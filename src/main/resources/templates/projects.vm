@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projects>
+#foreach ( $project in $projects )
+    <project>
+        <key>$project.Key</key>
+        <name>$project.Name</name>
+        <description>$project.Description</description>
+    </project>
+#end    
+</projects>
