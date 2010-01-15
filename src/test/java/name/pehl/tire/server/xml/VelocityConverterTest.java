@@ -4,6 +4,11 @@ import static org.junit.Assert.*;
 
 import java.util.logging.Logger;
 
+import name.pehl.taoki.xml.Context;
+import name.pehl.taoki.xml.ConverterException;
+import name.pehl.taoki.xml.VelocityConverter;
+import name.pehl.taoki.xml.VelocityProperties;
+
 import org.apache.velocity.app.VelocityEngine;
 import org.junit.Before;
 import org.junit.Test;

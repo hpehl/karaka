@@ -1,9 +1,9 @@
 package name.pehl.tire.server.servlet;
 
+import name.pehl.taoki.security.SecurityModule;
+import name.pehl.taoki.xml.XmlModule;
 import name.pehl.tire.server.persistence.PersistenceModule;
 import name.pehl.tire.server.rest.RestModule;
-import name.pehl.tire.server.security.SecurityModule;
-import name.pehl.tire.server.xml.XmlModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

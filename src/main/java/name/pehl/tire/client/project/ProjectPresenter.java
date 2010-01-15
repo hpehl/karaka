@@ -1,19 +1,14 @@
 package name.pehl.tire.client.project;
 
-import name.pehl.gwt.taoki.client.rest.RestCallback;
 import name.pehl.tire.client.widget.DefaultWidgetPresenter;
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.place.Place;
 import net.customware.gwt.presenter.client.place.PlaceRequest;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 
-import org.restlet.gwt.Request;
-import org.restlet.gwt.Response;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.inject.Inject;
 
@@ -62,14 +57,14 @@ public class ProjectPresenter extends DefaultWidgetPresenter<ProjectPresenter.Di
         Project project = new Project();
         project.setName(display.getName().getValue());
         project.setDescription(display.getDescription().getValue());
-        projectClient.add(project, new RestCallback()
-        {
-            @Override
-            public void onSuccess(Request request, Response response)
-            {
-                Window.alert("Project created!");
-            }
-        });
+//        projectClient.add(project, new RestCallback()
+//        {
+//            @Override
+//            public void onSuccess(Request request, Response response)
+//            {
+//                Window.alert("Project created!");
+//            }
+//        });
     }
 
 

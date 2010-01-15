@@ -1,8 +1,8 @@
 package name.pehl.tire.server.project;
 
-import name.pehl.tire.server.security.Secured;
-import name.pehl.tire.server.xml.Context;
-import name.pehl.tire.server.xml.TemplateConverter;
+import name.pehl.taoki.security.Secured;
+import name.pehl.taoki.xml.Context;
+import name.pehl.taoki.xml.TemplateConverter;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;

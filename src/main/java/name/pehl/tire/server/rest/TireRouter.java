@@ -1,5 +1,6 @@
 package name.pehl.tire.server.rest;
 
+import name.pehl.taoki.rest.GuiceRouter;
 import name.pehl.tire.server.project.ProjectsResource;
 
 import org.restlet.Context;
