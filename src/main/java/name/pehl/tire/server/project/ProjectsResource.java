@@ -1,8 +1,8 @@
 package name.pehl.tire.server.project;
 
+import name.pehl.taoki.converter.Converter;
+import name.pehl.taoki.converter.ConverterFactory;
 import name.pehl.taoki.security.Secured;
-import name.pehl.taoki.xml.Context;
-import name.pehl.taoki.xml.TemplateConverter;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -20,14 +20,14 @@ import com.google.inject.Inject;
 public class ProjectsResource extends ServerResource
 {
     private final ProjectService service;
-    private final TemplateConverter converter;
+    private final ConverterFactory converterFactory;
 
 
     @Inject
-    public ProjectsResource(ProjectService service, TemplateConverter converter)
+    public ProjectsResource(ProjectService service, ConverterFactory converterFactory)
     {
         this.service = service;
-        this.converter = converter;
+        this.converterFactory = converterFactory;
     }
 
 
@@ -35,10 +35,9 @@ public class ProjectsResource extends ServerResource
     @Override
     protected Representation get()
     {
-        Context context = new Context();
-        context.set("projects", service.list());
-        String xml = converter.convert("templates/projects.vm", context);
-        return new StringRepresentation(xml, MediaType.TEXT_XML);
+        // TODO
+        Converter<Project> converter = converterFactory.createConverter(null);
+        return converter.convert(service.list(), null);
     }
 
 

@@ -1,7 +1,7 @@
 package name.pehl.tire.server.servlet;
 
+import name.pehl.taoki.converter.XmlModule;
 import name.pehl.taoki.security.SecurityModule;
-import name.pehl.taoki.xml.XmlModule;
 import name.pehl.tire.server.persistence.PersistenceModule;
 import name.pehl.tire.server.rest.RestModule;
 
