@@ -1,6 +1,5 @@
 package name.pehl.tire.server.servlet;
 
-import name.pehl.taoki.converter.XmlModule;
 import name.pehl.taoki.security.SecurityModule;
 import name.pehl.tire.server.persistence.PersistenceModule;
 import name.pehl.tire.server.rest.RestModule;
@@ -18,7 +17,7 @@ public class ServletConfig extends GuiceServletContextListener
     @Override
     protected Injector getInjector()
     {
-        return Guice.createInjector(new ServletModule(), new SecurityModule(), new RestModule(), new XmlModule(),
+        return Guice.createInjector(new ServletModule(), new SecurityModule(), new RestModule(),
                 new PersistenceModule());
     }
 }

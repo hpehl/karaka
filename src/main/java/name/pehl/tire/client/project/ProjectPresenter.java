@@ -1,6 +1,7 @@
 package name.pehl.tire.client.project;
 
 import name.pehl.tire.client.widget.DefaultWidgetPresenter;
+import name.pehl.tire.shared.project.Project;
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.place.Place;
 import net.customware.gwt.presenter.client.place.PlaceRequest;
@@ -27,14 +28,19 @@ public class ProjectPresenter extends DefaultWidgetPresenter<ProjectPresenter.Di
 
     public static final Place PLACE = new Place("project");
 
-    private final ProjectClient projectClient;
 
+    // private final ProjectClient projectClient;
 
     @Inject
-    public ProjectPresenter(final Display display, final EventBus eventBus, final ProjectClient projectClient)
+    public ProjectPresenter(final Display display, final EventBus eventBus/*
+                                                                           * ,
+                                                                           * final
+                                                                           * ProjectClient
+                                                                           * projectClient
+                                                                           */)
     {
         super(display, eventBus);
-        this.projectClient = projectClient;
+        // this.projectClient = projectClient;
         bind();
     }
 
@@ -54,17 +60,15 @@ public class ProjectPresenter extends DefaultWidgetPresenter<ProjectPresenter.Di
 
     private void doNewProject()
     {
-        Project project = new Project();
-        project.setName(display.getName().getValue());
-        project.setDescription(display.getDescription().getValue());
-//        projectClient.add(project, new RestCallback()
-//        {
-//            @Override
-//            public void onSuccess(Request request, Response response)
-//            {
-//                Window.alert("Project created!");
-//            }
-//        });
+        Project project = new Project(display.getName().getValue(), display.getDescription().getValue());
+        // projectClient.add(project, new RestCallback()
+        // {
+        // @Override
+        // public void onSuccess(Request request, Response response)
+        // {
+        // Window.alert("Project created!");
+        // }
+        // });
     }
 
 

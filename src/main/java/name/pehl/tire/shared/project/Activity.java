@@ -1,43 +1,47 @@
-package name.pehl.tire.client.project;
+package name.pehl.tire.shared.project;
 
 import java.util.Date;
 
-import name.pehl.gwt.piriti.client.xml.XmlField;
-import name.pehl.gwt.piriti.client.xml.XmlReader;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-import com.google.gwt.core.client.GWT;
+
+import com.google.appengine.api.datastore.Key;
 
 /**
  * @author $Author:$
  * @version $Revision:$
  */
+@Entity
 public class Activity
 {
-    interface ActivityReader extends XmlReader<Activity>
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Key key;
+
+    private Project project;
+    private String name;
+    private String description;
+    private Date start;
+    private Date end;
+    private long pause;
+
+
+    public Activity(Project project, String name)
     {
+        this(project, name, null);
     }
 
-    public static final ActivityReader XML = GWT.create(ActivityReader.class);
 
-    @XmlField
-    String key;
-
-    @XmlField
-    String name;
-
-    @XmlField
-    String description;
-
-    @XmlField
-    Date start;
-
-    @XmlField
-    Date end;
-
-    @XmlField
-    long pause;
-
-    Project project;
+    public Activity(Project project, String name, String description)
+    {
+        this.project = project;
+        this.name = name;
+        this.description = description;
+        this.start = new Date();
+    }
 
 
     /**
@@ -186,7 +190,7 @@ public class Activity
     }
 
 
-    public String getKey()
+    public Key getKey()
     {
         return key;
     }

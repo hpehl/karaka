@@ -1,14 +1,19 @@
 package name.pehl.tire.server.project;
 
-import name.pehl.taoki.converter.Converter;
-import name.pehl.taoki.converter.ConverterFactory;
+import java.io.IOException;
+import java.util.List;
+
 import name.pehl.taoki.security.Secured;
+import name.pehl.tire.shared.project.Project;
 
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+import org.restlet.engine.converter.ConverterHelper;
+import org.restlet.engine.converter.ConverterUtils;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
+import org.restlet.representation.Variant;
 import org.restlet.resource.ServerResource;
 
 import com.google.inject.Inject;
@@ -20,14 +25,12 @@ import com.google.inject.Inject;
 public class ProjectsResource extends ServerResource
 {
     private final ProjectService service;
-    private final ConverterFactory converterFactory;
 
 
     @Inject
-    public ProjectsResource(ProjectService service, ConverterFactory converterFactory)
+    public ProjectsResource(ProjectService service)
     {
         this.service = service;
-        this.converterFactory = converterFactory;
     }
 
 
@@ -35,9 +38,19 @@ public class ProjectsResource extends ServerResource
     @Override
     protected Representation get()
     {
-        // TODO
-        Converter<Project> converter = converterFactory.createConverter(null);
-        return converter.convert(service.list(), null);
+        Representation representation = null;
+        List<Project> projects = service.list();
+        Variant preferredVariant = getPreferredVariant(getVariants());
+        ConverterHelper converterHelper = ConverterUtils.getBestHelper(projects, preferredVariant, this);
+        try
+        {
+            representation = converterHelper.toRepresentation(projects, preferredVariant, this);
+        }
+        catch (IOException e)
+        {
+            // TODO
+        }
+        return representation;
     }
 
 

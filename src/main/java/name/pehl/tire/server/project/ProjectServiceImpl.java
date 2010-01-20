@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import name.pehl.tire.server.persistence.TransactionTemplate;
+import name.pehl.tire.shared.project.Project;
 
 import com.google.inject.Inject;
 

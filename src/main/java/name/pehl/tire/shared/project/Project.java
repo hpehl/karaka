@@ -1,51 +1,43 @@
-package name.pehl.tire.server.project;
-
-import java.util.Date;
+package name.pehl.tire.shared.project;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.users.User;
 
 /**
  * @author $Author:$
  * @version $Revision:$
  */
 @Entity
-public class Activity
+public class Project
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Key key;
-
-    private Project project;
     private String name;
     private String description;
-    private Date start;
-    private Date end;
-    private long pause;
+    private User user;
 
 
-    public Activity(Project project, String name)
+    public Project(String name)
     {
-        this(project, name, null);
+        this(name, null);
     }
 
 
-    public Activity(Project project, String name, String description)
+    public Project(String name, String description)
     {
-        this.project = project;
         this.name = name;
         this.description = description;
-        this.start = new Date();
     }
 
 
     /**
-     * Based on project, name and start
+     * Based on name and user
      * 
      * @return
      * @see java.lang.Object#hashCode()
@@ -56,14 +48,13 @@ public class Activity
         final int prime = 31;
         int result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((project == null) ? 0 : project.hashCode());
-        result = prime * result + ((start == null) ? 0 : start.hashCode());
+        result = prime * result + ((user == null) ? 0 : user.hashCode());
         return result;
     }
 
 
     /**
-     * Based on project, name and start
+     * Base on name and user
      * 
      * @param obj
      * @return
@@ -84,7 +75,7 @@ public class Activity
         {
             return false;
         }
-        Activity other = (Activity) obj;
+        Project other = (Project) obj;
         if (name == null)
         {
             if (other.name != null)
@@ -96,25 +87,14 @@ public class Activity
         {
             return false;
         }
-        if (project == null)
+        if (user == null)
         {
-            if (other.project != null)
+            if (other.user != null)
             {
                 return false;
             }
         }
-        else if (!project.equals(other.project))
-        {
-            return false;
-        }
-        if (start == null)
-        {
-            if (other.start != null)
-            {
-                return false;
-            }
-        }
-        else if (!start.equals(other.start))
+        else if (!user.equals(other.user))
         {
             return false;
         }
@@ -125,8 +105,13 @@ public class Activity
     @Override
     public String toString()
     {
-        return "Activity [project=" + project.getName() + ", name=" + name + ", start=" + start + ", end=" + end
-                + ", pause=" + pause + "]";
+        return "Project [" + name + "]";
+    }
+
+
+    public Key getKey()
+    {
+        return key;
     }
 
 
@@ -154,50 +139,14 @@ public class Activity
     }
 
 
-    public Date getStart()
+    public User getUser()
     {
-        return start;
+        return user;
     }
 
 
-    public void setStart(Date start)
+    public void setUser(User user)
     {
-        this.start = start;
-    }
-
-
-    public Date getEnd()
-    {
-        return end;
-    }
-
-
-    public void setEnd(Date end)
-    {
-        this.end = end;
-    }
-
-
-    public long getPause()
-    {
-        return pause;
-    }
-
-
-    public void setPause(long pause)
-    {
-        this.pause = pause;
-    }
-
-
-    public Key getKey()
-    {
-        return key;
-    }
-
-
-    public Project getProject()
-    {
-        return project;
+        this.user = user;
     }
 }

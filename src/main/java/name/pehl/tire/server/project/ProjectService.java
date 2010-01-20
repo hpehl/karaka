@@ -3,6 +3,8 @@ package name.pehl.tire.server.project;
 
 import java.util.List;
 
+import name.pehl.tire.shared.project.Project;
+
 
 
 /**
