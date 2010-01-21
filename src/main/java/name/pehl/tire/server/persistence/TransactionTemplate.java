@@ -1,7 +1,7 @@
 package name.pehl.tire.server.persistence;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Transaction;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,19 +14,19 @@ public abstract class TransactionTemplate
 {
     private static final Log log = LogFactory.getLog(TransactionTemplate.class);
 
-    final private EntityManager entityManager;
+    final private PersistenceManager persistenceManager;
 
 
-    public TransactionTemplate(EntityManager entityManager)
+    public TransactionTemplate(PersistenceManager persistenceManager)
     {
         super();
-        this.entityManager = entityManager;
+        this.persistenceManager = persistenceManager;
     }
 
 
     public final void run()
     {
-        EntityTransaction tx = entityManager.getTransaction();
+        Transaction tx = persistenceManager.currentTransaction();
         try
         {
             tx.begin();

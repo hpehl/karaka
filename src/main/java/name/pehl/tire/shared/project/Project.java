@@ -1,9 +1,10 @@
 package name.pehl.tire.shared.project;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.users.User;
@@ -12,14 +13,18 @@ import com.google.appengine.api.users.User;
  * @author $Author:$
  * @version $Revision:$
  */
-@Entity
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
 public class Project
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Key key;
+
+    @Persistent
     private String name;
+    @Persistent
     private String description;
+    @Persistent
     private User user;
 
 

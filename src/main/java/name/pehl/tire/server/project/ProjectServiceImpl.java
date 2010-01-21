@@ -2,8 +2,8 @@ package name.pehl.tire.server.project;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 import name.pehl.tire.server.persistence.TransactionTemplate;
 import name.pehl.tire.shared.project.Project;
@@ -16,13 +16,13 @@ import com.google.inject.Inject;
  */
 public class ProjectServiceImpl implements ProjectService
 {
-    private final EntityManager entityManager;
+    private final PersistenceManager persistenceManager;
 
 
     @Inject
-    public ProjectServiceImpl(EntityManager entityManager)
+    public ProjectServiceImpl(PersistenceManager persistenceManager)
     {
-        this.entityManager = entityManager;
+        this.persistenceManager = persistenceManager;
     }
 
 
@@ -30,20 +30,20 @@ public class ProjectServiceImpl implements ProjectService
     @SuppressWarnings("unchecked")
     public List<Project> list()
     {
-        Query query = entityManager.createQuery("select from " + Project.class.getSimpleName());
-        return query.getResultList();
+        Query query = persistenceManager.newQuery(Project.class);
+        return (List<Project>) query.execute();
     }
 
 
     @Override
     public void save(final Project project)
     {
-        new TransactionTemplate(entityManager)
+        new TransactionTemplate(persistenceManager)
         {
             @Override
             protected void perform()
             {
-                entityManager.persist(project);
+                persistenceManager.makePersistent(project);
             }
         }.run();
     }

@@ -22,6 +22,8 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/velocity-1.6.2.jar"/>
 	<classpathentry kind="lib" path="gwt-libs/gin-1.0.jar"/>
+	<classpathentry kind="lib" path="gwt-libs/appengine-utils-client-1.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-utils-server-1.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/piriti"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/taoki"/>

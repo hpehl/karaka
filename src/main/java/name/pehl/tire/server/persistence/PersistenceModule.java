@@ -1,6 +1,6 @@
 package name.pehl.tire.server.persistence;
 
-import javax.persistence.EntityManager;
+import javax.jdo.PersistenceManager;
 
 import name.pehl.tire.server.project.ProjectService;
 import name.pehl.tire.server.project.ProjectServiceImpl;
@@ -22,8 +22,8 @@ public class PersistenceModule extends AbstractModule
 
 
     @Provides
-    public EntityManager providesEntityManager()
+    public PersistenceManager providesPersistenceManager()
     {
-        return EMF.get().createEntityManager();
+        return PMF.get().getPersistenceManager();
     }
 }

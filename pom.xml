@@ -78,6 +78,11 @@
             <url>http://taoki.googlecode.com/svn/repository</url>
         </repository>
         <repository>
+            <id>tire-d8-repo</id>
+            <name>TiRe Repository</name>
+            <url>http://tire-d8.googlecode.com/svn/repository</url>
+        </repository>
+        <repository>
             <id>maven-restlet</id>
             <name>Public online Restlet repository</name>
             <url>http://maven.restlet.org</url>
@@ -235,6 +240,28 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Restlet -->
+        <dependency>
+            <groupId>org.restlet.gae</groupId>
+            <artifactId>org.restlet</artifactId>
+            <version>${restlet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.restlet.gae</groupId>
+            <artifactId>org.restlet.ext.gwt</artifactId>
+            <version>${restlet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.restlet.gae</groupId>
+            <artifactId>org.restlet.ext.servlet</artifactId>
+            <version>${restlet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.restlet.gae</groupId>
+            <artifactId>org.restlet.ext.xml</artifactId>
+            <version>${restlet.version}</version>
+        </dependency>
+
         <!--
             J2EE Servlet API. You can probably remove it, if you 
             don't explicitly use servlets
@@ -313,6 +340,7 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -322,6 +350,7 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+            
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
@@ -330,6 +359,7 @@
                     </excludes>
                 </configuration>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -388,6 +418,7 @@ entryPointModules=]]>
                     </additionalConfig>
                 </configuration>
             </plugin>
+            
             <!--
                 This plug-in "enhances" your domain model objects (i.e.
                 makes them persistent for datanucleus)
@@ -401,7 +432,7 @@ entryPointModules=]]>
                         Make sure this path contains your persistent
                         classes!
                     -->
-                    <mappingIncludes>**/model/*.class</mappingIncludes>
+                    <mappingIncludes>**/shared/*.class</mappingIncludes>
                     <verbose>true</verbose>
                     <enhancerName>ASM</enhancerName>
                     <api>JDO</api>
@@ -438,6 +469,7 @@ entryPointModules=]]>
                     </dependency>
                 </dependencies>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -456,66 +488,37 @@ entryPointModules=]]>
                     </webResources>
                 </configuration>
             </plugin>
-            <!--
-                Maven GWT plugin (ex.
-                http://gwt-maven.googlecode.com/svn/docs/maven-googlewebtoolkit2-plugin/index.html)
-                http://mojo.codehaus.org/gwt-maven-plugin
-            -->
+            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
                 <version>1.2</version>
                 <configuration>
-                    <logLevel>INFO</logLevel>
-
-                    <!-- match -Dgae.port -->
-                    <port>${gae.port}</port>
-
-                    <!-- This must point to your GWT modules! -->
-                    <compileTargets>
-                        <value>net.kindleit.gae.example.Messages</value>
-                    </compileTargets>
-
-                    <!-- This is for generating Asynch interfaces -->
-                    <!-- <servicePattern>**/client/*Service.java</servicePattern> -->
-
-                    <extraJvmArgs>-Xmx512m</extraJvmArgs>
-                    <!--<jvm>${JAVA_HOME}/bin/java</jvm>-->
-                    <!--<noServer>false</noServer>-->
-
-                    <!--
-                        TODO This should help running GAE stuff in
-                        hosted mode (when gwt-maven-plugin-1.2 is
-                        released, see
-                        http://jira.codehaus.org/browse/MGWT-112)
-                    -->
-                    <server>com.google.appengine.tools.development.gwt.AppEngineLauncher
-                    </server>
-
-                    <runTarget>/index.html</runTarget>
-                    <style>DETAILED</style>
-                    <webXml>war/WEB-INF/web.xml</webXml>
-                    <!--
-                        this parameter is VERY important with automatic
-                        mode - has to match the version in your declared
-                        deps
-                    -->
-                    <!--
-                        if this is set incorrect (not a match), or left
-                        out (default is 1.5.2 for 2.0-beta23) you will
-                        have mysterious errors
-                    -->
+                    <module>name.pehl.tire.TiRe</module>
+                    <i18nConstantsBundle>
+                        name.pehl.tire.client.i18n.Constants
+                    </i18nConstantsBundle>
+                    <i18nConstantsWithLookupBundle>
+                        name.pehl.tire.client.i18n.Enums
+                    </i18nConstantsWithLookupBundle>
+                    <i18nMessagesBundle>
+                        name.pehl.tire.client.i18n.Messages
+                    </i18nMessagesBundle>
                     <gwtVersion>${gwt.version}</gwtVersion>
+                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+                    <style>DETAILED</style>
+                    <soyc>true</soyc>
+                    <webappDirectory>war</webappDirectory>
+                    <webXml>war/WEB-INF/web.xml</webXml>
+                    <server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
+                    <port>${gae.port}</port>
+                    <runTarget>/index.html</runTarget>
                 </configuration>
                 <executions>
-                    <!--
-                        <execution> <id>generateAsynch</id>
-                        <phase>generate-sources</phase> <goals>
-                        <goal>generateAsync</goal> </goals> </execution>
-                    -->
                     <execution>
-                        <phase>compile</phase>
                         <goals>
+                            <goal>resources</goal>
+                            <goal>i18n</goal>
                             <goal>compile</goal>
                         </goals>
                     </execution>
@@ -552,6 +555,60 @@ entryPointModules=]]>
             </extension>
         </extensions>
     </build>
+
+
+    <reporting>
+        <outputDirectory>${basedir}/site</outputDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>dependencies</report>
+                            <report>index</report>
+                            <report>license</report>
+                            <report>project-team</report>
+                            <report>scm</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <doctitle>${project.name} API ${project.version}</doctitle>
+                    <windowtitle>${project.name} API ${project.version}</windowtitle>
+                    <stylesheet>maven</stylesheet>
+                    <links>
+                        <link>http://google-web-toolkit.googlecode.com/svn/javadoc/2.0/</link>
+                    </links>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <!--
+                    the Maven Surefire Report plugin has a bug where it re-runs the tests, this is needed to avoid that
+                    - http://jira.codehaus.org/browse/SUREFIRE-257
+                -->
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report-only</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 
 
     <profiles>

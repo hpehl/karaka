@@ -2,11 +2,11 @@ package name.pehl.tire.shared.project;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -14,18 +14,24 @@ import com.google.appengine.api.datastore.Key;
  * @author $Author:$
  * @version $Revision:$
  */
-@Entity
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
 public class Activity
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Key key;
 
+    @Persistent
     private Project project;
+    @Persistent
     private String name;
+    @Persistent
     private String description;
+    @Persistent
     private Date start;
+    @Persistent
     private Date end;
+    @Persistent
     private long pause;
 
 

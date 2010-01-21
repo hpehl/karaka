@@ -2,6 +2,7 @@
 <module rename-to="tire">
 
     <inherits name="net.customware.gwt.presenter.Presenter" />
+    <inherits name="com.resmarksystems.AppEngineDataTypes" />
 
     <entry-point class="name.pehl.tire.client.TiRe" />
 
