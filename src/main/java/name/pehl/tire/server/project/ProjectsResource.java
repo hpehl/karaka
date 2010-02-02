@@ -2,7 +2,6 @@ package name.pehl.tire.server.project;
 
 import java.util.Iterator;
 
-import name.pehl.taoki.security.Secured;
 import name.pehl.tire.shared.project.Project;
 
 import org.restlet.resource.Get;
@@ -40,7 +39,6 @@ public class ProjectsResource extends ServerResource
     }
 
 
-    @Secured
     protected Iterator<Project> internalListProjects()
     {
         return service.list();
