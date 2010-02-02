@@ -1,31 +1,33 @@
 package name.pehl.tire.shared.project;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.users.User;
+import com.googlecode.objectify.annotation.Unindexed;
 
 /**
  * @author $Author:$
  * @version $Revision:$
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
+@Entity
 public class Project
 {
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
+    @Id
+    Long id;
+    
+    String name;
+    
+    @Unindexed
+    String description;
+    
+    User user;
 
-    @Persistent
-    private String name;
-    @Persistent
-    private String description;
-    @Persistent
-    private User user;
+
+    public Project()
+    {
+        this(null, null);
+    }
 
 
     public Project(String name)
@@ -114,9 +116,9 @@ public class Project
     }
 
 
-    public Key getKey()
+    public Long getId()
     {
-        return key;
+        return id;
     }
 
 
@@ -144,13 +146,7 @@ public class Project
     }
 
 
-    public User getUser()
-    {
-        return user;
-    }
-
-
-    public void setUser(User user)
+    public void attachToUser(User user)
     {
         this.user = user;
     }

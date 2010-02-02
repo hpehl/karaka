@@ -1,19 +1,11 @@
 package name.pehl.tire.server.project;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Iterator;
 
 import name.pehl.taoki.security.Secured;
 import name.pehl.tire.shared.project.Project;
 
-import org.restlet.data.Form;
-import org.restlet.data.MediaType;
-import org.restlet.data.Status;
-import org.restlet.engine.converter.ConverterHelper;
-import org.restlet.engine.converter.ConverterUtils;
-import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
-import org.restlet.representation.Variant;
+import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 import com.google.inject.Inject;
@@ -34,41 +26,23 @@ public class ProjectsResource extends ServerResource
     }
 
 
-    @Secured
-    @Override
-    protected Representation get()
+    @Get("xml")
+    public Iterator<Project> listXml()
     {
-        Representation representation = null;
-        List<Project> projects = service.list();
-        Variant preferredVariant = getPreferredVariant(getVariants());
-        ConverterHelper converterHelper = ConverterUtils.getBestHelper(projects, preferredVariant, this);
-        try
-        {
-            representation = converterHelper.toRepresentation(projects, preferredVariant, this);
-        }
-        catch (IOException e)
-        {
-            // TODO
-        }
-        return representation;
+        return internalListProjects();
     }
 
 
-    @Override
-    protected Representation post(Representation entity)
+    @Get("plain")
+    public Iterator<Project> listPlain()
     {
-        Representation result = null;
+        return internalListProjects();
+    }
 
-        Form form = new Form(entity);
-        String name = form.getFirstValue("name");
-        String description = form.getFirstValue("description");
-        Project project = new Project(name, description);
-        service.save(project);
-        setStatus(Status.SUCCESS_CREATED);
-        Representation rep = new StringRepresentation("Project created", MediaType.TEXT_PLAIN);
-        rep.setIdentifier(getRequest().getResourceRef().getIdentifier() + "/" + project.getKey());
-        result = rep;
 
-        return result;
+    @Secured
+    protected Iterator<Project> internalListProjects()
+    {
+        return service.list();
     }
 }

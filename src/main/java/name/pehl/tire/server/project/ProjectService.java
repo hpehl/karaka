@@ -1,11 +1,8 @@
 package name.pehl.tire.server.project;
 
-
-import java.util.List;
+import java.util.Iterator;
 
 import name.pehl.tire.shared.project.Project;
-
-
 
 /**
  * @author $Author:$
@@ -13,7 +10,8 @@ import name.pehl.tire.shared.project.Project;
  */
 public interface ProjectService
 {
-    List<Project> list();
-    
+    Iterator<Project> list();
+
+
     void save(Project project);
 }

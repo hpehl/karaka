@@ -2,48 +2,46 @@ package name.pehl.tire.shared.project;
 
 import java.util.Date;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.annotation.Unindexed;
 
 /**
  * @author $Author:$
  * @version $Revision:$
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
+@Entity
 public class Activity
 {
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
+    @Id
+    Long id;
+    
+    @Parent
+    Key<Project> project;
+    
+    String name;
+    
+    @Unindexed
+    String description;
+    
+    Date start;
+    
+    Date end;
+    
+    long pause;
 
-    @Persistent
-    private Project project;
-    @Persistent
-    private String name;
-    @Persistent
-    private String description;
-    @Persistent
-    private Date start;
-    @Persistent
-    private Date end;
-    @Persistent
-    private long pause;
 
-
-    public Activity(Project project, String name)
+    public Activity()
     {
-        this(project, name, null);
+        this(null, null);
     }
 
 
-    public Activity(Project project, String name, String description)
+    public Activity(String name, String description)
     {
-        this.project = project;
         this.name = name;
         this.description = description;
         this.start = new Date();
@@ -196,14 +194,20 @@ public class Activity
     }
 
 
-    public Key getKey()
+    public Long getId()
     {
-        return key;
+        return id;
     }
 
 
-    public Project getProject()
+    public Key<Project> getProject()
     {
         return project;
+    }
+
+
+    public void setProject(Key<Project> project)
+    {
+        this.project = project;
     }
 }

@@ -1,9 +1,6 @@
 package name.pehl.tire.server.project;
 
-import java.util.List;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
+import java.util.Iterator;
 
 import name.pehl.tire.server.persistence.TransactionTemplate;
 import name.pehl.tire.shared.project.Project;
@@ -16,34 +13,34 @@ import com.google.inject.Inject;
  */
 public class ProjectServiceImpl implements ProjectService
 {
-    private final PersistenceManager persistenceManager;
+    private final ProjectDao projectDao;
+    private final ActivityDao activityDao;
 
 
     @Inject
-    public ProjectServiceImpl(PersistenceManager persistenceManager)
+    public ProjectServiceImpl(ProjectDao projectDao, ActivityDao activityDao)
     {
-        this.persistenceManager = persistenceManager;
+        this.projectDao = projectDao;
+        this.activityDao = activityDao;
     }
 
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<Project> list()
+    public Iterator<Project> list()
     {
-        Query query = persistenceManager.newQuery(Project.class);
-        return (List<Project>) query.execute();
+        return projectDao.list();
     }
 
 
     @Override
     public void save(final Project project)
     {
-        new TransactionTemplate(persistenceManager)
+        new TransactionTemplate()
         {
             @Override
             protected void perform()
             {
-                persistenceManager.makePersistent(project);
+                projectDao.put(project);
             }
         }.run();
     }

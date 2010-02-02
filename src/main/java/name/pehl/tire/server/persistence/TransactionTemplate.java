@@ -1,10 +1,10 @@
 package name.pehl.tire.server.persistence;
 
-import javax.jdo.PersistenceManager;
-import javax.jdo.Transaction;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 /**
  * @author $Author:$
@@ -12,37 +12,31 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class TransactionTemplate
 {
-    private static final Log log = LogFactory.getLog(TransactionTemplate.class);
-
-    final private PersistenceManager persistenceManager;
+    private static final Logger log = Logger.getLogger(TransactionTemplate.class.getName());
 
 
-    public TransactionTemplate(PersistenceManager persistenceManager)
+    public TransactionTemplate()
     {
-        super();
-        this.persistenceManager = persistenceManager;
     }
 
 
     public final void run()
     {
-        Transaction tx = persistenceManager.currentTransaction();
+        final Objectify ofy = ObjectifyService.beginTransaction();
         try
         {
-            tx.begin();
             perform();
-            tx.commit();
+            ofy.getTxn().commit();
         }
         catch (Throwable t)
         {
-            log.error(t.getMessage(), t);
-            tx.rollback();
+            log.log(Level.SEVERE, t.getMessage(), t);
         }
         finally
         {
-            if (tx.isActive())
+            if (ofy.getTxn().isActive())
             {
-                tx.rollback();
+                ofy.getTxn().rollback();
             }
         }
     }

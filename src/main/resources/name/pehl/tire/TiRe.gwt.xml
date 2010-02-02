@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to="tire">
 
+    <inherits name="com.googlecode.Objectify" />
     <inherits name="net.customware.gwt.presenter.Presenter" />
-    <inherits name="com.resmarksystems.AppEngineDataTypes" />
 
     <entry-point class="name.pehl.tire.client.TiRe" />
 
