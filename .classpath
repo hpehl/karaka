@@ -4,29 +4,21 @@
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/resources"/>
-	<classpathentry kind="lib" path="gwt-libs/gwt-dispatch-1.0.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/piriti"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/taoki"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/objectify"/>
 	<classpathentry kind="lib" path="gwt-libs/gwt-presenter-1.0.0.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/aopalliance.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-2.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-servlet-2.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.xml.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/xalan.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/avalon-logkit-2.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-collections-3.2.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-lang-2.4.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/velocity-1.6.2.jar"/>
 	<classpathentry kind="lib" path="gwt-libs/gin-1.0.jar"/>
 	<classpathentry kind="lib" path="gwt-libs/org.restlet-2.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="gwt-libs/org.restlet.ext.xml-2.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet-2.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.servlet-2.0-SNAPSHOT.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/piriti"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/taoki"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/objectify"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
