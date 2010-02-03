@@ -1,7 +1,7 @@
 package name.pehl.tire.server.project;
 
 import name.pehl.tire.server.persistence.ObjectifyDao;
-import name.pehl.tire.shared.project.Activity;
+import name.pehl.tire.shared.model.Activity;
 
 import com.googlecode.objectify.ObjectifyService;
 

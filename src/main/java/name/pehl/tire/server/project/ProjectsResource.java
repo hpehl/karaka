@@ -2,7 +2,7 @@ package name.pehl.tire.server.project;
 
 import java.util.Iterator;
 
-import name.pehl.tire.shared.project.Project;
+import name.pehl.tire.shared.model.Project;
 
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;

@@ -1,41 +1,36 @@
-package name.pehl.tire.shared.project;
+package name.pehl.tire.shared.model;
 
 import javax.persistence.Entity;
 
 import com.google.appengine.api.users.User;
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.annotation.Unindexed;
 
 /**
- * @author $Author:$
- * @version $Revision:$
+ * @author $LastChangedBy:$
+ * @version $LastChangedRevision:$
  */
 @Entity
-public class Project extends NamedEntity implements HasUser
+public class Client extends NamedEntity implements HasUser
 {
     @Unindexed
     String description;
 
-    @Parent
-    Key<Client> project;
-
     User user;
 
 
-    public Project()
+    public Client()
     {
         this(null, null);
     }
 
 
-    public Project(String name)
+    public Client(String name)
     {
         this(name, null);
     }
 
 
-    public Project(String name, String description)
+    public Client(String name, String description)
     {
         super(name);
         this.description = description;

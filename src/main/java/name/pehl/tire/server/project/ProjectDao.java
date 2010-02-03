@@ -3,7 +3,7 @@ package name.pehl.tire.server.project;
 import com.googlecode.objectify.ObjectifyService;
 
 import name.pehl.tire.server.persistence.ObjectifyDao;
-import name.pehl.tire.shared.project.Project;
+import name.pehl.tire.shared.model.Project;
 
 /**
  * @author $LastChangedBy:$

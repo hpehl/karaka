@@ -6,11 +6,13 @@ import name.pehl.taoki.rest.RestletServlet;
 import org.restlet.Context;
 
 import com.google.inject.Injector;
+import com.google.inject.Singleton;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision$
  */
+@Singleton
 public class TireRestletServlet extends RestletServlet
 {
     /**

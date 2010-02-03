@@ -1,4 +1,4 @@
-package name.pehl.tire.shared.project;
+package name.pehl.tire.shared.model;
 
 /**
  * @author $LastChangedBy:$

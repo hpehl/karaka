@@ -1,7 +1,7 @@
 package name.pehl.tire.client.project;
 
 import name.pehl.tire.client.widget.DefaultWidgetPresenter;
-import name.pehl.tire.shared.project.Project;
+import name.pehl.tire.shared.model.Project;
 import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.place.Place;
 import net.customware.gwt.presenter.client.place.PlaceRequest;
