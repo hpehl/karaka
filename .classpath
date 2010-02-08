@@ -7,18 +7,18 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/piriti"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/taoki"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/objectify"/>
-	<classpathentry kind="lib" path="gwt-libs/gwt-presenter-1.0.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-2.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-servlet-2.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.xml.jar"/>
-	<classpathentry kind="lib" path="gwt-libs/gin-1.0.jar"/>
-	<classpathentry kind="lib" path="gwt-libs/org.restlet-2.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="gwt-libs/org.restlet.ext.xml-2.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet-2.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/org.restlet.ext.servlet-2.0-SNAPSHOT.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/gwt/gin-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/gwt/gwt-presenter-1.1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/gwt/org.restlet-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/gwt/org.restlet.ext.xml-2.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

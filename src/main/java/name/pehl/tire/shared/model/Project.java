@@ -5,18 +5,14 @@ import javax.persistence.Entity;
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Parent;
-import com.googlecode.objectify.annotation.Unindexed;
 
 /**
  * @author $Author:$
  * @version $Revision:$
  */
 @Entity
-public class Project extends NamedEntity implements HasUser
+public class Project extends DescriptiveEntity implements HasUser
 {
-    @Unindexed
-    String description;
-
     @Parent
     Key<Client> project;
 
@@ -37,20 +33,7 @@ public class Project extends NamedEntity implements HasUser
 
     public Project(String name, String description)
     {
-        super(name);
-        this.description = description;
-    }
-
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-
-    public void setDescription(String description)
-    {
-        this.description = description;
+        super(name, description);
     }
 
 

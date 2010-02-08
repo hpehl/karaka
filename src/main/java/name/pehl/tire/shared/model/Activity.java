@@ -6,18 +6,14 @@ import javax.persistence.Entity;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Parent;
-import com.googlecode.objectify.annotation.Unindexed;
 
 /**
  * @author $Author:$
  * @version $Revision:$
  */
 @Entity
-public class Activity extends NamedEntity
+public class Activity extends DescriptiveEntity
 {
-    @Unindexed
-    String description;
-
     Date start;
 
     Date end;
@@ -36,30 +32,31 @@ public class Activity extends NamedEntity
     }
 
 
+    public Activity(String name)
+    {
+        this(name, null);
+    }
+
+
     public Activity(String name, String description)
     {
-        super(name);
-        this.description = description;
+        super(name, description);
         this.start = new Date();
     }
 
 
+    /**
+     * Returns {@link #simpleClassname()} [&lt;id&gt;, &lt;name&gt;,
+     * &lt;start&gt;, &lt;end&gt;, &lt;pause&gt;]
+     * 
+     * @return
+     * @see name.pehl.tire.shared.model.NamedEntity#toString()
+     */
     @Override
     public String toString()
     {
-        return simpleClassname() + " [name=" + name + ", start=" + start + ", end=" + end + ", pause=" + pause + "]";
-    }
-
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-
-    public void setDescription(String description)
-    {
-        this.description = description;
+        return new StringBuilder(simpleClassname()).append(" [").append(id).append(", ").append(name).append(", ")
+                .append(start).append(", ").append(end).append(", ").append(pause).append("]").toString();
     }
 
 

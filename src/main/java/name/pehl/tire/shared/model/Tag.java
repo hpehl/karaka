@@ -16,6 +16,12 @@ public class Tag extends NamedEntity implements HasUser
     Key<Activity> activity;
 
 
+    public Tag()
+    {
+        this(null);
+    }
+
+
     public Tag(String name)
     {
         super(name);

@@ -1,5 +1,7 @@
 package name.pehl.tire.shared.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Id;
 
 /**
@@ -7,7 +9,7 @@ import javax.persistence.Id;
  * @version $LastChangedRevision:$
  */
 
-public abstract class BaseEntity
+public abstract class BaseEntity implements Serializable
 {
     @Id
     Long id;
@@ -74,7 +76,7 @@ public abstract class BaseEntity
 
 
     /**
-     * Returns {@link #simpleClassname()} [ &lt;id&gt; ]
+     * Returns {@link #simpleClassname()} [&lt;id&gt;]
      * 
      * @return
      * @see java.lang.Object#toString()
@@ -82,7 +84,7 @@ public abstract class BaseEntity
     @Override
     public String toString()
     {
-        return simpleClassname() + " [" + id + "]";
+        return new StringBuilder(simpleClassname()).append(" [").append(id).append("]").toString();
     }
 
 
