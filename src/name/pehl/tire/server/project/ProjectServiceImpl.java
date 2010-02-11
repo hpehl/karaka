@@ -1,6 +1,6 @@
 package name.pehl.tire.server.project;
 
-import java.util.Iterator;
+import java.util.List;
 
 import name.pehl.tire.server.persistence.TransactionTemplate;
 import name.pehl.tire.shared.model.Project;
@@ -27,9 +27,9 @@ public class ProjectServiceImpl implements ProjectService
 
 
     @Override
-    public Iterator<Project> list()
+    public List<Project> list()
     {
-        return projectDao.ofy().query(Project.class).iterator();
+        return projectDao.list();
     }
 
 

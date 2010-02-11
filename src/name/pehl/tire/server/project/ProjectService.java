@@ -1,6 +1,6 @@
 package name.pehl.tire.server.project;
 
-import java.util.Iterator;
+import java.util.List;
 
 import name.pehl.tire.shared.model.Project;
 
@@ -10,7 +10,7 @@ import name.pehl.tire.shared.model.Project;
  */
 public interface ProjectService
 {
-    Iterator<Project> list();
+    List<Project> list();
 
 
     void save(Project project);

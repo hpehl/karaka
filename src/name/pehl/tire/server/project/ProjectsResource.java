@@ -1,6 +1,6 @@
 package name.pehl.tire.server.project;
 
-import java.util.Iterator;
+import java.util.List;
 
 import name.pehl.tire.shared.model.Project;
 
@@ -26,20 +26,20 @@ public class ProjectsResource extends ServerResource
 
 
     @Get("xml")
-    public Iterator<Project> listXml()
+    public List<Project> listXml()
     {
         return internalListProjects();
     }
 
 
     @Get("plain")
-    public Iterator<Project> listPlain()
+    public List<Project> listPlain()
     {
         return internalListProjects();
     }
 
 
-    protected Iterator<Project> internalListProjects()
+    protected List<Project> internalListProjects()
     {
         return service.list();
     }

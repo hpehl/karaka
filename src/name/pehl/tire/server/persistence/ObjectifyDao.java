@@ -22,6 +22,8 @@ public class ObjectifyDao<T> extends DAOBase
     protected Class<T> clazz;
 
 
+    // ----------------------------------------------------------- constructors
+
     /**
      * We've got to get the associated domain class somehow
      * 
@@ -33,8 +35,82 @@ public class ObjectifyDao<T> extends DAOBase
     }
 
 
-    public Key<T> put(T entity)
+    // ------------------------------------------------------ get single entity
 
+    public T get(Long id) throws EntityNotFoundException
+    {
+        return ofy().get(clazz, id);
+    }
+
+
+    public T get(Key<T> key) throws EntityNotFoundException
+    {
+        return ofy().get(key);
+    }
+
+
+    public T getByProperty(String propName, Object propValue)
+    {
+        Query<T> q = ofy().query(clazz);
+        q.filter(propName, propValue);
+        return q.get();
+    }
+
+
+    public T getByExample(T exampleObj)
+    {
+        Query<T> queryByExample = buildQueryByExample(exampleObj);
+        Iterable<T> iterableResults = queryByExample.fetch();
+        Iterator<T> i = iterableResults.iterator();
+        T obj = i.next();
+        if (i.hasNext())
+            throw new RuntimeException("Too many results");
+        return obj;
+    }
+
+
+    // ------------------------------------------- get multiple entities / keys
+
+    public List<T> list()
+    {
+        Query<T> q = ofy().query(clazz);
+        return asList(q.fetch());
+    }
+
+
+    public List<Key<T>> listKeys()
+    {
+        Query<T> q = ofy().query(clazz);
+        return asKeyList(q.fetchKeys());
+    }
+
+
+    public List<T> listByProperty(String propName, Object propValue)
+    {
+        Query<T> q = ofy().query(clazz);
+        q.filter(propName, propValue);
+        return asList(q.fetch());
+    }
+
+
+    public List<Key<T>> listKeysByProperty(String propName, Object propValue)
+    {
+        Query<T> q = ofy().query(clazz);
+        q.filter(propName, propValue);
+        return asKeyList(q.fetchKeys());
+    }
+
+
+    public List<T> listByExample(T exampleObj)
+    {
+        Query<T> queryByExample = buildQueryByExample(exampleObj);
+        return asList(queryByExample.fetch());
+    }
+
+
+    // ----------------------------------------------------------- put / delete
+
+    public Key<T> put(T entity)
     {
         return ofy().put(entity);
     }
@@ -70,67 +146,7 @@ public class ObjectifyDao<T> extends DAOBase
     }
 
 
-    public T get(Long id) throws EntityNotFoundException
-    {
-        return ofy().get(this.clazz, id);
-    }
-
-
-    public T get(Key<T> key) throws EntityNotFoundException
-    {
-        return ofy().get(key);
-    }
-
-
-    /**
-     * Convenience method to get all objects matching a single property
-     * 
-     * @param propName
-     * @param propValue
-     * @return T matching Object
-     */
-    public T getByProperty(String propName, Object propValue)
-    {
-        Query<T> q = ofy().query(clazz);
-        q.filter(propName, propValue);
-        return q.get();
-    }
-
-
-    public List<T> listByProperty(String propName, Object propValue)
-    {
-        Query<T> q = ofy().query(clazz);
-        q.filter(propName, propValue);
-        return asList(q.fetch());
-    }
-
-
-    public List<Key<T>> listKeysByProperty(String propName, Object propValue)
-    {
-        Query<T> q = ofy().query(clazz);
-        q.filter(propName, propValue);
-        return asKeyList(q.fetchKeys());
-    }
-
-
-    public T getByExample(T exampleObj)
-    {
-        Query<T> queryByExample = buildQueryByExample(exampleObj);
-        Iterable<T> iterableResults = queryByExample.fetch();
-        Iterator<T> i = iterableResults.iterator();
-        T obj = i.next();
-        if (i.hasNext())
-            throw new RuntimeException("Too many results");
-        return obj;
-    }
-
-
-    public List<T> listByExample(T exampleObj)
-    {
-        Query<T> queryByExample = buildQueryByExample(exampleObj);
-        return asList(queryByExample.fetch());
-    }
-
+    // --------------------------------------------------------- helper methods
 
     private List<T> asList(Iterable<T> iterable)
     {
