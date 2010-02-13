@@ -25,7 +25,7 @@ public class ProjectsResource extends ServerResource
     }
 
 
-    @Get("xml")
+    @Get
     public List<Project> listProjects()
     {
         return service.list();
