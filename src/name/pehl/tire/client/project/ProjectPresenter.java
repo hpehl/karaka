@@ -14,11 +14,15 @@ public class ProjectPresenter extends DefaultWidgetPresenter<ProjectDisplay>
 {
     public static final Place PLACE = new Place("project");
 
+    @SuppressWarnings("unused")
+    private final ProjectClient projectClient;
+
 
     @Inject
-    public ProjectPresenter(final ProjectDisplay display, final EventBus eventBus)
+    public ProjectPresenter(final ProjectDisplay display, final EventBus eventBus, final ProjectClient projectClient)
     {
         super(display, eventBus);
+        this.projectClient = projectClient;
         bind();
     }
 
