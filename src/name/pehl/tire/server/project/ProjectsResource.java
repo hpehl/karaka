@@ -26,20 +26,7 @@ public class ProjectsResource extends ServerResource
 
 
     @Get("xml")
-    public List<Project> listXml()
-    {
-        return internalListProjects();
-    }
-
-
-    @Get("plain")
-    public List<Project> listPlain()
-    {
-        return internalListProjects();
-    }
-
-
-    protected List<Project> internalListProjects()
+    public List<Project> listProjects()
     {
         return service.list();
     }
