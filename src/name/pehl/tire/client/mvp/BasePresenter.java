@@ -1,6 +1,7 @@
 package name.pehl.tire.client.mvp;
 
 import net.customware.gwt.presenter.client.EventBus;
+import net.customware.gwt.presenter.client.place.Place;
 import net.customware.gwt.presenter.client.place.PlaceRequest;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
@@ -12,6 +13,7 @@ import net.customware.gwt.presenter.client.widget.WidgetPresenter;
  * <li>{@link #onBind()}
  * <li>{@link #onUnbind()}
  * <li>{@link #refreshDisplay()}
+ * <li>{@link #getPlace()}
  * <li>{@link #onPlaceRequest(PlaceRequest)}
  * </ul>
  * 
@@ -56,6 +58,19 @@ public abstract class BasePresenter<D extends WidgetDisplay> extends WidgetPrese
     @Override
     public void refreshDisplay()
     {
+    }
+
+
+    /**
+     * Empty implementation
+     * 
+     * @return <code>null</code>
+     * @see net.customware.gwt.presenter.client.BasicPresenter#getPlace()
+     */
+    @Override
+    public Place getPlace()
+    {
+        return null;
     }
 
 
