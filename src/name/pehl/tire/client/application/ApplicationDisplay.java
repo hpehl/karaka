@@ -1,12 +1,12 @@
 package name.pehl.tire.client.application;
 
-import net.customware.gwt.presenter.client.widget.WidgetDisplay;
+import net.customware.gwt.presenter.client.widget.WidgetContainerDisplay;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public interface ApplicationDisplay extends WidgetDisplay
+public interface ApplicationDisplay extends WidgetContainerDisplay
 {
 
 }

@@ -7,6 +7,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
+ * The main view which uses a {@link DockLayoutPanel}.
+ * 
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
@@ -41,5 +43,43 @@ public class ApplicationView extends Composite implements ApplicationDisplay
     @Override
     public void stopProcessing()
     {
+    }
+
+
+    /**
+     * Empty implementation
+     * 
+     * @param widget
+     * @see net.customware.gwt.presenter.client.widget.WidgetContainerDisplay#addWidget(com.google.gwt.user.client.ui.Widget)
+     */
+    @Override
+    public void addWidget(Widget widget)
+    {
+    }
+
+
+    /**
+     * Removes the specified widget from the center of the dock
+     * 
+     * @param widget
+     * @see net.customware.gwt.presenter.client.widget.WidgetContainerDisplay#removeWidget(com.google.gwt.user.client.ui.Widget)
+     */
+    @Override
+    public void removeWidget(Widget widget)
+    {
+        applicationPanel.remove(widget);
+    }
+
+
+    /**
+     * Adds the specified widget to the center of the dock
+     * 
+     * @param widget
+     * @see net.customware.gwt.presenter.client.widget.WidgetContainerDisplay#showWidget(com.google.gwt.user.client.ui.Widget)
+     */
+    @Override
+    public void showWidget(Widget widget)
+    {
+        applicationPanel.add(widget);
     }
 }
