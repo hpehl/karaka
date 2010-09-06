@@ -12,6 +12,6 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.DevMode"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -logLevel INFO -port 8888 -war /home/pehlh/Projekte/GoogleCode/TiRe/impl/war -server com.google.appengine.tools.development.gwt.AppEngineLauncher name.pehl.tire.Tire"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="tire"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m -javaagent:/opt/eclipse/helios/plugins/com.google.appengine.eclipse.sdkbundle.1.3.4_1.3.4.v201006111317/appengine-java-sdk-1.3.4/lib/agent/appengine-agent.jar"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m -javaagent:/opt/eclipse/helios/plugins/com.google.appengine.eclipse.sdkbundle.1.3.7_1.3.7.v201008311427/appengine-java-sdk-1.3.7/lib/agent/appengine-agent.jar"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:tire/war}"/>
 </launchConfiguration>
