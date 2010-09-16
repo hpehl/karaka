@@ -499,6 +499,17 @@
                     <additionalProjectnatures>
                         <projectnature>com.google.appengine.eclipse.core.gaeNature</projectnature>
                     </additionalProjectnatures>
+                    <additionalConfig>
+                        <file>
+                            <name>.checkstyle</name>
+                            <content><![CDATA[
+<factorypath>
+    <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/gwtplatform/gwtp/0.4/gwtp-0.4.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>
+                            ]]></content>
+                        </file>
+                    </additionalConfig>
                     <excludes>
                         <exclude>com.google.gwt:gwt-user</exclude>
                         <exclude>com.google.gwt:gwt-dev</exclude>
