@@ -4,11 +4,11 @@
 
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>name.pehl</groupId>
-    <artifactId>tire-d8</artifactId>
+    <groupId>name.pehl.tire</groupId>
+    <artifactId>tire-parent</artifactId>
     <version>0.1</version>
     <packaging>pom</packaging>
-    <name>Piriti</name>
+    <name>Tire</name>
     <description>Time Recording</description>
     <url>http://code.google.com/p/tire-d8/</url>
     <organization>
@@ -51,14 +51,14 @@
 
     <distributionManagement>
         <repository>
-            <id>piriti-repo</id>
-            <name>Piriti Repository</name>
-            <url>svn:https://piriti.googlecode.com/svn/repository</url>
+            <id>tire-repo</id>
+            <name>Tire Repository</name>
+            <url>svn:https://tire-d8.googlecode.com/svn/repository</url>
         </repository>
         <site>
-            <id>piriti-site</id>
-            <name>Piriti Site</name>
-            <url>svn:https://piriti.googlecode.com/svn/site</url>
+            <id>tire-site</id>
+            <name>Tire Site</name>
+            <url>svn:https://tire-d8.googlecode.com/svn/site</url>
         </site>
     </distributionManagement>
 
@@ -155,6 +155,14 @@
         <!-- Misc -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    
+    
+    <modules>
+        <module>dao</module>
+        <module>gwt</module>
+        <module>model</module>
+        <module>rest</module>
+    </modules>
 
 
     <dependencyManagement>
@@ -163,12 +171,6 @@
             <dependency>
                 <groupId>name.pehl.piriti</groupId>
                 <artifactId>piriti-core</artifactId>
-                <version>${piriti.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>name.pehl.piriti</groupId>
-                <artifactId>piriti-restlet</artifactId>
                 <version>${piriti.version}</version>
                 <scope>provided</scope>
             </dependency>
@@ -391,160 +393,34 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources/gwt</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-i18n-sources</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.build.directory}/generated-sources/gwt</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.1-beta-1</version>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <webResources>
-                        <resource>
-                            <directory>src/main/webapp</directory>
-                            <filtering>true</filtering>
-                            <includes>
-                                <include>**/appengine-web.xml</include>
-                            </includes>
-                        </resource>
-                    </webResources>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <configuration>
-                    <logLevel>INFO</logLevel>
-                    <port>8888</port>
-                    <extraJvmArgs>-Xmx512m</extraJvmArgs>
-                    <server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
-                    <runTarget>/index.html</runTarget>
-                    <webXml>war/WEB-INF/web.xml</webXml>
-                    <gwtVersion>${gwt.version}</gwtVersion>
-                    <module>name.pehl.tire.Tire</module>
-                    <i18nConstantsBundles>
-                        <i18nConstantsBundle>
-                            name.pehl.tire.client.i18n.Constants
-                        </i18nConstantsBundle>
-                    </i18nConstantsBundles>
-                    <i18nConstantsWithLookupBundles>
-                        <i18nConstantsWithLookupBundle>
-                            name.pehl.tire.client.i18n.Enums
-                        </i18nConstantsWithLookupBundle>
-                    </i18nConstantsWithLookupBundles>
-                    <i18nMessagesBundles>
-                        <i18nMessagesBundles>
-                            name.pehl.tire.client.i18n.Messages
-                        </i18nMessagesBundles>
-                    </i18nMessagesBundles>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>i18n</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <configuration>
-                    <classpathContainers>
-                        <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
-                        <classpathContainer>com.google.gwt.eclipse.core.GWT_CONTAINER</classpathContainer>
-                        <classpathContainer>com.google.appengine.eclipse.core.GAE_CONTAINER</classpathContainer>
-                    </classpathContainers>
-                    <additionalProjectnatures>
-                        <projectnature>com.google.appengine.eclipse.core.gaeNature</projectnature>
-                    </additionalProjectnatures>
                     <additionalConfig>
                         <file>
-                            <name>.factorypath</name>
-                            <content><![CDATA[
-<factorypath>
-    <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/gwtplatform/gwtp/0.4/gwtp-0.4.jar" enabled="true" runInBatchMode="false"/>
-</factorypath>
-                            ]]></content>
-                        </file>
-                        <file>
-                            <name>.settings/org.eclipse.jdt.apt.core.prefs</name>
-                            <content><![CDATA[
+                           <name>.settings/org.eclipse.core.resources.prefs</name>
+                           <content><![CDATA[
 eclipse.preferences.version=1
-org.eclipse.jdt.apt.aptEnabled=true
-org.eclipse.jdt.apt.genSrcDir=.apt_generated
-org.eclipse.jdt.apt.reconcileEnabled=true
-                            ]]></content>
-                        </file>
+encoding/<project>=${project.build.sourceEncoding}
+                           ]]></content>
+                       </file>
                     </additionalConfig>
-                    <excludes>
-                        <exclude>com.google.gwt:gwt-user</exclude>
-                        <exclude>com.google.gwt:gwt-dev</exclude>
-                        <exclude>com.google.appengine:appengine-api-1.0-sdk</exclude>
-                        <exclude>com.google.appengine:appengine-api-labs</exclude>
-                        <exclude>com.google.appengine:geronimo-jpa_3.0_spec</exclude>
-                        <exclude>com.google.appengine.orm:datanucleus-appengine</exclude>
-                        <exclude>org.datanucleus:datanucleus-core</exclude>
-                        <exclude>org.datanucleus:datanucleus-jpa</exclude>
-                        <exclude>javax.jdo:jdo2-api</exclude>
-                        <exclude>javax.transaction:jta</exclude>
-                        <exclude>org.apache.geronimo.specs:geronimo-jpa_3.0_spec</exclude>
-                        <exclude>org.apache.geronimo.specs:geronimo-servlet_2.5_spec</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>net.kindleit</groupId>
-                <artifactId>maven-gae-plugin</artifactId>
-                <version>0.7.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.kindleit</groupId>
-                        <artifactId>gae-runtime</artifactId>
-                        <version>${gae.version}</version>
-                        <type>pom</type>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <goals>gae:deploy</goals>
                 </configuration>
             </plugin>
         </plugins>

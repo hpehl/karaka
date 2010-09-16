@@ -1,0 +1,94 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <!-- $LastChangedBy: harald.pehl $LastChangedRevision: 137 $ -->
+
+    <parent>
+        <groupId>name.pehl.tire</groupId>
+        <artifactId>tire-gwt</artifactId>
+        <version>0.1</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>tire-gwt-resources</artifactId>
+    <name>Tire GWT Resources</name>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/gwt</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-i18n-sources</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/generated-sources/gwt</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <configuration>
+                    <extraJvmArgs>-Xmx512m</extraJvmArgs>
+                    <gwtVersion>${gwt.version}</gwtVersion>
+                    <i18nConstantsBundles>
+                        <i18nConstantsBundle>
+                            name.pehl.tire.client.i18n.Constants
+                        </i18nConstantsBundle>
+                    </i18nConstantsBundles>
+                    <i18nConstantsWithLookupBundles>
+                        <i18nConstantsWithLookupBundle>
+                            name.pehl.tire.client.i18n.Enums
+                        </i18nConstantsWithLookupBundle>
+                    </i18nConstantsWithLookupBundles>
+                    <i18nMessagesBundles>
+                        <i18nMessagesBundles>
+                            name.pehl.tire.client.i18n.Messages
+                        </i18nMessagesBundles>
+                    </i18nMessagesBundles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>i18n</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

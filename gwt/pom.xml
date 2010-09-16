@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <!-- $LastChangedBy: harald.pehl $LastChangedRevision: 137 $ -->
+
+    <parent>
+        <groupId>name.pehl.tire</groupId>
+        <artifactId>tire-parent</artifactId>
+        <version>0.1</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>tire-gwt</artifactId>
+    <name>Tire GWT</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>app</module>
+        <module>model</module>
+        <module>resources</module>
+    </modules>
+
+</project>
