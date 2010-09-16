@@ -12,4 +12,11 @@
     <artifactId>tire-model</artifactId>
     <name>Tire Model</name>
     
+    <dependencies>
+        <dependency>
+            <groupId>com.googlecode.objectify</groupId>
+            <artifactId>objectify</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

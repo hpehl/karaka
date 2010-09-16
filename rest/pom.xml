@@ -26,6 +26,10 @@
             <artifactId>taoki</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.restlet.gae</groupId>
             <artifactId>org.restlet</artifactId>
         </dependency>
