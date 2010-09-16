@@ -167,6 +167,38 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- TiRe -->
+            <dependency>
+                <groupId>name.pehl.tire</groupId>
+                <artifactId>tire-dao</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>name.pehl.tire</groupId>
+                <artifactId>tire-model</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>name.pehl.tire</groupId>
+                <artifactId>tire-rest</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>name.pehl.tire</groupId>
+                <artifactId>tire-gwt-app</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>name.pehl.tire</groupId>
+                <artifactId>tire-gwt-model</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>name.pehl.tire</groupId>
+                <artifactId>tire-gwt-resources</artifactId>
+                <version>${version}</version>
+            </dependency>
+            
             <!-- name.pehl -->
             <dependency>
                 <groupId>name.pehl.piriti</groupId>

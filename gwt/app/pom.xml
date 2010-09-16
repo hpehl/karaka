@@ -9,8 +9,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>tire-gwt-app</artifactId>
-    <name>Tire GWT Resources</name>
+    <artifactId>tire-d8</artifactId>
+    <name>Tire GWT App</name>
     <packaging>war</packaging>
 
     <dependencies>
