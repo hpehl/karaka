@@ -13,7 +13,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyFailureHandler;
  * @author $LastChangedBy: harald.pehl $
  * @version $LastChangedRevision: 50 $
  */
-@GinModules(TireModule.class)
+@GinModules({TireModule.class, DispatchAsyncModule.class})
 public interface TireGinjector extends Ginjector
 {
     EventBus getEventBus();

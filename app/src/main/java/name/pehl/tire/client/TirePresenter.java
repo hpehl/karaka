@@ -36,7 +36,7 @@ public class TirePresenter extends Presenter<TirePresenter.MyView, TirePresenter
         public void onSuccess(final CreateItemActionResult result)
         {
             // we omit to check if the creation was a result ...
-            view.getNewName().setValue("");
+            getView().getNewName().setValue("");
             dispatch.execute(new GetAllItemsAction(), new GetAllCallback());
         }
     }
@@ -123,14 +123,14 @@ public class TirePresenter extends Presenter<TirePresenter.MyView, TirePresenter
     protected void onBind()
     {
         super.onBind();
-        view.getNewItemButton().addClickHandler(new CreateClickHandler());
+        getView().getNewItemButton().addClickHandler(new CreateClickHandler());
     }
 
 
     @Override
     protected void revealInParent()
     {
-        RevealRootContentEvent.fire(eventBus, this);
+        RevealRootContentEvent.fire(this, this);
     }
 
 }

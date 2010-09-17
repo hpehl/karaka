@@ -33,6 +33,14 @@
             <groupId>name.pehl.piriti</groupId>
             <artifactId>piriti-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>name.pehl.piriti</groupId>
+            <artifactId>piriti-restlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>name.pehl</groupId>
+            <artifactId>totoe</artifactId>
+        </dependency>
 
         <!-- GWT & GWTP -->
         <dependency>
@@ -205,7 +213,7 @@
                     <server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
                     <port>8888</port>
                     <runTarget>/index.html</runTarget>
-                    <webXml>war/WEB-INF/web.xml</webXml>
+                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
                     <gwtVersion>${gwt.version}</gwtVersion>
                     <module>name.pehl.tire.Tire</module>
                     <i18nConstantsBundles>
