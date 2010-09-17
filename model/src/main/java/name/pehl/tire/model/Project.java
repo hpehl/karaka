@@ -13,7 +13,7 @@ import com.googlecode.objectify.annotation.Parent;
 public class Project extends DescriptiveEntity implements HasUser
 {
     @Parent
-    Key<Client> project;
+    Key<Client> client;
 
     User user;
 
@@ -40,6 +40,15 @@ public class Project extends DescriptiveEntity implements HasUser
     public User getUser()
     {
         return user;
+    }
+
+
+    /**
+     * @return the client.
+     */
+    public Key<Client> getClient()
+    {
+        return client;
     }
 
 
