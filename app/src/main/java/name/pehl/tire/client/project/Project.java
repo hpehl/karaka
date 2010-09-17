@@ -11,9 +11,12 @@ import com.gwtplatform.annotation.GenDto;
 @GenDto
 public class Project
 {
+    @JsonField
     Long id;
 
+    @JsonField
     String name;
 
+    @JsonField
     String description;
 }

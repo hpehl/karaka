@@ -153,6 +153,15 @@
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
+                <artifactId>apt-maven-plugin</artifactId>
+                <version>1.0-alpha-3</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <outputDirectory>${project.build.directory}/generated-sources/apt</outputDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <executions>
                     <execution>
@@ -168,6 +177,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--  Necessary or obsolete due to gwt:resources?
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
@@ -188,6 +198,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -237,6 +248,7 @@
                         <goals>
                             <goal>i18n</goal>
                             <goal>compile</goal>
+                            <goal>resources</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -253,7 +265,11 @@
                     <additionalBuildcommands>
                         <buildCommand>
                             <name>com.google.gdt.eclipse.core.webAppProjectValidator</name>
+                        </buildCommand>
+                        <buildCommand>
                             <name>com.google.gwt.eclipse.core.gwtProjectValidator</name>
+                        </buildCommand>
+                        <buildCommand>
                             <name>com.google.appengine.eclipse.core.projectValidator</name>
                         </buildCommand>
                     </additionalBuildcommands>
@@ -276,7 +292,7 @@
                             <content><![CDATA[
 eclipse.preferences.version=1
 org.eclipse.jdt.apt.aptEnabled=true
-org.eclipse.jdt.apt.genSrcDir=target/apt
+org.eclipse.jdt.apt.genSrcDir=target/generated-sources/apt
 org.eclipse.jdt.apt.reconcileEnabled=true
                             ]]></content>
                         </file>
