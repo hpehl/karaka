@@ -250,7 +250,15 @@
                         <classpathContainer>com.google.gwt.eclipse.core.GWT_CONTAINER</classpathContainer>
                         <classpathContainer>com.google.appengine.eclipse.core.GAE_CONTAINER</classpathContainer>
                     </classpathContainers>
+                    <additionalBuildcommands>
+                        <buildCommand>
+                            <name>com.google.gdt.eclipse.core.webAppProjectValidator</name>
+                            <name>com.google.gwt.eclipse.core.gwtProjectValidator</name>
+                            <name>com.google.appengine.eclipse.core.projectValidator</name>
+                        </buildCommand>
+                    </additionalBuildcommands>
                     <additionalProjectnatures>
+                        <projectnature>com.google.gwt.eclipse.core.gwtNature</projectnature>
                         <projectnature>com.google.appengine.eclipse.core.gaeNature</projectnature>
                     </additionalProjectnatures>
                     <additionalConfig>
@@ -268,7 +276,7 @@
                             <content><![CDATA[
 eclipse.preferences.version=1
 org.eclipse.jdt.apt.aptEnabled=true
-org.eclipse.jdt.apt.genSrcDir=.apt_generated
+org.eclipse.jdt.apt.genSrcDir=target/apt
 org.eclipse.jdt.apt.reconcileEnabled=true
                             ]]></content>
                         </file>

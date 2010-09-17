@@ -197,6 +197,12 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
+                <groupId>name.pehl.piriti</groupId>
+                <artifactId>piriti-restlet</artifactId>
+                <version>${piriti.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <groupId>name.pehl</groupId>
                 <artifactId>totoe</artifactId>
                 <version>${totoe.version}</version>
@@ -252,7 +258,7 @@
             <dependency>
                 <groupId>com.google.gwt.inject</groupId>
                 <artifactId>gin</artifactId>
-                <version>1.0</version>
+                <version>r137</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -321,7 +327,6 @@
                 <groupId>com.google.appengine</groupId>
                 <artifactId>geronimo-jpa_3.0_spec</artifactId>
                 <version>1.1.1</version>
-                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.appengine.orm</groupId>
