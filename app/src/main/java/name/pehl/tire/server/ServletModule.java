@@ -1,6 +1,4 @@
-package name.pehl.tire.server.servlet;
-
-import name.pehl.tire.server.rest.TireRestletServlet;
+package name.pehl.tire.server;
 
 /**
  * @author $Author: harald.pehl $
@@ -11,6 +9,6 @@ public class ServletModule extends com.google.inject.servlet.ServletModule
     @Override
     protected void configureServlets()
     {
-        serve("/rest/v1/*").with(TireRestletServlet.class);
+        serve("/rest/v1/*").with(TireServlet.class);
     }
 }
