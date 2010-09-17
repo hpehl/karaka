@@ -4,7 +4,6 @@ import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.TirePresenter;
 import name.pehl.tire.client.TireView;
 import name.pehl.tire.client.i18n.I18n;
-import name.pehl.tire.client.project.ProjectClient;
 
 import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.DefaultEventBus;
@@ -38,6 +37,6 @@ public class TireModule extends AbstractPresenterModule
 
         // Other stuff
         bind(I18n.class).in(Singleton.class);
-        bind(ProjectClient.class).in(Singleton.class);
+        // TODO bind(ProjectClient.class).in(Singleton.class);
     }
 }

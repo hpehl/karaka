@@ -7,7 +7,6 @@
     <inherits name="com.google.gwt.json.JSON" />
     <inherits name="com.google.gwt.uibinder.UiBinder" />
     <inherits name="com.google.gwt.user.User" />
-    <inherits name="com.google.gwt.xml.XML" />
 
     <!-- name.pehl -->
     <inherits name="name.pehl.totoe.Totoe" />

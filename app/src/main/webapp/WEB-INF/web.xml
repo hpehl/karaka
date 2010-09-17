@@ -1,6 +1,5 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
 
-
     <filter>
         <filter-name>guiceFilter</filter-name>
         <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
@@ -10,16 +9,13 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-
     <listener>
-        <listener-class>name.pehl.tire.server.servlet.ServletConfig</listener-class>
+        <listener-class>name.pehl.tire.server.ServletConfig</listener-class>
     </listener>
-
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-
 
     <security-constraint>
         <web-resource-collection>
@@ -29,6 +25,5 @@
             <role-name>*</role-name>
         </auth-constraint>
     </security-constraint>
-
 
 </web-app>

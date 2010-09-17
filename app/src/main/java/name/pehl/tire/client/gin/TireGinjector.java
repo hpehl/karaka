@@ -1,6 +1,6 @@
 package name.pehl.tire.client.gin;
 
-import name.pehl.tire.client.ApplicationPresenter;
+import name.pehl.tire.client.TirePresenter;
 
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
@@ -19,7 +19,7 @@ public interface TireGinjector extends Ginjector
     EventBus getEventBus();
 
 
-    Provider<ApplicationPresenter> getApplicationPresenter();
+    Provider<TirePresenter> getTirePresenter();
 
 
     PlaceManager getPlaceManager();

@@ -1,5 +1,10 @@
 package name.pehl.tire.client;
 
+import name.pehl.tire.client.command.CreateItemAction;
+import name.pehl.tire.client.command.CreateItemActionResult;
+import name.pehl.tire.client.command.GetAllItemsAction;
+import name.pehl.tire.client.command.GetAllItemsActionResult;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -8,7 +13,7 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.client.DispatchAsync;
 import com.gwtplatform.mvp.client.EventBus;
-import com.gwtplatform.mvp.client.PresenterImpl;
+import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
@@ -17,7 +22,7 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.Proxy;
 import com.gwtplatform.mvp.client.proxy.RevealRootContentEvent;
 
-public class TirePresenter extends PresenterImpl<TirePresenter.MyView, TirePresenter.MyProxy>
+public class TirePresenter extends Presenter<TirePresenter.MyView, TirePresenter.MyProxy>
 {
     class CreateCallback implements AsyncCallback<CreateItemActionResult>
     {
