@@ -1,10 +1,9 @@
-package name.pehl.tire.server.model;
+package name.pehl.tire.model;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Parent;
 
 /**

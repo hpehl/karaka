@@ -1,4 +1,4 @@
-package name.pehl.tire.server.model;
+package name.pehl.tire.model;
 
 import com.google.appengine.api.users.User;
 

@@ -1,9 +1,8 @@
-package name.pehl.tire.server.model;
-
-import javax.persistence.Entity;
+package name.pehl.tire.model;
 
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Entity;
 
 /**
  * @author $LastChangedBy: harald.pehl $

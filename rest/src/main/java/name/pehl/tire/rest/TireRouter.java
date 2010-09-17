@@ -1,7 +1,6 @@
-package name.pehl.tire.server.rest;
+package name.pehl.tire.rest;
 
 import name.pehl.taoki.security.SecureRouter;
-import name.pehl.tire.server.project.ProjectsResource;
 
 import org.restlet.Context;
 
@@ -22,6 +21,6 @@ public class TireRouter extends SecureRouter
     @Override
     protected void attachRoutes()
     {
-        attach("/{token}/projects", ProjectsResource.class);
+        // TODO attach("/{token}/projects", ProjectsResource.class);
     }
 }

@@ -1,6 +1,4 @@
-package name.pehl.tire.server.rest;
-
-import name.pehl.tire.server.project.ProjectsResource;
+package name.pehl.tire.rest;
 
 import com.google.inject.AbstractModule;
 
@@ -13,6 +11,6 @@ public class RestModule extends AbstractModule
     @Override
     protected void configure()
     {
-        bind(ProjectsResource.class);
+        // TODO bind(ProjectsResource.class);
     }
 }
