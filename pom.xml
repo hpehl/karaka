@@ -185,17 +185,7 @@
             </dependency>
             <dependency>
                 <groupId>name.pehl.tire</groupId>
-                <artifactId>tire-gwt-app</artifactId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
-                <groupId>name.pehl.tire</groupId>
-                <artifactId>tire-gwt-model</artifactId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
-                <groupId>name.pehl.tire</groupId>
-                <artifactId>tire-gwt-resources</artifactId>
+                <artifactId>tire-d8</artifactId>
                 <version>${version}</version>
             </dependency>
             

@@ -10,10 +10,24 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tire-d8</artifactId>
-    <name>Tire GWT App</name>
+    <name>Tire App</name>
     <packaging>war</packaging>
 
     <dependencies>
+        <!-- TiRe -->
+        <dependency>
+            <groupId>name.pehl.tire</groupId>
+            <artifactId>tire-dao</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>name.pehl.tire</groupId>
+            <artifactId>tire-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>name.pehl.tire</groupId>
+            <artifactId>tire-rest</artifactId>
+        </dependency>
+
         <!-- GWT & GWTP -->
         <dependency>
             <groupId>com.google.gwt</groupId>
