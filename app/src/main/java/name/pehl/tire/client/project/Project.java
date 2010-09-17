@@ -1,6 +1,6 @@
 package name.pehl.tire.client.project;
 
-import name.pehl.piriti.client.json.JsonField;
+import name.pehl.tire.client.model.Descriptive;
 
 import com.gwtplatform.annotation.GenDto;
 
@@ -9,14 +9,6 @@ import com.gwtplatform.annotation.GenDto;
  * @version $Date$ $Revision$
  */
 @GenDto
-public class Project
+public class Project extends Descriptive
 {
-    @JsonField
-    Long id;
-
-    @JsonField
-    String name;
-
-    @JsonField
-    String description;
 }
