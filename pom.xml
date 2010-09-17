@@ -158,8 +158,8 @@
     
     
     <modules>
+        <module>app</module>
         <module>dao</module>
-        <module>gwt</module>
         <module>model</module>
         <module>rest</module>
     </modules>
