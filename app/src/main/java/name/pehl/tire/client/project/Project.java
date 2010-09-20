@@ -11,4 +11,5 @@ import com.gwtplatform.annotation.GenDto;
 @GenDto
 public class Project extends Descriptive
 {
+    public String foo;
 }
