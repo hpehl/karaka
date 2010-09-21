@@ -1,5 +1,6 @@
 package name.pehl.tire.client.gin;
 
+import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.TirePresenter;
 import name.pehl.tire.client.TireView;
@@ -25,18 +26,21 @@ public class TireModule extends AbstractPresenterModule
     @Override
     protected void configure()
     {
-        // GWTP
+        // Singletons
         bind(EventBus.class).to(DefaultEventBus.class).in(Singleton.class);
         bind(PlaceManager.class).to(TirePlaceManager.class).in(Singleton.class);
         bind(TokenFormatter.class).to(ParameterTokenFormatter.class).in(Singleton.class);
         bind(RootPresenter.class).asEagerSingleton();
         bind(ProxyFailureHandler.class).to(DefaultProxyFailureHandler.class).in(Singleton.class);
+        bind(I18n.class).in(Singleton.class);
+
+        // Rest
+        // TODO bind(ProjectClient.class).in(Singleton.class);
+
+        // Constants
+        bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
         // MVP
-        bindPresenter(TirePresenter.class, TirePresenter.MyView.class, TireView.class, TirePresenter.MyProxy.class);
-
-        // Other stuff
-        bind(I18n.class).in(Singleton.class);
-        // TODO bind(ProjectClient.class).in(Singleton.class);
+        bindPresenter(TirePresenter.class, TirePresenter.View.class, TireView.class, TirePresenter.Proxy.class);
     }
 }

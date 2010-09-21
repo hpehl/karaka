@@ -1,36 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style>
-		.error {
-			font-weight: bold;
-			color: red;
-		}
-	</ui:style>
 	<g:HTMLPanel>
-        <table align="center">
-			<g:VerticalPanel>
-				<g:HTML>
-					<h1>GWTP Dispatch without GWT-RPC</h1>
-				</g:HTML>
-                <g:HTMLPanel>
-                    <fieldset>
-                        <legend>Create new item</legend>
-						<g:HorizontalPanel>
-							<g:Label>Name:</g:Label>
-							<g:TextBox ui:field="itemNameTextBox"/>
-							<g:Button ui:field="createNewItemButton">Create</g:Button>
-						</g:HorizontalPanel>
-						<g:Label ui:field="errorLabel" styleName="{style.error}"/>
-                    </fieldset>
-                </g:HTMLPanel>
-				<g:HTMLPanel>
-				    <fieldset>
-				        <legend>All items</legend>
-				        <g:FlexTable ui:field="allItemsFlexTable" borderWidth="1"/>
-				    </fieldset>
-				</g:HTMLPanel>
-			</g:VerticalPanel>
-        </table>
+		<g:FlowPanel ui:field="mainContentPanel" />
 	</g:HTMLPanel>
 </ui:UiBinder> 

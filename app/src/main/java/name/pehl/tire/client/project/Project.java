@@ -6,10 +6,10 @@ import com.gwtplatform.annotation.GenDto;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 83
+ *          $
  */
 @GenDto
 public class Project extends Descriptive
 {
-    public String foo;
 }
