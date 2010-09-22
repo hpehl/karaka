@@ -4,7 +4,10 @@ import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.TirePresenter;
 import name.pehl.tire.client.TireView;
-import name.pehl.tire.client.i18n.I18n;
+import name.pehl.tire.client.dashboard.DashboardPresenter;
+import name.pehl.tire.client.dashboard.DashboardView;
+import name.pehl.tire.client.resources.I18n;
+import name.pehl.tire.client.resources.Resources;
 
 import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.DefaultEventBus;
@@ -33,6 +36,7 @@ public class TireModule extends AbstractPresenterModule
         bind(RootPresenter.class).asEagerSingleton();
         bind(ProxyFailureHandler.class).to(DefaultProxyFailureHandler.class).in(Singleton.class);
         bind(I18n.class).in(Singleton.class);
+        bind(Resources.class).in(Singleton.class);
 
         // Rest
         // TODO bind(ProjectClient.class).in(Singleton.class);
@@ -41,6 +45,8 @@ public class TireModule extends AbstractPresenterModule
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
         // MVP
-        bindPresenter(TirePresenter.class, TirePresenter.View.class, TireView.class, TirePresenter.Proxy.class);
+        bindPresenter(TirePresenter.class, TirePresenter.MyView.class, TireView.class, TirePresenter.MyProxy.class);
+        bindPresenter(DashboardPresenter.class, DashboardPresenter.MyView.class, DashboardView.class,
+                DashboardPresenter.MyProxy.class);
     }
 }

@@ -4,20 +4,22 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.EventBus;
 import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.ContentSlot;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
-import com.gwtplatform.mvp.client.proxy.Place;
+import com.gwtplatform.mvp.client.proxy.Proxy;
 import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
-import com.gwtplatform.mvp.client.proxy.RevealRootContentEvent;
+import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
 
 /**
  * This is the top-level presenter of the hierarchy. Other presenters reveal
- * themselves within this presenter.
+ * themselves within this presenter. Therefore they must use the
+ * {@link #TYPE_SetMainContent} slot.
  * 
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision$
  */
-public class TirePresenter extends Presenter<TirePresenter.View, TirePresenter.Proxy>
+public class TirePresenter extends Presenter<TirePresenter.MyView, TirePresenter.MyProxy>
 {
     /**
      * Use this in leaf presenters, inside their {@link #revealInParent} method.
@@ -26,17 +28,17 @@ public class TirePresenter extends Presenter<TirePresenter.View, TirePresenter.P
     public static final Type<RevealContentHandler<?>> TYPE_SetMainContent = new Type<RevealContentHandler<?>>();
 
     @ProxyStandard
-    public interface Proxy extends com.gwtplatform.mvp.client.proxy.Proxy<TirePresenter>, Place
+    public interface MyProxy extends Proxy<TirePresenter>
     {
     }
 
-    public interface View extends com.gwtplatform.mvp.client.View
+    public interface MyView extends View
     {
     }
 
 
     @Inject
-    public TirePresenter(final EventBus eventBus, final View view, final Proxy proxy)
+    public TirePresenter(final EventBus eventBus, final MyView view, final MyProxy proxy)
     {
         super(eventBus, view, proxy);
     }
@@ -45,7 +47,6 @@ public class TirePresenter extends Presenter<TirePresenter.View, TirePresenter.P
     @Override
     protected void revealInParent()
     {
-        RevealRootContentEvent.fire(this, this);
+        RevealRootLayoutContentEvent.fire(this, this);
     }
-
 }

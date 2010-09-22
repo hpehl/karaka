@@ -1,29 +1,34 @@
 package name.pehl.tire.client;
 
+import name.pehl.tire.client.resources.Resources;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 
-public class TireView extends ViewImpl implements TirePresenter.View
+public class TireView extends ViewImpl implements TirePresenter.MyView
 {
-    interface MainPageViewUiBinder extends UiBinder<Widget, TireView>
+    interface TireUi extends UiBinder<Widget, TireView>
     {
     }
 
-    private static MainPageViewUiBinder uiBinder = GWT.create(MainPageViewUiBinder.class);
-
-    public final Widget widget;
+    private static TireUi uiBinder = GWT.create(TireUi.class);
 
     @UiField
-    FlowPanel mainContentPanel;
+    FlowPanel mainContent;
+    private final Widget widget;
 
 
-    public TireView()
+    @Inject
+    public TireView(Resources resources)
     {
-        widget = uiBinder.createAndBindUi(this);
+        StyleInjector.inject(resources.backgrounds().getText(), true);
+        this.widget = uiBinder.createAndBindUi(this);
     }
 
 
@@ -50,11 +55,10 @@ public class TireView extends ViewImpl implements TirePresenter.View
 
     private void setMainContent(Widget content)
     {
-        mainContentPanel.clear();
-
+        mainContent.clear();
         if (content != null)
         {
-            mainContentPanel.add(content);
+            mainContent.add(content);
         }
     }
 }

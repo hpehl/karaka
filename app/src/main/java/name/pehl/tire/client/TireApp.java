@@ -10,7 +10,7 @@ import com.gwtplatform.mvp.client.DelayedBindRegistry;
  * @author $Author$
  * @version $Revision$
  */
-public class Tire implements EntryPoint
+public class TireApp implements EntryPoint
 {
     public final TireGinjector ginjector = GWT.create(TireGinjector.class);
 

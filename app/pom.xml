@@ -213,17 +213,17 @@
                     <module>name.pehl.tire.Tire</module>
                     <i18nConstantsBundles>
                         <i18nConstantsBundle>
-                            name.pehl.tire.client.i18n.Constants
+                            name.pehl.tire.client.resources.Constants
                         </i18nConstantsBundle>
                     </i18nConstantsBundles>
                     <i18nConstantsWithLookupBundles>
                         <i18nConstantsWithLookupBundle>
-                            name.pehl.tire.client.i18n.Enums
+                            name.pehl.tire.client.resources.Enums
                         </i18nConstantsWithLookupBundle>
                     </i18nConstantsWithLookupBundles>
                     <i18nMessagesBundles>
                         <i18nMessagesBundles>
-                            name.pehl.tire.client.i18n.Messages
+                            name.pehl.tire.client.resources.Messages
                         </i18nMessagesBundles>
                     </i18nMessagesBundles>
                 </configuration>
@@ -231,7 +231,7 @@
                     <execution>
                         <goals>
                             <goal>i18n</goal>
-                            <goal>compile</goal>
+                            <goal>compile</goal> 
                             <goal>resources</goal>
                         </goals>
                     </execution>

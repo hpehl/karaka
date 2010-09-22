@@ -1,4 +1,4 @@
-package name.pehl.tire.client.i18n;
+package name.pehl.tire.client.resources;
 
 import java.util.MissingResourceException;
 
@@ -10,9 +10,9 @@ import com.google.inject.Inject;
  */
 public class I18n
 {
-    private Constants constants;
-    private Enums enums;
-    private Messages messages;
+    private final Constants constants;
+    private final Enums enums;
+    private final Messages messages;
 
 
     @Inject
