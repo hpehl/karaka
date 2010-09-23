@@ -1,9 +1,11 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
-    <ui:with field="nameTokens" type="name.pehl.tire.client.NameTokens"></ui:with>
-    <ui:image field="header" repeatStyle="Horizontal" src="resources/header.png"></ui:image>
-    <ui:style src="resources/common.css">
+    <ui:with field="nameTokens" type="name.pehl.tire.client.NameTokens" />
+    <ui:image field="header" repeatStyle="Horizontal" src="resources/header.png" />
+    <ui:style field="common" src="resources/common.css" />
+        
+    <ui:style src="resources/colors.css">
         @sprite header {
             color: white;
             gwt-image: "header";
@@ -51,6 +53,7 @@
             display: block;
             line-height: 20px;
             text-transform: uppercase;
+            letter-spacing: 3px;
             padding: 5px 5px 5px 10px;
             border-top: 1px solid green2;
             border-right: 1px solid green2;
@@ -106,21 +109,24 @@
             </g:HTMLPanel>
         </g:south>
         <g:east size="250">
-            <g:HTMLPanel>
-                <aside>
-                    <g:FlowPanel ui:field="statusPanel" addStyleNames="{style.statusPanel} {style.whiteBox}"></g:FlowPanel>
-                    <nav>
-                        <g:InlineHyperlink targetHistoryToken="{nameTokens.dashboard}" addStyleNames="{style.selected}">Dashboard</g:InlineHyperlink>
-                        <g:InlineHyperlink targetHistoryToken="{nameTokens.projects}">Projects</g:InlineHyperlink>
-                        <g:InlineHyperlink targetHistoryToken="{nameTokens.clients}">Clients</g:InlineHyperlink>
-                        <g:InlineHyperlink targetHistoryToken="{nameTokens.tags}">Tags</g:InlineHyperlink>
-                        <g:InlineHyperlink targetHistoryToken="{nameTokens.reports}">Reports</g:InlineHyperlink>
-                    </nav>
-                </aside>
-            </g:HTMLPanel>
+            <g:ScrollPanel>
+                <g:HTMLPanel>
+                    <aside>
+                        <g:FlowPanel ui:field="statusPanel" addStyleNames="{style.statusPanel} {common.whiteBox}"></g:FlowPanel>
+                        <nav>
+                            <g:InlineHyperlink targetHistoryToken="{nameTokens.dashboard}"
+                                addStyleNames="{style.selected}">Dashboard</g:InlineHyperlink>
+                            <g:InlineHyperlink targetHistoryToken="{nameTokens.projects}">Projects</g:InlineHyperlink>
+                            <g:InlineHyperlink targetHistoryToken="{nameTokens.clients}">Clients</g:InlineHyperlink>
+                            <g:InlineHyperlink targetHistoryToken="{nameTokens.tags}">Tags</g:InlineHyperlink>
+                            <g:InlineHyperlink targetHistoryToken="{nameTokens.reports}">Reports</g:InlineHyperlink>
+                        </nav>
+                    </aside>
+                </g:HTMLPanel>
+            </g:ScrollPanel>
         </g:east>
         <g:center>
-            <g:ScrollPanel ui:field="mainPanel" addStyleNames="{style.mainPanel} {style.whiteBox}"></g:ScrollPanel>
+            <g:ScrollPanel ui:field="mainPanel" addStyleNames="{style.mainPanel} {common.whiteBox}"></g:ScrollPanel>
         </g:center>
     </g:DockLayoutPanel>
 </ui:UiBinder> 

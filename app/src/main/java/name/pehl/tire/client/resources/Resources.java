@@ -2,6 +2,7 @@ package name.pehl.tire.client.resources;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.client.ImageResource;
 
 /**
  * @author $Author$
@@ -9,14 +10,32 @@ import com.google.gwt.resources.client.CssResource;
  */
 public interface Resources extends ClientBundle
 {
-    @Source("common.css")
-    CommonCss css();
+    @Source("on.png")
+    ImageResource on();
 
-    public interface CommonCss extends CssResource
+
+    @Source("off.png")
+    ImageResource off();
+
+
+    @Source("record.css")
+    Record record();
+
+    public interface Record extends CssResource
     {
         // @formatter:off
-        String whiteBox();
-        
+        @ClassName("on") String on();
+        @ClassName("off") String off();
+        // @formatter:on
+    }
+
+
+    @Source("colors.css")
+    Colors colors();
+
+    public interface Colors extends CssResource
+    {
+        // @formatter:off
         String turquoise0();
         String turquoise1();
         String turquoise2();

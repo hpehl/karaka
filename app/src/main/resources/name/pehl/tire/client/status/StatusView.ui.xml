@@ -1,18 +1,72 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
-    <ui:style>
-        p.status {
-            padding: 1em;
-            line-height: 1.2em;
+    <ui:with field="res" type="name.pehl.tire.client.resources.Resources" />
+    <ui:style src="../resources/colors.css">
+        div.recordContainer {
+            padding: 20px 68px 0px 68px;
+        }
+        
+        .record {
+            display: block;
+            -webkit-border-radius: 33px;
+            -moz-border-radius: 33px;
+            border-radius: 33px;
+        }
+        
+        .record:hover {
+            -moz-box-shadow: 0 0 25px turquoise2;
+            -webkit-box-shadow: 0 0 25px turquoise2;
+            box-shadow: 0 0 25px turquoise2;
+        }
+        
+        div.infoContainer {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        div.timeContainer {
+            padding: 0px 20px;
+            
+        }
+        
+        .dayTime {
+            font-size: 24px;
+            font-weight: bold;
+            float: left;
+        }
+        
+        .monthTime, .weekTime {
+            font-size: 12px;
+            float: right;
+            clear: right;
+        }
+        
+        .description {
+            padding-top: 20px;
+            clear: left;
+            font-size: 12px;
+        }
+        
+        .project {
+            padding-top: 5px;
+            font-size: 12px;
         }
     </ui:style>
 
-    <g:HTML>
-        <p class="{style.status}">
-            Lorem ipsum dolor sit amet , consectetur adipiscing elit. Morbi arcu magna, elementum non gravida sed, luctus
-            vitae dui.
-        </p>
-    </g:HTML>
+    <g:HTMLPanel>
+        <div class="{style.recordContainer}">
+            <g:Image ui:field="record" resource="{res.off}" addStyleNames="{style.record} {res.record.off}" />
+        </div>
+        <div class="{style.infoContainer}">
+            <div class="{style.timeContainer}">
+                <g:Label title="Today" addStyleNames="{style.dayTime}">12:34</g:Label>
+                <g:Label title="Current week" addStyleNames="{style.weekTime}">34:12</g:Label>
+                <g:Label title="Current month" addStyleNames="{style.monthTime}">123:55</g:Label>
+            </div>
+            <g:Label addStyleNames="{style.description}">Some description</g:Label>
+            <g:Label addStyleNames="{style.project}">Some project</g:Label>
+        </div>
+    </g:HTMLPanel>
 
 </ui:UiBinder> 

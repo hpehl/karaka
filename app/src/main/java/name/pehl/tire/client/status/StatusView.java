@@ -1,17 +1,23 @@
 package name.pehl.tire.client.status;
 
+import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.status.StatusPresenter.MyView;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwtplatform.mvp.client.ViewImpl;
+import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision$
  */
-public class StatusView extends ViewImpl implements MyView
+public class StatusView extends ViewWithUiHandlers<StatusUiHandlers> implements MyView
 {
     interface StatusUi extends UiBinder<Widget, StatusView>
     {
@@ -20,11 +26,17 @@ public class StatusView extends ViewImpl implements MyView
     private static StatusUi uiBinder = GWT.create(StatusUi.class);
 
     private final Widget widget;
+    private final Resources resources;
+
+    @UiField
+    Image record;
 
 
-    public StatusView()
+    @Inject
+    public StatusView(final Resources resources)
     {
-        widget = uiBinder.createAndBindUi(this);
+        this.resources = resources;
+        this.widget = uiBinder.createAndBindUi(this);
     }
 
 
@@ -32,5 +44,33 @@ public class StatusView extends ViewImpl implements MyView
     public Widget asWidget()
     {
         return widget;
+    }
+
+
+    @UiHandler("record")
+    void onRecordClicked(ClickEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            String style = record.getStyleName();
+            String onClass = resources.record().on();
+            String offClass = resources.record().off();
+            if (style.contains(onClass))
+            {
+                // stop recording
+                record.setResource(resources.off());
+                record.removeStyleName(onClass);
+                record.addStyleName(offClass);
+                getUiHandlers().onStopRecording();
+            }
+            else if (style.contains(offClass))
+            {
+                // start recording
+                record.setResource(resources.on());
+                record.removeStyleName(offClass);
+                record.addStyleName(onClass);
+                getUiHandlers().onStartRecording();
+            }
+        }
     }
 }

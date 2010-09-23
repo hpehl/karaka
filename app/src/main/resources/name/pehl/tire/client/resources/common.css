@@ -1,11 +1,3 @@
-/*
- * This files contains global color definitions and css rules. 
- * The more specific css classes are defined in the relevant 
- * UIBinder definitions. 
- * 
- * @author $Author: harald.pehl $
- * @version $Date: 2010-09-22 17:30:50 +0200 (Mi, 22 Sep 2010) $ $Revision: 85 $
- */
 @def turquoise0 #e7f8fb;
 @def turquoise1 #b8f5ff;
 @def turquoise2 #3cc5de;
