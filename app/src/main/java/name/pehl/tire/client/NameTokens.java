@@ -14,24 +14,72 @@ package name.pehl.tire.client;
  * Also note the exclamation mark in front of the tokens, this is used for
  * search engine crawling support.
  * 
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision$
  */
 public class NameTokens
 {
-    public static final String aboutPage = "!aboutPage";
-
+    public static final String about = "!about";
+    public static final String clients = "!clients";
     public static final String dashboard = "!dashboard";
+    public static final String help = "!help";
+    public static final String projects = "!projects";
+    public static final String reports = "!reports";
+    public static final String settings = "settings";
+    public static final String tags = "!tags";
+    public static final String terms = "!terms";
 
 
-    public static String getAboutPage()
+    public static String about()
     {
-        return aboutPage;
+        return about;
     }
 
 
-    public static String getDashboard()
+    public static String clients()
+    {
+        return clients;
+    }
+
+
+    public static String dashboard()
     {
         return dashboard;
+    }
+
+
+    public static String help()
+    {
+        return help;
+    }
+
+
+    public static String projects()
+    {
+        return projects;
+    }
+
+
+    public static String reports()
+    {
+        return reports;
+    }
+
+
+    public static String settings()
+    {
+        return settings;
+    }
+
+
+    public static String tags()
+    {
+        return tags;
+    }
+
+
+    public static String terms()
+    {
+        return terms;
     }
 }

@@ -3,10 +3,11 @@ package name.pehl.tire.client;
 import name.pehl.tire.client.resources.Resources;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -20,14 +21,16 @@ public class TireView extends ViewImpl implements TirePresenter.MyView
     private static TireUi uiBinder = GWT.create(TireUi.class);
 
     @UiField
-    FlowPanel mainContent;
+    ScrollPanel mainPanel;
+    @UiField
+    FlowPanel statusPanel;
+
     private final Widget widget;
 
 
     @Inject
     public TireView(Resources resources)
     {
-        StyleInjector.inject(resources.backgrounds().getText(), true);
         this.widget = uiBinder.createAndBindUi(this);
     }
 
@@ -44,7 +47,11 @@ public class TireView extends ViewImpl implements TirePresenter.MyView
     {
         if (slot == TirePresenter.TYPE_SetMainContent)
         {
-            setMainContent(content);
+            setContent(mainPanel, content);
+        }
+        else if (slot == TirePresenter.SLOT_StatusContent)
+        {
+            setContent(statusPanel, content);
         }
         else
         {
@@ -53,12 +60,12 @@ public class TireView extends ViewImpl implements TirePresenter.MyView
     }
 
 
-    private void setMainContent(Widget content)
+    private void setContent(Panel container, Widget content)
     {
-        mainContent.clear();
+        container.clear();
         if (content != null)
         {
-            mainContent.add(content);
+            container.add(content);
         }
     }
 }

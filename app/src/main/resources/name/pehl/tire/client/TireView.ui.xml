@@ -1,30 +1,108 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
-    <ui:with field="res" type="name.pehl.tire.client.resources.Resources"></ui:with>
-    <ui:style src="resources/colors.css">
-        div.top {
+    <ui:with field="nameTokens" type="name.pehl.tire.client.NameTokens"></ui:with>
+    <ui:image field="header" repeatStyle="Horizontal" src="resources/header.png"></ui:image>
+    <ui:style src="resources/common.css">
+        @sprite header {
             color: white;
+            gwt-image: "header";
+            padding: 0px 30px;
         }
         
-        div.nav {
-            background-color: green2;
+        header a {
+            font-size: 12px;
+            float: left;
+            color: white;
+            line-height: 30px;
+            padding: 0px 5px;
+        }
+        
+        header a.right {
+            float: right;
+        }
+        
+        header a:hover {
+            color: grey2;
+            background-color: white;
+        }
+        
+        .main {
+            margin: 20px 20px 20px 30px;
+            background-color: white;
+            border-radius: 5px 5px;
+            border-radius: 5px 5px;
+            -moz-border-radius: 5px 5px;
+            -moz-border-radius: 5px 5px;
+            -webkit-border-radius: 5px 5px;
+            -webkit-border-radius: 5px 5px;
+            box-shadow: 2px 2px 2px grey2;
+            -moz-box-shadow: 2px 2px 2px grey2;
+            -webkit-box-shadow: 2px 2px 2px grey2;
+        }
+        
+        aside {
+            margin: 20px 30px 20px 0px;
+        }
+        
+        aside nav a {
+            background-color: green3;
+            display: block;
+        }
+        
+        footer {
+            padding: 0px 30px;
+        }
+        
+        footer a {
+            font-size: 10px;
+            float: left;
+            color: grey2;
+            line-height: 20px;
+            padding: 0px 5px;
+        }
+        
+        footer a:hover {
+            color: black;
         }
     </ui:style>
 
     <g:DockLayoutPanel unit="PX">
         <g:north size="30">
-            <g:HTML>
-                <div class="{style.top} {res.backgrounds.top}">TOP</div>
-            </g:HTML>
+            <g:HTMLPanel>
+                <header>
+                    <g:InlineHyperlink targetHistoryToken="{nameTokens.dashboard}">TiRe</g:InlineHyperlink>
+                    <a class="{style.right}" title="Logout" href="#">Logged in as Harald Pehl</a>
+                    <g:InlineHyperlink addStyleNames="{style.right}" targetHistoryToken="{nameTokens.settings}">Settings</g:InlineHyperlink>
+                    <g:InlineHyperlink addStyleNames="{style.right}" targetHistoryToken="{nameTokens.help}">Help</g:InlineHyperlink>
+                </header>
+            </g:HTMLPanel>
         </g:north>
-        <g:east size="150">
-            <g:HTML>
-                <div class="{style.nav}">NAV</div>
-            </g:HTML>
+        <g:south size="20">
+            <g:HTMLPanel>
+                <footer>
+                    <g:InlineHyperlink targetHistoryToken="{nameTokens.about}">About</g:InlineHyperlink>
+                    <g:InlineHyperlink targetHistoryToken="{nameTokens.help}">Help</g:InlineHyperlink>
+                    <g:InlineHyperlink targetHistoryToken="{nameTokens.terms}">Terms</g:InlineHyperlink>
+                </footer>
+            </g:HTMLPanel>
+        </g:south>
+        <g:east size="250">
+            <g:HTMLPanel>
+                <aside>
+                    <g:FlowPanel ui:field="statusPanel"></g:FlowPanel>
+                    <nav>
+                        <g:InlineHyperlink targetHistoryToken="{nameTokens.dashboard}">Dashboard</g:InlineHyperlink>
+                        <g:InlineHyperlink targetHistoryToken="{nameTokens.projects}">Projects</g:InlineHyperlink>
+                        <g:InlineHyperlink targetHistoryToken="{nameTokens.clients}">Clients</g:InlineHyperlink>
+                        <g:InlineHyperlink targetHistoryToken="{nameTokens.tags}">Tags</g:InlineHyperlink>
+                        <g:InlineHyperlink targetHistoryToken="{nameTokens.reports}">Reports</g:InlineHyperlink>
+                    </nav>
+                </aside>
+            </g:HTMLPanel>
         </g:east>
         <g:center>
-            <g:FlowPanel ui:field="mainContent"></g:FlowPanel>
+            <g:ScrollPanel ui:field="mainPanel" addStyleNames="{style.main}"></g:ScrollPanel>
         </g:center>
     </g:DockLayoutPanel>
 </ui:UiBinder> 

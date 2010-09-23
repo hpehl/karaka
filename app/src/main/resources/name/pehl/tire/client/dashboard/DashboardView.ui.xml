@@ -1,6 +1,38 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
-    <g:HTML>DASHBOARD</g:HTML>
+    <ui:style>
+        p.withTag {
+            padding: 1em;
+            line-height: 2em;
+        }
+    </ui:style>
+
+    <g:HTML>
+        <p class="{style.withTag}">
+            Lorem ipsum dolor sit
+            <mark>amet</mark>
+            , consectetur adipiscing elit. Morbi arcu magna, elementum non gravida sed,
+            luctus vitae dui. Integer in
+            gravida metus. Phasellus ac hendrerit tellus. Donec fermentum nisl id dui
+            feugiat ornare. Sed eget neque
+            nunc, et lacinia
+            <mark>lorem</mark>
+            . Morbi rhoncus pretium ipsum nec mollis. Maecenas
+            auctor erat commodo velit lacinia et
+            <mark>pellentesque</mark>
+            turpis scelerisque. Cras tellus purus, tincidunt in
+            pretium quis,
+            <mark>interdum</mark>
+            sit amet nisi. Lorem ipsum dolor sit amet,
+            <mark>consectetur</mark>
+            adipiscing elit. Maecenas
+            nibh turpis, gravida
+            sollicitudin aliquet ac, porttitor ac felis. Nulla pretium
+            metus justo, ut molestie
+            enim. Mauris suscipit
+            feugiat quam sit amet molestie.
+        </p>
+    </g:HTML>
 
 </ui:UiBinder> 

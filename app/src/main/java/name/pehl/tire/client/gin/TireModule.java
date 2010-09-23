@@ -8,6 +8,8 @@ import name.pehl.tire.client.dashboard.DashboardPresenter;
 import name.pehl.tire.client.dashboard.DashboardView;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
+import name.pehl.tire.client.status.StatusPresenter;
+import name.pehl.tire.client.status.StatusView;
 
 import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.DefaultEventBus;
@@ -48,5 +50,6 @@ public class TireModule extends AbstractPresenterModule
         bindPresenter(TirePresenter.class, TirePresenter.MyView.class, TireView.class, TirePresenter.MyProxy.class);
         bindPresenter(DashboardPresenter.class, DashboardPresenter.MyView.class, DashboardView.class,
                 DashboardPresenter.MyProxy.class);
+        bindPresenterWidget(StatusPresenter.class, StatusPresenter.MyView.class, StatusView.class);
     }
 }
