@@ -1,8 +1,18 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
+    <ui:style>
+        p.status {
+            padding: 1em;
+            line-height: 1.2em;
+        }
+    </ui:style>
+
     <g:HTML>
-        <p>Placeholder for status</p>
+        <p class="{style.status}">
+            Lorem ipsum dolor sit amet , consectetur adipiscing elit. Morbi arcu magna, elementum non gravida sed, luctus
+            vitae dui.
+        </p>
     </g:HTML>
 
 </ui:UiBinder> 

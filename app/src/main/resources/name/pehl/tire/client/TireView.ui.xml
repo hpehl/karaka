@@ -27,27 +27,45 @@
             background-color: white;
         }
         
-        .main {
-            margin: 20px 20px 20px 30px;
-            background-color: white;
-            border-radius: 5px 5px;
-            border-radius: 5px 5px;
-            -moz-border-radius: 5px 5px;
-            -moz-border-radius: 5px 5px;
-            -webkit-border-radius: 5px 5px;
-            -webkit-border-radius: 5px 5px;
-            box-shadow: 2px 2px 2px grey2;
-            -moz-box-shadow: 2px 2px 2px grey2;
-            -webkit-box-shadow: 2px 2px 2px grey2;
+        .mainPanel {
+            margin: 20px 2px 20px 30px;
         }
         
         aside {
             margin: 20px 30px 20px 0px;
         }
         
+        .statusPanel {
+            margin-left: 18px;
+        }
+        
+        aside nav {
+            margin-top: 20px;
+            border-left: 3px solid green4;
+        }
+        
         aside nav a {
-            background-color: green3;
+            font-size: 12px;
+            color: green4;
+            background-color: green0;
             display: block;
+            line-height: 20px;
+            text-transform: uppercase;
+            padding: 5px 5px 5px 10px;
+            border-top: 1px solid green2;
+            border-right: 1px solid green2;
+            border-bottom: 1px solid green2;
+            -webkit-border-top-right-radius: 20px;
+            -webkit-border-bottom-right-radius: 20px;
+            -moz-border-radius-topright: 20px;
+            -moz-border-radius-bottomright: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        
+        aside nav a:hover,aside nav a.selected {
+            color: white;
+            background-color: green4;
         }
         
         footer {
@@ -90,9 +108,9 @@
         <g:east size="250">
             <g:HTMLPanel>
                 <aside>
-                    <g:FlowPanel ui:field="statusPanel"></g:FlowPanel>
+                    <g:FlowPanel ui:field="statusPanel" addStyleNames="{style.statusPanel} {style.whiteBox}"></g:FlowPanel>
                     <nav>
-                        <g:InlineHyperlink targetHistoryToken="{nameTokens.dashboard}">Dashboard</g:InlineHyperlink>
+                        <g:InlineHyperlink targetHistoryToken="{nameTokens.dashboard}" addStyleNames="{style.selected}">Dashboard</g:InlineHyperlink>
                         <g:InlineHyperlink targetHistoryToken="{nameTokens.projects}">Projects</g:InlineHyperlink>
                         <g:InlineHyperlink targetHistoryToken="{nameTokens.clients}">Clients</g:InlineHyperlink>
                         <g:InlineHyperlink targetHistoryToken="{nameTokens.tags}">Tags</g:InlineHyperlink>
@@ -102,7 +120,7 @@
             </g:HTMLPanel>
         </g:east>
         <g:center>
-            <g:ScrollPanel ui:field="mainPanel" addStyleNames="{style.main}"></g:ScrollPanel>
+            <g:ScrollPanel ui:field="mainPanel" addStyleNames="{style.mainPanel} {style.whiteBox}"></g:ScrollPanel>
         </g:center>
     </g:DockLayoutPanel>
 </ui:UiBinder> 

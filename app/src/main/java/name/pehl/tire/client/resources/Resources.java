@@ -15,6 +15,8 @@ public interface Resources extends ClientBundle
     public interface CommonCss extends CssResource
     {
         // @formatter:off
+        String whiteBox();
+        
         String turquoise0();
         String turquoise1();
         String turquoise2();

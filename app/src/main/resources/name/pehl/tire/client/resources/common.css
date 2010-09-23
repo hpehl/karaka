@@ -1,7 +1,7 @@
 /*
- * This files contains global color definitions used throughout in TiRe 
- * and css rules for elements only. The more specific css classes are defined 
- * in the relevant UIBinder definitions. 
+ * This files contains global color definitions and css rules. 
+ * The more specific css classes are defined in the relevant 
+ * UIBinder definitions. 
  * 
  * @author $Author: harald.pehl $
  * @version $Date: 2010-09-22 17:30:50 +0200 (Mi, 22 Sep 2010) $ $Revision: 85 $
@@ -84,13 +84,23 @@ img,input,select {
 
 /* This is used for tags */
 mark {
-    border-top-left-radius: 40px;
-    border-bottom-left-radius: 40px;
-    -moz-border-radius-topleft: 40px;
-    -moz-border-radius-bottomleft: 40px;
     -webkit-border-top-left-radius: 40px;
     -webkit-border-bottom-left-radius: 40px;
+    -moz-border-radius-topleft: 40px;
+    -moz-border-radius-bottomleft: 40px;
+    border-top-left-radius: 40px;
+    border-bottom-left-radius: 40px;
     border: 1px yellow2 solid;
     background-color: yellow0;
     padding: 2px 2px 2px 5px;
+}
+
+.whiteBox {
+    background-color: white;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px grey2;
+    -moz-box-shadow: 2px 2px 2px grey2;
+    -webkit-box-shadow: 2px 2px 2px grey2;
 }
