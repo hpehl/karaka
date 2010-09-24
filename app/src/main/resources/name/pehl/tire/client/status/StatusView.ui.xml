@@ -21,13 +21,13 @@
         }
         
         div.infoContainer {
+            color: grey3;
             padding: 20px;
             text-align: center;
         }
         
         div.timeContainer {
-            padding: 0px 20px;
-            
+            padding: 0px 15px;
         }
         
         .dayTime {
@@ -36,7 +36,7 @@
             float: left;
         }
         
-        .monthTime, .weekTime {
+        .monthTime,.weekTime {
             font-size: 12px;
             float: right;
             clear: right;
@@ -46,11 +46,15 @@
             padding-top: 20px;
             clear: left;
             font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .project {
             padding-top: 5px;
             font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     </ui:style>
 

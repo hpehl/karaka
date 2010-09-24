@@ -4,6 +4,7 @@
 @def turquoise3 #3eb0c7;
 @def turquoise4 #40a2b7;
 @def turquoise5 #1b92a8;
+@def turquoise6 #68d6ea;
 @def green0 #dbf1aa;
 @def green1 #e9ffbf;
 @def green2 #c4e96e;
@@ -25,6 +26,7 @@ aside nav {
 
 aside nav a {
     font-size: 12px;
+    font-weight: bold;
     color: green4;
     background-color: green0;
     display: block;
@@ -35,15 +37,15 @@ aside nav a {
     border-top: 1px solid green2;
     border-right: 1px solid green2;
     border-bottom: 1px solid green2;
-    -webkit-border-top-right-radius: 20px;
-    -webkit-border-bottom-right-radius: 20px;
-    -moz-border-radius-topright: 20px;
-    -moz-border-radius-bottomright: 20px;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
-aside nav a:hover, .selected {
+aside nav a:hover,.selected {
     color: white;
     background-color: green4;
 }

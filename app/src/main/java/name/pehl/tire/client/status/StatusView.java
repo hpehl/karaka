@@ -1,7 +1,6 @@
 package name.pehl.tire.client.status;
 
 import name.pehl.tire.client.resources.Resources;
-import name.pehl.tire.client.status.StatusPresenter.MyView;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,9 +14,10 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 90
+ *          $
  */
-public class StatusView extends ViewWithUiHandlers<StatusUiHandlers> implements MyView
+public class StatusView extends ViewWithUiHandlers<StatusUiHandlers> implements StatusPresenter.MyView
 {
     interface StatusUi extends UiBinder<Widget, StatusView>
     {
@@ -58,6 +58,7 @@ public class StatusView extends ViewWithUiHandlers<StatusUiHandlers> implements 
             if (style.contains(onClass))
             {
                 // stop recording
+                GWT.log("Stop Recording");
                 record.setResource(resources.off());
                 record.removeStyleName(onClass);
                 record.addStyleName(offClass);
@@ -66,6 +67,7 @@ public class StatusView extends ViewWithUiHandlers<StatusUiHandlers> implements 
             else if (style.contains(offClass))
             {
                 // start recording
+                GWT.log("Start Recording");
                 record.setResource(resources.on());
                 record.removeStyleName(offClass);
                 record.addStyleName(onClass);

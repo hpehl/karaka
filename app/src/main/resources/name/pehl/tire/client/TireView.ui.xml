@@ -5,7 +5,6 @@
     <ui:style field="navigation" src="resources/navigation.css" />
     <ui:with field="nameTokens" type="name.pehl.tire.client.NameTokens" />
     <ui:image field="header" repeatStyle="Horizontal" src="resources/header.png" />
-        
     <ui:style src="resources/colors.css">
         @sprite header {
             color: white;

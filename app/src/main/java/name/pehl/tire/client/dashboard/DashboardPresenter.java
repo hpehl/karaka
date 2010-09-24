@@ -13,8 +13,9 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision: 85
+ *          $
  */
 public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, DashboardPresenter.MyProxy>
 {
@@ -28,11 +29,26 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     {
     }
 
+    /**
+     * Constant for the status slot.
+     */
+    public static final Object SLOT_NewActivity = new Object();
+    /**
+     * Constant for the status slot.
+     */
+    public static final Object SLOT_RecentActivities = new Object();
+
+    private final NewActivityPresenter newActivityPresenter;
+    private final RecentActivitiesPresenter recentActivitiesPresenter;
+
 
     @Inject
-    public DashboardPresenter(EventBus eventBus, MyView view, MyProxy proxy)
+    public DashboardPresenter(EventBus eventBus, MyView view, MyProxy proxy,
+            final NewActivityPresenter newActivityPresenter, final RecentActivitiesPresenter recentActivitiesPresenter)
     {
         super(eventBus, view, proxy);
+        this.newActivityPresenter = newActivityPresenter;
+        this.recentActivitiesPresenter = recentActivitiesPresenter;
     }
 
 
@@ -40,5 +56,20 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     protected void revealInParent()
     {
         RevealContentEvent.fire(this, TirePresenter.TYPE_SetMainContent, this);
+    }
+
+
+    /**
+     * Sets the {@link NewActivityPresenter} to slot {@link #SLOT_NewActivity}
+     * and {@link RecentActivitiesPresenter} to slot
+     * {@link #SLOT_RecentActivities}.
+     * 
+     * @see com.gwtplatform.mvp.client.PresenterWidget#onReveal()
+     */
+    @Override
+    protected void onReveal()
+    {
+        setInSlot(SLOT_NewActivity, newActivityPresenter);
+        setInSlot(SLOT_RecentActivities, recentActivitiesPresenter);
     }
 }
