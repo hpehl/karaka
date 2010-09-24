@@ -261,6 +261,9 @@
                         <projectnature>com.google.gwt.eclipse.core.gwtNature</projectnature>
                         <projectnature>com.google.appengine.eclipse.core.gaeNature</projectnature>
                     </additionalProjectnatures>
+<!--
+Unfortunatley this does not work, when configured by maven. The workaround is 
+to generate the eclipe project settings without it and do it manually :-(
                     <additionalConfig>
                         <file>
                             <name>.factorypath</name>
@@ -281,6 +284,7 @@ org.eclipse.jdt.apt.reconcileEnabled=true
                             ]]></content>
                         </file>
                     </additionalConfig>
+-->
                     <excludes>
                         <exclude>com.google.gwt:gwt-user</exclude>
                         <exclude>com.google.gwt:gwt-dev</exclude>
