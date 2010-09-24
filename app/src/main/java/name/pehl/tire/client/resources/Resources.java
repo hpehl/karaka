@@ -6,7 +6,8 @@ import com.google.gwt.resources.client.ImageResource;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 90
+ *          $
  */
 public interface Resources extends ClientBundle
 {
@@ -26,6 +27,17 @@ public interface Resources extends ClientBundle
         // @formatter:off
         @ClassName("on") String on();
         @ClassName("off") String off();
+        // @formatter:on
+    }
+
+
+    @Source("navigation.css")
+    Navigation navigation();
+
+    public interface Navigation extends CssResource
+    {
+        // @formatter:off
+        @ClassName("selected") String selected();
         // @formatter:on
     }
 

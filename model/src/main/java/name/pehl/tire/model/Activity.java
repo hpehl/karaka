@@ -13,14 +13,10 @@ import com.googlecode.objectify.annotation.Parent;
 @Entity
 public class Activity extends DescriptiveEntity
 {
-    Date start;
-
-    Date end;
-
-    long pause;
-
-    boolean billable;
-
+    private Date start;
+    private Date end;
+    private long pause;
+    private boolean billable;
     @Parent
     Key<Project> project;
 
@@ -104,5 +100,17 @@ public class Activity extends DescriptiveEntity
     public void setProject(Key<Project> project)
     {
         this.project = project;
+    }
+
+
+    public boolean isBillable()
+    {
+        return billable;
+    }
+
+
+    public void setBillable(boolean billable)
+    {
+        this.billable = billable;
     }
 }

@@ -38,6 +38,21 @@ article,aside,dialog,figure,footer,header,hgroup,nav,section {
     display: block;
 }
 
+h1 {
+    color: grey3;
+    font-size: 133%;
+    font-style: italic;
+    text-transform: capitalize;
+    margin: 10px 10px 0px 10px;
+    border-bottom: 1px solid grey1;
+}
+
+p {
+    color: grey3;
+        margin: 10px;
+    line-height: 1.2em;
+}
+
 ul {
     list-style: none;
 }
@@ -58,6 +73,7 @@ a {
     font-size: 100%;
     vertical-align: baseline;
     background: transparent;
+    text-decoration: none;
 }
 
 del {

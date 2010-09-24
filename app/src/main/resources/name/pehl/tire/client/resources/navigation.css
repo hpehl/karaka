@@ -1,0 +1,49 @@
+@def turquoise0 #e7f8fb;
+@def turquoise1 #b8f5ff;
+@def turquoise2 #3cc5de;
+@def turquoise3 #3eb0c7;
+@def turquoise4 #40a2b7;
+@def turquoise5 #1b92a8;
+@def green0 #dbf1aa;
+@def green1 #e9ffbf;
+@def green2 #c4e96e;
+@def green3 #b2da8e;
+@def green4 #93cb2b;
+@def green5 #8ac401;
+@def grey0 #eaeaea;
+@def grey1 #dedede;
+@def grey2 #62635e;
+@def grey3 #3d3d3d;
+@def yellow0 #fff8ba;
+@def yellow1 #e5dc8a;
+@def yellow2 #d1c24f;
+@def pink0 #ef5f92;
+aside nav {
+    margin-top: 20px;
+    border-left: 3px solid green4;
+}
+
+aside nav a {
+    font-size: 12px;
+    color: green4;
+    background-color: green0;
+    display: block;
+    line-height: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding: 5px 5px 5px 10px;
+    border-top: 1px solid green2;
+    border-right: 1px solid green2;
+    border-bottom: 1px solid green2;
+    -webkit-border-top-right-radius: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    -moz-border-radius-topright: 20px;
+    -moz-border-radius-bottomright: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+aside nav a:hover, .selected {
+    color: white;
+    background-color: green4;
+}

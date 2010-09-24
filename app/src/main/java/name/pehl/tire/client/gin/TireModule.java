@@ -4,12 +4,26 @@ import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.TirePresenter;
 import name.pehl.tire.client.TireView;
+import name.pehl.tire.client.about.AboutPresenter;
+import name.pehl.tire.client.about.AboutView;
+import name.pehl.tire.client.client.ClientPresenter;
+import name.pehl.tire.client.client.ClientView;
 import name.pehl.tire.client.dashboard.DashboardPresenter;
 import name.pehl.tire.client.dashboard.DashboardView;
+import name.pehl.tire.client.help.HelpPresenter;
+import name.pehl.tire.client.help.HelpView;
+import name.pehl.tire.client.project.ProjectPresenter;
+import name.pehl.tire.client.project.ProjectView;
+import name.pehl.tire.client.report.ReportPresenter;
+import name.pehl.tire.client.report.ReportView;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.status.StatusPresenter;
 import name.pehl.tire.client.status.StatusView;
+import name.pehl.tire.client.tag.TagPresenter;
+import name.pehl.tire.client.tag.TagView;
+import name.pehl.tire.client.terms.TermsPresenter;
+import name.pehl.tire.client.terms.TermsView;
 
 import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.DefaultEventBus;
@@ -46,10 +60,20 @@ public class TireModule extends AbstractPresenterModule
         // Constants
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
-        // MVP
-        bindPresenter(TirePresenter.class, TirePresenter.MyView.class, TireView.class, TirePresenter.MyProxy.class);
+        // MVP (a-z)
+        bindPresenter(AboutPresenter.class, AboutPresenter.MyView.class, AboutView.class, AboutPresenter.MyProxy.class);
+        bindPresenter(ClientPresenter.class, ClientPresenter.MyView.class, ClientView.class,
+                ClientPresenter.MyProxy.class);
         bindPresenter(DashboardPresenter.class, DashboardPresenter.MyView.class, DashboardView.class,
                 DashboardPresenter.MyProxy.class);
+        bindPresenter(HelpPresenter.class, HelpPresenter.MyView.class, HelpView.class, HelpPresenter.MyProxy.class);
+        bindPresenter(ProjectPresenter.class, ProjectPresenter.MyView.class, ProjectView.class,
+                ProjectPresenter.MyProxy.class);
+        bindPresenter(ReportPresenter.class, ReportPresenter.MyView.class, ReportView.class,
+                ReportPresenter.MyProxy.class);
         bindPresenterWidget(StatusPresenter.class, StatusPresenter.MyView.class, StatusView.class);
+        bindPresenter(TagPresenter.class, TagPresenter.MyView.class, TagView.class, TagPresenter.MyProxy.class);
+        bindPresenter(TermsPresenter.class, TermsPresenter.MyView.class, TermsView.class, TermsPresenter.MyProxy.class);
+        bindPresenter(TirePresenter.class, TirePresenter.MyView.class, TireView.class, TirePresenter.MyProxy.class);
     }
 }
