@@ -151,7 +151,7 @@
 
     <build>
         <plugins>
-            <!--
+<!--
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>apt-maven-plugin</artifactId>
@@ -164,7 +164,7 @@
                     </execution>
                 </executions>
             </plugin>
-            -->
+-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -270,7 +270,7 @@ to generate the eclipe project settings without it and do it manually :-(
                             <content><![CDATA[
 <factorypath>
     <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/gwtplatform/gwtp/0.4/gwtp-0.4.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/gwtplatform/gwtp/0.4-SNAPSHOT/gwtp-0.4-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
 </factorypath>
                             ]]></content>
                         </file>
