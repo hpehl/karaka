@@ -28,7 +28,7 @@
 
     <script src="raphael-min.js" />
     <script src="g.raphael-min.js" />
-    <script src="g.bar-min.js" />
+    <script src="g.bar.js" />
 
     <define-configuration-property name="gin.ginjector" is-multi-valued="false" />
     <set-configuration-property name="gin.ginjector" value="name.pehl.tire.client.gin.TireGinjector" />

@@ -28,11 +28,7 @@
             background-color: #1b92a8;
         }
         
-        div.newActivity ul li a.selected {
-            background-color: #68d6ea;
-        }
-        
-        div.newActivity ul li a:hover,div.newActivity ul li a.selected:hover {
+        div.newActivity ul li a:hover {
             color: #68d6ea;
             background-color: white;
         }
@@ -80,7 +76,7 @@
                     <g:InlineHyperlink ui:field="yesterday"></g:InlineHyperlink>
                 </li>
                 <li>
-                    <g:InlineHyperlink ui:field="today" addStyleNames="{style.selected}">today</g:InlineHyperlink>
+                    <g:InlineHyperlink ui:field="today">today</g:InlineHyperlink>
                 </li>
                 <li>
                     <g:InlineHyperlink ui:field="calendar">calendar</g:InlineHyperlink>

@@ -151,20 +151,8 @@
 
     <build>
         <plugins>
-<!--
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>apt-maven-plugin</artifactId>
-                <version>1.0-alpha-4</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>process</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
--->
+            <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>apt-maven-plugin</artifactId> <version>1.0-alpha-4</version> 
+                <executions> <execution> <goals> <goal>process</goal> </goals> </execution> </executions> </plugin> -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -231,7 +219,7 @@
                     <execution>
                         <goals>
                             <goal>i18n</goal>
-                            <goal>compile</goal> 
+                            <goal>compile</goal>
                             <goal>resources</goal>
                         </goals>
                     </execution>
@@ -261,30 +249,13 @@
                         <projectnature>com.google.gwt.eclipse.core.gwtNature</projectnature>
                         <projectnature>com.google.appengine.eclipse.core.gaeNature</projectnature>
                     </additionalProjectnatures>
-<!--
-Unfortunatley this does not work, when configured by maven. The workaround is 
-to generate the eclipe project settings without it and do it manually :-(
-                    <additionalConfig>
-                        <file>
-                            <name>.factorypath</name>
-                            <content><![CDATA[
-<factorypath>
-    <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/gwtplatform/gwtp/0.4-SNAPSHOT/gwtp-0.4-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-</factorypath>
-                            ]]></content>
-                        </file>
-                        <file>
-                            <name>.settings/org.eclipse.jdt.apt.core.prefs</name>
-                            <content><![CDATA[
-eclipse.preferences.version=1
-org.eclipse.jdt.apt.aptEnabled=true
-org.eclipse.jdt.apt.genSrcDir=target/generated-sources/apt
-org.eclipse.jdt.apt.reconcileEnabled=true
-                            ]]></content>
-                        </file>
-                    </additionalConfig>
--->
+                    <!-- Unfortunatley this does not work, when configured by maven. The workaround is to generate the eclipe 
+                        project settings without it and do it manually :-( <additionalConfig> <file> <name>.factorypath</name> <content><![CDATA[ 
+                        <factorypath> <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="true" runInBatchMode="false"/> 
+                        <factorypathentry kind="VARJAR" id="M2_REPO/com/gwtplatform/gwtp/0.4-SNAPSHOT/gwtp-0.4-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/> 
+                        </factorypath> ]]></content> </file> <file> <name>.settings/org.eclipse.jdt.apt.core.prefs</name> <content><![CDATA[ eclipse.preferences.version=1 
+                        org.eclipse.jdt.apt.aptEnabled=true org.eclipse.jdt.apt.genSrcDir=target/generated-sources/apt org.eclipse.jdt.apt.reconcileEnabled=true 
+                        ]]></content> </file> </additionalConfig> -->
                     <excludes>
                         <exclude>com.google.gwt:gwt-user</exclude>
                         <exclude>com.google.gwt:gwt-dev</exclude>
@@ -313,6 +284,10 @@ org.eclipse.jdt.apt.reconcileEnabled=true
                         <type>pom</type>
                     </dependency>
                 </dependencies>
+                <configuration>
+                    <serverId>appengine.google.com</serverId>
+                    <appDir>${project.build.directory}/${artifactId}-${version}</appDir>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>

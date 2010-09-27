@@ -2,6 +2,8 @@ package name.pehl.tire.client.dashboard;
 
 import java.util.Date;
 
+import name.pehl.tire.client.resources.Resources;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -10,6 +12,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.InlineHyperlink;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
@@ -41,11 +44,17 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     InlineHyperlink calendar;
 
     private final Widget widget;
+    private final Resources resources;
 
 
-    public NewActivityView()
+    @Inject
+    public NewActivityView(final Resources resources)
     {
-        widget = uiBinder.createAndBindUi(this);
+        this.resources = resources;
+        this.resources.newActivity().ensureInjected();
+        this.widget = uiBinder.createAndBindUi(this);
+        this.today.addStyleName(resources.newActivity().selected());
+
         long time = new Date().getTime() - ONE_DAY;
         yesterday.setText(DATE_FORMAT.format(new Date(time)));
         time -= ONE_DAY;
@@ -63,33 +72,45 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     @UiHandler("theDayBeforeYesterday")
     void onTheDayBeforeYesterdayClicked(ClickEvent event)
     {
-        // TODO add/remove css class "selected"
         GWT.log("The day before yesterday selected");
+        theDayBeforeYesterday.addStyleName(resources.newActivity().selected());
+        yesterday.removeStyleName(resources.newActivity().selected());
+        today.removeStyleName(resources.newActivity().selected());
+        calendar.removeStyleName(resources.newActivity().selected());
     }
 
 
     @UiHandler("yesterday")
     void onYesterdayClicked(ClickEvent event)
     {
-        // TODO add/remove css class "selected"
         GWT.log("Yesterday selected");
+        theDayBeforeYesterday.removeStyleName(resources.newActivity().selected());
+        yesterday.addStyleName(resources.newActivity().selected());
+        today.removeStyleName(resources.newActivity().selected());
+        calendar.removeStyleName(resources.newActivity().selected());
     }
 
 
     @UiHandler("today")
     void onTodayClicked(ClickEvent event)
     {
-        // TODO add/remove css class "selected"
         GWT.log("Today selected");
+        theDayBeforeYesterday.removeStyleName(resources.newActivity().selected());
+        yesterday.removeStyleName(resources.newActivity().selected());
+        today.addStyleName(resources.newActivity().selected());
+        calendar.removeStyleName(resources.newActivity().selected());
     }
 
 
     @UiHandler("calendar")
     void onCalendarClicked(ClickEvent event)
     {
+        GWT.log("Calendar selected");
+        theDayBeforeYesterday.removeStyleName(resources.newActivity().selected());
+        yesterday.removeStyleName(resources.newActivity().selected());
+        today.removeStyleName(resources.newActivity().selected());
+        calendar.addStyleName(resources.newActivity().selected());
         // TODO Show DatePicker
         // Set selected date as text of hyperlink
-        // TODO add/remove css class "selected"
-        GWT.log("Calendar selected");
     }
 }

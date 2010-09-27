@@ -3,9 +3,21 @@
 
     <g:HTMLPanel>
         <div id="chart">
-        <script type="text/javascript">
-            var r = Raphael("chart");
-            r.g.barchart(0, 0, 202, 200, [[55, 20, 13, 32, 10]], 0, {type: "sharp"});
+            <script type="text/javascript">
+                var values = [55, 20, 13, 32, 10];
+                var dates = ["27.09", "28.09", "29.09", "30.09", "01.10"];
+                var r = Raphael("chart", 202, 220, 
+                    fin = function () 
+                    {
+                        this.flag = r.g.popup(this.bar.x, this.bar.y, this.bar.value || "0").insertBefore(this);
+                    },
+                    fout = function () 
+                    {
+                        this.flag.animate({opacity: 0}, 500, function () {this.remove();});
+                    });
+                r.g.colors = ["#3d3d3d"];
+                r.g.txtattr.font = "10px 'Fontin Sans', Fontin-Sans, sans-serif";
+                var c = r.g.barchart(0, 10, 200, 202, [values]).hover(fin, fout).label([dates], true);
         </script>
         </div>
     </g:HTMLPanel>
