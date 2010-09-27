@@ -1,5 +1,7 @@
 package name.pehl.tire.client.dashboard;
 
+import name.pehl.tire.client.ui.UiUtils;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -42,19 +44,11 @@ public class DashboardView extends ViewImpl implements DashboardPresenter.MyView
     {
         if (slot == DashboardPresenter.SLOT_NewActivity)
         {
-            newActivityPanel.clear();
-            if (content != null)
-            {
-                newActivityPanel.add(content);
-            }
+            UiUtils.setContent(newActivityPanel, content);
         }
         else if (slot == DashboardPresenter.SLOT_RecentActivities)
         {
-            recentActivitiesPanel.clear();
-            if (content != null)
-            {
-                recentActivitiesPanel.add(content);
-            }
+            UiUtils.setContent(recentActivitiesPanel, content);
         }
     }
 }
