@@ -1,7 +1,7 @@
 package name.pehl.tire.client.project;
 
 import name.pehl.tire.client.NameTokens;
-import name.pehl.tire.client.TirePresenter;
+import name.pehl.tire.client.application.ApplicationPresenter;
 
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.EventBus;
@@ -40,6 +40,6 @@ public class ProjectPresenter extends Presenter<ProjectPresenter.MyView, Project
     @Override
     protected void revealInParent()
     {
-        RevealContentEvent.fire(this, TirePresenter.TYPE_SetMainContent, this);
+        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
     }
 }

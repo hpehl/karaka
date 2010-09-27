@@ -1,0 +1,55 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with field="nameTokens" type="name.pehl.tire.client.NameTokens" />
+    <ui:image field="header" repeatStyle="Horizontal" src="../resources/header.png" />
+    <ui:style>
+        @sprite header {
+            color: white;
+            gwt-image: "header";
+            padding: 0px 30px;
+        }
+        
+        header nav a {
+            font-size: 12px;
+            float: left;
+            color: white;
+            line-height: 30px;
+            padding: 0px 5px;
+            margin: 0px 5px;
+            letter-spacing: 0.1em;
+        }
+        
+        header nav a.right {
+            float: right;
+        }
+        header nav a.first {
+            margin-left: 0px;
+        }
+        header nav a.last {
+            margin-right:0px; 
+        }
+        
+        header nav a:hover {
+            color: #62635e;
+            background-color: white;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <header>
+            <nav>
+                <g:InlineHyperlink ui:field="dashboard" targetHistoryToken="{nameTokens.dashboard}" addStyleNames="{style.first}">Dashboard</g:InlineHyperlink>
+                <g:InlineHyperlink ui:field="projects" targetHistoryToken="{nameTokens.projects}">Projects</g:InlineHyperlink>
+                <g:InlineHyperlink ui:field="clients" targetHistoryToken="{nameTokens.clients}">Clients</g:InlineHyperlink>
+                <g:InlineHyperlink ui:field="tags" targetHistoryToken="{nameTokens.tags}">Tags</g:InlineHyperlink>
+                <g:InlineHyperlink ui:field="reports" targetHistoryToken="{nameTokens.reports}">Reports</g:InlineHyperlink>
+                <!-- rtl -->
+                <a class="{style.right} {style.last}" title="Logout" href="#">Logged in as Harald Pehl</a>
+                <g:InlineHyperlink ui:field="settings" addStyleNames="{style.right}"
+                    targetHistoryToken="{nameTokens.settings}">Settings</g:InlineHyperlink>
+                <g:InlineHyperlink ui:field="help" targetHistoryToken="{nameTokens.help}" addStyleNames="{style.right}">Help</g:InlineHyperlink>
+            </nav>
+        </header>
+    </g:HTMLPanel>
+</ui:UiBinder> 

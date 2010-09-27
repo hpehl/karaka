@@ -1,24 +1,6 @@
-@def turquoise0 #e7f8fb;
-@def turquoise1 #b8f5ff;
-@def turquoise2 #3cc5de;
-@def turquoise3 #3eb0c7;
-@def turquoise4 #40a2b7;
-@def turquoise5 #1b92a8;
-@def turquoise6 #68d6ea;
-@def green0 #dbf1aa;
-@def green1 #e9ffbf;
-@def green2 #c4e96e;
-@def green3 #b2da8e;
-@def green4 #93cb2b;
-@def green5 #8ac401;
-@def grey0 #eaeaea;
-@def grey1 #dedede;
-@def grey2 #62635e;
-@def grey3 #3d3d3d;
-@def yellow0 #fff8ba;
-@def yellow1 #e5dc8a;
-@def yellow2 #d1c24f;
-@def pink0 #ef5f92;
+/*
+ * Basic element styles
+ */
 html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,dialog,figure,footer,header,hgroup,menu,nav,section,time,mark,audio,video
     {
     margin: 0;
@@ -32,7 +14,7 @@ html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address
 
 body {
     line-height: 1;
-    background-color: grey0;
+    background-color: #eaeaea;
 }
 
 article,aside,dialog,figure,footer,header,hgroup,nav,section {
@@ -40,16 +22,16 @@ article,aside,dialog,figure,footer,header,hgroup,nav,section {
 }
 
 h1 {
-    color: grey3;
+    color: #3d3d3d;
     font-size: 133%;
     font-style: italic;
     text-transform: capitalize;
     margin: 10px 10px 0px 10px;
-    border-bottom: 1px solid grey1;
+    border-bottom: 1px solid #dedede;
 }
 
 p {
-    color: grey3;
+    color: #3d3d3d;
     margin: 10px;
     line-height: 1.2em;
 }
@@ -77,10 +59,6 @@ a {
     text-decoration: none;
 }
 
-del {
-    text-decoration: line-through;
-}
-
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -99,17 +77,7 @@ mark {
     -moz-border-radius-bottomleft: 40px;
     border-top-left-radius: 40px;
     border-bottom-left-radius: 40px;
-    border: 1px yellow2 solid;
-    background-color: yellow0;
+    border: 1px #d1c24f solid;
+    background-color: #fff8ba;
     padding: 2px 2px 2px 5px;
-}
-
-.whiteBox {
-    background-color: white;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    box-shadow: 2px 2px 2px grey2;
-    -moz-box-shadow: 2px 2px 2px grey2;
-    -webkit-box-shadow: 2px 2px 2px grey2;
 }

@@ -1,0 +1,13 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <g:HTMLPanel>
+        <div id="chart">
+        <script type="text/javascript">
+            var r = Raphael("chart");
+            r.g.barchart(0, 0, 202, 200, [[55, 20, 13, 32, 10]], 0, {type: "sharp"});
+        </script>
+        </div>
+    </g:HTMLPanel>
+
+</ui:UiBinder> 

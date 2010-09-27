@@ -1,4 +1,4 @@
-package name.pehl.tire.client.status;
+package name.pehl.tire.client.application;
 
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.EventBus;
@@ -8,21 +8,22 @@ import com.gwtplatform.mvp.client.View;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision: 90
- *          $
+ * @version $Date$ $Revision$
  */
-public class StatusPresenter extends PresenterWidget<StatusPresenter.MyView> implements StatusUiHandlers
+public class ControlPresenter extends PresenterWidget<ControlPresenter.MyView> implements ControlUiHandlers
 {
-    public interface MyView extends View, HasUiHandlers<StatusUiHandlers>
+    public interface MyView extends View, HasUiHandlers<ControlUiHandlers>
     {
+        void initializeRecording(boolean recording);
     }
 
 
     @Inject
-    public StatusPresenter(final EventBus eventBus, final MyView view)
+    public ControlPresenter(final EventBus eventBus, final MyView view)
     {
         super(eventBus, view);
         getView().setUiHandlers(this);
+        getView().initializeRecording(false);
     }
 
 

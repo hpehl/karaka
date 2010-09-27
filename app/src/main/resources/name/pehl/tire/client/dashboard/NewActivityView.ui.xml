@@ -1,12 +1,12 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
-    <ui:style src="../resources/colors.css">
+    <ui:style>
         div.newActivity {
             font-size: 18px;
             color: white;
             padding-bottom: 20px;
-            background-color: turquoise2;
+            background-color: #3cc5de;
             -webkit-border-top-left-radius: 5px;
             -webkit-border-top-right-radius: 5px;
             -moz-border-radius-topleft: 5px;
@@ -19,25 +19,21 @@
             padding: 20px 10px 0px 10px;
         }
         
-        div.newActivity ul li {
+        div.newActivity ul li a {
             float: left;
             cursor: pointer;
             padding: 5px;
-            margin-left: 5px;
+            margin-right: 5px;
             text-transform: uppercase;
-            background-color: turquoise5;
+            background-color: #1b92a8;
         }
         
-        div.newActivity ul li:first {
-            margin-left: 10px;
+        div.newActivity ul li a.selected {
+            background-color: #68d6ea;
         }
         
-        div.newActivity ul li.selected {
-            background-color: turquoise6;
-        }
-        
-        div.newActivity ul li:hover,div.newActivity ul li.selected:hover {
-            color: turquoise6;
+        div.newActivity ul li a:hover,div.newActivity ul li a.selected:hover {
+            color: #68d6ea;
             background-color: white;
         }
         
@@ -45,19 +41,32 @@
             clear: left;
             padding: 10px;
             vertical-align: middle;
-            background-color: turquoise6;
+            background-color: #68d6ea;
+            height: 30px;
         }
         
         div.input input {
-            color: grey1;
+            color: #dedede;
             font-size: 18px;
-            line-height: 18px;
-            padding: 2px;
-            margin-right: 5px;
             border: none;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
+            width: 100%;
+            height: 26px;
+        }
+        
+        div.input div.description {
+            float: left;
+            width: 50%;
+        }
+        
+        div.input div.project {
+            float: left;
+            width: 38%;
+            margin: 0px 1%;
+        }
+        
+        div.input div.time {
+            float: left;
+            width: 10%;
         }
     </ui:style>
 
@@ -70,17 +79,23 @@
                 <li>
                     <g:InlineHyperlink ui:field="yesterday"></g:InlineHyperlink>
                 </li>
-                <li class="{style.selected}">
-                    <g:InlineHyperlink ui:field="today">today</g:InlineHyperlink>
+                <li>
+                    <g:InlineHyperlink ui:field="today" addStyleNames="{style.selected}">today</g:InlineHyperlink>
                 </li>
                 <li>
                     <g:InlineHyperlink ui:field="calendar">calendar</g:InlineHyperlink>
                 </li>
             </ul>
             <div class="{style.input}">
-                <input type="text" value="DESCRIPTION" style="width: 320px;" />
-                <input type="text" value="PROJECT" style="width: 180px;" />
-                <input type="text" value="TIME" style="width: 80px;" />
+                <div class="{style.description}">
+                    <g:TextBox value="DESCRIPTION" />
+                </div>
+                <div class="{style.project}">
+                    <g:TextBox value="PROJECT" />
+                </div>
+                <div class="{style.time}">
+                    <g:TextBox value="TIME" />
+                </div>
             </div>
         </div>
     </g:HTMLPanel>

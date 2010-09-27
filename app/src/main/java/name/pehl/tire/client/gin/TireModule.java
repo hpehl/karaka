@@ -2,10 +2,16 @@ package name.pehl.tire.client.gin;
 
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.TirePlaceManager;
-import name.pehl.tire.client.TirePresenter;
-import name.pehl.tire.client.TireView;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.about.AboutView;
+import name.pehl.tire.client.application.ApplicationPresenter;
+import name.pehl.tire.client.application.ApplicationView;
+import name.pehl.tire.client.application.ChartPresenter;
+import name.pehl.tire.client.application.ChartView;
+import name.pehl.tire.client.application.ControlPresenter;
+import name.pehl.tire.client.application.ControlView;
+import name.pehl.tire.client.application.NavigationPresenter;
+import name.pehl.tire.client.application.NavigationView;
 import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.client.ClientView;
 import name.pehl.tire.client.dashboard.DashboardPresenter;
@@ -22,8 +28,6 @@ import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.report.ReportView;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
-import name.pehl.tire.client.status.StatusPresenter;
-import name.pehl.tire.client.status.StatusView;
 import name.pehl.tire.client.tag.TagPresenter;
 import name.pehl.tire.client.tag.TagView;
 import name.pehl.tire.client.terms.TermsPresenter;
@@ -65,13 +69,17 @@ public class TireModule extends AbstractPresenterModule
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
         // PresenterWidgets (a-z)
+        bindPresenterWidget(ChartPresenter.class, ChartPresenter.MyView.class, ChartView.class);
+        bindPresenterWidget(ControlPresenter.class, ControlPresenter.MyView.class, ControlView.class);
+        bindPresenterWidget(NavigationPresenter.class, NavigationPresenter.MyView.class, NavigationView.class);
         bindPresenterWidget(NewActivityPresenter.class, NewActivityPresenter.MyView.class, NewActivityView.class);
         bindPresenterWidget(RecentActivitiesPresenter.class, RecentActivitiesPresenter.MyView.class,
                 RecentActivitiesView.class);
-        bindPresenterWidget(StatusPresenter.class, StatusPresenter.MyView.class, StatusView.class);
 
         // Presenters (a-z)
         bindPresenter(AboutPresenter.class, AboutPresenter.MyView.class, AboutView.class, AboutPresenter.MyProxy.class);
+        bindPresenter(ApplicationPresenter.class, ApplicationPresenter.MyView.class, ApplicationView.class,
+                ApplicationPresenter.MyProxy.class);
         bindPresenter(ClientPresenter.class, ClientPresenter.MyView.class, ClientView.class,
                 ClientPresenter.MyProxy.class);
         bindPresenter(DashboardPresenter.class, DashboardPresenter.MyView.class, DashboardView.class,
@@ -83,6 +91,5 @@ public class TireModule extends AbstractPresenterModule
                 ReportPresenter.MyProxy.class);
         bindPresenter(TagPresenter.class, TagPresenter.MyView.class, TagView.class, TagPresenter.MyProxy.class);
         bindPresenter(TermsPresenter.class, TermsPresenter.MyView.class, TermsView.class, TermsPresenter.MyProxy.class);
-        bindPresenter(TirePresenter.class, TirePresenter.MyView.class, TireView.class, TirePresenter.MyProxy.class);
     }
 }

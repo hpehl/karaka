@@ -20,11 +20,15 @@
     <inherits name="com.gwtplatform.dispatch.Dispatch" />
     <inherits name="com.gwtplatform.mvp.Mvp" />
 
-    <entry-point class="name.pehl.tire.client.TireApp" />
+    <entry-point class="name.pehl.tire.client.Tire" />
     <source path="client">
         <exclude name="gwttest" />
         <exclude name="**/*Test.java" />
     </source>
+
+    <script src="raphael-min.js" />
+    <script src="g.raphael-min.js" />
+    <script src="g.bar-min.js" />
 
     <define-configuration-property name="gin.ginjector" is-multi-valued="false" />
     <set-configuration-property name="gin.ginjector" value="name.pehl.tire.client.gin.TireGinjector" />

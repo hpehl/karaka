@@ -1,7 +1,7 @@
 package name.pehl.tire.client.gin;
 
-import name.pehl.tire.client.TirePresenter;
 import name.pehl.tire.client.about.AboutPresenter;
+import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.dashboard.DashboardPresenter;
 import name.pehl.tire.client.help.HelpPresenter;
@@ -37,6 +37,7 @@ public interface TireGinjector extends Ginjector
 
     // @formatter:off
     AsyncProvider<AboutPresenter> getAboutPresenter();
+    Provider<ApplicationPresenter> getApplicationPresenter();
     AsyncProvider<ClientPresenter> getClientPresenter();
     Provider<DashboardPresenter> getDashboardPresenter();
     AsyncProvider<HelpPresenter> getHelpPresenter();
@@ -44,6 +45,5 @@ public interface TireGinjector extends Ginjector
     AsyncProvider<ReportPresenter> getReportPresenter();
     AsyncProvider<TagPresenter> getTagPresenter();
     AsyncProvider<TermsPresenter> getTermsPresenter();
-    Provider<TirePresenter> getTirePresenter();
     // @formatter:on
 }
