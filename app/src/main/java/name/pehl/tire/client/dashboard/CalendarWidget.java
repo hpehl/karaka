@@ -2,7 +2,6 @@ package name.pehl.tire.client.dashboard;
 
 import java.util.Date;
 
-import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -23,8 +22,9 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision: 99
+ *          $
  */
 public class CalendarWidget extends Composite implements HasBlurHandlers, HasClickHandlers,
         HasValueChangeHandlers<Date>, HasValue<Date>, HasText
@@ -49,7 +49,6 @@ public class CalendarWidget extends Composite implements HasBlurHandlers, HasCli
         setStyleName(DEFAULT_STYLENAME);
 
         CalendarHandler handler = new CalendarHandler();
-        addBlurHandler(handler);
         addClickHandler(handler);
         addValueChangeHandler(handler);
         popup.addCloseHandler(handler);
@@ -120,19 +119,8 @@ public class CalendarWidget extends Composite implements HasBlurHandlers, HasCli
         }
     }
 
-    private class CalendarHandler implements ValueChangeHandler<Date>, BlurHandler, ClickHandler,
-            CloseHandler<PopupPanel>
+    private class CalendarHandler implements ValueChangeHandler<Date>, ClickHandler, CloseHandler<PopupPanel>
     {
-        @Override
-        public void onBlur(BlurEvent event)
-        {
-            if (popup.isShowing())
-            {
-                popup.hide();
-            }
-        }
-
-
         @Override
         public void onClick(ClickEvent event)
         {
