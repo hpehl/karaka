@@ -27,7 +27,7 @@
     </source>
 
     <script src="raphael-min.js" />
-    <script src="g.raphael-min.js" />
+    <script src="g.raphael.js" />
     <script src="g.bar.js" />
 
     <define-configuration-property name="gin.ginjector" is-multi-valued="false" />

@@ -2,6 +2,7 @@ package name.pehl.tire.client.application;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 
@@ -19,6 +20,9 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView
 
     private final Widget widget;
 
+    @UiField
+    ChartWidget chart;
+
 
     public ChartView()
     {
@@ -30,5 +34,12 @@ public class ChartView extends ViewImpl implements ChartPresenter.MyView
     public Widget asWidget()
     {
         return widget;
+    }
+
+
+    @Override
+    public void setHours(double... hours)
+    {
+        chart.setHours(hours);
     }
 }

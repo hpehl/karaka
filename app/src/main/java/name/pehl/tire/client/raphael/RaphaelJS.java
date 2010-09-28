@@ -6,7 +6,7 @@ import com.google.gwt.core.client.JsArray;
 /**
  * Overlay class for GWT to use raphaeljs library
  */
-class RaphaelJS extends JavaScriptObject
+public class RaphaelJS extends JavaScriptObject
 {
     /**
      * determine whether Raphael is defined on the client platform NB: do not

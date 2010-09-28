@@ -41,7 +41,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     InlineHyperlink today;
 
     @UiField
-    InlineHyperlink calendar;
+    CalendarWidget calendar;
 
     private final Widget widget;
     private final Resources resources;

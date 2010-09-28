@@ -13,6 +13,7 @@ public class ChartPresenter extends PresenterWidget<ChartPresenter.MyView>
 {
     public interface MyView extends View
     {
+        void setHours(double... hours);
     }
 
 
@@ -20,5 +21,6 @@ public class ChartPresenter extends PresenterWidget<ChartPresenter.MyView>
     public ChartPresenter(final EventBus eventBus, final MyView view)
     {
         super(eventBus, view);
+        getView().setHours(9, 7, 8, 5.5, 2);
     }
 }
