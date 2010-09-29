@@ -6,12 +6,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 102
+ *          $
  */
 public class CalendarWeekChart extends Widget
 {
-    private String width;
-    private String height;
+    private int width;
+    private int height;
     private final Element holder;
 
 
@@ -25,7 +26,7 @@ public class CalendarWeekChart extends Widget
     @Override
     public void setWidth(String width)
     {
-        this.width = width;
+        this.width = Integer.parseInt(width);
         super.setWidth(width);
     }
 
@@ -33,7 +34,7 @@ public class CalendarWeekChart extends Widget
     @Override
     public void setHeight(String height)
     {
-        this.height = height;
+        this.height = Integer.parseInt(height);
         super.setHeight(height);
     }
 
@@ -60,8 +61,8 @@ public class CalendarWeekChart extends Widget
     }
 
 
-    private native void createChart(com.google.gwt.user.client.Element element, String width, String height,
-            double hours0, double hours1, double hours2, double hours3, double hours4) /*-{
+    private native void createChart(com.google.gwt.user.client.Element element, int width, int height, double hours0,
+            double hours1, double hours2, double hours3, double hours4) /*-{
         var values = [hours0, hours1, hours2, hours3, hours4];
         var days = ["Mo", "Di", "Mi", "Do", "Fr"];
         var r = $wnd.Raphael(element, width, height, 
@@ -77,4 +78,11 @@ public class CalendarWeekChart extends Widget
         r.g.txtattr.font = "12px Verdana, sans-serif";
         var c = r.g.barchart(0, 10, 202, 210, [values]).hover(fin, fout).label([days], true);
     }-*/;
+
+    static class Column
+    {
+        String weekday;
+        String date;
+        int hours;
+    }
 }
