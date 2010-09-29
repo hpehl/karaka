@@ -21,11 +21,11 @@
             margin: 20px 30px 20px 0px;
         }
         
-        .controlPanel,.chartPanel {
+        .cockpitPanel,.quickChartPanel {
             margin-left: 18px;
         }
         
-        .chartPanel {
+        .quickChartPanel {
             margin-top: 20px;
         }
         
@@ -63,8 +63,8 @@
             <g:ScrollPanel>
                 <g:HTMLPanel>
                     <aside>
-                        <g:FlowPanel ui:field="controlPanel" addStyleNames="{style.controlPanel} {style.roundedWhiteBox}"></g:FlowPanel>
-                        <g:FlowPanel ui:field="chartPanel" addStyleNames="{style.chartPanel}"></g:FlowPanel>
+                        <g:FlowPanel ui:field="controlPanel" addStyleNames="{style.cockpitPanel} {style.roundedWhiteBox}"></g:FlowPanel>
+                        <g:FlowPanel ui:field="chartPanel" addStyleNames="{style.quickChartPanel}"></g:FlowPanel>
                     </aside>
                 </g:HTMLPanel>
             </g:ScrollPanel>

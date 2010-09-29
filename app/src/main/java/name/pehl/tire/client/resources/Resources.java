@@ -20,10 +20,6 @@ public interface Resources extends ClientBundle
     ImageResource selectedNavigation();
 
 
-    @Source("common.css")
-    CssResource common();
-
-
     @Source("navigation.css")
     Navigation navigation();
 

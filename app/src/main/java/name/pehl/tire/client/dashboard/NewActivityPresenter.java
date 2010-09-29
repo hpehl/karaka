@@ -10,14 +10,15 @@ import com.gwtplatform.mvp.client.View;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision: 90
- *          $
+ * @version $Date$ $Revision$
  */
 public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.MyView> implements NewActivityUiHandlers
 {
     public interface MyView extends View, HasUiHandlers<NewActivityUiHandlers>
     {
     }
+
+    private Date activityDate;
 
 
     @Inject
@@ -31,7 +32,6 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
     @Override
     public void onSelectDay(Date date)
     {
-        // TODO Implement me!
-        throw new UnsupportedOperationException("Not implemented");
+        this.activityDate = date;
     }
 }

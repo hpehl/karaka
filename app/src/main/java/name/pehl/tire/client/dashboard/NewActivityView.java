@@ -6,6 +6,7 @@ import name.pehl.tire.client.resources.Resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -17,8 +18,7 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision: 90
- *          $
+ * @version $Date$ $Revision$
  */
 public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> implements NewActivityPresenter.MyView
 {
@@ -41,7 +41,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     InlineHyperlink today;
 
     @UiField
-    CalendarWidget calendar;
+    CalendarLink calendar;
 
     private final Widget widget;
     private final Resources resources;
@@ -77,6 +77,12 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
         yesterday.removeStyleName(resources.newActivity().selected());
         today.removeStyleName(resources.newActivity().selected());
         calendar.removeStyleName(resources.newActivity().selected());
+        calendar.reset();
+        if (getUiHandlers() != null)
+        {
+            Date date = new Date(System.currentTimeMillis() - 2 * ONE_DAY);
+            getUiHandlers().onSelectDay(date);
+        }
     }
 
 
@@ -88,6 +94,12 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
         yesterday.addStyleName(resources.newActivity().selected());
         today.removeStyleName(resources.newActivity().selected());
         calendar.removeStyleName(resources.newActivity().selected());
+        calendar.reset();
+        if (getUiHandlers() != null)
+        {
+            Date date = new Date(System.currentTimeMillis() - ONE_DAY);
+            getUiHandlers().onSelectDay(date);
+        }
     }
 
 
@@ -99,18 +111,31 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
         yesterday.removeStyleName(resources.newActivity().selected());
         today.addStyleName(resources.newActivity().selected());
         calendar.removeStyleName(resources.newActivity().selected());
+        calendar.reset();
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().onSelectDay(new Date());
+        }
     }
 
 
     @UiHandler("calendar")
     void onCalendarClicked(ClickEvent event)
     {
-        GWT.log("Calendar selected");
         theDayBeforeYesterday.removeStyleName(resources.newActivity().selected());
         yesterday.removeStyleName(resources.newActivity().selected());
         today.removeStyleName(resources.newActivity().selected());
         calendar.addStyleName(resources.newActivity().selected());
-        // TODO Show DatePicker
-        // Set selected date as text of hyperlink
+    }
+
+
+    @UiHandler("calendar")
+    void onCalendarChanged(ValueChangeEvent<Date> event)
+    {
+        GWT.log(event.getValue() + " selected");
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().onSelectDay(event.getValue());
+        }
     }
 }

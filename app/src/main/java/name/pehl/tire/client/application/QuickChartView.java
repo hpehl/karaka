@@ -10,21 +10,21 @@ import com.gwtplatform.mvp.client.ViewImpl;
  * @author $Author$
  * @version $Date$ $Revision$
  */
-public class ChartView extends ViewImpl implements ChartPresenter.MyView
+public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyView
 {
-    interface ChartUi extends UiBinder<Widget, ChartView>
+    interface QuickChartUi extends UiBinder<Widget, QuickChartView>
     {
     }
 
-    private static ChartUi uiBinder = GWT.create(ChartUi.class);
+    private static QuickChartUi uiBinder = GWT.create(QuickChartUi.class);
 
     private final Widget widget;
 
     @UiField
-    ChartWidget chart;
+    CalendarWeekChart chart;
 
 
-    public ChartView()
+    public QuickChartView()
     {
         this.widget = uiBinder.createAndBindUi(this);
     }

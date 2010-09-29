@@ -10,16 +10,16 @@ import com.gwtplatform.mvp.client.View;
  * @author $Author$
  * @version $Date$ $Revision$
  */
-public class ControlPresenter extends PresenterWidget<ControlPresenter.MyView> implements ControlUiHandlers
+public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> implements CockpitUiHandlers
 {
-    public interface MyView extends View, HasUiHandlers<ControlUiHandlers>
+    public interface MyView extends View, HasUiHandlers<CockpitUiHandlers>
     {
         void initializeRecording(boolean recording);
     }
 
 
     @Inject
-    public ControlPresenter(final EventBus eventBus, final MyView view)
+    public CockpitPresenter(final EventBus eventBus, final MyView view)
     {
         super(eventBus, view);
         getView().setUiHandlers(this);

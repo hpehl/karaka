@@ -16,13 +16,13 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
  * @author $Author$
  * @version $Date$ $Revision$
  */
-public class ControlView extends ViewWithUiHandlers<ControlUiHandlers> implements ControlPresenter.MyView
+public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implements CockpitPresenter.MyView
 {
-    interface StatusUi extends UiBinder<Widget, ControlView>
+    interface CockpitUi extends UiBinder<Widget, CockpitView>
     {
     }
 
-    private static StatusUi uiBinder = GWT.create(StatusUi.class);
+    private static CockpitUi uiBinder = GWT.create(CockpitUi.class);
 
     @UiField
     Image startStop;
@@ -33,7 +33,7 @@ public class ControlView extends ViewWithUiHandlers<ControlUiHandlers> implement
 
 
     @Inject
-    public ControlView(final Resources resources)
+    public CockpitView(final Resources resources)
     {
         this.recording = false;
         this.resources = resources;

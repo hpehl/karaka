@@ -6,10 +6,10 @@ import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.about.AboutView;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
-import name.pehl.tire.client.application.ChartPresenter;
-import name.pehl.tire.client.application.ChartView;
-import name.pehl.tire.client.application.ControlPresenter;
-import name.pehl.tire.client.application.ControlView;
+import name.pehl.tire.client.application.QuickChartPresenter;
+import name.pehl.tire.client.application.QuickChartView;
+import name.pehl.tire.client.application.CockpitPresenter;
+import name.pehl.tire.client.application.CockpitView;
 import name.pehl.tire.client.application.NavigationPresenter;
 import name.pehl.tire.client.application.NavigationView;
 import name.pehl.tire.client.client.ClientPresenter;
@@ -69,8 +69,8 @@ public class TireModule extends AbstractPresenterModule
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
         // PresenterWidgets (a-z)
-        bindPresenterWidget(ChartPresenter.class, ChartPresenter.MyView.class, ChartView.class);
-        bindPresenterWidget(ControlPresenter.class, ControlPresenter.MyView.class, ControlView.class);
+        bindPresenterWidget(QuickChartPresenter.class, QuickChartPresenter.MyView.class, QuickChartView.class);
+        bindPresenterWidget(CockpitPresenter.class, CockpitPresenter.MyView.class, CockpitView.class);
         bindPresenterWidget(NavigationPresenter.class, NavigationPresenter.MyView.class, NavigationView.class);
         bindPresenterWidget(NewActivityPresenter.class, NewActivityPresenter.MyView.class, NewActivityView.class);
         bindPresenterWidget(RecentActivitiesPresenter.class, RecentActivitiesPresenter.MyView.class,

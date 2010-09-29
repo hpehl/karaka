@@ -1,6 +1,5 @@
 package name.pehl.tire.client.application;
 
-import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.UiUtils;
 
 import com.google.gwt.core.client.GWT;
@@ -9,7 +8,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 
 public class ApplicationView extends ViewImpl implements ApplicationPresenter.MyView
@@ -34,10 +32,8 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
     private final Widget widget;
 
 
-    @Inject
-    public ApplicationView(final Resources resources)
+    public ApplicationView()
     {
-        resources.common().ensureInjected();
         this.widget = uiBinder.createAndBindUi(this);
     }
 
@@ -60,11 +56,11 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
         {
             UiUtils.setContent(navigationPanel, content);
         }
-        else if (slot == ApplicationPresenter.SLOT_Control)
+        else if (slot == ApplicationPresenter.SLOT_Cockpit)
         {
             UiUtils.setContent(controlPanel, content);
         }
-        else if (slot == ApplicationPresenter.SLOT_Chart)
+        else if (slot == ApplicationPresenter.SLOT_QuickChart)
         {
             UiUtils.setContent(chartPanel, content);
         }

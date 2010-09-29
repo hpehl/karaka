@@ -6,7 +6,7 @@ import com.gwtplatform.mvp.client.UiHandlers;
  * @author $Author$
  * @version $Date$ $Revision$
  */
-public interface ControlUiHandlers extends UiHandlers
+public interface CockpitUiHandlers extends UiHandlers
 {
     void onStartRecording();
 

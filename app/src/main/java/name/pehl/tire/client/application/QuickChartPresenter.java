@@ -9,7 +9,7 @@ import com.gwtplatform.mvp.client.View;
  * @author $Author$
  * @version $Date$ $Revision$
  */
-public class ChartPresenter extends PresenterWidget<ChartPresenter.MyView>
+public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyView>
 {
     public interface MyView extends View
     {
@@ -18,7 +18,7 @@ public class ChartPresenter extends PresenterWidget<ChartPresenter.MyView>
 
 
     @Inject
-    public ChartPresenter(final EventBus eventBus, final MyView view)
+    public QuickChartPresenter(final EventBus eventBus, final MyView view)
     {
         super(eventBus, view);
         getView().setHours(9, 7, 8, 5.5, 2);

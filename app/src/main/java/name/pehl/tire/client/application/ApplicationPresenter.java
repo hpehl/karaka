@@ -23,8 +23,8 @@ import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
  * {@link PresenterWidget}s:
  * <ul>
  * <li>{@link NavigationPresenter} in {@link #SLOT_Navigation}
- * <li>{@link ControlPresenter} in {@link #SLOT_Control}
- * <li>{@link ChartPresenter} in {@link #SLOT_Chart}
+ * <li>{@link CockpitPresenter} in {@link #SLOT_Cockpit}
+ * <li>{@link QuickChartPresenter} in {@link #SLOT_QuickChart}
  * </ul>
  * 
  * @author $Author$
@@ -55,23 +55,23 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     /**
      * Constant for the static control slot.
      */
-    public static final Object SLOT_Control = new Object();
+    public static final Object SLOT_Cockpit = new Object();
 
     /**
      * Constant for the static chart slot.
      */
-    public static final Object SLOT_Chart = new Object();
+    public static final Object SLOT_QuickChart = new Object();
 
     private final NavigationPresenter navigationPresenter;
-    private final ControlPresenter controlPresenter;
-    private final ChartPresenter chartPresenter;
+    private final CockpitPresenter controlPresenter;
+    private final QuickChartPresenter chartPresenter;
     private final PlaceManager placeManager;
 
 
     @Inject
     public ApplicationPresenter(final EventBus eventBus, final PlaceManager placeManager, final MyView view,
             final MyProxy proxy, final NavigationPresenter navigationPresenter,
-            final ControlPresenter controlPresenter, final ChartPresenter chartPresenter)
+            final CockpitPresenter controlPresenter, final QuickChartPresenter chartPresenter)
     {
         super(eventBus, view, proxy);
         this.placeManager = placeManager;
@@ -90,8 +90,8 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 
     /**
      * Sets {@link NavigationPresenter} in {@link #SLOT_Navigation},
-     * {@link ControlPresenter} in {@link #SLOT_Control} and
-     * {@link ChartPresenter} in {@link #SLOT_Chart}.
+     * {@link CockpitPresenter} in {@link #SLOT_Cockpit} and
+     * {@link QuickChartPresenter} in {@link #SLOT_QuickChart}.
      * 
      * @see com.gwtplatform.mvp.client.PresenterWidget#onReveal()
      */
@@ -99,8 +99,8 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     protected void onReveal()
     {
         setInSlot(SLOT_Navigation, navigationPresenter);
-        setInSlot(SLOT_Control, controlPresenter);
-        setInSlot(SLOT_Chart, chartPresenter);
+        setInSlot(SLOT_Cockpit, controlPresenter);
+        setInSlot(SLOT_QuickChart, chartPresenter);
     }
 
 

@@ -2,10 +2,8 @@ package name.pehl.tire.client.dashboard;
 
 import java.util.Date;
 
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
@@ -26,8 +24,8 @@ import com.google.gwt.user.datepicker.client.DatePicker;
  * @version $Date$ $Revision: 99
  *          $
  */
-public class CalendarWidget extends Composite implements HasBlurHandlers, HasClickHandlers,
-        HasValueChangeHandlers<Date>, HasValue<Date>, HasText
+public class CalendarLink extends Composite implements HasClickHandlers, HasValueChangeHandlers<Date>, HasValue<Date>,
+        HasText
 {
     public static final String DEFAULT_STYLENAME = "tire-Calendar";
     private static final DateTimeFormat DEFAULT_FORMAT = DateTimeFormat.getFormat("dd.MM.yyyy");
@@ -36,14 +34,14 @@ public class CalendarWidget extends Composite implements HasBlurHandlers, HasCli
     private final DatePicker picker;
 
 
-    public CalendarWidget()
+    public CalendarLink()
     {
         anchor = new Anchor();
         picker = new DatePicker();
         popup = new PopupPanel(true);
         popup.addAutoHidePartner(anchor.getElement());
+        popup.setStyleName("tire-calendarPopup");
         popup.setWidget(picker);
-        popup.setStyleName("calendarPopup");
 
         initWidget(anchor);
         setStyleName(DEFAULT_STYLENAME);
@@ -52,13 +50,6 @@ public class CalendarWidget extends Composite implements HasBlurHandlers, HasCli
         addClickHandler(handler);
         addValueChangeHandler(handler);
         popup.addCloseHandler(handler);
-    }
-
-
-    @Override
-    public HandlerRegistration addBlurHandler(BlurHandler handler)
-    {
-        return anchor.addBlurHandler(handler);
     }
 
 
@@ -111,11 +102,18 @@ public class CalendarWidget extends Composite implements HasBlurHandlers, HasCli
     }
 
 
+    public void reset()
+    {
+        setValue(null);
+        setText("calendar");
+    }
+
+
     private void updateLabel(Date date)
     {
         if (date != null)
         {
-            anchor.setText(DEFAULT_FORMAT.format(date));
+            setText(DEFAULT_FORMAT.format(date));
         }
     }
 
@@ -130,7 +128,7 @@ public class CalendarWidget extends Composite implements HasBlurHandlers, HasCli
                 current = new Date();
             }
             picker.setCurrentMonth(current);
-            popup.showRelativeTo(CalendarWidget.this);
+            popup.showRelativeTo(CalendarLink.this);
         }
 
 
@@ -144,7 +142,6 @@ public class CalendarWidget extends Composite implements HasBlurHandlers, HasCli
         @Override
         public void onValueChange(ValueChangeEvent<Date> event)
         {
-            setValue(event.getValue(), true);
             popup.hide();
         }
     }

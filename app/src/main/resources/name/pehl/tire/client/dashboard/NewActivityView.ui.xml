@@ -1,9 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
-    xmlns:t="urn:import:name.pehl.tire.client.dashboard">
+    xmlns:tire-dash="urn:import:name.pehl.tire.client.dashboard" xmlns:tire-ui="urn:import:name.pehl.tire.client.ui">
 
-    <ui:style field="datepicker" src="../resources/datepicker.css" />
-        
     <ui:style>
         div.newActivity {
             font-size: 18px;
@@ -45,7 +43,6 @@
         }
         
         div.input input {
-            color: #dedede;
             font-size: 18px;
             border: none;
             width: 100%;
@@ -82,19 +79,18 @@
                     <g:InlineHyperlink ui:field="today">today</g:InlineHyperlink>
                 </li>
                 <li>
-                    <t:CalendarWidget ui:field="calendar">calendar</t:CalendarWidget>
-                    <!-- <g:InlineHyperlink ui:field="calendar">calendar</g:InlineHyperlink> -->
+                    <tire-dash:CalendarLink ui:field="calendar">calendar</tire-dash:CalendarLink>
                 </li>
             </ul>
             <div class="{style.input}">
                 <div class="{style.description}">
-                    <g:TextBox value="DESCRIPTION" />
+                    <tire-ui:DescriptiveTextBox descriptiveText="DESCRIPTION" />
                 </div>
                 <div class="{style.project}">
-                    <g:TextBox value="PROJECT" />
+                    <tire-ui:DescriptiveTextBox descriptiveText="PROJECT" />
                 </div>
                 <div class="{style.time}">
-                    <g:TextBox value="TIME" />
+                    <tire-ui:DescriptiveTextBox descriptiveText="TIME" />
                 </div>
             </div>
         </div>

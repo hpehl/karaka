@@ -5,17 +5,17 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision$
  */
-public class ChartWidget extends Widget
+public class CalendarWeekChart extends Widget
 {
     private String width;
     private String height;
     private final Element holder;
 
 
-    public ChartWidget()
+    public CalendarWeekChart()
     {
         holder = DOM.createDiv();
         setElement(holder);
