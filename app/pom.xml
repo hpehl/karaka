@@ -56,10 +56,6 @@
             <artifactId>gwt-dev</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.gwt.google-apis</groupId>
-            <artifactId>gwt-visualization</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp</artifactId>
         </dependency>
