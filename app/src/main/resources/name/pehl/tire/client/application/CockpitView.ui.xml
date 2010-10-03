@@ -24,32 +24,25 @@
             text-align: center;
         }
         
-        div.timeContainer {
-            padding: 0px 15px;
-        }
-        
-        .dayTime {
+        .day {
             font-size: 24px;
             font-weight: bold;
-            float: left;
         }
         
-        .monthTime,.weekTime {
+        .weekAndMonth {
             font-size: 12px;
-            float: right;
-            clear: right;
+            padding-top: 5px;
         }
         
         .description {
             padding-top: 20px;
-            clear: left;
-            font-size: 12px;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         
         .project {
             padding-top: 5px;
+        }
+        
+        .description,.project {
             font-size: 12px;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -63,13 +56,12 @@
             </div>
         </div>
         <div class="{style.infoContainer}">
-            <div class="{style.timeContainer}">
-                <g:Label title="Today" addStyleNames="{style.dayTime}">12:34</g:Label>
-                <g:Label title="Current week" addStyleNames="{style.weekTime}">34:12</g:Label>
-                <g:Label title="Current month" addStyleNames="{style.monthTime}">123:55</g:Label>
+            <g:Label ui:field="today" title="Today" addStyleNames="{style.day}">12:34</g:Label>
+            <div class="{style.weekAndMonth}">
+                <g:InlineLabel ui:field="week" title="Current week">34:12</g:InlineLabel>&nbsp;&mdash;&nbsp;<g:InlineLabel ui:field="month"  title="Current month">123:55</g:InlineLabel>
             </div>
-            <g:Label addStyleNames="{style.description}">Some description</g:Label>
-            <g:Label addStyleNames="{style.project}">Some project</g:Label>
+            <g:Label ui:field="description" addStyleNames="{style.description}">Some description</g:Label>
+            <g:Label ui:field="project" addStyleNames="{style.project}">Some project</g:Label>
         </div>
     </g:HTMLPanel>
 

@@ -23,8 +23,8 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
     // @formatter:off
     @UiField FlowPanel navigationPanel;
     @UiField ScrollPanel mainPanel;
-    @UiField FlowPanel controlPanel;
-    @UiField FlowPanel chartPanel;
+    @UiField FlowPanel cockpitPanel;
+    @UiField FlowPanel quickChartPanel;
     // @formatter:on
 
     // -------------------------------------------------------- private members
@@ -58,11 +58,11 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
         }
         else if (slot == ApplicationPresenter.SLOT_Cockpit)
         {
-            UiUtils.setContent(controlPanel, content);
+            UiUtils.setContent(cockpitPanel, content);
         }
         else if (slot == ApplicationPresenter.SLOT_QuickChart)
         {
-            UiUtils.setContent(chartPanel, content);
+            UiUtils.setContent(quickChartPanel, content);
         }
         else
         {

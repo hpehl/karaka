@@ -8,13 +8,16 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 102
+ *          $
  */
 public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implements CockpitPresenter.MyView
 {
@@ -24,8 +27,14 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
 
     private static CockpitUi uiBinder = GWT.create(CockpitUi.class);
 
-    @UiField
-    Image startStop;
+    // @formatter:off
+    @UiField Image startStop;
+    @UiField Label today;
+    @UiField InlineLabel week;
+    @UiField InlineLabel month;
+    @UiField Label description;
+    @UiField Label project;
+    // @formatter:on
 
     private boolean recording;
     private final Widget widget;
