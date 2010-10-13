@@ -3,7 +3,7 @@
     xmlns:tire-app="urn:import:name.pehl.tire.client.application">
 
     <g:HTMLPanel>
-        <tire-app:CalendarWeekChart ui:field="chart" width="202" height="220" />
+        <tire-app:CalendarWeekChart ui:field="calendarWeekChart" />
     </g:HTMLPanel>
 
 </ui:UiBinder> 

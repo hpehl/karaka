@@ -8,7 +8,8 @@ import com.gwtplatform.mvp.client.ViewImpl;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 102
+ *          $
  */
 public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyView
 {
@@ -20,12 +21,13 @@ public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyVi
 
     private final Widget widget;
 
-    @UiField
-    CalendarWeekChart chart;
+    @UiField(provided = true)
+    CalendarWeekChart calendarWeekChart;
 
 
     public QuickChartView()
     {
+        this.calendarWeekChart = new CalendarWeekChart(200, 200, new String[] {"Mo", "Tue", "Wed", "Thu", "Fr"});
         this.widget = uiBinder.createAndBindUi(this);
     }
 
@@ -38,8 +40,8 @@ public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyVi
 
 
     @Override
-    public void setHours(double... hours)
+    public void update(boolean animate, CalendarWeekData... data)
     {
-        chart.setHours(hours);
+        calendarWeekChart.update(animate, data);
     }
 }

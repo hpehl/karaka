@@ -1,5 +1,9 @@
 package name.pehl.tire.client.application;
 
+import static java.lang.Math.max;
+import static java.lang.Math.round;
+
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
@@ -11,78 +15,137 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class CalendarWeekChart extends Widget
 {
-    private int width;
-    private int height;
+    private static final int POPUP_HEIGHT = 20;
+    private static final int LABEL_HEIGHT = 20;
+    private static final double COLUMN_GAP_PERCENTAGE = .05;
+    private static final int MIN_COLUMN_GAP = 5;
+
+    // -------------------------------------------------------- private members
+
+    private final int width;
+    private final int height;
+    private final String[] weekdays;
+    private final int usableHeight;
+    private final double columnWidth;
+    private final double columnGap;
+
+    private int max;
+    private double oneMinute;
+
     private final Element holder;
+    private final JavaScriptObject[] columns;
+    private JavaScriptObject raphael;
 
 
-    public CalendarWeekChart()
+    // ----------------------------------------------------------- constructors
+
+    public CalendarWeekChart(final int width, final int height, final String[] weekdays)
     {
-        holder = DOM.createDiv();
+        this.width = width;
+        this.height = height;
+        this.weekdays = weekdays;
+        this.holder = DOM.createDiv();
         setElement(holder);
+        setWidth(String.valueOf(width));
+        setHeight(String.valueOf(height));
+
+        usableHeight = height - POPUP_HEIGHT - LABEL_HEIGHT;
+        oneMinute = usableHeight / 100.0;
+        columnGap = max(width * COLUMN_GAP_PERCENTAGE, MIN_COLUMN_GAP);
+        int columnCount = weekdays != null && weekdays.length != 0 ? weekdays.length : 1;
+        columns = new JavaScriptObject[columnCount];
+        columnWidth = (width - (weekdays.length - 1) * columnGap) / columnCount;
     }
 
+
+    // ------------------------------------------------------------------- init
 
     @Override
-    public void setWidth(String width)
+    protected void onLoad()
     {
-        this.width = Integer.parseInt(width);
-        super.setWidth(width);
-    }
-
-
-    @Override
-    public void setHeight(String height)
-    {
-        this.height = Integer.parseInt(height);
-        super.setHeight(height);
-    }
-
-
-    public void setHours(double... hours)
-    {
-        double[] hoursToPass = new double[5];
-        if (hours != null)
+        raphael = initRaphael(holder, width, height);
+        for (int i = 0; i < weekdays.length; i++)
         {
-            for (int i = 0; i < hoursToPass.length; i++)
+            CalendarWeekData cwd = new CalendarWeekData(i);
+            String path = path(cwd);
+            columns[i] = initColumn(raphael, path);
+        }
+    }
+
+
+    private native JavaScriptObject initRaphael(Element holder, int width, int height) /*-{
+        return $wnd.Raphael(holder, width, height);
+    }-*/;
+
+
+    private native JavaScriptObject initColumn(JavaScriptObject raphael, String path) /*-{
+        return raphael.path(path).attr({stroke: "#3d3d3d", fill: "#3d3d3d"});
+    }-*/;
+
+
+    // ------------------------------------------------------- animate / update
+
+    public void update(boolean animate, CalendarWeekData... data)
+    {
+        if (raphael != null && columns != null && data != null)
+        {
+            updateMax(data);
+            for (CalendarWeekData cwd : data)
             {
-                if (i < hours.length)
+                int index = cwd.getIndex();
+                if (index >= 0 && index < columns.length)
                 {
-                    hoursToPass[i] = hours[i];
-                }
-                else
-                {
-                    hoursToPass[i] = 0;
+                    String path = path(cwd);
+                    JavaScriptObject column = columns[cwd.getIndex()];
+                    if (animate)
+                    {
+                        internalAnimate(column, path);
+                    }
+                    else
+                    {
+                        internalUpdate(column, path);
+                    }
                 }
             }
         }
-        createChart(holder, width, height, hoursToPass[0], hoursToPass[1], hoursToPass[2], hoursToPass[3],
-                hoursToPass[4]);
     }
 
 
-    private native void createChart(com.google.gwt.user.client.Element element, int width, int height, double hours0,
-            double hours1, double hours2, double hours3, double hours4) /*-{
-        var values = [hours0, hours1, hours2, hours3, hours4];
-        var days = ["Mo", "Di", "Mi", "Do", "Fr"];
-        var r = $wnd.Raphael(element, width, height, 
-        fin = function () 
-        {
-        this.flag = r.g.popup(this.bar.x, this.bar.y, this.bar.value || "0").insertBefore(this);
-        },
-        fout = function () 
-        {
-        this.flag.animate({opacity: 0}, 300, function () {this.remove();});
-        });
-        r.g.colors = ["#3d3d3d"];
-        r.g.txtattr.font = "12px Verdana, sans-serif";
-        var c = r.g.barchart(0, 10, 202, 210, [values]).hover(fin, fout).label([days], true);
+    private native void internalAnimate(JavaScriptObject column, String path) /*-{
+        column.animate({path: path}, 1000, ">");
     }-*/;
 
-    static class Column
+
+    private native void internalUpdate(JavaScriptObject column, String path) /*-{
+
+    }-*/;
+
+
+    // --------------------------------------------------------- helper methods
+
+    private String path(CalendarWeekData cwd)
     {
-        String weekday;
-        String date;
-        int hours;
+        StringBuilder path = new StringBuilder();
+        long x = round(cwd.getIndex() * (columnWidth + columnGap));
+        long y = round(POPUP_HEIGHT + usableHeight);
+        path.append("M").append(x).append(",").append(y);
+        x += columnWidth;
+        path.append("L").append(x).append(",").append(y);
+        y -= round(cwd.getMinutes() * oneMinute);
+        path.append("L").append(x).append(",").append(y);
+        x -= columnWidth;
+        path.append("L").append(x).append(",").append(y).append("Z");
+        return path.toString();
+    }
+
+
+    private void updateMax(CalendarWeekData... data)
+    {
+        for (CalendarWeekData cwd : data)
+        {
+            max = max(max, cwd.getMinutes());
+        }
+        max += max * .05;
+        oneMinute = (double) usableHeight / max;
     }
 }

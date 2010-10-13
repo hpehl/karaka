@@ -1,5 +1,7 @@
 package name.pehl.tire.client.application;
 
+import java.util.Date;
+
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.EventBus;
 import com.gwtplatform.mvp.client.PresenterWidget;
@@ -7,13 +9,14 @@ import com.gwtplatform.mvp.client.View;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 102
+ *          $
  */
 public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyView>
 {
     public interface MyView extends View
     {
-        void setHours(double... hours);
+        void update(boolean animate, CalendarWeekData... data);
     }
 
 
@@ -21,6 +24,15 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     public QuickChartPresenter(final EventBus eventBus, final MyView view)
     {
         super(eventBus, view);
-        getView().setHours(9, 7, 8, 5.5, 2);
+    }
+
+
+    @Override
+    protected void onReset()
+    {
+        // Test
+        getView().update(true, new CalendarWeekData(0, 420, new Date()), new CalendarWeekData(1, 490, new Date()),
+                new CalendarWeekData(2, 560, new Date()), new CalendarWeekData(3, 350, new Date()),
+                new CalendarWeekData(4, 395, new Date()));
     }
 }
