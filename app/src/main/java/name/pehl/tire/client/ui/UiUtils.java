@@ -1,15 +1,21 @@
 package name.pehl.tire.client.ui;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 102
+ *          $
  */
 public final class UiUtils
 {
+    // TODO Replace with user setting
+    public static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat("dd.MM.yyyy");
+
+
     private UiUtils()
     {
     }

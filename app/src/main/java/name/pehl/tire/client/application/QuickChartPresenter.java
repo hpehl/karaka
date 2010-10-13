@@ -16,7 +16,7 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
 {
     public interface MyView extends View
     {
-        void update(boolean animate, CalendarWeekData... data);
+        void update(CalendarWeekData cwd, boolean animate);
     }
 
 
@@ -28,11 +28,13 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
 
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void onReset()
     {
         // Test
-        getView().update(true, new CalendarWeekData(0, 420, new Date()), new CalendarWeekData(1, 490, new Date()),
-                new CalendarWeekData(2, 560, new Date()), new CalendarWeekData(3, 350, new Date()),
-                new CalendarWeekData(4, 395, new Date()));
+        Date start = new Date(110, 9, 11);
+        Date end = new Date(110, 9, 15);
+        CalendarWeekData cwd = new CalendarWeekData(start, end, 41, 420, 490, 560, 350, 395);
+        getView().update(cwd, true);
     }
 }

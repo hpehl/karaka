@@ -1,42 +1,72 @@
 package name.pehl.tire.client.application;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
-class CalendarWeekData
+class CalendarWeekData implements Iterable<Integer>
 {
-    final private int index;
-    final private int minutes;
-    final private Date date;
+    final private Date start;
+    final private Date end;
+    final private int calendarWeek;
+    final private List<Integer> minutes;
 
 
-    public CalendarWeekData(int index)
+    public CalendarWeekData(Date start, Date end, int calendarWeek, int... minutes)
     {
-        this(index, 0, null);
+        this.start = start;
+        this.end = end;
+        this.calendarWeek = calendarWeek;
+        this.minutes = new ArrayList<Integer>();
+        if (minutes != null)
+        {
+            for (int m : minutes)
+            {
+                this.minutes.add(m);
+            }
+        }
     }
 
 
-    public CalendarWeekData(int index, int minutes, Date date)
+    @Override
+    public Iterator<Integer> iterator()
     {
-        this.index = index;
-        this.minutes = minutes;
-        this.date = date;
+        return minutes.iterator();
     }
 
 
-    public int getIndex()
+    public void add(int index, int minutes)
     {
-        return index;
+        if (index >= 0 && index < this.minutes.size())
+        {
+            int m = this.minutes.get(index);
+            m += minutes;
+            this.minutes.set(index, m);
+        }
     }
 
 
-    public int getMinutes()
+    public Date getStart()
+    {
+        return start;
+    }
+
+
+    public Date getEnd()
+    {
+        return end;
+    }
+
+
+    public int getCalendarWeek()
+    {
+        return calendarWeek;
+    }
+
+
+    public List<Integer> getMinutes()
     {
         return minutes;
-    }
-
-
-    public Date getDate()
-    {
-        return date;
     }
 }

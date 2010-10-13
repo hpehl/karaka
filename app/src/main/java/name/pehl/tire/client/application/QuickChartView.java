@@ -40,8 +40,8 @@ public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyVi
 
 
     @Override
-    public void update(boolean animate, CalendarWeekData... data)
+    public void update(CalendarWeekData cwd, boolean animate)
     {
-        calendarWeekChart.update(animate, data);
+        calendarWeekChart.update(cwd, animate);
     }
 }
