@@ -1,6 +1,7 @@
 package name.pehl.tire.client.ui;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
@@ -14,6 +15,7 @@ public final class UiUtils
 {
     // TODO Replace with user setting
     public static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat("dd.MM.yyyy");
+    public static final NumberFormat NUMBER_FORMAT = NumberFormat.getFormat("#0.00");
 
 
     private UiUtils()

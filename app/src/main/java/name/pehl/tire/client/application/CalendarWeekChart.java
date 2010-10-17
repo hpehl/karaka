@@ -2,6 +2,8 @@ package name.pehl.tire.client.application;
 
 import static java.lang.Math.max;
 import static java.lang.Math.round;
+import name.pehl.tire.client.activity.Day;
+import name.pehl.tire.client.activity.Week;
 import name.pehl.tire.client.ui.UiUtils;
 
 import com.google.gwt.core.client.GWT;
@@ -22,7 +24,9 @@ public class CalendarWeekChart extends Widget
     private static final double COLUMN_GAP_PERCENTAGE = .05;
     private static final int MIN_COLUMN_GAP = 5;
     private static final String COLUMN_COLOR = "#3d3d3d";
+    private static final String COLUMN_HOVER_COLOR = "#8ac401";
     private static final String TEXT_COLOR = "#3d3d3d";
+    private static final String BACKGROUND_COLOR = "#eaeaea";
 
     // -------------------------------------------------------- private members
 
@@ -34,6 +38,7 @@ public class CalendarWeekChart extends Widget
     private final double columnWidth;
     private final double columnGap;
     private double oneMinute;
+    private Week currentWeek;
 
     private final Element holder;
     private JavaScriptObject raphael;
@@ -73,29 +78,41 @@ public class CalendarWeekChart extends Widget
         raphael = initRaphael(holder, width, height);
         int x = width / 2;
         int y = TITLE_HEIGHT / 2;
-        title = initTitle(raphael, x, y, " \n ");
+        int rectX = (int) round(columnWidth);
+        int rectY = 0;
+        int rectWidth = (int) round(width - 2.0 * columnWidth);
+        int rectHeight = TITLE_HEIGHT;
+        title = initTitle(raphael, x, y, " \n ", rectX, rectY, rectWidth, rectHeight);
 
         // prev
-        x = (int) (columnWidth / 2) + 5;
-        y = TITLE_HEIGHT / 2 - 5;
+        x = (int) round(columnWidth / 2 + 5);
+        y = (int) round(TITLE_HEIGHT / 2.0 - 5);
         StringBuilder prevPath = new StringBuilder().append("M").append(x).append(",").append(y);
         y += 10;
         prevPath.append("L").append(x).append(",").append(y);
         x -= 10;
         y -= 5;
         prevPath.append("L").append(x).append(",").append(y).append("Z");
-        prev = initPrev(raphael, prevPath.toString());
+        rectX = 0;
+        rectY = 0;
+        rectWidth = (int) round(columnWidth);
+        rectHeight = TITLE_HEIGHT;
+        prev = initPrev(raphael, prevPath.toString(), rectX, rectY, rectWidth, rectHeight);
 
         // next
         x = (int) (round((weekdays.length - 1) * (columnWidth + columnGap)) + columnWidth / 2 - 5);
-        y = TITLE_HEIGHT / 2 - 5;
+        y = (int) round(TITLE_HEIGHT / 2.0 - 5);
         StringBuilder nextPath = new StringBuilder().append("M").append(x).append(",").append(y);
         y += 10;
         nextPath.append("L").append(x).append(",").append(y);
         x += 10;
         y -= 5;
         nextPath.append("L").append(x).append(",").append(y).append("Z");
-        next = initNext(raphael, nextPath.toString());
+        rectX = (int) round((weekdays.length - 1) * (columnWidth + columnGap));
+        rectY = 0;
+        rectWidth = (int) round(columnWidth);
+        rectHeight = TITLE_HEIGHT;
+        next = initNext(raphael, nextPath.toString(), rectX, rectY, rectWidth, rectHeight);
 
         // columns and legend
         for (int i = 0; i < weekdays.length; i++)
@@ -103,46 +120,53 @@ public class CalendarWeekChart extends Widget
             String path = path(i, 0);
             columns[i] = initColumn(raphael, path);
             x = (int) round(i * (columnWidth + columnGap) + columnWidth / 2);
-            y = height - LEGEND_HEIGHT / 2;
+            y = (int) round(height - LEGEND_HEIGHT / 2.0);
             initLegend(raphael, x, y, weekdays[i]);
         }
     }
 
 
-    private native JavaScriptObject initTitle(JavaScriptObject raphael, int x, int y, String title) /*-{
+    private native JavaScriptObject initTitle(JavaScriptObject raphael, int x, int y, String title, int rectX,
+            int rectY, int rectWidth, int rectHeight) /*-{
         var color = @name.pehl.tire.client.application.CalendarWeekChart::TEXT_COLOR;
-        return raphael.text(x, y, title).attr({font: "10px Verdana", fill: color});
+        var bgColor = @name.pehl.tire.client.application.CalendarWeekChart::BACKGROUND_COLOR;
+        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({stroke: "none", fill: bgColor, title: "Current calendarweek"});
+        var text = raphael.text(x, y, title).attr({font: "10px Verdana", fill: color, title: "Current calendarweek"});
+        rect.node.onclick = text.node.onclick = @name.pehl.tire.client.application.CalendarWeekChart::onCurrent();
+        return text;
     }-*/;
 
 
-    private native JavaScriptObject initPrev(JavaScriptObject raphael, String path) /*-{
+    private native JavaScriptObject initPrev(JavaScriptObject raphael, String path, int rectX, int rectY,
+            int rectWidth, int rectHeight) /*-{
         var color = @name.pehl.tire.client.application.CalendarWeekChart::TEXT_COLOR;
-        var prev = raphael.path(path).attr({fill: color, stroke: color, opacity: .66});
-        prev.mouseover(function (event) {
-        this.attr({opacity: 1.0});
-        });
-        prev.mouseout(function (event) {
-        this.attr({opacity: .66});
-        });
-        prev.click(function (event) {
-        this.@name.pehl.tire.client.application.CalendarWeekChart::onPrev();
-        });
+        var bgColor = @name.pehl.tire.client.application.CalendarWeekChart::BACKGROUND_COLOR;
+        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({stroke: "none", fill: bgColor, title: "Previous calendarweek"});
+        var prev = raphael.path(path).attr({fill: color, stroke: color, opacity: .66, title: "Previous calendarweek"});
+        rect.node.onclick = prev.node.onclick = @name.pehl.tire.client.application.CalendarWeekChart::onPrev();
+        rect.node.onmouseover = prev.node.onmouseover = function() {
+        prev.attr({opacity: 1.0});
+        };
+        rect.node.onmouseout = prev.node.onmouseout = function() {
+        prev.attr({opacity: .66});
+        };
         return prev;
     }-*/;
 
 
-    private native JavaScriptObject initNext(JavaScriptObject raphael, String path) /*-{
+    private native JavaScriptObject initNext(JavaScriptObject raphael, String path, int rectX, int rectY,
+            int rectWidth, int rectHeight) /*-{
         var color = @name.pehl.tire.client.application.CalendarWeekChart::TEXT_COLOR;
-        var next = raphael.path(path).attr({fill: color, stroke: color, opacity: .66});
-        next.mouseover(function (event) {
-        this.attr({opacity: 1.0});
-        });
-        next.mouseout(function (event) {
-        this.attr({opacity: .66});
-        });
-        next.click(function (event) {
-        this.@name.pehl.tire.client.application.CalendarWeekChart::onNext();
-        });
+        var bgColor = @name.pehl.tire.client.application.CalendarWeekChart::BACKGROUND_COLOR;
+        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({stroke: "none", fill: bgColor, title: "Next calendarweek"});
+        var next = raphael.path(path).attr({fill: color, stroke: color, opacity: .66, title: "Next calendarweek"});
+        rect.node.onclick = next.node.onclick = @name.pehl.tire.client.application.CalendarWeekChart::onNext();
+        rect.node.onmouseover = next.node.onmouseover = function() {
+        next.attr({opacity: 1.0});
+        };
+        rect.node.onmouseout = next.node.onmouseout = function() {
+        next.attr({opacity: .66});
+        };
         return next;
     }-*/;
 
@@ -166,40 +190,42 @@ public class CalendarWeekChart extends Widget
 
     // ----------------------------------------------------------------- update
 
-    public void update(CalendarWeekData cwd, boolean animate)
+    public void update(Week week, boolean animate)
     {
-        if (raphael != null && columns != null && cwd != null)
+        if (raphael != null && columns != null && week != null && !week.isEmpty())
         {
             // update title
             StringBuilder value = new StringBuilder();
-            value.append("CW ").append(cwd.getCalendarWeek()).append("\n")
-                    .append(UiUtils.DATE_FORMAT.format(cwd.getStart())).append(" - ")
-                    .append(UiUtils.DATE_FORMAT.format(cwd.getEnd()));
+            value.append("CW ").append(week.getCalendarWeek()).append("\n")
+                    .append(UiUtils.DATE_FORMAT.format(week.getStart().getDate())).append(" - ")
+                    .append(UiUtils.DATE_FORMAT.format(week.getEnd().getDate()));
             internalUpdateTitle(title, value.toString());
 
             // update max
-            for (int minutes : cwd)
+            for (Day day : week)
             {
-                max = max(max, minutes);
+                max = max(max, day.getMinutes());
             }
             max += max * .05;
             oneMinute = (double) usableHeight / max;
 
             // update columns
             int index = 0;
-            for (int minutes : cwd)
+            for (Day day : week)
             {
                 if (index >= 0 && index < columns.length)
                 {
                     JavaScriptObject column = columns[index];
-                    String path = path(index, minutes);
+                    String path = path(index, day.getMinutes());
+                    String date = UiUtils.DATE_FORMAT.format(day.getDate());
+                    String hours = UiUtils.NUMBER_FORMAT.format(day.getMinutes() / 60.0);
                     if (animate)
                     {
-                        internalAnimate(column, path);
+                        internalAnimate(column, path, date, hours);
                     }
                     else
                     {
-                        internalUpdate(column, path);
+                        internalUpdate(column, path, date, hours);
                     }
                 }
                 index++;
@@ -213,25 +239,40 @@ public class CalendarWeekChart extends Widget
     }-*/;
 
 
-    private native void internalAnimate(JavaScriptObject column, String path) /*-{
+    private native void internalAnimate(JavaScriptObject column, String path, String date, String hours) /*-{
+        var color = @name.pehl.tire.client.application.CalendarWeekChart::COLUMN_COLOR;
+        var hoverColor = @name.pehl.tire.client.application.CalendarWeekChart::COLUMN_HOVER_COLOR;
         column.animate({path: path}, 1500, ">");
+        column.attr("title", date + ": " + hours + "h");
+        column.node.onmouseover = function() {
+        column.attr("fill", hoverColor);
+        };
+        column.node.onmouseout = function() {
+        column.attr("fill", color);
+        };
     }-*/;
 
 
-    private native void internalUpdate(JavaScriptObject column, String path) /*-{
-        column.attr("path", path);
+    private native void internalUpdate(JavaScriptObject column, String path, String date, String hours) /*-{
+        column.attr({path: path, title: date + ": " + hours + "h"});
     }-*/;
 
 
     // ------------------------------------------------------------ prev / next
 
-    private void onPrev()
+    private static void onPrev()
     {
         GWT.log("Previous calendarweek");
     }
 
 
-    private void onNext()
+    private static void onCurrent()
+    {
+        GWT.log("Current calendarweek");
+    }
+
+
+    private static void onNext()
     {
         GWT.log("Next calendarweek");
     }

@@ -1,5 +1,7 @@
 package name.pehl.tire.client.application;
 
+import name.pehl.tire.client.activity.Week;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -40,8 +42,8 @@ public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyVi
 
 
     @Override
-    public void update(CalendarWeekData cwd, boolean animate)
+    public void update(Week week, boolean animate)
     {
-        calendarWeekChart.update(cwd, animate);
+        calendarWeekChart.update(week, animate);
     }
 }

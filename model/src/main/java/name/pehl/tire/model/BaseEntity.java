@@ -32,7 +32,7 @@ public abstract class BaseEntity implements Serializable
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + (id == null ? 0 : id.hashCode());
         return result;
     }
 
@@ -76,7 +76,7 @@ public abstract class BaseEntity implements Serializable
 
 
     /**
-     * Returns {@link #simpleClassname()} [&lt;id&gt;]
+     * Returns {@link Class#getSimpleName()} [&lt;id&gt;]
      * 
      * @return
      * @see java.lang.Object#toString()
@@ -84,27 +84,12 @@ public abstract class BaseEntity implements Serializable
     @Override
     public String toString()
     {
-        return new StringBuilder(simpleClassname()).append(" [").append(id).append("]").toString();
+        return new StringBuilder(getClass().getSimpleName()).append(" [").append(id).append("]").toString();
     }
 
 
     public Long getId()
     {
         return id;
-    }
-
-
-    /**
-     * Returns the simple class name for this class. Workaround since
-     * {@link Class#getSimpleName()} is not part of the GWT JRE emulation
-     * library.
-     * 
-     * @return
-     */
-    protected String simpleClassname()
-    {
-        String classname = getClass().getName();
-        int lastPeriod = classname.lastIndexOf('.');
-        return classname.substring(lastPeriod + 1, classname.length());
     }
 }

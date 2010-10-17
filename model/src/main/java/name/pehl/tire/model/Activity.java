@@ -41,7 +41,7 @@ public class Activity extends DescriptiveEntity
 
 
     /**
-     * Returns {@link #simpleClassname()} [&lt;id&gt;, &lt;name&gt;,
+     * Returns {@link Class#getSimpleName()} [&lt;id&gt;, &lt;name&gt;,
      * &lt;start&gt;, &lt;end&gt;, &lt;pause&gt;]
      * 
      * @return
@@ -50,8 +50,8 @@ public class Activity extends DescriptiveEntity
     @Override
     public String toString()
     {
-        return new StringBuilder(simpleClassname()).append(" [").append(id).append(", ").append(name).append(", ")
-                .append(start).append(", ").append(end).append(", ").append(pause).append("]").toString();
+        return new StringBuilder(getClass().getSimpleName()).append(" [").append(id).append(", ").append(name)
+                .append(", ").append(start).append(", ").append(end).append(", ").append(pause).append("]").toString();
     }
 
 

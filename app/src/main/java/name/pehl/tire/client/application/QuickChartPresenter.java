@@ -2,6 +2,10 @@ package name.pehl.tire.client.application;
 
 import java.util.Date;
 
+import name.pehl.tire.client.activity.Activity;
+import name.pehl.tire.client.activity.Day;
+import name.pehl.tire.client.activity.Week;
+
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.EventBus;
 import com.gwtplatform.mvp.client.PresenterWidget;
@@ -16,7 +20,7 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
 {
     public interface MyView extends View
     {
-        void update(CalendarWeekData cwd, boolean animate);
+        void update(Week week, boolean animate);
     }
 
 
@@ -32,9 +36,20 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     protected void onReset()
     {
         // Test
-        Date start = new Date(110, 9, 11);
-        Date end = new Date(110, 9, 15);
-        CalendarWeekData cwd = new CalendarWeekData(start, end, 41, 420, 490, 560, 350, 395);
-        getView().update(cwd, true);
+        Week week = new Week();
+        week.setCalendarWeek(41);
+        for (int i = 0; i < 5; i++)
+        {
+            Date date = new Date(110, 9, 11 + i);
+            Activity activity = new Activity();
+            int minutes = (int) Math.round(Math.random() * 100) + 300;
+            activity.setStart(date);
+            activity.setEnd(date);
+            activity.setMinutes(minutes);
+            Day day = new Day(date);
+            day.addActivity(activity);
+            week.addDay(day);
+        }
+        getView().update(week, true);
     }
 }

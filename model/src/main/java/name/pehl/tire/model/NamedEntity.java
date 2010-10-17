@@ -17,7 +17,7 @@ public abstract class NamedEntity extends BaseEntity
 
 
     /**
-     * Returns {@link #simpleClassname()} [&lt;id&gt;, &lt;name&gt;]
+     * Returns {@link Class#getSimpleName()} [&lt;id&gt;, &lt;name&gt;]
      * 
      * @return
      * @see java.lang.Object#toString()
@@ -25,8 +25,8 @@ public abstract class NamedEntity extends BaseEntity
     @Override
     public String toString()
     {
-        return new StringBuilder(simpleClassname()).append(" [").append(id).append(", ").append(name).append("]")
-                .toString();
+        return new StringBuilder(getClass().getSimpleName()).append(" [").append(id).append(", ").append(name)
+                .append("]").toString();
     }
 
 
