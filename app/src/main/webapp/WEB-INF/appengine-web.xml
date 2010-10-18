@@ -3,8 +3,23 @@
 
     <application>tire-d8</application>
     <version>1</version>
+    <sessions-enabled>true</sessions-enabled>
+    <precompilation-enabled>true</precompilation-enabled>
 
-    <!-- Configure java.util.logging -->
+    <static-files>
+        <include path="*.css" expiration="30d" />
+        <include path="index.html" expiration="30d" />
+        <include path="tire/**.cache.*" expiration="30d" />
+        <include path="tire/g.*.js" expiration="30d" />
+        <include path="tire/json2.js" expiration="30d" />
+        <include path="tire/raphael*.js" expiration="30d" />
+        <include path="tire/sarissa*.js" expiration="30d" />
+    </static-files>
+
+    <resource-files>
+        <include path="tire/*.nocache.*" />
+    </resource-files>
+    
     <system-properties>
         <property name="java.util.logging.config.file" value="WEB-INF/logging.properties" />
     </system-properties>

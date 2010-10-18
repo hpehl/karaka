@@ -1,6 +1,8 @@
 package name.pehl.tire.rest;
 
 import name.pehl.taoki.security.SecureRouter;
+import name.pehl.tire.rest.activity.ActivitiesResource;
+import name.pehl.tire.rest.activity.ActivityResource;
 
 import org.restlet.Context;
 
@@ -21,6 +23,12 @@ public class TireRouter extends SecureRouter
     @Override
     protected void attachRoutes()
     {
-        // TODO attach("/{token}/projects", ProjectsResource.class);
+        // TODO Implement security {token}
+        attach("/activities", ActivitiesResource.class);
+        attach("/activities/{year}", ActivitiesResource.class);
+        attach("/activities/{year}/{month}", ActivitiesResource.class);
+        attach("/activities/{year}/cw{week}", ActivitiesResource.class);
+        attach("/activities/{year}/{month}/{day}", ActivitiesResource.class);
+        attach("/activities/{id}", ActivityResource.class);
     }
 }
