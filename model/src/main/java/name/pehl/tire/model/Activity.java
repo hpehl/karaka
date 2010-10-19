@@ -17,8 +17,9 @@ public class Activity extends DescriptiveEntity
     private Date end;
     private long pause;
     private boolean billable;
+    private Status status;
     @Parent
-    Key<Project> project;
+    private Key<Project> project;
 
 
     public Activity()
@@ -37,12 +38,13 @@ public class Activity extends DescriptiveEntity
     {
         super(name, description);
         this.start = new Date();
+        this.status = Status.STOPPED;
     }
 
 
     /**
      * Returns {@link Class#getSimpleName()} [&lt;id&gt;, &lt;name&gt;,
-     * &lt;start&gt;, &lt;end&gt;, &lt;pause&gt;]
+     * &lt;start&gt;, &lt;end&gt;, &lt;pause&gt;, &lt;status&gt;]
      * 
      * @return
      * @see name.pehl.tire.shared.model.NamedEntity#toString()
@@ -51,7 +53,8 @@ public class Activity extends DescriptiveEntity
     public String toString()
     {
         return new StringBuilder(getClass().getSimpleName()).append(" [").append(id).append(", ").append(name)
-                .append(", ").append(start).append(", ").append(end).append(", ").append(pause).append("]").toString();
+                .append(", ").append(start).append(", ").append(end).append(", ").append(pause).append(", ")
+                .append(status).append("]").toString();
     }
 
 
@@ -112,5 +115,24 @@ public class Activity extends DescriptiveEntity
     public void setBillable(boolean billable)
     {
         this.billable = billable;
+    }
+
+
+    public Status getStatus()
+    {
+        return status;
+    }
+
+
+    public void setStatus(Status status)
+    {
+        this.status = status;
+    }
+
+    public static enum Status
+    {
+        STOPPED,
+        RUNNING,
+        PAUSE;
     }
 }
