@@ -23,9 +23,7 @@ public class TireRouter extends SecureRouter
     @Override
     protected void attachRoutes()
     {
-        // TODO Implement security {token}
         attach("/activities", ActivitiesResource.class);
-        attach("/activities/{year}", ActivitiesResource.class);
         attach("/activities/{year}/{month}", ActivitiesResource.class);
         attach("/activities/{year}/cw{week}", ActivitiesResource.class);
         attach("/activities/{year}/{month}/{day}", ActivitiesResource.class);
