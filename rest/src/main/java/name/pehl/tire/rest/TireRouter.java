@@ -24,9 +24,11 @@ public class TireRouter extends SecureRouter
     protected void attachRoutes()
     {
         attach("/activities", ActivitiesResource.class);
-        attach("/activities/{year}/{month}", ActivitiesResource.class);
-        attach("/activities/{year}/cw{week}", ActivitiesResource.class);
+        attach("/activities/{year}/{monthOrWeek}", ActivitiesResource.class);
         attach("/activities/{year}/{month}/{day}", ActivitiesResource.class);
         attach("/activities/{id}", ActivityResource.class);
+        attach("/activities/{id}/start", ActivityResource.class);
+        attach("/activities/{id}/stop", ActivityResource.class);
+        attach("/activities/{id}/pause", ActivityResource.class);
     }
 }
