@@ -1,16 +1,15 @@
 package name.pehl.tire.client.model;
 
-import name.pehl.piriti.client.json.JsonField;
+import name.pehl.piriti.client.json.Json;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision: 78
- *          $
+ * @version $Date$ $Revision$
  */
 public abstract class NamedModel extends BaseModel
 {
-    @JsonField
-    public String name;
+    @Json
+    private String name;
 
 
     public String getName()

@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import name.pehl.piriti.client.json.JsonField;
+import name.pehl.piriti.client.json.Json;
 import name.pehl.piriti.client.json.JsonReader;
 
 import com.google.gwt.core.client.GWT;
@@ -20,8 +20,8 @@ public class Day implements Iterable<Activity>
     interface DayReader extends JsonReader<Day> {}
     public static final DayReader JSON_READER = GWT.create(DayReader.class);
     
-    @JsonField Date date;
-    @JsonField List<Activity> activities;
+    @Json private Date date;
+    @Json(setter = DayActivitiesSetter.class) private final List<Activity> activities;
     // @formatter:on
 
     public Day()
@@ -99,9 +99,21 @@ public class Day implements Iterable<Activity>
     }
 
 
+    public void clearActivities()
+    {
+        activities.clear();
+    }
+
+
     public void addActivity(Activity activity)
     {
         activities.add(activity);
+    }
+
+
+    public List<Activity> getActivities()
+    {
+        return activities;
     }
 
 

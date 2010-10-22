@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import name.pehl.piriti.client.json.JsonField;
+import name.pehl.piriti.client.json.Json;
 import name.pehl.piriti.client.json.JsonReader;
 
 import com.google.gwt.core.client.GWT;
@@ -19,8 +19,8 @@ public class Week implements Iterable<Day>
     interface WeekReader extends JsonReader<Week> {}
     public static final WeekReader JSON_READER = GWT.create(WeekReader.class);
     
-    @JsonField int calendarWeek;
-    @JsonField List<Day> days;
+    @Json private int calendarWeek;
+    @Json(setter = WeekDaysSetter.class) private final List<Day> days;
     // @formatter:on
 
     /**
@@ -100,6 +100,18 @@ public class Week implements Iterable<Day>
     }
 
 
+    public void clearDays()
+    {
+        days.clear();
+    }
+
+
+    public void addDay(Day day)
+    {
+        days.add(day);
+    }
+
+
     public Day getStart()
     {
         if (!days.isEmpty())
@@ -117,12 +129,6 @@ public class Week implements Iterable<Day>
             return days.get(days.size() - 1);
         }
         return null;
-    }
-
-
-    public void addDay(Day day)
-    {
-        days.add(day);
     }
 
 

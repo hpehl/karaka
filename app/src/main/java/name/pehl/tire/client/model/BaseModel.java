@@ -1,16 +1,15 @@
 package name.pehl.tire.client.model;
 
-import name.pehl.piriti.client.json.JsonField;
+import name.pehl.piriti.client.json.Json;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision: 69
- *          $
+ * @version $Date$ $Revision$
  */
 public abstract class BaseModel
 {
-    @JsonField
-    public Long id;
+    @Json(setter = BaseModelIdSetter.class)
+    private Long id;
 
 
     /**
@@ -83,5 +82,17 @@ public abstract class BaseModel
     public Long getId()
     {
         return id;
+    }
+
+
+    /**
+     * Necessary for the Piriti mapping.
+     * 
+     * @param id
+     *            The id to set.
+     */
+    void setId(Long id)
+    {
+        this.id = id;
     }
 }

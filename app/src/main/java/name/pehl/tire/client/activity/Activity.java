@@ -2,7 +2,7 @@ package name.pehl.tire.client.activity;
 
 import java.util.Date;
 
-import name.pehl.piriti.client.json.JsonField;
+import name.pehl.piriti.client.json.Json;
 import name.pehl.piriti.client.json.JsonReader;
 import name.pehl.piriti.client.json.JsonWriter;
 import name.pehl.tire.client.model.DescriptiveModel;
@@ -22,11 +22,11 @@ public class Activity extends DescriptiveModel
     interface ActivityWriter extends JsonWriter<Activity> {}
     public static final ActivityWriter JSON_WRITER = GWT.create(ActivityWriter.class);
     
-    @JsonField Date start;
-    @JsonField Date end;
-    @JsonField int pause;
-    @JsonField int minutes;
-    @JsonField boolean billable;
+    @Json private Date start;
+    @Json private Date end;
+    @Json private int pause;
+    @Json private int minutes;
+    @Json private boolean billable;
     // @formatter:on
 
     public Activity()
