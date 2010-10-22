@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>Transition Test</title>
+<style type="text/css">
+@-webkit-keyframes pulse {
+    from {
+        border-left-color: #ccc;
+        border-right-color: #ccc;
+    }
+    to {
+        border-left-color: #c00;
+        border-right-color: #c00;
+    }
+}
+div {
+    margin: 1em;
+    padding: 1em;
+    text-align: center;
+    background-color: #ccc;
+    border-left: 10px solid #ccc;
+    border-right: 10px solid #ccc;
+}
+div.active {
+    -webkit-animation-name: pulse;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-out;
+}
+</style>
+</head>
+<body>
+<div>Erste Zeile</div>
+<div>Zweite Zeile</div>
+<div class="active">Dritte Zeile</div>
+<div>Vierte Zeile</div>
+</body>
+</html>
