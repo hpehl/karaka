@@ -6,7 +6,7 @@ package name.pehl.tire.model;
  */
 public abstract class NamedEntity extends BaseEntity
 {
-    String name;
+    private String name;
 
 
     public NamedEntity(String name)
@@ -25,7 +25,7 @@ public abstract class NamedEntity extends BaseEntity
     @Override
     public String toString()
     {
-        return new StringBuilder(getClass().getSimpleName()).append(" [").append(id).append(", ").append(name)
+        return new StringBuilder(getClass().getSimpleName()).append(" [").append(getId()).append(", ").append(name)
                 .append("]").toString();
     }
 

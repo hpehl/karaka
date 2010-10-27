@@ -10,7 +10,7 @@ import com.googlecode.objectify.annotation.Entity;
 @Entity
 public class Client extends DescriptiveEntity implements HasUser
 {
-    User user;
+    private User user;
 
 
     public Client()

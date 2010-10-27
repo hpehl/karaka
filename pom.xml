@@ -128,7 +128,7 @@
         <restlet.version>2.0.1</restlet.version>
 
         <!-- Objectify -->
-        <objectify.version>2.2.1</objectify.version>
+        <objectify.version>2.2.2</objectify.version>
 
         <!-- Logging -->
         <slf4j.version>1.6.1</slf4j.version>

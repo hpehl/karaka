@@ -2,23 +2,30 @@ package name.pehl.tire.model;
 
 import java.util.Date;
 
+import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.annotation.Unindexed;
 
 /**
  * @author $Author: harald.pehl $
  * @version $Revision: 41 $
  */
 @Entity
-public class Activity extends DescriptiveEntity
+public class Activity extends DescriptiveEntity implements HasUser
 {
+    private User user;
     private Date start;
     private Date end;
+
+    @Unindexed
     private long pause;
+
     private boolean billable;
+
+    @Unindexed(IfStopped.class)
     private Status status;
-    @Parent
+
     private Key<Project> project;
 
 
@@ -52,9 +59,23 @@ public class Activity extends DescriptiveEntity
     @Override
     public String toString()
     {
-        return new StringBuilder(getClass().getSimpleName()).append(" [").append(id).append(", ").append(name)
-                .append(", ").append(start).append(", ").append(end).append(", ").append(pause).append(", ")
-                .append(status).append("]").toString();
+        return new StringBuilder(getClass().getSimpleName()).append(" [").append(getId()).append(", ")
+                .append(getName()).append(", ").append(start).append(", ").append(end).append(", ").append(pause)
+                .append(", ").append(status).append("]").toString();
+    }
+
+
+    @Override
+    public User getUser()
+    {
+        return user;
+    }
+
+
+    @Override
+    public void attachToUser(User user)
+    {
+        this.user = user;
     }
 
 
@@ -127,12 +148,5 @@ public class Activity extends DescriptiveEntity
     public void setStatus(Status status)
     {
         this.status = status;
-    }
-
-    public static enum Status
-    {
-        STOPPED,
-        RUNNING,
-        PAUSE;
     }
 }

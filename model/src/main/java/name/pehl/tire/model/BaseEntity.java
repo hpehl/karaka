@@ -12,7 +12,7 @@ import javax.persistence.Id;
 public abstract class BaseEntity implements Serializable
 {
     @Id
-    Long id;
+    private Long id;
 
 
     public BaseEntity()

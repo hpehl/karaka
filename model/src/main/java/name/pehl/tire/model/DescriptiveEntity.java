@@ -9,7 +9,7 @@ import com.googlecode.objectify.annotation.Unindexed;
 public abstract class DescriptiveEntity extends NamedEntity
 {
     @Unindexed
-    String description;
+    private String description;
 
 
     public DescriptiveEntity(String name, String description)

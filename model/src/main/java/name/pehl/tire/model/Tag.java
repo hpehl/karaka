@@ -11,8 +11,8 @@ import com.googlecode.objectify.annotation.Entity;
 @Entity
 public class Tag extends NamedEntity implements HasUser
 {
-    User user;
-    Key<Activity> activity;
+    private User user;
+    private Key<Activity> activity;
 
 
     public Tag()
