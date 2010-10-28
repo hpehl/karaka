@@ -1,12 +1,12 @@
 package name.pehl.tire.rest;
 
 import name.pehl.taoki.security.CookieSecurityCheck;
-import name.pehl.taoki.security.HeaderSecurityTokenReader;
 import name.pehl.taoki.security.RandomSecurityTokenGenerator;
 import name.pehl.taoki.security.SecurityCheck;
 import name.pehl.taoki.security.SecurityToken;
 import name.pehl.taoki.security.SecurityTokenGenerator;
 import name.pehl.taoki.security.SecurityTokenReader;
+import name.pehl.taoki.security.UrlSecurityTokenReader;
 import name.pehl.tire.rest.activity.ActivitiesResource;
 import name.pehl.tire.rest.activity.ActivityResource;
 
@@ -25,7 +25,7 @@ public class RestModule extends AbstractModule
         bindConstant().annotatedWith(SecurityToken.class).to("TST");
         bind(SecurityCheck.class).to(CookieSecurityCheck.class);
         bind(SecurityTokenGenerator.class).to(RandomSecurityTokenGenerator.class);
-        bind(SecurityTokenReader.class).to(HeaderSecurityTokenReader.class);
+        bind(SecurityTokenReader.class).to(UrlSecurityTokenReader.class);
 
         // bind resources
         bind(ActivityResource.class);

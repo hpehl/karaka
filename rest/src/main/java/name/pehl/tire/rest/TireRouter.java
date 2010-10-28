@@ -1,8 +1,10 @@
 package name.pehl.tire.rest;
 
+import static name.pehl.tire.rest.activity.ActivityParameters.*;
 import name.pehl.taoki.security.SecureRouter;
 import name.pehl.tire.rest.activity.ActivitiesResource;
 import name.pehl.tire.rest.activity.ActivityResource;
+import name.pehl.tire.rest.activity.ActivityRouter;
 
 import org.restlet.Context;
 
@@ -23,12 +25,13 @@ public class TireRouter extends SecureRouter
     @Override
     protected void attachRoutes()
     {
-        attach("/activities", ActivitiesResource.class);
-        attach("/activities/{year}/{monthOrWeek}", ActivitiesResource.class);
-        attach("/activities/{year}/{month}/{day}", ActivitiesResource.class);
-        attach("/activities/{id}", ActivityResource.class);
-        attach("/activities/{id}/start", ActivityResource.class);
-        attach("/activities/{id}/stop", ActivityResource.class);
-        attach("/activities/{id}/pause", ActivityResource.class);
+        // Unambiguous URIs
+        attach("/{TST}/activities", ActivitiesResource.class);
+        attach(String.format("/{TST}/activities/{%s}", ID), ActivityResource.class);
+        attach(String.format("/{TST}/activities/{%s}/{%s}/{%s}", YEAR, MONTH, DAY), ActivitiesResource.class);
+
+        // Ambiguous URIs
+        ActivityRouter router = new ActivityRouter(getInjector(), getContext());
+        attach(String.format("/{TST}/activities/{%s}/{%s}", YEAR_OR_ID, MONTH_OR_WEEK_OR_ACTION), router);
     }
 }
