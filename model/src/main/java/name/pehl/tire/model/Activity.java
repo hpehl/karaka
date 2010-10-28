@@ -1,6 +1,10 @@
 package name.pehl.tire.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Embedded;
 
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
@@ -26,6 +30,9 @@ public class Activity extends DescriptiveEntity implements HasUser
     @Unindexed(IfStopped.class)
     private Status status;
 
+    @Embedded
+    private List<Tag> tags;
+
     private Key<Project> project;
 
 
@@ -46,6 +53,7 @@ public class Activity extends DescriptiveEntity implements HasUser
         super(name, description);
         this.start = new Date();
         this.status = Status.STOPPED;
+        this.tags = new ArrayList<Tag>();
     }
 
 
@@ -112,6 +120,33 @@ public class Activity extends DescriptiveEntity implements HasUser
     public void setPause(long pause)
     {
         this.pause = pause;
+    }
+
+
+    public List<Tag> getTags()
+    {
+        return this.tags;
+    }
+
+
+    public void addTag(Tag tag)
+    {
+        if (!this.tags.contains(tag))
+        {
+            this.tags.add(tag);
+        }
+    }
+
+
+    public void removeTag(Tag tag)
+    {
+        this.tags.remove(tag);
+    }
+
+
+    public void clearTags()
+    {
+        this.tags.clear();
     }
 
 
