@@ -88,6 +88,10 @@
             <id>maven2-repository.dev.java.net</id>
             <url>http://download.java.net/maven/2/</url>
         </repository>
+        <repository>
+          <id>gson</id>
+          <url>http://google-gson.googlecode.com/svn/mavenrepo</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -366,6 +370,11 @@
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
                 <version>1.6.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>1.5</version>
             </dependency>
 
             <!-- Logging -->
