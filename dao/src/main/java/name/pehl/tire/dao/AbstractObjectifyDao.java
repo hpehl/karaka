@@ -3,8 +3,14 @@ package name.pehl.tire.dao;
 import java.util.List;
 import java.util.Map;
 
+import name.pehl.tire.model.Activity;
+import name.pehl.tire.model.Client;
+import name.pehl.tire.model.Project;
+import name.pehl.tire.model.Tag;
+
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 import com.googlecode.objectify.helper.DAOBase;
 
@@ -16,12 +22,14 @@ public abstract class AbstractObjectifyDao<T> extends DAOBase
 {
     static
     {
-        // Register all your entity classes here
-        // ObjectifyService.register(MyDomain.class);
-        // ...
+        // Register all entity classes here
+        ObjectifyService.register(Activity.class);
+        ObjectifyService.register(Client.class);
+        ObjectifyService.register(Project.class);
+        ObjectifyService.register(Tag.class);
     }
 
-    protected Class<T> clazz;
+    protected final Class<T> clazz;
 
 
     /**
@@ -36,7 +44,6 @@ public abstract class AbstractObjectifyDao<T> extends DAOBase
 
 
     public Key<T> put(T entity)
-
     {
         return ofy().put(entity);
     }
