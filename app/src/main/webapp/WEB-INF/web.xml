@@ -10,7 +10,7 @@
     </filter-mapping>
 
     <listener>
-        <listener-class>name.pehl.tire.server.ServletConfig</listener-class>
+        <listener-class>name.pehl.tire.server.TireConfig</listener-class>
     </listener>
 
     <welcome-file-list>

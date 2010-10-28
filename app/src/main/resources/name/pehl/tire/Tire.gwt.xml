@@ -9,7 +9,6 @@
     <inherits name="com.google.gwt.user.User" />
 
     <!-- name.pehl -->
-    <inherits name="name.pehl.totoe.Totoe" />
     <inherits name="name.pehl.piriti.Piriti" />
     <inherits name="name.pehl.piriti.restlet.PiritiRestlet" />
 
