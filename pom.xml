@@ -95,17 +95,11 @@
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>codehaus-snapshots</id>
-            <url>http://snapshots.repository.codehaus.org/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
+            <id>gwt-plugin</id>
+            <url>http://google-web-toolkit.googlecode.com/svn/2.1.0/gwt/maven</url>
         </pluginRepository>
         <pluginRepository>
-            <id>maven-gae-plugin-repo</id>
+            <id>gae-plugin</id>
             <url>http://maven-gae-plugin.googlecode.com/svn/repository</url>
         </pluginRepository>
         <pluginRepository>
@@ -216,14 +210,6 @@
                 <version>${gwt.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <!--
-            <dependency>
-                <groupId>com.google.gwt</groupId>
-                <artifactId>gwt-dev</artifactId>
-                <version>${gwt.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            -->
             <dependency>
                 <groupId>com.gwtplatform</groupId>
                 <artifactId>gwtp</artifactId>
