@@ -13,7 +13,7 @@
         <include path="tire/g.*.js" expiration="30d" />
         <include path="tire/json*.js" expiration="30d" />
         <include path="tire/raphael*.js" expiration="30d" />
-        <include path="tire/sarissa*.js" expiration="30d" />
+        <include path="tire/**/sarissa*.js" expiration="30d" />
     </static-files>
 
     <resource-files>
