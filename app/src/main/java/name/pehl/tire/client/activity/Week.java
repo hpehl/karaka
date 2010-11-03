@@ -19,6 +19,7 @@ public class Week implements Iterable<Day>
     interface WeekReader extends JsonReader<Week> {}
     public static final WeekReader JSON_READER = GWT.create(WeekReader.class);
     
+    @Json private int year;
     @Json private int calendarWeek;
     @Json(setter = WeekDaysSetter.class) private final List<Day> days;
     // @formatter:on
@@ -33,7 +34,7 @@ public class Week implements Iterable<Day>
 
 
     /**
-     * Based on calendarWeek.
+     * Based on year and calendarWeek.
      * 
      * @return
      * @see java.lang.Object#hashCode()
@@ -44,12 +45,13 @@ public class Week implements Iterable<Day>
         final int prime = 31;
         int result = 1;
         result = prime * result + calendarWeek;
+        result = prime * result + year;
         return result;
     }
 
 
     /**
-     * Based on calendarWeek.
+     * Based on year and calendarWeek.
      * 
      * @param obj
      * @return
@@ -75,6 +77,10 @@ public class Week implements Iterable<Day>
         {
             return false;
         }
+        if (year != other.year)
+        {
+            return false;
+        }
         return true;
     }
 
@@ -82,7 +88,8 @@ public class Week implements Iterable<Day>
     @Override
     public String toString()
     {
-        StringBuilder builder = new StringBuilder("Week [").append(calendarWeek).append(", ").append(days).append("]");
+        StringBuilder builder = new StringBuilder("Week [").append(year).append("/").append(calendarWeek).append(", ")
+                .append(days).append("]");
         return builder.toString();
     }
 
@@ -140,6 +147,12 @@ public class Week implements Iterable<Day>
             minutes += day.getMinutes();
         }
         return minutes;
+    }
+
+
+    public int getYear()
+    {
+        return year;
     }
 
 

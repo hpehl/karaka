@@ -18,30 +18,23 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 102
+ *          $
  */
 public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> implements NewActivityPresenter.MyView
 {
-    interface NewActivityUi extends UiBinder<Widget, NewActivityView>
-    {
-    }
-
-    private static NewActivityUi uiBinder = GWT.create(NewActivityUi.class);
-
-    private static final long ONE_DAY = 24 * 60 * 60 * 1000;
+    private static final long ONE_DAY = 86400000l;
     private static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat("dd. MMM");
 
-    @UiField
-    InlineHyperlink theDayBeforeYesterday;
+    // @formatter:off
+    interface NewActivityUi extends UiBinder<Widget, NewActivityView> {}
+    private static NewActivityUi uiBinder = GWT.create(NewActivityUi.class);
 
-    @UiField
-    InlineHyperlink yesterday;
-
-    @UiField
-    InlineHyperlink today;
-
-    @UiField
-    CalendarLink calendar;
+    @UiField InlineHyperlink theDayBeforeYesterday;
+    @UiField InlineHyperlink yesterday;
+    @UiField InlineHyperlink today;
+    @UiField CalendarLink calendar;
+    // @formatter:on
 
     private final Widget widget;
     private final Resources resources;

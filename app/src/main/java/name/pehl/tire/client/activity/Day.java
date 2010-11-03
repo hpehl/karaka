@@ -32,6 +32,8 @@ public class Day implements Iterable<Activity>
 
     public Day(Date date)
     {
+        // TODO Remove constructor when test code in
+        // QuickChartPresenter.onReset() is no longer needed
         this.date = date;
         activities = new ArrayList<Activity>();
     }

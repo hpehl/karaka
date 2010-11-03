@@ -41,6 +41,12 @@ public class Activity extends DescriptiveModel
     }
 
 
+    /**
+     * Based on start and end.
+     * 
+     * @return
+     * @see name.pehl.tire.client.model.BaseModel#hashCode()
+     */
     @Override
     public int hashCode()
     {
@@ -52,6 +58,13 @@ public class Activity extends DescriptiveModel
     }
 
 
+    /**
+     * Based on start and end.
+     * 
+     * @param obj
+     * @return
+     * @see name.pehl.tire.client.model.BaseModel#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -147,6 +160,8 @@ public class Activity extends DescriptiveModel
 
     public void setMinutes(int minutes)
     {
+        // TODO Remove public visibility when test code in
+        // QuickChartPresenter.onReset() is no longer needed
         this.minutes = minutes;
     }
 
