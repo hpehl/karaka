@@ -3,6 +3,7 @@
 <module rename-to="tire">
 
     <!-- GWT -->
+    <inherits name="com.google.gwt.cell.Cell" />
     <inherits name="com.google.gwt.inject.Inject" />
     <inherits name="com.google.gwt.json.JSON" />
     <inherits name="com.google.gwt.logging.Logging"/>
