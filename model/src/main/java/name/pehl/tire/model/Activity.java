@@ -1,7 +1,6 @@
 package name.pehl.tire.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Embedded;
@@ -19,8 +18,12 @@ import com.googlecode.objectify.annotation.Unindexed;
 public class Activity extends DescriptiveEntity implements HasUser
 {
     private User user;
-    private Date start;
-    private Date end;
+
+    @Embedded
+    private Time start;
+
+    @Embedded
+    private Time end;
 
     @Unindexed
     private long pause;
@@ -38,20 +41,20 @@ public class Activity extends DescriptiveEntity implements HasUser
 
     public Activity()
     {
-        this(null, null);
+        this(null, null, null);
     }
 
 
     public Activity(String name)
     {
-        this(name, null);
+        this(name, null, null);
     }
 
 
-    public Activity(String name, String description)
+    public Activity(String name, String description, String timeZoneId)
     {
         super(name, description);
-        this.start = new Date();
+        this.start = new Time(timeZoneId);
         this.status = Status.STOPPED;
         this.tags = new ArrayList<Tag>();
     }
@@ -87,25 +90,25 @@ public class Activity extends DescriptiveEntity implements HasUser
     }
 
 
-    public Date getStart()
+    public Time getStart()
     {
         return start;
     }
 
 
-    public void setStart(Date start)
+    public void setStart(Time start)
     {
         this.start = start;
     }
 
 
-    public Date getEnd()
+    public Time getEnd()
     {
         return end;
     }
 
 
-    public void setEnd(Date end)
+    public void setEnd(Time end)
     {
         this.end = end;
     }
