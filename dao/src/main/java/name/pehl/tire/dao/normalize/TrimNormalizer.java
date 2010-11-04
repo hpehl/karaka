@@ -1,11 +1,11 @@
-package name.pehl.tire.dao.search;
+package name.pehl.tire.dao.normalize;
 
 /**
  * Removes leading and trailing whitespaces, multiple whitespaces are replaced
  * by one.
  * 
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision$
  */
 public class TrimNormalizer implements Normalizer
 {

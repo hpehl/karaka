@@ -1,8 +1,8 @@
-package name.pehl.tire.dao.search;
+package name.pehl.tire.dao.normalize;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision$
  */
 public class ToLowerCaseNormalizer implements Normalizer
 {

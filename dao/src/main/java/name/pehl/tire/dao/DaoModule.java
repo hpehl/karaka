@@ -1,10 +1,10 @@
 package name.pehl.tire.dao;
 
-import name.pehl.tire.dao.search.CompundNormalizer;
-import name.pehl.tire.dao.search.Normalizer;
-import name.pehl.tire.dao.search.RemoveNormalizer;
-import name.pehl.tire.dao.search.ToLowerCaseNormalizer;
-import name.pehl.tire.dao.search.TrimNormalizer;
+import name.pehl.tire.dao.normalize.CompundNormalizer;
+import name.pehl.tire.dao.normalize.Normalizer;
+import name.pehl.tire.dao.normalize.RemoveNormalizer;
+import name.pehl.tire.dao.normalize.ToLowerCaseNormalizer;
+import name.pehl.tire.dao.normalize.TrimNormalizer;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -23,6 +23,7 @@ public class DaoModule extends AbstractModule
         bind(ActivityDao.class).in(Singleton.class);
         bind(ClientDao.class).in(Singleton.class);
         bind(ProjectDao.class).in(Singleton.class);
+        bind(SearchDao.class).in(Singleton.class);
         bind(TagDao.class).in(Singleton.class);
     }
 

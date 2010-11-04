@@ -1,11 +1,12 @@
 package name.pehl.tire.rest;
 
-import static java.util.logging.Level.*;
+import static java.util.logging.Level.SEVERE;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import name.pehl.tire.dao.BaseEntityDao;
+import name.pehl.tire.model.BaseEntity;
 
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -15,9 +16,10 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 138
+ *          $
  */
-public class EntityIdFinder<T>
+public class EntityIdFinder<T extends BaseEntity>
 {
     public T findById(ServerResource resource, BaseEntityDao<T> dao, String id) throws ResourceException
     {

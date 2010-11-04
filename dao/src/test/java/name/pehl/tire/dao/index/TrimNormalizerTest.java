@@ -2,15 +2,15 @@ package name.pehl.tire.dao.index;
 
 import static org.junit.Assert.*;
 
-import name.pehl.tire.dao.search.Normalizer;
-import name.pehl.tire.dao.search.TrimNormalizer;
+import name.pehl.tire.dao.normalize.Normalizer;
+import name.pehl.tire.dao.normalize.TrimNormalizer;
 
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision$
  */
 public class TrimNormalizerTest
 {

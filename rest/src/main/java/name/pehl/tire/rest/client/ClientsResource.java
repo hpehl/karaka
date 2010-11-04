@@ -1,7 +1,9 @@
 package name.pehl.tire.rest.client;
 
+import name.pehl.taoki.paging.PageResult;
 import name.pehl.taoki.paging.PagingHeaderResource;
 import name.pehl.tire.dao.ClientDao;
+import name.pehl.tire.model.Client;
 
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
@@ -43,6 +45,9 @@ public class ClientsResource extends PagingHeaderResource
     @Get("json")
     public Representation getClients()
     {
+        // TODO findByName
+        // TODO orderBy
+        PageResult<Client> pageResult = dao.list(getPageInfo());
         return null;
     }
 }

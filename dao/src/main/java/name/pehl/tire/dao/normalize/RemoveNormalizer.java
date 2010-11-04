@@ -1,10 +1,10 @@
-package name.pehl.tire.dao.search;
+package name.pehl.tire.dao.normalize;
 
 import com.google.common.base.CharMatcher;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision$
  */
 public class RemoveNormalizer implements Normalizer
 {

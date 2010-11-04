@@ -8,7 +8,7 @@ import java.util.Set;
 
 import name.pehl.taoki.paging.PageInfo;
 import name.pehl.taoki.paging.PageResult;
-import name.pehl.tire.dao.search.Normalizer;
+import name.pehl.tire.dao.normalize.Normalizer;
 import name.pehl.tire.model.Activity;
 import name.pehl.tire.model.BaseEntity;
 import name.pehl.tire.model.Client;
@@ -26,6 +26,13 @@ import com.googlecode.objectify.Query;
 import com.googlecode.objectify.helper.DAOBase;
 
 /**
+ * Base class for all entites used in TiRe. There's also support for the
+ * following interfaces
+ * <ul>
+ * <li> {@link Searchable}
+ * <li> {@link HasUser}
+ * </ul>
+ * 
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
