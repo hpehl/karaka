@@ -9,8 +9,11 @@ import name.pehl.taoki.security.SecurityTokenReader;
 import name.pehl.taoki.security.UrlSecurityTokenReader;
 import name.pehl.tire.rest.activity.ActivitiesResource;
 import name.pehl.tire.rest.activity.ActivityResource;
+import name.pehl.tire.rest.client.ClientResource;
+import name.pehl.tire.rest.client.ClientsResource;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 
 /**
  * @author $Author: harald.pehl $
@@ -30,5 +33,10 @@ public class RestModule extends AbstractModule
         // bind resources
         bind(ActivityResource.class);
         bind(ActivitiesResource.class);
+        bind(ClientResource.class);
+        bind(ClientsResource.class);
+
+        // helper classes
+        bind(EntityIdFinder.class).in(Singleton.class);
     }
 }

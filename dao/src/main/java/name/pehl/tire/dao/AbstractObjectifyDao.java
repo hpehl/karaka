@@ -3,6 +3,8 @@ package name.pehl.tire.dao;
 import java.util.List;
 import java.util.Map;
 
+import name.pehl.taoki.paging.PageInfo;
+import name.pehl.taoki.paging.PageResult;
 import name.pehl.tire.model.Activity;
 import name.pehl.tire.model.Client;
 import name.pehl.tire.model.Project;
@@ -20,6 +22,8 @@ import com.googlecode.objectify.helper.DAOBase;
  */
 public abstract class AbstractObjectifyDao<T> extends DAOBase
 {
+    // ------------------------------------------------------ register entities
+
     static
     {
         // Register all entity classes here
@@ -29,8 +33,12 @@ public abstract class AbstractObjectifyDao<T> extends DAOBase
         ObjectifyService.register(Tag.class);
     }
 
+    // -------------------------------------------------------- private members
+
     protected final Class<T> clazz;
 
+
+    // ----------------------------------------------------------- constructors
 
     /**
      * We've got to get the associated domain class somehow
@@ -43,6 +51,8 @@ public abstract class AbstractObjectifyDao<T> extends DAOBase
     }
 
 
+    // ------------------------------------------------------------ put methods
+
     public Key<T> put(T entity)
     {
         return ofy().put(entity);
@@ -54,6 +64,8 @@ public abstract class AbstractObjectifyDao<T> extends DAOBase
         return ofy().put(entities);
     }
 
+
+    // --------------------------------------------------------- delete methods
 
     public void delete(T entity)
     {
@@ -79,6 +91,8 @@ public abstract class AbstractObjectifyDao<T> extends DAOBase
     }
 
 
+    // ------------------------------------------------------------- get entity
+
     public T get(Long id) throws EntityNotFoundException
     {
         return ofy().get(this.clazz, id);
@@ -100,24 +114,48 @@ public abstract class AbstractObjectifyDao<T> extends DAOBase
      */
     public T getByProperty(String propName, Object propValue)
     {
-        Query<T> q = ofy().query(clazz);
-        q.filter(propName, propValue);
-        return q.get();
+        return ofy().query(clazz).filter(propName, propValue).get();
     }
 
 
-    public List<T> listByProperty(String propName, Object propValue)
+    // ---------------------------------------------------------- find entities
+
+    public PageResult<T> list()
     {
-        Query<T> q = ofy().query(clazz);
-        q.filter(propName, propValue);
-        return q.list();
+        return list(null);
     }
 
 
-    public List<Key<T>> listKeysByProperty(String propName, Object propValue)
+    public PageResult<T> list(PageInfo pageInfo)
     {
         Query<T> q = ofy().query(clazz);
-        q.filter(propName, propValue);
-        return q.listKeys();
+        return buildPageResult(q, pageInfo);
+    }
+
+
+    public PageResult<T> listByProperty(String propName, Object propValue)
+    {
+        return listByProperty(propName, propValue, null);
+    }
+
+
+    public PageResult<T> listByProperty(String propName, Object propValue, PageInfo pageInfo)
+    {
+        Query<T> q = ofy().query(clazz).filter(propName, propValue);
+        return buildPageResult(q, pageInfo);
+    }
+
+
+    // --------------------------------------------------------- helper methods
+
+    protected PageResult<T> buildPageResult(Query<T> q, PageInfo pageInfo)
+    {
+        if (pageInfo != null)
+        {
+            int total = q.count();
+            List<T> page = q.offset(pageInfo.getOffset()).limit(pageInfo.getPageSize()).list();
+            return new PageResult<T>(pageInfo, page, total);
+        }
+        return new PageResult<T>(pageInfo, q.list());
     }
 }

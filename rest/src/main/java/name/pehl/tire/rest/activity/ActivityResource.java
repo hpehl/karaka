@@ -1,10 +1,15 @@
 package name.pehl.tire.rest.activity;
 
+import java.util.List;
+
 import name.pehl.tire.dao.ActivityDao;
+import name.pehl.tire.model.Activity;
+import name.pehl.tire.rest.EntityIdFinder;
 
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
+import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 
 import com.google.inject.Inject;
@@ -26,30 +31,36 @@ import com.google.inject.Inject;
  */
 public class ActivityResource extends ServerResource
 {
-    private final ActivityDao activityDao;
+    private final ActivityDao dao;
+    private final EntityIdFinder<Activity> eif;
 
 
     @Inject
-    public ActivityResource(ActivityDao activityDao)
+    public ActivityResource(ActivityDao dao, EntityIdFinder<Activity> eif)
     {
-        super();
-        this.activityDao = activityDao;
+        this.dao = dao;
+        this.eif = eif;
     }
 
 
     @Get("json")
     public Representation getActivity()
     {
-        ActivityParameters parameters = new ActivityParameters().parse(getRequestAttributes());
-        if (parameters.hasId())
-        {
-            return new StringRepresentation(String.format("{\"id\": %d}", parameters.getId()));
-        }
-        if (parameters.hasId())
-        {
-            return new StringRepresentation(String.format("{\"id\": %d, \"action\": \"%s\"}", parameters.getId(),
-                    parameters.getAction().name()));
-        }
+        Activity activity = eif.findById(this, dao, (String) getRequestAttributes().get("id"));
         return null;
+    }
+
+
+    @Put
+    public void update()
+    {
+        Activity activity = eif.findById(this, dao, (String) getRequestAttributes().get("id"));
+    }
+
+
+    @Delete
+    public void remove()
+    {
+        List<Activity> activities = eif.findByIds(this, dao, (String) getRequestAttributes().get("id"));
     }
 }

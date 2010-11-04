@@ -11,11 +11,15 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tire-dao</artifactId>
     <name>Tire DAO</name>
-    
+
     <dependencies>
         <dependency>
             <groupId>name.pehl.tire</groupId>
             <artifactId>tire-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>name.pehl</groupId>
+            <artifactId>taoki</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>

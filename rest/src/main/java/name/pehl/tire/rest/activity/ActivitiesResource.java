@@ -1,9 +1,11 @@
 package name.pehl.tire.rest.activity;
 
+import java.util.List;
+
 import name.pehl.tire.dao.ActivityDao;
+import name.pehl.tire.model.Activity;
 
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
@@ -25,13 +27,13 @@ import com.google.inject.Inject;
  */
 public class ActivitiesResource extends ServerResource
 {
-    private final ActivityDao activityDao;
+    private final ActivityDao dao;
 
 
     @Inject
-    public ActivitiesResource(ActivityDao activityDao)
+    public ActivitiesResource(ActivityDao dao)
     {
-        this.activityDao = activityDao;
+        this.dao = dao;
     }
 
 
@@ -45,21 +47,19 @@ public class ActivitiesResource extends ServerResource
     @Get("json")
     public Representation getActivities()
     {
-        ActivityParameters parameters = new ActivityParameters().parse(getRequestAttributes());
-        if (parameters.hasYear() && parameters.hasMonth() && parameters.hasDay())
+        List<Activity> activities = null;
+        ActivityParameters ap = new ActivityParameters().parse(getRequestAttributes());
+        if (ap.hasYear() && ap.hasMonth() && ap.hasDay())
         {
-            return new StringRepresentation(String.format("{\"year\": %d, \"month\": %d, \"day\": %d}",
-                    parameters.getYear(), parameters.getMonth(), parameters.getDay()));
+            activities = dao.findByYearMonthDay(ap.getYear(), ap.getMonth(), ap.getDay());
         }
-        else if (parameters.hasYear() && parameters.hasMonth())
+        else if (ap.hasYear() && ap.hasMonth())
         {
-            return new StringRepresentation(String.format("{\"year\": %d, \"month\": %d}", parameters.getYear(),
-                    parameters.getMonth()));
+            activities = dao.findByYearMonth(ap.getYear(), ap.getMonth());
         }
-        else if (parameters.hasYear() && parameters.hasWeek())
+        else if (ap.hasYear() && ap.hasWeek())
         {
-            return new StringRepresentation(String.format("{\"year\": %d, \"week\": %d}", parameters.getYear(),
-                    parameters.getWeek()));
+            activities = dao.findByYearWeek(ap.getYear(), ap.getWeek());
         }
         return null;
     }

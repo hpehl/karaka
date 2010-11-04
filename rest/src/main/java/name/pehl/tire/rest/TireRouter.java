@@ -5,6 +5,8 @@ import name.pehl.taoki.security.SecureRouter;
 import name.pehl.tire.rest.activity.ActivitiesResource;
 import name.pehl.tire.rest.activity.ActivityResource;
 import name.pehl.tire.rest.activity.ActivityRouter;
+import name.pehl.tire.rest.client.ClientResource;
+import name.pehl.tire.rest.client.ClientsResource;
 
 import org.restlet.Context;
 
@@ -29,6 +31,8 @@ public class TireRouter extends SecureRouter
         attach("/{TST}/activities", ActivitiesResource.class);
         attach(String.format("/{TST}/activities/{%s}", ID), ActivityResource.class);
         attach(String.format("/{TST}/activities/{%s}/{%s}/{%s}", YEAR, MONTH, DAY), ActivitiesResource.class);
+        attach("/{TST}/clients", ClientsResource.class);
+        attach("/{TST}/clients/{id}", ClientResource.class);
 
         // Ambiguous URIs
         ActivityRouter router = new ActivityRouter(getInjector(), getContext());
