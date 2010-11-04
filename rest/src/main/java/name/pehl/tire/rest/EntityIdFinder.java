@@ -5,7 +5,7 @@ import static java.util.logging.Level.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import name.pehl.tire.dao.AbstractObjectifyDao;
+import name.pehl.tire.dao.BaseEntityDao;
 
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -14,12 +14,12 @@ import org.restlet.resource.ServerResource;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision$
  */
 public class EntityIdFinder<T>
 {
-    public T findById(ServerResource resource, AbstractObjectifyDao<T> dao, String id) throws ResourceException
+    public T findById(ServerResource resource, BaseEntityDao<T> dao, String id) throws ResourceException
     {
         if (id == null)
         {
@@ -44,7 +44,7 @@ public class EntityIdFinder<T>
     }
 
 
-    public List<T> findByIds(ServerResource resource, AbstractObjectifyDao<T> dao, String ids) throws ResourceException
+    public List<T> findByIds(ServerResource resource, BaseEntityDao<T> dao, String ids) throws ResourceException
     {
         if (ids == null)
         {

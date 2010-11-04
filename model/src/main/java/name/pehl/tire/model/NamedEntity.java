@@ -6,12 +6,12 @@ import com.googlecode.objectify.annotation.Unindexed;
  * @author $LastChangedBy: harald.pehl $
  * @version $LastChangedRevision: 41 $
  */
-public abstract class NamedEntity extends BaseEntity
+public abstract class NamedEntity extends BaseEntity implements Searchable
 {
     @Unindexed
     private String name;
     @SuppressWarnings("unused")
-    private String searchableName;
+    private String lcName;
 
 
     public NamedEntity(String name)
@@ -44,16 +44,19 @@ public abstract class NamedEntity extends BaseEntity
     public void setName(String name)
     {
         this.name = name;
-        this.searchableName = makeSearchable(name);
+        this.lcName = name != null ? name.toLowerCase() : null;
     }
 
 
-    public static String makeSearchable(String name)
+    /**
+     * Returns the name
+     * 
+     * @return the name
+     * @see name.pehl.tire.model.Searchable#getSearchData()
+     */
+    @Override
+    public String getSearchData()
     {
-        if (name != null)
-        {
-            return name.toLowerCase();
-        }
-        return null;
+        return name;
     }
 }
