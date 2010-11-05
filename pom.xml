@@ -111,8 +111,8 @@
 
     <properties>
         <!-- name.pehl -->
-        <piriti.version>0.6</piriti.version>
-        <taoki.version>0.2.1</taoki.version>
+        <piriti.version>0.6.2</piriti.version>
+        <taoki.version>0.3</taoki.version>
         <totoe.version>0.2.1</totoe.version>
 
         <!-- GAE & GWT Stuff -->
@@ -368,6 +368,11 @@
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>1.5</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>r07</version>
             </dependency>
 
             <!-- Logging -->
