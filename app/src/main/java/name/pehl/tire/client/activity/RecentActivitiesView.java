@@ -1,4 +1,4 @@
-package name.pehl.tire.client.dashboard;
+package name.pehl.tire.client.activity;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -7,8 +7,7 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision: 90
- *          $
+ * @version $Date$ $Revision$
  */
 public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiHandlers> implements
         RecentActivitiesPresenter.MyView

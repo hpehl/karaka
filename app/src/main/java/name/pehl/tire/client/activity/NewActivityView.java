@@ -1,7 +1,8 @@
-package name.pehl.tire.client.dashboard;
+package name.pehl.tire.client.activity;
 
 import java.util.Date;
 
+import name.pehl.tire.client.dashboard.CalendarLink;
 import name.pehl.tire.client.resources.Resources;
 
 import com.google.gwt.core.client.GWT;

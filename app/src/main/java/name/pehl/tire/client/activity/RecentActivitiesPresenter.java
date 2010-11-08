@@ -1,4 +1,4 @@
-package name.pehl.tire.client.dashboard;
+package name.pehl.tire.client.activity;
 
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.EventBus;

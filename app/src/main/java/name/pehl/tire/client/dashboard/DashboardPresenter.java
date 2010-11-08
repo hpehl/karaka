@@ -1,6 +1,8 @@
 package name.pehl.tire.client.dashboard;
 
 import name.pehl.tire.client.NameTokens;
+import name.pehl.tire.client.activity.NewActivityPresenter;
+import name.pehl.tire.client.activity.RecentActivitiesPresenter;
 import name.pehl.tire.client.application.ApplicationPresenter;
 
 import com.google.inject.Inject;
