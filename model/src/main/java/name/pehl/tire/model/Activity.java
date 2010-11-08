@@ -26,6 +26,8 @@ import com.googlecode.objectify.annotation.Unindexed;
 @Entity
 public class Activity extends DescriptiveEntity implements HasUser
 {
+    // -------------------------------------------------------- private members
+
     private User user;
 
     @Embedded
@@ -50,6 +52,8 @@ public class Activity extends DescriptiveEntity implements HasUser
     private Key<Project> project;
 
 
+    // ----------------------------------------------------------- constructors
+
     public Activity()
     {
         this(null, null, null);
@@ -62,6 +66,14 @@ public class Activity extends DescriptiveEntity implements HasUser
     }
 
 
+    /**
+     * Construct a new instance of this class
+     * 
+     * @param name
+     * @param description
+     * @param timeZoneId
+     *            If <code>null</code> the default time zone is used.
+     */
     public Activity(String name, String description, String timeZoneId)
     {
         super(name, description);
@@ -70,6 +82,8 @@ public class Activity extends DescriptiveEntity implements HasUser
         this.tags = new ArrayList<Tag>();
     }
 
+
+    // --------------------------------------------------------- public methods
 
     /**
      * Returns {@link Class#getSimpleName()} [&lt;id&gt;, &lt;name&gt;,

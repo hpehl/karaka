@@ -41,6 +41,12 @@ public class Time
     }
 
 
+    /**
+     * Construct a new instance of this class
+     * 
+     * @param timeZoneId
+     *            If <code>null</code> the default time zone is used.
+     */
     public Time(String timeZoneId)
     {
         this(DateTimeZone.forID(timeZoneId));
