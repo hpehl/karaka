@@ -11,6 +11,15 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Unindexed;
 
 /**
+ * Represent an activity of an user. An Activity has a specific state:
+ * <ul>
+ * <li> {@link Status#RUNNING}
+ * <li> {@link Status#PAUSE}
+ * <li> {@link Status#STOPPED}
+ * </ul>
+ * For a given user there must be only one activity with {@link Status#RUNNING}
+ * or {@link Status#PAUSE}.
+ * 
  * @author $Author: harald.pehl $
  * @version $Revision: 41 $
  */
@@ -23,11 +32,13 @@ public class Activity extends DescriptiveEntity implements HasUser
     private Time start;
 
     @Embedded
+    @Unindexed
     private Time end;
 
     @Unindexed
     private long pause;
 
+    @Unindexed
     private boolean billable;
 
     @Unindexed(IfStopped.class)

@@ -8,8 +8,22 @@ import org.joda.time.DateTimeZone;
 import com.googlecode.objectify.annotation.Unindexed;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * Value object which is used in {@link Activity} to store the moment at which
+ * an activity was started / stopped. The class contains the searchable data for
+ * that moment as extra properties:
+ * <ul>
+ * <li> {@link #getYear()}
+ * <li> {@link #getMonth()}
+ * <li> {@link #getWeek()}
+ * <li> {@link #getDay()}
+ * </ul>
+ * The class internally uses <a href="http://joda-time.sourceforge.net/">Joda
+ * Time</a> and a distinct time zone to compute the values. If no time zone is
+ * given the default time zone of the servers JVM is used.
+ * 
+ * @author $Author$
+ * @version $Date$ $Revision: 136
+ *          $
  */
 public class Time
 {
