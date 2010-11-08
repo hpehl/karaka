@@ -95,10 +95,6 @@
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>gwt-plugin</id>
-            <url>http://google-web-toolkit.googlecode.com/svn/2.1.0/gwt/maven</url>
-        </pluginRepository>
-        <pluginRepository>
             <id>gae-plugin</id>
             <url>http://maven-gae-plugin.googlecode.com/svn/repository</url>
         </pluginRepository>
