@@ -84,15 +84,15 @@
             </ul>
             <div class="{style.input}">
                 <div class="{style.description}">
-                    <tire-ui:DescriptiveTextBox ui:field="description" descriptiveText="DESCRIPTION"
+                    <tire-ui:PlaceholderTextBox ui:field="description" placeholder="Description"
                         title="Create or select a description" />
                 </div>
                 <div class="{style.project}">
-                    <tire-ui:DescriptiveTextBox ui:field="project" descriptiveText="PROJECT"
+                    <tire-ui:PlaceholderTextBox field="project" placeholder="Project"
                         title="Create or select a project" />
                 </div>
                 <div class="{style.time}">
-                    <tire-ui:DescriptiveTextBox ui:field="time" descriptiveText="TIME"
+                    <tire-ui:PlaceholderTextBox ui:field="time" placeholder="Time"
                         title="Leave empty to start a new activity" />
                 </div>
             </div>
