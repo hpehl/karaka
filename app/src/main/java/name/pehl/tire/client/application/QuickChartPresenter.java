@@ -42,7 +42,7 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
         {
             Date date = new Date(110, 9, 11 + i);
             Activity activity = new Activity();
-            int minutes = (int) Math.round(Math.random() * 100) + 300;
+            int minutes = (int) Math.round(Math.random() * 200) + 200;
             activity.setStart(date);
             activity.setEnd(date);
             activity.setMinutes(minutes);

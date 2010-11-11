@@ -1,7 +1,6 @@
 package name.pehl.tire.client.application;
 
-import static java.lang.Math.max;
-import static java.lang.Math.round;
+import static java.lang.Math.*;
 import name.pehl.tire.client.activity.Day;
 import name.pehl.tire.client.activity.Week;
 import name.pehl.tire.client.ui.UiUtils;
@@ -24,7 +23,6 @@ public class CalendarWeekChart extends Widget
     private static final double COLUMN_GAP_PERCENTAGE = .05;
     private static final int MIN_COLUMN_GAP = 5;
     private static final String COLUMN_COLOR = "#3d3d3d";
-    private static final String COLUMN_HOVER_COLOR = "#8ac401";
     private static final String TEXT_COLOR = "#3d3d3d";
     private static final String BACKGROUND_COLOR = "#eaeaea";
 
@@ -131,7 +129,7 @@ public class CalendarWeekChart extends Widget
         var color = @name.pehl.tire.client.application.CalendarWeekChart::TEXT_COLOR;
         var bgColor = @name.pehl.tire.client.application.CalendarWeekChart::BACKGROUND_COLOR;
         var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({stroke: "none", fill: bgColor, title: "Current calendarweek"});
-        var text = raphael.text(x, y, title).attr({font: "10px Verdana", fill: color, title: "Current calendarweek"});
+        var text = raphael.text(x, y, title).attr({cursor: "pointer", font: "10px Verdana", fill: color, title: "Current calendarweek"});
         rect.node.onclick = text.node.onclick = @name.pehl.tire.client.application.CalendarWeekChart::onCurrent();
         return text;
     }-*/;
@@ -141,8 +139,8 @@ public class CalendarWeekChart extends Widget
             int rectWidth, int rectHeight) /*-{
         var color = @name.pehl.tire.client.application.CalendarWeekChart::TEXT_COLOR;
         var bgColor = @name.pehl.tire.client.application.CalendarWeekChart::BACKGROUND_COLOR;
-        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({stroke: "none", fill: bgColor, title: "Previous calendarweek"});
-        var prev = raphael.path(path).attr({fill: color, stroke: color, opacity: .66, title: "Previous calendarweek"});
+        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({cursor: "pointer", stroke: "none", fill: bgColor, title: "Previous calendarweek"});
+        var prev = raphael.path(path).attr({cursor: "pointer", fill: color, stroke: color, opacity: .66, title: "Previous calendarweek"});
         rect.node.onclick = prev.node.onclick = @name.pehl.tire.client.application.CalendarWeekChart::onPrev();
         rect.node.onmouseover = prev.node.onmouseover = function() {
         prev.attr({opacity: 1.0});
@@ -158,8 +156,8 @@ public class CalendarWeekChart extends Widget
             int rectWidth, int rectHeight) /*-{
         var color = @name.pehl.tire.client.application.CalendarWeekChart::TEXT_COLOR;
         var bgColor = @name.pehl.tire.client.application.CalendarWeekChart::BACKGROUND_COLOR;
-        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({stroke: "none", fill: bgColor, title: "Next calendarweek"});
-        var next = raphael.path(path).attr({fill: color, stroke: color, opacity: .66, title: "Next calendarweek"});
+        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({cursor: "pointer", stroke: "none", fill: bgColor, title: "Next calendarweek"});
+        var next = raphael.path(path).attr({cursor: "pointer", fill: color, stroke: color, opacity: .66, title: "Next calendarweek"});
         rect.node.onclick = next.node.onclick = @name.pehl.tire.client.application.CalendarWeekChart::onNext();
         rect.node.onmouseover = next.node.onmouseover = function() {
         next.attr({opacity: 1.0});
@@ -202,6 +200,7 @@ public class CalendarWeekChart extends Widget
             internalUpdateTitle(title, value.toString());
 
             // update max
+            max = 0;
             for (Day day : week)
             {
                 max = max(max, day.getMinutes());
@@ -240,16 +239,8 @@ public class CalendarWeekChart extends Widget
 
 
     private native void internalAnimate(JavaScriptObject column, String path, String date, String hours) /*-{
-        var color = @name.pehl.tire.client.application.CalendarWeekChart::COLUMN_COLOR;
-        var hoverColor = @name.pehl.tire.client.application.CalendarWeekChart::COLUMN_HOVER_COLOR;
         column.animate({path: path}, 1500, ">");
         column.attr("title", date + ": " + hours + "h");
-        column.node.onmouseover = function() {
-        column.attr("fill", hoverColor);
-        };
-        column.node.onmouseout = function() {
-        column.attr("fill", color);
-        };
     }-*/;
 
 
