@@ -88,7 +88,7 @@
                         title="Create or select a description" />
                 </div>
                 <div class="{style.project}">
-                    <tire-ui:PlaceholderTextBox field="project" placeholder="Project"
+                    <tire-ui:PlaceholderTextBox ui:field="project" placeholder="Project"
                         title="Create or select a project" />
                 </div>
                 <div class="{style.time}">
