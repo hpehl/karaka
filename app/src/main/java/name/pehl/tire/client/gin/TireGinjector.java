@@ -4,6 +4,7 @@ import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.dashboard.DashboardPresenter;
+import name.pehl.tire.client.dispatch.ClientDispatchModule;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.project.ProjectPresenter;
 import name.pehl.tire.client.report.ReportPresenter;
@@ -22,7 +23,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyFailureHandler;
  * @author $LastChangedBy$
  * @version $LastChangedRevision$
  */
-@GinModules(TireModule.class)
+@GinModules({ClientDispatchModule.class, TireModule.class})
 public interface TireGinjector extends Ginjector
 {
     // ------------------------------------------------------------- singletons

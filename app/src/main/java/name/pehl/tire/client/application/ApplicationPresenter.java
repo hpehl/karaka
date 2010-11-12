@@ -62,19 +62,19 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     public static final Object SLOT_QuickChart = new Object();
 
     private final NavigationPresenter navigationPresenter;
-    private final CockpitPresenter controlPresenter;
-    private final QuickChartPresenter chartPresenter;
+    private final CockpitPresenter cockpitPresenter;
+    private final QuickChartPresenter quickChartPresenter;
 
 
     @Inject
     public ApplicationPresenter(final EventBus eventBus, final MyView view, final MyProxy proxy,
-            final NavigationPresenter navigationPresenter, final CockpitPresenter controlPresenter,
-            final QuickChartPresenter chartPresenter)
+            final NavigationPresenter navigationPresenter, final CockpitPresenter cockpitPresenter,
+            final QuickChartPresenter quickChartPresenter)
     {
         super(eventBus, view, proxy);
         this.navigationPresenter = navigationPresenter;
-        this.controlPresenter = controlPresenter;
-        this.chartPresenter = chartPresenter;
+        this.cockpitPresenter = cockpitPresenter;
+        this.quickChartPresenter = quickChartPresenter;
     }
 
 
@@ -96,7 +96,7 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     protected void onReveal()
     {
         setInSlot(SLOT_Navigation, navigationPresenter);
-        setInSlot(SLOT_Cockpit, controlPresenter);
-        setInSlot(SLOT_QuickChart, chartPresenter);
+        setInSlot(SLOT_Cockpit, cockpitPresenter);
+        setInSlot(SLOT_QuickChart, quickChartPresenter);
     }
 }
