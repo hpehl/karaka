@@ -1,11 +1,14 @@
 package name.pehl.tire.client.activity;
 
 import java.util.Date;
+import java.util.List;
 
 import name.pehl.piriti.client.json.Json;
 import name.pehl.piriti.client.json.JsonReader;
 import name.pehl.piriti.client.json.JsonWriter;
 import name.pehl.tire.client.model.DescriptiveModel;
+import name.pehl.tire.client.project.Project;
+import name.pehl.tire.client.tag.Tag;
 
 import com.google.gwt.core.client.GWT;
 
@@ -27,6 +30,8 @@ public class Activity extends DescriptiveModel
     @Json private int pause;
     @Json private int minutes;
     @Json private boolean billable;
+    @Json private Project project;
+    @Json private List<Tag> tags;
     // @formatter:on
 
     public Activity()
@@ -175,5 +180,29 @@ public class Activity extends DescriptiveModel
     public void setBillable(boolean billable)
     {
         this.billable = billable;
+    }
+
+
+    public Project getProject()
+    {
+        return project;
+    }
+
+
+    public void setProject(Project project)
+    {
+        this.project = project;
+    }
+
+
+    public List<Tag> getTags()
+    {
+        return tags;
+    }
+
+
+    public void setTags(List<Tag> tags)
+    {
+        this.tags = tags;
     }
 }
