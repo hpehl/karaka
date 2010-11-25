@@ -10,6 +10,7 @@ import name.pehl.tire.dao.normalize.Normalizer;
 import name.pehl.tire.model.IndexEntry;
 import name.pehl.tire.model.Searchable;
 
+import com.google.inject.Inject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.helper.DAOBase;
 
@@ -23,6 +24,7 @@ public class SearchDao extends DAOBase
     private final Normalizer normalizer;
 
 
+    @Inject
     public SearchDao(Normalizer normalizer)
     {
         this.normalizer = normalizer;
