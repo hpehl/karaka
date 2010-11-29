@@ -7,12 +7,12 @@
     <precompilation-enabled>true</precompilation-enabled>
 
     <static-files>
-        <include path="*.css" expiration="30d" />
         <include path="index.html" expiration="30d" />
-        <include path="tire/**.cache.*" expiration="30d" />
         <include path="tire/g.*.js" expiration="30d" />
         <include path="tire/json*.js" expiration="30d" />
         <include path="tire/raphael*.js" expiration="30d" />
+        <include path="tire/**/*.css" expiration="30d" />
+        <include path="tire/**/*.cache.*" expiration="30d" />
         <include path="tire/**/sarissa*.js" expiration="30d" />
     </static-files>
 
