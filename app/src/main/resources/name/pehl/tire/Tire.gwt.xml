@@ -31,9 +31,6 @@
     <script src="g.raphael.js" />
     <script src="g.bar.js" />
 
-    <stylesheet src="tire.css" />
-    <stylesheet src="widgets.css" />
-
     <define-configuration-property name="gin.ginjector" is-multi-valued="false" />
     <set-configuration-property name="gin.ginjector" value="name.pehl.tire.client.gin.TireGinjector" />
 

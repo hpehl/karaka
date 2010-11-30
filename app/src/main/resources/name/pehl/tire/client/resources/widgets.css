@@ -1,7 +1,8 @@
+@external tire-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton;
 .tire-calendarPopup {
     box-shadow: #666 0px 4px 10px;
-    -moz-box-shadow: #666 0px 4px 10px;
-    -webkit-box-shadow: #666 0px 4px 10px;
+    -moz-box-shadow: #666 0 px 4 px 10 px;
+    -webkit-box-shadow: #666 0 px 4 px 10 px;
 }
 
 .gwt-DatePicker {

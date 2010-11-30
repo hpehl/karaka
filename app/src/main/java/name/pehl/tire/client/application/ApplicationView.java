@@ -1,5 +1,6 @@
 package name.pehl.tire.client.application;
 
+import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.UiUtils;
 
 import com.google.gwt.core.client.GWT;
@@ -8,6 +9,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 
 public class ApplicationView extends ViewImpl implements ApplicationPresenter.MyView
@@ -30,10 +32,16 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
     // -------------------------------------------------------- private members
 
     private final Widget widget;
+    private final Resources resources;
 
 
-    public ApplicationView()
+    @Inject
+    public ApplicationView(Resources resources)
     {
+        // Inject the global CSS resources
+        this.resources = resources;
+        this.resources.tire().ensureInjected();
+        this.resources.widgets().ensureInjected();
         this.widget = uiBinder.createAndBindUi(this);
     }
 

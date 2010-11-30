@@ -28,14 +28,14 @@ public class TireRouter extends SecureRouter
     protected void attachRoutes()
     {
         // Unambiguous URIs
-        attach("/{TST}/activities", ActivitiesResource.class);
-        attach(String.format("/{TST}/activities/{%s}", ID), ActivityResource.class);
-        attach(String.format("/{TST}/activities/{%s}/{%s}/{%s}", YEAR, MONTH, DAY), ActivitiesResource.class);
-        attach("/{TST}/clients", ClientsResource.class);
-        attach("/{TST}/clients/{id}", ClientResource.class);
+        attach("/activities", ActivitiesResource.class);
+        attach(String.format("/activities/{%s}", ID), ActivityResource.class);
+        attach(String.format("/activities/{%s}/{%s}/{%s}", YEAR, MONTH, DAY), ActivitiesResource.class);
+        attach("/clients", ClientsResource.class);
+        attach("/clients/{id}", ClientResource.class);
 
         // Ambiguous URIs
         ActivityRouter router = new ActivityRouter(getInjector(), getContext());
-        attach(String.format("/{TST}/activities/{%s}/{%s}", YEAR_OR_ID, MONTH_OR_WEEK_OR_ACTION), router);
+        attach(String.format("/activities/{%s}/{%s}", YEAR_OR_ID, MONTH_OR_WEEK_OR_ACTION), router);
     }
 }

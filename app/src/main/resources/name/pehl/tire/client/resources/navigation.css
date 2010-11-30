@@ -1,3 +1,7 @@
+/*
+ * Class to select the active navigatino entry.
+ * Used in NavigationPresenter.MyView.highlight(String)
+ */
 @sprite .selected {
     width: auto;
     height: auto;
