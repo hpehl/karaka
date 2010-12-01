@@ -27,8 +27,8 @@ public class Activity extends DescriptiveModel
     
     @Json private Date start;
     @Json private Date end;
-    @Json private int pause;
-    @Json private int minutes;
+    @Json private long pause;
+    @Json private long minutes;
     @Json private boolean billable;
     @Json private Project project;
     @Json private List<Tag> tags;
@@ -145,25 +145,25 @@ public class Activity extends DescriptiveModel
     }
 
 
-    public int getPause()
+    public long getPause()
     {
         return pause;
     }
 
 
-    public void setPause(int pause)
+    public void setPause(long pause)
     {
         this.pause = pause;
     }
 
 
-    public int getMinutes()
+    public long getMinutes()
     {
         return minutes;
     }
 
 
-    public void setMinutes(int minutes)
+    public void setMinutes(long minutes)
     {
         // TODO Remove public visibility when test code in
         // QuickChartPresenter.onReset() is no longer needed
