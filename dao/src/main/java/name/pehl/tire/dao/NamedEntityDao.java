@@ -18,8 +18,8 @@ public abstract class NamedEntityDao<T extends NamedEntity> extends BaseEntityDa
     }
 
 
-    public PageResult<T> listByName(String name)
+    public PageResult<T> findByName(String name)
     {
-        return listByProperty("name >=", name.toLowerCase());
+        return findByProperty("name >=", name.toLowerCase());
     }
 }
