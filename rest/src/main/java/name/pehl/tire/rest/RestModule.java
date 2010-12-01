@@ -38,7 +38,7 @@ public class RestModule extends AbstractModule
 
         // helper classes
         bind(EntityIdFinder.class).in(Singleton.class);
-        bindConstant().annotatedWith(DateTimeFormat.class).to("dd.MM.yyyy HH:mm:ss.SSS");
+        bindConstant().annotatedWith(DateTimeFormat.class).to("dd.MM.yyyy HH:mm:ss.SSS Z");
         bind(TimeAdapter.class);
         bind(Gson.class).toProvider(GsonProvider.class);
     }
