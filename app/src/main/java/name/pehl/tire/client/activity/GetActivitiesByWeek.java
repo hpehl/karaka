@@ -1,6 +1,5 @@
 package name.pehl.tire.client.activity;
 
-
 import com.gwtplatform.annotation.GenDispatch;
 import com.gwtplatform.annotation.In;
 import com.gwtplatform.annotation.Out;

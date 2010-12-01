@@ -1,11 +1,12 @@
 package name.pehl.tire.client.raphael;
 
+import java.util.ArrayList;
+
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
-import java.util.ArrayList;
 
 public class Raphael extends Widget {
 

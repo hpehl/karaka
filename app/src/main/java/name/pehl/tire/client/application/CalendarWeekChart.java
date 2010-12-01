@@ -1,6 +1,7 @@
 package name.pehl.tire.client.application;
 
-import static java.lang.Math.*;
+import static java.lang.Math.max;
+import static java.lang.Math.round;
 import name.pehl.tire.client.activity.Day;
 import name.pehl.tire.client.activity.Week;
 import name.pehl.tire.client.ui.UiUtils;
