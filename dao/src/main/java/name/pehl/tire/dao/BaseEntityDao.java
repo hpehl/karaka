@@ -161,13 +161,13 @@ public abstract class BaseEntityDao<T extends BaseEntity> extends DAOBase
     }
 
 
-    public PageResult<T> listByProperty(String propName, Object propValue)
+    public PageResult<T> findByProperty(String propName, Object propValue)
     {
-        return listByProperty(propName, propValue, null);
+        return findByProperty(propName, propValue, null);
     }
 
 
-    public PageResult<T> listByProperty(String propName, Object propValue, PageInfo pageInfo)
+    public PageResult<T> findByProperty(String propName, Object propValue, PageInfo pageInfo)
     {
         return pageResultFor(query().filter(propName, propValue), pageInfo);
     }
@@ -175,7 +175,7 @@ public abstract class BaseEntityDao<T extends BaseEntity> extends DAOBase
 
     // ---------------------------------------------------------- index methods
 
-    public IndexEntry createIndexEntry(Key<T> key, T entity)
+    private IndexEntry createIndexEntry(Key<T> key, T entity)
     {
         IndexEntry indexEntry = null;
         if (entity instanceof Searchable)
@@ -190,7 +190,7 @@ public abstract class BaseEntityDao<T extends BaseEntity> extends DAOBase
     }
 
 
-    public List<IndexEntry> createIndexEntries(Map<Key<T>, T> keysAndEntities)
+    private List<IndexEntry> createIndexEntries(Map<Key<T>, T> keysAndEntities)
     {
         List<IndexEntry> indexEntries = new ArrayList<IndexEntry>();
         for (Map.Entry<Key<T>, T> entry : keysAndEntities.entrySet())
@@ -205,7 +205,7 @@ public abstract class BaseEntityDao<T extends BaseEntity> extends DAOBase
     }
 
 
-    protected void index(Key<T> key, T entity)
+    private void index(Key<T> key, T entity)
     {
         unIndex(key);
         IndexEntry indexEntry = createIndexEntry(key, entity);
@@ -216,7 +216,7 @@ public abstract class BaseEntityDao<T extends BaseEntity> extends DAOBase
     }
 
 
-    protected void index(Map<Key<T>, T> keysAndEntities)
+    private void index(Map<Key<T>, T> keysAndEntities)
     {
         unIndex(keysAndEntities.keySet());
         List<IndexEntry> indexEntries = createIndexEntries(keysAndEntities);
@@ -227,14 +227,14 @@ public abstract class BaseEntityDao<T extends BaseEntity> extends DAOBase
     }
 
 
-    protected void unIndex(Key<T> key)
+    private void unIndex(Key<T> key)
     {
         List<Key<IndexEntry>> indexEntryKeys = ofy().query(IndexEntry.class).filter("key", key).listKeys();
         ofy().delete(indexEntryKeys);
     }
 
 
-    protected void unIndex(Iterable<Key<T>> keys)
+    private void unIndex(Iterable<Key<T>> keys)
     {
         List<Key<IndexEntry>> indexEntryKeys = ofy().query(IndexEntry.class).filter("key IN", keys).listKeys();
         ofy().delete(indexEntryKeys);
