@@ -5,11 +5,13 @@ import java.util.List;
 import name.pehl.tire.dao.ActivityDao;
 import name.pehl.tire.model.Activity;
 
+import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 /**
@@ -27,13 +29,15 @@ import com.google.inject.Inject;
  */
 public class ActivitiesResource extends ServerResource
 {
+    private final Gson gson;
     private final ActivityDao dao;
 
 
     @Inject
-    public ActivitiesResource(ActivityDao dao)
+    public ActivitiesResource(ActivityDao dao, Gson gson)
     {
         this.dao = dao;
+        this.gson = gson;
     }
 
 
@@ -61,6 +65,26 @@ public class ActivitiesResource extends ServerResource
         {
             activities = dao.findByYearWeek(ap.getYear(), ap.getWeek());
         }
-        return null;
+        String json = gson.toJson(new ActivitiesGet(activities));
+        return new JsonRepresentation(json);
+    }
+
+    /**
+     * The only reason for this class is to let Gson create an JSON object with
+     * an array named "activities".
+     * 
+     * @author $Author:$
+     * @version $Date:$ $Revision:$
+     */
+    class ActivitiesGet
+    {
+        final List<Activity> activities;
+
+
+        ActivitiesGet(List<Activity> activities)
+        {
+            super();
+            this.activities = activities;
+        }
     }
 }
