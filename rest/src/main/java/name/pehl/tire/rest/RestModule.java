@@ -9,6 +9,7 @@ import name.pehl.taoki.security.SecurityTokenGenerator;
 import name.pehl.taoki.security.SecurityTokenReader;
 import name.pehl.tire.rest.activity.ActivitiesResource;
 import name.pehl.tire.rest.activity.ActivityResource;
+import name.pehl.tire.rest.client.ClientResource;
 import name.pehl.tire.rest.client.ClientsResource;
 
 import com.google.gson.Gson;
@@ -33,7 +34,7 @@ public class RestModule extends AbstractModule
         // bind resources
         bind(ActivityResource.class);
         bind(ActivitiesResource.class);
-        // bind(ClientResource.class);
+        bind(ClientResource.class);
         bind(ClientsResource.class);
 
         // helper classes
