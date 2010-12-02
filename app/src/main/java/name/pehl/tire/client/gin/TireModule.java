@@ -4,6 +4,7 @@ import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.about.AboutView;
+import name.pehl.tire.client.activity.GetActivitiesByWeekHandler;
 import name.pehl.tire.client.activity.NewActivityPresenter;
 import name.pehl.tire.client.activity.NewActivityView;
 import name.pehl.tire.client.activity.RecentActivitiesPresenter;
@@ -36,6 +37,9 @@ import name.pehl.tire.client.terms.TermsView;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.inject.Singleton;
+import com.gwtplatform.dispatch.client.DefaultSecurityCookieAccessor;
+import com.gwtplatform.dispatch.client.SecurityCookieAccessor;
+import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.mvp.client.DefaultProxyFailureHandler;
 import com.gwtplatform.mvp.client.RootPresenter;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
@@ -62,8 +66,12 @@ public class TireModule extends AbstractPresenterModule
         bind(I18n.class).in(Singleton.class);
         bind(Resources.class).in(Singleton.class);
 
-        // Rest
-        // TODO bind(ProjectClient.class).in(Singleton.class);
+        // Security
+        bindConstant().annotatedWith(SecurityCookie.class).to("TST");
+        bind(SecurityCookieAccessor.class).to(DefaultSecurityCookieAccessor.class);
+
+        // Rest Action Handlers
+        bind(GetActivitiesByWeekHandler.class);
 
         // Constants
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);

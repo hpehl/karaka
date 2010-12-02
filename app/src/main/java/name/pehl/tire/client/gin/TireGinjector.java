@@ -16,6 +16,8 @@ import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.inject.Provider;
+import com.gwtplatform.dispatch.client.DispatchAsync;
+import com.gwtplatform.dispatch.client.gin.DispatchAsyncModule;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.ProxyFailureHandler;
 
@@ -23,7 +25,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyFailureHandler;
  * @author $LastChangedBy$
  * @version $LastChangedRevision$
  */
-@GinModules({ClientDispatchModule.class, TireModule.class})
+@GinModules({DispatchAsyncModule.class, ClientDispatchModule.class, TireModule.class})
 public interface TireGinjector extends Ginjector
 {
     // ------------------------------------------------------------- singletons
@@ -32,6 +34,7 @@ public interface TireGinjector extends Ginjector
     EventBus getEventBus();
     PlaceManager getPlaceManager();
     ProxyFailureHandler getProxyFailureHandler();
+    DispatchAsync getDispatcher();
     // @formatter:on
 
     // ------------------------------------------------------- presenters (a-z)

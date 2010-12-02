@@ -10,6 +10,10 @@ import org.restlet.client.Response;
 import org.restlet.client.data.MediaType;
 import org.restlet.client.data.Method;
 
+import com.google.inject.Inject;
+import com.gwtplatform.dispatch.client.SecurityCookieAccessor;
+import com.gwtplatform.dispatch.shared.SecurityCookie;
+
 /**
  * @author $Author:$
  * @version $Date:$ $Revision:$
@@ -17,10 +21,12 @@ import org.restlet.client.data.Method;
 public class GetActivitiesByWeekHandler extends
         AbstractRestletClientActionHandler<GetActivitiesByWeekAction, GetActivitiesByWeekResult>
 {
-
-    protected GetActivitiesByWeekHandler()
+    @Inject
+    protected GetActivitiesByWeekHandler(@SecurityCookie String securityCookieName,
+            SecurityCookieAccessor securityCookieAccessor)
     {
-        super(GetActivitiesByWeekAction.class, Method.GET, MediaType.APPLICATION_JSON);
+        super(GetActivitiesByWeekAction.class, Method.GET, MediaType.APPLICATION_JSON, securityCookieName,
+                securityCookieAccessor);
     }
 
 
