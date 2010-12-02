@@ -1,10 +1,13 @@
 package name.pehl.tire.rest.activity;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import name.pehl.tire.dao.ActivityDao;
 import name.pehl.tire.model.Activity;
 
+import org.joda.time.MutableDateTime;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
@@ -51,7 +54,9 @@ public class ActivitiesResource extends ServerResource
     @Get("json")
     public Representation getActivities()
     {
+        String json = null;
         List<Activity> activities = null;
+
         ActivityParameters ap = new ActivityParameters().parse(getRequestAttributes());
         if (ap.hasYear() && ap.hasMonth() && ap.hasDay())
         {
@@ -63,27 +68,49 @@ public class ActivitiesResource extends ServerResource
         }
         else if (ap.hasYear() && ap.hasWeek())
         {
-            activities = dao.findByYearWeek(ap.getYear(), ap.getWeek());
+            // activities = dao.findByYearWeek(ap.getYear(), ap.getWeek());
+            activities = new ArrayList<Activity>();
+            ActivityGenerator activityGenerator = new ActivityGenerator();
+            MutableDateTime mdt = new MutableDateTime().year().set(ap.getYear()).weekyear().set(ap.getWeek())
+                    .dayOfWeek().set(0);
+            for (int i = 0; i < 5; i++)
+            {
+                mdt.addDays(i);
+                activities.add(activityGenerator.generate(mdt.toDate()));
+            }
+            json = gson.toJson(new Week(ap.getYear(), ap.getWeek(), activities));
         }
-        String json = gson.toJson(new ActivitiesGet(activities));
         return new JsonRepresentation(json);
     }
 
-    /**
-     * The only reason for this class is to let Gson create an JSON object with
-     * an array named "activities".
-     * 
-     * @author $Author:$
-     * @version $Date:$ $Revision:$
-     */
-    class ActivitiesGet
+    // -------------------------------------- inner classes for json conversion
+
+    static class Week
     {
+        final int year;
+        final int week;
+        final List<Day> days;
+
+
+        Week(int year, int week, List<Activity> activities)
+        {
+            this.year = year;
+            this.week = week;
+            this.days = new ArrayList<Day>();
+            // TODO Sort the activities by day
+        }
+    }
+
+    static class Day
+    {
+        final Date date;
         final List<Activity> activities;
 
 
-        ActivitiesGet(List<Activity> activities)
+        Day(Date date, List<Activity> activities)
         {
             super();
+            this.date = date;
             this.activities = activities;
         }
     }
