@@ -109,7 +109,6 @@ public class ActivitiesResource extends ServerResource
 
         Day(Date date, List<Activity> activities)
         {
-            super();
             this.date = date;
             this.activities = activities;
         }

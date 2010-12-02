@@ -1,17 +1,19 @@
 package name.pehl.tire.rest.activity;
 
-import java.util.List;
-
 import name.pehl.tire.dao.ActivityDao;
 import name.pehl.tire.model.Activity;
 import name.pehl.tire.rest.EntityIdFinder;
 
+import org.restlet.data.Status;
+import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 /**
@@ -31,15 +33,17 @@ import com.google.inject.Inject;
  */
 public class ActivityResource extends ServerResource
 {
+    private final Gson gson;
     private final ActivityDao dao;
     private final EntityIdFinder<Activity> eif;
 
 
     @Inject
-    public ActivityResource(ActivityDao dao, EntityIdFinder<Activity> eif)
+    public ActivityResource(ActivityDao dao, EntityIdFinder<Activity> eif, Gson gson)
     {
         this.dao = dao;
         this.eif = eif;
+        this.gson = gson;
     }
 
 
@@ -47,20 +51,29 @@ public class ActivityResource extends ServerResource
     public Representation getActivity()
     {
         Activity activity = eif.findById(this, dao, (String) getRequestAttributes().get("id"));
-        return null;
+        if (activity == null)
+        {
+            throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
+        }
+        String json = gson.toJson(activity);
+        return new JsonRepresentation(json);
     }
 
 
     @Put
     public void update()
     {
-        Activity activity = eif.findById(this, dao, (String) getRequestAttributes().get("id"));
+        // TODO Implement me
+        // Activity activity = eif.findById(this, dao, (String)
+        // getRequestAttributes().get("id"));
     }
 
 
     @Delete
     public void remove()
     {
-        List<Activity> activities = eif.findByIds(this, dao, (String) getRequestAttributes().get("id"));
+        // TODO Implement me
+        // List<Activity> activities = eif.findByIds(this, dao, (String)
+        // getRequestAttributes().get("id"));
     }
 }

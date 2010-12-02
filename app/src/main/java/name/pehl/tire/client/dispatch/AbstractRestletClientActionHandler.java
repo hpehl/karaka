@@ -10,7 +10,7 @@ import org.restlet.client.data.MediaType;
 import org.restlet.client.data.Method;
 import org.restlet.client.data.Preference;
 import org.restlet.client.data.Status;
-import org.restlet.client.engine.http.header.HeaderConstants;
+import org.restlet.client.engine.header.HeaderConstants;
 import org.restlet.client.resource.ClientResource;
 import org.restlet.client.resource.ResourceException;
 
