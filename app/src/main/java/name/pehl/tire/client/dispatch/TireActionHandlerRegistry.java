@@ -1,6 +1,6 @@
 package name.pehl.tire.client.dispatch;
 
-import name.pehl.tire.client.activity.GetActivitiesByWeekHandler;
+import name.pehl.tire.client.activity.GetWeekHandler;
 
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.client.actionhandler.DefaultClientActionHandlerRegistry;
@@ -8,7 +8,7 @@ import com.gwtplatform.dispatch.client.actionhandler.DefaultClientActionHandlerR
 public class TireActionHandlerRegistry extends DefaultClientActionHandlerRegistry
 {
     @Inject
-    public TireActionHandlerRegistry(final GetActivitiesByWeekHandler getActivitiesByWeekHandler)
+    public TireActionHandlerRegistry(final GetWeekHandler getActivitiesByWeekHandler)
     {
         register(getActivitiesByWeekHandler);
     }

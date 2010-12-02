@@ -6,9 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import name.pehl.piriti.client.json.Json;
-import name.pehl.piriti.client.json.JsonReader;
-
-import com.google.gwt.core.client.GWT;
 
 /**
  * @author $LastChangedBy:$
@@ -17,9 +14,6 @@ import com.google.gwt.core.client.GWT;
 public class Day implements Iterable<Activity>
 {
     // @formatter:off
-    interface DayReader extends JsonReader<Day> {}
-    public static final DayReader JSON_READER = GWT.create(DayReader.class);
-    
     @Json private Date date;
     @Json(setter = DayActivitiesSetter.class) private final List<Activity> activities;
     // @formatter:on

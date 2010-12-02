@@ -9,13 +9,13 @@ import com.gwtplatform.annotation.Out;
  * @version $Date:$ $Revision:$
  */
 @GenDispatch
-public class GetActivitiesByWeek
+public class GetWeek
 {
     @In(1)
     int year;
 
     @In(2)
-    int calendarWeek;
+    int weekNumber;
 
     @Out(1)
     Week week;

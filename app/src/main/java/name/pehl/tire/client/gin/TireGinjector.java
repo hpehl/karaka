@@ -36,6 +36,11 @@ public interface TireGinjector extends Ginjector
     DispatchAsync getDispatcher();
     // @formatter:on
 
+    // --------------------------------------------------- json reader / writer
+
+    // @formatter:off
+    // @formatter:on
+
     // ------------------------------------------------------- presenters (a-z)
 
     // @formatter:off

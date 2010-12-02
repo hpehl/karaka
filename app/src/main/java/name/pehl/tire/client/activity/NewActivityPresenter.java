@@ -10,7 +10,8 @@ import com.gwtplatform.mvp.client.View;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 164
+ *          $
  */
 public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.MyView> implements NewActivityUiHandlers
 {

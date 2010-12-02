@@ -4,8 +4,7 @@ import com.gwtplatform.mvp.client.UiHandlers;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision: 90
- *          $
+ * @version $Date$ $Revision$
  */
 public interface RecentActivitiesUiHandlers extends UiHandlers
 {

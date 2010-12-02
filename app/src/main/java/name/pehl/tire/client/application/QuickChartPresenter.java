@@ -1,7 +1,7 @@
 package name.pehl.tire.client.application;
 
-import name.pehl.tire.client.activity.GetActivitiesByWeekAction;
-import name.pehl.tire.client.activity.GetActivitiesByWeekResult;
+import name.pehl.tire.client.activity.GetWeekAction;
+import name.pehl.tire.client.activity.GetWeekResult;
 import name.pehl.tire.client.activity.Week;
 import name.pehl.tire.client.dispatch.TireCallback;
 
@@ -42,32 +42,15 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     protected void onReset()
     {
         // TODO Current year and week
-        dispatcher.execute(new GetActivitiesByWeekAction(2010, 42), new TireCallback<GetActivitiesByWeekResult>(
-                placeManager)
+        dispatcher.execute(new GetWeekAction(2010, 42), new TireCallback<GetWeekResult>(placeManager)
         {
             @Override
-            public void onSuccess(GetActivitiesByWeekResult result)
+            public void onSuccess(GetWeekResult result)
             {
                 Week week = result.getWeek();
-                getView().update(week, true);
+                // TODO Get / build week and update view
+                // getView().update(week, true);
             }
         });
-
-        // Test
-        // Week week = new Week();
-        // week.setCalendarWeek(41);
-        // for (int i = 0; i < 5; i++)
-        // {
-        // Date date = new Date(110, 9, 11 + i);
-        // Activity activity = new Activity();
-        // int minutes = (int) Math.round(Math.random() * 200) + 200;
-        // activity.setStart(date);
-        // activity.setEnd(date);
-        // activity.setMinutes(minutes);
-        // Day day = new Day(date);
-        // day.addActivity(activity);
-        // week.addDay(day);
-        // }
-        // getView().update(week, true);
     }
 }

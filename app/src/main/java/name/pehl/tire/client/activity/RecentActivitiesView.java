@@ -7,7 +7,8 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 142
+ *          $
  */
 public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiHandlers> implements
         RecentActivitiesPresenter.MyView

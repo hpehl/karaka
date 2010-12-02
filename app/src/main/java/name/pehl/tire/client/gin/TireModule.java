@@ -4,7 +4,7 @@ import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.about.AboutView;
-import name.pehl.tire.client.activity.GetActivitiesByWeekHandler;
+import name.pehl.tire.client.activity.GetWeekHandler;
 import name.pehl.tire.client.activity.NewActivityPresenter;
 import name.pehl.tire.client.activity.NewActivityView;
 import name.pehl.tire.client.activity.RecentActivitiesPresenter;
@@ -65,7 +65,7 @@ public class TireModule extends AbstractPresenterModule
         bind(Resources.class).in(Singleton.class);
 
         // Rest Action Handlers
-        bind(GetActivitiesByWeekHandler.class);
+        bind(GetWeekHandler.class);
 
         // Constants
         bindConstant().annotatedWith(SecurityCookie.class).to("TST");

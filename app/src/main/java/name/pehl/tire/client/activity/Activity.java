@@ -4,13 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import name.pehl.piriti.client.json.Json;
-import name.pehl.piriti.client.json.JsonReader;
-import name.pehl.piriti.client.json.JsonWriter;
 import name.pehl.tire.client.model.DescriptiveModel;
 import name.pehl.tire.client.project.Project;
 import name.pehl.tire.client.tag.Tag;
-
-import com.google.gwt.core.client.GWT;
 
 /**
  * @author $LastChangedBy:$
@@ -19,12 +15,6 @@ import com.google.gwt.core.client.GWT;
 public class Activity extends DescriptiveModel
 {
     // @formatter:off
-    interface ActivityReader extends JsonReader<Activity> {}
-    public static final ActivityReader JSON_READER = GWT.create(ActivityReader.class);
-
-    interface ActivityWriter extends JsonWriter<Activity> {}
-    public static final ActivityWriter JSON_WRITER = GWT.create(ActivityWriter.class);
-    
     @Json private Date start;
     @Json private Date end;
     @Json private long pause;
