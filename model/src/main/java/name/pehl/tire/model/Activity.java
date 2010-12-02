@@ -66,6 +66,12 @@ public class Activity extends DescriptiveEntity implements HasUser
     }
 
 
+    public Activity(String name, String description)
+    {
+        this(name, description, null);
+    }
+
+
     /**
      * Construct a new instance of this class
      * 
