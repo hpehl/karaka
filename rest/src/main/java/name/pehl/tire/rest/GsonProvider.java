@@ -13,10 +13,10 @@ import com.google.inject.Provider;
  */
 public class GsonProvider implements Provider<Gson>
 {
-    @Inject
     private final TimeAdapter timeAdapter;
 
 
+    @Inject
     public GsonProvider(TimeAdapter timeAdapter)
     {
         this.timeAdapter = timeAdapter;

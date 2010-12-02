@@ -15,7 +15,7 @@ public class Project extends DescriptiveEntity implements HasUser
     private Key<Client> client;
 
 
-    public Project()
+    Project()
     {
         this(null, null);
     }

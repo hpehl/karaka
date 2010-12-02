@@ -54,7 +54,7 @@ public class Activity extends DescriptiveEntity implements HasUser
 
     // ----------------------------------------------------------- constructors
 
-    public Activity()
+    Activity()
     {
         this(null, null, null);
     }

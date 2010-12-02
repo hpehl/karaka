@@ -13,7 +13,7 @@ public class Client extends DescriptiveEntity implements HasUser
     private User user;
 
 
-    public Client()
+    Client()
     {
         this(null, null);
     }

@@ -15,7 +15,7 @@ public class Tag extends NamedEntity implements HasUser
     private Key<Activity> activity;
 
 
-    public Tag()
+    Tag()
     {
         this(null);
     }

@@ -14,7 +14,6 @@ public abstract class TireCallback<T> implements AsyncCallback<T>
 
     public TireCallback(PlaceManager placeManager)
     {
-        super();
         this.placeManager = placeManager;
     }
 

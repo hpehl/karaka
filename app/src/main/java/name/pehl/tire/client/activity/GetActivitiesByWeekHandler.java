@@ -34,7 +34,8 @@ public class GetActivitiesByWeekHandler extends
     protected String getUrl(GetActivitiesByWeekAction action)
     {
         String url = new UrlBuilder().setModule("rest").setVersion("v1")
-                .addResourcePath("activities", "cw" + action.getCw()).toUrl();
+                .addResourcePath("activities", String.valueOf(action.getYear()), "cw" + action.getCalendarWeek())
+                .toUrl();
         return url;
     }
 

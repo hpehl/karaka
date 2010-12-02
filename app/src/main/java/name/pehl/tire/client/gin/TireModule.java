@@ -37,8 +37,6 @@ import name.pehl.tire.client.terms.TermsView;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.inject.Singleton;
-import com.gwtplatform.dispatch.client.DefaultSecurityCookieAccessor;
-import com.gwtplatform.dispatch.client.SecurityCookieAccessor;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.mvp.client.DefaultProxyFailureHandler;
 import com.gwtplatform.mvp.client.RootPresenter;
@@ -66,14 +64,11 @@ public class TireModule extends AbstractPresenterModule
         bind(I18n.class).in(Singleton.class);
         bind(Resources.class).in(Singleton.class);
 
-        // Security
-        bindConstant().annotatedWith(SecurityCookie.class).to("TST");
-        bind(SecurityCookieAccessor.class).to(DefaultSecurityCookieAccessor.class);
-
         // Rest Action Handlers
         bind(GetActivitiesByWeekHandler.class);
 
         // Constants
+        bindConstant().annotatedWith(SecurityCookie.class).to("TST");
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
         // PresenterWidgets (a-z)

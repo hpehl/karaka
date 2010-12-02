@@ -15,9 +15,8 @@ public abstract class BaseEntity implements Serializable
     private Long id;
 
 
-    public BaseEntity()
+    BaseEntity()
     {
-        super();
     }
 
 

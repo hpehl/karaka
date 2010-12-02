@@ -11,7 +11,7 @@ import com.google.inject.BindingAnnotation;
  * Bind this annotation on the string you want to use as date / time format:
  * 
  * <pre>
- * bindConstant().annotatedWith(DateTimeFormat.class).to(&quot;dd.MM.yyyy HH:mm:ss.SSS&quot;);
+ * bindConstant().annotatedWith(DateTimeFormat.class).to(&quot;dd.MM.yyyy HH:mm:ss.SSS Z&quot;);
  * </pre>
  * 
  * @author $Author: harald.pehl $

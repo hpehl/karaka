@@ -41,9 +41,9 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     @Override
     protected void onReset()
     {
-        // Get current week data
-        // TODO Current week
-        dispatcher.execute(new GetActivitiesByWeekAction(42), new TireCallback<GetActivitiesByWeekResult>(placeManager)
+        // TODO Current year and week
+        dispatcher.execute(new GetActivitiesByWeekAction(2010, 42), new TireCallback<GetActivitiesByWeekResult>(
+                placeManager)
         {
             @Override
             public void onSuccess(GetActivitiesByWeekResult result)

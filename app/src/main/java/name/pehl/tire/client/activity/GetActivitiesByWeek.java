@@ -12,7 +12,10 @@ import com.gwtplatform.annotation.Out;
 public class GetActivitiesByWeek
 {
     @In(1)
-    int cw;
+    int year;
+
+    @In(2)
+    int calendarWeek;
 
     @Out(1)
     Week week;
