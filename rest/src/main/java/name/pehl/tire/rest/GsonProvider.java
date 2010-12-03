@@ -1,6 +1,9 @@
 package name.pehl.tire.rest;
 
+import name.pehl.tire.model.Activity;
 import name.pehl.tire.model.Time;
+import name.pehl.tire.rest.activity.ActivityAdapter;
+import name.pehl.tire.rest.activity.TimeAdapter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,17 +11,24 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 /**
+ * TODO Add adapters for other models TODO "Inject" the current user in
+ * JsonDeserializer<T>.deserialize()
+ * 
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
 public class GsonProvider implements Provider<Gson>
 {
+    private final String dateTimeFormat;
     private final TimeAdapter timeAdapter;
+    private final ActivityAdapter activityAdapter;
 
 
     @Inject
-    public GsonProvider(TimeAdapter timeAdapter)
+    public GsonProvider(@DateTimeFormat String dateTimeFormat, ActivityAdapter activityAdapter, TimeAdapter timeAdapter)
     {
+        this.dateTimeFormat = dateTimeFormat;
+        this.activityAdapter = activityAdapter;
         this.timeAdapter = timeAdapter;
     }
 
@@ -26,6 +36,7 @@ public class GsonProvider implements Provider<Gson>
     @Override
     public Gson get()
     {
-        return new GsonBuilder().registerTypeAdapter(Time.class, timeAdapter).create();
+        return new GsonBuilder().setDateFormat(dateTimeFormat).registerTypeAdapter(Activity.class, activityAdapter)
+                .registerTypeAdapter(Time.class, timeAdapter).create();
     }
 }

@@ -48,8 +48,10 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
             public void onSuccess(GetWeekResult result)
             {
                 Week week = result.getWeek();
-                // TODO Get / build week and update view
-                // getView().update(week, true);
+                if (week != null)
+                {
+                    getView().update(week, true);
+                }
             }
         });
     }

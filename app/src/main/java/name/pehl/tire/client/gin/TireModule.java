@@ -4,11 +4,15 @@ import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.about.AboutView;
+import name.pehl.tire.client.activity.ActivityReader;
+import name.pehl.tire.client.activity.ActivityWriter;
+import name.pehl.tire.client.activity.DayReader;
 import name.pehl.tire.client.activity.GetWeekHandler;
 import name.pehl.tire.client.activity.NewActivityPresenter;
 import name.pehl.tire.client.activity.NewActivityView;
 import name.pehl.tire.client.activity.RecentActivitiesPresenter;
 import name.pehl.tire.client.activity.RecentActivitiesView;
+import name.pehl.tire.client.activity.WeekReader;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
 import name.pehl.tire.client.application.CockpitPresenter;
@@ -24,13 +28,17 @@ import name.pehl.tire.client.dashboard.DashboardView;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
 import name.pehl.tire.client.project.ProjectPresenter;
+import name.pehl.tire.client.project.ProjectReader;
 import name.pehl.tire.client.project.ProjectView;
+import name.pehl.tire.client.project.ProjectWriter;
 import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.report.ReportView;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.tag.TagPresenter;
+import name.pehl.tire.client.tag.TagReader;
 import name.pehl.tire.client.tag.TagView;
+import name.pehl.tire.client.tag.TagWriter;
 import name.pehl.tire.client.terms.TermsPresenter;
 import name.pehl.tire.client.terms.TermsView;
 
@@ -66,6 +74,16 @@ public class TireModule extends AbstractPresenterModule
 
         // Rest Action Handlers
         bind(GetWeekHandler.class);
+
+        // JsonReader / Writer
+        bind(ActivityReader.class).asEagerSingleton();
+        bind(ActivityWriter.class).asEagerSingleton();
+        bind(DayReader.class).asEagerSingleton();
+        bind(ProjectReader.class).asEagerSingleton();
+        bind(ProjectWriter.class).asEagerSingleton();
+        bind(TagReader.class).asEagerSingleton();
+        bind(TagWriter.class).asEagerSingleton();
+        bind(WeekReader.class).asEagerSingleton();
 
         // Constants
         bindConstant().annotatedWith(SecurityCookie.class).to("TST");

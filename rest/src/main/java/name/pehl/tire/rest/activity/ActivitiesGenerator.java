@@ -1,45 +1,44 @@
 package name.pehl.tire.rest.activity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 import name.pehl.tire.model.Activity;
 import name.pehl.tire.model.Time;
 
+import org.joda.time.MutableDateTime;
+
 /**
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class ActivityGenerator
+public class ActivitiesGenerator
 {
     private Random random = new Random();
 
 
-    public Activity generate(Date date)
-    {
-        Activity activity = new Activity(random(5), random(10));
-        activity.setStart(new Time(date));
-        activity.setEnd(new Time(new Date(date.getTime() + random.nextInt())));
-        return activity;
-    }
-
-
-    public List<Activity> generate(Date date, int amount)
+    public List<Activity> generate(int year, int week)
     {
         List<Activity> activities = new ArrayList<Activity>();
-        for (int i = 0; i < amount; i++)
+        MutableDateTime mdt = new MutableDateTime().year().set(year).weekOfWeekyear().set(week).dayOfWeek().set(1)
+                .hourOfDay().set(9);
+        for (int i = 0; i < 5; i++)
         {
-            activities.add(generate(date));
+            mdt.addDays(1);
+            Activity activity = new Activity(randomString(5), randomString(10));
+            activity.setStart(new Time(mdt.toDate()));
+            int hour = mdt.hourOfDay().get() + 2 + random.nextInt(6);
+            activity.setEnd(new Time(mdt.copy().hourOfDay().set(hour).toDate()));
+            activities.add(activity);
         }
         return activities;
     }
 
 
-    private String random(int amount)
+    private String randomString(int amount)
     {
-        int start = 'A';
+        int start = 'a';
         int end = 'z';
         int gap = end - start;
 

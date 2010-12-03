@@ -194,7 +194,7 @@ public class CalendarWeekChart extends Widget
         {
             // update title
             StringBuilder value = new StringBuilder();
-            value.append("CW ").append(week.getCalendarWeek()).append("\n")
+            value.append("CW ").append(week.getWeek()).append("\n")
                     .append(UiUtils.DATE_FORMAT.format(week.getStart().getDate())).append(" - ")
                     .append(UiUtils.DATE_FORMAT.format(week.getEnd().getDate()));
             internalUpdateTitle(title, value.toString());

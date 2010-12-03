@@ -8,7 +8,9 @@ import name.pehl.taoki.security.SecurityToken;
 import name.pehl.taoki.security.SecurityTokenGenerator;
 import name.pehl.taoki.security.SecurityTokenReader;
 import name.pehl.tire.rest.activity.ActivitiesResource;
+import name.pehl.tire.rest.activity.ActivityAdapter;
 import name.pehl.tire.rest.activity.ActivityResource;
+import name.pehl.tire.rest.activity.TimeAdapter;
 import name.pehl.tire.rest.client.ClientResource;
 import name.pehl.tire.rest.client.ClientsResource;
 
@@ -37,10 +39,13 @@ public class RestModule extends AbstractModule
         bind(ClientResource.class);
         bind(ClientsResource.class);
 
-        // helper classes
-        bind(EntityIdFinder.class).in(Singleton.class);
+        // Gson setup
         bindConstant().annotatedWith(DateTimeFormat.class).to("dd.MM.yyyy HH:mm:ss.SSS Z");
+        bind(ActivityAdapter.class);
         bind(TimeAdapter.class);
         bind(Gson.class).toProvider(GsonProvider.class);
+
+        // helper classes
+        bind(EntityIdFinder.class).in(Singleton.class);
     }
 }

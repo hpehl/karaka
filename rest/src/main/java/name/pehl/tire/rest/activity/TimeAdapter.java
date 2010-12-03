@@ -1,10 +1,11 @@
-package name.pehl.tire.rest;
+package name.pehl.tire.rest.activity;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import name.pehl.tire.model.Time;
+import name.pehl.tire.rest.DateTimeFormat;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -25,9 +26,9 @@ public class TimeAdapter implements JsonSerializer<Time>, JsonDeserializer<Time>
 
 
     @Inject
-    public TimeAdapter(@DateTimeFormat String pattern)
+    public TimeAdapter(@DateTimeFormat String dateTimeFormat)
     {
-        this.sdf = new SimpleDateFormat(pattern);
+        this.sdf = new SimpleDateFormat(dateTimeFormat);
     }
 
 

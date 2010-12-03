@@ -20,6 +20,12 @@ public abstract class BaseEntity implements Serializable
     }
 
 
+    public boolean isTransient()
+    {
+        return id == null;
+    }
+
+
     /**
      * Based on the id
      * 

@@ -5,7 +5,10 @@ import java.util.List;
 
 import javax.persistence.Embedded;
 
+import org.joda.time.Minutes;
+
 import com.google.appengine.api.users.User;
+import com.google.appengine.repackaged.com.google.common.collect.ComparisonChain;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Unindexed;
@@ -24,7 +27,7 @@ import com.googlecode.objectify.annotation.Unindexed;
  * @version $Revision: 41 $
  */
 @Entity
-public class Activity extends DescriptiveEntity implements HasUser
+public class Activity extends DescriptiveEntity implements HasUser, Comparable<Activity>
 {
     // -------------------------------------------------------- private members
 
@@ -91,6 +94,13 @@ public class Activity extends DescriptiveEntity implements HasUser
 
     // --------------------------------------------------------- public methods
 
+    @Override
+    public int compareTo(Activity that)
+    {
+        return ComparisonChain.start().compare(this.start, that.start).result();
+    }
+
+
     /**
      * Returns {@link Class#getSimpleName()} [&lt;id&gt;, &lt;name&gt;,
      * &lt;start&gt;, &lt;end&gt;, &lt;pause&gt;, &lt;status&gt;]
@@ -104,6 +114,18 @@ public class Activity extends DescriptiveEntity implements HasUser
         return new StringBuilder(getClass().getSimpleName()).append(" [").append(getId()).append(", ")
                 .append(getName()).append(", ").append(start).append(", ").append(end).append(", ").append(pause)
                 .append(", ").append(status).append("]").toString();
+    }
+
+
+    public int getMinutes()
+    {
+        int minutes = 0;
+        if (start != null && end != null)
+        {
+            Minutes m = Minutes.minutesBetween(start.getDateTime(), end.getDateTime());
+            minutes = m.getMinutes();
+        }
+        return minutes;
     }
 
 

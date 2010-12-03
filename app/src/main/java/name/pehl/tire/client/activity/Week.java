@@ -5,9 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import name.pehl.piriti.client.json.Json;
-import name.pehl.piriti.client.json.JsonReader;
-
-import com.google.gwt.core.client.GWT;
 
 /**
  * @author $LastChangedBy:$
@@ -16,11 +13,8 @@ import com.google.gwt.core.client.GWT;
 public class Week implements Iterable<Day>
 {
     // @formatter:off
-    interface WeekReader extends JsonReader<Week> {}
-    public static final WeekReader JSON_READER = GWT.create(WeekReader.class);
-    
     @Json private int year;
-    @Json private int calendarWeek;
+    @Json private int week;
     @Json(setter = WeekDaysSetter.class) private final List<Day> days;
     // @formatter:on
 
@@ -44,7 +38,7 @@ public class Week implements Iterable<Day>
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + calendarWeek;
+        result = prime * result + week;
         result = prime * result + year;
         return result;
     }
@@ -73,7 +67,7 @@ public class Week implements Iterable<Day>
             return false;
         }
         Week other = (Week) obj;
-        if (calendarWeek != other.calendarWeek)
+        if (week != other.week)
         {
             return false;
         }
@@ -88,7 +82,7 @@ public class Week implements Iterable<Day>
     @Override
     public String toString()
     {
-        StringBuilder builder = new StringBuilder("Week [").append(year).append("/").append(calendarWeek).append(", ")
+        StringBuilder builder = new StringBuilder("Week [").append(year).append("/").append(week).append(", ")
                 .append(days).append("]");
         return builder.toString();
     }
@@ -150,20 +144,26 @@ public class Week implements Iterable<Day>
     }
 
 
+    public void setYear(int year)
+    {
+        this.year = year;
+    }
+
+
     public int getYear()
     {
         return year;
     }
 
 
-    public int getCalendarWeek()
+    public int getWeek()
     {
-        return calendarWeek;
+        return week;
     }
 
 
-    public void setCalendarWeek(int calendarWeek)
+    public void setWeek(int week)
     {
-        this.calendarWeek = calendarWeek;
+        this.week = week;
     }
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import name.pehl.piriti.client.json.Json;
+import name.pehl.tire.client.Defaults;
 import name.pehl.tire.client.model.DescriptiveModel;
 import name.pehl.tire.client.project.Project;
 import name.pehl.tire.client.tag.Tag;
@@ -15,8 +16,8 @@ import name.pehl.tire.client.tag.Tag;
 public class Activity extends DescriptiveModel
 {
     // @formatter:off
-    @Json private Date start;
-    @Json private Date end;
+    @Json(format = Defaults.DATE_TIME_PATTERN) private Date start;
+    @Json(format = Defaults.DATE_TIME_PATTERN) private Date end;
     @Json private long pause;
     @Json private long minutes;
     @Json private boolean billable;

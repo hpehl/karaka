@@ -24,26 +24,19 @@ import com.gwtplatform.mvp.client.proxy.ProxyFailureHandler;
  * @author $LastChangedBy$
  * @version $LastChangedRevision$
  */
+// @formatter:off
 @GinModules({ClientDispatchModule.class, TireModule.class})
 public interface TireGinjector extends Ginjector
 {
     // ------------------------------------------------------------- singletons
 
-    // @formatter:off
     EventBus getEventBus();
     PlaceManager getPlaceManager();
     ProxyFailureHandler getProxyFailureHandler();
     DispatchAsync getDispatcher();
-    // @formatter:on
-
-    // --------------------------------------------------- json reader / writer
-
-    // @formatter:off
-    // @formatter:on
 
     // ------------------------------------------------------- presenters (a-z)
 
-    // @formatter:off
     AsyncProvider<AboutPresenter> getAboutPresenter();
     Provider<ApplicationPresenter> getApplicationPresenter();
     AsyncProvider<ClientPresenter> getClientPresenter();
@@ -53,5 +46,4 @@ public interface TireGinjector extends Ginjector
     AsyncProvider<ReportPresenter> getReportPresenter();
     AsyncProvider<TagPresenter> getTagPresenter();
     AsyncProvider<TermsPresenter> getTermsPresenter();
-    // @formatter:on
 }

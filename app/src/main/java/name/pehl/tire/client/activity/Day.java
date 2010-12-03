@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import name.pehl.piriti.client.json.Json;
+import name.pehl.tire.client.Defaults;
 
 /**
  * @author $LastChangedBy:$
@@ -14,21 +15,12 @@ import name.pehl.piriti.client.json.Json;
 public class Day implements Iterable<Activity>
 {
     // @formatter:off
-    @Json private Date date;
+    @Json(format = Defaults.DATE_TIME_PATTERN) private Date date;
     @Json(setter = DayActivitiesSetter.class) private final List<Activity> activities;
     // @formatter:on
 
     public Day()
     {
-        this(null);
-    }
-
-
-    public Day(Date date)
-    {
-        // TODO Remove constructor when test code in
-        // QuickChartPresenter.onReset() is no longer needed
-        this.date = date;
         activities = new ArrayList<Activity>();
     }
 

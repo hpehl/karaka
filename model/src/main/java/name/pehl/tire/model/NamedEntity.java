@@ -10,8 +10,6 @@ public abstract class NamedEntity extends BaseEntity implements Searchable
 {
     @Unindexed
     private String name;
-    @SuppressWarnings("unused")
-    private String lcName;
 
 
     public NamedEntity(String name)
@@ -44,7 +42,6 @@ public abstract class NamedEntity extends BaseEntity implements Searchable
     public void setName(String name)
     {
         this.name = name;
-        this.lcName = name != null ? name.toLowerCase() : null;
     }
 
 

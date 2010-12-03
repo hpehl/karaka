@@ -2,9 +2,12 @@ package name.pehl.tire.model;
 
 import java.util.Date;
 
+import javax.persistence.Transient;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import com.google.appengine.repackaged.com.google.common.collect.ComparisonChain;
 import com.googlecode.objectify.annotation.Unindexed;
 
 /**
@@ -25,12 +28,14 @@ import com.googlecode.objectify.annotation.Unindexed;
  * @version $Date$ $Revision: 136
  *          $
  */
-public class Time
+public class Time implements Comparable<Time>
 {
     // -------------------------------------------------------- private members
 
     @Unindexed
     private final Date date;
+    @Transient
+    private final DateTime dateTime;
     private final int year;
     private final int month;
     private final int week;
@@ -83,29 +88,84 @@ public class Time
 
     public Time(DateTimeZone timeZone, Date date)
     {
-        DateTime dt = null;
         if (date == null)
         {
-            dt = new DateTime(timeZone);
+            dateTime = new DateTime(timeZone);
         }
         else
         {
-            dt = new DateTime(date.getTime(), timeZone);
+            dateTime = new DateTime(date.getTime(), timeZone);
         }
-        this.date = dt.toDate();
-        this.year = dt.year().get();
-        this.month = dt.monthOfYear().get();
-        this.week = dt.weekyear().get();
-        this.day = dt.dayOfMonth().get();
+        this.date = dateTime.toDate();
+        this.year = dateTime.year().get();
+        this.month = dateTime.monthOfYear().get();
+        this.week = dateTime.weekyear().get();
+        this.day = dateTime.dayOfMonth().get();
     }
 
 
     // --------------------------------------------------------- public methods
 
     @Override
+    public int compareTo(Time that)
+    {
+        return ComparisonChain.start().compare(this.dateTime, that.dateTime).result();
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
+        return result;
+    }
+
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        Time other = (Time) obj;
+        if (dateTime == null)
+        {
+            if (other.dateTime != null)
+            {
+                return false;
+            }
+        }
+        else if (!dateTime.equals(other.dateTime))
+        {
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
     public String toString()
     {
-        return date.toString();
+        return dateTime.toString();
+    }
+
+
+    // ------------------------------------------------------------- properties
+
+    public DateTime getDateTime()
+    {
+        return dateTime;
     }
 
 
