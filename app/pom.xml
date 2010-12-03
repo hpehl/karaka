@@ -151,6 +151,7 @@
                         </goals>
                         <phase>generate-sources</phase>
                         <configuration>
+                            <outputDiagnostics>false</outputDiagnostics>
                             <outputDirectory>${project.build.directory}/generated-sources/apt</outputDirectory>
                         </configuration>
                     </execution>
@@ -294,13 +295,6 @@
                 <configuration>
                     <serverId>appengine.google.com</serverId>
                     <appDir>${project.build.directory}/${project.artifactId}-${project.version}</appDir>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <goals>gae:deploy</goals>
                 </configuration>
             </plugin>
         </plugins>
