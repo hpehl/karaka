@@ -10,8 +10,9 @@ import java.util.regex.Pattern;
  * Parser for all template parameters used in {@link ActivitiesResource} and
  * {@link ActivityResource}.
  * 
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision: 123
+ *          $
  */
 public class ActivityParameters
 {
@@ -20,9 +21,12 @@ public class ActivityParameters
     public static final String YEAR = "year";
     public static final String YEAR_OR_ID = "yearOdId";
     public static final String MONTH_OR_WEEK_OR_ACTION = "monthOrWeekOrAction";
+    public static final String CURRENT_MONTH = "currentMonth";
     public static final String MONTH = "month";
+    public static final String CURRENT_WEEK = "currentWeek";
+    public static final String TODAY = "today";
     public static final String DAY = "day";
-    public static final String ID = "id";
+    public static final String ID_OR_CURRENT_MONTH_OR_CURRENT_WEEK_OR_TODAY = "idOrCurrentMonthOrCurrentWeekOrToday";
 
     public static final String START = "start";
     public static final String STOP = "stop";
@@ -36,10 +40,13 @@ public class ActivityParameters
     private Map<String, Object> parameters;
     private boolean hasYear;
     private int year;
+    private boolean currentMonth;
     private boolean hasMonth;
     private int month;
+    private boolean currentWeek;
     private boolean hasWeek;
     private int week;
+    private boolean today;
     private boolean hasDay;
     private int day;
     private boolean hasId;
@@ -58,12 +65,7 @@ public class ActivityParameters
         }
 
         // Unambiguous template parameters
-        String value = (String) parameters.get(ID);
-        if (value != null)
-        {
-            id = convertToNumber(ID, value);
-            hasId = true;
-        }
+        String value = null;
         value = (String) parameters.get(YEAR);
         if (value != null)
         {
@@ -84,6 +86,31 @@ public class ActivityParameters
         }
 
         // Ambiguous template parameters
+        value = (String) parameters.get(ID_OR_CURRENT_MONTH_OR_CURRENT_WEEK_OR_TODAY);
+        if (value != null)
+        {
+            if (CURRENT_MONTH.equals(value) || CURRENT_WEEK.equals(value) || TODAY.equals(value))
+            {
+                if (CURRENT_MONTH.equals(value))
+                {
+                    currentMonth = true;
+                }
+                else if (CURRENT_WEEK.equals(value))
+                {
+                    currentWeek = true;
+                }
+                else
+                {
+                    today = true;
+                }
+                hasId = false;
+            }
+            else
+            {
+                id = convertToNumber(ID_OR_CURRENT_MONTH_OR_CURRENT_WEEK_OR_TODAY, value);
+                hasId = true;
+            }
+        }
         value = (String) parameters.get(MONTH_OR_WEEK_OR_ACTION);
         if (value != null)
         {
@@ -163,6 +190,12 @@ public class ActivityParameters
     }
 
 
+    public boolean isCurrentMonth()
+    {
+        return currentMonth;
+    }
+
+
     public boolean hasMonth()
     {
         return hasMonth;
@@ -175,6 +208,12 @@ public class ActivityParameters
     }
 
 
+    public boolean isCurrentWeek()
+    {
+        return currentWeek;
+    }
+
+
     public boolean hasWeek()
     {
         return hasWeek;
@@ -184,6 +223,12 @@ public class ActivityParameters
     public int getWeek()
     {
         return week;
+    }
+
+
+    public boolean isToday()
+    {
+        return today;
     }
 
 

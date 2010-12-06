@@ -3,8 +3,8 @@ package name.pehl.tire.rest;
 import static name.pehl.tire.rest.activity.ActivityParameters.*;
 import name.pehl.taoki.security.SecureRouter;
 import name.pehl.tire.rest.activity.ActivitiesResource;
-import name.pehl.tire.rest.activity.ActivityResource;
-import name.pehl.tire.rest.activity.ActivityRouter;
+import name.pehl.tire.rest.activity.SingleParamActivityRouter;
+import name.pehl.tire.rest.activity.TwoParamActivityRouter;
 import name.pehl.tire.rest.client.ClientResource;
 import name.pehl.tire.rest.client.ClientsResource;
 
@@ -29,13 +29,15 @@ public class TireRouter extends SecureRouter
     {
         // Unambiguous URIs
         attach("/activities", ActivitiesResource.class);
-        attach(String.format("/activities/{%s}", ID), ActivityResource.class);
         attach(String.format("/activities/{%s}/{%s}/{%s}", YEAR, MONTH, DAY), ActivitiesResource.class);
         attach("/clients", ClientsResource.class);
         attach("/clients/{id}", ClientResource.class);
 
         // Ambiguous URIs
-        ActivityRouter router = new ActivityRouter(getInjector(), getContext());
+        SingleParamActivityRouter singleParamRouter = new SingleParamActivityRouter(getInjector(), getContext());
+        attach(String.format("/activities/{%s}", ID_OR_CURRENT_MONTH_OR_CURRENT_WEEK_OR_TODAY), singleParamRouter);
+
+        TwoParamActivityRouter router = new TwoParamActivityRouter(getInjector(), getContext());
         attach(String.format("/activities/{%s}/{%s}", YEAR_OR_ID, MONTH_OR_WEEK_OR_ACTION), router);
     }
 }

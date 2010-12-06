@@ -35,9 +35,16 @@ public class GetWeekHandler extends AbstractRestletClientActionHandler<GetWeekAc
     @Override
     protected String getUrl(GetWeekAction action)
     {
-        String url = new UrlBuilder().setModule("rest").setVersion("v1")
-                .addResourcePath("activities", String.valueOf(action.getYear()), "cw" + action.getWeekNumber()).toUrl();
-        return url;
+        UrlBuilder urlBuilder = new UrlBuilder().setModule("rest").setVersion("v1").addResourcePath("activities");
+        if (action.getYear() == 0 && action.getWeekNumber() == 0)
+        {
+            urlBuilder.addResourcePath("currentWeek");
+        }
+        else
+        {
+            urlBuilder.addResourcePath(String.valueOf(action.getYear()), "cw" + action.getWeekNumber());
+        }
+        return urlBuilder.toUrl();
     }
 
 

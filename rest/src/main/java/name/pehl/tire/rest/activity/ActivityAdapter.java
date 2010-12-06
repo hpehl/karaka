@@ -10,8 +10,9 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision: 173
+ *          $
  */
 public class ActivityAdapter implements JsonSerializer<Activity>
 {
@@ -27,6 +28,9 @@ public class ActivityAdapter implements JsonSerializer<Activity>
     public JsonElement serialize(Activity src, Type typeOfSrc, JsonSerializationContext context)
     {
         JsonObject activityJson = new JsonObject();
+        activityJson.add("id", context.serialize(src.getId()));
+        activityJson.add("name", context.serialize(src.getName()));
+        activityJson.add("description", context.serialize(src.getDescription()));
         activityJson.add("start", context.serialize(src.getStart()));
         activityJson.add("end", context.serialize(src.getEnd()));
         activityJson.add("pause", context.serialize(src.getPause()));

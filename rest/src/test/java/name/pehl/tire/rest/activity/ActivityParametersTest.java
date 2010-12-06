@@ -9,8 +9,9 @@ import java.util.Map;
 import org.junit.Test;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision: 123
+ *          $
  */
 public class ActivityParametersTest
 {
@@ -27,7 +28,8 @@ public class ActivityParametersTest
     @Test
     public void testId()
     {
-        ActivityParameters parameters = new ActivityParameters().parse(mapFor(ID, "0"));
+        ActivityParameters parameters = new ActivityParameters().parse(mapFor(
+                ID_OR_CURRENT_MONTH_OR_CURRENT_WEEK_OR_TODAY, "0"));
         assertTrue(parameters.hasId());
         assertEquals(0, parameters.getId());
     }
@@ -36,7 +38,17 @@ public class ActivityParametersTest
     @Test(expected = IllegalArgumentException.class)
     public void testWrongId()
     {
-        new ActivityParameters().parse(mapFor(ID, "nope"));
+        new ActivityParameters().parse(mapFor(ID_OR_CURRENT_MONTH_OR_CURRENT_WEEK_OR_TODAY, "nope"));
+    }
+
+
+    @Test
+    public void testCurrentMonth()
+    {
+        ActivityParameters parameters = new ActivityParameters().parse(mapFor(
+                ID_OR_CURRENT_MONTH_OR_CURRENT_WEEK_OR_TODAY, CURRENT_MONTH));
+        assertFalse(parameters.hasId());
+        assertTrue(parameters.isCurrentMonth());
     }
 
 
@@ -60,6 +72,16 @@ public class ActivityParametersTest
 
 
     @Test
+    public void testCurrentWeek()
+    {
+        ActivityParameters parameters = new ActivityParameters().parse(mapFor(
+                ID_OR_CURRENT_MONTH_OR_CURRENT_WEEK_OR_TODAY, CURRENT_WEEK));
+        assertFalse(parameters.hasId());
+        assertTrue(parameters.isCurrentWeek());
+    }
+
+
+    @Test
     public void testYearWeek()
     {
         ActivityParameters parameters = new ActivityParameters().parse(mapFor(YEAR_OR_ID, "1973",
@@ -75,6 +97,16 @@ public class ActivityParametersTest
     public void testWrongYearWeek()
     {
         new ActivityParameters().parse(mapFor(YEAR_OR_ID, "nope", MONTH_OR_WEEK_OR_ACTION, "cw42"));
+    }
+
+
+    @Test
+    public void testToday()
+    {
+        ActivityParameters parameters = new ActivityParameters().parse(mapFor(
+                ID_OR_CURRENT_MONTH_OR_CURRENT_WEEK_OR_TODAY, TODAY));
+        assertFalse(parameters.hasId());
+        assertTrue(parameters.isToday());
     }
 
 

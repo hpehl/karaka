@@ -7,20 +7,12 @@
     <precompilation-enabled>true</precompilation-enabled>
 
     <static-files>
-        <include path="index.html" expiration="30d" />
-        <include path="tire/g.*.js" expiration="30d" />
-        <include path="tire/json*.js" expiration="30d" />
-        <include path="tire/raphael*.js" expiration="30d" />
-        <include path="tire/**/*.css" expiration="30d" />
-        <include path="tire/**/*.cache.*" expiration="30d" />
-        <include path="tire/**/sarissa*.js" expiration="30d" />
+        <include path="**" />
+        <include path="**.nocache.*" expiration="0s" />
+        <include path="**.cache.*" expiration="365d" />
+        <exclude path="/rest/v1/*" />
     </static-files>
 
-    <resource-files>
-        <include path="tire/*.nocache.*" />
-        <include path="tire/rest/v1/*" />
-    </resource-files>
-     
     <system-properties>
         <property name="java.util.logging.config.file" value="WEB-INF/logging.properties" />
     </system-properties>

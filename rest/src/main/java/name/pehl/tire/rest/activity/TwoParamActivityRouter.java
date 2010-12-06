@@ -13,12 +13,18 @@ import org.restlet.Restlet;
 import com.google.inject.Injector;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * Router which routes the following URLs to the following resources:
+ * <ul>
+ * <li>TODO Javadoc
+ * </ul>
+ * 
+ * @author $Author$
+ * @version $Date$ $Revision: 123
+ *          $
  */
-public class ActivityRouter extends SecureRouter
+public class TwoParamActivityRouter extends SecureRouter
 {
-    public ActivityRouter(Injector injector, Context context)
+    public TwoParamActivityRouter(Injector injector, Context context)
     {
         super(injector, context);
     }
@@ -51,12 +57,12 @@ public class ActivityRouter extends SecureRouter
         Map<String, Object> attributes = request.getAttributes();
         try
         {
-            ActivityParameters parameters = new ActivityParameters().parse(attributes);
-            if (parameters.hasYear() && (parameters.hasMonth() || parameters.hasWeek()))
+            ActivityParameters ap = new ActivityParameters().parse(attributes);
+            if (ap.hasYear() && (ap.hasMonth() || ap.hasWeek()))
             {
                 return createFinder(ActivitiesResource.class);
             }
-            else if (parameters.hasId() && parameters.hasAction())
+            else if (ap.hasId() && ap.hasAction())
             {
                 return createFinder(ActivityResource.class);
             }

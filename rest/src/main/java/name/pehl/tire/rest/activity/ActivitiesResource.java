@@ -7,6 +7,9 @@ import java.util.TreeSet;
 import name.pehl.tire.dao.ActivityDao;
 import name.pehl.tire.model.Activity;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
@@ -24,10 +27,14 @@ import com.google.inject.Inject;
  * Supported methods:
  * <ul>
  * <li>POST: Create a new activity
+ * <li>GET /activities/currentMonth: Find activities
  * <li>GET /activities/{year}/{month}: Find activities
+ * <li>GET /activities/currentWeek: Find activities
  * <li>GET /activities/{year}/cw{week}: Find activities
+ * <li>GET /activities/today: Find activities
  * <li>GET /activities/{year}/{month}/{day}: Find activities
  * </ul>
+ * TODO Need a timezone offset for current* resources
  * 
  * @author $Author$
  * @version $Date$ $Revision: 110
@@ -35,6 +42,8 @@ import com.google.inject.Inject;
  */
 public class ActivitiesResource extends ServerResource
 {
+    private static final String TIME_ZONE_ID = "tz";
+
     private final Gson gson;
     private final ActivityDao dao;
 
@@ -61,7 +70,33 @@ public class ActivitiesResource extends ServerResource
         List<Activity> activities = null;
 
         ActivityParameters ap = new ActivityParameters().parse(getRequestAttributes());
-        if (ap.hasYear() && ap.hasMonth() && ap.hasDay())
+        if (ap.isCurrentMonth())
+        {
+            DateTime dateTime = new DateTime(parseTimeZone(getQuery()));
+            int year = dateTime.year().get();
+            int month = dateTime.monthOfYear().get();
+            activities = ensureValidActivities(dao.findByYearMonth(year, month));
+        }
+        else if (ap.isCurrentWeek())
+        {
+            DateTime dateTime = new DateTime(parseTimeZone(getQuery()));
+            int year = dateTime.year().get();
+            int week = dateTime.weekOfWeekyear().get();
+            // activities = ensureValidActivities(dao.findByYearWeek(year,
+            // week));
+            activities = ensureValidActivities(new ActivitiesGenerator().generate(year, week));
+            JsonWeek jsonWeek = sortActivitiesByWeek(year, week, activities);
+            json = gson.toJson(jsonWeek);
+        }
+        else if (ap.isToday())
+        {
+            DateTime dateTime = new DateTime(parseTimeZone(getQuery()));
+            int year = dateTime.year().get();
+            int month = dateTime.monthOfYear().get();
+            int day = dateTime.dayOfMonth().get();
+            activities = ensureValidActivities(dao.findByYearMonthDay(year, month, day));
+        }
+        else if (ap.hasYear() && ap.hasMonth() && ap.hasDay())
         {
             activities = ensureValidActivities(dao.findByYearMonthDay(ap.getYear(), ap.getMonth(), ap.getDay()));
         }
@@ -75,14 +110,25 @@ public class ActivitiesResource extends ServerResource
             // ensureValidActivities(dao.findByYearWeek(ap.getYear(),
             // ap.getWeek()));
             activities = ensureValidActivities(new ActivitiesGenerator().generate(ap.getYear(), ap.getWeek()));
-            JsonWeek week = sortActivitiesByWeek(ap.getYear(), ap.getWeek(), activities);
-            json = gson.toJson(week);
+            JsonWeek jsonWeek = sortActivitiesByWeek(ap.getYear(), ap.getWeek(), activities);
+            json = gson.toJson(jsonWeek);
         }
         return new JsonRepresentation(json);
     }
 
 
     // --------------------------------------------------------- helper methods
+
+    private DateTimeZone parseTimeZone(Form form)
+    {
+        String timeZoneId = form.getFirstValue(TIME_ZONE_ID);
+        if (timeZoneId != null)
+        {
+            return DateTimeZone.forID(timeZoneId);
+        }
+        return DateTimeZone.getDefault();
+    }
+
 
     /**
      * Sort the specified activities into {@link JsonDay} instances and the days

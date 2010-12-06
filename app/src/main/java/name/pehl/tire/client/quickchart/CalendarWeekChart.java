@@ -1,12 +1,14 @@
-package name.pehl.tire.client.application;
+package name.pehl.tire.client.quickchart;
 
 import static java.lang.Math.*;
 import name.pehl.tire.client.activity.Day;
 import name.pehl.tire.client.activity.Week;
+import name.pehl.tire.client.quickchart.CalendarWeekNavigationEvent.Direction;
 import name.pehl.tire.client.ui.UiUtils;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
@@ -16,8 +18,9 @@ import com.google.gwt.user.client.ui.Widget;
  * @version $Date$ $Revision: 102
  *          $
  */
-public class CalendarWeekChart extends Widget
+public class CalendarWeekChart extends Widget implements HasHandlers
 {
+
     private static final int TITLE_HEIGHT = 30;
     private static final int LEGEND_HEIGHT = 20;
     private static final double COLUMN_GAP_PERCENTAGE = .05;
@@ -126,22 +129,22 @@ public class CalendarWeekChart extends Widget
 
     private native JavaScriptObject initTitle(JavaScriptObject raphael, int x, int y, String title, int rectX,
             int rectY, int rectWidth, int rectHeight) /*-{
-        var color = @name.pehl.tire.client.application.CalendarWeekChart::TEXT_COLOR;
-        var bgColor = @name.pehl.tire.client.application.CalendarWeekChart::BACKGROUND_COLOR;
+        var color = @name.pehl.tire.client.quickchart.CalendarWeekChart::TEXT_COLOR;
+        var bgColor = @name.pehl.tire.client.quickchart.CalendarWeekChart::BACKGROUND_COLOR;
         var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({stroke: "none", fill: bgColor, title: "Current calendarweek"});
         var text = raphael.text(x, y, title).attr({cursor: "pointer", font: "10px Verdana", fill: color, title: "Current calendarweek"});
-        rect.node.onclick = text.node.onclick = @name.pehl.tire.client.application.CalendarWeekChart::onCurrent();
+        rect.node.onclick = text.node.onclick = this.@name.pehl.tire.client.quickchart.CalendarWeekChart::onCurrent();
         return text;
     }-*/;
 
 
     private native JavaScriptObject initPrev(JavaScriptObject raphael, String path, int rectX, int rectY,
             int rectWidth, int rectHeight) /*-{
-        var color = @name.pehl.tire.client.application.CalendarWeekChart::TEXT_COLOR;
-        var bgColor = @name.pehl.tire.client.application.CalendarWeekChart::BACKGROUND_COLOR;
+        var color = @name.pehl.tire.client.quickchart.CalendarWeekChart::TEXT_COLOR;
+        var bgColor = @name.pehl.tire.client.quickchart.CalendarWeekChart::BACKGROUND_COLOR;
         var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({cursor: "pointer", stroke: "none", fill: bgColor, title: "Previous calendarweek"});
         var prev = raphael.path(path).attr({cursor: "pointer", fill: color, stroke: color, opacity: .66, title: "Previous calendarweek"});
-        rect.node.onclick = prev.node.onclick = @name.pehl.tire.client.application.CalendarWeekChart::onPrev();
+        rect.node.onclick = prev.node.onclick = this.@name.pehl.tire.client.quickchart.CalendarWeekChart::onPrev();
         rect.node.onmouseover = prev.node.onmouseover = function() {
         prev.attr({opacity: 1.0});
         };
@@ -154,11 +157,11 @@ public class CalendarWeekChart extends Widget
 
     private native JavaScriptObject initNext(JavaScriptObject raphael, String path, int rectX, int rectY,
             int rectWidth, int rectHeight) /*-{
-        var color = @name.pehl.tire.client.application.CalendarWeekChart::TEXT_COLOR;
-        var bgColor = @name.pehl.tire.client.application.CalendarWeekChart::BACKGROUND_COLOR;
+        var color = @name.pehl.tire.client.quickchart.CalendarWeekChart::TEXT_COLOR;
+        var bgColor = @name.pehl.tire.client.quickchart.CalendarWeekChart::BACKGROUND_COLOR;
         var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({cursor: "pointer", stroke: "none", fill: bgColor, title: "Next calendarweek"});
         var next = raphael.path(path).attr({cursor: "pointer", fill: color, stroke: color, opacity: .66, title: "Next calendarweek"});
-        rect.node.onclick = next.node.onclick = @name.pehl.tire.client.application.CalendarWeekChart::onNext();
+        rect.node.onclick = next.node.onclick = this.@name.pehl.tire.client.quickchart.CalendarWeekChart::onNext();
         rect.node.onmouseover = next.node.onmouseover = function() {
         next.attr({opacity: 1.0});
         };
@@ -175,13 +178,13 @@ public class CalendarWeekChart extends Widget
 
 
     private native JavaScriptObject initColumn(JavaScriptObject raphael, String path) /*-{
-        var color = @name.pehl.tire.client.application.CalendarWeekChart::COLUMN_COLOR;
+        var color = @name.pehl.tire.client.quickchart.CalendarWeekChart::COLUMN_COLOR;
         return raphael.path(path).attr({stroke: color, fill: color});
     }-*/;
 
 
     private native void initLegend(JavaScriptObject raphael, int x, int y, String weekday) /*-{
-        var color = @name.pehl.tire.client.application.CalendarWeekChart::TEXT_COLOR;
+        var color = @name.pehl.tire.client.quickchart.CalendarWeekChart::TEXT_COLOR;
         raphael.text(x, y, weekday).attr({font: "10px Verdana", fill: color});
     }-*/;
 
@@ -249,23 +252,29 @@ public class CalendarWeekChart extends Widget
     }-*/;
 
 
-    // ------------------------------------------------------------ prev / next
+    // --------------------------------------------------------- event handling
 
-    private static void onPrev()
+    public HandlerRegistration addCalendarWeekNavigationHandler(CalendarWeekNavigationHandler handler)
     {
-        GWT.log("Previous calendarweek");
+        return addHandler(handler, CalendarWeekNavigationEvent.getType());
     }
 
 
-    private static void onCurrent()
+    private void onPrev()
     {
-        GWT.log("Current calendarweek");
+        CalendarWeekNavigationEvent.fire(this, Direction.PREV);
     }
 
 
-    private static void onNext()
+    private void onCurrent()
     {
-        GWT.log("Next calendarweek");
+        CalendarWeekNavigationEvent.fire(this, Direction.CURRENT);
+    }
+
+
+    private void onNext()
+    {
+        CalendarWeekNavigationEvent.fire(this, Direction.NEXT);
     }
 
 

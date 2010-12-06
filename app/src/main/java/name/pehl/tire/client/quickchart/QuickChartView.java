@@ -1,19 +1,20 @@
-package name.pehl.tire.client.application;
+package name.pehl.tire.client.quickchart;
 
 import name.pehl.tire.client.activity.Week;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
-import com.gwtplatform.mvp.client.ViewImpl;
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
  * @author $Author$
  * @version $Date$ $Revision: 102
  *          $
  */
-public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyView
+public class QuickChartView extends ViewWithUiHandlers<QuickChartUiHandlers> implements QuickChartPresenter.MyView
 {
     interface QuickChartUi extends UiBinder<Widget, QuickChartView>
     {
@@ -45,5 +46,28 @@ public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyVi
     public void update(Week week, boolean animate)
     {
         calendarWeekChart.update(week, animate);
+    }
+
+
+    @UiHandler("calendarWeekChart")
+    void handleCalendarWeekNavigation(CalendarWeekNavigationEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            switch (event.getDirection())
+            {
+                case PREV:
+                    getUiHandlers().onPrev();
+                    break;
+                case CURRENT:
+                    getUiHandlers().onCurrent();
+                    break;
+                case NEXT:
+                    getUiHandlers().onNext();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

@@ -12,7 +12,7 @@
     <listener>
         <listener-class>name.pehl.tire.server.TireConfig</listener-class>
     </listener>
-
+    
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>

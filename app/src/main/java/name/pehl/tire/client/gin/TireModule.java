@@ -15,22 +15,22 @@ import name.pehl.tire.client.activity.RecentActivitiesView;
 import name.pehl.tire.client.activity.WeekReader;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
-import name.pehl.tire.client.application.CockpitPresenter;
-import name.pehl.tire.client.application.CockpitView;
-import name.pehl.tire.client.application.NavigationPresenter;
-import name.pehl.tire.client.application.NavigationView;
-import name.pehl.tire.client.application.QuickChartPresenter;
-import name.pehl.tire.client.application.QuickChartView;
 import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.client.ClientView;
+import name.pehl.tire.client.cockpit.CockpitPresenter;
+import name.pehl.tire.client.cockpit.CockpitView;
 import name.pehl.tire.client.dashboard.DashboardPresenter;
 import name.pehl.tire.client.dashboard.DashboardView;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
+import name.pehl.tire.client.navigation.NavigationPresenter;
+import name.pehl.tire.client.navigation.NavigationView;
 import name.pehl.tire.client.project.ProjectPresenter;
 import name.pehl.tire.client.project.ProjectReader;
 import name.pehl.tire.client.project.ProjectView;
 import name.pehl.tire.client.project.ProjectWriter;
+import name.pehl.tire.client.quickchart.QuickChartPresenter;
+import name.pehl.tire.client.quickchart.QuickChartView;
 import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.report.ReportView;
 import name.pehl.tire.client.resources.I18n;
@@ -76,6 +76,8 @@ public class TireModule extends AbstractPresenterModule
         bind(GetWeekHandler.class);
 
         // JsonReader / Writer
+        // Bind them as eager singletons so that the JsonRegistry
+        // is setup correctly!
         bind(ActivityReader.class).asEagerSingleton();
         bind(ActivityWriter.class).asEagerSingleton();
         bind(DayReader.class).asEagerSingleton();
