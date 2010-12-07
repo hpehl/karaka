@@ -2,7 +2,7 @@ package name.pehl.tire.client.activity.week;
 
 import static java.lang.Math.*;
 import name.pehl.tire.client.activity.day.Day;
-import name.pehl.tire.client.activity.week.WeekNavigationEvent.Direction;
+import name.pehl.tire.client.navigation.Direction;
 import name.pehl.tire.client.ui.UiUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -261,7 +261,7 @@ public class WeekChartWidget extends Widget
 
     // --------------------------------------------------------- event handling
 
-    public HandlerRegistration addCalendarWeekNavigationHandler(WeekNavigationHandler handler)
+    public HandlerRegistration addCalendarWeekNavigationHandler(WeekNavigationEvent.WeekNavigationHandler handler)
     {
         return addHandler(handler, WeekNavigationEvent.getType());
     }
