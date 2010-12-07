@@ -44,10 +44,6 @@
             <id>pehl-parent</id>
             <url>http://pehl-parent.googlecode.com/svn/repository</url>
         </repository>
-        <repository>
-            <id>tire-d8</id>
-            <url>http://tire-d8.googlecode.com/svn/repository</url>
-        </repository>
     </repositories>
 
 
