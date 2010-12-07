@@ -23,7 +23,7 @@ public class ActivitiesGenerator
         List<Activity> activities = new ArrayList<Activity>();
         MutableDateTime mdt = new MutableDateTime().year().set(year).weekOfWeekyear().set(week).dayOfWeek().set(1)
                 .hourOfDay().set(9);
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 7; i++)
         {
             Activity activity = new Activity(randomString(5), randomString(10));
             activity.setStart(new Time(mdt.toDate()));

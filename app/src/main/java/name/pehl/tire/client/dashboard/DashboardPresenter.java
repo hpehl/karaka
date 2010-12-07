@@ -32,11 +32,12 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     }
 
     /**
-     * Constant for the status slot.
+     * Constant for the new activity slot.
      */
     public static final Object SLOT_NewActivity = new Object();
+
     /**
-     * Constant for the status slot.
+     * Constant for the recent activities slot.
      */
     public static final Object SLOT_RecentActivities = new Object();
 

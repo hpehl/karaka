@@ -1,4 +1,4 @@
-package name.pehl.tire.client.activity;
+package name.pehl.tire.client.activity.day;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +7,7 @@ import java.util.List;
 
 import name.pehl.piriti.client.json.Json;
 import name.pehl.tire.client.Defaults;
+import name.pehl.tire.client.activity.Activity;
 
 /**
  * @author $LastChangedBy:$

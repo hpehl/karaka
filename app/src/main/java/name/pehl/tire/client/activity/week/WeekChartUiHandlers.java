@@ -1,13 +1,12 @@
-package name.pehl.tire.client.activity;
+package name.pehl.tire.client.activity.week;
 
 import com.gwtplatform.mvp.client.UiHandlers;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision: 169
- *          $
+ * @version $Date$ $Revision$
  */
-public interface RecentActivitiesUiHandlers extends UiHandlers
+public interface WeekChartUiHandlers extends UiHandlers
 {
     void onPrev();
 

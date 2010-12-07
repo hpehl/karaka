@@ -1,6 +1,4 @@
-package name.pehl.tire.client.quickchart;
-
-import name.pehl.tire.client.activity.Week;
+package name.pehl.tire.client.activity.week;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -14,23 +12,21 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
  * @version $Date$ $Revision: 102
  *          $
  */
-public class QuickChartView extends ViewWithUiHandlers<QuickChartUiHandlers> implements QuickChartPresenter.MyView
+public class WeekChartView extends ViewWithUiHandlers<WeekChartUiHandlers> implements WeekChartPresenter.MyView
 {
-    interface QuickChartUi extends UiBinder<Widget, QuickChartView>
-    {
-    }
-
-    private static QuickChartUi uiBinder = GWT.create(QuickChartUi.class);
+    // @formatter:off
+    interface WeekChartUi extends UiBinder<Widget, WeekChartView> {}
+    private static WeekChartUi uiBinder = GWT.create(WeekChartUi.class);
+    
+    @UiField(provided = true) WeekChartWidget weekChart;
+    // @formatter:on
 
     private final Widget widget;
 
-    @UiField(provided = true)
-    CalendarWeekChart calendarWeekChart;
 
-
-    public QuickChartView()
+    public WeekChartView()
     {
-        this.calendarWeekChart = new CalendarWeekChart(200, 200, new String[] {"Mo", "Tue", "Wed", "Thu", "Fr"});
+        this.weekChart = new WeekChartWidget(200, 200, new String[] {"Mo", "Tue", "Wed", "Thu", "Fr", "Sat", "Sun"});
         this.widget = uiBinder.createAndBindUi(this);
     }
 
@@ -43,14 +39,14 @@ public class QuickChartView extends ViewWithUiHandlers<QuickChartUiHandlers> imp
 
 
     @Override
-    public void update(Week week, boolean animate)
+    public void updateChart(Week week, boolean animate)
     {
-        calendarWeekChart.update(week, animate);
+        weekChart.update(week, animate);
     }
 
 
-    @UiHandler("calendarWeekChart")
-    void handleCalendarWeekNavigation(CalendarWeekNavigationEvent event)
+    @UiHandler("weekChart")
+    void handleWeekNavigation(WeekNavigationEvent event)
     {
         if (getUiHandlers() != null)
         {

@@ -1,9 +1,9 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
-    xmlns:tire-app="urn:import:name.pehl.tire.client.quickchart">
+    xmlns:tire-app="urn:import:name.pehl.tire.client.activity.week">
 
     <g:HTMLPanel>
-        <tire-app:CalendarWeekChart ui:field="calendarWeekChart" />
+        <tire-app:WeekChartWidget ui:field="weekChart" />
     </g:HTMLPanel>
 
 </ui:UiBinder> 

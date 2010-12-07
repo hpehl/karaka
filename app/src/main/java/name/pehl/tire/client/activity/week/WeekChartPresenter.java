@@ -1,11 +1,7 @@
-package name.pehl.tire.client.quickchart;
+package name.pehl.tire.client.activity.week;
 
-import name.pehl.tire.client.activity.GetWeekAction;
-import name.pehl.tire.client.activity.GetWeekResult;
-import name.pehl.tire.client.activity.Week;
 import name.pehl.tire.client.dispatch.TireCallback;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.client.DispatchAsync;
@@ -19,11 +15,11 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
  * @version $Date$ $Revision: 102
  *          $
  */
-public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyView> implements QuickChartUiHandlers
+public class WeekChartPresenter extends PresenterWidget<WeekChartPresenter.MyView> implements WeekChartUiHandlers
 {
-    public interface MyView extends View, HasUiHandlers<QuickChartUiHandlers>
+    public interface MyView extends View, HasUiHandlers<WeekChartUiHandlers>
     {
-        void update(Week week, boolean animate);
+        void updateChart(Week week, boolean animate);
     }
 
     private int currentYear;
@@ -33,7 +29,7 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
 
 
     @Inject
-    public QuickChartPresenter(final EventBus eventBus, final MyView view, final DispatchAsync dispatcher,
+    public WeekChartPresenter(final EventBus eventBus, final MyView view, final DispatchAsync dispatcher,
             final PlaceManager placeManager)
     {
         super(eventBus, view);
@@ -46,31 +42,13 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     @Override
     protected void onReveal()
     {
-        getActivities(currentYear, currentWeek);
-        // Create local test data
-        // Week week = new Week();
-        // week.setWeek(41);
-        // for (int i = 0; i < 5; i++)
-        // {
-        // @SuppressWarnings("deprecation")
-        // Date date = new Date(110, 9, 11 + i);
-        // Activity activity = new Activity();
-        // int minutes = (int) Math.round(Math.random() * 200) + 200;
-        // activity.setStart(date);
-        // activity.setEnd(date);
-        // activity.setMinutes(minutes);
-        // Day day = new Day();
-        // day.setDate(date);
-        // day.addActivity(activity);
-        // week.addDay(day);
-        // }
-        // getView().update(week, true);
+        loadWeek();
     }
 
 
-    private void getActivities(int year, int week)
+    private void loadWeek()
     {
-        dispatcher.execute(new GetWeekAction(year, week), new TireCallback<GetWeekResult>(placeManager)
+        dispatcher.execute(new GetWeekAction(currentYear, currentWeek), new TireCallback<GetWeekResult>(placeManager)
         {
             @Override
             public void onSuccess(GetWeekResult result)
@@ -78,7 +56,7 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
                 Week week = result.getWeek();
                 if (week != null)
                 {
-                    getView().update(week, true);
+                    getView().updateChart(week, true);
                     currentYear = week.getYear();
                     currentWeek = week.getWeek();
                 }
@@ -90,37 +68,34 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     @Override
     public void onPrev()
     {
-        GWT.log("Previous calendarweek");
         currentWeek--;
         if (currentWeek < 1)
         {
             currentYear--;
             currentWeek = 52;
         }
-        getActivities(currentYear, currentWeek);
+        loadWeek();
     }
 
 
     @Override
     public void onCurrent()
     {
-        GWT.log("Current calendarweek");
         currentYear = 0;
         currentWeek = 0;
-        getActivities(currentYear, currentWeek);
+        loadWeek();
     }
 
 
     @Override
     public void onNext()
     {
-        GWT.log("Next calendarweek");
         currentWeek++;
         if (currentWeek > 52)
         {
             currentYear++;
             currentWeek = 1;
         }
-        getActivities(currentYear, currentWeek);
+        loadWeek();
     }
 }

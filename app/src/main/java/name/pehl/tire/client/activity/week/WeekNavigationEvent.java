@@ -1,13 +1,13 @@
-package name.pehl.tire.client.quickchart;
+package name.pehl.tire.client.activity.week;
 
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 
 /**
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision$
  */
-public class CalendarWeekNavigationEvent extends GwtEvent<CalendarWeekNavigationHandler>
+public class WeekNavigationEvent extends GwtEvent<WeekNavigationHandler>
 {
     public static enum Direction
     {
@@ -16,21 +16,21 @@ public class CalendarWeekNavigationEvent extends GwtEvent<CalendarWeekNavigation
         NEXT;
     }
 
-    private static Type<CalendarWeekNavigationHandler> TYPE;
+    private static Type<WeekNavigationHandler> TYPE;
 
 
-    public static Type<CalendarWeekNavigationHandler> getType()
+    public static Type<WeekNavigationHandler> getType()
     {
         if (TYPE == null)
         {
-            TYPE = new Type<CalendarWeekNavigationHandler>();
+            TYPE = new Type<WeekNavigationHandler>();
         }
         return TYPE;
     }
 
 
     @Override
-    public Type<CalendarWeekNavigationHandler> getAssociatedType()
+    public Type<WeekNavigationHandler> getAssociatedType()
     {
         return TYPE;
     }
@@ -40,7 +40,7 @@ public class CalendarWeekNavigationEvent extends GwtEvent<CalendarWeekNavigation
     {
         if (TYPE != null)
         {
-            CalendarWeekNavigationEvent event = new CalendarWeekNavigationEvent(direction);
+            WeekNavigationEvent event = new WeekNavigationEvent(direction);
             source.fireEvent(event);
         }
     }
@@ -48,14 +48,14 @@ public class CalendarWeekNavigationEvent extends GwtEvent<CalendarWeekNavigation
     private final Direction direction;
 
 
-    protected CalendarWeekNavigationEvent(Direction direction)
+    protected WeekNavigationEvent(Direction direction)
     {
         this.direction = direction;
     }
 
 
     @Override
-    protected void dispatch(CalendarWeekNavigationHandler handler)
+    protected void dispatch(WeekNavigationHandler handler)
     {
         handler.onNavigation(this);
     }

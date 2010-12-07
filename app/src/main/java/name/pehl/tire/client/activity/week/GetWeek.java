@@ -1,4 +1,4 @@
-package name.pehl.tire.client.activity;
+package name.pehl.tire.client.activity.week;
 
 import com.gwtplatform.annotation.GenDispatch;
 import com.gwtplatform.annotation.In;

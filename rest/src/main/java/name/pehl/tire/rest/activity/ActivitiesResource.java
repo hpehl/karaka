@@ -82,11 +82,12 @@ public class ActivitiesResource extends ServerResource
         {
             DateTime dateTime = new DateTime(parseTimeZone(form));
             int year = dateTime.year().get();
+            int month = dateTime.monthOfYear().get();
             int week = dateTime.weekOfWeekyear().get();
             // activities = ensureValidActivities(dao.findByYearWeek(year,
             // week));
             activities = ensureValidActivities(new ActivitiesGenerator().generate(year, week));
-            JsonWeek jsonWeek = sortActivitiesByWeek(year, week, activities);
+            JsonWeek jsonWeek = sortActivitiesByWeek(year, month, week, activities);
             json = gson.toJson(jsonWeek);
         }
         else if (ap.isToday())
@@ -110,8 +111,9 @@ public class ActivitiesResource extends ServerResource
             // activities =
             // ensureValidActivities(dao.findByYearWeek(ap.getYear(),
             // ap.getWeek()));
+            // TODO Set month
             activities = ensureValidActivities(new ActivitiesGenerator().generate(ap.getYear(), ap.getWeek()));
-            JsonWeek jsonWeek = sortActivitiesByWeek(ap.getYear(), ap.getWeek(), activities);
+            JsonWeek jsonWeek = sortActivitiesByWeek(ap.getYear(), 0, ap.getWeek(), activities);
             json = gson.toJson(jsonWeek);
         }
         return new JsonRepresentation(json);
@@ -138,7 +140,7 @@ public class ActivitiesResource extends ServerResource
      * @param activities
      * @return
      */
-    private JsonWeek sortActivitiesByWeek(int year, int week, List<Activity> activities)
+    private JsonWeek sortActivitiesByWeek(int year, int month, int week, List<Activity> activities)
     {
         SortedSet<JsonDay> days = new TreeSet<JsonDay>();
         SortedSetMultimap<JsonDay, Activity> activitiesPerDay = TreeMultimap.create();
@@ -152,7 +154,7 @@ public class ActivitiesResource extends ServerResource
             day.activities = activitiesPerDay.get(day);
             days.add(day);
         }
-        return new JsonWeek(year, week, days);
+        return new JsonWeek(year, month, week, days);
     }
 
 

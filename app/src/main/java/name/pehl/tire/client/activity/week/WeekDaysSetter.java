@@ -1,8 +1,9 @@
-package name.pehl.tire.client.activity;
+package name.pehl.tire.client.activity.week;
 
 import java.util.List;
 
 import name.pehl.piriti.client.property.PropertySetter;
+import name.pehl.tire.client.activity.day.Day;
 
 /**
  * @author $LastChangedBy:$

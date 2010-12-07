@@ -91,18 +91,22 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
 
     private void startRecording()
     {
-        GWT.log("Start Recording");
-        this.recording = true;
-        startStop.setResource(resources.recordOn());
-        getUiHandlers().onStartRecording();
+        if (getUiHandlers() != null)
+        {
+            this.recording = true;
+            startStop.setResource(resources.recordOn());
+            getUiHandlers().onStartRecording();
+        }
     }
 
 
     private void stopRecording()
     {
-        GWT.log("Stop Recording");
-        this.recording = false;
-        startStop.setResource(resources.recordOff());
-        getUiHandlers().onStopRecording();
+        if (getUiHandlers() != null)
+        {
+            this.recording = false;
+            startStop.setResource(resources.recordOff());
+            getUiHandlers().onStopRecording();
+        }
     }
 }

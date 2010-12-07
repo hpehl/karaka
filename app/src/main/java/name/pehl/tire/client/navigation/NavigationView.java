@@ -12,7 +12,8 @@ import com.gwtplatform.mvp.client.ViewImpl;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 175
+ *          $
  */
 public class NavigationView extends ViewImpl implements NavigationPresenter.MyView
 {
@@ -63,7 +64,6 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
             {
                 if (token.equals(link.getTargetHistoryToken()))
                 {
-                    GWT.log(token + " selected");
                     link.addStyleName(resources.navigation().selected());
                 }
                 else

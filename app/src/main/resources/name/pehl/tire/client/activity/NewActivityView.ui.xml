@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
-    xmlns:tire-dash="urn:import:name.pehl.tire.client.dashboard" xmlns:tire-ui="urn:import:name.pehl.tire.client.ui">
+    xmlns:tire-act="urn:import:name.pehl.tire.client.activity" xmlns:tire-ui="urn:import:name.pehl.tire.client.ui">
 
     <ui:style>
         div.newActivity {
@@ -83,7 +83,7 @@
                     <g:InlineHyperlink ui:field="today">today</g:InlineHyperlink>
                 </li>
                 <li>
-                    <tire-dash:CalendarLink ui:field="calendar">calendar</tire-dash:CalendarLink>
+                    <tire-act:CalendarLink ui:field="calendar">calendar</tire-act:CalendarLink>
                 </li>
             </ul>
             <div class="{style.input}">
