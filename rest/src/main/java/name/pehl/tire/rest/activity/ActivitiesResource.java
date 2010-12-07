@@ -69,17 +69,18 @@ public class ActivitiesResource extends ServerResource
         String json = null;
         List<Activity> activities = null;
 
+        Form form = getRequest().getResourceRef().getQueryAsForm();
         ActivityParameters ap = new ActivityParameters().parse(getRequestAttributes());
         if (ap.isCurrentMonth())
         {
-            DateTime dateTime = new DateTime(parseTimeZone(getQuery()));
+            DateTime dateTime = new DateTime(parseTimeZone(form));
             int year = dateTime.year().get();
             int month = dateTime.monthOfYear().get();
             activities = ensureValidActivities(dao.findByYearMonth(year, month));
         }
         else if (ap.isCurrentWeek())
         {
-            DateTime dateTime = new DateTime(parseTimeZone(getQuery()));
+            DateTime dateTime = new DateTime(parseTimeZone(form));
             int year = dateTime.year().get();
             int week = dateTime.weekOfWeekyear().get();
             // activities = ensureValidActivities(dao.findByYearWeek(year,
@@ -90,7 +91,7 @@ public class ActivitiesResource extends ServerResource
         }
         else if (ap.isToday())
         {
-            DateTime dateTime = new DateTime(parseTimeZone(getQuery()));
+            DateTime dateTime = new DateTime(parseTimeZone(form));
             int year = dateTime.year().get();
             int month = dateTime.monthOfYear().get();
             int day = dateTime.dayOfMonth().get();

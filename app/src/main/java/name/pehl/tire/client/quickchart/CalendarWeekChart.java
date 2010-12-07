@@ -8,7 +8,6 @@ import name.pehl.tire.client.ui.UiUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
@@ -18,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @version $Date$ $Revision: 102
  *          $
  */
-public class CalendarWeekChart extends Widget implements HasHandlers
+public class CalendarWeekChart extends Widget
 {
 
     private static final int TITLE_HEIGHT = 30;
@@ -129,22 +128,28 @@ public class CalendarWeekChart extends Widget implements HasHandlers
 
     private native JavaScriptObject initTitle(JavaScriptObject raphael, int x, int y, String title, int rectX,
             int rectY, int rectWidth, int rectHeight) /*-{
+        var safeThis = this;
         var color = @name.pehl.tire.client.quickchart.CalendarWeekChart::TEXT_COLOR;
         var bgColor = @name.pehl.tire.client.quickchart.CalendarWeekChart::BACKGROUND_COLOR;
-        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({stroke: "none", fill: bgColor, title: "Current calendarweek"});
+        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({cursor: "pointer", stroke: "none", fill: bgColor, title: "Current calendarweek"});
         var text = raphael.text(x, y, title).attr({cursor: "pointer", font: "10px Verdana", fill: color, title: "Current calendarweek"});
-        rect.node.onclick = text.node.onclick = this.@name.pehl.tire.client.quickchart.CalendarWeekChart::onCurrent();
+        rect.node.onclick = text.node.onclick = function() {
+        safeThis.@name.pehl.tire.client.quickchart.CalendarWeekChart::onCurrent()();
+        };
         return text;
     }-*/;
 
 
     private native JavaScriptObject initPrev(JavaScriptObject raphael, String path, int rectX, int rectY,
             int rectWidth, int rectHeight) /*-{
+        var safeThis = this;
         var color = @name.pehl.tire.client.quickchart.CalendarWeekChart::TEXT_COLOR;
         var bgColor = @name.pehl.tire.client.quickchart.CalendarWeekChart::BACKGROUND_COLOR;
         var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({cursor: "pointer", stroke: "none", fill: bgColor, title: "Previous calendarweek"});
         var prev = raphael.path(path).attr({cursor: "pointer", fill: color, stroke: color, opacity: .66, title: "Previous calendarweek"});
-        rect.node.onclick = prev.node.onclick = this.@name.pehl.tire.client.quickchart.CalendarWeekChart::onPrev();
+        rect.node.onclick = prev.node.onclick = function() {
+        safeThis.@name.pehl.tire.client.quickchart.CalendarWeekChart::onPrev()();
+        };
         rect.node.onmouseover = prev.node.onmouseover = function() {
         prev.attr({opacity: 1.0});
         };
@@ -157,11 +162,14 @@ public class CalendarWeekChart extends Widget implements HasHandlers
 
     private native JavaScriptObject initNext(JavaScriptObject raphael, String path, int rectX, int rectY,
             int rectWidth, int rectHeight) /*-{
+        var safeThis = this;
         var color = @name.pehl.tire.client.quickchart.CalendarWeekChart::TEXT_COLOR;
         var bgColor = @name.pehl.tire.client.quickchart.CalendarWeekChart::BACKGROUND_COLOR;
         var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({cursor: "pointer", stroke: "none", fill: bgColor, title: "Next calendarweek"});
         var next = raphael.path(path).attr({cursor: "pointer", fill: color, stroke: color, opacity: .66, title: "Next calendarweek"});
-        rect.node.onclick = next.node.onclick = this.@name.pehl.tire.client.quickchart.CalendarWeekChart::onNext();
+        rect.node.onclick = next.node.onclick = function(){
+        safeThis.@name.pehl.tire.client.quickchart.CalendarWeekChart::onNext()();
+        };
         rect.node.onmouseover = next.node.onmouseover = function() {
         next.attr({opacity: 1.0});
         };

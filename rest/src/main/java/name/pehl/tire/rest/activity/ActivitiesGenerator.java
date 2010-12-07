@@ -25,12 +25,12 @@ public class ActivitiesGenerator
                 .hourOfDay().set(9);
         for (int i = 0; i < 5; i++)
         {
-            mdt.addDays(1);
             Activity activity = new Activity(randomString(5), randomString(10));
             activity.setStart(new Time(mdt.toDate()));
             int hour = mdt.hourOfDay().get() + 2 + random.nextInt(6);
             activity.setEnd(new Time(mdt.copy().hourOfDay().set(hour).toDate()));
             activities.add(activity);
+            mdt.addDays(1);
         }
         return activities;
     }

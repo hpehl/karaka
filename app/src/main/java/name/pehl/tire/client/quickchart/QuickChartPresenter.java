@@ -46,7 +46,7 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     @Override
     protected void onReveal()
     {
-        getActivities(currentWeek, currentYear);
+        getActivities(currentYear, currentWeek);
         // Create local test data
         // Week week = new Week();
         // week.setWeek(41);
@@ -92,11 +92,12 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     {
         GWT.log("Previous calendarweek");
         currentWeek--;
-        if (currentWeek < 0)
+        if (currentWeek < 1)
         {
             currentYear--;
-            currentWeek = 1;
+            currentWeek = 52;
         }
+        getActivities(currentYear, currentWeek);
     }
 
 
@@ -106,6 +107,7 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
         GWT.log("Current calendarweek");
         currentYear = 0;
         currentWeek = 0;
+        getActivities(currentYear, currentWeek);
     }
 
 
@@ -119,5 +121,6 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
             currentYear++;
             currentWeek = 1;
         }
+        getActivities(currentYear, currentWeek);
     }
 }
