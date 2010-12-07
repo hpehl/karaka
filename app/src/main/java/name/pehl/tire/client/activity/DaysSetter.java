@@ -1,4 +1,4 @@
-package name.pehl.tire.client.activity.week;
+package name.pehl.tire.client.activity;
 
 import java.util.List;
 
@@ -6,13 +6,13 @@ import name.pehl.piriti.client.property.PropertySetter;
 import name.pehl.tire.client.activity.day.Day;
 
 /**
- * @author $LastChangedBy:$
- * @version $LastChangedRevision:$
+ * @author $LastChangedBy$
+ * @version $LastChangedRevision$
  */
-public class WeekDaysSetter implements PropertySetter<Week, List<Day>>
+public class DaysSetter implements PropertySetter<Activities, List<Day>>
 {
     @Override
-    public void set(Week model, List<Day> value)
+    public void set(Activities model, List<Day> value)
     {
         model.clearDays();
         if (value != null)

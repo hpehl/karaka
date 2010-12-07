@@ -4,6 +4,7 @@ import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.about.AboutView;
+import name.pehl.tire.client.activity.ActivitiesReader;
 import name.pehl.tire.client.activity.ActivityReader;
 import name.pehl.tire.client.activity.ActivityWriter;
 import name.pehl.tire.client.activity.NewActivityPresenter;
@@ -14,7 +15,6 @@ import name.pehl.tire.client.activity.RecentActivitiesPresenter;
 import name.pehl.tire.client.activity.RecentActivitiesView;
 import name.pehl.tire.client.activity.day.DayReader;
 import name.pehl.tire.client.activity.week.GetWeekHandler;
-import name.pehl.tire.client.activity.week.WeekReader;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
 import name.pehl.tire.client.client.ClientPresenter;
@@ -85,17 +85,17 @@ public class TireModule extends AbstractPresenterModule
         bind(ProjectWriter.class).asEagerSingleton();
         bind(TagReader.class).asEagerSingleton();
         bind(TagWriter.class).asEagerSingleton();
-        bind(WeekReader.class).asEagerSingleton();
+        bind(ActivitiesReader.class).asEagerSingleton();
 
         // Constants
         bindConstant().annotatedWith(SecurityCookie.class).to("TST");
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
         // PresenterWidgets (a-z)
-        bindPresenterWidget(QuickChartPresenter.class, QuickChartPresenter.MyView.class, QuickChartView.class);
         bindPresenterWidget(CockpitPresenter.class, CockpitPresenter.MyView.class, CockpitView.class);
         bindPresenterWidget(NavigationPresenter.class, NavigationPresenter.MyView.class, NavigationView.class);
         bindPresenterWidget(NewActivityPresenter.class, NewActivityPresenter.MyView.class, NewActivityView.class);
+        bindPresenterWidget(QuickChartPresenter.class, QuickChartPresenter.MyView.class, QuickChartView.class);
         bindPresenterWidget(RecentActivitiesPresenter.class, RecentActivitiesPresenter.MyView.class,
                 RecentActivitiesView.class);
 

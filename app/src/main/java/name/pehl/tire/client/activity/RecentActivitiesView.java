@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity;
 
-import java.util.List;
+import name.pehl.tire.client.activity.ActivitiesNavigation.Unit;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -82,9 +82,9 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
 
 
     @Override
-    public void updateActivities(List<Activity> activities)
+    public void updateActivities(Activities activities, Unit unit)
     {
-        this.activities.setRowData(0, activities);
-        this.activities.setRowCount(activities.size());
+        this.activities.setRowData(0, activities.getActivities());
+        this.activities.setRowCount(activities.getActivities().size());
     }
 }

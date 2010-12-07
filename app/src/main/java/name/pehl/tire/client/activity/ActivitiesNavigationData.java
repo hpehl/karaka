@@ -1,11 +1,12 @@
 package name.pehl.tire.client.activity;
 
-
 /**
- * Month and week are <b>not</b> synced!
+ * Simple data holder for navigation over activities by week / month. Month and
+ * week are <b>not</b> synced!
  * 
- * @author $Author:$
- * @version $Date:$ $Revision:$
+ * @author $Author$
+ * @version $Date$ $Revision: 180
+ *          $
  */
 public class ActivitiesNavigationData
 {

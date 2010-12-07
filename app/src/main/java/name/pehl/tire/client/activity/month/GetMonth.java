@@ -1,4 +1,4 @@
-package name.pehl.tire.client.activity.week;
+package name.pehl.tire.client.activity.month;
 
 import name.pehl.tire.client.activity.Activities;
 
@@ -11,13 +11,13 @@ import com.gwtplatform.annotation.Out;
  * @version $Date:$ $Revision:$
  */
 @GenDispatch
-public class GetWeek
+public class GetMonth
 {
     @In(1)
     int year;
 
     @In(2)
-    int week;
+    int month;
 
     @Out(1)
     Activities activities;
