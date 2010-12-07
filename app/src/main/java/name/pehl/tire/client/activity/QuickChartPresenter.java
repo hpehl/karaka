@@ -1,9 +1,6 @@
 package name.pehl.tire.client.activity;
 
 import static name.pehl.tire.client.activity.ActivitiesNavigation.Unit.*;
-
-import java.util.List;
-
 import name.pehl.tire.client.activity.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.activity.ActivitiesNavigation.Unit;
 import name.pehl.tire.client.activity.week.GetWeekAction;
@@ -20,15 +17,18 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 
 /**
+ * Presenter for the quick chart showing the activites by week / month.
+ * 
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 102
+ *          $
  */
-public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesPresenter.MyView> implements
+public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyView> implements
         ActivitiesNavigationUiHandlers, ActivitiesLoadedHandler
 {
     public interface MyView extends View, HasUiHandlers<ActivitiesNavigationUiHandlers>
     {
-        void updateActivities(List<Activity> activities);
+        void updateChart(Week week, boolean animate);
     }
 
     private Unit unit;
@@ -38,7 +38,7 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
 
 
     @Inject
-    public RecentActivitiesPresenter(final EventBus eventBus, final MyView view, final DispatchAsync dispatcher,
+    public QuickChartPresenter(final EventBus eventBus, final MyView view, final DispatchAsync dispatcher,
             final PlaceManager placeManager)
     {
         super(eventBus, view);
@@ -71,7 +71,7 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
                     Week week = result.getWeek();
                     if (week != null)
                     {
-                        ActivitiesLoadedEvent.fire(RecentActivitiesPresenter.this, null, week);
+                        ActivitiesLoadedEvent.fire(QuickChartPresenter.this, null, week);
                     }
                 }
             });
@@ -125,7 +125,7 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
     public void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
         Week week = event.getWeek();
-        getView().updateActivities(week.getActivities());
+        getView().updateChart(week, true);
         and = new ActivitiesNavigationData(week.getYear(), week.getMonth(), week.getWeek());
     }
 }

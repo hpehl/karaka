@@ -1,4 +1,7 @@
-package name.pehl.tire.client.activity.week;
+package name.pehl.tire.client.activity;
+
+import name.pehl.tire.client.activity.week.Week;
+import name.pehl.tire.client.activity.week.WeekChartWidget;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -8,14 +11,19 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
+ * View for the quick chart showing the activites by week / month.
+ * <p>
+ * TODO Implement MonthChartWidget
+ * 
  * @author $Author$
  * @version $Date$ $Revision: 102
  *          $
  */
-public class WeekChartView extends ViewWithUiHandlers<WeekChartUiHandlers> implements WeekChartPresenter.MyView
+public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHandlers> implements
+        QuickChartPresenter.MyView
 {
     // @formatter:off
-    interface WeekChartUi extends UiBinder<Widget, WeekChartView> {}
+    interface WeekChartUi extends UiBinder<Widget, QuickChartView> {}
     private static WeekChartUi uiBinder = GWT.create(WeekChartUi.class);
     
     @UiField(provided = true) WeekChartWidget weekChart;
@@ -24,7 +32,7 @@ public class WeekChartView extends ViewWithUiHandlers<WeekChartUiHandlers> imple
     private final Widget widget;
 
 
-    public WeekChartView()
+    public QuickChartView()
     {
         this.weekChart = new WeekChartWidget(200, 200, new String[] {"Mo", "Tue", "Wed", "Thu", "Fr", "Sat", "Sun"});
         this.widget = uiBinder.createAndBindUi(this);
@@ -46,7 +54,7 @@ public class WeekChartView extends ViewWithUiHandlers<WeekChartUiHandlers> imple
 
 
     @UiHandler("weekChart")
-    void handleWeekNavigation(WeekNavigationEvent event)
+    void handleWeekNavigation(ActivitiesNavigationEvent event)
     {
         if (getUiHandlers() != null)
         {

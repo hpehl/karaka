@@ -8,12 +8,12 @@ import name.pehl.tire.client.activity.ActivityReader;
 import name.pehl.tire.client.activity.ActivityWriter;
 import name.pehl.tire.client.activity.NewActivityPresenter;
 import name.pehl.tire.client.activity.NewActivityView;
+import name.pehl.tire.client.activity.QuickChartPresenter;
+import name.pehl.tire.client.activity.QuickChartView;
 import name.pehl.tire.client.activity.RecentActivitiesPresenter;
 import name.pehl.tire.client.activity.RecentActivitiesView;
 import name.pehl.tire.client.activity.day.DayReader;
 import name.pehl.tire.client.activity.week.GetWeekHandler;
-import name.pehl.tire.client.activity.week.WeekChartPresenter;
-import name.pehl.tire.client.activity.week.WeekChartView;
 import name.pehl.tire.client.activity.week.WeekReader;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
@@ -92,7 +92,7 @@ public class TireModule extends AbstractPresenterModule
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
         // PresenterWidgets (a-z)
-        bindPresenterWidget(WeekChartPresenter.class, WeekChartPresenter.MyView.class, WeekChartView.class);
+        bindPresenterWidget(QuickChartPresenter.class, QuickChartPresenter.MyView.class, QuickChartView.class);
         bindPresenterWidget(CockpitPresenter.class, CockpitPresenter.MyView.class, CockpitView.class);
         bindPresenterWidget(NavigationPresenter.class, NavigationPresenter.MyView.class, NavigationView.class);
         bindPresenterWidget(NewActivityPresenter.class, NewActivityPresenter.MyView.class, NewActivityView.class);

@@ -1,6 +1,6 @@
 package name.pehl.tire.client.application;
 
-import name.pehl.tire.client.activity.week.WeekChartPresenter;
+import name.pehl.tire.client.activity.QuickChartPresenter;
 import name.pehl.tire.client.cockpit.CockpitPresenter;
 import name.pehl.tire.client.navigation.NavigationPresenter;
 
@@ -26,7 +26,7 @@ import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
  * <ul>
  * <li>{@link NavigationPresenter} in {@link #SLOT_Navigation}
  * <li>{@link CockpitPresenter} in {@link #SLOT_Cockpit}
- * <li>{@link WeekChartPresenter} in {@link #SLOT_QuickChart}
+ * <li>{@link QuickChartPresenter} in {@link #SLOT_QuickChart}
  * </ul>
  * 
  * @author $Author$
@@ -67,13 +67,13 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 
     private final NavigationPresenter navigationPresenter;
     private final CockpitPresenter cockpitPresenter;
-    private final WeekChartPresenter quickChartPresenter;
+    private final QuickChartPresenter quickChartPresenter;
 
 
     @Inject
     public ApplicationPresenter(final EventBus eventBus, final MyView view, final MyProxy proxy,
             final NavigationPresenter navigationPresenter, final CockpitPresenter cockpitPresenter,
-            final WeekChartPresenter quickChartPresenter)
+            final QuickChartPresenter quickChartPresenter)
     {
         super(eventBus, view, proxy);
         this.navigationPresenter = navigationPresenter;
@@ -92,7 +92,7 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     /**
      * Sets {@link NavigationPresenter} in {@link #SLOT_Navigation},
      * {@link CockpitPresenter} in {@link #SLOT_Cockpit} and
-     * {@link WeekChartPresenter} in {@link #SLOT_QuickChart}.
+     * {@link QuickChartPresenter} in {@link #SLOT_QuickChart}.
      * 
      * @see com.gwtplatform.mvp.client.PresenterWidget#onReveal()
      */

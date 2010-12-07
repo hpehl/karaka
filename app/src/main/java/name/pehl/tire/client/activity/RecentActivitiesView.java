@@ -15,7 +15,7 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
  * @version $Date$ $Revision: 142
  *          $
  */
-public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiHandlers> implements
+public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigationUiHandlers> implements
         RecentActivitiesPresenter.MyView
 {
     // @formatter:off

@@ -1,8 +1,10 @@
 package name.pehl.tire.client.activity.week;
 
 import static java.lang.Math.*;
+import name.pehl.tire.client.activity.ActivitiesNavigation.Direction;
+import name.pehl.tire.client.activity.ActivitiesNavigation.Unit;
+import name.pehl.tire.client.activity.ActivitiesNavigationEvent;
 import name.pehl.tire.client.activity.day.Day;
-import name.pehl.tire.client.navigation.Direction;
 import name.pehl.tire.client.ui.UiUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -16,7 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @version $Date$ $Revision: 102
  *          $
  */
-public class WeekChartWidget extends Widget
+public class WeekChartWidget extends Widget implements ActivitiesNavigationEvent.HasActivitiesNavigationHandlers
 {
 
     private static final int TITLE_HEIGHT = 30;
@@ -261,27 +263,29 @@ public class WeekChartWidget extends Widget
 
     // --------------------------------------------------------- event handling
 
-    public HandlerRegistration addCalendarWeekNavigationHandler(WeekNavigationEvent.WeekNavigationHandler handler)
+    @Override
+    public HandlerRegistration addActivitiesNavigationHandler(
+            ActivitiesNavigationEvent.ActivitiesNavigationHandler handler)
     {
-        return addHandler(handler, WeekNavigationEvent.getType());
+        return addHandler(handler, ActivitiesNavigationEvent.getType());
     }
 
 
     private void onPrev()
     {
-        WeekNavigationEvent.fire(this, Direction.PREV);
+        ActivitiesNavigationEvent.fire(this, Direction.PREV, Unit.WEEK);
     }
 
 
     private void onCurrent()
     {
-        WeekNavigationEvent.fire(this, Direction.CURRENT);
+        ActivitiesNavigationEvent.fire(this, Direction.CURRENT, Unit.WEEK);
     }
 
 
     private void onNext()
     {
-        WeekNavigationEvent.fire(this, Direction.NEXT);
+        ActivitiesNavigationEvent.fire(this, Direction.NEXT, Unit.WEEK);
     }
 
 
