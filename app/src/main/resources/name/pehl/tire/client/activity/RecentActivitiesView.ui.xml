@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 
     <g:HTMLPanel>
-        <h1>Recent Entries</h1>
+        <h1><g:InlineLabel ui:field="header">Recent Entries</g:InlineLabel></h1>
         <p>
             Lorem ipsum dolor sit amet , consectetur adipiscing elit. Morbi arcu magna, elementum non gravida sed, luctus
             vitae dui.

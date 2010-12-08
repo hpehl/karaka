@@ -1,12 +1,14 @@
 package name.pehl.tire.client.activity;
 
 import name.pehl.tire.client.activity.ActivitiesNavigation.Unit;
+import name.pehl.tire.client.ui.UiUtils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
@@ -22,6 +24,7 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     interface RecentActivitiesUi extends UiBinder<Widget, RecentActivitiesView> {}
     private static RecentActivitiesUi uiBinder = GWT.create(RecentActivitiesUi.class);
 
+    @UiField InlineLabel header;
     @UiField(provided = true) CellTable<Activity> activities;
     // @formatter:on
 
@@ -34,7 +37,6 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
         activities.setRowCount(0);
         addColumns(activities);
         widget = uiBinder.createAndBindUi(this);
-
     }
 
 
@@ -84,6 +86,11 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     @Override
     public void updateActivities(Activities activities, Unit unit)
     {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Recent activities by ").append(unit.name().toLowerCase()).append(": ")
+                .append(UiUtils.DATE_FORMAT.format(activities.getStart().getDate())).append(" - ")
+                .append(UiUtils.DATE_FORMAT.format(activities.getEnd().getDate()));
+        this.header.setText(builder.toString());
         this.activities.setRowData(0, activities.getActivities());
         this.activities.setRowCount(activities.getActivities().size());
     }
