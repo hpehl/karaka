@@ -3,16 +3,14 @@
 <module rename-to="tire">
 
     <!-- GWT -->
+    <inherits name="com.google.common.annotations.Annotations" />
+    <inherits name="com.google.common.base.Base" />
     <inherits name="com.google.gwt.cell.Cell" />
     <inherits name="com.google.gwt.inject.Inject" />
     <inherits name="com.google.gwt.json.JSON" />
-    <inherits name="com.google.gwt.logging.Logging"/>
+    <inherits name="com.google.gwt.logging.Logging" />
     <inherits name="com.google.gwt.uibinder.UiBinder" />
     <inherits name="com.google.gwt.user.User" />
-
-    <!-- name.pehl -->
-    <inherits name="name.pehl.piriti.Piriti" />
-    <inherits name="name.pehl.piriti.restlet.PiritiRestlet" />
 
     <!-- Restlet -->
     <inherits name="org.restlet.Restlet" />
@@ -20,6 +18,11 @@
     <!-- GWTP -->
     <inherits name="com.gwtplatform.dispatch.Dispatch" />
     <inherits name="com.gwtplatform.mvp.Mvp" />
+
+    <!-- name.pehl -->
+    <inherits name="name.pehl.piriti.Piriti" />
+    <inherits name="name.pehl.piriti.restlet.PiritiRestlet" />
+    <inherits name="name.pehl.tire.Model" />
 
     <entry-point class="name.pehl.tire.client.Tire" />
     <source path="client">

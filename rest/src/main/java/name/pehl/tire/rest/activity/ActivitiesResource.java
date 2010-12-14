@@ -66,56 +66,61 @@ public class ActivitiesResource extends ServerResource
     @Get("json")
     public Representation getActivities()
     {
+        int year = 0;
+        int month = 1;
+        int week = 1;
+        int day = 1;
         String json = null;
         List<Activity> activities = null;
 
         Form form = getRequest().getResourceRef().getQueryAsForm();
         ActivityParameters ap = new ActivityParameters().parse(getRequestAttributes());
-        if (ap.isCurrentMonth())
+        if (ap.isCurrentMonth() || ap.isCurrentWeek() || ap.isToday())
         {
             DateTime dateTime = new DateTime(parseTimeZone(form));
-            int year = dateTime.year().get();
-            int month = dateTime.monthOfYear().get();
-            activities = ensureValidActivities(dao.findByYearMonth(year, month));
-        }
-        else if (ap.isCurrentWeek())
-        {
-            DateTime dateTime = new DateTime(parseTimeZone(form));
-            int year = dateTime.year().get();
-            int month = dateTime.monthOfYear().get();
-            int week = dateTime.weekOfWeekyear().get();
-            // activities = ensureValidActivities(dao.findByYearWeek(year,
-            // week));
-            activities = ensureValidActivities(new ActivitiesGenerator().generate(year, week));
-            JsonWeek jsonWeek = sortActivitiesByWeek(year, month, week, activities);
-            json = gson.toJson(jsonWeek);
-        }
-        else if (ap.isToday())
-        {
-            DateTime dateTime = new DateTime(parseTimeZone(form));
-            int year = dateTime.year().get();
-            int month = dateTime.monthOfYear().get();
-            int day = dateTime.dayOfMonth().get();
-            activities = ensureValidActivities(dao.findByYearMonthDay(year, month, day));
+            year = dateTime.year().get();
+            month = dateTime.monthOfYear().get();
+            week = dateTime.weekOfWeekyear().get();
+            day = dateTime.dayOfMonth().get();
+            if (ap.isCurrentMonth())
+            {
+                activities = ensureValidActivities(dao.findByYearMonth(year, month));
+            }
+            else if (ap.isCurrentWeek())
+            {
+                // activities = ensureValidActivities(dao.findByYearWeek(year,
+                // week));
+                activities = ensureValidActivities(new ActivitiesGenerator().generate(year, week));
+            }
+            else if (ap.isToday())
+            {
+                activities = ensureValidActivities(dao.findByYearMonthDay(year, month, day));
+            }
         }
         else if (ap.hasYear() && ap.hasMonth() && ap.hasDay())
         {
-            activities = ensureValidActivities(dao.findByYearMonthDay(ap.getYear(), ap.getMonth(), ap.getDay()));
+            year = ap.getYear();
+            month = ap.getMonth();
+            day = ap.getDay();
+            activities = ensureValidActivities(dao.findByYearMonthDay(year, month, day));
         }
         else if (ap.hasYear() && ap.hasMonth())
         {
-            activities = ensureValidActivities(dao.findByYearMonth(ap.getYear(), ap.getMonth()));
+            year = ap.getYear();
+            month = ap.getMonth();
+            activities = ensureValidActivities(dao.findByYearMonth(year, month));
         }
         else if (ap.hasYear() && ap.hasWeek())
         {
-            // activities =
-            // ensureValidActivities(dao.findByYearWeek(ap.getYear(),
-            // ap.getWeek()));
-            // TODO Set month
+            year = ap.getYear();
+            week = ap.getWeek();
+            // activities = ensureValidActivities(dao.findByYearWeek(year,
+            // week));
             activities = ensureValidActivities(new ActivitiesGenerator().generate(ap.getYear(), ap.getWeek()));
-            JsonWeek jsonWeek = sortActivitiesByWeek(ap.getYear(), 0, ap.getWeek(), activities);
-            json = gson.toJson(jsonWeek);
         }
+
+        Activities sortedActivities = sortActivities(year, month, week, activities);
+        json = gson.toJson(sortedActivities);
         return new JsonRepresentation(json);
     }
 
@@ -134,27 +139,27 @@ public class ActivitiesResource extends ServerResource
 
 
     /**
-     * Sort the specified activities into {@link JsonDay} instances and the days
-     * into a {@link JsonWeek} instance.
+     * Sort the specified activities into {@link Day} instances and the days
+     * into a {@link Activities} instance.
      * 
      * @param activities
      * @return
      */
-    private JsonWeek sortActivitiesByWeek(int year, int month, int week, List<Activity> activities)
+    private Activities sortActivities(int year, int month, int week, List<Activity> activities)
     {
-        SortedSet<JsonDay> days = new TreeSet<JsonDay>();
-        SortedSetMultimap<JsonDay, Activity> activitiesPerDay = TreeMultimap.create();
+        SortedSet<Day> days = new TreeSet<Day>();
+        SortedSetMultimap<Day, Activity> activitiesPerDay = TreeMultimap.create();
         for (Activity activity : activities)
         {
-            JsonDay day = new JsonDay(activity.getStart().getDate());
+            Day day = new Day(activity.getStart().getDate());
             activitiesPerDay.put(day, activity);
         }
-        for (JsonDay day : activitiesPerDay.keySet())
+        for (Day day : activitiesPerDay.keySet())
         {
             day.activities = activitiesPerDay.get(day);
             days.add(day);
         }
-        return new JsonWeek(year, month, week, days);
+        return new Activities(year, month, week, days);
     }
 
 

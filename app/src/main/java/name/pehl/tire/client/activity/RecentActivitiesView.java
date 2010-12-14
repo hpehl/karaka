@@ -1,15 +1,34 @@
 package name.pehl.tire.client.activity;
 
-import name.pehl.tire.client.activity.ActivitiesNavigation.Unit;
-import name.pehl.tire.client.ui.UiUtils;
+import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
 
+import java.util.List;
+
+import name.pehl.tire.client.activity.ActivitiesNavigation.Unit;
+import name.pehl.tire.client.resources.CellTableResources;
+import name.pehl.tire.client.tag.Tag;
+import name.pehl.tire.client.ui.FormatUtils;
+import name.pehl.tire.model.Status;
+
+import com.google.gwt.cell.client.AbstractSafeHtmlCell;
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.text.shared.AbstractSafeHtmlRenderer;
+import com.google.gwt.text.shared.SafeHtmlRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.cellview.client.TextHeader;
+import com.google.gwt.user.client.ui.InlineHyperlink;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
@@ -20,37 +39,161 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigationUiHandlers> implements
         RecentActivitiesPresenter.MyView
 {
+    interface ActivityTemplates extends SafeHtmlTemplates
+    {
+        @Template("<span title=\"{1}\">{0}</span>")
+        SafeHtml nameDescription(String name, String description);
+
+
+        @Template("<mark>{0}</mark>")
+        SafeHtml tag(String name);
+    }
+
+    private static final ActivityTemplates ACTIVITY_TEMPLATES = GWT.create(ActivityTemplates.class);
+
     // @formatter:off
     interface RecentActivitiesUi extends UiBinder<Widget, RecentActivitiesView> {}
     private static RecentActivitiesUi uiBinder = GWT.create(RecentActivitiesUi.class);
 
-    @UiField InlineLabel header;
-    @UiField(provided = true) CellTable<Activity> activities;
+    @UiField InlineLabel rangeInfo;
+    @UiField InlineHyperlink previous;
+    @UiField InlineHyperlink next;
+    @UiField InlineHyperlink lastMonth;
+    @UiField InlineHyperlink lastWeek;
+    @UiField InlineHyperlink currentMonth;
+    @UiField InlineHyperlink currentWeek;
+    @UiField(provided = true) CellTable<Activity> activitiesTable;
     // @formatter:on
 
     private final Widget widget;
+    private final CellTableResources ctr;
+    private Activities currentActivities;
 
 
-    public RecentActivitiesView()
+    @Inject
+    public RecentActivitiesView(final CellTableResources ctr)
     {
-        activities = new CellTable<Activity>();
-        activities.setRowCount(0);
-        addColumns(activities);
+        this.ctr = ctr;
+        this.ctr.cellTableStyle().ensureInjected();
+        activitiesTable = new CellTable<Activity>(Integer.MAX_VALUE, this.ctr);
+        activitiesTable.setRowCount(0);
+        activitiesTable.setKeyboardSelectionPolicy(DISABLED);
+        activitiesTable.setRowStyles(new RowStyles<Activity>()
+        {
+            @Override
+            public String getStyleNames(Activity row, int rowIndex)
+            {
+                if (row.getStatus() == Status.RUNNING)
+                {
+                    return ctr.cellTableStyle().activeActivity();
+                }
+                return null;
+            }
+        });
+        addColumns(activitiesTable);
         widget = uiBinder.createAndBindUi(this);
     }
 
 
     private void addColumns(CellTable<Activity> activities)
     {
-        TextColumn<Activity> nameAndTagColumn = new TextColumn<Activity>()
+        // Column #0: Start date
+        TextColumn<Activity> startColumn = new TextColumn<Activity>()
         {
             @Override
             public String getValue(Activity activity)
             {
-                return activity.getName();
+                return FormatUtils.format(activity.getStart());
             }
         };
-        activities.addColumn(nameAndTagColumn);
+        activities.addColumnStyleName(0, ctr.cellTableStyle().startColumn());
+        activities.addColumn(startColumn, null, new TextHeader(null)
+        {
+            @Override
+            public String getValue()
+            {
+                if (currentActivities != null)
+                {
+                    return currentActivities.size() + " days";
+                }
+                return null;
+            }
+        });
+
+        // Column #1: Duration
+        // TODO Right align as soon as
+        // http://code.google.com/p/google-web-toolkit/issues/detail?id=5623 is
+        // released
+        TextColumn<Activity> durationColumn = new TextColumn<Activity>()
+        {
+            @Override
+            public String getValue(Activity activity)
+            {
+                return FormatUtils.inHours(activity.getMinutes());
+            }
+        };
+        activities.addColumnStyleName(1, ctr.cellTableStyle().durationColumn());
+        activities.addColumn(durationColumn, null, new TextHeader(null)
+        {
+            @Override
+            public String getValue()
+            {
+                if (currentActivities != null)
+                {
+                    return FormatUtils.inHours(currentActivities.getMinutes());
+                }
+                return null;
+            }
+        });
+
+        // Column #2: Name, Description & Tags
+        SafeHtmlRenderer<Activity> nameRenderer = new AbstractSafeHtmlRenderer<Activity>()
+        {
+            @Override
+            public SafeHtml render(Activity activity)
+            {
+                SafeHtml nameDescription = ACTIVITY_TEMPLATES.nameDescription(activity.getName(),
+                        activity.getDescription());
+                List<Tag> tags = activity.getTags();
+                if (tags.isEmpty())
+                {
+                    return nameDescription;
+                }
+                else
+                {
+                    SafeHtmlBuilder safeHtmlBuilder = new SafeHtmlBuilder();
+                    safeHtmlBuilder.append(nameDescription);
+                    for (Tag tag : tags)
+                    {
+                        safeHtmlBuilder.append(' ').append(ACTIVITY_TEMPLATES.tag(tag.getName()));
+                    }
+                    return safeHtmlBuilder.toSafeHtml();
+                }
+            }
+        };
+        Cell<Activity> nameCell = new AbstractSafeHtmlCell<Activity>(nameRenderer)
+        {
+            @Override
+            protected void render(SafeHtml data, Object key, SafeHtmlBuilder sb)
+            {
+                if (data != null)
+                {
+                    sb.append(data);
+                }
+            }
+        };
+        Column<Activity, Activity> nameColumn = new Column<Activity, Activity>(nameCell)
+        {
+            @Override
+            public Activity getValue(Activity activity)
+            {
+                return activity;
+            }
+        };
+        activities.addColumnStyleName(2, ctr.cellTableStyle().nameColumn());
+        activities.addColumn(nameColumn);
+
+        // Column #3: Project
         TextColumn<Activity> projectColumn = new TextColumn<Activity>()
         {
             @Override
@@ -63,16 +206,10 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
                 return null;
             }
         };
+        activities.addColumnStyleName(3, ctr.cellTableStyle().projectColumn());
         activities.addColumn(projectColumn);
-        TextColumn<Activity> durationColumn = new TextColumn<Activity>()
-        {
-            @Override
-            public String getValue(Activity activity)
-            {
-                return "nyi";
-            }
-        };
-        activities.addColumn(durationColumn);
+
+        // TODO Column #4: Actions
     }
 
 
@@ -86,12 +223,12 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     @Override
     public void updateActivities(Activities activities, Unit unit)
     {
+        currentActivities = activities;
         StringBuilder builder = new StringBuilder();
-        builder.append("Recent activities by ").append(unit.name().toLowerCase()).append(": ")
-                .append(UiUtils.DATE_FORMAT.format(activities.getStart().getDate())).append(" - ")
-                .append(UiUtils.DATE_FORMAT.format(activities.getEnd().getDate()));
-        this.header.setText(builder.toString());
-        this.activities.setRowData(0, activities.getActivities());
-        this.activities.setRowCount(activities.getActivities().size());
+        builder.append(FormatUtils.format(activities.getStart().getDate())).append(" - ")
+                .append(FormatUtils.format(activities.getEnd().getDate()));
+        rangeInfo.setText(builder.toString());
+        activitiesTable.setRowData(0, activities.getActivities());
+        activitiesTable.setRowCount(activities.getActivities().size());
     }
 }

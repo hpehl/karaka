@@ -8,6 +8,7 @@ import name.pehl.tire.client.Defaults;
 import name.pehl.tire.client.model.DescriptiveModel;
 import name.pehl.tire.client.project.Project;
 import name.pehl.tire.client.tag.Tag;
+import name.pehl.tire.model.Status;
 
 /**
  * @author $LastChangedBy:$
@@ -21,6 +22,7 @@ public class Activity extends DescriptiveModel
     @Json private long pause;
     @Json private long minutes;
     @Json private boolean billable;
+    @Json private Status status;
     @Json private Project project;
     @Json private List<Tag> tags;
     // @formatter:on
@@ -171,6 +173,18 @@ public class Activity extends DescriptiveModel
     public void setBillable(boolean billable)
     {
         this.billable = billable;
+    }
+
+
+    public Status getStatus()
+    {
+        return status;
+    }
+
+
+    public void setStatus(Status status)
+    {
+        this.status = status;
     }
 
 

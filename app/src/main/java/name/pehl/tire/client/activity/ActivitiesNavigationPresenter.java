@@ -3,8 +3,6 @@ package name.pehl.tire.client.activity;
 import static name.pehl.tire.client.activity.ActivitiesNavigation.Unit.WEEK;
 import name.pehl.tire.client.activity.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.activity.ActivitiesNavigation.Unit;
-import name.pehl.tire.client.activity.week.GetWeekAction;
-import name.pehl.tire.client.activity.week.GetWeekResult;
 import name.pehl.tire.client.dispatch.TireCallback;
 
 import com.google.gwt.event.shared.EventBus;
@@ -16,7 +14,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-
 public abstract class ActivitiesNavigationPresenter<V extends ActivitiesNavigationView> extends PresenterWidget<V>
         implements ActivitiesNavigationUiHandlers, ActivitiesLoadedHandler
 {
@@ -33,16 +30,9 @@ public abstract class ActivitiesNavigationPresenter<V extends ActivitiesNavigati
         this.dispatcher = dispatcher;
         this.placeManager = placeManager;
         this.unit = WEEK;
-        this.and = new ActivitiesNavigationData(0, 0, 0);
+        this.and = new ActivitiesNavigationData();
         getView().setUiHandlers(this);
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
-    }
-
-
-    @Override
-    protected void onReveal()
-    {
-        loadActivities();
     }
 
 
@@ -50,11 +40,10 @@ public abstract class ActivitiesNavigationPresenter<V extends ActivitiesNavigati
     {
         if (unit == WEEK)
         {
-            dispatcher.execute(new GetWeekAction(and.getYear(), and.getWeek()), new TireCallback<GetWeekResult>(
-                    placeManager)
+            dispatcher.execute(new GetActivitiesAction(and), new TireCallback<GetActivitiesResult>(placeManager)
             {
                 @Override
-                public void onSuccess(GetWeekResult result)
+                public void onSuccess(GetActivitiesResult result)
                 {
                     Activities activities = result.getActivities();
                     if (activities != null)
@@ -89,7 +78,7 @@ public abstract class ActivitiesNavigationPresenter<V extends ActivitiesNavigati
     @Override
     public void onCurrent()
     {
-        and = new ActivitiesNavigationData(0, 0, 0);
+        and = new ActivitiesNavigationData();
         loadActivities();
     }
 

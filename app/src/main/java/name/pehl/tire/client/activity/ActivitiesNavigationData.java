@@ -1,7 +1,7 @@
 package name.pehl.tire.client.activity;
 
 /**
- * Simple data holder for navigation over activities by week / month. Month and
+ * Simple data holder for navigation over activities by month / week. Month and
  * week are <b>not</b> synced!
  * 
  * @author $Author$
@@ -15,13 +15,12 @@ public class ActivitiesNavigationData
     private int week;
 
 
-    /**
-     * Construct a new instance of this class
-     * 
-     * @param year
-     * @param month
-     * @param week
-     */
+    public ActivitiesNavigationData()
+    {
+        this(0, 0, 0);
+    }
+
+
     public ActivitiesNavigationData(int year, int month, int week)
     {
         super();

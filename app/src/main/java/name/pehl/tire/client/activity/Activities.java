@@ -106,6 +106,12 @@ public class Activities implements Iterable<Day>
     }
 
 
+    public int size()
+    {
+        return days.size();
+    }
+
+
     public void clearDays()
     {
         days.clear();
@@ -138,20 +144,14 @@ public class Activities implements Iterable<Day>
     }
 
 
-    public int getMinutes()
+    public long getMinutes()
     {
-        int minutes = 0;
+        long minutes = 0;
         for (Day day : this)
         {
             minutes += day.getMinutes();
         }
         return minutes;
-    }
-
-
-    public double getHours()
-    {
-        return getMinutes() / 60.0;
     }
 
 

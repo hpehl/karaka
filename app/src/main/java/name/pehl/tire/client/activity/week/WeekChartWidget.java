@@ -7,7 +7,7 @@ import name.pehl.tire.client.activity.ActivitiesNavigation.Direction;
 import name.pehl.tire.client.activity.ActivitiesNavigation.Unit;
 import name.pehl.tire.client.activity.ActivitiesNavigationEvent;
 import name.pehl.tire.client.activity.day.Day;
-import name.pehl.tire.client.ui.UiUtils;
+import name.pehl.tire.client.ui.FormatUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -33,7 +33,7 @@ public class WeekChartWidget extends Widget implements ActivitiesNavigationEvent
 
     // -------------------------------------------------------- private members
 
-    private int max;
+    private long max;
     private final int width;
     private final int height;
     private final String[] weekdays;
@@ -208,9 +208,10 @@ public class WeekChartWidget extends Widget implements ActivitiesNavigationEvent
         {
             // update title
             StringBuilder value = new StringBuilder();
-            value.append("CW ").append(activities.getWeek()).append(" - ").append(activities.getHours()).append("h")
-                    .append("\n").append(UiUtils.DATE_FORMAT.format(activities.getStart().getDate())).append(" - ")
-                    .append(UiUtils.DATE_FORMAT.format(activities.getEnd().getDate()));
+            value.append("CW ").append(activities.getWeek()).append(" - ")
+                    .append(FormatUtils.inHours(activities.getMinutes())).append("\n")
+                    .append(FormatUtils.format(activities.getStart().getDate())).append(" - ")
+                    .append(FormatUtils.format(activities.getEnd().getDate()));
             internalUpdateTitle(title, value.toString());
 
             // update max
@@ -230,8 +231,8 @@ public class WeekChartWidget extends Widget implements ActivitiesNavigationEvent
                 {
                     JavaScriptObject column = columns[index];
                     String path = path(index, day.getMinutes());
-                    String date = UiUtils.DATE_FORMAT.format(day.getDate());
-                    String hours = UiUtils.NUMBER_FORMAT.format(day.getMinutes() / 60.0);
+                    String date = FormatUtils.format(day.getDate());
+                    String hours = FormatUtils.inHours(day.getMinutes());
                     internalAnimate(column, path, date, hours);
                 }
                 index++;
@@ -247,12 +248,12 @@ public class WeekChartWidget extends Widget implements ActivitiesNavigationEvent
 
     private native void internalAnimate(JavaScriptObject column, String path, String date, String hours) /*-{
         column.animate({path: path}, 1500, ">");
-        column.attr("title", date + ": " + hours + "h");
+        column.attr("title", date + ": " + hours);
     }-*/;
 
 
     private native void internalUpdate(JavaScriptObject column, String path, String date, String hours) /*-{
-        column.attr({path: path, title: date + ": " + hours + "h"});
+        column.attr({path: path, title: date + ": " + hours});
     }-*/;
 
 
@@ -286,7 +287,7 @@ public class WeekChartWidget extends Widget implements ActivitiesNavigationEvent
 
     // --------------------------------------------------------- helper methods
 
-    private String path(int index, int minutes)
+    private String path(int index, long minutes)
     {
         StringBuilder path = new StringBuilder();
         long x = round(index * (columnWidth + columnGap));

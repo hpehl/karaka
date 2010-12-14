@@ -50,6 +50,15 @@
             <artifactId>gwt-user</artifactId>
         </dependency>
         <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <classifier>gwt</classifier>
+        </dependency>
+        <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp</artifactId>
         </dependency>
@@ -140,29 +149,10 @@
         <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
         <plugins>
             <plugin>
-                <groupId>org.bsc.maven</groupId>
-                <artifactId>maven-processor-plugin</artifactId>
-                <version>1.3.6</version>
-                <executions>
-                    <execution>
-                        <id>process</id>
-                        <goals>
-                            <goal>process</goal>
-                        </goals>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <outputDiagnostics>false</outputDiagnostics>
-                            <outputDirectory>${project.build.directory}/generated-sources/apt</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Disable annotation processors during normal compilation -->
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <compilerArgument>-proc:none</compilerArgument>
+                    <generatedSourcesDirectory>${project.build.directory}/generated-sources/apt</generatedSourcesDirectory>
                 </configuration>
             </plugin>
             <plugin>

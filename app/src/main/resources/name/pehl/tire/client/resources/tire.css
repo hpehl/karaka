@@ -34,7 +34,7 @@ p {
     line-height: 1.2em;
 }
 
-h1,h2,p,input {
+h1,h2,p,input,td,div {
     color: #3d3d3d;
 }
 

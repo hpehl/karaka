@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import name.pehl.tire.model.Activity;
+import name.pehl.tire.model.Tag;
 import name.pehl.tire.model.Time;
 
 import org.joda.time.MutableDateTime;
@@ -15,7 +16,7 @@ import org.joda.time.MutableDateTime;
  */
 public class ActivitiesGenerator
 {
-    private Random random = new Random();
+    private final Random random = new Random();
 
 
     public List<Activity> generate(int year, int week)
@@ -29,6 +30,13 @@ public class ActivitiesGenerator
             activity.setStart(new Time(mdt.toDate()));
             int hour = mdt.hourOfDay().get() + 2 + random.nextInt(6);
             activity.setEnd(new Time(mdt.copy().hourOfDay().set(hour).toDate()));
+
+            int tags = random.nextInt(3);
+            for (int j = 0; j < tags; j++)
+            {
+                activity.addTag(new Tag(randomString(5)));
+            }
+
             activities.add(activity);
             mdt.addDays(1);
         }

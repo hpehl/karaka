@@ -7,6 +7,7 @@ import name.pehl.tire.client.about.AboutView;
 import name.pehl.tire.client.activity.ActivitiesReader;
 import name.pehl.tire.client.activity.ActivityReader;
 import name.pehl.tire.client.activity.ActivityWriter;
+import name.pehl.tire.client.activity.GetActivitiesHandler;
 import name.pehl.tire.client.activity.NewActivityPresenter;
 import name.pehl.tire.client.activity.NewActivityView;
 import name.pehl.tire.client.activity.QuickChartPresenter;
@@ -14,7 +15,6 @@ import name.pehl.tire.client.activity.QuickChartView;
 import name.pehl.tire.client.activity.RecentActivitiesPresenter;
 import name.pehl.tire.client.activity.RecentActivitiesView;
 import name.pehl.tire.client.activity.day.DayReader;
-import name.pehl.tire.client.activity.week.GetWeekHandler;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
 import name.pehl.tire.client.client.ClientPresenter;
@@ -33,6 +33,7 @@ import name.pehl.tire.client.project.ProjectView;
 import name.pehl.tire.client.project.ProjectWriter;
 import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.report.ReportView;
+import name.pehl.tire.client.resources.CellTableResources;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.tag.TagPresenter;
@@ -71,9 +72,10 @@ public class TireModule extends AbstractPresenterModule
         bind(ProxyFailureHandler.class).to(DefaultProxyFailureHandler.class).in(Singleton.class);
         bind(I18n.class).in(Singleton.class);
         bind(Resources.class).in(Singleton.class);
+        bind(CellTableResources.class).in(Singleton.class);
 
         // Rest Action Handlers
-        bind(GetWeekHandler.class);
+        bind(GetActivitiesHandler.class);
 
         // JsonReader / Writer
         // Bind them as eager singletons so that the JsonRegistry

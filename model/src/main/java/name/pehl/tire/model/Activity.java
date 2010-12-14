@@ -50,7 +50,7 @@ public class Activity extends DescriptiveEntity implements HasUser, Comparable<A
     private Status status;
 
     @Embedded
-    private List<Tag> tags;
+    private final List<Tag> tags;
 
     private Key<Project> project;
 
@@ -97,7 +97,7 @@ public class Activity extends DescriptiveEntity implements HasUser, Comparable<A
     @Override
     public int compareTo(Activity that)
     {
-        return ComparisonChain.start().compare(this.start, that.start).result();
+        return ComparisonChain.start().compare(that.start, this.start).result();
     }
 
 

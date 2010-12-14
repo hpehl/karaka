@@ -7,22 +7,22 @@ import name.pehl.tire.model.Activity;
 
 import com.google.common.collect.ComparisonChain;
 
-class JsonDay implements Comparable<JsonDay>
+class Day implements Comparable<Day>
 {
     final Date date;
     SortedSet<Activity> activities;
 
 
-    JsonDay(Date date)
+    Day(Date date)
     {
         this.date = date;
     }
 
 
     @Override
-    public int compareTo(JsonDay that)
+    public int compareTo(Day that)
     {
-        return ComparisonChain.start().compare(this.date, that.date).result();
+        return ComparisonChain.start().compare(that.date, this.date).result();
     }
 
 
@@ -31,7 +31,7 @@ class JsonDay implements Comparable<JsonDay>
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((date == null) ? 0 : date.hashCode());
+        result = prime * result + (date == null ? 0 : date.hashCode());
         return result;
     }
 
@@ -51,7 +51,7 @@ class JsonDay implements Comparable<JsonDay>
         {
             return false;
         }
-        JsonDay other = (JsonDay) obj;
+        Day other = (Day) obj;
         if (date == null)
         {
             if (other.date != null)

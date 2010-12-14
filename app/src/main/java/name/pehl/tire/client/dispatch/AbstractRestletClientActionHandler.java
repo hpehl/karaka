@@ -2,6 +2,9 @@ package name.pehl.tire.client.dispatch;
 
 import java.io.IOException;
 
+import name.pehl.piriti.client.json.JsonReader;
+import name.pehl.piriti.restlet.client.json.PiritiJsonRepresentation;
+
 import org.restlet.client.Request;
 import org.restlet.client.Response;
 import org.restlet.client.Uniform;
@@ -29,24 +32,26 @@ import com.gwtplatform.dispatch.shared.Result;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public abstract class AbstractRestletClientActionHandler<A extends Action<R>, R extends Result> extends
+public abstract class AbstractRestletClientActionHandler<T, A extends Action<R>, R extends Result> extends
         AbstractClientActionHandler<A, R>
 {
     protected final Method method;
     protected final MediaType mediaType;
     protected final String securityCookieName;
     protected final SecurityCookieAccessor securityCookieAccessor;
+    protected final JsonReader<T> jsonReader;
 
 
     protected AbstractRestletClientActionHandler(final Class<A> actionType, final Method method,
             final MediaType mediaType, final String securityCookieName,
-            final SecurityCookieAccessor securityCookieAccessor)
+            final SecurityCookieAccessor securityCookieAccessor, final JsonReader<T> jsonReader)
     {
         super(actionType);
         this.method = method;
         this.mediaType = mediaType;
         this.securityCookieName = securityCookieName;
         this.securityCookieAccessor = securityCookieAccessor;
+        this.jsonReader = jsonReader;
     }
 
 
@@ -78,7 +83,9 @@ public abstract class AbstractRestletClientActionHandler<A extends Action<R>, R 
                 {
                     try
                     {
-                        resultCallback.onSuccess(extractResult(response));
+                        PiritiJsonRepresentation<T> representation = new PiritiJsonRepresentation<T>(jsonReader,
+                                response.getEntity());
+                        resultCallback.onSuccess(extractResult(response, representation));
                     }
                     catch (IOException e)
                     {
@@ -97,7 +104,8 @@ public abstract class AbstractRestletClientActionHandler<A extends Action<R>, R 
     protected abstract String getUrl(A action);
 
 
-    protected abstract R extractResult(Response response) throws IOException;
+    protected abstract R extractResult(Response response, PiritiJsonRepresentation<T> representation)
+            throws IOException;
 
 
     /**

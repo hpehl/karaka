@@ -106,9 +106,9 @@ public class Day implements Iterable<Activity>
     }
 
 
-    public int getMinutes()
+    public long getMinutes()
     {
-        int minutes = 0;
+        long minutes = 0;
         for (Activity activity : this)
         {
             minutes += activity.getMinutes();
