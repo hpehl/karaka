@@ -1,5 +1,8 @@
 package name.pehl.tire.client.activity;
 
+import static name.pehl.tire.client.activity.Unit.MONTH;
+import static name.pehl.tire.client.activity.Unit.WEEK;
+
 import java.io.IOException;
 
 import name.pehl.piriti.restlet.client.UrlBuilder;
@@ -34,13 +37,27 @@ public class GetActivitiesHandler extends
     protected String getUrl(GetActivitiesAction action)
     {
         UrlBuilder urlBuilder = new UrlBuilder().setModule("rest").setVersion("v1").addResourcePath("activities");
-        if (action.getAnd().getYear() == 0 && action.getAnd().getWeek() == 0)
+        if (action.getAnd().getUnit() == WEEK)
         {
-            urlBuilder.addResourcePath("currentWeek");
+            if (action.getAnd().getWeek() == 0)
+            {
+                urlBuilder.addResourcePath("currentWeek");
+            }
+            else
+            {
+                urlBuilder.addResourcePath(String.valueOf(action.getAnd().getYear()), "cw" + action.getAnd().getWeek());
+            }
         }
-        else
+        else if (action.getAnd().getUnit() == MONTH)
         {
-            urlBuilder.addResourcePath(String.valueOf(action.getAnd().getYear()), "cw" + action.getAnd().getWeek());
+            if (action.getAnd().getMonth() == 0)
+            {
+                urlBuilder.addResourcePath("currentWeek");
+            }
+            else
+            {
+                urlBuilder.addResourcePath(String.valueOf(action.getAnd().getYear()), "cw" + action.getAnd().getWeek());
+            }
         }
         return urlBuilder.toUrl();
     }

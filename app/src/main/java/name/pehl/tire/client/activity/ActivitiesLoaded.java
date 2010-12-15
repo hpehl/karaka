@@ -9,9 +9,11 @@ import com.gwtplatform.annotation.Order;
  *          $
  */
 @GenEvent
-@SuppressWarnings("unused")
 public class ActivitiesLoaded
 {
     @Order(1)
-    private Activities activities;
+    Activities activities;
+
+    @Order(2)
+    Unit unit;
 }

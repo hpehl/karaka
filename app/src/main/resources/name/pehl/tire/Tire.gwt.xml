@@ -34,6 +34,16 @@
     <script src="g.raphael.js" />
     <script src="g.bar.js" />
 
+    <!-- Logging -->
+    <set-property name="gwt.logging.logLevel" value="FINE" />
+    <set-property name="gwt.logging.enabled" value="TRUE" />
+    <set-property name="gwt.logging.consoleHandler" value="ENABLED" />
+    <set-property name="gwt.logging.developmentModeHandler" value="ENABLED" />
+    <set-property name="gwt.logging.firebugHandler" value="ENABLED" />
+    <set-property name="gwt.logging.systemHandler" value="ENABLED" />
+    <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED" />
+    <set-property name="gwt.logging.popupHandler" value="DISABLED" />
+
     <define-configuration-property name="gin.ginjector" is-multi-valued="false" />
     <set-configuration-property name="gin.ginjector" value="name.pehl.tire.client.gin.TireGinjector" />
 

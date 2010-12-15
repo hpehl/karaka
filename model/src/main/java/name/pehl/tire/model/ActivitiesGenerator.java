@@ -1,12 +1,8 @@
-package name.pehl.tire.rest.activity;
+package name.pehl.tire.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import name.pehl.tire.model.Activity;
-import name.pehl.tire.model.Tag;
-import name.pehl.tire.model.Time;
 
 import org.joda.time.MutableDateTime;
 
@@ -16,6 +12,7 @@ import org.joda.time.MutableDateTime;
  */
 public class ActivitiesGenerator
 {
+    private static long nextId = 0;
     private final Random random = new Random();
 
 
@@ -27,6 +24,7 @@ public class ActivitiesGenerator
         for (int i = 0; i < 7; i++)
         {
             Activity activity = new Activity(randomString(5), randomString(10));
+            activity.setId(nextId++);
             activity.setStart(new Time(mdt.toDate()));
             int hour = mdt.hourOfDay().get() + 2 + random.nextInt(6);
             activity.setEnd(new Time(mdt.copy().hourOfDay().set(hour).toDate()));
@@ -34,7 +32,9 @@ public class ActivitiesGenerator
             int tags = random.nextInt(3);
             for (int j = 0; j < tags; j++)
             {
-                activity.addTag(new Tag(randomString(5)));
+                Tag tag = new Tag(randomString(5));
+                tag.setId(nextId++);
+                activity.addTag(tag);
             }
 
             activities.add(activity);

@@ -5,10 +5,13 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import name.pehl.tire.dao.ActivityDao;
+import name.pehl.tire.model.ActivitiesGenerator;
 import name.pehl.tire.model.Activity;
 
+import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.MutableDateTime;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
@@ -74,10 +77,11 @@ public class ActivitiesResource extends ServerResource
         List<Activity> activities = null;
 
         Form form = getRequest().getResourceRef().getQueryAsForm();
+        DateTimeZone timeZone = parseTimeZone(form);
         ActivityParameters ap = new ActivityParameters().parse(getRequestAttributes());
         if (ap.isCurrentMonth() || ap.isCurrentWeek() || ap.isToday())
         {
-            DateTime dateTime = new DateTime(parseTimeZone(form));
+            DateTime dateTime = new DateTime(timeZone);
             year = dateTime.year().get();
             month = dateTime.monthOfYear().get();
             week = dateTime.weekOfWeekyear().get();
@@ -108,12 +112,18 @@ public class ActivitiesResource extends ServerResource
         {
             year = ap.getYear();
             month = ap.getMonth();
+            week = new DateMidnight(year, month, day, timeZone).weekOfWeekyear().get();
             activities = ensureValidActivities(dao.findByYearMonth(year, month));
         }
         else if (ap.hasYear() && ap.hasWeek())
         {
             year = ap.getYear();
             week = ap.getWeek();
+            MutableDateTime mdt = new MutableDateTime(timeZone);
+            mdt.year().set(year);
+            mdt.weekOfWeekyear().set(week);
+            mdt.dayOfMonth().set(day);
+            month = mdt.monthOfYear().get();
             // activities = ensureValidActivities(dao.findByYearWeek(year,
             // week));
             activities = ensureValidActivities(new ActivitiesGenerator().generate(ap.getYear(), ap.getWeek()));

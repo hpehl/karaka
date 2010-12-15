@@ -1,10 +1,10 @@
 package name.pehl.tire.client.activity;
 
 import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
+import static name.pehl.tire.client.activity.Unit.WEEK;
 
 import java.util.List;
 
-import name.pehl.tire.client.activity.ActivitiesNavigation.Unit;
 import name.pehl.tire.client.resources.CellTableResources;
 import name.pehl.tire.client.tag.Tag;
 import name.pehl.tire.client.ui.FormatUtils;
@@ -13,6 +13,7 @@ import name.pehl.tire.model.Status;
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -20,12 +21,13 @@ import com.google.gwt.text.shared.AbstractSafeHtmlRenderer;
 import com.google.gwt.text.shared.SafeHtmlRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.TextHeader;
-import com.google.gwt.user.client.ui.InlineHyperlink;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -55,13 +57,9 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     interface RecentActivitiesUi extends UiBinder<Widget, RecentActivitiesView> {}
     private static RecentActivitiesUi uiBinder = GWT.create(RecentActivitiesUi.class);
 
-    @UiField InlineLabel rangeInfo;
-    @UiField InlineHyperlink previous;
-    @UiField InlineHyperlink next;
-    @UiField InlineHyperlink lastMonth;
-    @UiField InlineHyperlink lastWeek;
-    @UiField InlineHyperlink currentMonth;
-    @UiField InlineHyperlink currentWeek;
+    @UiField InlineLabel previous;
+    @UiField InlineLabel next;
+    @UiField InlineHTML info;
     @UiField(provided = true) CellTable<Activity> activitiesTable;
     // @formatter:on
 
@@ -221,14 +219,49 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
 
 
     @Override
-    public void updateActivities(Activities activities, Unit unit)
+    public void updateActivities(Activities activities, ActivitiesNavigationData and)
     {
         currentActivities = activities;
-        StringBuilder builder = new StringBuilder();
-        builder.append(FormatUtils.format(activities.getStart().getDate())).append(" - ")
-                .append(FormatUtils.format(activities.getEnd().getDate()));
-        rangeInfo.setText(builder.toString());
-        activitiesTable.setRowData(0, activities.getActivities());
-        activitiesTable.setRowCount(activities.getActivities().size());
+
+        StringBuilder infoText = new StringBuilder();
+        infoText.append("CW ").append(currentActivities.getWeek()).append(" - ")
+                .append(FormatUtils.inHours(currentActivities.getMinutes())).append("<br/>")
+                .append(FormatUtils.format(currentActivities.getStart().getDate())).append(" - ")
+                .append(FormatUtils.format(currentActivities.getEnd().getDate()));
+        info.setHTML(infoText.toString());
+
+        activitiesTable.setRowData(0, currentActivities.getActivities());
+        activitiesTable.setRowCount(currentActivities.getActivities().size());
+    }
+
+
+    @UiHandler("previous")
+    public void onPreviousClicked(ClickEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().onPrev();
+        }
+    }
+
+
+    @UiHandler("next")
+    public void onNextClicked(ClickEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().onNext();
+        }
+    }
+
+
+    @UiHandler("info")
+    public void onInfoClicked(ClickEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().changeUnit(WEEK);
+            getUiHandlers().onCurrent();
+        }
     }
 }

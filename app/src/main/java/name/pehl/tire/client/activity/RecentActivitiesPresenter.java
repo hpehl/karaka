@@ -2,7 +2,6 @@ package name.pehl.tire.client.activity;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.inject.Inject;
-import com.gwtplatform.dispatch.client.DispatchAsync;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 
 /**
@@ -21,8 +20,8 @@ public class RecentActivitiesPresenter extends ActivitiesNavigationPresenter<Rec
 
     @Inject
     public RecentActivitiesPresenter(final EventBus eventBus, final RecentActivitiesPresenter.MyView view,
-            final DispatchAsync dispatcher, final PlaceManager placeManager)
+            final PlaceManager placeManager)
     {
-        super(eventBus, view, dispatcher, placeManager);
+        super(eventBus, view, placeManager);
     }
 }

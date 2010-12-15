@@ -16,4 +16,7 @@ public interface ActivitiesNavigationUiHandlers extends UiHandlers
 
 
     void onNext();
+
+
+    void changeUnit(Unit unit);
 }

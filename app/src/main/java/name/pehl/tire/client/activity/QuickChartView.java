@@ -1,8 +1,8 @@
 package name.pehl.tire.client.activity;
 
-import static name.pehl.tire.client.activity.ActivitiesNavigation.Unit.WEEK;
-import name.pehl.tire.client.activity.ActivitiesNavigation.Unit;
+import static name.pehl.tire.client.activity.Unit.WEEK;
 import name.pehl.tire.client.activity.week.WeekChartWidget;
+import name.pehl.tire.client.activity.week.WeekNavigationEvent;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -48,9 +48,9 @@ public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHan
 
 
     @Override
-    public void updateActivities(Activities activities, Unit unit)
+    public void updateActivities(Activities activities, ActivitiesNavigationData and)
     {
-        if (unit == WEEK)
+        if (and.getUnit() == WEEK)
         {
             weekChart.update(activities);
         }
@@ -58,10 +58,11 @@ public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHan
 
 
     @UiHandler("weekChart")
-    void handleWeekNavigation(ActivitiesNavigationEvent event)
+    void handleWeekNavigation(WeekNavigationEvent event)
     {
         if (getUiHandlers() != null)
         {
+            getUiHandlers().changeUnit(WEEK);
             switch (event.getDirection())
             {
                 case PREV:
