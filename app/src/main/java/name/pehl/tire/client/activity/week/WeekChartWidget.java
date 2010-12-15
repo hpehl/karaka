@@ -207,7 +207,7 @@ public class WeekChartWidget extends Widget implements HasWeekNavigationHandlers
         {
             // update title
             StringBuilder value = new StringBuilder();
-            value.append("CW ").append(activities.getWeek()).append(" - ")
+            value.append("CW ").append(activities.getWeek()).append(" / ").append(activities.getYear()).append(" - ")
                     .append(FormatUtils.inHours(activities.getMinutes())).append("\n")
                     .append(FormatUtils.format(activities.getStart().getDate())).append(" - ")
                     .append(FormatUtils.format(activities.getEnd().getDate()));

@@ -227,6 +227,11 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     {
         currentActivities = activities;
         StringBuilder builder = new StringBuilder();
+        if (and.getUnit() == WEEK)
+        {
+            builder.append("CW ").append(currentActivities.getWeek()).append(" / ").append(currentActivities.getYear())
+                    .append(": ");
+        }
         builder.append(FormatUtils.format(currentActivities.getStart().getDate())).append(" - ")
                 .append(FormatUtils.format(currentActivities.getEnd().getDate()));
         rangeInfo.setText(builder.toString());
