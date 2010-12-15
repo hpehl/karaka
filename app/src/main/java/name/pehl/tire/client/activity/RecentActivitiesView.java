@@ -1,6 +1,7 @@
 package name.pehl.tire.client.activity;
 
 import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
+import static name.pehl.tire.client.activity.Unit.MONTH;
 import static name.pehl.tire.client.activity.Unit.WEEK;
 
 import java.util.List;
@@ -27,7 +28,6 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.TextHeader;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -57,9 +57,13 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     interface RecentActivitiesUi extends UiBinder<Widget, RecentActivitiesView> {}
     private static RecentActivitiesUi uiBinder = GWT.create(RecentActivitiesUi.class);
 
+    @UiField InlineLabel rangeInfo;
     @UiField InlineLabel previous;
     @UiField InlineLabel next;
-    @UiField InlineHTML info;
+    @UiField InlineLabel lastMonth;
+    @UiField InlineLabel lastWeek;
+    @UiField InlineLabel currentMonth;
+    @UiField InlineLabel currentWeek;
     @UiField(provided = true) CellTable<Activity> activitiesTable;
     // @formatter:on
 
@@ -222,16 +226,12 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     public void updateActivities(Activities activities, ActivitiesNavigationData and)
     {
         currentActivities = activities;
-
-        StringBuilder infoText = new StringBuilder();
-        infoText.append("CW ").append(currentActivities.getWeek()).append(" - ")
-                .append(FormatUtils.inHours(currentActivities.getMinutes())).append("<br/>")
-                .append(FormatUtils.format(currentActivities.getStart().getDate())).append(" - ")
+        StringBuilder builder = new StringBuilder();
+        builder.append(FormatUtils.format(currentActivities.getStart().getDate())).append(" - ")
                 .append(FormatUtils.format(currentActivities.getEnd().getDate()));
-        info.setHTML(infoText.toString());
-
-        activitiesTable.setRowData(0, currentActivities.getActivities());
-        activitiesTable.setRowCount(currentActivities.getActivities().size());
+        rangeInfo.setText(builder.toString());
+        activitiesTable.setRowData(0, activities.getActivities());
+        activitiesTable.setRowCount(activities.getActivities().size());
     }
 
 
@@ -245,23 +245,56 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     }
 
 
+    @UiHandler("lastMonth")
+    public void onLastMonthClicked(ClickEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().changeUnit(MONTH);
+            getUiHandlers().onPrev();
+        }
+    }
+
+
+    @UiHandler("lastWeek")
+    public void onLastWeekClicked(ClickEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().changeUnit(WEEK);
+            getUiHandlers().onPrev();
+        }
+    }
+
+
+    @UiHandler("currentMonth")
+    public void onCurrentMonthClicked(ClickEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().changeUnit(MONTH);
+            getUiHandlers().onCurrent();
+        }
+    }
+
+
+    @UiHandler("currentWeek")
+    public void onCurrentWeekClicked(ClickEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().changeUnit(WEEK);
+            getUiHandlers().onCurrent();
+        }
+    }
+
+
     @UiHandler("next")
     public void onNextClicked(ClickEvent event)
     {
         if (getUiHandlers() != null)
         {
             getUiHandlers().onNext();
-        }
-    }
-
-
-    @UiHandler("info")
-    public void onInfoClicked(ClickEvent event)
-    {
-        if (getUiHandlers() != null)
-        {
-            getUiHandlers().changeUnit(WEEK);
-            getUiHandlers().onCurrent();
         }
     }
 }

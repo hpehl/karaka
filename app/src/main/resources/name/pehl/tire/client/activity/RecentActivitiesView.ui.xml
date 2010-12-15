@@ -9,6 +9,7 @@
         }
         
         .navigation {
+            line-height: 16px;
             font-weight: normal;
             font-style: normal;
             text-align: right;
@@ -17,28 +18,16 @@
             float: right;
         }
         
-        .navigation td {
+        .navigation span {
             padding: 2px;
-            text-align: center;
-            vertical-align: middle;
-        }
-        
-        .navigation td span.arrow {
-            font-size: 24px;
-            padding-left: 6px;
-            padding-right: 6px;
-        }
-        
-        .navigation td span.link {
             cursor: pointer;
         }
         
-        /*
-                .navigation td span.link:hover {
-                    color: white;
-                    background-color: #3d3d3d;
-                }
-                */
+        .navigation span:hover {
+            color: white;
+            background-color: #3d3d3d;
+        }
+        
         .container {
             padding: 10px;
             width: 100%;
@@ -59,21 +48,16 @@
         <h1 class="{style.noBorder}">
             Recent Activities
             <div class="{style.navigation}">
-                <table>
-                    <tr>
-                        <td>
-                            <g:InlineLabel ui:field="previous" addStyleNames="{style.link} {style.arrow}"
-                                title="Previous calendarweek">&#8612;</g:InlineLabel>
-                        </td>
-                        <td>
-                            <g:InlineHTML ui:field="info" addStyleNames="{style.link}" title="Current calendarweek" />
-                        </td>
-                        <td>
-                            <g:InlineLabel ui:field="next" addStyleNames="{style.link} {style.arrow}"
-                                title="Next calendarweek">&#8614;</g:InlineLabel>
-                        </td>
-                    </tr>
-                </table>
+                <g:InlineLabel ui:field="rangeInfo" />
+                <br />
+                <span>
+                    <g:InlineLabel ui:field="previous">&#8612;</g:InlineLabel>
+                    <g:InlineLabel ui:field="lastMonth">Last Month</g:InlineLabel>
+                    <g:InlineLabel ui:field="lastWeek">Last Week</g:InlineLabel>
+                    <g:InlineLabel ui:field="currentMonth">Current Month</g:InlineLabel>
+                    <g:InlineLabel ui:field="currentWeek">Current Week</g:InlineLabel>
+                    <g:InlineLabel ui:field="next">&#8614;</g:InlineLabel>
+                </span>
             </div>
         </h1>
         <div class="{style.container}">
