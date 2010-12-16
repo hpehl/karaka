@@ -44,9 +44,9 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     public NewActivityView(final Resources resources)
     {
         this.resources = resources;
-        this.resources.newActivity().ensureInjected();
+        this.resources.navigation().ensureInjected();
         this.widget = uiBinder.createAndBindUi(this);
-        this.today.addStyleName(resources.newActivity().selected());
+        this.today.addStyleName(resources.navigation().selectedDate());
 
         long time = new Date().getTime() - ONE_DAY;
         yesterday.setText(DATE_FORMAT.format(new Date(time)));
@@ -66,10 +66,10 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     void onTheDayBeforeYesterdayClicked(ClickEvent event)
     {
         GWT.log("The day before yesterday selected");
-        theDayBeforeYesterday.addStyleName(resources.newActivity().selected());
-        yesterday.removeStyleName(resources.newActivity().selected());
-        today.removeStyleName(resources.newActivity().selected());
-        calendar.removeStyleName(resources.newActivity().selected());
+        theDayBeforeYesterday.addStyleName(resources.navigation().selectedDate());
+        yesterday.removeStyleName(resources.navigation().selectedDate());
+        today.removeStyleName(resources.navigation().selectedDate());
+        calendar.removeStyleName(resources.navigation().selectedDate());
         calendar.reset();
         if (getUiHandlers() != null)
         {
@@ -83,10 +83,10 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     void onYesterdayClicked(ClickEvent event)
     {
         GWT.log("Yesterday selected");
-        theDayBeforeYesterday.removeStyleName(resources.newActivity().selected());
-        yesterday.addStyleName(resources.newActivity().selected());
-        today.removeStyleName(resources.newActivity().selected());
-        calendar.removeStyleName(resources.newActivity().selected());
+        theDayBeforeYesterday.removeStyleName(resources.navigation().selectedDate());
+        yesterday.addStyleName(resources.navigation().selectedDate());
+        today.removeStyleName(resources.navigation().selectedDate());
+        calendar.removeStyleName(resources.navigation().selectedDate());
         calendar.reset();
         if (getUiHandlers() != null)
         {
@@ -100,10 +100,10 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     void onTodayClicked(ClickEvent event)
     {
         GWT.log("Today selected");
-        theDayBeforeYesterday.removeStyleName(resources.newActivity().selected());
-        yesterday.removeStyleName(resources.newActivity().selected());
-        today.addStyleName(resources.newActivity().selected());
-        calendar.removeStyleName(resources.newActivity().selected());
+        theDayBeforeYesterday.removeStyleName(resources.navigation().selectedDate());
+        yesterday.removeStyleName(resources.navigation().selectedDate());
+        today.addStyleName(resources.navigation().selectedDate());
+        calendar.removeStyleName(resources.navigation().selectedDate());
         calendar.reset();
         if (getUiHandlers() != null)
         {
@@ -115,10 +115,10 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     @UiHandler("calendar")
     void onCalendarClicked(ClickEvent event)
     {
-        theDayBeforeYesterday.removeStyleName(resources.newActivity().selected());
-        yesterday.removeStyleName(resources.newActivity().selected());
-        today.removeStyleName(resources.newActivity().selected());
-        calendar.addStyleName(resources.newActivity().selected());
+        theDayBeforeYesterday.removeStyleName(resources.navigation().selectedDate());
+        yesterday.removeStyleName(resources.navigation().selectedDate());
+        today.removeStyleName(resources.navigation().selectedDate());
+        calendar.addStyleName(resources.navigation().selectedDate());
     }
 
 

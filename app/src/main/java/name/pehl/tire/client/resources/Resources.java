@@ -41,20 +41,16 @@ public interface Resources extends ClientBundle
 
     public interface Navigation extends CssResource
     {
-        @ClassName("selected")
-        String selected();
+        @ClassName("selectedNavigationEntry")
+        String selectedNavigationEntry();
+        
+        @ClassName("selectedDate")
+        String selectedDate();
+
+        @ClassName("selectedActivities")
+        String selectedActivities();
     }
 
     @Source("navigation.css")
     Navigation navigation();
-
-
-    public interface NewActivity extends CssResource
-    {
-        @ClassName("selected")
-        String selected();
-    }
-
-    @Source("newActivity.css")
-    NewActivity newActivity();
 }

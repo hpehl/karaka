@@ -64,11 +64,11 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
             {
                 if (token.equals(link.getTargetHistoryToken()))
                 {
-                    link.addStyleName(resources.navigation().selected());
+                    link.addStyleName(resources.navigation().selectedNavigationEntry());
                 }
                 else
                 {
-                    link.removeStyleName(resources.navigation().selected());
+                    link.removeStyleName(resources.navigation().selectedNavigationEntry());
                 }
             }
         }

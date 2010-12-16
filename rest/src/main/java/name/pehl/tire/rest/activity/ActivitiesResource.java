@@ -9,9 +9,11 @@ import name.pehl.tire.model.ActivitiesGenerator;
 import name.pehl.tire.model.Activity;
 
 import org.joda.time.DateMidnight;
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Months;
 import org.joda.time.MutableDateTime;
+import org.joda.time.Weeks;
+import org.joda.time.Years;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
@@ -37,8 +39,10 @@ import com.google.inject.Inject;
  * <li>GET /activities/today: Find activities
  * <li>GET /activities/{year}/{month}/{day}: Find activities
  * </ul>
- * TODO Need a timezone offset for current* resources
  * 
+ * @todo Need a timezone offset for current* resources
+ * @todo Add hyperlinks to current, previous and next activities. If there are
+ *       no previous / next activities omit the links
  * @author $Author$
  * @version $Date$ $Revision: 110
  *          $
@@ -69,68 +73,67 @@ public class ActivitiesResource extends ServerResource
     @Get("json")
     public Representation getActivities()
     {
-        int year = 0;
-        int month = 1;
-        int week = 1;
-        int day = 1;
         String json = null;
+        DateMidnight now = null;
+        DateMidnight requested = null;
+        ActivityParameters ap = null;
         List<Activity> activities = null;
 
         Form form = getRequest().getResourceRef().getQueryAsForm();
         DateTimeZone timeZone = parseTimeZone(form);
-        ActivityParameters ap = new ActivityParameters().parse(getRequestAttributes());
+        now = new DateMidnight(timeZone);
+        ap = new ActivityParameters().parse(getRequestAttributes());
         if (ap.isCurrentMonth() || ap.isCurrentWeek() || ap.isToday())
         {
-            DateTime dateTime = new DateTime(timeZone);
-            year = dateTime.year().get();
-            month = dateTime.monthOfYear().get();
-            week = dateTime.weekOfWeekyear().get();
-            day = dateTime.dayOfMonth().get();
+            requested = new DateMidnight(timeZone);
             if (ap.isCurrentMonth())
             {
-                activities = ensureValidActivities(dao.findByYearMonth(year, month));
+                activities = ensureValidActivities(dao.findByYearMonth(requested.year().get(), requested.monthOfYear()
+                        .get()));
             }
             else if (ap.isCurrentWeek())
             {
-                // activities = ensureValidActivities(dao.findByYearWeek(year,
-                // week));
-                activities = ensureValidActivities(new ActivitiesGenerator().generate(year, week));
+                // activities =
+                // ensureValidActivities(dao.findByYearWeek(requested.year().get(),
+                // requested
+                // .weekOfWeekyear().get()));
+                activities = ensureValidActivities(new ActivitiesGenerator().generate(requested.year().get(), requested
+                        .weekOfWeekyear().get()));
             }
             else if (ap.isToday())
             {
-                activities = ensureValidActivities(dao.findByYearMonthDay(year, month, day));
+                activities = ensureValidActivities(dao.findByYearMonthDay(requested.year().get(), requested
+                        .monthOfYear().get(), requested.dayOfMonth().get()));
             }
         }
         else if (ap.hasYear() && ap.hasMonth() && ap.hasDay())
         {
-            year = ap.getYear();
-            month = ap.getMonth();
-            day = ap.getDay();
-            activities = ensureValidActivities(dao.findByYearMonthDay(year, month, day));
+            requested = new DateMidnight(ap.getYear(), ap.getMonth(), ap.getDay(), timeZone);
+            activities = ensureValidActivities(dao.findByYearMonthDay(requested.year().get(), requested.monthOfYear()
+                    .get(), requested.dayOfMonth().get()));
         }
         else if (ap.hasYear() && ap.hasMonth())
         {
-            year = ap.getYear();
-            month = ap.getMonth();
-            week = new DateMidnight(year, month, day, timeZone).weekOfWeekyear().get();
-            activities = ensureValidActivities(dao.findByYearMonth(year, month));
+            requested = new DateMidnight(ap.getYear(), ap.getMonth(), 1, timeZone);
+            activities = ensureValidActivities(dao.findByYearMonth(requested.year().get(), requested.monthOfYear()
+                    .get()));
         }
         else if (ap.hasYear() && ap.hasWeek())
         {
-            year = ap.getYear();
-            week = ap.getWeek();
             MutableDateTime mdt = new MutableDateTime(timeZone);
-            mdt.year().set(year);
-            mdt.weekOfWeekyear().set(week);
-            mdt.dayOfMonth().set(day);
-            month = mdt.monthOfYear().get();
-            // activities = ensureValidActivities(dao.findByYearWeek(year,
-            // week));
-            activities = ensureValidActivities(new ActivitiesGenerator().generate(ap.getYear(), ap.getWeek()));
+            mdt.year().set(ap.getYear());
+            mdt.weekOfWeekyear().set(ap.getWeek());
+            requested = new DateMidnight(mdt);
+            // activities =
+            // ensureValidActivities(dao.findByYearWeek(requested.year().get(),
+            // requested.weekOfWeekyear()
+            // .get()));
+            activities = ensureValidActivities(new ActivitiesGenerator().generate(requested.year().get(), requested
+                    .weekOfWeekyear().get()));
         }
 
-        Activities sortedActivities = sortActivities(year, month, week, activities);
-        json = gson.toJson(sortedActivities);
+        Activities activitiesforJson = createActivities(requested, now, activities);
+        json = gson.toJson(activitiesforJson);
         return new JsonRepresentation(json);
     }
 
@@ -152,11 +155,20 @@ public class ActivitiesResource extends ServerResource
      * Sort the specified activities into {@link Day} instances and the days
      * into a {@link Activities} instance.
      * 
+     * @param requested
+     * @param now
      * @param activities
      * @return
      */
-    private Activities sortActivities(int year, int month, int week, List<Activity> activities)
+    private Activities createActivities(DateMidnight requested, DateMidnight now, List<Activity> activities)
     {
+        int year = requested.year().get();
+        int yearDiff = Years.yearsBetween(now, requested).getYears();
+        int month = requested.monthOfYear().get();
+        int monthDiff = Months.monthsBetween(now, requested).getMonths();
+        int week = requested.weekOfWeekyear().get();
+        int weekDiff = Weeks.weeksBetween(now, requested).getWeeks();
+
         SortedSet<Day> days = new TreeSet<Day>();
         SortedSetMultimap<Day, Activity> activitiesPerDay = TreeMultimap.create();
         for (Activity activity : activities)
@@ -169,7 +181,7 @@ public class ActivitiesResource extends ServerResource
             day.activities = activitiesPerDay.get(day);
             days.add(day);
         }
-        return new Activities(year, month, week, days);
+        return new Activities(year, yearDiff, month, monthDiff, week, weekDiff, days);
     }
 
 

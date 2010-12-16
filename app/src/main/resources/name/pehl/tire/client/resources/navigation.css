@@ -1,10 +1,32 @@
 /*
  * Class to select the active navigatino entry.
- * Used in NavigationPresenter.MyView.highlight(String)
+ * Used in NavigationPresenter
  */
-@sprite .selected {
+@sprite .selectedNavigationEntry {
     width: auto;
     height: auto;
     gwt-image: "selectedNavigation";
     background-position: center bottom;
+}
+
+/*
+ * Classes to select the active date.
+ * Used in NewActivityPresenter
+ */
+a.selectedDate {
+    background-color: #68d6ea !important;
+}
+
+a.selectedDate:hover {
+    color: #68d6ea !important;
+    background-color: white !important;
+}
+
+/*
+ * Class to select the month / week navigation links. 
+ * Used in RecentActivitiesPresenter
+ */
+.selectedActivities {
+    color: white;
+    background-color: #3d3d3d;
 }

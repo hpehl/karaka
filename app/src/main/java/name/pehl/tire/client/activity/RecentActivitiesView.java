@@ -7,6 +7,7 @@ import static name.pehl.tire.client.activity.Unit.WEEK;
 import java.util.List;
 
 import name.pehl.tire.client.resources.CellTableResources;
+import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.tag.Tag;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.model.Status;
@@ -68,13 +69,16 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     // @formatter:on
 
     private final Widget widget;
+    private final Resources resources;
     private final CellTableResources ctr;
     private Activities currentActivities;
 
 
     @Inject
-    public RecentActivitiesView(final CellTableResources ctr)
+    public RecentActivitiesView(final Resources resources, final CellTableResources ctr)
     {
+        this.resources = resources;
+        this.resources.navigation().ensureInjected();
         this.ctr = ctr;
         this.ctr.cellTableStyle().ensureInjected();
         activitiesTable = new CellTable<Activity>(Integer.MAX_VALUE, this.ctr);
@@ -237,6 +241,26 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
         rangeInfo.setText(builder.toString());
         activitiesTable.setRowData(0, activities.getActivities());
         activitiesTable.setRowCount(activities.getActivities().size());
+
+        lastMonth.removeStyleName(resources.navigation().selectedActivities());
+        lastWeek.removeStyleName(resources.navigation().selectedActivities());
+        currentMonth.removeStyleName(resources.navigation().selectedActivities());
+        currentWeek.removeStyleName(resources.navigation().selectedActivities());
+        if (and.getUnit() == WEEK)
+        {
+            if (activities.getWeekDiff() == -1)
+            {
+                lastWeek.addStyleName(resources.navigation().selectedActivities());
+            }
+            else if (activities.getWeekDiff() == 0)
+            {
+                currentWeek.addStyleName(resources.navigation().selectedActivities());
+            }
+        }
+        else if (and.getUnit() == MONTH)
+        {
+
+        }
     }
 
 

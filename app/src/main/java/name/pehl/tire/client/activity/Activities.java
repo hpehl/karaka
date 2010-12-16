@@ -15,9 +15,12 @@ import name.pehl.tire.client.activity.day.Day;
 public class Activities implements Iterable<Day>
 {
     // @formatter:off
-    @Json protected int year;
-    @Json protected int month;
-    @Json protected int week;
+    @Json int year;
+    @Json int yearDiff;
+    @Json int month;
+    @Json int monthDiff;
+    @Json int week;
+    @Json int weekDiff;
     @Json(setter = DaysSetter.class) private final List<Day> days;
     // @formatter:on
 
@@ -172,9 +175,9 @@ public class Activities implements Iterable<Day>
     }
 
 
-    public void setYear(int year)
+    public int getYearDiff()
     {
-        this.year = year;
+        return yearDiff;
     }
 
 
@@ -184,9 +187,9 @@ public class Activities implements Iterable<Day>
     }
 
 
-    public void setMonth(int month)
+    public int getMonthDiff()
     {
-        this.month = month;
+        return monthDiff;
     }
 
 
@@ -196,8 +199,8 @@ public class Activities implements Iterable<Day>
     }
 
 
-    public void setWeek(int week)
+    public int getWeekDiff()
     {
-        this.week = week;
+        return weekDiff;
     }
 }
