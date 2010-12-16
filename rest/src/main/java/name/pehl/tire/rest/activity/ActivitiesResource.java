@@ -13,7 +13,6 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.Months;
 import org.joda.time.MutableDateTime;
 import org.joda.time.Weeks;
-import org.joda.time.Years;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
@@ -83,13 +82,18 @@ public class ActivitiesResource extends ServerResource
         DateTimeZone timeZone = parseTimeZone(form);
         now = new DateMidnight(timeZone);
         ap = new ActivityParameters().parse(getRequestAttributes());
+
         if (ap.isCurrentMonth() || ap.isCurrentWeek() || ap.isToday())
         {
             requested = new DateMidnight(timeZone);
             if (ap.isCurrentMonth())
             {
-                activities = ensureValidActivities(dao.findByYearMonth(requested.year().get(), requested.monthOfYear()
-                        .get()));
+                // activities =
+                // ensureValidActivities(dao.findByYearMonth(requested.year().get(),
+                // requested.monthOfYear()
+                // .get()));
+                activities = ensureValidActivities(new ActivitiesGenerator().generateMonth(requested.year().get(),
+                        requested.monthOfYear().get()));
             }
             else if (ap.isCurrentWeek())
             {
@@ -97,8 +101,8 @@ public class ActivitiesResource extends ServerResource
                 // ensureValidActivities(dao.findByYearWeek(requested.year().get(),
                 // requested
                 // .weekOfWeekyear().get()));
-                activities = ensureValidActivities(new ActivitiesGenerator().generate(requested.year().get(), requested
-                        .weekOfWeekyear().get()));
+                activities = ensureValidActivities(new ActivitiesGenerator().generateWeek(requested.year().get(),
+                        requested.weekOfWeekyear().get()));
             }
             else if (ap.isToday())
             {
@@ -115,8 +119,12 @@ public class ActivitiesResource extends ServerResource
         else if (ap.hasYear() && ap.hasMonth())
         {
             requested = new DateMidnight(ap.getYear(), ap.getMonth(), 1, timeZone);
-            activities = ensureValidActivities(dao.findByYearMonth(requested.year().get(), requested.monthOfYear()
-                    .get()));
+            // activities =
+            // ensureValidActivities(dao.findByYearMonth(requested.year().get(),
+            // requested.monthOfYear()
+            // .get()));
+            activities = ensureValidActivities(new ActivitiesGenerator().generateMonth(requested.year().get(),
+                    requested.monthOfYear().get()));
         }
         else if (ap.hasYear() && ap.hasWeek())
         {
@@ -128,7 +136,7 @@ public class ActivitiesResource extends ServerResource
             // ensureValidActivities(dao.findByYearWeek(requested.year().get(),
             // requested.weekOfWeekyear()
             // .get()));
-            activities = ensureValidActivities(new ActivitiesGenerator().generate(requested.year().get(), requested
+            activities = ensureValidActivities(new ActivitiesGenerator().generateWeek(requested.year().get(), requested
                     .weekOfWeekyear().get()));
         }
 
@@ -163,7 +171,8 @@ public class ActivitiesResource extends ServerResource
     private Activities createActivities(DateMidnight requested, DateMidnight now, List<Activity> activities)
     {
         int year = requested.year().get();
-        int yearDiff = Years.yearsBetween(now, requested).getYears();
+        // Years.yearsBetween(now, requested).getYears() returns wrong results;
+        int yearDiff = requested.year().get() - now.year().get();
         int month = requested.monthOfYear().get();
         int monthDiff = Months.monthsBetween(now, requested).getMonths();
         int week = requested.weekOfWeekyear().get();

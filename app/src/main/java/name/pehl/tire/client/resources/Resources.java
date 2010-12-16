@@ -46,9 +46,6 @@ public interface Resources extends ClientBundle
         
         @ClassName("selectedDate")
         String selectedDate();
-
-        @ClassName("selectedActivities")
-        String selectedActivities();
     }
 
     @Source("navigation.css")

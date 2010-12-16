@@ -3,7 +3,8 @@
     xmlns:tire-app="urn:import:name.pehl.tire.client.activity.week">
 
     <g:HTMLPanel>
-        <tire-app:WeekChartWidget ui:field="weekChart" />
+        <tire-app:WeekChartWidget ui:field="weekChart" width="200" height="200"
+            weekdays="Mo, Tue, Wed, Thu, Fr, Sat, Sun" />
     </g:HTMLPanel>
 
 </ui:UiBinder> 

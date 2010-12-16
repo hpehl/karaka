@@ -10,9 +10,10 @@ import name.pehl.tire.client.activity.week.WeekNavigationEvent.WeekNavigationHan
 import name.pehl.tire.client.ui.FormatUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
+import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -52,12 +53,13 @@ public class WeekChartWidget extends Widget implements HasWeekNavigationHandlers
 
     // ----------------------------------------------------------- constructors
 
-    public WeekChartWidget(final int width, final int height, final String[] weekdays)
+    public @UiConstructor
+    WeekChartWidget(final int width, final int height, final String weekdays)
     {
         this.width = width;
         this.height = height;
-        this.weekdays = weekdays;
-        this.holder = DOM.createDiv();
+        this.weekdays = weekdays.split("[, ]+");
+        this.holder = Document.get().createDivElement();
         setElement(holder);
         setWidth(String.valueOf(width));
         setHeight(String.valueOf(height));
@@ -65,9 +67,9 @@ public class WeekChartWidget extends Widget implements HasWeekNavigationHandlers
         usableHeight = height - TITLE_HEIGHT - LEGEND_HEIGHT;
         oneMinute = usableHeight / 100.0;
         columnGap = max(width * COLUMN_GAP_PERCENTAGE, MIN_COLUMN_GAP);
-        int columnCount = weekdays != null && weekdays.length != 0 ? weekdays.length : 1;
+        int columnCount = this.weekdays != null && this.weekdays.length != 0 ? this.weekdays.length : 1;
         columns = new JavaScriptObject[columnCount];
-        columnWidth = (width - (weekdays.length - 1) * columnGap) / columnCount;
+        columnWidth = (width - (this.weekdays.length - 1) * columnGap) / columnCount;
     }
 
 

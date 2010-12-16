@@ -52,17 +52,28 @@ public class ActivitiesNavigationDataAdapter
     {
         if (placeRequest != null)
         {
-            Unit unit = Unit.WEEK;
-            int year = parseInt(placeRequest.getParameter(PARAM_YEAR, "0"));
-            int month = parseInt(placeRequest.getParameter(PARAM_MONTH, "0"));
-            int week = parseInt(placeRequest.getParameter(PARAM_WEEK, "0"));
-
             Set<String> names = placeRequest.getParameterNames();
-            if (names.contains(PARAM_YEAR) && names.contains(PARAM_MONTH) && !names.contains(PARAM_WEEK))
+            if (names.contains(PARAM_MONTH) && VALUE_CURRENT.equals(placeRequest.getParameter(PARAM_MONTH, null)))
             {
-                unit = Unit.MONTH;
+                return new ActivitiesNavigationData(0, 0, 0, MONTH);
             }
-            return new ActivitiesNavigationData(year, month, week, unit);
+            else if (names.contains(PARAM_WEEK) && VALUE_CURRENT.equals(placeRequest.getParameter(PARAM_WEEK, null)))
+            {
+                return new ActivitiesNavigationData(0, 0, 0, WEEK);
+            }
+            else
+            {
+                Unit unit = Unit.WEEK;
+                int year = parseInt(placeRequest.getParameter(PARAM_YEAR, "0"));
+                int month = parseInt(placeRequest.getParameter(PARAM_MONTH, "0"));
+                int week = parseInt(placeRequest.getParameter(PARAM_WEEK, "0"));
+
+                if (names.contains(PARAM_YEAR) && names.contains(PARAM_MONTH) && !names.contains(PARAM_WEEK))
+                {
+                    unit = Unit.MONTH;
+                }
+                return new ActivitiesNavigationData(year, month, week, unit);
+            }
         }
         return new ActivitiesNavigationData();
     }

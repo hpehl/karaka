@@ -21,12 +21,3 @@ a.selectedDate:hover {
     color: #68d6ea !important;
     background-color: white !important;
 }
-
-/*
- * Class to select the month / week navigation links. 
- * Used in RecentActivitiesPresenter
- */
-.selectedActivities {
-    color: white;
-    background-color: #3d3d3d;
-}

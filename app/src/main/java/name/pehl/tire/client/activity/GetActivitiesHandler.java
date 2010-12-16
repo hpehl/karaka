@@ -52,11 +52,12 @@ public class GetActivitiesHandler extends
         {
             if (action.getAnd().getMonth() == 0)
             {
-                urlBuilder.addResourcePath("currentWeek");
+                urlBuilder.addResourcePath("currentMonth");
             }
             else
             {
-                urlBuilder.addResourcePath(String.valueOf(action.getAnd().getYear()), "cw" + action.getAnd().getWeek());
+                urlBuilder.addResourcePath(String.valueOf(action.getAnd().getYear()),
+                        String.valueOf(action.getAnd().getMonth()));
             }
         }
         return urlBuilder.toUrl();

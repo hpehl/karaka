@@ -131,7 +131,8 @@ public class Activities implements Iterable<Day>
     {
         if (!days.isEmpty())
         {
-            return days.get(0);
+            // days are sorted in descending order!
+            return days.get(days.size() - 1);
         }
         return null;
     }
@@ -141,7 +142,8 @@ public class Activities implements Iterable<Day>
     {
         if (!days.isEmpty())
         {
-            return days.get(days.size() - 1);
+            // days are sorted in descending order!
+            return days.get(0);
         }
         return null;
     }

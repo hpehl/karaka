@@ -7,9 +7,11 @@ import static name.pehl.tire.client.activity.Unit.WEEK;
 import java.util.List;
 
 import name.pehl.tire.client.resources.CellTableResources;
+import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.tag.Tag;
 import name.pehl.tire.client.ui.FormatUtils;
+import name.pehl.tire.client.ui.SvgPath;
 import name.pehl.tire.model.Status;
 
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;
@@ -58,16 +60,17 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     interface RecentActivitiesUi extends UiBinder<Widget, RecentActivitiesView> {}
     private static RecentActivitiesUi uiBinder = GWT.create(RecentActivitiesUi.class);
 
-    @UiField InlineLabel rangeInfo;
-    @UiField InlineLabel previous;
-    @UiField InlineLabel next;
-    @UiField InlineLabel lastMonth;
-    @UiField InlineLabel lastWeek;
-    @UiField InlineLabel currentMonth;
-    @UiField InlineLabel currentWeek;
+    @UiField InlineLabel header;
+    @UiField SvgPath previous;
+    @UiField SvgPath next;
+    @UiField SvgPath lastMonth;
+    @UiField SvgPath lastWeek;
+    @UiField SvgPath currentMonth;
+    @UiField SvgPath currentWeek;
     @UiField(provided = true) CellTable<Activity> activitiesTable;
     // @formatter:on
 
+    private final I18n i18n;
     private final Widget widget;
     private final Resources resources;
     private final CellTableResources ctr;
@@ -75,8 +78,9 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
 
 
     @Inject
-    public RecentActivitiesView(final Resources resources, final CellTableResources ctr)
+    public RecentActivitiesView(final I18n i18n, final Resources resources, final CellTableResources ctr)
     {
+        this.i18n = i18n;
         this.resources = resources;
         this.resources.navigation().ensureInjected();
         this.ctr = ctr;
@@ -230,36 +234,54 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     public void updateActivities(Activities activities, ActivitiesNavigationData and)
     {
         currentActivities = activities;
-        StringBuilder builder = new StringBuilder();
+
+        StringBuilder tooltip = new StringBuilder();
         if (and.getUnit() == WEEK)
         {
-            builder.append("CW ").append(currentActivities.getWeek()).append(" / ").append(currentActivities.getYear())
-                    .append(": ");
+            tooltip.append("CW ").append(currentActivities.getWeek()).append(" / ").append(currentActivities.getYear());
         }
-        builder.append(FormatUtils.format(currentActivities.getStart().getDate())).append(" - ")
+        else if (and.getUnit() == MONTH)
+        {
+            String monthKey = "month_" + currentActivities.getMonth();
+            tooltip.append(i18n.enums().getString(monthKey)).append(" ").append(currentActivities.getYear());
+        }
+        tooltip.append(" - ").append(FormatUtils.inHours(currentActivities.getMinutes())).append(" - ")
+                .append(FormatUtils.format(currentActivities.getStart().getDate())).append(" - ")
                 .append(FormatUtils.format(currentActivities.getEnd().getDate()));
-        rangeInfo.setText(builder.toString());
+        header.setTitle(tooltip.toString());
+
         activitiesTable.setRowData(0, activities.getActivities());
         activitiesTable.setRowCount(activities.getActivities().size());
 
-        lastMonth.removeStyleName(resources.navigation().selectedActivities());
-        lastWeek.removeStyleName(resources.navigation().selectedActivities());
-        currentMonth.removeStyleName(resources.navigation().selectedActivities());
-        currentWeek.removeStyleName(resources.navigation().selectedActivities());
+        lastMonth.setColor("#3d3d3d");
+        lastWeek.setColor("#3d3d3d");
+        currentMonth.setColor("#3d3d3d");
+        currentWeek.setColor("#3d3d3d");
         if (and.getUnit() == WEEK)
         {
+            previous.setTitle("Previous week");
+            next.setTitle("Next week");
             if (activities.getWeekDiff() == -1)
             {
-                lastWeek.addStyleName(resources.navigation().selectedActivities());
+                lastWeek.setColor("#1b92a8");
             }
             else if (activities.getWeekDiff() == 0)
             {
-                currentWeek.addStyleName(resources.navigation().selectedActivities());
+                currentWeek.setColor("#1b92a8");
             }
         }
         else if (and.getUnit() == MONTH)
         {
-
+            previous.setTitle("Previous month");
+            next.setTitle("Next month");
+            if (activities.getMonthDiff() == -1)
+            {
+                lastMonth.setColor("#1b92a8");
+            }
+            else if (activities.getMonthDiff() == 0)
+            {
+                currentMonth.setColor("#1b92a8");
+            }
         }
     }
 

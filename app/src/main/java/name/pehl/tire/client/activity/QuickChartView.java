@@ -27,7 +27,7 @@ public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHan
     interface WeekChartUi extends UiBinder<Widget, QuickChartView> {}
     private static WeekChartUi uiBinder = GWT.create(WeekChartUi.class);
     
-    @UiField(provided = true) WeekChartWidget weekChart;
+    @UiField WeekChartWidget weekChart;
     // @formatter:on
 
     private final Widget widget;
@@ -35,7 +35,6 @@ public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHan
 
     public QuickChartView()
     {
-        this.weekChart = new WeekChartWidget(200, 200, new String[] {"Mo", "Tue", "Wed", "Thu", "Fr", "Sat", "Sun"});
         this.widget = uiBinder.createAndBindUi(this);
     }
 
