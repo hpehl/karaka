@@ -15,6 +15,7 @@ import name.pehl.tire.client.activity.QuickChartView;
 import name.pehl.tire.client.activity.RecentActivitiesPresenter;
 import name.pehl.tire.client.activity.RecentActivitiesView;
 import name.pehl.tire.client.activity.day.DayReader;
+import name.pehl.tire.client.activity.week.WeekReader;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
 import name.pehl.tire.client.client.ClientPresenter;
@@ -80,14 +81,15 @@ public class TireModule extends AbstractPresenterModule
         // JsonReader / Writer
         // Bind them as eager singletons so that the JsonRegistry
         // is setup correctly!
+        bind(ActivitiesReader.class).asEagerSingleton();
+        bind(WeekReader.class).asEagerSingleton();
+        bind(DayReader.class).asEagerSingleton();
         bind(ActivityReader.class).asEagerSingleton();
         bind(ActivityWriter.class).asEagerSingleton();
-        bind(DayReader.class).asEagerSingleton();
         bind(ProjectReader.class).asEagerSingleton();
         bind(ProjectWriter.class).asEagerSingleton();
         bind(TagReader.class).asEagerSingleton();
         bind(TagWriter.class).asEagerSingleton();
-        bind(ActivitiesReader.class).asEagerSingleton();
 
         // Constants
         bindConstant().annotatedWith(SecurityCookie.class).to("TST");

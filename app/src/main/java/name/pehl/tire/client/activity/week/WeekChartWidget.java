@@ -2,6 +2,10 @@ package name.pehl.tire.client.activity.week;
 
 import static java.lang.Math.max;
 import static java.lang.Math.round;
+
+import java.util.List;
+import java.util.ListIterator;
+
 import name.pehl.tire.client.activity.Activities;
 import name.pehl.tire.client.activity.Direction;
 import name.pehl.tire.client.activity.day.Day;
@@ -205,19 +209,20 @@ public class WeekChartWidget extends Widget implements HasWeekNavigationHandlers
 
     public void update(Activities activities)
     {
-        if (raphael != null && columns != null && activities != null && !activities.isEmpty())
+        List<Day> days = activities.getDays();
+        if (raphael != null && columns != null && activities != null && days != null && !days.isEmpty())
         {
             // update title
             StringBuilder value = new StringBuilder();
             value.append("CW ").append(activities.getWeek()).append(" / ").append(activities.getYear()).append(" - ")
                     .append(FormatUtils.inHours(activities.getMinutes())).append("\n")
-                    .append(FormatUtils.format(activities.getStart().getDate())).append(" - ")
-                    .append(FormatUtils.format(activities.getEnd().getDate()));
+                    .append(FormatUtils.format(activities.getStart())).append(" - ")
+                    .append(FormatUtils.format(activities.getEnd()));
             internalUpdateTitle(title, value.toString());
 
             // update max
             max = 0;
-            for (Day day : activities)
+            for (Day day : days)
             {
                 max = max(max, day.getMinutes());
             }
@@ -226,13 +231,14 @@ public class WeekChartWidget extends Widget implements HasWeekNavigationHandlers
 
             // update columns
             int index = 0;
-            for (Day day : activities)
+            for (ListIterator<Day> iter = days.listIterator(days.size()); iter.hasPrevious();)
             {
+                Day day = iter.previous();
                 if (index >= 0 && index < columns.length)
                 {
                     JavaScriptObject column = columns[index];
                     String path = path(index, day.getMinutes());
-                    String date = FormatUtils.format(day.getDate());
+                    String date = FormatUtils.format(day.getStart());
                     String hours = FormatUtils.inHours(day.getMinutes());
                     internalAnimate(column, path, date, hours);
                 }

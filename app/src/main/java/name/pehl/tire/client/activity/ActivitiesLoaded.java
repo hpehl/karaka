@@ -1,5 +1,7 @@
 package name.pehl.tire.client.activity;
 
+import name.pehl.tire.model.TimeUnit;
+
 import com.gwtplatform.annotation.GenEvent;
 import com.gwtplatform.annotation.Order;
 
@@ -15,5 +17,5 @@ public class ActivitiesLoaded
     Activities activities;
 
     @Order(2)
-    Unit unit;
+    TimeUnit unit;
 }

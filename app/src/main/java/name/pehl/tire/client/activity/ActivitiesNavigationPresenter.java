@@ -1,6 +1,7 @@
 package name.pehl.tire.client.activity;
 
 import name.pehl.tire.client.activity.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
+import name.pehl.tire.model.TimeUnit;
 
 import com.google.gwt.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PresenterWidget;
@@ -53,7 +54,7 @@ public abstract class ActivitiesNavigationPresenter<V extends ActivitiesNavigati
 
 
     @Override
-    public void changeUnit(Unit unit)
+    public void changeUnit(TimeUnit unit)
     {
         currentAnd = currentAnd.changeUnit(unit);
     }
@@ -64,6 +65,6 @@ public abstract class ActivitiesNavigationPresenter<V extends ActivitiesNavigati
     {
         currentActivities = event.getActivities();
         currentAnd = new ActivitiesNavigationDataAdapter().fromEvent(event);
-        getView().updateActivities(currentActivities, currentAnd);
+        getView().updateActivities(currentActivities);
     }
 }

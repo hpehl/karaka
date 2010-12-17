@@ -11,9 +11,6 @@ import name.pehl.tire.client.Defaults;
  */
 public final class FormatUtils
 {
-    private static final String NON_BREAKABLE_SPACE = "&nbsp;";
-
-
     private FormatUtils()
     {
     }
@@ -25,7 +22,7 @@ public final class FormatUtils
         {
             return Defaults.NUMBER_FORMAT.format(minutes / 60.0) + "h";
         }
-        return NON_BREAKABLE_SPACE;
+        return "";
     }
 
 
@@ -35,6 +32,6 @@ public final class FormatUtils
         {
             return Defaults.DATE_FORMAT.format(date);
         }
-        return NON_BREAKABLE_SPACE;
+        return "";
     }
 }

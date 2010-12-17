@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity;
 
-import static name.pehl.tire.client.activity.Unit.WEEK;
+import static name.pehl.tire.model.TimeUnit.WEEK;
 import name.pehl.tire.client.activity.week.WeekChartWidget;
 import name.pehl.tire.client.activity.week.WeekNavigationEvent;
 
@@ -47,9 +47,9 @@ public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHan
 
 
     @Override
-    public void updateActivities(Activities activities, ActivitiesNavigationData and)
+    public void updateActivities(Activities activities)
     {
-        if (and.getUnit() == WEEK)
+        if (activities.getUnit() == WEEK)
         {
             weekChart.update(activities);
         }

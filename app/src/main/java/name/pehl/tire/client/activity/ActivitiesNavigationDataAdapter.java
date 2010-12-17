@@ -1,13 +1,14 @@
 package name.pehl.tire.client.activity;
 
-import static name.pehl.tire.client.activity.Unit.MONTH;
-import static name.pehl.tire.client.activity.Unit.WEEK;
+import static name.pehl.tire.model.TimeUnit.MONTH;
+import static name.pehl.tire.model.TimeUnit.WEEK;
 
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
+import name.pehl.tire.model.TimeUnit;
 
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
@@ -32,7 +33,7 @@ public class ActivitiesNavigationDataAdapter
             Activities activities = event.getActivities();
             if (activities != null)
             {
-                Unit unit = event.getUnit();
+                TimeUnit unit = event.getUnit();
                 if (unit == MONTH)
                 {
                     return new ActivitiesNavigationData(activities.getYear(), activities.getMonth(), 0, unit);
@@ -63,14 +64,14 @@ public class ActivitiesNavigationDataAdapter
             }
             else
             {
-                Unit unit = Unit.WEEK;
+                TimeUnit unit = TimeUnit.WEEK;
                 int year = parseInt(placeRequest.getParameter(PARAM_YEAR, "0"));
                 int month = parseInt(placeRequest.getParameter(PARAM_MONTH, "0"));
                 int week = parseInt(placeRequest.getParameter(PARAM_WEEK, "0"));
 
                 if (names.contains(PARAM_YEAR) && names.contains(PARAM_MONTH) && !names.contains(PARAM_WEEK))
                 {
-                    unit = Unit.MONTH;
+                    unit = TimeUnit.MONTH;
                 }
                 return new ActivitiesNavigationData(year, month, week, unit);
             }
@@ -84,7 +85,7 @@ public class ActivitiesNavigationDataAdapter
         PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard);
         if (and != null)
         {
-            if (and.getUnit() == Unit.MONTH)
+            if (and.getUnit() == TimeUnit.MONTH)
             {
                 if (and.getYear() > 0 && and.getMonth() > 0)
                 {
@@ -96,7 +97,7 @@ public class ActivitiesNavigationDataAdapter
                     placeRequest = placeRequest.with(PARAM_MONTH, VALUE_CURRENT);
                 }
             }
-            else if (and.getUnit() == Unit.WEEK)
+            else if (and.getUnit() == TimeUnit.WEEK)
             {
                 if (and.getYear() > 0 && and.getWeek() > 0)
                 {

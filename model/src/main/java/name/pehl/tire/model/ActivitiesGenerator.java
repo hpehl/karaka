@@ -12,6 +12,10 @@ import org.joda.time.MutableDateTime;
  */
 public class ActivitiesGenerator
 {
+    public static final int ACTIVITIES_PER_MONTH = 23;
+    private static final int MAX_ACTIVITIES_PER_DAY = 2;
+    private static final int MAX_TAGS = 4;
+
     private static long nextId = 0;
     private final Random random = new Random();
 
@@ -19,12 +23,18 @@ public class ActivitiesGenerator
     public List<Activity> generateMonth(int year, int month)
     {
         List<Activity> activities = new ArrayList<Activity>();
-        MutableDateTime mdt = new MutableDateTime().year().set(year).monthOfYear().set(month).dayOfMonth().set(1)
-                .hourOfDay().set(9);
-        for (int i = 0; i < 23; i++)
+        MutableDateTime mdt = new MutableDateTime().year().set(year).monthOfYear().set(month).dayOfMonth().set(1);
+        for (int i = 0; i < ACTIVITIES_PER_MONTH; i++)
         {
-            Activity activity = newActivity(mdt);
-            activities.add(activity);
+            mdt.hourOfDay().set(9);
+            int activitiesCount = 1 + random.nextInt(MAX_ACTIVITIES_PER_DAY);
+            int hours = 2 + random.nextInt(6) / activitiesCount;
+            for (int j = 0; j < activitiesCount; j++)
+            {
+                Activity activity = newActivity(mdt, hours);
+                activities.add(activity);
+                mdt.hourOfDay().add(hours);
+            }
             mdt.addDays(1);
         }
         return activities;
@@ -34,27 +44,33 @@ public class ActivitiesGenerator
     public List<Activity> generateWeek(int year, int week)
     {
         List<Activity> activities = new ArrayList<Activity>();
-        MutableDateTime mdt = new MutableDateTime().year().set(year).weekOfWeekyear().set(week).dayOfWeek().set(1)
-                .hourOfDay().set(9);
+        MutableDateTime mdt = new MutableDateTime().year().set(year).weekOfWeekyear().set(week).dayOfWeek().set(1);
         for (int i = 0; i < 7; i++)
         {
-            Activity activity = newActivity(mdt);
-            activities.add(activity);
+            mdt.hourOfDay().set(9);
+            int activitiesCount = 1 + random.nextInt(MAX_ACTIVITIES_PER_DAY);
+            int hours = random.nextInt(8) / activitiesCount;
+            for (int j = 0; j < activitiesCount; j++)
+            {
+                Activity activity = newActivity(mdt, hours);
+                activities.add(activity);
+                mdt.hourOfDay().add(hours);
+            }
             mdt.addDays(1);
         }
         return activities;
     }
 
 
-    private Activity newActivity(MutableDateTime date)
+    private Activity newActivity(MutableDateTime date, int hours)
     {
         Activity activity = new Activity(randomString(5), randomString(10));
         activity.setId(nextId++);
         activity.setStart(new Time(date.toDate()));
-        int hour = date.hourOfDay().get() + 2 + random.nextInt(6);
+        int hour = date.hourOfDay().get() + hours;
         activity.setEnd(new Time(date.copy().hourOfDay().set(hour).toDate()));
 
-        int tags = random.nextInt(3);
+        int tags = random.nextInt(MAX_TAGS);
         for (int j = 0; j < tags; j++)
         {
             Tag tag = new Tag(randomString(5));

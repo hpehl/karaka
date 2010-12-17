@@ -1,7 +1,7 @@
 package name.pehl.tire.client.activity;
 
-import static name.pehl.tire.client.activity.Unit.MONTH;
-import static name.pehl.tire.client.activity.Unit.WEEK;
+import static name.pehl.tire.model.TimeUnit.MONTH;
+import static name.pehl.tire.model.TimeUnit.WEEK;
 
 import java.io.IOException;
 

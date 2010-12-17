@@ -1,18 +1,20 @@
 package name.pehl.tire.client.activity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 
 import name.pehl.piriti.client.json.Json;
 import name.pehl.tire.client.activity.day.Day;
+import name.pehl.tire.client.activity.week.Week;
+import name.pehl.tire.model.TimeUnit;
 
 /**
  * @author $Author$
  * @version $Date$ $Revision: 177
  *          $
  */
-public class Activities implements Iterable<Day>
+public class Activities
 {
     // @formatter:off
     @Json int year;
@@ -21,14 +23,11 @@ public class Activities implements Iterable<Day>
     @Json int monthDiff;
     @Json int week;
     @Json int weekDiff;
-    @Json(setter = DaysSetter.class) private final List<Day> days;
+    @Json TimeUnit unit;
+    @Json List<Week> weeks;
+    @Json List<Day> days;
+    @Json List<Activity> activities;
     // @formatter:on
-
-    public Activities()
-    {
-        days = new ArrayList<Day>();
-    }
-
 
     /**
      * Based on year, month and week
@@ -90,84 +89,99 @@ public class Activities implements Iterable<Day>
     @Override
     public String toString()
     {
-        StringBuilder builder = new StringBuilder("ActivitiesByDay [").append(year).append("/").append(month)
-                .append("/cw").append(week).append("]");
+        StringBuilder builder = new StringBuilder("ActivitiesByDay [").append(year).append(", ").append(month)
+                .append(", cw").append(week).append("]");
         return builder.toString();
     }
 
 
-    @Override
-    public Iterator<Day> iterator()
+    public Date getStart()
     {
-        return days.iterator();
-    }
-
-
-    public boolean isEmpty()
-    {
-        return days.isEmpty();
-    }
-
-
-    public int size()
-    {
-        return days.size();
-    }
-
-
-    public void clearDays()
-    {
-        days.clear();
-    }
-
-
-    public void addDay(Day day)
-    {
-        days.add(day);
-    }
-
-
-    public Day getStart()
-    {
-        if (!days.isEmpty())
+        Date start = null;
+        switch (unit)
         {
-            // days are sorted in descending order!
-            return days.get(days.size() - 1);
+            case MONTH:
+                if (!weeks.isEmpty())
+                {
+                    start = weeks.get(weeks.size() - 1).getStart();
+                }
+                break;
+            case WEEK:
+                if (!days.isEmpty())
+                {
+                    start = days.get(days.size() - 1).getStart();
+                }
+                break;
+            case DAY:
+                if (!activities.isEmpty())
+                {
+                    start = activities.get(activities.size() - 1).getStart();
+                }
+                break;
+            default:
+                break;
         }
-        return null;
+        return start;
     }
 
 
-    public Day getEnd()
+    public Date getEnd()
     {
-        if (!days.isEmpty())
+        Date end = null;
+        switch (unit)
         {
-            // days are sorted in descending order!
-            return days.get(0);
+            case MONTH:
+                if (!weeks.isEmpty())
+                {
+                    end = weeks.get(0).getEnd();
+                }
+                break;
+            case WEEK:
+                if (!days.isEmpty())
+                {
+                    end = days.get(0).getEnd();
+                }
+                break;
+            case DAY:
+                if (!activities.isEmpty())
+                {
+                    end = activities.get(0).getStart();
+                }
+                break;
+            default:
+                break;
         }
-        return null;
+        return end;
     }
 
 
     public long getMinutes()
     {
         long minutes = 0;
-        for (Day day : this)
+        switch (unit)
         {
-            minutes += day.getMinutes();
+            case MONTH:
+                for (Week week : weeks)
+                {
+                    minutes += week.getMinutes();
+                }
+                break;
+            case WEEK:
+                for (Day day : days)
+                {
+                    minutes += day.getMinutes();
+                }
+                break;
+            case DAY:
+                for (Activity activity : activities)
+                {
+                    minutes += activity.getMinutes();
+                }
+                break;
+            default:
+                break;
         }
         return minutes;
-    }
-
-
-    public List<Activity> getActivities()
-    {
-        List<Activity> activities = new ArrayList<Activity>();
-        for (Day day : this)
-        {
-            activities.addAll(day.getActivities());
-        }
-        return activities;
     }
 
 
@@ -204,5 +218,74 @@ public class Activities implements Iterable<Day>
     public int getWeekDiff()
     {
         return weekDiff;
+    }
+
+
+    public TimeUnit getUnit()
+    {
+        return unit;
+    }
+
+
+    public List<Week> getWeeks()
+    {
+        return weeks;
+    }
+
+
+    public List<Day> getDays()
+    {
+        return days;
+    }
+
+
+    public List<Activity> getActivities()
+    {
+        List<Activity> allActivities = new ArrayList<Activity>();
+        switch (unit)
+        {
+            case MONTH:
+                for (Week week : weeks)
+                {
+                    allActivities.addAll(week.getActivities());
+                }
+                break;
+            case WEEK:
+                for (Day day : days)
+                {
+                    allActivities.addAll(day.getActivities());
+                }
+                break;
+            case DAY:
+                allActivities = activities;
+                break;
+            default:
+                break;
+        }
+        return allActivities;
+    }
+
+
+    public int days()
+    {
+        int result = 0;
+        switch (unit)
+        {
+            case MONTH:
+                for (Week week : weeks)
+                {
+                    result += week.getDays().size();
+                }
+                break;
+            case WEEK:
+                result = days.size();
+                break;
+            case DAY:
+                result = 1;
+                break;
+            default:
+                break;
+        }
+        return result;
     }
 }

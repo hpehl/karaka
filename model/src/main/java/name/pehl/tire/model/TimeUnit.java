@@ -1,11 +1,12 @@
-package name.pehl.tire.client.activity;
+package name.pehl.tire.model;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public enum Unit
+public enum TimeUnit
 {
+    MONTH,
     WEEK,
-    MONTH;
+    DAY
 }

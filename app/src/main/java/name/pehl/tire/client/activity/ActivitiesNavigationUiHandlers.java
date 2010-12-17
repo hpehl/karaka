@@ -1,5 +1,7 @@
 package name.pehl.tire.client.activity;
 
+import name.pehl.tire.model.TimeUnit;
+
 import com.gwtplatform.mvp.client.UiHandlers;
 
 /**
@@ -18,5 +20,5 @@ public interface ActivitiesNavigationUiHandlers extends UiHandlers
     void onNext();
 
 
-    void changeUnit(Unit unit);
+    void changeUnit(TimeUnit unit);
 }

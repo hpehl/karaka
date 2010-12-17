@@ -1,21 +1,23 @@
-package name.pehl.tire.client.activity.day;
+package name.pehl.tire.client.activity.week;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import name.pehl.piriti.client.json.Json;
 import name.pehl.tire.client.activity.Activity;
+import name.pehl.tire.client.activity.day.Day;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class Day implements Iterable<Activity>
+public class Week implements Iterable<Day>
 {
     // @formatter:off
-    @Json int day;
-    @Json List<Activity> activities;
+    @Json int cw;
+    @Json List<Day> days;
     // @formatter:on
 
     @Override
@@ -23,7 +25,7 @@ public class Day implements Iterable<Activity>
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + day;
+        result = prime * result + cw;
         return result;
     }
 
@@ -43,8 +45,8 @@ public class Day implements Iterable<Activity>
         {
             return false;
         }
-        Day other = (Day) obj;
-        if (day != other.day)
+        Week other = (Week) obj;
+        if (cw != other.cw)
         {
             return false;
         }
@@ -56,53 +58,64 @@ public class Day implements Iterable<Activity>
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("Day [day=").append(day).append(", activities=").append(activities).append("]");
+        builder.append("Week [cw=").append(cw).append(", days=").append(days).append("]");
         return builder.toString();
     }
 
 
     @Override
-    public Iterator<Activity> iterator()
+    public Iterator<Day> iterator()
     {
-        return activities.iterator();
+        return days.iterator();
     }
 
 
     public boolean isEmpty()
     {
-        return activities.isEmpty();
+        return days.isEmpty();
     }
 
 
     public long getMinutes()
     {
         long minutes = 0;
-        for (Activity activity : this)
+        for (Day day : this)
         {
-            minutes += activity.getMinutes();
+            minutes += day.getMinutes();
         }
         return minutes;
     }
 
 
-    public int getDay()
+    public int getCw()
     {
-        return day;
+        return cw;
+    }
+
+
+    public List<Day> getDays()
+    {
+        return days;
     }
 
 
     public List<Activity> getActivities()
     {
-        return activities;
+        List<Activity> allActivities = new ArrayList<Activity>();
+        for (Day day : days)
+        {
+            allActivities.addAll(day.getActivities());
+        }
+        return allActivities;
     }
 
 
     public Date getStart()
     {
         Date start = null;
-        if (!activities.isEmpty())
+        if (!days.isEmpty())
         {
-            return activities.get(activities.size() - 1).getStart();
+            return days.get(days.size() - 1).getStart();
         }
         return start;
     }
@@ -111,9 +124,9 @@ public class Day implements Iterable<Activity>
     public Date getEnd()
     {
         Date end = null;
-        if (!activities.isEmpty())
+        if (!days.isEmpty())
         {
-            return activities.get(0).getStart();
+            return days.get(0).getStart();
         }
         return end;
     }

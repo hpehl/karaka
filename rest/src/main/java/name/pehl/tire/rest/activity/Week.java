@@ -4,39 +4,37 @@ import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import name.pehl.tire.model.Activity;
-
 import com.google.common.collect.ComparisonChain;
 
-class Day implements Comparable<Day>
+class Week implements Comparable<Week>
 {
-    final int day;
-    final SortedSet<Activity> activities;
+    final int week;
+    final SortedSet<Day> days;
 
 
-    Day(int day)
+    Week(int week)
     {
-        this.day = day;
-        this.activities = new TreeSet<Activity>();
+        this.week = week;
+        days = new TreeSet<Day>();
     }
 
 
-    public boolean add(Activity activity)
+    public boolean add(Day day)
     {
-        return activities.add(activity);
+        return days.add(day);
     }
 
 
-    public boolean addAll(Collection<? extends Activity> c)
+    public boolean addAll(Collection<? extends Day> c)
     {
-        return activities.addAll(c);
+        return days.addAll(c);
     }
 
 
     @Override
-    public int compareTo(Day that)
+    public int compareTo(Week that)
     {
-        return ComparisonChain.start().compare(that.day, this.day).result();
+        return ComparisonChain.start().compare(that.week, this.week).result();
     }
 
 
@@ -45,7 +43,7 @@ class Day implements Comparable<Day>
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + day;
+        result = prime * result + week;
         return result;
     }
 
@@ -65,8 +63,8 @@ class Day implements Comparable<Day>
         {
             return false;
         }
-        Day other = (Day) obj;
-        if (day != other.day)
+        Week other = (Week) obj;
+        if (week != other.week)
         {
             return false;
         }
@@ -78,7 +76,7 @@ class Day implements Comparable<Day>
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("Day [day=").append(day).append(", activities=").append(activities).append("]");
+        builder.append("Week [week=").append(week).append(", days=").append(days).append("]");
         return builder.toString();
     }
 }

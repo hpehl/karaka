@@ -4,6 +4,7 @@
 
     <source path="model">
         <include name="Status.java" />
+        <include name="TimeUnit.java" />
     </source>
 
 </module>

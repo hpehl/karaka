@@ -1,8 +1,8 @@
 package name.pehl.tire.client.activity;
 
 import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
-import static name.pehl.tire.client.activity.Unit.MONTH;
-import static name.pehl.tire.client.activity.Unit.WEEK;
+import static name.pehl.tire.model.TimeUnit.MONTH;
+import static name.pehl.tire.model.TimeUnit.WEEK;
 
 import java.util.List;
 
@@ -124,7 +124,7 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
             {
                 if (currentActivities != null)
                 {
-                    return currentActivities.size() + " days";
+                    return currentActivities.days() + " days";
                 }
                 return null;
             }
@@ -231,23 +231,23 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
 
 
     @Override
-    public void updateActivities(Activities activities, ActivitiesNavigationData and)
+    public void updateActivities(Activities activities)
     {
         currentActivities = activities;
 
         StringBuilder tooltip = new StringBuilder();
-        if (and.getUnit() == WEEK)
+        if (activities.getUnit() == WEEK)
         {
             tooltip.append("CW ").append(currentActivities.getWeek()).append(" / ").append(currentActivities.getYear());
         }
-        else if (and.getUnit() == MONTH)
+        else if (activities.getUnit() == MONTH)
         {
             String monthKey = "month_" + currentActivities.getMonth();
             tooltip.append(i18n.enums().getString(monthKey)).append(" ").append(currentActivities.getYear());
         }
         tooltip.append(" - ").append(FormatUtils.inHours(currentActivities.getMinutes())).append(" - ")
-                .append(FormatUtils.format(currentActivities.getStart().getDate())).append(" - ")
-                .append(FormatUtils.format(currentActivities.getEnd().getDate()));
+                .append(FormatUtils.format(currentActivities.getStart())).append(" - ")
+                .append(FormatUtils.format(currentActivities.getEnd()));
         header.setTitle(tooltip.toString());
 
         activitiesTable.setRowData(0, activities.getActivities());
@@ -257,7 +257,7 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
         lastWeek.setColor("#3d3d3d");
         currentMonth.setColor("#3d3d3d");
         currentWeek.setColor("#3d3d3d");
-        if (and.getUnit() == WEEK)
+        if (currentActivities.getUnit() == WEEK)
         {
             previous.setTitle("Previous week");
             next.setTitle("Next week");
@@ -270,7 +270,7 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
                 currentWeek.setColor("#1b92a8");
             }
         }
-        else if (and.getUnit() == MONTH)
+        else if (currentActivities.getUnit() == MONTH)
         {
             previous.setTitle("Previous month");
             next.setTitle("Next month");

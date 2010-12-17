@@ -99,7 +99,7 @@ public class Time implements Comparable<Time>
         this.date = dateTime.toDate();
         this.year = dateTime.year().get();
         this.month = dateTime.monthOfYear().get();
-        this.week = dateTime.weekyear().get();
+        this.week = dateTime.weekOfWeekyear().get();
         this.day = dateTime.dayOfMonth().get();
     }
 
@@ -118,7 +118,7 @@ public class Time implements Comparable<Time>
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
+        result = prime * result + (dateTime == null ? 0 : dateTime.hashCode());
         return result;
     }
 

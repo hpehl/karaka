@@ -1,7 +1,8 @@
 package name.pehl.tire.client.activity;
 
-import static name.pehl.tire.client.activity.Unit.MONTH;
-import static name.pehl.tire.client.activity.Unit.WEEK;
+import static name.pehl.tire.model.TimeUnit.MONTH;
+import static name.pehl.tire.model.TimeUnit.WEEK;
+import name.pehl.tire.model.TimeUnit;
 
 /**
  * Simple value object for navigation over activities by year, month and week.
@@ -26,7 +27,7 @@ public class ActivitiesNavigationData
     private final int year;
     private final int month;
     private final int week;
-    private final Unit unit;
+    private final TimeUnit unit;
 
 
     // ----------------------------------------------------------- constructors
@@ -37,7 +38,7 @@ public class ActivitiesNavigationData
     }
 
 
-    public ActivitiesNavigationData(int year, int month, int week, Unit unit)
+    public ActivitiesNavigationData(int year, int month, int week, TimeUnit unit)
     {
         super();
         this.year = year;
@@ -125,7 +126,7 @@ public class ActivitiesNavigationData
     }
 
 
-    public ActivitiesNavigationData changeUnit(Unit newUnit)
+    public ActivitiesNavigationData changeUnit(TimeUnit newUnit)
     {
         return new ActivitiesNavigationData(year, month, week, newUnit);
     }
@@ -225,7 +226,7 @@ public class ActivitiesNavigationData
     }
 
 
-    public Unit getUnit()
+    public TimeUnit getUnit()
     {
         return unit;
     }

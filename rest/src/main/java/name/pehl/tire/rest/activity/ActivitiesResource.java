@@ -1,18 +1,17 @@
 package name.pehl.tire.rest.activity;
 
+import static name.pehl.tire.model.TimeUnit.*;
+
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import name.pehl.tire.dao.ActivityDao;
 import name.pehl.tire.model.ActivitiesGenerator;
 import name.pehl.tire.model.Activity;
+import name.pehl.tire.model.TimeUnit;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
-import org.joda.time.Months;
 import org.joda.time.MutableDateTime;
-import org.joda.time.Weeks;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
@@ -22,8 +21,6 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import com.google.common.collect.SortedSetMultimap;
-import com.google.common.collect.TreeMultimap;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 
@@ -72,6 +69,7 @@ public class ActivitiesResource extends ServerResource
     @Get("json")
     public Representation getActivities()
     {
+        TimeUnit unit = null;
         String json = null;
         DateMidnight now = null;
         DateMidnight requested = null;
@@ -92,6 +90,7 @@ public class ActivitiesResource extends ServerResource
                 // ensureValidActivities(dao.findByYearMonth(requested.year().get(),
                 // requested.monthOfYear()
                 // .get()));
+                unit = MONTH;
                 activities = ensureValidActivities(new ActivitiesGenerator().generateMonth(requested.year().get(),
                         requested.monthOfYear().get()));
             }
@@ -101,23 +100,27 @@ public class ActivitiesResource extends ServerResource
                 // ensureValidActivities(dao.findByYearWeek(requested.year().get(),
                 // requested
                 // .weekOfWeekyear().get()));
+                unit = WEEK;
                 activities = ensureValidActivities(new ActivitiesGenerator().generateWeek(requested.year().get(),
                         requested.weekOfWeekyear().get()));
             }
             else if (ap.isToday())
             {
+                unit = DAY;
                 activities = ensureValidActivities(dao.findByYearMonthDay(requested.year().get(), requested
                         .monthOfYear().get(), requested.dayOfMonth().get()));
             }
         }
         else if (ap.hasYear() && ap.hasMonth() && ap.hasDay())
         {
+            unit = DAY;
             requested = new DateMidnight(ap.getYear(), ap.getMonth(), ap.getDay(), timeZone);
             activities = ensureValidActivities(dao.findByYearMonthDay(requested.year().get(), requested.monthOfYear()
                     .get(), requested.dayOfMonth().get()));
         }
         else if (ap.hasYear() && ap.hasMonth())
         {
+            unit = MONTH;
             requested = new DateMidnight(ap.getYear(), ap.getMonth(), 1, timeZone);
             // activities =
             // ensureValidActivities(dao.findByYearMonth(requested.year().get(),
@@ -128,6 +131,7 @@ public class ActivitiesResource extends ServerResource
         }
         else if (ap.hasYear() && ap.hasWeek())
         {
+            unit = WEEK;
             MutableDateTime mdt = new MutableDateTime(timeZone);
             mdt.year().set(ap.getYear());
             mdt.weekOfWeekyear().set(ap.getWeek());
@@ -140,7 +144,7 @@ public class ActivitiesResource extends ServerResource
                     .weekOfWeekyear().get()));
         }
 
-        Activities activitiesforJson = createActivities(requested, now, activities);
+        Activities activitiesforJson = new ActivitiesSorter().sort(requested, now, unit, activities);
         json = gson.toJson(activitiesforJson);
         return new JsonRepresentation(json);
     }
@@ -156,41 +160,6 @@ public class ActivitiesResource extends ServerResource
             return DateTimeZone.forID(timeZoneId);
         }
         return DateTimeZone.getDefault();
-    }
-
-
-    /**
-     * Sort the specified activities into {@link Day} instances and the days
-     * into a {@link Activities} instance.
-     * 
-     * @param requested
-     * @param now
-     * @param activities
-     * @return
-     */
-    private Activities createActivities(DateMidnight requested, DateMidnight now, List<Activity> activities)
-    {
-        int year = requested.year().get();
-        // Years.yearsBetween(now, requested).getYears() returns wrong results;
-        int yearDiff = requested.year().get() - now.year().get();
-        int month = requested.monthOfYear().get();
-        int monthDiff = Months.monthsBetween(now, requested).getMonths();
-        int week = requested.weekOfWeekyear().get();
-        int weekDiff = Weeks.weeksBetween(now, requested).getWeeks();
-
-        SortedSet<Day> days = new TreeSet<Day>();
-        SortedSetMultimap<Day, Activity> activitiesPerDay = TreeMultimap.create();
-        for (Activity activity : activities)
-        {
-            Day day = new Day(activity.getStart().getDate());
-            activitiesPerDay.put(day, activity);
-        }
-        for (Day day : activitiesPerDay.keySet())
-        {
-            day.activities = activitiesPerDay.get(day);
-            days.add(day);
-        }
-        return new Activities(year, yearDiff, month, monthDiff, week, weekDiff, days);
     }
 
 
