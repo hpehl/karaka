@@ -5,14 +5,14 @@ import static java.util.logging.Level.FINE;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
-import name.pehl.tire.client.activity.Activities;
-import name.pehl.tire.client.activity.ActivitiesLoadedEvent;
-import name.pehl.tire.client.activity.ActivitiesNavigationData;
-import name.pehl.tire.client.activity.ActivitiesNavigationDataAdapter;
-import name.pehl.tire.client.activity.GetActivitiesAction;
-import name.pehl.tire.client.activity.GetActivitiesResult;
-import name.pehl.tire.client.activity.NewActivityPresenter;
-import name.pehl.tire.client.activity.RecentActivitiesPresenter;
+import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
+import name.pehl.tire.client.activity.event.GetActivitiesAction;
+import name.pehl.tire.client.activity.event.GetActivitiesResult;
+import name.pehl.tire.client.activity.model.Activities;
+import name.pehl.tire.client.activity.model.ActivitiesNavigationData;
+import name.pehl.tire.client.activity.model.ActivitiesNavigationDataAdapter;
+import name.pehl.tire.client.activity.presenter.NewActivityPresenter;
+import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.dispatch.TireCallback;
 
@@ -30,8 +30,7 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision: 85
- *          $
+ * @version $Date$ $Revision$
  */
 public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, DashboardPresenter.MyProxy>
 

@@ -1,6 +1,6 @@
 package name.pehl.tire.client.application;
 
-import name.pehl.tire.client.activity.QuickChartPresenter;
+import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
 import name.pehl.tire.client.cockpit.CockpitPresenter;
 import name.pehl.tire.client.navigation.NavigationPresenter;
 

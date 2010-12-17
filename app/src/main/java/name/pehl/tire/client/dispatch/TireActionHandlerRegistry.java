@@ -1,6 +1,6 @@
 package name.pehl.tire.client.dispatch;
 
-import name.pehl.tire.client.activity.GetActivitiesHandler;
+import name.pehl.tire.client.activity.event.GetActivitiesHandler;
 
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.client.actionhandler.DefaultClientActionHandlerRegistry;
