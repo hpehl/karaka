@@ -2,7 +2,6 @@ package name.pehl.tire.client.activity;
 
 import static name.pehl.tire.model.TimeUnit.WEEK;
 import name.pehl.tire.client.activity.week.WeekChartWidget;
-import name.pehl.tire.client.activity.week.WeekNavigationEvent;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -57,7 +56,7 @@ public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHan
 
 
     @UiHandler("weekChart")
-    void handleWeekNavigation(WeekNavigationEvent event)
+    void handleWeekNavigation(ActivitiesNavigationEvent event)
     {
         if (getUiHandlers() != null)
         {

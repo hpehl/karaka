@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.ListIterator;
 
 import name.pehl.tire.client.activity.Activities;
+import name.pehl.tire.client.activity.ActivitiesNavigationEvent;
+import name.pehl.tire.client.activity.ActivitiesNavigationEvent.ActivitiesNavigationHandler;
+import name.pehl.tire.client.activity.ActivitiesNavigationEvent.HasActivitiesNavigationHandlers;
 import name.pehl.tire.client.activity.Direction;
 import name.pehl.tire.client.activity.day.Day;
-import name.pehl.tire.client.activity.week.WeekNavigationEvent.HasWeekNavigationHandlers;
-import name.pehl.tire.client.activity.week.WeekNavigationEvent.WeekNavigationHandler;
 import name.pehl.tire.client.ui.FormatUtils;
+import name.pehl.tire.model.TimeUnit;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
@@ -25,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @version $Date$ $Revision: 102
  *          $
  */
-public class WeekChartWidget extends Widget implements HasWeekNavigationHandlers
+public class WeekChartWidget extends Widget implements HasActivitiesNavigationHandlers
 {
     private static final int TITLE_HEIGHT = 30;
     private static final int LEGEND_HEIGHT = 20;
@@ -267,27 +269,27 @@ public class WeekChartWidget extends Widget implements HasWeekNavigationHandlers
     // --------------------------------------------------------- event handling
 
     @Override
-    public HandlerRegistration addWeekNavigationHandler(WeekNavigationHandler handler)
+    public HandlerRegistration addActivitiesNavigationHandler(ActivitiesNavigationHandler handler)
     {
-        return addHandler(handler, WeekNavigationEvent.getType());
+        return addHandler(handler, ActivitiesNavigationEvent.getType());
     }
 
 
     private void onPrev()
     {
-        WeekNavigationEvent.fire(this, Direction.PREV);
+        ActivitiesNavigationEvent.fire(this, TimeUnit.WEEK, Direction.PREV);
     }
 
 
     private void onCurrent()
     {
-        WeekNavigationEvent.fire(this, Direction.CURRENT);
+        ActivitiesNavigationEvent.fire(this, TimeUnit.WEEK, Direction.CURRENT);
     }
 
 
     private void onNext()
     {
-        WeekNavigationEvent.fire(this, Direction.NEXT);
+        ActivitiesNavigationEvent.fire(this, TimeUnit.WEEK, Direction.NEXT);
     }
 
 

@@ -85,7 +85,7 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
         this.resources.navigation().ensureInjected();
         this.ctr = ctr;
         this.ctr.cellTableStyle().ensureInjected();
-        activitiesTable = new CellTable<Activity>(Integer.MAX_VALUE, this.ctr);
+        activitiesTable = new CellTable<Activity>(Integer.MAX_VALUE, this.ctr, new ActivityKeyProvider());
         activitiesTable.setRowCount(0);
         activitiesTable.setKeyboardSelectionPolicy(DISABLED);
         activitiesTable.setRowStyles(new RowStyles<Activity>()

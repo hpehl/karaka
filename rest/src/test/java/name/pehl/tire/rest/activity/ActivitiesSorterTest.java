@@ -1,7 +1,6 @@
 package name.pehl.tire.rest.activity;
 
-import static junit.framework.Assert.*;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.List;
 

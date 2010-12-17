@@ -1,6 +1,6 @@
-package name.pehl.tire.client.activity.week;
+package name.pehl.tire.client.activity;
 
-import name.pehl.tire.client.activity.Direction;
+import name.pehl.tire.model.TimeUnit;
 
 import com.gwtplatform.annotation.GenEvent;
 import com.gwtplatform.annotation.Order;
@@ -10,8 +10,11 @@ import com.gwtplatform.annotation.Order;
  * @version $LastChangedRevision:$
  */
 @GenEvent
-public class WeekNavigation
+public class ActivitiesNavigation
 {
     @Order(1)
+    TimeUnit unit;
+
+    @Order(2)
     Direction direction;
 }

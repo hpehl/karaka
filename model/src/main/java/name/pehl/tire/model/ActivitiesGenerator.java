@@ -49,7 +49,7 @@ public class ActivitiesGenerator
         {
             mdt.hourOfDay().set(9);
             int activitiesCount = 1 + random.nextInt(MAX_ACTIVITIES_PER_DAY);
-            int hours = random.nextInt(8) / activitiesCount;
+            int hours = 2 + random.nextInt(8) / activitiesCount;
             for (int j = 0; j < activitiesCount; j++)
             {
                 Activity activity = newActivity(mdt, hours);
