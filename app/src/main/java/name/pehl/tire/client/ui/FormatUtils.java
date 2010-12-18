@@ -16,7 +16,7 @@ public final class FormatUtils
     }
 
 
-    public static String inHours(long minutes)
+    public static String hours(long minutes)
     {
         if (minutes > 0)
         {
@@ -26,11 +26,21 @@ public final class FormatUtils
     }
 
 
-    public static String format(Date date)
+    public static String date(Date date)
     {
         if (date != null)
         {
             return Defaults.DATE_FORMAT.format(date);
+        }
+        return "";
+    }
+
+
+    public static String time(Date date)
+    {
+        if (date != null)
+        {
+            return Defaults.TIME_FORMAT.format(date);
         }
         return "";
     }

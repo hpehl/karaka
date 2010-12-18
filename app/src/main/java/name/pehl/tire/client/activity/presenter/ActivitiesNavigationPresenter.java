@@ -5,11 +5,12 @@ import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoad
 import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationData;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationDataAdapter;
-import name.pehl.tire.client.activity.view.ActivitiesNavigationView;
 import name.pehl.tire.model.TimeUnit;
 
 import com.google.gwt.event.shared.EventBus;
+import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
+import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
@@ -17,9 +18,14 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public abstract class ActivitiesNavigationPresenter<V extends ActivitiesNavigationView> extends PresenterWidget<V>
-        implements ActivitiesNavigationUiHandlers, ActivitiesLoadedHandler
+public abstract class ActivitiesNavigationPresenter<V extends ActivitiesNavigationPresenter.MyView> extends
+        PresenterWidget<V> implements ActivitiesNavigationUiHandlers, ActivitiesLoadedHandler
 {
+    public interface MyView extends View, HasUiHandlers<ActivitiesNavigationUiHandlers>
+    {
+        void updateActivities(Activities activities);
+    }
+
     protected Activities currentActivities;
     protected ActivitiesNavigationData currentAnd;
     protected final PlaceManager placeManager;

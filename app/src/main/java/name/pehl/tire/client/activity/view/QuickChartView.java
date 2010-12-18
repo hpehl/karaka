@@ -1,5 +1,6 @@
 package name.pehl.tire.client.activity.view;
 
+import static name.pehl.tire.model.TimeUnit.MONTH;
 import static name.pehl.tire.model.TimeUnit.WEEK;
 import name.pehl.tire.client.activity.event.ActivitiesNavigationEvent;
 import name.pehl.tire.client.activity.model.Activities;
@@ -30,6 +31,7 @@ public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHan
     private static WeekChartUi uiBinder = GWT.create(WeekChartUi.class);
     
     @UiField WeekChartWidget weekChart;
+    @UiField MonthChartWidget monthChart;
     // @formatter:on
 
     private final Widget widget;
@@ -38,6 +40,7 @@ public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHan
     public QuickChartView()
     {
         this.widget = uiBinder.createAndBindUi(this);
+        this.monthChart.setVisible(false);
     }
 
 
@@ -53,17 +56,38 @@ public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHan
     {
         if (activities.getUnit() == WEEK)
         {
+            monthChart.setVisible(false);
+            weekChart.setVisible(true);
             weekChart.update(activities);
         }
+        else if (activities.getUnit() == MONTH)
+        {
+            weekChart.setVisible(false);
+            monthChart.setVisible(true);
+            monthChart.update(activities);
+        }
+    }
+
+
+    @UiHandler("monthChart")
+    void handleMonthNavigation(ActivitiesNavigationEvent event)
+    {
+        handleNavigation(event);
     }
 
 
     @UiHandler("weekChart")
     void handleWeekNavigation(ActivitiesNavigationEvent event)
     {
+        handleNavigation(event);
+    }
+
+
+    void handleNavigation(ActivitiesNavigationEvent event)
+    {
         if (getUiHandlers() != null)
         {
-            getUiHandlers().changeUnit(WEEK);
+            getUiHandlers().changeUnit(event.getUnit());
             switch (event.getDirection())
             {
                 case PREV:

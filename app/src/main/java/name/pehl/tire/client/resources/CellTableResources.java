@@ -17,7 +17,10 @@ public interface CellTableResources extends CellTable.Resources
         String startColumn();
 
 
-        String durationColumn();
+        String durationInHoursColumn();
+
+
+        String durationFromToColumn();
 
 
         String nameColumn();

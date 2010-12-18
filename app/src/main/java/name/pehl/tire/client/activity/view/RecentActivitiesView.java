@@ -117,7 +117,7 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
             @Override
             public String getValue(Activity activity)
             {
-                return FormatUtils.format(activity.getStart());
+                return FormatUtils.date(activity.getStart());
             }
         };
         activities.addColumnStyleName(0, ctr.cellTableStyle().startColumn());
@@ -134,33 +134,45 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
             }
         });
 
-        // Column #1: Duration
-        // TODO Right align as soon as
-        // http://code.google.com/p/google-web-toolkit/issues/detail?id=5623 is
-        // released
-        TextColumn<Activity> durationColumn = new TextColumn<Activity>()
+        // Column #1: Duration from - to
+        TextColumn<Activity> durationFromToColumn = new TextColumn<Activity>()
         {
             @Override
             public String getValue(Activity activity)
             {
-                return FormatUtils.inHours(activity.getMinutes());
+                return FormatUtils.time(activity.getStart()) + " - " + FormatUtils.time(activity.getEnd());
             }
         };
-        activities.addColumnStyleName(1, ctr.cellTableStyle().durationColumn());
-        activities.addColumn(durationColumn, null, new TextHeader(null)
+        activities.addColumnStyleName(1, ctr.cellTableStyle().durationFromToColumn());
+        activities.addColumn(durationFromToColumn);
+
+        // Column #2: Duration in hours
+        // TODO Right align as soon as
+        // http://code.google.com/p/google-web-toolkit/issues/detail?id=5623 is
+        // released
+        TextColumn<Activity> durationInHoursColumn = new TextColumn<Activity>()
+        {
+            @Override
+            public String getValue(Activity activity)
+            {
+                return FormatUtils.hours(activity.getMinutes());
+            }
+        };
+        activities.addColumnStyleName(2, ctr.cellTableStyle().durationInHoursColumn());
+        activities.addColumn(durationInHoursColumn, null, new TextHeader(null)
         {
             @Override
             public String getValue()
             {
                 if (currentActivities != null)
                 {
-                    return FormatUtils.inHours(currentActivities.getMinutes());
+                    return FormatUtils.hours(currentActivities.getMinutes());
                 }
                 return null;
             }
         });
 
-        // Column #2: Name, Description & Tags
+        // Column #3: Name, Description & Tags
         SafeHtmlRenderer<Activity> nameRenderer = new AbstractSafeHtmlRenderer<Activity>()
         {
             @Override
@@ -204,10 +216,10 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
                 return activity;
             }
         };
-        activities.addColumnStyleName(2, ctr.cellTableStyle().nameColumn());
+        activities.addColumnStyleName(3, ctr.cellTableStyle().nameColumn());
         activities.addColumn(nameColumn);
 
-        // Column #3: Project
+        // Column #4: Project
         TextColumn<Activity> projectColumn = new TextColumn<Activity>()
         {
             @Override
@@ -220,7 +232,7 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
                 return null;
             }
         };
-        activities.addColumnStyleName(3, ctr.cellTableStyle().projectColumn());
+        activities.addColumnStyleName(4, ctr.cellTableStyle().projectColumn());
         activities.addColumn(projectColumn);
 
         // TODO Column #4: Actions
@@ -249,9 +261,9 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
             String monthKey = "month_" + currentActivities.getMonth();
             tooltip.append(i18n.enums().getString(monthKey)).append(" ").append(currentActivities.getYear());
         }
-        tooltip.append(" - ").append(FormatUtils.inHours(currentActivities.getMinutes())).append(" - ")
-                .append(FormatUtils.format(currentActivities.getStart())).append(" - ")
-                .append(FormatUtils.format(currentActivities.getEnd()));
+        tooltip.append(" - ").append(FormatUtils.hours(currentActivities.getMinutes())).append(" - ")
+                .append(FormatUtils.date(currentActivities.getStart())).append(" - ")
+                .append(FormatUtils.date(currentActivities.getEnd()));
         header.setTitle(tooltip.toString());
 
         activitiesTable.setRowData(0, activities.getActivities());

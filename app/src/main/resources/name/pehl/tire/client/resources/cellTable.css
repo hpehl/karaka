@@ -102,11 +102,15 @@
 }
 
 .startColumn {
-    width: 10em;
+    width: 7em;
 }
 
-.durationColumn {
-    width: 5em;
+.durationFromToColumn {
+    width: 8em;
+}
+
+.durationInHoursColumn {
+    width: 4em;
 }
 
 .nameColumn {

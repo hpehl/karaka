@@ -7,26 +7,27 @@ import java.util.ListIterator;
 
 import name.pehl.tire.client.activity.event.ActivitiesNavigationEvent;
 import name.pehl.tire.client.activity.model.Activities;
-import name.pehl.tire.client.activity.model.Day;
 import name.pehl.tire.client.activity.model.Direction;
+import name.pehl.tire.client.activity.model.Week;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.model.TimeUnit;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiConstructor;
 
 /**
- * @author $Author$
- * @version $Date$ $Revision: 102
+ * @author $Author: harald.pehl $
+ * @version $Date: 2010-12-17 21:37:43 +0100 (Fr, 17 Dez 2010) $ $Revision: 102
  *          $
  */
-public class WeekChartWidget extends QuickChartWidget
+public class MonthChartWidget extends QuickChartWidget
 {
 
     // ----------------------------------------------------------- constructors
 
     @UiConstructor
-    public WeekChartWidget(int width, int height, String legendTitles)
+    public MonthChartWidget(int width, int height, String legendTitles)
     {
         super(width, height, legendTitles);
     }
@@ -37,38 +38,40 @@ public class WeekChartWidget extends QuickChartWidget
     @Override
     public void update(Activities activities)
     {
-        if (initialized && activities != null && activities.getDays() != null && !activities.getDays().isEmpty())
+        if (initialized && activities != null && activities.getWeeks() != null && !activities.getWeeks().isEmpty())
         {
-            List<Day> days = activities.getDays();
+            List<Week> weeks = activities.getWeeks();
 
             // update title
+            String month = NumberFormat.getFormat("00").format(activities.getMonth());
             StringBuilder title = new StringBuilder();
-            title.append("CW ").append(activities.getWeek()).append(" / ").append(activities.getYear()).append(" - ")
-                    .append(FormatUtils.hours(activities.getMinutes())).append("\n")
-                    .append(FormatUtils.date(activities.getStart())).append(" - ")
-                    .append(FormatUtils.date(activities.getEnd()));
+            title.append(month).append(" / ").append(activities.getYear()).append(" - ")
+                    .append(FormatUtils.hours(activities.getMinutes()));
             updateTitle(title.toString());
 
             // update max
             max = 0;
-            for (Day day : days)
+            for (Week week : weeks)
             {
-                max = max(max, day.getMinutes());
+                max = max(max, week.getMinutes());
             }
             max += max * .05;
             oneMinute = (double) usableHeight / max;
 
             // update columns
             int index = 0;
-            for (ListIterator<Day> iter = days.listIterator(days.size()); iter.hasPrevious();)
+            for (ListIterator<Week> iter = weeks.listIterator(weeks.size()); iter.hasPrevious();)
             {
-                Day day = iter.previous();
+                Week week = iter.previous();
                 if (index >= 0 && index < columns.length)
                 {
                     JavaScriptObject column = columns[index];
-                    String path = path(index, day.getMinutes());
-                    String tooltip = FormatUtils.date(day.getStart()) + ": " + FormatUtils.hours(day.getMinutes());
+                    JavaScriptObject legend = legends[index];
+                    String path = path(index, week.getMinutes());
+                    String cw = "CW " + week.getWeek();
+                    String tooltip = cw + ": " + FormatUtils.hours(week.getMinutes());
                     animateColumn(column, path, tooltip);
+                    updateLegend(legend, cw);
                 }
                 index++;
             }
@@ -81,20 +84,20 @@ public class WeekChartWidget extends QuickChartWidget
     @Override
     protected void onPrev()
     {
-        ActivitiesNavigationEvent.fire(this, TimeUnit.WEEK, Direction.PREV);
+        ActivitiesNavigationEvent.fire(this, TimeUnit.MONTH, Direction.PREV);
     }
 
 
     @Override
     protected void onCurrent()
     {
-        ActivitiesNavigationEvent.fire(this, TimeUnit.WEEK, Direction.CURRENT);
+        ActivitiesNavigationEvent.fire(this, TimeUnit.MONTH, Direction.CURRENT);
     }
 
 
     @Override
     protected void onNext()
     {
-        ActivitiesNavigationEvent.fire(this, TimeUnit.WEEK, Direction.NEXT);
+        ActivitiesNavigationEvent.fire(this, TimeUnit.MONTH, Direction.NEXT);
     }
 }

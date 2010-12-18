@@ -14,7 +14,7 @@ import name.pehl.piriti.client.json.Json;
 public class Week implements Iterable<Day>
 {
     // @formatter:off
-    @Json int cw;
+    @Json int week;
     @Json List<Day> days;
     // @formatter:on
 
@@ -23,7 +23,7 @@ public class Week implements Iterable<Day>
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + cw;
+        result = prime * result + week;
         return result;
     }
 
@@ -44,7 +44,7 @@ public class Week implements Iterable<Day>
             return false;
         }
         Week other = (Week) obj;
-        if (cw != other.cw)
+        if (week != other.week)
         {
             return false;
         }
@@ -56,7 +56,7 @@ public class Week implements Iterable<Day>
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("Week [cw=").append(cw).append(", days=").append(days).append("]");
+        builder.append("Week [week=").append(week).append(", days=").append(days).append("]");
         return builder.toString();
     }
 
@@ -85,9 +85,9 @@ public class Week implements Iterable<Day>
     }
 
 
-    public int getCw()
+    public int getWeek()
     {
-        return cw;
+        return week;
     }
 
 

@@ -1,7 +1,5 @@
 package name.pehl.tire.client.activity.presenter;
 
-import name.pehl.tire.client.activity.view.ActivitiesNavigationView;
-
 import com.google.gwt.event.shared.EventBus;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
@@ -15,7 +13,7 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
  */
 public class RecentActivitiesPresenter extends ActivitiesNavigationPresenter<RecentActivitiesPresenter.MyView>
 {
-    public interface MyView extends ActivitiesNavigationView
+    public interface MyView extends ActivitiesNavigationPresenter.MyView
     {
     }
 

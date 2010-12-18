@@ -14,5 +14,6 @@ public interface Defaults
 
     // TODO Replace with user setting
     DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat("dd.MM.yyyy");
+    DateTimeFormat TIME_FORMAT = DateTimeFormat.getFormat("HH:mm");
     NumberFormat NUMBER_FORMAT = NumberFormat.getFormat("#0.00");
 }

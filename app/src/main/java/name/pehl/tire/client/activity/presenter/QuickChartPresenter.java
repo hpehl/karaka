@@ -6,7 +6,6 @@ import name.pehl.tire.client.activity.event.GetActivitiesAction;
 import name.pehl.tire.client.activity.event.GetActivitiesResult;
 import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationData;
-import name.pehl.tire.client.activity.view.ActivitiesNavigationView;
 import name.pehl.tire.client.dispatch.TireCallback;
 
 import com.google.gwt.event.shared.EventBus;
@@ -23,7 +22,7 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
  */
 public class QuickChartPresenter extends ActivitiesNavigationPresenter<QuickChartPresenter.MyView>
 {
-    public interface MyView extends ActivitiesNavigationView
+    public interface MyView extends ActivitiesNavigationPresenter.MyView
     {
     }
 
