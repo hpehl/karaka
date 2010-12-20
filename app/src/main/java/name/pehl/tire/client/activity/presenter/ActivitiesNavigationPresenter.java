@@ -12,7 +12,6 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
 /**
  * @author $LastChangedBy:$
@@ -28,6 +27,7 @@ public abstract class ActivitiesNavigationPresenter<V extends ActivitiesNavigati
 
     protected Activities currentActivities;
     protected ActivitiesNavigationData currentAnd;
+    protected ActivitiesNavigationDataAdapter anda;
     protected final PlaceManager placeManager;
 
 
@@ -35,32 +35,37 @@ public abstract class ActivitiesNavigationPresenter<V extends ActivitiesNavigati
     {
         super(eventBus, view);
         this.placeManager = placeManager;
+        this.anda = new ActivitiesNavigationDataAdapter();
         getView().setUiHandlers(this);
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
     }
 
 
     @Override
+    public void onRelative(int offset)
+    {
+        placeManager.revealPlace(anda.toPlaceRequest(currentAnd.relative(offset)));
+    }
+
+
+    @Override
     public void onPrev()
     {
-        PlaceRequest placeRequest = new ActivitiesNavigationDataAdapter().toPlaceRequest(currentAnd.decrease());
-        placeManager.revealPlace(placeRequest);
+        placeManager.revealPlace(anda.toPlaceRequest(currentAnd.decrease()));
     }
 
 
     @Override
     public void onCurrent()
     {
-        PlaceRequest placeRequest = new ActivitiesNavigationDataAdapter().toPlaceRequest(currentAnd.current());
-        placeManager.revealPlace(placeRequest);
+        placeManager.revealPlace(anda.toPlaceRequest(currentAnd.current()));
     }
 
 
     @Override
     public void onNext()
     {
-        PlaceRequest placeRequest = new ActivitiesNavigationDataAdapter().toPlaceRequest(currentAnd.increase());
-        placeManager.revealPlace(placeRequest);
+        placeManager.revealPlace(anda.toPlaceRequest(currentAnd.increase()));
     }
 
 
@@ -74,8 +79,8 @@ public abstract class ActivitiesNavigationPresenter<V extends ActivitiesNavigati
     @Override
     public final void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
+        currentAnd = anda.fromEvent(event);
         currentActivities = event.getActivities();
-        currentAnd = new ActivitiesNavigationDataAdapter().fromEvent(event);
         getView().updateActivities(currentActivities);
     }
 }

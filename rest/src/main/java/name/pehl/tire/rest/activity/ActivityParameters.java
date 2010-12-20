@@ -19,8 +19,9 @@ public class ActivityParameters
     // -------------------------------------------------------------- constants
 
     public static final String YEAR = "year";
-    public static final String YEAR_OR_ID = "yearOdId";
+    public static final String YEAR_OR_RELATIVE_OR_ID = "yearOrRelativeOrId";
     public static final String MONTH_OR_WEEK_OR_ACTION = "monthOrWeekOrAction";
+    public static final String RELATIVE = "relative";
     public static final String CURRENT_MONTH = "currentMonth";
     public static final String MONTH = "month";
     public static final String CURRENT_WEEK = "currentWeek";
@@ -31,7 +32,7 @@ public class ActivityParameters
     public static final String START = "start";
     public static final String STOP = "stop";
     public static final String PAUSE = "pause";
-    public static final Pattern WEEK_PATTERN = Pattern.compile("cw([\\d]{1,2})");
+    public static final Pattern WEEK_PATTERN = Pattern.compile("cw((\\+|-)?[\\d]{1,2})");
 
     // -------------------------------------------------------- private members
 
@@ -51,6 +52,7 @@ public class ActivityParameters
     private int day;
     private boolean hasId;
     private long id;
+    private boolean relative;
     private boolean hasAction;
     private Action action;
 
@@ -117,8 +119,8 @@ public class ActivityParameters
             if (START.equals(value) || STOP.equals(value) || PAUSE.equals(value))
             {
                 // In this case id is required
-                String idValue = (String) parameters.get(YEAR_OR_ID);
-                id = convertToNumber(YEAR_OR_ID, idValue);
+                String idValue = (String) parameters.get(YEAR_OR_RELATIVE_OR_ID);
+                id = convertToNumber(YEAR_OR_RELATIVE_OR_ID, idValue);
                 hasId = true;
 
                 action = Action.valueOf(value.toUpperCase());
@@ -126,20 +128,38 @@ public class ActivityParameters
             }
             else
             {
-                // In this case year is required
-                String yearValue = (String) parameters.get(YEAR_OR_ID);
-                year = (int) convertToNumber(YEAR_OR_ID, yearValue);
-                hasYear = true;
-                Matcher m = WEEK_PATTERN.matcher(value);
-                if (m.matches())
+                // In this case relative keyword or year is required
+                String yearOrRelativeValue = (String) parameters.get(YEAR_OR_RELATIVE_OR_ID);
+                if (RELATIVE.equals(yearOrRelativeValue))
                 {
-                    week = (int) convertToNumber(MONTH_OR_WEEK_OR_ACTION, m.group(1));
-                    hasWeek = true;
+                    relative = true;
+                    Matcher m = WEEK_PATTERN.matcher(value);
+                    if (m.matches())
+                    {
+                        week = (int) convertToNumber(MONTH_OR_WEEK_OR_ACTION, m.group(1));
+                        hasWeek = true;
+                    }
+                    else
+                    {
+                        month = (int) convertToNumber(MONTH_OR_WEEK_OR_ACTION, value);
+                        hasMonth = true;
+                    }
                 }
                 else
                 {
-                    month = (int) convertToNumber(MONTH_OR_WEEK_OR_ACTION, value);
-                    hasMonth = true;
+                    year = (int) convertToNumber(YEAR_OR_RELATIVE_OR_ID, yearOrRelativeValue);
+                    hasYear = true;
+                    Matcher m = WEEK_PATTERN.matcher(value);
+                    if (m.matches())
+                    {
+                        week = (int) convertToNumber(MONTH_OR_WEEK_OR_ACTION, m.group(1));
+                        hasWeek = true;
+                    }
+                    else
+                    {
+                        month = (int) convertToNumber(MONTH_OR_WEEK_OR_ACTION, value);
+                        hasMonth = true;
+                    }
                 }
             }
         }
@@ -253,6 +273,12 @@ public class ActivityParameters
     public long getId()
     {
         return id;
+    }
+
+
+    public boolean isRelative()
+    {
+        return relative;
     }
 
 

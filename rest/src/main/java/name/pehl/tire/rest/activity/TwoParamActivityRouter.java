@@ -58,7 +58,11 @@ public class TwoParamActivityRouter extends SecureRouter
         try
         {
             ActivityParameters ap = new ActivityParameters().parse(attributes);
-            if (ap.hasYear() && (ap.hasMonth() || ap.hasWeek()))
+            if (ap.isRelative() && (ap.hasMonth() || ap.hasWeek()))
+            {
+                return createFinder(ActivitiesResource.class);
+            }
+            else if (ap.hasYear() && (ap.hasMonth() || ap.hasWeek()))
             {
                 return createFinder(ActivitiesResource.class);
             }

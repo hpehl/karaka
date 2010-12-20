@@ -19,7 +19,7 @@
     text-align: left;
     font-size: 11pt;
     line-height: 2em;
-    padding: 5px 10px 5px 0;
+    padding: 5px 10px;
     border-top: 1px solid #dedede;
 }
 
@@ -98,6 +98,10 @@
 
 /* ----------------------------------------------- Custom CellTable classes */
 .activeActivity {
+    background-color: #dbf1aa;
+}
+
+.oddDays {
     background-color: #e9ffbf;
 }
 
@@ -119,4 +123,8 @@
 
 .projectColumn {
     
+}
+
+.actionColumn {
+    width: 40px;
 }

@@ -2,10 +2,24 @@ package name.pehl.tire.client.activity.model;
 
 import static name.pehl.tire.model.TimeUnit.MONTH;
 import static name.pehl.tire.model.TimeUnit.WEEK;
+
+import java.util.EnumSet;
+
 import name.pehl.tire.model.TimeUnit;
 
 /**
  * Simple value object for navigation over activities by year, month and week.
+ * therefore special values for year, month and week the are used in the
+ * following manner:
+ * <dl>
+ * <dt>0 for year, month and week</dt>
+ * <dd>Navigation data for the current month / week</dd>
+ * <dt>0 for year and -n for either month or week</dt>
+ * <dd>Navigation data for the month / week relative to the current month / week
+ * with offset n.</dd>
+ * <dt>Absolute values for year and either month or week within valid ranges</dt>
+ * <dd>Navigation data for the specified month / week</dd>
+ * </dl>
  * 
  * @author $Author$
  * @version $Date$ $Revision: 180
@@ -38,9 +52,14 @@ public class ActivitiesNavigationData
     }
 
 
+    public ActivitiesNavigationData(TimeUnit unit)
+    {
+        this(0, 0, 0, unit);
+    }
+
+
     public ActivitiesNavigationData(int year, int month, int week, TimeUnit unit)
     {
-        super();
         this.year = year;
         this.month = month;
         this.week = week;
@@ -123,6 +142,35 @@ public class ActivitiesNavigationData
     public ActivitiesNavigationData current()
     {
         return new ActivitiesNavigationData(0, 0, 0, unit);
+    }
+
+
+    public ActivitiesNavigationData relative(int offset)
+    {
+        if (offset > 0)
+        {
+            throw new IllegalArgumentException("Illegal offset " + offset + ": Offset must be <= 0");
+        }
+        if (unit == TimeUnit.DAY)
+        {
+            throw new IllegalArgumentException("Illegal unit " + unit + ": Unit must be one of "
+                    + EnumSet.of(MONTH, WEEK));
+        }
+        if (offset == 0)
+        {
+            return new ActivitiesNavigationData(0, 0, 0, unit);
+        }
+        else
+        {
+            if (unit == TimeUnit.MONTH)
+            {
+                return new ActivitiesNavigationData(0, offset, 0, unit);
+            }
+            else
+            {
+                return new ActivitiesNavigationData(0, 0, offset, unit);
+            }
+        }
     }
 
 

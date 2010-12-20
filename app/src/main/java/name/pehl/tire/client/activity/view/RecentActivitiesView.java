@@ -95,11 +95,16 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
         activitiesTable.setRowStyles(new RowStyles<Activity>()
         {
             @Override
+            @SuppressWarnings("deprecation")
             public String getStyleNames(Activity row, int rowIndex)
             {
                 if (row.getStatus() == Status.RUNNING)
                 {
                     return ctr.cellTableStyle().activeActivity();
+                }
+                if (row.getStart().getDate() % 2 != 0)
+                {
+                    return ctr.cellTableStyle().oddDays();
                 }
                 return null;
             }
@@ -313,23 +318,23 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
 
 
     @UiHandler("lastMonth")
-    public void onLastMonthClicked(ClickEvent event)
+    public void onRecentMonthClicked(ClickEvent event)
     {
         if (getUiHandlers() != null)
         {
             getUiHandlers().changeUnit(MONTH);
-            getUiHandlers().onPrev();
+            getUiHandlers().onRelative(-1);
         }
     }
 
 
     @UiHandler("lastWeek")
-    public void onLastWeekClicked(ClickEvent event)
+    public void onRecentWeekClicked(ClickEvent event)
     {
         if (getUiHandlers() != null)
         {
             getUiHandlers().changeUnit(WEEK);
-            getUiHandlers().onPrev();
+            getUiHandlers().onRelative(-1);
         }
     }
 

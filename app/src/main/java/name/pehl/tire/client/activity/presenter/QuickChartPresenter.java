@@ -75,6 +75,16 @@ public class QuickChartPresenter extends ActivitiesNavigationPresenter<QuickChar
     }
 
 
+    /**
+     * Not implemented!
+     */
+    @Override
+    public void onRelative(int offset)
+    {
+        // nop
+    }
+
+
     @Override
     public void onPrev()
     {

@@ -11,6 +11,9 @@ import com.gwtplatform.mvp.client.UiHandlers;
  */
 public interface ActivitiesNavigationUiHandlers extends UiHandlers
 {
+    void onRelative(int offset);
+
+
     void onPrev();
 
 

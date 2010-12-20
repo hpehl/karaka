@@ -45,7 +45,10 @@ public class SvgPath extends Widget implements HasClickHandlers
     @Override
     protected void onLoad()
     {
-        this.path = draw(getElement(), width, height, p, color);
+        if (this.path == null)
+        {
+            this.path = draw(getElement(), width, height, p, color);
+        }
     }
 
 

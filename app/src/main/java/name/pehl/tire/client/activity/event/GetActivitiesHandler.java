@@ -41,9 +41,13 @@ public class GetActivitiesHandler extends
         UrlBuilder urlBuilder = new UrlBuilder().setModule("rest").setVersion("v1").addResourcePath("activities");
         if (action.getAnd().getUnit() == WEEK)
         {
-            if (action.getAnd().getWeek() == 0)
+            if (action.getAnd().getYear() == 0 && action.getAnd().getWeek() == 0)
             {
                 urlBuilder.addResourcePath("currentWeek");
+            }
+            else if (action.getAnd().getYear() == 0 && action.getAnd().getWeek() != 0)
+            {
+                urlBuilder.addResourcePath("relative", "cw" + action.getAnd().getWeek());
             }
             else
             {
@@ -52,9 +56,13 @@ public class GetActivitiesHandler extends
         }
         else if (action.getAnd().getUnit() == MONTH)
         {
-            if (action.getAnd().getMonth() == 0)
+            if (action.getAnd().getYear() == 0 && action.getAnd().getMonth() == 0)
             {
                 urlBuilder.addResourcePath("currentMonth");
+            }
+            else if (action.getAnd().getYear() == 0 && action.getAnd().getMonth() != 0)
+            {
+                urlBuilder.addResourcePath("relative", String.valueOf(action.getAnd().getMonth()));
             }
             else
             {

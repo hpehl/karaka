@@ -39,6 +39,6 @@ public class TireRouter extends SecureRouter
         attach(String.format("/activities/{%s}", ID_OR_CURRENT_MONTH_OR_CURRENT_WEEK_OR_TODAY), singleParamRouter);
 
         TwoParamActivityRouter twoParamRouter = new TwoParamActivityRouter(getInjector(), getContext());
-        attach(String.format("/activities/{%s}/{%s}", YEAR_OR_ID, MONTH_OR_WEEK_OR_ACTION), twoParamRouter);
+        attach(String.format("/activities/{%s}/{%s}", YEAR_OR_RELATIVE_OR_ID, MONTH_OR_WEEK_OR_ACTION), twoParamRouter);
     }
 }

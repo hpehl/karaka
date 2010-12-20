@@ -3,36 +3,33 @@
 <title>Transition Test</title>
 <style type="text/css">
 @-webkit-keyframes pulse {
-    from {
-        border-left-color: #ccc;
-        border-right-color: #ccc;
+    from { 
+        background-color: inherit
     }
     to {
-        border-left-color: #c00;
-        border-right-color: #c00;
+        background-color: #dbf1aa;
     }
 }
 div {
-    margin: 1em;
     padding: 1em;
     text-align: center;
-    background-color: #ccc;
-    border-left: 10px solid #ccc;
-    border-right: 10px solid #ccc;
+    border-top: 1px solid #dedede;
+    border-bottom: 1px solid #dedede;
 }
+
 div.active {
     -webkit-animation-name: pulse;
     -webkit-animation-duration: 2s;
     -webkit-animation-direction: alternate;
     -webkit-animation-iteration-count: infinite;
-    -webkit-animation-timing-function: ease-out;
+    -webkit-animation-timing-function: ease-in;
 }
 </style>
 </head>
 <body>
-<div>Erste Zeile</div>
-<div>Zweite Zeile</div>
-<div class="active">Dritte Zeile</div>
-<div>Vierte Zeile</div>
+<div>Activity A</div>
+<div>Activity B</div>
+<div class="active">Active activity</div>
+<div>Activity C</div>
 </body>
 </html>

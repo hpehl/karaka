@@ -55,7 +55,7 @@ public class ActivityParametersTest
     @Test
     public void testYearMonth()
     {
-        ActivityParameters parameters = new ActivityParameters().parse(mapFor(YEAR_OR_ID, "1973",
+        ActivityParameters parameters = new ActivityParameters().parse(mapFor(YEAR_OR_RELATIVE_OR_ID, "1973",
                 MONTH_OR_WEEK_OR_ACTION, "9"));
         assertTrue(parameters.hasYear());
         assertEquals(1973, parameters.getYear());
@@ -67,7 +67,7 @@ public class ActivityParametersTest
     @Test(expected = IllegalArgumentException.class)
     public void testWrongYearMonth()
     {
-        new ActivityParameters().parse(mapFor(YEAR_OR_ID, "nope", MONTH_OR_WEEK_OR_ACTION, "9"));
+        new ActivityParameters().parse(mapFor(YEAR_OR_RELATIVE_OR_ID, "nope", MONTH_OR_WEEK_OR_ACTION, "9"));
     }
 
 
@@ -84,7 +84,7 @@ public class ActivityParametersTest
     @Test
     public void testYearWeek()
     {
-        ActivityParameters parameters = new ActivityParameters().parse(mapFor(YEAR_OR_ID, "1973",
+        ActivityParameters parameters = new ActivityParameters().parse(mapFor(YEAR_OR_RELATIVE_OR_ID, "1973",
                 MONTH_OR_WEEK_OR_ACTION, "cw42"));
         assertTrue(parameters.hasYear());
         assertEquals(1973, parameters.getYear());
@@ -96,7 +96,7 @@ public class ActivityParametersTest
     @Test(expected = IllegalArgumentException.class)
     public void testWrongYearWeek()
     {
-        new ActivityParameters().parse(mapFor(YEAR_OR_ID, "nope", MONTH_OR_WEEK_OR_ACTION, "cw42"));
+        new ActivityParameters().parse(mapFor(YEAR_OR_RELATIVE_OR_ID, "nope", MONTH_OR_WEEK_OR_ACTION, "cw42"));
     }
 
 
@@ -133,7 +133,7 @@ public class ActivityParametersTest
     @Test
     public void testIdAction()
     {
-        ActivityParameters parameters = new ActivityParameters().parse(mapFor(YEAR_OR_ID, "123",
+        ActivityParameters parameters = new ActivityParameters().parse(mapFor(YEAR_OR_RELATIVE_OR_ID, "123",
                 MONTH_OR_WEEK_OR_ACTION, "stop"));
         assertTrue(parameters.hasId());
         assertEquals(123, parameters.getId());
@@ -145,7 +145,29 @@ public class ActivityParametersTest
     @Test(expected = IllegalArgumentException.class)
     public void testWrongIdAction()
     {
-        new ActivityParameters().parse(mapFor(YEAR_OR_ID, "123", MONTH_OR_WEEK_OR_ACTION, "foo"));
+        new ActivityParameters().parse(mapFor(YEAR_OR_RELATIVE_OR_ID, "123", MONTH_OR_WEEK_OR_ACTION, "foo"));
+    }
+
+
+    @Test
+    public void testRelativeMonth()
+    {
+        ActivityParameters parameters = new ActivityParameters().parse(mapFor(YEAR_OR_RELATIVE_OR_ID, "relative",
+                MONTH_OR_WEEK_OR_ACTION, "-1"));
+        assertTrue(parameters.isRelative());
+        assertTrue(parameters.hasMonth());
+        assertEquals(-1, parameters.getMonth());
+    }
+
+
+    @Test
+    public void testRelativeWeek()
+    {
+        ActivityParameters parameters = new ActivityParameters().parse(mapFor(YEAR_OR_RELATIVE_OR_ID, "relative",
+                MONTH_OR_WEEK_OR_ACTION, "cw-2"));
+        assertTrue(parameters.isRelative());
+        assertTrue(parameters.hasWeek());
+        assertEquals(-2, parameters.getWeek());
     }
 
 

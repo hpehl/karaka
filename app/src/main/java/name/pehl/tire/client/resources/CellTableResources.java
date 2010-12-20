@@ -14,6 +14,9 @@ public interface CellTableResources extends CellTable.Resources
         String activeActivity();
 
 
+        String oddDays();
+
+
         String startColumn();
 
 
@@ -27,6 +30,9 @@ public interface CellTableResources extends CellTable.Resources
 
 
         String projectColumn();
+
+
+        String actionColumn();
     }
 
 
