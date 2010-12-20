@@ -13,6 +13,7 @@ import name.pehl.tire.client.activity.model.WeekReader;
 import name.pehl.tire.client.activity.presenter.NewActivityPresenter;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
+import name.pehl.tire.client.activity.view.ActivitiesTableResources;
 import name.pehl.tire.client.activity.view.NewActivityView;
 import name.pehl.tire.client.activity.view.QuickChartView;
 import name.pehl.tire.client.activity.view.RecentActivitiesView;
@@ -34,7 +35,6 @@ import name.pehl.tire.client.project.ProjectView;
 import name.pehl.tire.client.project.ProjectWriter;
 import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.report.ReportView;
-import name.pehl.tire.client.resources.CellTableResources;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.tag.TagPresenter;
@@ -71,9 +71,11 @@ public class TireModule extends AbstractPresenterModule
         bind(TokenFormatter.class).to(ParameterTokenFormatter.class).in(Singleton.class);
         bind(RootPresenter.class).asEagerSingleton();
         bind(ProxyFailureHandler.class).to(DefaultProxyFailureHandler.class).in(Singleton.class);
+
+        // Resources
         bind(I18n.class).in(Singleton.class);
         bind(Resources.class).in(Singleton.class);
-        bind(CellTableResources.class).in(Singleton.class);
+        bind(ActivitiesTableResources.class).in(Singleton.class);
 
         // Rest Action Handlers
         bind(GetActivitiesHandler.class);
