@@ -24,6 +24,7 @@
 }
 
 .cellTableCell {
+    cursor: pointer;
     border-bottom: 1px solid #dedede;
 }
 
@@ -127,4 +128,8 @@
 
 .actionColumn {
     width: 40px;
+}
+
+.hideActions {
+    visibility: hidden;
 }

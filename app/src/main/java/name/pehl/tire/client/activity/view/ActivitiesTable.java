@@ -10,39 +10,18 @@ import name.pehl.tire.client.tag.Tag;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.model.Status;
 
-import com.google.gwt.cell.client.AbstractSafeHtmlCell;
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.text.shared.AbstractSafeHtmlRenderer;
-import com.google.gwt.text.shared.SafeHtmlRenderer;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.RowStyles;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.TextHeader;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-
 public class ActivitiesTable extends CellTable<Activity>
 {
-    interface ActivityTemplates extends SafeHtmlTemplates
-    {
-        @Template("<span title=\"{1}\">{0}</span>")
-        SafeHtml nameDescription(String name, String description);
-
-
-        @Template("<mark>{0}</mark>")
-        SafeHtml tag(String name);
-    }
-
-    private static final ActivityTemplates ACTIVITY_TEMPLATES = GWT.create(ActivityTemplates.class);
-
     private final ActivitiesTableResources atr;
     private Activities currentActivities;
 
@@ -77,15 +56,18 @@ public class ActivitiesTable extends CellTable<Activity>
 
     private void addColumns()
     {
+        // Action cell is used in all other cells to show / hide the actions
+        ActivityActionCell actionCell = new ActivityActionCell(atr);
+
         // Column #0: Start date
-        TextColumn<Activity> startColumn = new TextColumn<Activity>()
+        ActivityColumn startColumn = new ActivityColumn(actionCell, new ActivityTextRenderer()
         {
             @Override
-            public String getValue(Activity activity)
+            protected String getValue(Activity activity)
             {
                 return FormatUtils.date(activity.getStart());
             }
-        };
+        });
         addColumnStyleName(0, atr.cellTableStyle().startColumn());
         addColumn(startColumn, null, new TextHeader(null)
         {
@@ -101,14 +83,14 @@ public class ActivitiesTable extends CellTable<Activity>
         });
 
         // Column #1: Duration from - to
-        TextColumn<Activity> durationFromToColumn = new TextColumn<Activity>()
+        ActivityColumn durationFromToColumn = new ActivityColumn(actionCell, new ActivityTextRenderer()
         {
             @Override
             public String getValue(Activity activity)
             {
                 return FormatUtils.time(activity.getStart()) + " - " + FormatUtils.time(activity.getEnd());
             }
-        };
+        });
         addColumnStyleName(1, atr.cellTableStyle().durationFromToColumn());
         addColumn(durationFromToColumn);
 
@@ -116,14 +98,14 @@ public class ActivitiesTable extends CellTable<Activity>
         // TODO Right align as soon as
         // http://code.google.com/p/google-web-toolkit/issues/detail?id=5623 is
         // released
-        TextColumn<Activity> durationInHoursColumn = new TextColumn<Activity>()
+        ActivityColumn durationInHoursColumn = new ActivityColumn(actionCell, new ActivityTextRenderer()
         {
             @Override
             public String getValue(Activity activity)
             {
                 return FormatUtils.hours(activity.getMinutes());
             }
-        };
+        });
         addColumnStyleName(2, atr.cellTableStyle().durationInHoursColumn());
         addColumn(durationInHoursColumn, null, new TextHeader(null)
         {
@@ -139,12 +121,12 @@ public class ActivitiesTable extends CellTable<Activity>
         });
 
         // Column #3: Name, Description & Tags
-        SafeHtmlRenderer<Activity> nameRenderer = new AbstractSafeHtmlRenderer<Activity>()
+        ActivityRenderer nameRenderer = new ActivityRenderer()
         {
             @Override
             public SafeHtml render(Activity activity)
             {
-                SafeHtml nameDescription = ACTIVITY_TEMPLATES.nameDescription(activity.getName(),
+                SafeHtml nameDescription = ActivityTemplates.INSTANCE.nameDescription(activity.getName(),
                         activity.getDescription());
                 List<Tag> tags = activity.getTags();
                 if (tags.isEmpty())
@@ -157,24 +139,13 @@ public class ActivitiesTable extends CellTable<Activity>
                     safeHtmlBuilder.append(nameDescription);
                     for (Tag tag : tags)
                     {
-                        safeHtmlBuilder.append(' ').append(ACTIVITY_TEMPLATES.tag(tag.getName()));
+                        safeHtmlBuilder.append(' ').append(ActivityTemplates.INSTANCE.tag(tag.getName()));
                     }
                     return safeHtmlBuilder.toSafeHtml();
                 }
             }
         };
-        Cell<Activity> nameCell = new AbstractSafeHtmlCell<Activity>(nameRenderer)
-        {
-            @Override
-            protected void render(SafeHtml data, Object key, SafeHtmlBuilder sb)
-            {
-                if (data != null)
-                {
-                    sb.append(data);
-                }
-            }
-        };
-        Column<Activity, Activity> nameColumn = new Column<Activity, Activity>(nameCell)
+        ActivityColumn nameColumn = new ActivityColumn(actionCell, nameRenderer)
         {
             @Override
             public Activity getValue(Activity activity)
@@ -186,7 +157,7 @@ public class ActivitiesTable extends CellTable<Activity>
         addColumn(nameColumn);
 
         // Column #4: Project
-        TextColumn<Activity> projectColumn = new TextColumn<Activity>()
+        ActivityColumn projectColumn = new ActivityColumn(actionCell, new ActivityTextRenderer()
         {
             @Override
             public String getValue(Activity activity)
@@ -197,11 +168,14 @@ public class ActivitiesTable extends CellTable<Activity>
                 }
                 return null;
             }
-        };
+        });
         addColumnStyleName(4, atr.cellTableStyle().projectColumn());
         addColumn(projectColumn);
 
-        // TODO Column #4: Actions
+        // Column #5: Actions
+        ActivityColumn actionColumn = new ActivityColumn(actionCell);
+        addColumnStyleName(5, atr.cellTableStyle().actionColumn());
+        addColumn(actionColumn);
     }
 
 

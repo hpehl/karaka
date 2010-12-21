@@ -14,6 +14,6 @@ class ActivityKeyProvider implements ProvidesKey<Activity>
     @Override
     public Object getKey(Activity item)
     {
-        return item.getId();
+        return item == null ? null : item.getId();
     }
 }

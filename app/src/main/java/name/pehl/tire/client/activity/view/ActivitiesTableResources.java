@@ -1,5 +1,6 @@
 package name.pehl.tire.client.activity.view;
 
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.CellTable;
 
 public interface ActivitiesTableResources extends CellTable.Resources
@@ -28,10 +29,19 @@ public interface ActivitiesTableResources extends CellTable.Resources
 
 
         String actionColumn();
+
+
+        String hideActions();
     }
 
 
     @Override
     @Source("activitiesTable.css")
     ActivitiesTableStyle cellTableStyle();
+
+
+    ImageResource goon();
+
+
+    ImageResource delete();
 }
