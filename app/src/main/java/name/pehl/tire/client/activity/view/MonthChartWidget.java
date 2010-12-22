@@ -5,12 +5,9 @@ import static java.lang.Math.max;
 import java.util.List;
 import java.util.ListIterator;
 
-import name.pehl.tire.client.activity.event.ActivitiesNavigationEvent;
 import name.pehl.tire.client.activity.model.Activities;
-import name.pehl.tire.client.activity.model.Direction;
 import name.pehl.tire.client.activity.model.Week;
 import name.pehl.tire.client.ui.FormatUtils;
-import name.pehl.tire.model.TimeUnit;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -45,8 +42,10 @@ public class MonthChartWidget extends QuickChartWidget
             // update title
             String month = NumberFormat.getFormat("00").format(activities.getMonth());
             StringBuilder title = new StringBuilder();
-            title.append(month).append(" / ").append(activities.getYear()).append(" - ")
-                    .append(FormatUtils.hours(activities.getMinutes()));
+            title.append(month).append(" ").append(activities.getYear()).append(" - ")
+                    .append(FormatUtils.hours(activities.getMinutes())).append("\n")
+                    .append(FormatUtils.date(activities.getStart())).append(" - ")
+                    .append(FormatUtils.date(activities.getEnd()));
             updateTitle(title.toString());
 
             // update max
@@ -76,28 +75,5 @@ public class MonthChartWidget extends QuickChartWidget
                 index++;
             }
         }
-    }
-
-
-    // --------------------------------------------------------- event handling
-
-    @Override
-    protected void onPrev()
-    {
-        ActivitiesNavigationEvent.fire(this, TimeUnit.MONTH, Direction.PREV);
-    }
-
-
-    @Override
-    protected void onCurrent()
-    {
-        ActivitiesNavigationEvent.fire(this, TimeUnit.MONTH, Direction.CURRENT);
-    }
-
-
-    @Override
-    protected void onNext()
-    {
-        ActivitiesNavigationEvent.fire(this, TimeUnit.MONTH, Direction.NEXT);
     }
 }

@@ -9,7 +9,7 @@ import com.gwtplatform.mvp.client.UiHandlers;
  * @version $Date$ $Revision: 169
  *          $
  */
-public interface ActivitiesNavigationUiHandlers extends UiHandlers
+public interface RecentActivitiesUiHandlers extends UiHandlers
 {
     void onRelative(int offset);
 

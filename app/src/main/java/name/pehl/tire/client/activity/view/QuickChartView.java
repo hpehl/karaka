@@ -2,15 +2,13 @@ package name.pehl.tire.client.activity.view;
 
 import static name.pehl.tire.model.TimeUnit.MONTH;
 import static name.pehl.tire.model.TimeUnit.WEEK;
-import name.pehl.tire.client.activity.event.ActivitiesNavigationEvent;
 import name.pehl.tire.client.activity.model.Activities;
-import name.pehl.tire.client.activity.presenter.ActivitiesNavigationUiHandlers;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
+import name.pehl.tire.client.activity.presenter.RecentActivitiesUiHandlers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
@@ -23,7 +21,7 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
  * @version $Date$ $Revision: 102
  *          $
  */
-public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHandlers> implements
+public class QuickChartView extends ViewWithUiHandlers<RecentActivitiesUiHandlers> implements
         QuickChartPresenter.MyView
 {
     // @formatter:off
@@ -65,43 +63,6 @@ public class QuickChartView extends ViewWithUiHandlers<ActivitiesNavigationUiHan
             weekChart.setVisible(false);
             monthChart.setVisible(true);
             monthChart.update(activities);
-        }
-    }
-
-
-    @UiHandler("monthChart")
-    void handleMonthNavigation(ActivitiesNavigationEvent event)
-    {
-        handleNavigation(event);
-    }
-
-
-    @UiHandler("weekChart")
-    void handleWeekNavigation(ActivitiesNavigationEvent event)
-    {
-        handleNavigation(event);
-    }
-
-
-    void handleNavigation(ActivitiesNavigationEvent event)
-    {
-        if (getUiHandlers() != null)
-        {
-            getUiHandlers().changeUnit(event.getUnit());
-            switch (event.getDirection())
-            {
-                case PREV:
-                    getUiHandlers().onPrev();
-                    break;
-                case CURRENT:
-                    getUiHandlers().onCurrent();
-                    break;
-                case NEXT:
-                    getUiHandlers().onNext();
-                    break;
-                default:
-                    break;
-            }
         }
     }
 }

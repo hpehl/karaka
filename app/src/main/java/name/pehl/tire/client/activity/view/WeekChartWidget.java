@@ -5,12 +5,9 @@ import static java.lang.Math.max;
 import java.util.List;
 import java.util.ListIterator;
 
-import name.pehl.tire.client.activity.event.ActivitiesNavigationEvent;
 import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.Day;
-import name.pehl.tire.client.activity.model.Direction;
 import name.pehl.tire.client.ui.FormatUtils;
-import name.pehl.tire.model.TimeUnit;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.uibinder.client.UiConstructor;
@@ -73,28 +70,5 @@ public class WeekChartWidget extends QuickChartWidget
                 index++;
             }
         }
-    }
-
-
-    // --------------------------------------------------------- event handling
-
-    @Override
-    protected void onPrev()
-    {
-        ActivitiesNavigationEvent.fire(this, TimeUnit.WEEK, Direction.PREV);
-    }
-
-
-    @Override
-    protected void onCurrent()
-    {
-        ActivitiesNavigationEvent.fire(this, TimeUnit.WEEK, Direction.CURRENT);
-    }
-
-
-    @Override
-    protected void onNext()
-    {
-        ActivitiesNavigationEvent.fire(this, TimeUnit.WEEK, Direction.NEXT);
     }
 }

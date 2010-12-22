@@ -4,10 +4,8 @@
 
     <g:HTMLPanel>
         <tire:WeekChartWidget ui:field="weekChart" width="200" height="200"
-            legendTitles="Mo, Tue, Wed, Thu, Fr, Sat, Sun" prevTooltip="Previous calendarweek" titleTooltip="Current Calendarweek"
-            nextTooltip="Next calendarweek" />
-        <tire:MonthChartWidget ui:field="monthChart" width="200" height="200" legendTitles="CW?, CW?, CW?, CW?"
-            prevTooltip="Previous month" titleTooltip="Current month" nextTooltip="Next month" />
+            legendTitles="Mo, Tue, Wed, Thu, Fr, Sat, Sun" />
+        <tire:MonthChartWidget ui:field="monthChart" width="200" height="200" legendTitles="CW?, CW?, CW?, CW?" />
     </g:HTMLPanel>
 
 </ui:UiBinder> 

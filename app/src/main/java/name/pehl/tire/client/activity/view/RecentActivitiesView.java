@@ -3,8 +3,8 @@ package name.pehl.tire.client.activity.view;
 import static name.pehl.tire.model.TimeUnit.MONTH;
 import static name.pehl.tire.model.TimeUnit.WEEK;
 import name.pehl.tire.client.activity.model.Activities;
-import name.pehl.tire.client.activity.presenter.ActivitiesNavigationUiHandlers;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
+import name.pehl.tire.client.activity.presenter.RecentActivitiesUiHandlers;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.client.ui.SvgPath;
@@ -24,7 +24,7 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
  * @version $Date$ $Revision: 142
  *          $
  */
-public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigationUiHandlers> implements
+public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiHandlers> implements
         RecentActivitiesPresenter.MyView
 {
     // @formatter:off
@@ -65,38 +65,44 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
     public void updateActivities(Activities activities)
     {
         // Update header
+        StringBuilder text = new StringBuilder("Recent Activities");
         StringBuilder tooltip = new StringBuilder();
         if (activities.getUnit() == WEEK)
         {
-            tooltip.append("CW ").append(activities.getWeek()).append(" / ").append(activities.getYear());
+            String cw = "CW " + activities.getWeek() + " / " + activities.getYear();
+            text.append(": ").append(cw);
+            tooltip.append(cw);
         }
         else if (activities.getUnit() == MONTH)
         {
             String monthKey = "month_" + activities.getMonth();
-            tooltip.append(i18n.enums().getString(monthKey)).append(" ").append(activities.getYear());
+            String month = i18n.enums().getString(monthKey) + " " + activities.getYear();
+            text.append(": ").append(month);
+            tooltip.append(month);
         }
         tooltip.append(" - ").append(FormatUtils.hours(activities.getMinutes())).append(" - ")
                 .append(FormatUtils.date(activities.getStart())).append(" - ")
                 .append(FormatUtils.date(activities.getEnd()));
+        header.setText(text.toString());
         header.setTitle(tooltip.toString());
 
         // Update navigation
         // TODO Define colors as resources / constants
-        lastMonth.setColor("#3d3d3d");
-        lastWeek.setColor("#3d3d3d");
-        currentMonth.setColor("#3d3d3d");
-        currentWeek.setColor("#3d3d3d");
+        lastMonth.fill("#3d3d3d");
+        lastWeek.fill("#3d3d3d");
+        currentMonth.fill("#3d3d3d");
+        currentWeek.fill("#3d3d3d");
         if (activities.getUnit() == WEEK)
         {
             previous.setTitle("Previous week");
             next.setTitle("Next week");
             if (activities.getWeekDiff() == -1)
             {
-                lastWeek.setColor("#1b92a8");
+                lastWeek.fill("#1b92a8");
             }
             else if (activities.getWeekDiff() == 0)
             {
-                currentWeek.setColor("#1b92a8");
+                currentWeek.fill("#1b92a8");
             }
         }
         else if (activities.getUnit() == MONTH)
@@ -105,11 +111,11 @@ public class RecentActivitiesView extends ViewWithUiHandlers<ActivitiesNavigatio
             next.setTitle("Next month");
             if (activities.getMonthDiff() == -1)
             {
-                lastMonth.setColor("#1b92a8");
+                lastMonth.fill("#1b92a8");
             }
             else if (activities.getMonthDiff() == 0)
             {
-                currentMonth.setColor("#1b92a8");
+                currentMonth.fill("#1b92a8");
             }
         }
 

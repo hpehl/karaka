@@ -2,15 +2,11 @@ package name.pehl.tire.client.activity.view;
 
 import static java.lang.Math.max;
 import static java.lang.Math.round;
-import name.pehl.tire.client.activity.event.ActivitiesNavigationEvent;
-import name.pehl.tire.client.activity.event.ActivitiesNavigationEvent.ActivitiesNavigationHandler;
-import name.pehl.tire.client.activity.event.ActivitiesNavigationEvent.HasActivitiesNavigationHandlers;
 import name.pehl.tire.client.activity.model.Activities;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -18,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @version $Date: 2010-12-17 21:37:43 +0100 (Fr, 17 Dez 2010) $ $Revision: 102
  *          $
  */
-public abstract class QuickChartWidget extends Widget implements HasActivitiesNavigationHandlers
+public abstract class QuickChartWidget extends Widget
 {
     // -------------------------------------------------------------- constants
 
@@ -42,19 +38,13 @@ public abstract class QuickChartWidget extends Widget implements HasActivitiesNa
 
     protected final String color;
     protected final String bgColor;
-    protected String prevTooltip;
-    protected String titleTooltip;
-    protected String nextTooltip;
-
     protected final Element holder;
-    protected JavaScriptObject raphael;
-    protected JavaScriptObject prev;
-    protected JavaScriptObject title;
-    protected JavaScriptObject next;
     protected final JavaScriptObject[] columns;
     protected final JavaScriptObject[] legends;
 
     protected boolean initialized;
+    protected JavaScriptObject raphael;
+    protected JavaScriptObject title;
 
 
     // ----------------------------------------------------------- constructors
@@ -91,41 +81,7 @@ public abstract class QuickChartWidget extends Widget implements HasActivitiesNa
         raphael = initRaphael(width, height);
         int x = width / 2;
         int y = TITLE_HEIGHT / 2;
-        int rectX = (int) round(columnWidth);
-        int rectY = 0;
-        int rectWidth = (int) round(width - 2.0 * columnWidth);
-        int rectHeight = TITLE_HEIGHT;
-        title = initTitle(x, y, rectX, rectY, rectWidth, rectHeight);
-
-        // prev
-        x = (int) round(columnWidth / 2 + 5);
-        y = (int) round(TITLE_HEIGHT / 2.0 - 5);
-        StringBuilder prevPath = new StringBuilder().append("M").append(x).append(",").append(y);
-        y += 10;
-        prevPath.append("L").append(x).append(",").append(y);
-        x -= 10;
-        y -= 5;
-        prevPath.append("L").append(x).append(",").append(y).append("Z");
-        rectX = 0;
-        rectY = 0;
-        rectWidth = (int) round(columnWidth);
-        rectHeight = TITLE_HEIGHT;
-        prev = initPrev(prevPath.toString(), rectX, rectY, rectWidth, rectHeight);
-
-        // next
-        x = (int) (round((legendTitles.length - 1) * (columnWidth + columnGap)) + columnWidth / 2 - 5);
-        y = (int) round(TITLE_HEIGHT / 2.0 - 5);
-        StringBuilder nextPath = new StringBuilder().append("M").append(x).append(",").append(y);
-        y += 10;
-        nextPath.append("L").append(x).append(",").append(y);
-        x += 10;
-        y -= 5;
-        nextPath.append("L").append(x).append(",").append(y).append("Z");
-        rectX = (int) round((legendTitles.length - 1) * (columnWidth + columnGap));
-        rectY = 0;
-        rectWidth = (int) round(columnWidth);
-        rectHeight = TITLE_HEIGHT;
-        next = initNext(nextPath.toString(), rectX, rectY, rectWidth, rectHeight);
+        title = initTitle(x, y);
 
         // columns and legend
         for (int i = 0; i < legendTitles.length; i++)
@@ -146,60 +102,13 @@ public abstract class QuickChartWidget extends Widget implements HasActivitiesNa
     }-*/;
 
 
-    private native JavaScriptObject initTitle(int x, int y, int rectX, int rectY, int rectWidth, int rectHeight) /*-{
+    private native JavaScriptObject initTitle(int x, int y) /*-{
         var safeThis = this;
         var raphael = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::raphael;
         var color = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::color;
         var bgColor = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::bgColor;
-        var tooltip = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::titleTooltip;
-        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({cursor: "pointer", stroke: "none", fill: bgColor, title: tooltip});
-        var text = raphael.text(x, y, " \n ").attr({cursor: "pointer", font: "10px Verdana", fill: color, title: tooltip});
-        rect.node.onclick = text.node.onclick = function() {
-        safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::onCurrent()();
-        };
+        var text = raphael.text(x, y, "").attr({font: "10px Verdana", fill: color});
         return text;
-    }-*/;
-
-
-    private native JavaScriptObject initPrev(String path, int rectX, int rectY, int rectWidth, int rectHeight) /*-{
-        var safeThis = this;
-        var raphael = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::raphael;
-        var color = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::color;
-        var bgColor = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::bgColor;
-        var tooltip = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::prevTooltip;
-        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({cursor: "pointer", stroke: "none", fill: bgColor, title: tooltip});
-        var prev = raphael.path(path).attr({cursor: "pointer", fill: color, stroke: color, opacity: .66, title: tooltip});
-        rect.node.onclick = prev.node.onclick = function() {
-        safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::onPrev()();
-        };
-        rect.node.onmouseover = prev.node.onmouseover = function() {
-        prev.attr({opacity: 1.0});
-        };
-        rect.node.onmouseout = prev.node.onmouseout = function() {
-        prev.attr({opacity: .66});
-        };
-        return prev;
-    }-*/;
-
-
-    private native JavaScriptObject initNext(String path, int rectX, int rectY, int rectWidth, int rectHeight) /*-{
-        var safeThis = this;
-        var raphael = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::raphael;
-        var color = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::color;
-        var bgColor = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::bgColor;
-        var tooltip = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::nextTooltip;
-        var rect = raphael.rect(rectX, rectY, rectWidth, rectHeight).attr({cursor: "pointer", stroke: "none", fill: bgColor, title: tooltip});
-        var next = raphael.path(path).attr({cursor: "pointer", fill: color, stroke: color, opacity: .66, title: tooltip});
-        rect.node.onclick = next.node.onclick = function(){
-        safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::onNext()();
-        };
-        rect.node.onmouseover = next.node.onmouseover = function() {
-        next.attr({opacity: 1.0});
-        };
-        rect.node.onmouseout = next.node.onmouseout = function() {
-        next.attr({opacity: .66});
-        };
-        return next;
     }-*/;
 
 
@@ -244,24 +153,6 @@ public abstract class QuickChartWidget extends Widget implements HasActivitiesNa
     }-*/;
 
 
-    // --------------------------------------------------------- event handling
-
-    @Override
-    public HandlerRegistration addActivitiesNavigationHandler(ActivitiesNavigationHandler handler)
-    {
-        return addHandler(handler, ActivitiesNavigationEvent.getType());
-    }
-
-
-    protected abstract void onPrev();
-
-
-    protected abstract void onCurrent();
-
-
-    protected abstract void onNext();
-
-
     // --------------------------------------------------------- helper methods
 
     protected String path(int index, long minutes)
@@ -277,25 +168,5 @@ public abstract class QuickChartWidget extends Widget implements HasActivitiesNa
         x -= columnWidth;
         path.append("L").append(x).append(",").append(y).append("Z");
         return path.toString();
-    }
-
-
-    // ------------------------------------------------------------- properties
-
-    public void setPrevTooltip(String prevTooltip)
-    {
-        this.prevTooltip = prevTooltip;
-    }
-
-
-    public void setTitleTooltip(String titleTooltip)
-    {
-        this.titleTooltip = titleTooltip;
-    }
-
-
-    public void setNextTooltip(String nextTooltip)
-    {
-        this.nextTooltip = nextTooltip;
     }
 }
