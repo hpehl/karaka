@@ -62,6 +62,18 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
 
 
     @Override
+    public void mask()
+    {
+    }
+
+
+    @Override
+    public void unmask()
+    {
+    }
+
+
+    @Override
     public void updateActivities(Activities activities)
     {
         // Update header

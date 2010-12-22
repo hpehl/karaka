@@ -26,6 +26,12 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
 {
     public interface MyView extends View, HasUiHandlers<RecentActivitiesUiHandlers>
     {
+        void mask();
+
+
+        void unmask();
+
+
         void updateActivities(Activities activities);
     }
 

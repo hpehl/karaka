@@ -20,6 +20,12 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
 {
     public interface MyView extends View
     {
+        void mask();
+
+
+        void unmask();
+
+
         void updateActivities(Activities activities);
     }
 

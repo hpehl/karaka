@@ -14,9 +14,14 @@ public interface Resources extends ClientBundle
 {
     // ----------------------------------------------------------------- images
     
+    ImageResource loading24();
+    ImageResource loading48();
     ImageResource recordOn();
     ImageResource recordOff();
     ImageResource selectedNavigation();
+    ImageResource stopwatch32();
+    ImageResource stopwatch64();
+    ImageResource stopwatch128();
 
 
     // -------------------------------------------------------------------- CSS
