@@ -1,5 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tire="urn:import:name.pehl.tire.client.ui">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
+    xmlns:dp="urn:import:com.google.gwt.user.datepicker.client" xmlns:tire="urn:import:name.pehl.tire.client.ui">
 
     <ui:style>
         .popup {
@@ -15,9 +16,13 @@
         }
     </ui:style>
 
-    <tire:EscapablePopupPanel animationEnabled="false" autoHideEnabled="true" modal="true" glassEnabled="true" addStyleNames="{style.popup}">
+    <tire:EscapablePopupPanel animationEnabled="false" autoHideEnabled="true" modal="true"
+        glassEnabled="true" addStyleNames="{style.popup}">
         <g:FlowPanel>
-            <g:Label>Placeholder for EditAvtivityUi</g:Label>
+            <g:Label ui:field="name" />
+            <g:Label ui:field="description" />
+            <dp:DateBox ui:field="start" />
+            <dp:DateBox ui:field="end" />
         </g:FlowPanel>
     </tire:EscapablePopupPanel>
 

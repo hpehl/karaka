@@ -6,11 +6,13 @@
     <inherits name="com.google.common.annotations.Annotations" />
     <inherits name="com.google.common.base.Base" />
     <inherits name="com.google.gwt.cell.Cell" />
+    <inherits name="com.google.gwt.editor.Editor" />
     <inherits name="com.google.gwt.inject.Inject" />
     <inherits name="com.google.gwt.json.JSON" />
     <inherits name="com.google.gwt.logging.Logging" />
     <inherits name="com.google.gwt.uibinder.UiBinder" />
     <inherits name="com.google.gwt.user.User" />
+    <inherits name="com.gwtincubator.widgets.IncubatorTimepicker" />
 
     <!-- Restlet -->
     <inherits name="org.restlet.Restlet" />

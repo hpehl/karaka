@@ -114,6 +114,7 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
     public void onEdit(int rowIndex, Activity activity)
     {
         logger.fine("Edit " + activity + " in row #" + rowIndex);
+        editActivityPresenter.getView().setActivity(activity);
         addToPopupSlot(editActivityPresenter);
     }
 

@@ -7,9 +7,14 @@ import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
 import name.pehl.tire.client.ui.EscapablePopupPanel;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.Editor;
+import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.PopupViewCloseHandler;
 import com.gwtplatform.mvp.client.PopupViewImpl;
@@ -18,15 +23,24 @@ import com.gwtplatform.mvp.client.PopupViewImpl;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class EditActivityView extends PopupViewImpl implements EditActivityPresenter.MyView
+public class EditActivityView extends PopupViewImpl implements EditActivityPresenter.MyView, Editor<Activity>
 {
     private static Logger logger = Logger.getLogger(EditActivityView.class.getName());
 
     // @formatter:off
+    interface Driver extends SimpleBeanEditorDriver<Activity, EditActivityView> {}
+    private static Driver driver = GWT.create(Driver.class);
+    
     interface EditActivityUi extends UiBinder<EscapablePopupPanel, EditActivityView> {}
     private static EditActivityUi uiBinder = GWT.create(EditActivityUi.class);
+    
+    @UiField Label name;
+    @UiField Label description;
+    @UiField DateBox start;
+    @UiField DateBox end;
     // @formatter:on
 
+    private Activity activityToEdit;
     private final EscapablePopupPanel popupPanel;
 
 
@@ -48,6 +62,15 @@ public class EditActivityView extends PopupViewImpl implements EditActivityPrese
 
 
     @Override
+    public void show()
+    {
+        driver.initialize(this);
+        driver.edit(activityToEdit);
+        super.show();
+    }
+
+
+    @Override
     public Widget asWidget()
     {
         return popupPanel;
@@ -57,6 +80,6 @@ public class EditActivityView extends PopupViewImpl implements EditActivityPrese
     @Override
     public void setActivity(Activity activity)
     {
-
+        this.activityToEdit = activity;
     }
 }
