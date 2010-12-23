@@ -6,6 +6,7 @@ import com.google.gwt.cell.client.AbstractSafeHtmlCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.SafeHtmlRenderer;
@@ -36,7 +37,9 @@ public class ActivityCell extends AbstractSafeHtmlCell<Activity>
         super.onBrowserEvent(parent, value, key, event, valueUpdater);
         if ("click".equals(event.getType()))
         {
-            activitiesTable.onEdit(value);
+            int rowIndex = getRowIndex(parent);
+            actionCell.hideActions(parent);
+            activitiesTable.onEdit(rowIndex, value);
         }
         else if ("mouseover".equals(event.getType()))
         {
@@ -46,6 +49,33 @@ public class ActivityCell extends AbstractSafeHtmlCell<Activity>
         {
             actionCell.hideActions(parent);
         }
+    }
+
+
+    /**
+     * Calculate the row from the specified div element
+     * 
+     * @param parent
+     * @return
+     */
+    private int getRowIndex(Element div)
+    {
+        int index = -1;
+        Element element = null;
+        if (div != null)
+        {
+            element = div.getParentElement();
+            if (element != null)
+            {
+                element = element.getParentElement();
+                if (element != null)
+                {
+                    TableRowElement tr = TableRowElement.as(element);
+                    index = tr.getSectionRowIndex();
+                }
+            }
+        }
+        return index;
     }
 
 

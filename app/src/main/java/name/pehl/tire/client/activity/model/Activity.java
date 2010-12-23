@@ -108,9 +108,9 @@ public class Activity extends DescriptiveModel
     @Override
     public String toString()
     {
-        StringBuilder builder = new StringBuilder("Activity [").append(start).append(", ").append(end).append(", ")
-                .append(pause).append(", ").append(billable);
-        return builder.toString();
+        return new StringBuilder("Activity [").append(getId()).append(", ").append(getName()).append(", ")
+                .append(start).append(", ").append(end).append(", ").append(pause).append(", ").append(status)
+                .append("]").toString();
     }
 
 

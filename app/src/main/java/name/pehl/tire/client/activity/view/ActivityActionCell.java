@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -40,6 +41,7 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
         super.onBrowserEvent(parent, value, key, event, valueUpdater);
         if ("click".equals(event.getType()))
         {
+            int rowIndex = getRowIndex(parent);
             EventTarget eventTarget = event.getEventTarget();
             if (eventTarget != null)
             {
@@ -51,15 +53,15 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
                     ImageElement delete = findImage(parent, 2);
                     if (img == copy)
                     {
-                        activitiesTable.onCopy(value);
+                        activitiesTable.onCopy(rowIndex, value);
                     }
                     else if (img == goon)
                     {
-                        activitiesTable.onGoon(value);
+                        activitiesTable.onGoon(rowIndex, value);
                     }
                     else if (img == delete)
                     {
-                        activitiesTable.onDelete(value);
+                        activitiesTable.onDelete(rowIndex, value);
                     }
                 }
             }
@@ -74,6 +76,33 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
             DivElement actionsDiv = parent.getFirstChildElement().cast();
             hideActionsDiv(actionsDiv);
         }
+    }
+
+
+    /**
+     * Calculate the row from the specified div element
+     * 
+     * @param parent
+     * @return
+     */
+    private int getRowIndex(Element div)
+    {
+        int index = -1;
+        Element element = null;
+        if (div != null)
+        {
+            element = div.getParentElement();
+            if (element != null)
+            {
+                element = element.getParentElement();
+                if (element != null)
+                {
+                    TableRowElement tr = TableRowElement.as(element);
+                    index = tr.getSectionRowIndex();
+                }
+            }
+        }
+        return index;
     }
 
 

@@ -27,14 +27,14 @@ public interface RecentActivitiesUiHandlers extends UiHandlers
     void changeUnit(TimeUnit unit);
 
 
-    void onEdit(Activity activity);
+    void onEdit(int rowIndex, Activity activity);
 
 
-    void onCopy(Activity activity);
+    void onCopy(int rowIndex, Activity activity);
 
 
-    void onGoon(Activity activity);
+    void onGoon(int rowIndex, Activity activity);
 
 
-    void onDelete(Activity activity);
+    void onDelete(int rowIndex, Activity activity);
 }

@@ -111,30 +111,30 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
 
 
     @Override
-    public void onEdit(Activity activity)
+    public void onEdit(int rowIndex, Activity activity)
     {
-        logger.fine("Edit " + activity);
+        logger.fine("Edit " + activity + " in row #" + rowIndex);
         addToPopupSlot(editActivityPresenter);
     }
 
 
     @Override
-    public void onCopy(Activity activity)
+    public void onCopy(int rowIndex, Activity activity)
     {
-        logger.fine("Copy " + activity);
+        logger.fine("Copy " + activity + " in row #" + rowIndex);
     }
 
 
     @Override
-    public void onGoon(Activity activity)
+    public void onGoon(int rowIndex, Activity activity)
     {
-        logger.fine("Continue " + activity);
+        logger.fine("Continue " + activity + " in row #" + rowIndex);
     }
 
 
     @Override
-    public void onDelete(Activity activity)
+    public void onDelete(int rowIndex, Activity activity)
     {
-        logger.fine("Delete " + activity);
+        logger.fine("Delete " + activity + " in row #" + rowIndex);
     }
 }

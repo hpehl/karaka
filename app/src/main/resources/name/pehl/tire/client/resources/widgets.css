@@ -96,9 +96,8 @@ td.datePickerMonth {
 }
 
 .gwt-PopupPanelGlass {
-    background-color: #3d3d3d;
-    filter: alpha(opacity = 50);
-    -moz-opacity: 0.5;
-    -khtml-opacity: 0.5;
-    opacity: 0.5;
+    background-color: #333;
+    -moz-opacity: 0.66;
+    -khtml-opacity: 0.66;
+    opacity: 0.66;
 }

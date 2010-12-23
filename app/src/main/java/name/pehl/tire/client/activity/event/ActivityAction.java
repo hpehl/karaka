@@ -21,8 +21,11 @@ public class ActivityAction
     }
 
     @Order(1)
-    Activity activity;
+    int rowIndex;
 
     @Order(2)
+    Activity activity;
+
+    @Order(3)
     Action action;
 }

@@ -207,20 +207,21 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
     {
         if (getUiHandlers() != null)
         {
+            int rowIndex = event.getRowIndex();
             Activity activity = event.getActivity();
             switch (event.getAction())
             {
                 case EDIT:
-                    getUiHandlers().onEdit(activity);
+                    getUiHandlers().onEdit(rowIndex, activity);
                     break;
                 case COPY:
-                    getUiHandlers().onCopy(activity);
+                    getUiHandlers().onCopy(rowIndex, activity);
                     break;
                 case GOON:
-                    getUiHandlers().onGoon(activity);
+                    getUiHandlers().onGoon(rowIndex, activity);
                     break;
                 case DELETE:
-                    getUiHandlers().onDelete(activity);
+                    getUiHandlers().onDelete(rowIndex, activity);
                     break;
                 default:
                     break;

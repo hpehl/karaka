@@ -209,26 +209,26 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
     }
 
 
-    public void onEdit(Activity activity)
+    public void onEdit(int rowIndex, Activity activity)
     {
-        ActivityActionEvent.fire(this, activity, ActivityAction.Action.EDIT);
+        ActivityActionEvent.fire(this, rowIndex, activity, ActivityAction.Action.EDIT);
     }
 
 
-    public void onCopy(Activity activity)
+    public void onCopy(int rowIndex, Activity activity)
     {
-        ActivityActionEvent.fire(this, activity, ActivityAction.Action.COPY);
+        ActivityActionEvent.fire(this, rowIndex, activity, ActivityAction.Action.COPY);
     }
 
 
-    public void onGoon(Activity activity)
+    public void onGoon(int rowIndex, Activity activity)
     {
-        ActivityActionEvent.fire(this, activity, ActivityAction.Action.GOON);
+        ActivityActionEvent.fire(this, rowIndex, activity, ActivityAction.Action.GOON);
     }
 
 
-    public void onDelete(Activity activity)
+    public void onDelete(int rowIndex, Activity activity)
     {
-        ActivityActionEvent.fire(this, activity, ActivityAction.Action.DELETE);
+        ActivityActionEvent.fire(this, rowIndex, activity, ActivityAction.Action.DELETE);
     }
 }
