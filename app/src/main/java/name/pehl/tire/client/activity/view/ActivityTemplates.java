@@ -17,6 +17,6 @@ interface ActivityTemplates extends SafeHtmlTemplates
     SafeHtml tag(String name);
 
 
-    @Template("<div class=\"{0}\" style=\"width:40px;\"><span style=\"margin-right:4px;\" title=\"Continue\">{1}</span><span title=\"Delete\">{2}</span></div>")
-    SafeHtml actions(String hideActionsClassname, SafeHtml goon, SafeHtml delete);
+    @Template("<div class=\"{0}\" style=\"width:56px;\"><span style=\"margin-right:4px;\" title=\"Copy and add one day\">{1}</span><span style=\"margin-right:4px;\" title=\"Continue\">{2}</span><span title=\"Delete\">{3}</span></div>")
+    SafeHtml actions(String hideActionsClassname, SafeHtml copy, SafeHtml goon, SafeHtml delete);
 }

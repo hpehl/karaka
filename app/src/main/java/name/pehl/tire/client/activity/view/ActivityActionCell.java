@@ -1,7 +1,5 @@
 package name.pehl.tire.client.activity.view;
 
-import java.util.logging.Logger;
-
 import name.pehl.tire.client.activity.model.Activity;
 
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;
@@ -23,13 +21,14 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
  */
 public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
 {
-    private static Logger logger = Logger.getLogger(ActivityActionCell.class.getName());
+    private final ActivitiesTable activitiesTable;
     private final ActivitiesTableResources atr;
 
 
-    public ActivityActionCell(final ActivitiesTableResources atr)
+    public ActivityActionCell(final ActivitiesTable activitiesTable, final ActivitiesTableResources atr)
     {
         super(new ActionRenderer(atr), "click", "mouseover", "mouseout");
+        this.activitiesTable = activitiesTable;
         this.atr = atr;
     }
 
@@ -47,15 +46,20 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
                 ImageElement img = eventTarget.cast();
                 if (ImageElement.is(img))
                 {
-                    ImageElement goon = findImage(parent, 0);
-                    ImageElement delete = findImage(parent, 1);
-                    if (img == goon)
+                    ImageElement copy = findImage(parent, 0);
+                    ImageElement goon = findImage(parent, 1);
+                    ImageElement delete = findImage(parent, 2);
+                    if (img == copy)
                     {
-                        onGoon(value);
+                        activitiesTable.onCopy(value);
+                    }
+                    else if (img == goon)
+                    {
+                        activitiesTable.onGoon(value);
                     }
                     else if (img == delete)
                     {
-                        onDelete(value);
+                        activitiesTable.onDelete(value);
                     }
                 }
             }
@@ -70,18 +74,6 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
             DivElement actionsDiv = parent.getFirstChildElement().cast();
             hideActionsDiv(actionsDiv);
         }
-    }
-
-
-    private void onGoon(Activity activity)
-    {
-        logger.fine("Continue " + activity);
-    }
-
-
-    private void onDelete(Activity activity)
-    {
-        logger.fine("Delete " + activity);
     }
 
 
@@ -232,10 +224,12 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
         @Override
         public SafeHtml render(Activity object)
         {
+            SafeHtml copyHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(atr.copy()).getHTML());
             SafeHtml goonHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(atr.goon()).getHTML());
             SafeHtml deleteHtml = SafeHtmlUtils
                     .fromTrustedString(AbstractImagePrototype.create(atr.delete()).getHTML());
-            return ActivityTemplates.INSTANCE.actions(atr.cellTableStyle().hideActions(), goonHtml, deleteHtml);
+            return ActivityTemplates.INSTANCE.actions(atr.cellTableStyle().hideActions(), copyHtml, goonHtml,
+                    deleteHtml);
         }
     }
 }

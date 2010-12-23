@@ -1,6 +1,5 @@
 package name.pehl.tire.rest.activity;
 
-import static java.lang.Math.abs;
 import static name.pehl.tire.model.TimeUnit.*;
 import static org.joda.time.Months.months;
 import static org.joda.time.Weeks.weeks;
@@ -135,7 +134,7 @@ public class ActivitiesResource extends ServerResource
             int requestedMonth = ap.getMonth();
             if (ap.isRelative())
             {
-                DateMidnight relative = now.minus(months(abs(requestedMonth)));
+                DateMidnight relative = now.plus(months(requestedMonth));
                 year = relative.year().get();
                 requestedMonth = relative.monthOfYear().get();
             }
@@ -153,7 +152,7 @@ public class ActivitiesResource extends ServerResource
             int requestedWeek = ap.getWeek();
             if (ap.isRelative())
             {
-                DateMidnight relative = now.minus(weeks(abs(requestedWeek)));
+                DateMidnight relative = now.plus(weeks(requestedWeek));
                 year = relative.year().get();
                 requestedWeek = relative.weekOfWeekyear().get();
             }

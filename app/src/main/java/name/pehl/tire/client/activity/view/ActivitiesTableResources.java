@@ -40,6 +40,9 @@ public interface ActivitiesTableResources extends CellTable.Resources
     ActivitiesTableStyle cellTableStyle();
 
 
+    ImageResource copy();
+
+
     ImageResource goon();
 
 

@@ -1,7 +1,5 @@
 package name.pehl.tire.client.activity.view;
 
-import java.util.logging.Logger;
-
 import name.pehl.tire.client.activity.model.Activity;
 
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;
@@ -18,13 +16,15 @@ import com.google.gwt.text.shared.SafeHtmlRenderer;
  */
 public class ActivityCell extends AbstractSafeHtmlCell<Activity>
 {
-    private static Logger logger = Logger.getLogger(ActivityCell.class.getName());
+    private final ActivitiesTable activitiesTable;
     private final ActivityActionCell actionCell;
 
 
-    public ActivityCell(ActivityActionCell actionCell, SafeHtmlRenderer<Activity> renderer)
+    public ActivityCell(ActivitiesTable activitiesTable, ActivityActionCell actionCell,
+            SafeHtmlRenderer<Activity> renderer)
     {
         super(renderer, "click", "mouseover", "mouseout");
+        this.activitiesTable = activitiesTable;
         this.actionCell = actionCell;
     }
 
@@ -36,7 +36,7 @@ public class ActivityCell extends AbstractSafeHtmlCell<Activity>
         super.onBrowserEvent(parent, value, key, event, valueUpdater);
         if ("click".equals(event.getType()))
         {
-            onEdit(value);
+            activitiesTable.onEdit(value);
         }
         else if ("mouseover".equals(event.getType()))
         {
@@ -46,12 +46,6 @@ public class ActivityCell extends AbstractSafeHtmlCell<Activity>
         {
             actionCell.hideActions(parent);
         }
-    }
-
-
-    private void onEdit(Activity activity)
-    {
-        logger.fine("Edit " + activity);
     }
 
 

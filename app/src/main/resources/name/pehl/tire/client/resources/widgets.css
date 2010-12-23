@@ -1,4 +1,4 @@
-@external tire-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton;
+@external tire-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton, gwt-PopupPanelGlass;
 .tire-calendarPopup {
     box-shadow: #666 0px 4px 10px;
     -moz-box-shadow: #666 0 px 4 px 10 px;
@@ -93,4 +93,12 @@ td.datePickerMonth {
     cursor: hand;
     cursor: pointer;
     padding: 0px 5px;
+}
+
+.gwt-PopupPanelGlass {
+    background-color: #3d3d3d;
+    filter: alpha(opacity = 50);
+    -moz-opacity: 0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
 }

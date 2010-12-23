@@ -30,10 +30,10 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 192
+ *          $
  */
 public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, DashboardPresenter.MyProxy>
-
 {
     @ProxyStandard
     @NameToken(NameTokens.dashboard)

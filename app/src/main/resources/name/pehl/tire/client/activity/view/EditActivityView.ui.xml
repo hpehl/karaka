@@ -1,0 +1,24 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tire="urn:import:name.pehl.tire.client.ui">
+
+    <ui:style>
+        .popup {
+            padding: 10px;
+            border: #93cb2b solid 2px;
+            background-color: white;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 2px #3d3d3d;
+            -moz-box-shadow: 2px 2px 2px #3d3d3d;
+            -webkit-box-shadow: 2px 2px 2px #3d3d3d;
+        }
+    </ui:style>
+
+    <tire:EscapablePopupPanel animationEnabled="false" autoHideEnabled="true" modal="true" glassEnabled="true" addStyleNames="{style.popup}">
+        <g:FlowPanel>
+            <g:Label>Placeholder for EditAvtivityUi</g:Label>
+        </g:FlowPanel>
+    </tire:EscapablePopupPanel>
+
+</ui:UiBinder> 

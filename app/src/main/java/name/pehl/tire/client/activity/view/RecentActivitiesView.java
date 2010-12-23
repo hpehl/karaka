@@ -2,7 +2,9 @@ package name.pehl.tire.client.activity.view;
 
 import static name.pehl.tire.model.TimeUnit.MONTH;
 import static name.pehl.tire.model.TimeUnit.WEEK;
+import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.model.Activities;
+import name.pehl.tire.client.activity.model.Activity;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesUiHandlers;
 import name.pehl.tire.client.resources.I18n;
@@ -196,6 +198,33 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
         if (getUiHandlers() != null)
         {
             getUiHandlers().onNext();
+        }
+    }
+
+
+    @UiHandler("activitiesTable")
+    public void onActivityAction(ActivityActionEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            Activity activity = event.getActivity();
+            switch (event.getAction())
+            {
+                case EDIT:
+                    getUiHandlers().onEdit(activity);
+                    break;
+                case COPY:
+                    getUiHandlers().onCopy(activity);
+                    break;
+                case GOON:
+                    getUiHandlers().onGoon(activity);
+                    break;
+                case DELETE:
+                    getUiHandlers().onDelete(activity);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

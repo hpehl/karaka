@@ -1,10 +1,13 @@
 package name.pehl.tire.client.activity.presenter;
 
+import java.util.logging.Logger;
+
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationData;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationDataAdapter;
+import name.pehl.tire.client.activity.model.Activity;
 import name.pehl.tire.model.TimeUnit;
 
 import com.google.gwt.event.shared.EventBus;
@@ -35,21 +38,40 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
         void updateActivities(Activities activities);
     }
 
+    /**
+     * Constant for the edit activity slot.
+     */
+    public static final Object SLOT_EditActivity = new Object();
+
+    private static Logger logger = Logger.getLogger(RecentActivitiesPresenter.class.getName());
+
     private final PlaceManager placeManager;
     private final ActivitiesNavigationDataAdapter anda;
+    private final EditActivityPresenter editActivityPresenter;
     private Activities currentActivities;
     private ActivitiesNavigationData currentAnd;
 
 
     @Inject
     public RecentActivitiesPresenter(final EventBus eventBus, final RecentActivitiesPresenter.MyView view,
-            final PlaceManager placeManager)
+            final PlaceManager placeManager, final EditActivityPresenter editActivityPresenter)
     {
         super(eventBus, view);
         this.placeManager = placeManager;
         this.anda = new ActivitiesNavigationDataAdapter();
+        this.editActivityPresenter = editActivityPresenter;
+
         getView().setUiHandlers(this);
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
+    }
+
+
+    @Override
+    public final void onActivitiesLoaded(ActivitiesLoadedEvent event)
+    {
+        currentAnd = anda.fromEvent(event);
+        currentActivities = event.getActivities();
+        getView().updateActivities(currentActivities);
     }
 
 
@@ -89,10 +111,30 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
 
 
     @Override
-    public final void onActivitiesLoaded(ActivitiesLoadedEvent event)
+    public void onEdit(Activity activity)
     {
-        currentAnd = anda.fromEvent(event);
-        currentActivities = event.getActivities();
-        getView().updateActivities(currentActivities);
+        logger.fine("Edit " + activity);
+        addToPopupSlot(editActivityPresenter);
+    }
+
+
+    @Override
+    public void onCopy(Activity activity)
+    {
+        logger.fine("Copy " + activity);
+    }
+
+
+    @Override
+    public void onGoon(Activity activity)
+    {
+        logger.fine("Continue " + activity);
+    }
+
+
+    @Override
+    public void onDelete(Activity activity)
+    {
+        logger.fine("Delete " + activity);
     }
 }

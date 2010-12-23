@@ -4,12 +4,17 @@ import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.Key
 
 import java.util.List;
 
+import name.pehl.tire.client.activity.event.ActivityAction;
+import name.pehl.tire.client.activity.event.ActivityActionEvent;
+import name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler;
+import name.pehl.tire.client.activity.event.ActivityActionEvent.HasActivityActionHandlers;
 import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.Activity;
 import name.pehl.tire.client.tag.Tag;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.model.Status;
 
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -20,11 +25,15 @@ import com.google.gwt.user.cellview.client.TextHeader;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class ActivitiesTable extends CellTable<Activity>
+public class ActivitiesTable extends CellTable<Activity> implements HasActivityActionHandlers
 {
+    // -------------------------------------------------------- private members
+
     private final ActivitiesTableResources atr;
     private Activities currentActivities;
 
+
+    // ----------------------------------------------------------- constructors
 
     public ActivitiesTable(final ActivitiesTableResources atr)
     {
@@ -54,13 +63,15 @@ public class ActivitiesTable extends CellTable<Activity>
     }
 
 
+    // -------------------------------------------------------------- gui setup
+
     private void addColumns()
     {
         // Action cell is used in all other cells to show / hide the actions
-        ActivityActionCell actionCell = new ActivityActionCell(atr);
+        ActivityActionCell actionCell = new ActivityActionCell(this, atr);
 
         // Column #0: Start date
-        ActivityColumn startColumn = new ActivityColumn(actionCell, new ActivityTextRenderer()
+        ActivityColumn startColumn = new ActivityColumn(this, actionCell, new ActivityTextRenderer()
         {
             @Override
             protected String getValue(Activity activity)
@@ -83,7 +94,7 @@ public class ActivitiesTable extends CellTable<Activity>
         });
 
         // Column #1: Duration from - to
-        ActivityColumn durationFromToColumn = new ActivityColumn(actionCell, new ActivityTextRenderer()
+        ActivityColumn durationFromToColumn = new ActivityColumn(this, actionCell, new ActivityTextRenderer()
         {
             @Override
             public String getValue(Activity activity)
@@ -98,7 +109,7 @@ public class ActivitiesTable extends CellTable<Activity>
         // TODO Right align as soon as
         // http://code.google.com/p/google-web-toolkit/issues/detail?id=5623 is
         // released
-        ActivityColumn durationInHoursColumn = new ActivityColumn(actionCell, new ActivityTextRenderer()
+        ActivityColumn durationInHoursColumn = new ActivityColumn(this, actionCell, new ActivityTextRenderer()
         {
             @Override
             public String getValue(Activity activity)
@@ -145,7 +156,7 @@ public class ActivitiesTable extends CellTable<Activity>
                 }
             }
         };
-        ActivityColumn nameColumn = new ActivityColumn(actionCell, nameRenderer)
+        ActivityColumn nameColumn = new ActivityColumn(this, actionCell, nameRenderer)
         {
             @Override
             public Activity getValue(Activity activity)
@@ -157,7 +168,7 @@ public class ActivitiesTable extends CellTable<Activity>
         addColumn(nameColumn);
 
         // Column #4: Project
-        ActivityColumn projectColumn = new ActivityColumn(actionCell, new ActivityTextRenderer()
+        ActivityColumn projectColumn = new ActivityColumn(this, actionCell, new ActivityTextRenderer()
         {
             @Override
             public String getValue(Activity activity)
@@ -179,10 +190,45 @@ public class ActivitiesTable extends CellTable<Activity>
     }
 
 
+    // --------------------------------------------------------- public methods
+
     public void update(Activities activities)
     {
         currentActivities = activities;
         setRowData(0, activities.getActivities());
         setRowCount(activities.getActivities().size());
+    }
+
+
+    // --------------------------------------------------------- event handling
+
+    @Override
+    public HandlerRegistration addActivityActionHandler(ActivityActionHandler handler)
+    {
+        return addHandler(handler, ActivityActionEvent.getType());
+    }
+
+
+    public void onEdit(Activity activity)
+    {
+        ActivityActionEvent.fire(this, activity, ActivityAction.Action.EDIT);
+    }
+
+
+    public void onCopy(Activity activity)
+    {
+        ActivityActionEvent.fire(this, activity, ActivityAction.Action.COPY);
+    }
+
+
+    public void onGoon(Activity activity)
+    {
+        ActivityActionEvent.fire(this, activity, ActivityAction.Action.GOON);
+    }
+
+
+    public void onDelete(Activity activity)
+    {
+        ActivityActionEvent.fire(this, activity, ActivityAction.Action.DELETE);
     }
 }

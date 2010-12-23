@@ -19,9 +19,10 @@ public class ActivityColumn extends Column<Activity, Activity>
     }
 
 
-    public ActivityColumn(ActivityActionCell actionCell, SafeHtmlRenderer<Activity> renderer)
+    public ActivityColumn(ActivitiesTable activitiesTable, ActivityActionCell actionCell,
+            SafeHtmlRenderer<Activity> renderer)
     {
-        super(new ActivityCell(actionCell, renderer));
+        super(new ActivityCell(activitiesTable, actionCell, renderer));
     }
 
 
