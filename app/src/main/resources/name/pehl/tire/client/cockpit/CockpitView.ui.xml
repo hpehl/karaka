@@ -27,11 +27,13 @@
         .day {
             font-size: 24px;
             font-weight: bold;
+            cursor: help;
         }
         
         .weekAndMonth {
             font-size: 12px;
             padding-top: 5px;
+            cursor: help;
         }
         
         .description {

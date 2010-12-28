@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 import name.pehl.tire.client.activity.model.Activity;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
 import name.pehl.tire.client.ui.EscapablePopupPanel;
+import name.pehl.tire.client.ui.PlaceholderTextBox;
+import name.pehl.tire.client.ui.TimeTextBox;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -12,9 +14,7 @@ import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.datepicker.client.DateBox;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.PopupViewCloseHandler;
 import com.gwtplatform.mvp.client.PopupViewImpl;
@@ -34,10 +34,10 @@ public class EditActivityView extends PopupViewImpl implements EditActivityPrese
     interface EditActivityUi extends UiBinder<EscapablePopupPanel, EditActivityView> {}
     private static EditActivityUi uiBinder = GWT.create(EditActivityUi.class);
     
-    @UiField Label name;
-    @UiField Label description;
-    @UiField DateBox start;
-    @UiField DateBox end;
+    @UiField PlaceholderTextBox name;
+    @UiField PlaceholderTextBox description;
+    @UiField TimeTextBox start;
+    @UiField TimeTextBox end;
     // @formatter:on
 
     private Activity activityToEdit;

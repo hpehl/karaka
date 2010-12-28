@@ -71,10 +71,6 @@
             <artifactId>guice-servlet</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.gwtincubator.widgets</groupId>
-            <artifactId>gwt-incubator-timepicker</artifactId>
-        </dependency>
-        <dependency>
             <groupId>aopalliance</groupId>
             <artifactId>aopalliance</artifactId>
         </dependency>

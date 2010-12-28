@@ -12,7 +12,6 @@
     <inherits name="com.google.gwt.logging.Logging" />
     <inherits name="com.google.gwt.uibinder.UiBinder" />
     <inherits name="com.google.gwt.user.User" />
-    <inherits name="com.gwtincubator.widgets.IncubatorTimepicker" />
 
     <!-- Restlet -->
     <inherits name="org.restlet.Restlet" />

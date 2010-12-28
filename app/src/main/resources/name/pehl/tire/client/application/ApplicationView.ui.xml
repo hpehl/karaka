@@ -34,7 +34,7 @@
             padding: 0px 30px;
         }
         
-        footer a {
+        footer a, footer a:visited {
             font-size: 10px;
             float: left;
             color: #62635e;

@@ -19,10 +19,10 @@
     <tire:EscapablePopupPanel animationEnabled="false" autoHideEnabled="true" modal="true"
         glassEnabled="true" addStyleNames="{style.popup}">
         <g:FlowPanel>
-            <g:Label ui:field="name" />
-            <g:Label ui:field="description" />
-            <dp:DateBox ui:field="start" />
-            <dp:DateBox ui:field="end" />
+            <tire:PlaceholderTextBox ui:field="name" />
+            <tire:PlaceholderTextBox ui:field="description" />
+            <tire:TimeTextBox ui:field="start" />
+            <tire:TimeTextBox ui:field="end" />
         </g:FlowPanel>
     </tire:EscapablePopupPanel>
 

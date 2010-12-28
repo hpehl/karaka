@@ -3,10 +3,10 @@ package name.pehl.tire.client.activity.view;
 import name.pehl.tire.client.activity.model.Activity;
 
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.SafeHtmlRenderer;
@@ -31,13 +31,13 @@ public class ActivityCell extends AbstractSafeHtmlCell<Activity>
 
 
     @Override
-    public void onBrowserEvent(Element parent, Activity value, Object key, NativeEvent event,
+    public void onBrowserEvent(Cell.Context context, Element parent, Activity value, NativeEvent event,
             ValueUpdater<Activity> valueUpdater)
     {
-        super.onBrowserEvent(parent, value, key, event, valueUpdater);
+        super.onBrowserEvent(context, parent, value, event, valueUpdater);
         if ("click".equals(event.getType()))
         {
-            int rowIndex = getRowIndex(parent);
+            int rowIndex = context.getIndex();
             actionCell.hideActions(parent);
             activitiesTable.onEdit(rowIndex, value);
         }
@@ -52,35 +52,8 @@ public class ActivityCell extends AbstractSafeHtmlCell<Activity>
     }
 
 
-    /**
-     * Calculate the row from the specified div element
-     * 
-     * @param parent
-     * @return
-     */
-    private int getRowIndex(Element div)
-    {
-        int index = -1;
-        Element element = null;
-        if (div != null)
-        {
-            element = div.getParentElement();
-            if (element != null)
-            {
-                element = element.getParentElement();
-                if (element != null)
-                {
-                    TableRowElement tr = TableRowElement.as(element);
-                    index = tr.getSectionRowIndex();
-                }
-            }
-        }
-        return index;
-    }
-
-
     @Override
-    protected void render(SafeHtml data, Object key, SafeHtmlBuilder sb)
+    protected void render(Cell.Context context, SafeHtml data, SafeHtmlBuilder sb)
     {
         if (data != null)
         {
