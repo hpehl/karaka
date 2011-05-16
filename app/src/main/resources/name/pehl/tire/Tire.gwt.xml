@@ -21,8 +21,8 @@
     <inherits name="com.gwtplatform.mvp.Mvp" />
 
     <!-- name.pehl -->
-    <inherits name="name.pehl.piriti.Piriti" />
-    <inherits name="name.pehl.piriti.restlet.PiritiRestlet" />
+    <inherits name="name.pehl.piriti.json.JSON" />
+    <inherits name="name.pehl.piriti.restlet.Restlet" />
     <inherits name="name.pehl.tire.Model" />
 
     <entry-point class="name.pehl.tire.client.Tire" />
