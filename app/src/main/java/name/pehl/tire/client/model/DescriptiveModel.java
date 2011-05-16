@@ -1,14 +1,12 @@
 package name.pehl.tire.client.model;
 
-import name.pehl.piriti.client.json.Json;
-
 /**
  * @author $Author$
- * @version $Date$ $Revision$
+ * @version $Date$ $Revision: 117
+ *          $
  */
 public abstract class DescriptiveModel extends NamedModel
 {
-    @Json
     private String description;
 
 

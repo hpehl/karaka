@@ -19,7 +19,6 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>1.6.2</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.objectify</groupId>
@@ -73,7 +72,6 @@
                 </executions>
             </plugin>
         </plugins>
-
     </build>
 
 
@@ -103,7 +101,6 @@
                                             <outputDirectory>../app/target/tire-d8-${project.version}/WEB-INF/lib</outputDirectory>
                                         </artifactItem>
                                     </artifactItems>
-                                    <!-- other configurations here -->
                                 </configuration>
                             </execution>
                         </executions>

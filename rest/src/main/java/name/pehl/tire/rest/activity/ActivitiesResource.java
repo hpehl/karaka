@@ -1,6 +1,8 @@
 package name.pehl.tire.rest.activity;
 
-import static name.pehl.tire.model.TimeUnit.*;
+import static name.pehl.tire.model.TimeUnit.DAY;
+import static name.pehl.tire.model.TimeUnit.MONTH;
+import static name.pehl.tire.model.TimeUnit.WEEK;
 import static org.joda.time.Months.months;
 import static org.joda.time.Weeks.weeks;
 

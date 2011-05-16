@@ -1,6 +1,6 @@
 package name.pehl.tire.client.model;
 
-import name.pehl.piriti.client.property.PropertySetter;
+import name.pehl.piriti.property.client.PropertySetter;
 
 /**
  * @author $LastChangedBy:$

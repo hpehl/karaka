@@ -4,18 +4,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import name.pehl.piriti.client.json.Json;
-
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
 public class Day implements Iterable<Activity>
 {
-    // @formatter:off
-    @Json int day;
-    @Json List<Activity> activities;
-    // @formatter:on
+    int day;
+    List<Activity> activities;
+
 
     @Override
     public int hashCode()

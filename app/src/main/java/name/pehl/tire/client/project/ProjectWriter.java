@@ -1,6 +1,6 @@
 package name.pehl.tire.client.project;
 
-import name.pehl.piriti.client.json.JsonWriter;
+import name.pehl.piriti.json.client.JsonWriter;
 
 public interface ProjectWriter extends JsonWriter<Project>
 {

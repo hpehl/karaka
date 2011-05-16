@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import name.pehl.piriti.client.json.Json;
 import name.pehl.tire.model.TimeUnit;
 
 /**
@@ -14,18 +13,17 @@ import name.pehl.tire.model.TimeUnit;
  */
 public class Activities
 {
-    // @formatter:off
-    @Json int year;
-    @Json int yearDiff;
-    @Json int month;
-    @Json int monthDiff;
-    @Json int week;
-    @Json int weekDiff;
-    @Json TimeUnit unit;
-    @Json List<Week> weeks;
-    @Json List<Day> days;
-    @Json List<Activity> activities;
-    // @formatter:on
+    int year;
+    int yearDiff;
+    int month;
+    int monthDiff;
+    int week;
+    int weekDiff;
+    TimeUnit unit;
+    List<Week> weeks;
+    List<Day> days;
+    List<Activity> activities;
+
 
     /**
      * Based on year, month and week

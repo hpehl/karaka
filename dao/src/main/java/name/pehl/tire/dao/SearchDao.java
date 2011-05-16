@@ -12,7 +12,7 @@ import name.pehl.tire.model.Searchable;
 
 import com.google.inject.Inject;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.helper.DAOBase;
+import com.googlecode.objectify.util.DAOBase;
 
 /**
  * @author $LastChangedBy:$

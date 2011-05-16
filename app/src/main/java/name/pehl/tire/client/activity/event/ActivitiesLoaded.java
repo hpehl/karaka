@@ -3,8 +3,8 @@ package name.pehl.tire.client.activity.event;
 import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.model.TimeUnit;
 
-import com.gwtplatform.annotation.GenEvent;
-import com.gwtplatform.annotation.Order;
+import com.gwtplatform.dispatch.annotation.GenEvent;
+import com.gwtplatform.dispatch.annotation.Order;
 
 /**
  * @author $Author$

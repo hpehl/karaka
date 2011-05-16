@@ -5,18 +5,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import name.pehl.piriti.client.json.Json;
-
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
 public class Week implements Iterable<Day>
 {
-    // @formatter:off
-    @Json int week;
-    @Json List<Day> days;
-    // @formatter:on
+    int week;
+    List<Day> days;
+
 
     @Override
     public int hashCode()

@@ -6,7 +6,7 @@ import static name.pehl.tire.model.TimeUnit.WEEK;
 import java.io.IOException;
 
 import name.pehl.piriti.restlet.client.UrlBuilder;
-import name.pehl.piriti.restlet.client.json.PiritiJsonRepresentation;
+import name.pehl.piriti.restlet.json.client.PiritiJsonRepresentation;
 import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.dispatch.AbstractRestletClientActionHandler;

@@ -2,8 +2,8 @@ package name.pehl.tire.client.dispatch;
 
 import java.io.IOException;
 
-import name.pehl.piriti.client.json.JsonReader;
-import name.pehl.piriti.restlet.client.json.PiritiJsonRepresentation;
+import name.pehl.piriti.json.client.JsonReader;
+import name.pehl.piriti.restlet.json.client.PiritiJsonRepresentation;
 
 import org.restlet.client.Request;
 import org.restlet.client.Response;

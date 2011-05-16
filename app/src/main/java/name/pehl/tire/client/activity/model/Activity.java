@@ -3,7 +3,7 @@ package name.pehl.tire.client.activity.model;
 import java.util.Date;
 import java.util.List;
 
-import name.pehl.piriti.client.json.Json;
+import name.pehl.piriti.commons.client.Format;
 import name.pehl.tire.client.Defaults;
 import name.pehl.tire.client.model.DescriptiveModel;
 import name.pehl.tire.client.project.Project;
@@ -17,14 +17,14 @@ import name.pehl.tire.model.Status;
 public class Activity extends DescriptiveModel
 {
     // @formatter:off
-    @Json(format = Defaults.DATE_TIME_PATTERN) private Date start;
-    @Json(format = Defaults.DATE_TIME_PATTERN) private Date end;
-    @Json private long pause;
-    @Json private long minutes;
-    @Json private boolean billable;
-    @Json private Status status;
-    @Json private Project project;
-    @Json private List<Tag> tags;
+    @Format(Defaults.DATE_TIME_PATTERN) private Date start;
+    @Format(Defaults.DATE_TIME_PATTERN) private Date end;
+    private long pause;
+    private long minutes;
+    private boolean billable;
+    private Status status;
+    private Project project;
+    private List<Tag> tags;
     // @formatter:on
 
     public Activity()
