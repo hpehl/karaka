@@ -8,12 +8,14 @@ import com.google.common.collect.ComparisonChain;
 
 class Week implements Comparable<Week>
 {
+    final int year;
     final int week;
     final SortedSet<Day> days;
 
 
-    Week(int week)
+    Week(int year, int week)
     {
+        this.year = year;
         this.week = week;
         days = new TreeSet<Day>();
     }
@@ -34,7 +36,7 @@ class Week implements Comparable<Week>
     @Override
     public int compareTo(Week that)
     {
-        return ComparisonChain.start().compare(that.week, this.week).result();
+        return ComparisonChain.start().compare(that.year, this.year).compare(that.week, this.week).result();
     }
 
 
@@ -43,6 +45,7 @@ class Week implements Comparable<Week>
     {
         final int prime = 31;
         int result = 1;
+        result = prime * result + year;
         result = prime * result + week;
         return result;
     }
@@ -64,6 +67,10 @@ class Week implements Comparable<Week>
             return false;
         }
         Week other = (Week) obj;
+        if (year != other.year)
+        {
+            return false;
+        }
         if (week != other.week)
         {
             return false;
@@ -76,7 +83,8 @@ class Week implements Comparable<Week>
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("Week [week=").append(week).append(", days=").append(days).append("]");
+        builder.append("Week [year=").append(year).append(", week=").append(week).append(", days=").append(days)
+                .append("]");
         return builder.toString();
     }
 }

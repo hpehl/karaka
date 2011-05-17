@@ -60,7 +60,7 @@ public class ActivitiesSorter
         SortedSetMultimap<Week, Activity> activitiesPerWeek = TreeMultimap.create();
         for (Activity activity : activities)
         {
-            Week week = new Week(activity.getStart().getWeek());
+            Week week = new Week(activity.getStart().getYear(), activity.getStart().getWeek());
             activitiesPerWeek.put(week, activity);
         }
 
