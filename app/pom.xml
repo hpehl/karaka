@@ -50,17 +50,32 @@
             <artifactId>gwt-user</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>jsr305</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <classifier>gwt</classifier>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-clients-common</artifactId>
+            <version>${gwtp.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.gwtplatform</groupId>
-            <artifactId>gwtp</artifactId>
+            <artifactId>gwtp-mvp-client</artifactId>
+            <version>${gwtp.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-dispatch-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-processors</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-crawler</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-tester</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>
@@ -115,11 +130,11 @@
             <artifactId>datanucleus-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.appengine</groupId>
+            <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jpa_3.0_spec</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.appengine</groupId>
+            <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jta_1.1_spec</artifactId>
         </dependency>
         <dependency>
