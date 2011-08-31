@@ -3,8 +3,6 @@
 <module rename-to="tire">
 
     <!-- GWT -->
-    <inherits name="com.google.common.annotations.Annotations" />
-    <inherits name="com.google.common.base.Base" />
     <inherits name="com.google.gwt.cell.Cell" />
     <inherits name="com.google.gwt.editor.Editor" />
     <inherits name="com.google.gwt.inject.Inject" />
