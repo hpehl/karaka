@@ -17,6 +17,9 @@ import com.google.inject.Singleton;
 @Singleton
 public class TireServlet extends RestletServlet
 {
+    private static final long serialVersionUID = 6736699669978670928L;
+
+
     @Override
     protected GuiceRouter createRouter(Injector injector, Context context)
     {
