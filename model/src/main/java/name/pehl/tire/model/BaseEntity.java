@@ -9,6 +9,7 @@ import javax.persistence.Id;
  * @version $LastChangedRevision: 41 $
  */
 
+@SuppressWarnings("serial")
 public abstract class BaseEntity implements Serializable
 {
     @Id

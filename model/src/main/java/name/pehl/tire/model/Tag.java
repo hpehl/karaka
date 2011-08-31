@@ -11,6 +11,8 @@ import com.googlecode.objectify.annotation.Entity;
 @Entity
 public class Tag extends NamedEntity implements HasUser
 {
+    private static final long serialVersionUID = -3947128324431639651L;
+
     private User user;
     private Key<Activity> activity;
 

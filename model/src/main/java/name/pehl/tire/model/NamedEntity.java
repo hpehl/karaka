@@ -6,6 +6,7 @@ import com.googlecode.objectify.annotation.Unindexed;
  * @author $LastChangedBy: harald.pehl $
  * @version $LastChangedRevision: 41 $
  */
+@SuppressWarnings("serial")
 public abstract class NamedEntity extends BaseEntity implements Searchable
 {
     @Unindexed

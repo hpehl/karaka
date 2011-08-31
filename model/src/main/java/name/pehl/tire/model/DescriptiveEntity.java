@@ -8,6 +8,8 @@ import com.googlecode.objectify.annotation.Unindexed;
  */
 public abstract class DescriptiveEntity extends NamedEntity
 {
+    private static final long serialVersionUID = 9133025000040397867L;
+
     @Unindexed
     private String description;
 

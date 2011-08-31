@@ -31,6 +31,8 @@ public class Activity extends DescriptiveEntity implements HasUser, Comparable<A
 {
     // -------------------------------------------------------- private members
 
+    private static final long serialVersionUID = 3829933815690771262L;
+
     private User user;
 
     @Embedded

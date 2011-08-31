@@ -11,6 +11,8 @@ import com.googlecode.objectify.annotation.Entity;
 @Entity
 public class Project extends DescriptiveEntity implements HasUser
 {
+    private static final long serialVersionUID = -8354180510050961764L;
+
     private User user;
     private Key<Client> client;
 

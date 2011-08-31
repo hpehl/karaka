@@ -9,6 +9,8 @@ import com.googlecode.objectify.Key;
  */
 public class IndexEntry extends BaseEntity
 {
+    private static final long serialVersionUID = 5319841455603288912L;
+
     private final Key<?> key;
     private final String data;
 
