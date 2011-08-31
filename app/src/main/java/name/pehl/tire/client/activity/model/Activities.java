@@ -85,7 +85,7 @@ public class Activities
     @Override
     public String toString()
     {
-        StringBuilder builder = new StringBuilder("ActivitiesByDay [").append(year).append(", ").append(month)
+        StringBuilder builder = new StringBuilder("Activities [").append(year).append(", ").append(month)
                 .append(", cw").append(week).append("]");
         return builder.toString();
     }
