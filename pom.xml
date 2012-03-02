@@ -67,12 +67,6 @@
         </dependency> 
         <dependency>
             <groupId>name.pehl</groupId>
-            <artifactId>piriti-rest</artifactId>
-            <version>${piriti.version}</version>
-            <scope>provided</scope>
-        </dependency> 
-        <dependency>
-            <groupId>name.pehl</groupId>
             <artifactId>piriti-user</artifactId>
             <version>${piriti.version}</version>
             <scope>provided</scope>
