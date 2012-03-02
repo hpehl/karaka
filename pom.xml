@@ -40,7 +40,7 @@
     <properties>
         <gae.version>1.6.3</gae.version>
         <gin.version>1.5.0</gin.version>
-        <guava.version>11.02</guava.version>
+        <guava.version>11.0.2</guava.version>
         <guice.version>3.0</guice.version>
         <gwt.version>2.4.0</gwt.version>
         <gwt.plugin.version>2.4.0</gwt.plugin.version>
@@ -53,7 +53,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <resteasy.version>2.3.2.Final</resteasy.version>
         <slf4j.version>1.6.4</slf4j.version>
-        <totoe.version>0.4</totoe.version>
+        <totoe.version>0.3</totoe.version>
     </properties> 
 
 
