@@ -8,10 +8,10 @@ import static org.joda.time.Weeks.weeks;
 
 import java.util.List;
 
-import name.pehl.tire.dao.ActivityDao;
 import name.pehl.tire.model.ActivitiesGenerator;
 import name.pehl.tire.model.Activity;
 import name.pehl.tire.model.TimeUnit;
+import name.pehl.tire.server.dao.ActivityDao;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;

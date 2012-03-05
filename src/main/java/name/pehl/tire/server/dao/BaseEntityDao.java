@@ -1,4 +1,4 @@
-package name.pehl.tire.dao;
+package name.pehl.tire.server.dao;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import name.pehl.tire.dao.normalize.Normalizer;
 import name.pehl.tire.model.Activity;
 import name.pehl.tire.model.BaseEntity;
 import name.pehl.tire.model.Client;
@@ -17,6 +16,7 @@ import name.pehl.tire.model.Searchable;
 import name.pehl.tire.model.Tag;
 import name.pehl.tire.rest.paging.PageInfo;
 import name.pehl.tire.rest.paging.PageResult;
+import name.pehl.tire.server.dao.normalize.Normalizer;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.users.User;

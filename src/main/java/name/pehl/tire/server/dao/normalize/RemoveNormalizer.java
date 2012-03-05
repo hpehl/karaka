@@ -1,4 +1,4 @@
-package name.pehl.tire.dao.normalize;
+package name.pehl.tire.server.dao.normalize;
 
 import com.google.common.base.CharMatcher;
 

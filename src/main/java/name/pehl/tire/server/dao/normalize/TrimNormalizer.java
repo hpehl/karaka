@@ -1,4 +1,4 @@
-package name.pehl.tire.dao.normalize;
+package name.pehl.tire.server.dao.normalize;
 
 /**
  * Removes leading and trailing whitespaces, multiple whitespaces are replaced

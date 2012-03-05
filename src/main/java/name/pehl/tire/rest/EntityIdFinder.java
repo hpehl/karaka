@@ -5,8 +5,8 @@ import static java.util.logging.Level.SEVERE;
 import java.util.ArrayList;
 import java.util.List;
 
-import name.pehl.tire.dao.BaseEntityDao;
 import name.pehl.tire.model.BaseEntity;
+import name.pehl.tire.server.dao.BaseEntityDao;
 
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;

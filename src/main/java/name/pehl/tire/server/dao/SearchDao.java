@@ -1,4 +1,4 @@
-package name.pehl.tire.dao;
+package name.pehl.tire.server.dao;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import name.pehl.tire.dao.normalize.Normalizer;
 import name.pehl.tire.model.IndexEntry;
 import name.pehl.tire.model.Searchable;
+import name.pehl.tire.server.dao.normalize.Normalizer;
 
 import com.google.inject.Inject;
 import com.googlecode.objectify.Key;

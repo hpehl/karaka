@@ -1,8 +1,8 @@
-package name.pehl.tire.dao;
+package name.pehl.tire.server.dao;
 
-import name.pehl.tire.dao.normalize.Normalizer;
 import name.pehl.tire.model.NamedEntity;
 import name.pehl.tire.rest.paging.PageResult;
+import name.pehl.tire.server.dao.normalize.Normalizer;
 
 import com.google.appengine.api.users.User;
 

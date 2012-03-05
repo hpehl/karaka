@@ -1,8 +1,8 @@
 package name.pehl.tire.rest.activity;
 
-import name.pehl.tire.dao.ActivityDao;
 import name.pehl.tire.model.Activity;
 import name.pehl.tire.rest.EntityIdFinder;
+import name.pehl.tire.server.dao.ActivityDao;
 
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
