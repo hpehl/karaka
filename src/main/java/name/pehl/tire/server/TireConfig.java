@@ -1,7 +1,7 @@
 package name.pehl.tire.server;
 
-import name.pehl.tire.rest.RestModule;
 import name.pehl.tire.server.dao.DaoModule;
+import name.pehl.tire.server.rest.RestModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

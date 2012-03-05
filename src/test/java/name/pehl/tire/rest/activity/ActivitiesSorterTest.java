@@ -7,6 +7,10 @@ import java.util.List;
 import name.pehl.tire.model.ActivitiesGenerator;
 import name.pehl.tire.model.Activity;
 import name.pehl.tire.model.TimeUnit;
+import name.pehl.tire.server.rest.activity.Activities;
+import name.pehl.tire.server.rest.activity.ActivitiesSorter;
+import name.pehl.tire.server.rest.activity.Day;
+import name.pehl.tire.server.rest.activity.Week;
 
 import org.joda.time.DateMidnight;
 import org.junit.Before;

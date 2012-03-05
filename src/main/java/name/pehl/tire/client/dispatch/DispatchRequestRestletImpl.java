@@ -1,6 +1,6 @@
 package name.pehl.tire.client.dispatch;
 
-import name.pehl.tire.rest.client.ClientResource;
+import name.pehl.tire.server.rest.client.ClientResource;
 
 import com.gwtplatform.dispatch.shared.DispatchRequest;
 

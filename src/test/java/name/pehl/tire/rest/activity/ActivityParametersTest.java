@@ -1,10 +1,13 @@
 package name.pehl.tire.rest.activity;
 
-import static name.pehl.tire.rest.activity.ActivityParameters.*;
+import static name.pehl.tire.server.rest.activity.ActivityParameters.*;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import name.pehl.tire.server.rest.activity.Action;
+import name.pehl.tire.server.rest.activity.ActivityParameters;
 
 import org.junit.Test;
 

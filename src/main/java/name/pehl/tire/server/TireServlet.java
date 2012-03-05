@@ -2,7 +2,7 @@ package name.pehl.tire.server;
 
 import name.pehl.taoki.GuiceRouter;
 import name.pehl.taoki.RestletServlet;
-import name.pehl.tire.rest.TireRouter;
+import name.pehl.tire.server.rest.TireRouter;
 
 import org.restlet.Context;
 
