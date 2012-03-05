@@ -41,7 +41,6 @@
         <gae.version>1.6.3</gae.version>
         <gin.version>1.5.0</gin.version>
         <guava.version>11.0.2</guava.version>
-        <guice.version>3.0</guice.version>
         <gwt.version>2.4.0</gwt.version>
         <gwt.plugin.version>2.4.0</gwt.plugin.version>
         <gwtp.version>0.7</gwtp.version>
@@ -54,6 +53,7 @@
         <resteasy.version>2.3.2.Final</resteasy.version>
         <slf4j.version>1.6.4</slf4j.version>
         <totoe.version>0.3</totoe.version>
+        <weld.version>1.1.5.Final</weld.version>
     </properties> 
 
 
@@ -77,6 +77,14 @@
             <version>${totoe.version}</version>
             <scope>provided</scope>
         </dependency> 
+
+        <!-- Servlet -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- GAE -->
         <dependency>
@@ -167,19 +175,9 @@
 
         <!-- DI -->
         <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-servlet</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-assistedinject</artifactId>
-            <version>${guice.version}</version>
+            <groupId>org.jboss.weld.servlet</groupId>
+            <artifactId>weld-servlet</artifactId>
+            <version>${weld.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.gwt.inject</groupId>
@@ -187,25 +185,7 @@
             <version>${gin.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>1</version>
-        </dependency>
-        <dependency>
-            <groupId>aopalliance</groupId>
-            <artifactId>aopalliance</artifactId>
-            <version>1.0</version>
-        </dependency>
         
-        <!-- Servlet -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- RestEasy -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
