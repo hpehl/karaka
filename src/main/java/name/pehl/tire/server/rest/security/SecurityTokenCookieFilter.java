@@ -1,6 +1,8 @@
 package name.pehl.tire.server.rest.security;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,7 +14,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 /**
@@ -29,29 +30,23 @@ import com.google.inject.Singleton;
  *          $
  */
 @Singleton
-public class SecurityCookieFilter implements Filter
+public class SecurityTokenCookieFilter implements Filter, SecurityToken
 {
-    private final String name;
-    private final String token;
-
-
-    @Inject
-    public SecurityCookieFilter(@SecurityToken final String name, final SecurityTokenGenerator securityTokenGenerator)
-    {
-        this.name = name;
-        this.token = securityTokenGenerator.generateToken();
-    }
+    private String token;
 
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException
     {
+        SecureRandom secureRandom = new SecureRandom();
+        this.token = new BigInteger(130, secureRandom).toString(32);
     }
 
 
     @Override
     public void destroy()
     {
+        this.token = null;
     }
 
 
@@ -62,7 +57,7 @@ public class SecurityCookieFilter implements Filter
         if (request instanceof HttpServletRequest)
         {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
-            Cookie securityCookie = new Cookie(name, token);
+            Cookie securityCookie = new Cookie(TOKEN_NAME, token);
             securityCookie.setMaxAge(-1);
             securityCookie.setPath("/");
             httpResponse.addCookie(securityCookie);
