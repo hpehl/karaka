@@ -1,8 +1,8 @@
 package name.pehl.tire.server.rest.activity;
 
-import static name.pehl.tire.server.model.TimeUnit.DAY;
-import static name.pehl.tire.server.model.TimeUnit.MONTH;
-import static name.pehl.tire.server.model.TimeUnit.WEEK;
+import static name.pehl.tire.shared.model.TimeUnit.DAY;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import static org.joda.time.Months.months;
 import static org.joda.time.Weeks.weeks;
 
@@ -11,7 +11,7 @@ import java.util.List;
 import name.pehl.tire.server.dao.ActivityDao;
 import name.pehl.tire.server.model.ActivitiesGenerator;
 import name.pehl.tire.server.model.Activity;
-import name.pehl.tire.server.model.TimeUnit;
+import name.pehl.tire.shared.model.TimeUnit;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;

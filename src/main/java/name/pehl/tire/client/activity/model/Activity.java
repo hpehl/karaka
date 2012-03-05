@@ -8,7 +8,7 @@ import name.pehl.tire.client.Defaults;
 import name.pehl.tire.client.model.DescriptiveModel;
 import name.pehl.tire.client.project.Project;
 import name.pehl.tire.client.tag.Tag;
-import name.pehl.tire.server.model.Status;
+import name.pehl.tire.shared.model.Status;
 
 /**
  * @author $LastChangedBy:$

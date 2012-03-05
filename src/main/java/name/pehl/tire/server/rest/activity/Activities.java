@@ -3,7 +3,7 @@ package name.pehl.tire.server.rest.activity;
 import java.util.SortedSet;
 
 import name.pehl.tire.server.model.Activity;
-import name.pehl.tire.server.model.TimeUnit;
+import name.pehl.tire.shared.model.TimeUnit;
 
 /**
  * Data holder used for the json representations of activities. This class is

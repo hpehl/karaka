@@ -1,7 +1,7 @@
 package name.pehl.tire.client.activity.view;
 
-import static name.pehl.tire.server.model.TimeUnit.MONTH;
-import static name.pehl.tire.server.model.TimeUnit.WEEK;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesUiHandlers;

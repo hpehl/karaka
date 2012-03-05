@@ -1,11 +1,11 @@
 package name.pehl.tire.client.activity.model;
 
-import static name.pehl.tire.server.model.TimeUnit.MONTH;
-import static name.pehl.tire.server.model.TimeUnit.WEEK;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 import java.util.EnumSet;
 
-import name.pehl.tire.server.model.TimeUnit;
+import name.pehl.tire.shared.model.TimeUnit;
 
 /**
  * Simple value object for navigation over activities by year, month and week.

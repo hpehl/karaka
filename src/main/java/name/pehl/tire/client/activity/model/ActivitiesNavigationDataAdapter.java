@@ -1,7 +1,7 @@
 package name.pehl.tire.client.activity.model;
 
-import static name.pehl.tire.server.model.TimeUnit.MONTH;
-import static name.pehl.tire.server.model.TimeUnit.WEEK;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 import java.util.Set;
 import java.util.logging.Level;
@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
-import name.pehl.tire.server.model.TimeUnit;
+import name.pehl.tire.shared.model.TimeUnit;
 
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 

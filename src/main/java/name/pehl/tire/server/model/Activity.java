@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Embedded;
 
+import name.pehl.tire.shared.model.Status;
+
 import org.joda.time.Minutes;
 
 import com.google.appengine.api.users.User;
