@@ -7,7 +7,7 @@
     </context-param>
     <context-param>
         <param-name>resteasy.servlet.mapping.prefix</param-name>
-        <param-value>/resteasy</param-value>
+        <param-value>/rest/v1</param-value>
     </context-param>
 
 
@@ -31,7 +31,7 @@
     
     <servlet-mapping>
         <servlet-name>Resteasy</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
+        <url-pattern>/rest/v1/*</url-pattern>
     </servlet-mapping>
     
     

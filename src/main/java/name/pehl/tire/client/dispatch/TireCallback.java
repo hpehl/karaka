@@ -2,9 +2,7 @@ package name.pehl.tire.client.dispatch;
 
 import name.pehl.tire.client.NameTokens;
 
-import org.restlet.client.data.Status;
-import org.restlet.client.resource.ResourceException;
-
+import com.google.gwt.resources.client.ResourceException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 

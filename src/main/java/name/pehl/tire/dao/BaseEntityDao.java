@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import name.pehl.taoki.paging.PageInfo;
-import name.pehl.taoki.paging.PageResult;
 import name.pehl.tire.dao.normalize.Normalizer;
 import name.pehl.tire.model.Activity;
 import name.pehl.tire.model.BaseEntity;
@@ -17,6 +15,8 @@ import name.pehl.tire.model.IndexEntry;
 import name.pehl.tire.model.Project;
 import name.pehl.tire.model.Searchable;
 import name.pehl.tire.model.Tag;
+import name.pehl.tire.rest.paging.PageInfo;
+import name.pehl.tire.rest.paging.PageResult;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.users.User;

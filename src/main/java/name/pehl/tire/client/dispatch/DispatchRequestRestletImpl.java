@@ -1,9 +1,8 @@
 package name.pehl.tire.client.dispatch;
 
-import org.restlet.client.Request;
-import org.restlet.client.resource.ClientResource;
+import name.pehl.tire.rest.client.ClientResource;
 
-import com.gwtplatform.dispatch.client.DispatchRequest;
+import com.gwtplatform.dispatch.shared.DispatchRequest;
 
 /**
  * Implementation of {@link DispatchRequest} used by
