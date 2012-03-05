@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import name.pehl.tire.model.IndexEntry;
-import name.pehl.tire.model.Searchable;
 import name.pehl.tire.server.dao.normalize.Normalizer;
+import name.pehl.tire.server.model.IndexEntry;
+import name.pehl.tire.server.model.Searchable;
 
 import com.google.inject.Inject;
 import com.googlecode.objectify.Key;

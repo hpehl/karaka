@@ -4,8 +4,8 @@ import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import name.pehl.tire.model.Time;
 import name.pehl.tire.rest.DateTimeFormat;
+import name.pehl.tire.server.model.Time;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

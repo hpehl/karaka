@@ -12,7 +12,7 @@ import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.Activity;
 import name.pehl.tire.client.tag.Tag;
 import name.pehl.tire.client.ui.FormatUtils;
-import name.pehl.tire.model.Status;
+import name.pehl.tire.server.model.Status;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;

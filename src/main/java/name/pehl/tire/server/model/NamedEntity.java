@@ -1,4 +1,4 @@
-package name.pehl.tire.model;
+package name.pehl.tire.server.model;
 
 import com.googlecode.objectify.annotation.Unindexed;
 
@@ -50,7 +50,7 @@ public abstract class NamedEntity extends BaseEntity implements Searchable
      * Returns the name
      * 
      * @return the name
-     * @see name.pehl.tire.model.Searchable#getSearchData()
+     * @see name.pehl.tire.server.model.Searchable#getSearchData()
      */
     @Override
     public String getSearchData()

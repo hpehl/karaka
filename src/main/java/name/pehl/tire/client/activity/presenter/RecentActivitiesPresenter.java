@@ -8,7 +8,7 @@ import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationData;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationDataAdapter;
 import name.pehl.tire.client.activity.model.Activity;
-import name.pehl.tire.model.TimeUnit;
+import name.pehl.tire.server.model.TimeUnit;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.inject.Inject;

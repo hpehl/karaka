@@ -3,9 +3,9 @@ package name.pehl.tire.server.dao;
 import java.util.EnumSet;
 import java.util.List;
 
-import name.pehl.tire.model.Activity;
-import name.pehl.tire.model.Status;
 import name.pehl.tire.server.dao.normalize.Normalizer;
+import name.pehl.tire.server.model.Activity;
+import name.pehl.tire.server.model.Status;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.users.User;

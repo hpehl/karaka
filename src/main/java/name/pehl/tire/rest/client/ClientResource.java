@@ -2,9 +2,9 @@ package name.pehl.tire.rest.client;
 
 import java.util.List;
 
-import name.pehl.tire.model.Client;
 import name.pehl.tire.rest.EntityIdFinder;
 import name.pehl.tire.server.dao.ClientDao;
+import name.pehl.tire.server.model.Client;
 
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;

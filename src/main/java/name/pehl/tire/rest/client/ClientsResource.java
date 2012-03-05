@@ -2,8 +2,8 @@ package name.pehl.tire.rest.client;
 
 import name.pehl.taoki.paging.PageResult;
 import name.pehl.taoki.paging.PagingHeaderResource;
-import name.pehl.tire.model.Client;
 import name.pehl.tire.server.dao.ClientDao;
+import name.pehl.tire.server.model.Client;
 
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;

@@ -1,9 +1,9 @@
 package name.pehl.tire.rest;
 
-import name.pehl.tire.model.Activity;
-import name.pehl.tire.model.Time;
 import name.pehl.tire.rest.activity.ActivityAdapter;
 import name.pehl.tire.rest.activity.TimeAdapter;
+import name.pehl.tire.server.model.Activity;
+import name.pehl.tire.server.model.Time;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

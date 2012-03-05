@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import name.pehl.tire.model.Activity;
-import name.pehl.tire.model.BaseEntity;
-import name.pehl.tire.model.Client;
-import name.pehl.tire.model.HasUser;
-import name.pehl.tire.model.IndexEntry;
-import name.pehl.tire.model.Project;
-import name.pehl.tire.model.Searchable;
-import name.pehl.tire.model.Tag;
 import name.pehl.tire.rest.paging.PageInfo;
 import name.pehl.tire.rest.paging.PageResult;
 import name.pehl.tire.server.dao.normalize.Normalizer;
+import name.pehl.tire.server.model.Activity;
+import name.pehl.tire.server.model.BaseEntity;
+import name.pehl.tire.server.model.Client;
+import name.pehl.tire.server.model.HasUser;
+import name.pehl.tire.server.model.IndexEntry;
+import name.pehl.tire.server.model.Project;
+import name.pehl.tire.server.model.Searchable;
+import name.pehl.tire.server.model.Tag;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.users.User;

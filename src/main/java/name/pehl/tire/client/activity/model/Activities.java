@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import name.pehl.tire.model.TimeUnit;
+import name.pehl.tire.server.model.TimeUnit;
 
 /**
  * @author $Author: harald.pehl $

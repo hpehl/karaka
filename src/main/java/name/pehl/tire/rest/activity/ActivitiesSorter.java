@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import name.pehl.tire.model.Activity;
-import name.pehl.tire.model.TimeUnit;
+import name.pehl.tire.server.model.Activity;
+import name.pehl.tire.server.model.TimeUnit;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.Months;

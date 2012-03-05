@@ -1,7 +1,7 @@
 package name.pehl.tire.client.activity.presenter;
 
 import name.pehl.tire.client.activity.model.Activity;
-import name.pehl.tire.model.TimeUnit;
+import name.pehl.tire.server.model.TimeUnit;
 
 import com.gwtplatform.mvp.client.UiHandlers;
 

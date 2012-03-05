@@ -2,7 +2,7 @@ package name.pehl.tire.rest.activity;
 
 import java.lang.reflect.Type;
 
-import name.pehl.tire.model.Activity;
+import name.pehl.tire.server.model.Activity;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
