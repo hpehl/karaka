@@ -11,7 +11,7 @@ public class ServletModule extends com.google.inject.servlet.ServletModule
     @Override
     protected void configureServlets()
     {
-        filter("*").through(SecurityCookieFilter.class);
+        filter("*").through(SecurityTokenCookieFilter.class);
         serve("/rest/v1/*").with(TireServlet.class);
     }
 }

@@ -8,6 +8,11 @@ import static org.joda.time.Weeks.weeks;
 
 import java.util.List;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
 import name.pehl.tire.server.dao.ActivityDao;
 import name.pehl.tire.server.model.ActivitiesGenerator;
 import name.pehl.tire.server.model.Activity;
@@ -16,16 +21,8 @@ import name.pehl.tire.shared.model.TimeUnit;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
-import org.restlet.data.Form;
-import org.restlet.data.Status;
-import org.restlet.ext.json.JsonRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.Get;
-import org.restlet.resource.Post;
-import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 
-import com.google.gson.Gson;
+import com.google.gwt.resources.client.ResourceException;
 import com.google.inject.Inject;
 
 /**
@@ -49,31 +46,25 @@ import com.google.inject.Inject;
  * @version $Date: 2011-05-16 12:54:26 +0200 (Mo, 16. Mai 2011) $ $Revision: 110
  *          $
  */
-public class ActivitiesResource extends ServerResource
+@Path("/activities")
+public class ActivitiesResource
 {
     private static final String TIME_ZONE_ID = "tz";
 
-    private final Gson gson;
     private final ActivityDao dao;
 
 
     @Inject
-    public ActivitiesResource(ActivityDao dao, Gson gson)
+    public ActivitiesResource(ActivityDao dao)
     {
         this.dao = dao;
-        this.gson = gson;
     }
 
 
-    @Post
-    public void create()
-    {
-
-    }
-
-
-    @Get("json")
-    public Representation getActivities()
+    @GET
+    @Path("{year:[0-9]{4}}/{month:[0-9]{2}}")
+    @Produces("application/json")
+    public Activities getActivities(@PathParam("year") int year, @PathParam("month") int month)
     {
         ActivityParameters ap = new ActivityParameters().parse(getRequestAttributes());
         DateTimeZone timeZone = parseTimeZone(getRequest().getResourceRef().getQueryAsForm());

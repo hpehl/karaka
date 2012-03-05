@@ -11,23 +11,19 @@
     <inherits name="com.google.gwt.uibinder.UiBinder" />
     <inherits name="com.google.gwt.user.User" />
 
-    <!-- Restlet -->
-    <inherits name="org.restlet.Restlet" />
-
     <!-- GWTP -->
     <inherits name="com.gwtplatform.dispatch.Dispatch" />
     <inherits name="com.gwtplatform.mvp.Mvp" />
 
     <!-- name.pehl -->
     <inherits name="name.pehl.piriti.json.JSON" />
-    <inherits name="name.pehl.piriti.restlet.Restlet" />
-    <inherits name="name.pehl.tire.Model" />
 
     <entry-point class="name.pehl.tire.client.Tire" />
     <source path="client">
         <exclude name="gwttest" />
         <exclude name="**/*Test.java" />
     </source>
+    <source path="shared" />
 
     <script src="raphael-min.js" />
     <script src="g.raphael.js" />

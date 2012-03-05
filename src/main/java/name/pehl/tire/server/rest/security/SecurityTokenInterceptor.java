@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.ext.Provider;
 
 import org.jboss.resteasy.annotations.interception.SecurityPrecedence;
@@ -43,8 +42,7 @@ public class SecurityTokenInterceptor implements PreProcessInterceptor, Security
     private String readToken(HttpRequest request)
     {
         String token = null;
-        HttpHeaders headers = request.getHttpHeaders();
-        List<String> tokenHeader = headers.getRequestHeader(TOKEN_NAME);
+        List<String> tokenHeader = request.getHttpHeaders().getRequestHeader(TOKEN_NAME);
         if (tokenHeader != null && !tokenHeader.isEmpty())
         {
             token = tokenHeader.get(0);
@@ -60,8 +58,7 @@ public class SecurityTokenInterceptor implements PreProcessInterceptor, Security
     private String readCookie(HttpRequest request)
     {
         String value = null;
-        HttpHeaders headers = request.getHttpHeaders();
-        Map<String, Cookie> cookies = headers.getCookies();
+        Map<String, Cookie> cookies = request.getHttpHeaders().getCookies();
         if (cookies != null && !cookies.isEmpty())
         {
             Cookie cookie = cookies.get(TOKEN_NAME);
