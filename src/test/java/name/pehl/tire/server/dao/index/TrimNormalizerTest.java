@@ -1,4 +1,4 @@
-package name.pehl.tire.dao.index;
+package name.pehl.tire.server.dao.index;
 
 import static org.junit.Assert.*;
 
