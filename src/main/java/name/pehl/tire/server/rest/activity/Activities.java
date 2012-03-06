@@ -2,6 +2,8 @@ package name.pehl.tire.server.rest.activity;
 
 import java.util.SortedSet;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import name.pehl.tire.server.model.Activity;
 import name.pehl.tire.shared.model.TimeUnit;
 
@@ -17,6 +19,7 @@ import name.pehl.tire.shared.model.TimeUnit;
  * @author $LastChangedBy: harald.pehl $
  * @version $LastChangedRevision: 190 $
  */
+@XmlRootElement
 class Activities
 {
     final int year;
@@ -40,5 +43,65 @@ class Activities
         this.week = week;
         this.weekDiff = weekDiff;
         this.unit = unit;
+    }
+
+
+    public int getYear()
+    {
+        return year;
+    }
+
+
+    public int getYearDiff()
+    {
+        return yearDiff;
+    }
+
+
+    public int getMonth()
+    {
+        return month;
+    }
+
+
+    public int getMonthDiff()
+    {
+        return monthDiff;
+    }
+
+
+    public int getWeek()
+    {
+        return week;
+    }
+
+
+    public int getWeekDiff()
+    {
+        return weekDiff;
+    }
+
+
+    public TimeUnit getUnit()
+    {
+        return unit;
+    }
+
+
+    public SortedSet<Week> getWeeks()
+    {
+        return weeks;
+    }
+
+
+    public SortedSet<Day> getDays()
+    {
+        return days;
+    }
+
+
+    public SortedSet<Activity> getActivities()
+    {
+        return activities;
     }
 }
