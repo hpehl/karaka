@@ -1,4 +1,4 @@
-package name.pehl.tire.rest.activity;
+package name.pehl.tire.server.rest.activity;
 
 import static name.pehl.tire.server.rest.activity.ActivityParameters.*;
 import static org.junit.Assert.*;
