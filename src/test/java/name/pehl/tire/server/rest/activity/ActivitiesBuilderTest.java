@@ -1,18 +1,19 @@
 package name.pehl.tire.server.rest.activity;
 
-import static org.junit.Assert.*;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import name.pehl.tire.model.ActivitiesGenerator;
-import name.pehl.tire.model.Activity;
-import name.pehl.tire.model.TimeUnit;
-import name.pehl.tire.server.rest.activity.Activities;
-import name.pehl.tire.server.rest.activity.ActivitiesSorter;
-import name.pehl.tire.server.rest.activity.Day;
-import name.pehl.tire.server.rest.activity.Week;
+import name.pehl.tire.server.model.ActivitiesGenerator;
+import name.pehl.tire.server.model.Activity;
 
 import org.joda.time.DateMidnight;
+import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,19 +22,15 @@ import org.junit.Test;
  * @version $LastChangedRevision:$
  */
 
-public class ActivitiesSorterTest
+public class ActivitiesBuilderTest
 {
-    private ActivitiesSorter underTest;
     private DateMidnight requestedFixture;
-    private DateMidnight nowFixture;
 
 
     @Before
     public void setUp() throws Exception
     {
-        underTest = new ActivitiesSorter();
         requestedFixture = new DateMidnight();
-        nowFixture = new DateMidnight();
     }
 
 
@@ -41,7 +38,8 @@ public class ActivitiesSorterTest
     public void testSortByMonth()
     {
         List<Activity> data = new ActivitiesGenerator().generateMonth(1973, 9);
-        Activities activities = underTest.sort(requestedFixture, nowFixture, TimeUnit.MONTH, data);
+        Activities activities = new Activities.Builder(requestedFixture, DateTimeZone.getDefault(), MONTH, data)
+                .build();
         assertNotNull(activities);
         assertNotNull(activities.weeks);
         assertEquals(4, activities.weeks.size());
@@ -70,7 +68,7 @@ public class ActivitiesSorterTest
     {
         int cw = 35;
         List<Activity> data = new ActivitiesGenerator().generateWeek(1973, cw);
-        Activities activities = underTest.sort(requestedFixture, nowFixture, TimeUnit.WEEK, data);
+        Activities activities = new Activities.Builder(requestedFixture, DateTimeZone.getDefault(), WEEK, data).build();
         assertNotNull(activities);
         assertNull(activities.weeks);
         assertNotNull(activities.days);

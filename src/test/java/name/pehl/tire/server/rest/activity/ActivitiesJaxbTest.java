@@ -8,6 +8,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.AnnotationIntrospector;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +23,10 @@ public class ActivitiesJaxbTest
     {
         mapper = new ObjectMapper();
         AnnotationIntrospector introspector = new JaxbAnnotationIntrospector();
-        mapper.getDeserializationConfig().withAnnotationIntrospector(introspector);
-        mapper.getSerializationConfig().withAnnotationIntrospector(introspector);
+        mapper.setAnnotationIntrospector(introspector);
+        mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false).configure(
+                SerializationConfig.Feature.INDENT_OUTPUT, false);
+        mapper = mapper.configure(SerializationConfig.Feature.WRITE_NULL_MAP_VALUES, true);
     }
 
 

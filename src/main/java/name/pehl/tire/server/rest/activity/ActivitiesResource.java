@@ -12,18 +12,18 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import name.pehl.tire.server.dao.ActivityDao;
 import name.pehl.tire.server.model.ActivitiesGenerator;
 import name.pehl.tire.server.model.Activity;
-import name.pehl.tire.shared.model.TimeUnit;
 
+import org.jboss.resteasy.spi.NotFoundException;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 
-import com.google.gwt.resources.client.ResourceException;
 import com.google.inject.Inject;
 
 /**
@@ -37,7 +37,7 @@ import com.google.inject.Inject;
  * <li>GET /activities/relative/cw{week}: Find activities
  * <li>GET /activities/currentWeek: Find activities
  * <li>GET /activities/{year}/{month}/{day}: Find activities
- * <li>GET /activities/today: Find activities *
+ * <li>GET /activities/today: Find activities
  * </ul>
  * 
  * @todo Need a timezone offset for current* resources
@@ -50,8 +50,6 @@ import com.google.inject.Inject;
 @Path("/activities")
 public class ActivitiesResource
 {
-    private static final String TIME_ZONE_ID = "tz";
-
     private final ActivityDao dao;
 
 
@@ -62,137 +60,183 @@ public class ActivitiesResource
     }
 
 
-    @GET
-    @Path("{year:[0-9]{4}}/{month:[0-9]{2}}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Activities getActivities(@PathParam("year") int year, @PathParam("month") int month)
-    {
-        ActivityParameters ap = new ActivityParameters().parse(getRequestAttributes());
-        DateTimeZone timeZone = parseTimeZone(getRequest().getResourceRef().getQueryAsForm());
-        Activities activities = retrieveActivities(ap, timeZone);
+    // --------------------------------------------------------------- by month
 
-        String json = gson.toJson(activities);
-        return new JsonRepresentation(json);
+    @GET
+    @Path("/{year:\\d{4}}/{month:\\d{1,2}}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Activities activitiesByYearMonth(@PathParam("year") int year, @PathParam("month") int month,
+            @QueryParam("tz") String timeZoneId)
+    {
+        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateMidnight requested = new DateMidnight(year, month, 1, timeZone);
+        // activities = dao.findByYearMonth(requested.year().get(),
+        // requested.monthOfYear().get());
+        List<Activity> activities = new ActivitiesGenerator().generateMonth(requested.year().get(), requested
+                .monthOfYear().get());
+        if (activities.isEmpty())
+        {
+            throw new NotFoundException(String.format("No activities found for year %d and month %d", year, month));
+        }
+        return new Activities.Builder(requested, timeZone, MONTH, activities).build();
     }
 
 
-    protected Activities retrieveActivities(ActivityParameters ap, DateTimeZone timeZone)
+    @GET
+    @Path("/relative/{month:[+-]?\\d+}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Activities activitiesByRelativeMonth(@PathParam("month") int month, @QueryParam("tz") String timeZoneId)
     {
-        TimeUnit unit = null;
-        DateMidnight now = null;
-        DateMidnight requested = null;
-        List<Activity> activities = null;
+        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateMidnight now = new DateMidnight(timeZone);
+        DateMidnight relative = now.plus(months(month));
+        int year = relative.year().get();
+        int requestedMonth = relative.monthOfYear().get();
+        DateMidnight requested = new DateMidnight(year, requestedMonth, 1, timeZone);
+        // activities = dao.findByYearMonth(requested.year().get(),
+        // requested.monthOfYear().get());
+        List<Activity> activities = new ActivitiesGenerator().generateMonth(requested.year().get(), requested
+                .monthOfYear().get());
+        if (activities.isEmpty())
+        {
+            throw new NotFoundException(String.format("No activities found for relative month %d", month));
+        }
+        return new Activities.Builder(requested, timeZone, MONTH, activities).now(now).build();
+    }
 
-        now = new DateMidnight(timeZone);
-        if (ap.isCurrentMonth() || ap.isCurrentWeek() || ap.isToday())
+
+    @GET
+    @Path("/currentMonth")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Activities activitiesByCurrentMonth(@QueryParam("tz") String timeZoneId)
+    {
+        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateMidnight requested = new DateMidnight(timeZone);
+        // activities = dao.findByYearMonth(requested.year().get(),
+        // requested.monthOfYear().get());
+        List<Activity> activities = new ActivitiesGenerator().generateMonth(requested.year().get(), requested
+                .monthOfYear().get());
+        if (activities.isEmpty())
         {
-            requested = new DateMidnight(timeZone);
-            if (ap.isCurrentMonth())
-            {
-                // activities =
-                // dao.findByYearMonth(requested.year().get(),
-                // requested.monthOfYear()
-                // .get());
-                unit = MONTH;
-                activities = new ActivitiesGenerator().generateMonth(requested.year().get(), requested.monthOfYear()
-                        .get());
-            }
-            else if (ap.isCurrentWeek())
-            {
-                // activities =
-                // dao.findByYearWeek(requested.year().get(),
-                // requested
-                // .weekOfWeekyear().get());
-                unit = WEEK;
-                activities = new ActivitiesGenerator().generateWeek(requested.year().get(), requested.weekOfWeekyear()
-                        .get());
-            }
-            else if (ap.isToday())
-            {
-                unit = DAY;
-                activities = dao.findByYearMonthDay(requested.year().get(), requested.monthOfYear().get(), requested
-                        .dayOfMonth().get());
-            }
+            throw new NotFoundException("No activities found for current month");
         }
-        else if (ap.hasYear() && ap.hasMonth() && ap.hasDay())
+        return new Activities.Builder(requested, timeZone, MONTH, activities).build();
+    }
+
+
+    // ------------------------------------------------------- by calendar week
+
+    @GET
+    @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Activities activitiesByYearWeek(@PathParam("year") int year, @PathParam("week") int week,
+            @QueryParam("tz") String timeZoneId)
+    {
+        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(week);
+        DateMidnight requested = new DateMidnight(mdt);
+        // activities = dao.findByYearWeek(requested.year().get(),
+        // requested.weekOfWeekyear().get());
+        List<Activity> activities = new ActivitiesGenerator().generateWeek(requested.year().get(), requested
+                .weekOfWeekyear().get());
+        if (activities.isEmpty())
         {
-            unit = DAY;
-            requested = new DateMidnight(ap.getYear(), ap.getMonth(), ap.getDay(), timeZone);
-            activities = dao.findByYearMonthDay(requested.year().get(), requested.monthOfYear().get(), requested
-                    .dayOfMonth().get());
+            throw new NotFoundException(String.format("No activities found for year %d and calendar week %d", year,
+                    week));
         }
-        else if ((ap.hasYear() || ap.isRelative()) && ap.hasMonth())
+        return new Activities.Builder(requested, timeZone, WEEK, activities).build();
+    }
+
+
+    @GET
+    @Path("/relative/cw{week:\\d{1,2}}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Activities activitiesByRelativeWeek(@PathParam("week") int week, @QueryParam("tz") String timeZoneId)
+    {
+        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateMidnight now = new DateMidnight(timeZone);
+        DateMidnight relative = now.plus(weeks(week));
+        int year = relative.year().get();
+        int requestedWeek = relative.weekOfWeekyear().get();
+        MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(requestedWeek);
+        DateMidnight requested = new DateMidnight(mdt);
+        // activities = dao.findByYearWeek(requested.year().get(),
+        // requested.weekOfWeekyear().get());
+        List<Activity> activities = new ActivitiesGenerator().generateWeek(requested.year().get(), requested
+                .weekOfWeekyear().get());
+        if (activities.isEmpty())
         {
-            unit = MONTH;
-            int year = ap.getYear();
-            int requestedMonth = ap.getMonth();
-            if (ap.isRelative())
-            {
-                DateMidnight relative = now.plus(months(requestedMonth));
-                year = relative.year().get();
-                requestedMonth = relative.monthOfYear().get();
-            }
-            requested = new DateMidnight(year, requestedMonth, 1, timeZone);
-            // activities =
-            // dao.findByYearMonth(requested.year().get(),
-            // requested.monthOfYear()
-            // .get());
-            activities = new ActivitiesGenerator().generateMonth(requested.year().get(), requested.monthOfYear().get());
+            throw new NotFoundException(String.format("No activities found for relative calendar week %d", week));
         }
-        else if ((ap.hasYear() || ap.isRelative()) && ap.hasWeek())
+        return new Activities.Builder(requested, timeZone, WEEK, activities).now(now).build();
+    }
+
+
+    @GET
+    @Path("/currentWeek")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Activities activitiesByCurrentWeek(@QueryParam("tz") String timeZoneId)
+    {
+        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateMidnight requested = new DateMidnight(timeZone);
+        // activities = dao.findByYearWeek(requested.year().get(),
+        // requested.weekOfWeekyear().get());
+        List<Activity> activities = new ActivitiesGenerator().generateMonth(requested.year().get(), requested
+                .monthOfYear().get());
+        if (activities.isEmpty())
         {
-            unit = WEEK;
-            int year = ap.getYear();
-            int requestedWeek = ap.getWeek();
-            if (ap.isRelative())
-            {
-                DateMidnight relative = now.plus(weeks(requestedWeek));
-                year = relative.year().get();
-                requestedWeek = relative.weekOfWeekyear().get();
-            }
-            MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(requestedWeek);
-            requested = new DateMidnight(mdt);
-            // activities =
-            // dao.findByYearWeek(requested.year().get(),
-            // requested.weekOfWeekyear()
-            // .get());
-            activities = new ActivitiesGenerator().generateWeek(requested.year().get(), requested.weekOfWeekyear()
-                    .get());
+            throw new NotFoundException("No activities found for current calendar week");
         }
-        return new ActivitiesSorter().sort(requested, now, unit, ensureValidActivities(activities));
+        return new Activities.Builder(requested, timeZone, WEEK, activities).build();
+    }
+
+
+    // ----------------------------------------------------------------- by day
+
+    @GET
+    @Path("/{year:\\d{4}}/{month:\\d{1,2}}/{day:\\d{1,2}}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Activities activitiesByYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
+            @PathParam("day") int day, @QueryParam("tz") String timeZoneId)
+    {
+        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateMidnight requested = new DateMidnight(year, month, day, timeZone);
+        List<Activity> activities = dao.findByYearMonthDay(requested.year().get(), requested.monthOfYear().get(),
+                requested.dayOfMonth().get());
+        if (activities.isEmpty())
+        {
+            throw new NotFoundException(String.format("No activities found for year %d, month %d and day %d", year,
+                    month, day));
+        }
+        return new Activities.Builder(requested, timeZone, DAY, activities).build();
+    }
+
+
+    @GET
+    @Path("/today")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Activities activitiesByYearMonthDay(@QueryParam("tz") String timeZoneId)
+    {
+        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateMidnight requested = new DateMidnight(timeZone);
+        List<Activity> activities = dao.findByYearMonthDay(requested.year().get(), requested.monthOfYear().get(),
+                requested.dayOfMonth().get());
+        if (activities.isEmpty())
+        {
+            throw new NotFoundException("No activities found for today");
+        }
+        return new Activities.Builder(requested, timeZone, DAY, activities).build();
     }
 
 
     // --------------------------------------------------------- helper methods
 
-    private DateTimeZone parseTimeZone(Form form)
+    private DateTimeZone parseTimeZone(String timeZoneId)
     {
-        String timeZoneId = form.getFirstValue(TIME_ZONE_ID);
         if (timeZoneId != null)
         {
             return DateTimeZone.forID(timeZoneId);
         }
         return DateTimeZone.getDefault();
-    }
-
-
-    /**
-     * Throws a {@link ResourceException} with
-     * {@link Status#CLIENT_ERROR_NOT_FOUND} in case the activites are null or
-     * empty.
-     * 
-     * @param activities
-     *            the activities to check
-     * @return the specified activities
-     * @throws ResourceException
-     *             in case the activites are null or empty.
-     */
-    private List<Activity> ensureValidActivities(List<Activity> activities)
-    {
-        if (activities == null || activities.isEmpty())
-        {
-            throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
-        }
-        return activities;
     }
 }
