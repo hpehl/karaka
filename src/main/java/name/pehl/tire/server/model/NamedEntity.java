@@ -1,5 +1,7 @@
 package name.pehl.tire.server.model;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.googlecode.objectify.annotation.Unindexed;
 
 /**
@@ -53,6 +55,7 @@ public abstract class NamedEntity extends BaseEntity implements Searchable
      * @see name.pehl.tire.server.model.Searchable#getSearchData()
      */
     @Override
+    @XmlTransient
     public String getSearchData()
     {
         return name;

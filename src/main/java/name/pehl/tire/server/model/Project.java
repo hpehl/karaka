@@ -1,5 +1,7 @@
 package name.pehl.tire.server.model;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
@@ -36,6 +38,7 @@ public class Project extends DescriptiveEntity implements HasUser
 
 
     @Override
+    @XmlTransient
     public User getUser()
     {
         return user;

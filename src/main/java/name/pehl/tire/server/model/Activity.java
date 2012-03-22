@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Embedded;
+import javax.xml.bind.annotation.XmlTransient;
 
 import name.pehl.tire.shared.model.Status;
 
@@ -134,6 +135,7 @@ public class Activity extends DescriptiveEntity implements HasUser, Comparable<A
 
 
     @Override
+    @XmlTransient
     public User getUser()
     {
         return user;

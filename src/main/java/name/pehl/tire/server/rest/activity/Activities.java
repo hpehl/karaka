@@ -1,6 +1,7 @@
 package name.pehl.tire.server.rest.activity;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -72,7 +73,14 @@ class Activities
             this.now = new DateMidnight(timeZone);
             this.date = date;
             this.unit = unit;
-            this.activities = activities;
+            if (activities == null)
+            {
+                this.activities = Collections.emptyList();
+            }
+            else
+            {
+                this.activities = activities;
+            }
         }
 
 

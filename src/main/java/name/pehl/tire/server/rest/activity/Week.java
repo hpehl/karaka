@@ -4,8 +4,12 @@ import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 import com.google.common.collect.ComparisonChain;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 class Week implements Comparable<Week>
 {
     final int year;

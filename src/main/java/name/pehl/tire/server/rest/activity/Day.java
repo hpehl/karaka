@@ -4,10 +4,14 @@ import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 import name.pehl.tire.server.model.Activity;
 
 import com.google.common.collect.ComparisonChain;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 class Day implements Comparable<Day>
 {
     final int day;
