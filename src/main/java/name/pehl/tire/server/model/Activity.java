@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Embedded;
-import javax.xml.bind.annotation.XmlTransient;
 
 import name.pehl.tire.shared.model.Status;
 
 import org.joda.time.Minutes;
 
-import com.google.appengine.api.users.User;
 import com.google.appengine.repackaged.com.google.common.collect.ComparisonChain;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
@@ -30,13 +28,11 @@ import com.googlecode.objectify.annotation.Unindexed;
  * @version $Revision: 41 $
  */
 @Entity
-public class Activity extends DescriptiveEntity implements HasUser, Comparable<Activity>
+public class Activity extends DescriptiveEntity implements Comparable<Activity>
 {
     // -------------------------------------------------------- private members
 
     private static final long serialVersionUID = 3829933815690771262L;
-
-    private User user;
 
     @Embedded
     private Time start;
@@ -131,21 +127,6 @@ public class Activity extends DescriptiveEntity implements HasUser, Comparable<A
             minutes = m.getMinutes();
         }
         return minutes;
-    }
-
-
-    @Override
-    @XmlTransient
-    public User getUser()
-    {
-        return user;
-    }
-
-
-    @Override
-    public void attachToUser(User user)
-    {
-        this.user = user;
     }
 
 

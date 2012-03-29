@@ -10,7 +10,6 @@ import name.pehl.tire.server.dao.normalize.Normalizer;
 import name.pehl.tire.server.model.Activity;
 import name.pehl.tire.server.model.BaseEntity;
 import name.pehl.tire.server.model.Client;
-import name.pehl.tire.server.model.HasUser;
 import name.pehl.tire.server.model.IndexEntry;
 import name.pehl.tire.server.model.Project;
 import name.pehl.tire.server.model.Searchable;
@@ -245,12 +244,7 @@ public abstract class BaseEntityDao<T extends BaseEntity> extends DAOBase
 
     protected Query<T> query()
     {
-        Query<T> q = ofy().query(clazz);
-        if (HasUser.class.isAssignableFrom(clazz))
-        {
-            q.filter("user", user);
-        }
-        return q;
+        return ofy().query(clazz);
     }
 
 

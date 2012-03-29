@@ -1,34 +1,34 @@
 package name.pehl.tire.client.dispatch;
 
-import name.pehl.tire.server.rest.client.ClientResource;
+import org.fusesource.restygwt.client.Method;
 
+import com.google.gwt.http.client.Request;
 import com.gwtplatform.dispatch.shared.DispatchRequest;
 
 /**
- * Implementation of {@link DispatchRequest} used by
- * {@link AbstractRestletClientActionHandler}
+ * Implementation of {@link DispatchRequest} used by {@link TireActionHandler}
  * 
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
 public class DispatchRequestRestletImpl implements DispatchRequest
 {
-    private final ClientResource clientResource;
+    private final Method method;
 
 
-    public DispatchRequestRestletImpl(final ClientResource clientResource)
+    public DispatchRequestRestletImpl(final Method method)
     {
-        this.clientResource = clientResource;
+        this.method = method;
     }
 
 
     @Override
     public void cancel()
     {
-        Request request = clientResource.getRequest();
+        Request request = method.getRequest();
         if (request != null)
         {
-            request.abort();
+            request.cancel();
         }
     }
 
@@ -36,6 +36,6 @@ public class DispatchRequestRestletImpl implements DispatchRequest
     @Override
     public boolean isPending()
     {
-        return clientResource.getResponse() == null;
+        return method.getResponse() == null;
     }
 }

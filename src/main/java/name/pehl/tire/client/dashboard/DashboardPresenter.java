@@ -1,7 +1,5 @@
 package name.pehl.tire.client.dashboard;
 
-import static java.util.logging.Level.FINE;
-
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
@@ -27,6 +25,8 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
+
+import static java.util.logging.Level.FINE;
 
 /**
  * @author $Author: harald.pehl $

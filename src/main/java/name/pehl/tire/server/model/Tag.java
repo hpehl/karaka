@@ -2,7 +2,6 @@ package name.pehl.tire.server.model;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 
@@ -11,11 +10,10 @@ import com.googlecode.objectify.annotation.Entity;
  * @version $LastChangedRevision: 41 $
  */
 @Entity
-public class Tag extends NamedEntity implements HasUser
+public class Tag extends NamedEntity
 {
     private static final long serialVersionUID = -3947128324431639651L;
 
-    private User user;
     private Key<Activity> activity;
 
 
@@ -28,21 +26,6 @@ public class Tag extends NamedEntity implements HasUser
     public Tag(String name)
     {
         super(name);
-    }
-
-
-    @Override
-    @XmlTransient
-    public User getUser()
-    {
-        return user;
-    }
-
-
-    @Override
-    public void attachToUser(User user)
-    {
-        this.user = user;
     }
 
 

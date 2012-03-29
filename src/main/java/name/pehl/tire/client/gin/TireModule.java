@@ -70,7 +70,6 @@ public class TireModule extends AbstractPresenterModule
         bind(PlaceManager.class).to(TirePlaceManager.class).in(Singleton.class);
         bind(TokenFormatter.class).to(ParameterTokenFormatter.class).in(Singleton.class);
         bind(RootPresenter.class).asEagerSingleton();
-        bind(ProxyFailureHandler.class).to(DefaultProxyFailureHandler.class).in(Singleton.class);
 
         // Resources
         bind(I18n.class).in(Singleton.class);

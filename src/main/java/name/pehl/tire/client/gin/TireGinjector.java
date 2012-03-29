@@ -31,7 +31,6 @@ public interface TireGinjector extends Ginjector
 
     EventBus getEventBus();
     PlaceManager getPlaceManager();
-    ProxyFailureHandler getProxyFailureHandler();
     DispatchAsync getDispatcher();
 
     // ------------------------------------------------------- presenters (a-z)
