@@ -60,7 +60,7 @@ public class ActivitiesJaxbTest
         StringWriter buffer = new StringWriter();
         DateMidnight now = DateMidnight.now();
         Activities activities = new Activities.Builder(now, DateTimeZone.getDefault(), WEEK,
-                new ActivitiesGenerator().generateMonth(now.year().get(), now.weekOfWeekyear().get())).build();
+                new ActivitiesGenerator().generateWeek(now.year().get(), now.weekOfWeekyear().get())).build();
         mapper.writeValue(buffer, activities);
         String json = buffer.toString();
         assertNotNull(json);

@@ -1,5 +1,7 @@
 package name.pehl.tire.client.gin;
 
+import javax.inject.Singleton;
+
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.about.AboutPresenter;
@@ -46,15 +48,9 @@ import name.pehl.tire.client.tag.TagWriter;
 import name.pehl.tire.client.terms.TermsPresenter;
 import name.pehl.tire.client.terms.TermsView;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.inject.Singleton;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
-import com.gwtplatform.mvp.client.RootPresenter;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
-import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
-import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import com.gwtplatform.mvp.client.proxy.TokenFormatter;
+import com.gwtplatform.mvp.client.gin.DefaultModule;
 
 /**
  * @author $LastChangedBy: harald.pehl $
@@ -65,11 +61,8 @@ public class TireModule extends AbstractPresenterModule
     @Override
     protected void configure()
     {
-        // Singletons
-        bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
-        bind(PlaceManager.class).to(TirePlaceManager.class).in(Singleton.class);
-        bind(TokenFormatter.class).to(ParameterTokenFormatter.class).in(Singleton.class);
-        bind(RootPresenter.class).asEagerSingleton();
+        // GWTP stuff
+        install(new DefaultModule(TirePlaceManager.class));
 
         // Resources
         bind(I18n.class).in(Singleton.class);

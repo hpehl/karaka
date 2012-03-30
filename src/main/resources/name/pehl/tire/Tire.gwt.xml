@@ -15,6 +15,9 @@
     <inherits name="com.gwtplatform.dispatch.Dispatch" />
     <inherits name="com.gwtplatform.mvp.Mvp" />
 
+    <!-- RestyGWT -->
+    <inherits name="org.fusesource.restygwt.RestyGWT" />
+    
     <!-- name.pehl -->
     <inherits name="name.pehl.piriti.json.JSON" />
 

@@ -1,11 +1,12 @@
 package name.pehl.tire.client.activity.presenter;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.activity.model.Activities;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 

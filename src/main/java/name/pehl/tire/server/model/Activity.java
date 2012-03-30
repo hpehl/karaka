@@ -9,7 +9,7 @@ import name.pehl.tire.shared.model.Status;
 
 import org.joda.time.Minutes;
 
-import com.google.appengine.repackaged.com.google.common.collect.ComparisonChain;
+import com.google.common.collect.ComparisonChain;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Unindexed;

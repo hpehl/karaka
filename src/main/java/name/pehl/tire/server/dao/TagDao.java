@@ -4,7 +4,7 @@ import name.pehl.tire.server.dao.normalize.Normalizer;
 import name.pehl.tire.server.model.Tag;
 
 import com.google.appengine.api.users.User;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
 /**
  * @author $Author: harald.pehl $

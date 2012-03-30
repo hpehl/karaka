@@ -1,5 +1,7 @@
 package name.pehl.tire.client.gin;
 
+import javax.inject.Provider;
+
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.client.ClientPresenter;
@@ -15,8 +17,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
-import com.google.inject.Provider;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 
 /**
@@ -31,7 +31,6 @@ public interface TireGinjector extends Ginjector
 
     EventBus getEventBus();
     PlaceManager getPlaceManager();
-    DispatchAsync getDispatcher();
 
     // ------------------------------------------------------- presenters (a-z)
 

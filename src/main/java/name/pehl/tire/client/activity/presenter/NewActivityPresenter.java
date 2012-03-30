@@ -2,8 +2,9 @@ package name.pehl.tire.client.activity.presenter;
 
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import com.google.gwt.event.shared.EventBus;
-import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;

@@ -1,9 +1,10 @@
 package name.pehl.tire.client;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.client.gin.DefaultPlace;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.proxy.PlaceManagerImpl;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;

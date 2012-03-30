@@ -9,7 +9,7 @@ import name.pehl.tire.shared.model.Status;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.users.User;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.googlecode.objectify.Key;
 
 /**

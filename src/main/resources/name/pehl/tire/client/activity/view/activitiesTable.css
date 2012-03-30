@@ -1,135 +1,147 @@
 /* ------------------------------------------ Overwritten CellTable classes */
 .cellTableWidget {
-    
+	
 }
 
 .cellTableFirstColumn {
-    
+	
 }
 
 .cellTableLastColumn {
-    
+	
 }
 
 .cellTableHeader {
-    
+	
 }
 
 .cellTableCell,.cellTableFooter {
-    text-align: left;
-    font-size: 11pt;
-    line-height: 2em;
-    padding: 5px 10px;
-    border-top: 1px solid #dedede;
+	text-align: left;
+	font-size: 11pt;
+	line-height: 2em;
+	padding: 5px 10px;
+	border-top: 1px solid #dedede;
 }
 
 .cellTableCell {
-    cursor: pointer;
-    border-bottom: 1px solid #dedede;
+	cursor: pointer;
+	border-bottom: 1px solid #dedede;
 }
 
 .cellTableFooter {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .cellTableFirstColumnFooter {
-    
+	
 }
 
 .cellTableFirstColumnHeader {
-    
+	
 }
 
 .cellTableLastColumnFooter {
-    
+	
 }
 
 .cellTableLastColumnHeader {
-    
+	
 }
 
 .cellTableEvenRow {
-    
+	
 }
 
 .cellTableEvenRowCell {
-    
+	
 }
 
 .cellTableOddRow {
-    
+	
 }
 
 .cellTableOddRowCell {
-    
+	
 }
 
 .cellTableHoveredRow {
-    
+	
 }
 
 .cellTableHoveredRowCell {
-    
+	
 }
 
 .cellTableKeyboardSelectedRow {
-    
+	
 }
 
 .cellTableKeyboardSelectedRowCell {
-    
+	
 }
 
 .cellTableSelectedRow {
-    
+	
 }
 
 .cellTableSelectedRowCell {
-    
+	
 }
 
 .cellTableKeyboardSelectedCell {
-    
+	
+}
+
+.cellTableSortedHeaderDescending {
+	
+}
+
+.cellTableSortedHeaderAscending {
+	
+}
+
+.cellTableSortableHeader {
+	
 }
 
 @sprite .cellTableLoading {
-    gwt-image: 'cellTableLoading';
-    margin: 30px;
+	gwt-image: 'cellTableLoading';
+	margin: 30px;
 }
 
 /* ----------------------------------------------- Custom CellTable classes */
 .activeActivity {
-    background-color: #dbf1aa;
+	background-color: #dbf1aa;
 }
 
 .oddDays {
-    background-color: #e9ffbf;
+	background-color: #e9ffbf;
 }
 
 .startColumn {
-    width: 7em;
+	width: 7em;
 }
 
 .durationFromToColumn {
-    width: 8em;
+	width: 8em;
 }
 
 .durationInHoursColumn {
-    width: 4em;
+	width: 4em;
 }
 
 .nameColumn {
-    
+	
 }
 
 .projectColumn {
-    
+	
 }
 
 .actionColumn {
-    width: 40px;
+	width: 40px;
 }
 
 .hideActions {
-    visibility: hidden;
+	visibility: hidden;
 }

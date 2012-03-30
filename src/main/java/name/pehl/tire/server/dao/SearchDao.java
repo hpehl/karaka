@@ -10,7 +10,7 @@ import name.pehl.tire.server.dao.normalize.Normalizer;
 import name.pehl.tire.server.model.IndexEntry;
 import name.pehl.tire.server.model.Searchable;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.util.DAOBase;
 

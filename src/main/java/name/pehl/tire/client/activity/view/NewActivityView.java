@@ -2,6 +2,8 @@ package name.pehl.tire.client.activity.view;
 
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.client.activity.presenter.NewActivityPresenter;
 import name.pehl.tire.client.activity.presenter.NewActivityUiHandlers;
 import name.pehl.tire.client.resources.Resources;
@@ -15,7 +17,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.InlineHyperlink;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**

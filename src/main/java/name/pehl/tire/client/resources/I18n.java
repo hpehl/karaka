@@ -2,7 +2,7 @@ package name.pehl.tire.client.resources;
 
 import java.util.MissingResourceException;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
 /**
  * @author $Author: harald.pehl $

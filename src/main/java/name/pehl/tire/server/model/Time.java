@@ -7,7 +7,7 @@ import javax.persistence.Transient;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import com.google.appengine.repackaged.com.google.common.collect.ComparisonChain;
+import com.google.common.collect.ComparisonChain;
 import com.googlecode.objectify.annotation.Unindexed;
 
 /**

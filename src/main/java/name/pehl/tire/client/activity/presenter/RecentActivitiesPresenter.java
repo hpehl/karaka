@@ -2,6 +2,8 @@ package name.pehl.tire.client.activity.presenter;
 
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.activity.model.Activities;
@@ -11,7 +13,6 @@ import name.pehl.tire.client.activity.model.Activity;
 import name.pehl.tire.shared.model.TimeUnit;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;

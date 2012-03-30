@@ -1,5 +1,7 @@
 package name.pehl.tire.client.activity.event;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.dispatch.TireActionHandler;
@@ -9,7 +11,6 @@ import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.Resource;
 
 import com.google.gwt.json.client.JSONObject;
-import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
