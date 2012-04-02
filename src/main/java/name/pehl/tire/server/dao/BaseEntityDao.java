@@ -18,7 +18,6 @@ import name.pehl.tire.server.rest.paging.PageInfo;
 import name.pehl.tire.server.rest.paging.PageResult;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
@@ -52,16 +51,14 @@ public abstract class BaseEntityDao<T extends BaseEntity> extends DAOBase
     // -------------------------------------------------------- private members
 
     protected final Class<T> clazz;
-    protected final User user;
     protected final Normalizer normalizer;
 
 
     // ----------------------------------------------------------- constructors
 
-    protected BaseEntityDao(Class<T> clazz, User user, Normalizer normalizer)
+    protected BaseEntityDao(Class<T> clazz, Normalizer normalizer)
     {
         this.clazz = clazz;
-        this.user = user;
         this.normalizer = normalizer;
     }
 

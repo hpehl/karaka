@@ -1,10 +1,10 @@
 package name.pehl.tire.server.dao;
 
-import name.pehl.tire.server.dao.normalize.Normalizer;
-import name.pehl.tire.server.model.Tag;
-
-import com.google.appengine.api.users.User;
 import javax.inject.Inject;
+
+import name.pehl.tire.server.dao.normalize.Normalizer;
+import name.pehl.tire.server.dao.normalize.TireNormalizer;
+import name.pehl.tire.server.model.Tag;
 
 /**
  * @author $Author: harald.pehl $
@@ -14,8 +14,8 @@ import javax.inject.Inject;
 public class TagDao extends NamedEntityDao<Tag>
 {
     @Inject
-    public TagDao(User user, Normalizer normalizer)
+    public TagDao(@TireNormalizer Normalizer normalizer)
     {
-        super(Tag.class, user, normalizer);
+        super(Tag.class, normalizer);
     }
 }

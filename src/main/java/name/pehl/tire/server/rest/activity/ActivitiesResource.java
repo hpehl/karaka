@@ -50,14 +50,8 @@ import static org.joda.time.Weeks.weeks;
 @Produces(MediaType.APPLICATION_JSON)
 public class ActivitiesResource
 {
-    private final ActivityDao dao;
-
-
     @Inject
-    public ActivitiesResource(ActivityDao dao)
-    {
-        this.dao = dao;
-    }
+    private ActivityDao dao;
 
 
     // --------------------------------------------------------------- by month

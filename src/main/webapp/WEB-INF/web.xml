@@ -4,18 +4,21 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
 
-
+	<context-param>
+		<param-name>resteasy.scan</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>resteasy.servlet.mapping.prefix</param-name>
+		<param-value>/rest</param-value>
+	</context-param>
 	<context-param>
 		<param-name>resteasy.injector.factory</param-name>
 		<param-value>org.jboss.resteasy.cdi.CdiInjectorFactory</param-value>
 	</context-param>
 	<context-param>
-		<param-name>javax.ws.rs.core.Application</param-name>
+		<param-name>javax.ws.rs.Application</param-name>
 		<param-value>name.pehl.tire.server.rest.TireApplication</param-value>
-	</context-param>
-	<context-param>
-		<param-name>resteasy.servlet.mapping.prefix</param-name>
-		<param-value>/rest</param-value>
 	</context-param>
 
 
@@ -63,7 +66,7 @@
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>any</web-resource-name>
-			<url-pattern>*</url-pattern>
+			<url-pattern>/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name>

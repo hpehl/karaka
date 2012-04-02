@@ -3,13 +3,14 @@ package name.pehl.tire.server.dao;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.server.dao.normalize.Normalizer;
+import name.pehl.tire.server.dao.normalize.TireNormalizer;
 import name.pehl.tire.server.model.Activity;
 import name.pehl.tire.shared.model.Status;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.users.User;
-import javax.inject.Inject;
 import com.googlecode.objectify.Key;
 
 /**
@@ -20,9 +21,9 @@ import com.googlecode.objectify.Key;
 public class ActivityDao extends NamedEntityDao<Activity>
 {
     @Inject
-    public ActivityDao(User user, Normalizer normalizer)
+    public ActivityDao(@TireNormalizer Normalizer normalizer)
     {
-        super(Activity.class, user, normalizer);
+        super(Activity.class, normalizer);
     }
 
 

@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.server.dao.normalize.Normalizer;
+import name.pehl.tire.server.dao.normalize.TireNormalizer;
 import name.pehl.tire.server.model.IndexEntry;
 import name.pehl.tire.server.model.Searchable;
 
-import javax.inject.Inject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.util.DAOBase;
 
@@ -25,7 +27,7 @@ public class SearchDao extends DAOBase
 
 
     @Inject
-    public SearchDao(Normalizer normalizer)
+    public SearchDao(@TireNormalizer Normalizer normalizer)
     {
         this.normalizer = normalizer;
     }

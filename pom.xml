@@ -15,6 +15,7 @@
 	<groupId>name.pehl</groupId>
 	<artifactId>tire</artifactId>
 	<version>0.3-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>TiRe</name>
 	<description>Time Recording</description>
 	<url>http://code.google.com/p/tire-d8/</url>
@@ -214,6 +215,11 @@
 			<artifactId>persistence-api</artifactId>
 			<version>1.0</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>xalan</groupId>
+			<artifactId>xalan</artifactId>
+			<version>2.7.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -445,42 +451,6 @@ encoding/<project>=${project.build.sourceEncoding}
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<configuration>
-					<server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
-					<port>8888</port>
-					<runTarget>/index.html</runTarget>
-					<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
-					<module>name.pehl.tire.Tire</module>
-                    <logLevel>DEBUG</logLevel>
-					<i18nConstantsBundles>
-						<i18nConstantsBundle>
-							name.pehl.tire.client.resources.Constants
-                        </i18nConstantsBundle>
-					</i18nConstantsBundles>
-					<i18nConstantsWithLookupBundles>
-						<i18nConstantsWithLookupBundle>
-							name.pehl.tire.client.resources.Enums
-                        </i18nConstantsWithLookupBundle>
-					</i18nConstantsWithLookupBundles>
-					<i18nMessagesBundles>
-						<i18nMessagesBundles>
-							name.pehl.tire.client.resources.Messages
-                        </i18nMessagesBundles>
-					</i18nMessagesBundles>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>i18n</goal>
-							<goal>compile</goal>
-							<goal>resources</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>net.kindleit</groupId>
 				<artifactId>maven-gae-plugin</artifactId>
 				<dependencies>
@@ -498,4 +468,51 @@ encoding/<project>=${project.build.sourceEncoding}
 			</plugin>
 		</plugins>
 	</build>
+
+
+	<profiles>
+		<profile>
+			<id>gwt</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>gwt-maven-plugin</artifactId>
+						<configuration>
+							<server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
+							<port>8888</port>
+							<runTarget>/index.html</runTarget>
+							<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+							<module>name.pehl.tire.Tire</module>
+							<logLevel>INFO</logLevel>
+							<i18nConstantsBundles>
+								<i18nConstantsBundle>
+									name.pehl.tire.client.resources.Constants
+                        </i18nConstantsBundle>
+							</i18nConstantsBundles>
+							<i18nConstantsWithLookupBundles>
+								<i18nConstantsWithLookupBundle>
+									name.pehl.tire.client.resources.Enums
+                        </i18nConstantsWithLookupBundle>
+							</i18nConstantsWithLookupBundles>
+							<i18nMessagesBundles>
+								<i18nMessagesBundles>
+									name.pehl.tire.client.resources.Messages
+                        </i18nMessagesBundles>
+							</i18nMessagesBundles>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>i18n</goal>
+									<goal>compile</goal>
+									<goal>resources</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

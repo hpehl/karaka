@@ -4,8 +4,6 @@ import name.pehl.tire.server.dao.normalize.Normalizer;
 import name.pehl.tire.server.model.NamedEntity;
 import name.pehl.tire.server.rest.paging.PageResult;
 
-import com.google.appengine.api.users.User;
-
 /**
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-01 17:01:54 +0100 (Mi, 01. Dez 2010) $ $Revision: 161
@@ -13,9 +11,9 @@ import com.google.appengine.api.users.User;
  */
 public abstract class NamedEntityDao<T extends NamedEntity> extends BaseEntityDao<T>
 {
-    protected NamedEntityDao(Class<T> clazz, User user, Normalizer normalizer)
+    protected NamedEntityDao(Class<T> clazz, Normalizer normalizer)
     {
-        super(clazz, user, normalizer);
+        super(clazz, normalizer);
     }
 
 
