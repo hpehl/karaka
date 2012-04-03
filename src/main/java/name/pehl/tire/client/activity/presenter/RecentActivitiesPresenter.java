@@ -12,7 +12,7 @@ import name.pehl.tire.client.activity.model.ActivitiesNavigationDataAdapter;
 import name.pehl.tire.client.activity.model.Activity;
 import name.pehl.tire.shared.model.TimeUnit;
 
-import com.google.gwt.event.shared.EventBus;
+import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;

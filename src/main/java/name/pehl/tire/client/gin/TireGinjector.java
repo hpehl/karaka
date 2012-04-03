@@ -11,11 +11,11 @@ import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.tag.TagPresenter;
 import name.pehl.tire.client.terms.TermsPresenter;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.inject.Provider;
+import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 
 /**

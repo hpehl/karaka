@@ -3,7 +3,7 @@ package name.pehl.tire.client.tag;
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.application.ApplicationPresenter;
 
-import com.google.gwt.event.shared.EventBus;
+import com.google.web.bindery.event.shared.EventBus;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
