@@ -1,6 +1,6 @@
 package name.pehl.tire.client.about;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.application.ApplicationPresenter;

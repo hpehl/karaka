@@ -15,7 +15,8 @@ package name.pehl.tire.client;
  * search engine crawling support.
  * 
  * @author $Author: harald.pehl $
- * @version $Date: 2010-09-23 13:52:31 +0200 (Do, 23. Sep 2010) $ $Revision: 88 $
+ * @version $Date: 2010-09-23 13:52:31 +0200 (Do, 23. Sep 2010) $ $Revision: 88
+ *          $
  */
 public class NameTokens
 {

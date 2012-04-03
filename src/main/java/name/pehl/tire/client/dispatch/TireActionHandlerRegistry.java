@@ -2,7 +2,7 @@ package name.pehl.tire.client.dispatch;
 
 import name.pehl.tire.client.activity.event.GetActivitiesHandler;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import com.gwtplatform.dispatch.client.actionhandler.DefaultClientActionHandlerRegistry;
 
 public class TireActionHandlerRegistry extends DefaultClientActionHandlerRegistry

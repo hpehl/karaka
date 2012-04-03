@@ -5,8 +5,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.ui.PopupPanel;
 
-
-
 public class EscapablePopupPanel extends PopupPanel
 {
     @Override

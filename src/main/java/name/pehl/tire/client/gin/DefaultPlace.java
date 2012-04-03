@@ -18,7 +18,8 @@ import com.google.inject.BindingAnnotation;
  * presenter.
  * 
  * @author $Author: harald.pehl $
- * @version $Date: 2011-05-16 12:54:26 +0200 (Mo, 16. Mai 2011) $ $Revision: 208 $
+ * @version $Date: 2011-05-16 12:54:26 +0200 (Mo, 16. Mai 2011) $ $Revision: 208
+ *          $
  */
 @BindingAnnotation
 @Target({FIELD, PARAMETER, METHOD})

@@ -6,7 +6,8 @@ import com.google.gwt.view.client.ProvidesKey;
  * Key provider which uses {@link BaseModel#getId()} as key.
  * 
  * @author $Author: harald.pehl $
- * @version $Date: 2010-11-03 15:39:56 +0100 (Mi, 03. Nov 2010) $ $Revision: 133 $
+ * @version $Date: 2010-11-03 15:39:56 +0100 (Mi, 03. Nov 2010) $ $Revision: 133
+ *          $
  */
 public class BaseModelKeyProvider implements ProvidesKey<BaseModel>
 {

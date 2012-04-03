@@ -3,7 +3,7 @@ package name.pehl.tire.server.dao;
 import java.util.EnumSet;
 import java.util.List;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import name.pehl.tire.server.dao.normalize.Normalizer;
 import name.pehl.tire.server.dao.normalize.TireNormalizer;

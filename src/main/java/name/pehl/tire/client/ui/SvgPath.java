@@ -111,17 +111,17 @@ public class SvgPath extends Widget implements HasClickHandlers
     // ----------------------------------------------------- javascript methods
 
     private native JavaScriptObject initializeRaphael(Element holder, int width, int height) /*-{
-        return $wnd.Raphael(holder, width, height);
-    }-*/;
+                                                                                             return $wnd.Raphael(holder, width, height);
+                                                                                             }-*/;
 
 
     private native JavaScriptObject internalDraw(String fill, String stroke, String path) /*-{
-        var raphael = this.@name.pehl.tire.client.ui.SvgPath::raphael;
-        return raphael.path(path).attr({stroke: stroke, fill: fill});
-    }-*/;
+                                                                                          var raphael = this.@name.pehl.tire.client.ui.SvgPath::raphael;
+                                                                                          return raphael.path(path).attr({stroke: stroke, fill: fill});
+                                                                                          }-*/;
 
 
     private native JavaScriptObject internalFill(JavaScriptObject path, String fill) /*-{
-        path.attr({fill: fill});
-    }-*/;
+                                                                                     path.attr({fill: fill});
+                                                                                     }-*/;
 }

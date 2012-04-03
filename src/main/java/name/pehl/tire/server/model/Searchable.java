@@ -4,7 +4,8 @@ package name.pehl.tire.server.model;
  * Interface for entities which have some data the user can search for.
  * 
  * @author $Author: harald.pehl $
- * @version $Date: 2010-11-04 18:21:43 +0100 (Do, 04. Nov 2010) $ $Revision: 138 $
+ * @version $Date: 2010-11-04 18:21:43 +0100 (Do, 04. Nov 2010) $ $Revision: 138
+ *          $
  */
 public interface Searchable
 {

@@ -1,6 +1,6 @@
 package name.pehl.tire.server.dao;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import name.pehl.tire.server.dao.normalize.Normalizer;
 import name.pehl.tire.server.dao.normalize.TireNormalizer;

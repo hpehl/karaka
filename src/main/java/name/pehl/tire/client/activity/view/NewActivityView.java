@@ -2,7 +2,7 @@ package name.pehl.tire.client.activity.view;
 
 import java.util.Date;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import name.pehl.tire.client.activity.presenter.NewActivityPresenter;
 import name.pehl.tire.client.activity.presenter.NewActivityUiHandlers;

@@ -4,7 +4,8 @@ import com.google.common.base.CharMatcher;
 
 /**
  * @author $Author: harald.pehl $
- * @version $Date: 2010-11-05 00:40:48 +0100 (Fr, 05. Nov 2010) $ $Revision: 139 $
+ * @version $Date: 2010-11-05 00:40:48 +0100 (Fr, 05. Nov 2010) $ $Revision: 139
+ *          $
  */
 public class RemoveNormalizer implements Normalizer
 {

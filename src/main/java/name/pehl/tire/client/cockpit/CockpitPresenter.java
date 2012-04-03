@@ -1,14 +1,15 @@
 package name.pehl.tire.client.cockpit;
 
 import com.google.gwt.event.shared.EventBus;
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 
 /**
  * @author $Author: harald.pehl $
- * @version $Date: 2010-12-06 17:48:50 +0100 (Mo, 06. Dez 2010) $ $Revision: 175 $
+ * @version $Date: 2010-12-06 17:48:50 +0100 (Mo, 06. Dez 2010) $ $Revision: 175
+ *          $
  */
 public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> implements CockpitUiHandlers
 {

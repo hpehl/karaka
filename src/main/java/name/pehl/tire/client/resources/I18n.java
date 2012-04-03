@@ -2,11 +2,12 @@ package name.pehl.tire.client.resources;
 
 import java.util.MissingResourceException;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 /**
  * @author $Author: harald.pehl $
- * @version $Date: 2010-09-22 17:30:50 +0200 (Mi, 22. Sep 2010) $ $Revision: 85 $
+ * @version $Date: 2010-09-22 17:30:50 +0200 (Mi, 22. Sep 2010) $ $Revision: 85
+ *          $
  */
 public class I18n
 {

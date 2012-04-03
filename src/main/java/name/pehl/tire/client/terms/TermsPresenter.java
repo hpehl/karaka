@@ -4,7 +4,7 @@ import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.application.ApplicationPresenter;
 
 import com.google.gwt.event.shared.EventBus;
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;

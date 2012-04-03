@@ -72,8 +72,8 @@ public class VersionCheckInterceptor implements PreProcessInterceptor
         if (!reqContainsSupportedVersion)
         {
 
-            throw new NotFoundException("No supported version found for " + acceptHeaders + " in "
-                    + request.getUri() + ". Supported versions are: " + annotation.versions() + ".");
+            throw new NotFoundException("No supported version found for " + acceptHeaders + " in " + request.getUri()
+                    + ". Supported versions are: " + annotation.versions() + ".");
         }
         return null;
     }

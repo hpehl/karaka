@@ -22,20 +22,28 @@ package name.pehl.tire.client.dispatch;
  * @author Denis Labaye
  */
 @SuppressWarnings("serial")
-public class RequestRuntimeException extends RuntimeException {
+public class RequestRuntimeException extends RuntimeException
+{
 
-    public RequestRuntimeException() {
+    public RequestRuntimeException()
+    {
     }
 
-    public RequestRuntimeException(final String message) {
+
+    public RequestRuntimeException(final String message)
+    {
         super(message);
     }
 
-    public RequestRuntimeException(final String message, final Throwable cause) {
+
+    public RequestRuntimeException(final String message, final Throwable cause)
+    {
         super(message, cause);
     }
 
-    public RequestRuntimeException(final Throwable cause) {
+
+    public RequestRuntimeException(final Throwable cause)
+    {
         super(cause);
     }
 

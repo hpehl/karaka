@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity.view;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.model.Activities;

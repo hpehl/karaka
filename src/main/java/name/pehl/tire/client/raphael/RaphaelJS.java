@@ -13,24 +13,24 @@ public class RaphaelJS extends JavaScriptObject
      * call any other methods if Raphael is not defined
      */
     static public final native boolean isDefined() /*-{
-        return $wnd.Raphael!=undefined;
-    }-*/;
+                                                   return $wnd.Raphael!=undefined;
+                                                   }-*/;
 
 
     /**
      * Raphael factory method
      */
     static public final native RaphaelJS create(String elementId, int width, int height) /*-{
-        return $wnd.Raphael(elementId, width, height);
-    }-*/;
+                                                                                         return $wnd.Raphael(elementId, width, height);
+                                                                                         }-*/;
 
 
     /**
      * Raphael factory method
      */
     static public final native RaphaelJS create(com.google.gwt.user.client.Element element, int width, int height) /*-{
-        return $wnd.Raphael(element, width, height);
-    }-*/;
+                                                                                                                   return $wnd.Raphael(element, width, height);
+                                                                                                                   }-*/;
 
     /**
      * color object returned by Element.getColor() and friends
@@ -46,8 +46,8 @@ public class RaphaelJS extends JavaScriptObject
          * reset getColor() function to restart from the beginning
          */
         public final native void reset() /*-{
-            this.reset();
-        }-*/;
+                                         this.reset();
+                                         }-*/;
     }
 
     /**
@@ -67,8 +67,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return reference to the current DOM object
          */
         public final native com.google.gwt.user.client.Element node() /*-{
-            return this.node;
-        }-*/;
+                                                                      return this.node;
+                                                                      }-*/;
 
 
         /**
@@ -76,8 +76,8 @@ public class RaphaelJS extends JavaScriptObject
          * call.
          */
         public final native void remove() /*-{
-            this.remove();
-        }-*/;
+                                          this.remove();
+                                          }-*/;
 
 
         /**
@@ -86,8 +86,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the javascript object hidden
          */
         public final native Element hide() /*-{
-            return this.hide();
-        }-*/;
+                                           return this.hide();
+                                           }-*/;
 
 
         /**
@@ -96,8 +96,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the javascript object made visible
          */
         public final native Element show() /*-{
-            return this.show();
-        }-*/;
+                                           return this.show();
+                                           }-*/;
 
 
         /**
@@ -109,8 +109,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the javascript object rotated
          */
         public final native Element rotate(double degree) /*-{
-            return this.rotate(degree);
-        }-*/;
+                                                          return this.rotate(degree);
+                                                          }-*/;
 
 
         /**
@@ -124,8 +124,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the javascript object rotated
          */
         public final native Element rotate(double degree, boolean isAbsolute) /*-{
-            return this.rotate(degree, isAbsolute);
-        }-*/;
+                                                                              return this.rotate(degree, isAbsolute);
+                                                                              }-*/;
 
 
         /**
@@ -141,8 +141,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the javascript object rotated
          */
         public final native Element rotate(double degree, double cx, double cy) /*-{
-            return this.rotate(degree, cx, cy);
-        }-*/;
+                                                                                return this.rotate(degree, cx, cy);
+                                                                                }-*/;
 
 
         /**
@@ -155,8 +155,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the javascript object translated
          */
         public final native Element translate(double dx, double dy) /*-{
-            return this.translate(dx, dy);
-        }-*/;
+                                                                    return this.translate(dx, dy);
+                                                                    }-*/;
 
 
         /**
@@ -169,8 +169,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the javascript object scaled
          */
         public final native Element scale(double Xtimes, double Ytimes) /*-{
-            return this.scale(Xtimes, Ytimes);
-        }-*/;
+                                                                        return this.scale(Xtimes, Ytimes);
+                                                                        }-*/;
 
 
         /**
@@ -183,8 +183,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the javascript object scaled
          */
         public final native Element scale(double Xtimes, double Ytimes, double centerX) /*-{
-            return this.scale(Xtimes, Ytimes, centerX);
-        }-*/;
+                                                                                        return this.scale(Xtimes, Ytimes, centerX);
+                                                                                        }-*/;
 
 
         /**
@@ -197,8 +197,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the javascript object scaled
          */
         public final native Element scale(double Xtimes, double Ytimes, double centerX, double centerY) /*-{
-            return this.scale(Xtimes, Ytimes, centerX, centerY);
-        }-*/;
+                                                                                                        return this.scale(Xtimes, Ytimes, centerX, centerY);
+                                                                                                        }-*/;
 
 
         /**
@@ -220,15 +220,15 @@ public class RaphaelJS extends JavaScriptObject
          *            The duration of the animation, given in milliseconds
          */
         public final native Element animate(JavaScriptObject newAttrs, int ms) /*-{
-            return this.animate(newAttrs, ms);
-        }-*/;
+                                                                               return this.animate(newAttrs, ms);
+                                                                               }-*/;
 
 
         public final native Element animate(JavaScriptObject newAttrs, int ms, AnimationCallback callback) /*-{
-            return this.animate(newAttrs, ms, function() {
-            @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
-            });
-        }-*/;
+                                                                                                           return this.animate(newAttrs, ms, function() {
+                                                                                                           @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
+                                                                                                           });
+                                                                                                           }-*/;
 
 
         /**
@@ -246,75 +246,75 @@ public class RaphaelJS extends JavaScriptObject
          *            [>, <, <>, backIn, backOut, bounce, elastic]
          */
         public final native Element animate(JavaScriptObject newAttrs, int ms, String easing) /*-{
-            return this.animate(newAttrs, ms, easing);
-        }-*/;
+                                                                                              return this.animate(newAttrs, ms, easing);
+                                                                                              }-*/;
 
 
         public final native Element animate(JavaScriptObject newAttrs, int ms, String easing, AnimationCallback callback) /*-{
-            return this.animate(newAttrs, ms, easing, function() {
-            @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
-            });
-        }-*/;
+                                                                                                                          return this.animate(newAttrs, ms, easing, function() {
+                                                                                                                          @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
+                                                                                                                          });
+                                                                                                                          }-*/;
 
 
         public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms) /*-{
-            return this.animateWith(element, newAttrs, ms);
-        }-*/;
+                                                                                                    return this.animateWith(element, newAttrs, ms);
+                                                                                                    }-*/;
 
 
         public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms,
                 AnimationCallback callback) /*-{
-            return this.animateWith(element, newAttrs, ms, function() {
-            @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
-            });
-        }-*/;
+                                            return this.animateWith(element, newAttrs, ms, function() {
+                                            @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
+                                            });
+                                            }-*/;
 
 
         public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms, String easing) /*-{
-            return this.animateWith(element, newAttrs, ms, easing);
-        }-*/;
+                                                                                                                   return this.animateWith(element, newAttrs, ms, easing);
+                                                                                                                   }-*/;
 
 
         public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms, String easing,
                 AnimationCallback callback) /*-{
-            return this.animateWith(element, newAttrs, ms, easing, function() {
-            @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
-            });
-        }-*/;
+                                            return this.animateWith(element, newAttrs, ms, easing, function() {
+                                            @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
+                                            });
+                                            }-*/;
 
 
         public final native Element animateAlong(Element path, int ms) /*-{
-            return this.animateAlong(path, ms);
-        }-*/;
+                                                                       return this.animateAlong(path, ms);
+                                                                       }-*/;
 
 
         public final native Element animateAlong(Element path, int ms, boolean rotate) /*-{
-            return this.animateAlong(path, ms, rotate);
-        }-*/;
+                                                                                       return this.animateAlong(path, ms, rotate);
+                                                                                       }-*/;
 
 
         public final native Element animateAlong(Element path, int ms, boolean rotate, AnimationCallback callback) /*-{
-            return this.animateAlong(path, ms, rotate, function() {
-            @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
-            });
-        }-*/;
+                                                                                                                   return this.animateAlong(path, ms, rotate, function() {
+                                                                                                                   @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
+                                                                                                                   });
+                                                                                                                   }-*/;
 
 
         public final native Element animateAlongBack(Element path, int ms) /*-{
-            return this.animateAlongBack(path, ms);
-        }-*/;
+                                                                           return this.animateAlongBack(path, ms);
+                                                                           }-*/;
 
 
         public final native Element animateAlongBack(Element path, int ms, boolean rotate) /*-{
-            return this.animateAlongBack(path, ms, rotate);
-        }-*/;
+                                                                                           return this.animateAlongBack(path, ms, rotate);
+                                                                                           }-*/;
 
 
         public final native Element animateAlongBack(Element path, int ms, boolean rotate, AnimationCallback callback) /*-{
-            return this.animateAlongBack(path, ms, rotate, function() {
-            @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
-            });
-        }-*/;
+                                                                                                                       return this.animateAlongBack(path, ms, rotate, function() {
+                                                                                                                       @name.pehl.tire.client.raphael.AnimationCallback::fire(Lname/pehl/tire/client/raphael/AnimationCallback;)(callback);
+                                                                                                                       });
+                                                                                                                       }-*/;
 
 
         /**
@@ -344,13 +344,13 @@ public class RaphaelJS extends JavaScriptObject
          * @return the javascript object having attributes modified
          */
         public final native Element attr(String attributeName, String value) /*-{
-            return this.attr(attributeName, value);
-        }-*/;
+                                                                             return this.attr(attributeName, value);
+                                                                             }-*/;
 
 
         public final native Element attr(String attributeName, double value) /*-{
-            return this.attr(attributeName, value);
-        }-*/;
+                                                                             return this.attr(attributeName, value);
+                                                                             }-*/;
 
 
         /**
@@ -359,8 +359,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the current value for the given attribute name
          */
         public final native Element attr(JavaScriptObject params) /*-{
-            return this.attr(params);
-        }-*/;
+                                                                  return this.attr(params);
+                                                                  }-*/;
 
 
         /**
@@ -369,8 +369,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the current value for the given attribute name
          */
         public final native double attrAsDouble(String attributeName) /*-{
-            return this.attr(attributeName);
-        }-*/;
+                                                                      return this.attr(attributeName);
+                                                                      }-*/;
 
 
         /**
@@ -379,8 +379,8 @@ public class RaphaelJS extends JavaScriptObject
          * @return the current value for the given attribute name
          */
         public final native String attrAsString(String attributeName) /*-{
-            return this.attr(attributeName);
-        }-*/;
+                                                                      return this.attr(attributeName);
+                                                                      }-*/;
 
 
         /**
@@ -390,33 +390,33 @@ public class RaphaelJS extends JavaScriptObject
          */
         @SuppressWarnings("rawtypes")
         public final native JsArray attr(JsArray attributeNames) /*-{
-            return this.attr(attributeNames);
-        }-*/;
+                                                                 return this.attr(attributeNames);
+                                                                 }-*/;
 
 
         public final native BBox getBBox() /*-{
-            return this.getBBox();
-        }-*/;
+                                           return this.getBBox();
+                                           }-*/;
 
 
         public final native Element toFront() /*-{
-            return this.toFront();
-        }-*/;
+                                              return this.toFront();
+                                              }-*/;
 
 
         public final native Element toBack() /*-{
-            return this.toBack();
-        }-*/;
+                                             return this.toBack();
+                                             }-*/;
 
 
         public final native Element insertBefore(Element obj) /*-{
-            return this.insertBefore(obj);
-        }-*/;
+                                                              return this.insertBefore(obj);
+                                                              }-*/;
 
 
         public final native Element insertAfter(Element obj) /*-{
-            return this.insertAfter(obj);
-        }-*/;
+                                                             return this.insertAfter(obj);
+                                                             }-*/;
     }
 
     /**
@@ -440,18 +440,18 @@ public class RaphaelJS extends JavaScriptObject
 
 
         public final native int getTotalLength() /*-{
-            return this.getTotalLength();
-        }-*/;
+                                                 return this.getTotalLength();
+                                                 }-*/;
 
 
         public final native Point getPointAtLength(int length) /*-{
-            return this.getPointAtLength(length);
-        }-*/;
+                                                               return this.getPointAtLength(length);
+                                                               }-*/;
 
 
         public final native String getSubpath(int from, int to) /*-{
-            return this.getSubpath(from, to);
-        }-*/;
+                                                                return this.getSubpath(from, to);
+                                                                }-*/;
     }
 
     protected static class Set extends Element
@@ -462,13 +462,13 @@ public class RaphaelJS extends JavaScriptObject
 
 
         public final native Set push(Element obj) /*-{
-            return this.push(obj);
-        }-*/;
+                                                  return this.push(obj);
+                                                  }-*/;
 
 
         public final native Element pop() /*-{
-            return this.pop();
-        }-*/;
+                                          return this.pop();
+                                          }-*/;
     }
 
 
@@ -493,16 +493,16 @@ public class RaphaelJS extends JavaScriptObject
      * @return the circle object
      */
     public final native Element circle(double x, double y, double r) /*-{
-        return this.circle(x,y,r);
-    }-*/;
+                                                                     return this.circle(x,y,r);
+                                                                     }-*/;
 
 
     /**
      * Clears the canvas, i.e. removes all the elements
      */
     public final native void clear() /*-{
-        return this.clear();
-    }-*/;
+                                     return this.clear();
+                                     }-*/;
 
 
     /**
@@ -519,16 +519,16 @@ public class RaphaelJS extends JavaScriptObject
      * @return the ellipse object
      */
     public final native Element ellipse(double x, double y, double rx, double ry) /*-{
-        return this.ellipse(x, y, rx, ry);
-    }-*/;
+                                                                                  return this.ellipse(x, y, rx, ry);
+                                                                                  }-*/;
 
 
     /**
      * return the next color in the spectrum
      */
     public final native Color getColor() /*-{
-        return this.getColor();
-    }-*/;
+                                         return this.getColor();
+                                         }-*/;
 
 
     /**
@@ -537,36 +537,36 @@ public class RaphaelJS extends JavaScriptObject
      * @param brightness
      */
     public final native Color getColor(double brightness) /*-{
-        return this.getColor(brightness);
-    }-*/;
+                                                          return this.getColor(brightness);
+                                                          }-*/;
 
 
     public final native Font getFont(String family) /*-{
-        return this.getFont(family);
-    }-*/;
+                                                    return this.getFont(family);
+                                                    }-*/;
 
 
     public final native Font getFont(String family, String weight) /*-{
-        return this.getFont(family, weight);
-    }-*/;
+                                                                   return this.getFont(family, weight);
+                                                                   }-*/;
 
 
     public final native Font getFont(String family, String weight, String style) /*-{
-        return this.getFont(family, weight, style);
-    }-*/;
+                                                                                 return this.getFont(family, weight, style);
+                                                                                 }-*/;
 
 
     public final native Font getFont(String family, String weight, String style, String stretch) /*-{
-        return this.getFont(family, weight, style, stretch);
-    }-*/;
+                                                                                                 return this.getFont(family, weight, style, stretch);
+                                                                                                 }-*/;
 
 
     /**
      * parse color string and return a Color object
      */
     public final native Color getRGB(String color) /*-{
-        return this.getRGB(color);
-    }-*/;
+                                                   return this.getRGB(color);
+                                                   }-*/;
 
 
     /**
@@ -585,8 +585,8 @@ public class RaphaelJS extends JavaScriptObject
      * @return the image object
      */
     public final native Element image(String src, double x, double y, double width, double height) /*-{
-        return this.image(src, x, y, width, height);
-    }-*/;
+                                                                                                   return this.image(src, x, y, width, height);
+                                                                                                   }-*/;
 
 
     /**
@@ -598,8 +598,8 @@ public class RaphaelJS extends JavaScriptObject
      * @return the path object
      */
     public final native Path path() /*-{
-        return this.path();
-    }-*/;
+                                    return this.path();
+                                    }-*/;
 
 
     /**
@@ -610,13 +610,13 @@ public class RaphaelJS extends JavaScriptObject
      * @return the path object
      */
     public final native Path path(String pathString) /*-{
-        return this.path(pathString);
-    }-*/;
+                                                     return this.path(pathString);
+                                                     }-*/;
 
 
     public final native Font print(double x, double y, String text, Font font, double font_size) /*-{
-        return this.print(x, y, text, font, font-size);
-    }-*/;
+                                                                                                 return this.print(x, y, text, font, font-size);
+                                                                                                 }-*/;
 
 
     /**
@@ -633,8 +633,8 @@ public class RaphaelJS extends JavaScriptObject
      * @return the rectangle object
      */
     public final native Element rect(double x, double y, double width, double height) /*-{
-        return this.rect(x, y, width, height);
-    }-*/;
+                                                                                      return this.rect(x, y, width, height);
+                                                                                      }-*/;
 
 
     /**
@@ -653,32 +653,32 @@ public class RaphaelJS extends JavaScriptObject
      * @return the rectangle object with rounded corners
      */
     public final native Element rect(double x, double y, double width, double height, double r) /*-{
-        return this.rect(x, y, width, height, r);
-    }-*/;
+                                                                                                return this.rect(x, y, width, height, r);
+                                                                                                }-*/;
 
 
     public final native Font registerFont(JavaScriptObject font) /*-{
-        return this.registerFont(font);
-    }-*/;
+                                                                 return this.registerFont(font);
+                                                                 }-*/;
 
 
     /**
      * creates an object to hold and operate on multiple Elements
      */
     public final native Set set() /*-{
-        return this.set();
-    }-*/;
+                                  return this.set();
+                                  }-*/;
 
 
     /**
      * change the dimensions of the canvas
      */
     public final native Element setSize(int width, int height) /*-{
-        return this.setSize(width, height);
-    }-*/;
+                                                               return this.setSize(width, height);
+                                                               }-*/;
 
 
     public final native Element text(double x, double y, String text) /*-{
-        return this.text(x, y, text);
-    }-*/;
+                                                                      return this.text(x, y, text);
+                                                                      }-*/;
 }

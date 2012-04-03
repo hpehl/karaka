@@ -1,6 +1,6 @@
 package name.pehl.tire.client.application;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
 import name.pehl.tire.client.cockpit.CockpitPresenter;

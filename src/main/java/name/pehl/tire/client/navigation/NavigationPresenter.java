@@ -1,7 +1,7 @@
 package name.pehl.tire.client.navigation;
 
 import com.google.gwt.event.shared.EventBus;
-import javax.inject.Inject;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;

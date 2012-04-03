@@ -2,7 +2,7 @@ package name.pehl.tire.client.activity.view;
 
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 import name.pehl.tire.client.activity.model.Activity;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
