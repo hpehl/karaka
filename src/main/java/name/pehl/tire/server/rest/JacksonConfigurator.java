@@ -8,9 +8,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
 
+import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import org.codehaus.jackson.map.module.SimpleModule;
 import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 import org.jboss.resteasy.plugins.providers.jackson.ResteasyJacksonProvider;
 
@@ -19,24 +21,27 @@ import org.jboss.resteasy.plugins.providers.jackson.ResteasyJacksonProvider;
 @Produces({MediaType.APPLICATION_JSON, "text/json"})
 public class JacksonConfigurator extends ResteasyJacksonProvider
 {
-    private static final String DATE_FORMAT = "dd.MM.yyyy HH:mm:ss.SSS Z";
-    private static final Logger log = Logger.getLogger(JacksonConfigurator.class.getName());
+    static final String DATE_FORMAT = "dd.MM.yyyy HH:mm:ss.SSS Z";
+    static final Logger log = Logger.getLogger(JacksonConfigurator.class.getName());
 
 
     public JacksonConfigurator()
     {
         super();
-        log.info("Configuring date handling");
+        log.info("Configuring Jackson");
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.setAnnotationIntrospector(new JaxbAnnotationIntrospector());
         mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false)
-                .configure(SerializationConfig.Feature.INDENT_OUTPUT, true)
                 .configure(SerializationConfig.Feature.WRITE_NULL_MAP_VALUES, true)
                 .configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
         mapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);
         mapper.getSerializationConfig().withDateFormat(new SimpleDateFormat(DATE_FORMAT));
-        mapper.getDeserializationConfig().withDateFormat(new SimpleDateFormat(DATE_FORMAT));
+
+        SimpleModule module = new SimpleModule("TiRe", new Version(1, 0, 0, null));
+        module.addSerializer(new TimeJsonSerializer());
+        mapper.registerModule(module);
+
         setMapper(mapper);
     }
 }
