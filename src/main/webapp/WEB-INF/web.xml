@@ -8,6 +8,10 @@
 		<param-name>resteasy.scan</param-name>
 		<param-value>true</param-value>
 	</context-param>
+    <context-param>
+        <param-name>resteasy.providers</param-name>
+        <param-value>name.pehl.tire.server.rest.JacksonConfigurator</param-value>
+    </context-param>
 	<context-param>
 		<param-name>resteasy.servlet.mapping.prefix</param-name>
 		<param-value>/rest</param-value>
@@ -63,15 +67,15 @@
 	</welcome-file-list>
 
 
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>any</web-resource-name>
-			<url-pattern>/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>*</role-name>
-		</auth-constraint>
-	</security-constraint>
+<!-- 	<security-constraint> -->
+<!-- 		<web-resource-collection> -->
+<!-- 			<web-resource-name>any</web-resource-name> -->
+<!-- 			<url-pattern>/*</url-pattern> -->
+<!-- 		</web-resource-collection> -->
+<!-- 		<auth-constraint> -->
+<!-- 			<role-name>*</role-name> -->
+<!-- 		</auth-constraint> -->
+<!-- 	</security-constraint> -->
 
 
 </web-app>

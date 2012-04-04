@@ -28,7 +28,7 @@ public class NamespaceFilter implements Filter
 
 
     @Override
-    public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2) throws IOException,
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException
     {
         if (NamespaceManager.get() == null)
@@ -43,5 +43,6 @@ public class NamespaceFilter implements Filter
                 NamespaceManager.set(currentUser.getUserId());
             }
         }
+        chain.doFilter(request, response);
     }
 }
