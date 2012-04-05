@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
+import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.TimeUnit;
 
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;

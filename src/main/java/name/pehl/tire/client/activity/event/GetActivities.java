@@ -1,7 +1,7 @@
 package name.pehl.tire.client.activity.event;
 
-import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationData;
+import name.pehl.tire.shared.model.Activities;
 
 import com.gwtplatform.dispatch.annotation.GenDispatch;
 import com.gwtplatform.dispatch.annotation.In;

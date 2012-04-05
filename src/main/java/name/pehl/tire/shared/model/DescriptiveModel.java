@@ -1,4 +1,4 @@
-package name.pehl.tire.client.model;
+package name.pehl.tire.shared.model;
 
 /**
  * @author $Author: harald.pehl $

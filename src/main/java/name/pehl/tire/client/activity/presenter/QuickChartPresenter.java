@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
-import name.pehl.tire.client.activity.model.Activities;
+import name.pehl.tire.shared.model.Activities;
 
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PresenterWidget;

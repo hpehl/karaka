@@ -1,16 +1,20 @@
-package name.pehl.tire.client.activity.model;
+package name.pehl.tire.shared.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-import name.pehl.tire.shared.model.TimeUnit;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author $Author: harald.pehl $
  * @version $Date: 2011-08-31 22:05:44 +0200 (Mi, 31. Aug 2011) $ $Revision: 177
  *          $
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Activities
 {
     int year;
@@ -20,9 +24,12 @@ public class Activities
     int week;
     int weekDiff;
     TimeUnit unit;
-    List<Week> weeks;
-    List<Day> days;
-    List<Activity> activities;
+    SortedSet<Week> weeks;
+    SortedSet<Day> days;
+    SortedSet<Activity> activities;
+    Link prev;
+    Link self;
+    Link next;
 
 
     /**
@@ -99,19 +106,19 @@ public class Activities
             case MONTH:
                 if (!weeks.isEmpty())
                 {
-                    start = weeks.get(weeks.size() - 1).getStart();
+                    start = weeks.first().getStart();
                 }
                 break;
             case WEEK:
                 if (!days.isEmpty())
                 {
-                    start = days.get(days.size() - 1).getStart();
+                    start = days.first().getStart();
                 }
                 break;
             case DAY:
                 if (!activities.isEmpty())
                 {
-                    start = activities.get(activities.size() - 1).getStart();
+                    start = activities.first().getStart();
                 }
                 break;
             default:
@@ -129,19 +136,19 @@ public class Activities
             case MONTH:
                 if (!weeks.isEmpty())
                 {
-                    end = weeks.get(0).getEnd();
+                    end = weeks.last().getEnd();
                 }
                 break;
             case WEEK:
                 if (!days.isEmpty())
                 {
-                    end = days.get(0).getEnd();
+                    end = days.last().getEnd();
                 }
                 break;
             case DAY:
                 if (!activities.isEmpty())
                 {
-                    end = activities.get(0).getStart();
+                    end = activities.last().getStart();
                 }
                 break;
             default:
@@ -223,21 +230,21 @@ public class Activities
     }
 
 
-    public List<Week> getWeeks()
+    public SortedSet<Week> getWeeks()
     {
         return weeks;
     }
 
 
-    public List<Day> getDays()
+    public SortedSet<Day> getDays()
     {
         return days;
     }
 
 
-    public List<Activity> getActivities()
+    public SortedSet<Activity> getActivities()
     {
-        List<Activity> allActivities = new ArrayList<Activity>();
+        SortedSet<Activity> allActivities = new TreeSet<Activity>();
         switch (unit)
         {
             case MONTH:

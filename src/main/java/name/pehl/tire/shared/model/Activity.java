@@ -1,31 +1,28 @@
-package name.pehl.tire.client.activity.model;
+package name.pehl.tire.shared.model;
 
 import java.util.Date;
 import java.util.List;
 
-import name.pehl.piriti.commons.client.Format;
-import name.pehl.tire.client.Defaults;
-import name.pehl.tire.client.model.DescriptiveModel;
-import name.pehl.tire.client.project.Project;
-import name.pehl.tire.client.tag.Tag;
-import name.pehl.tire.shared.model.Status;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Activity extends DescriptiveModel
 {
-    // @formatter:off
-    @Format(Defaults.DATE_TIME_PATTERN) private Date start;
-    @Format(Defaults.DATE_TIME_PATTERN) private Date end;
-    private long pause;
-    private long minutes;
-    private boolean billable;
-    private Status status;
-    private Project project;
-    private List<Tag> tags;
-    // @formatter:on
+    Date start;
+    Date end;
+    long pause;
+    long minutes;
+    boolean billable;
+    Status status;
+    Project project;
+    List<Tag> tags;
+    Link link;
+
 
     public Activity()
     {
@@ -43,7 +40,7 @@ public class Activity extends DescriptiveModel
      * Based on start and end.
      * 
      * @return
-     * @see name.pehl.tire.client.model.BaseModel#hashCode()
+     * @see name.pehl.tire.shared.model.BaseModel#hashCode()
      */
     @Override
     public int hashCode()
@@ -61,7 +58,7 @@ public class Activity extends DescriptiveModel
      * 
      * @param obj
      * @return
-     * @see name.pehl.tire.client.model.BaseModel#equals(java.lang.Object)
+     * @see name.pehl.tire.shared.model.BaseModel#equals(java.lang.Object)
      */
     @Override
     public boolean equals(Object obj)
@@ -209,5 +206,17 @@ public class Activity extends DescriptiveModel
     public void setTags(List<Tag> tags)
     {
         this.tags = tags;
+    }
+
+
+    public Link getLink()
+    {
+        return link;
+    }
+
+
+    public void setLink(Link link)
+    {
+        this.link = link;
     }
 }

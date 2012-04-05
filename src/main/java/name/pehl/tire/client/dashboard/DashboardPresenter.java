@@ -6,13 +6,13 @@ import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.GetActivitiesAction;
 import name.pehl.tire.client.activity.event.GetActivitiesResult;
-import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationData;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationDataAdapter;
 import name.pehl.tire.client.activity.presenter.NewActivityPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.dispatch.TireCallback;
+import name.pehl.tire.shared.model.Activities;
 
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.inject.Inject;

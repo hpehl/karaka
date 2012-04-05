@@ -6,10 +6,10 @@ import com.google.inject.Inject;
 
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
-import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationData;
 import name.pehl.tire.client.activity.model.ActivitiesNavigationDataAdapter;
-import name.pehl.tire.client.activity.model.Activity;
+import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.TimeUnit;
 
 import com.google.web.bindery.event.shared.EventBus;

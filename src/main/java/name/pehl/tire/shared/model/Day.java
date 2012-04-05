@@ -1,18 +1,26 @@
-package name.pehl.tire.client.activity.model;
+package name.pehl.tire.shared.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import com.google.common.collect.ComparisonChain;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class Week implements Iterable<Day>
+public class Day implements Comparable<Day>, Iterable<Activity>
 {
-    int week;
-    List<Day> days;
+    int day;
+    SortedSet<Activity> activities;
+
+
+    public Day()
+    {
+        this.activities = new TreeSet<Activity>();
+    }
 
 
     @Override
@@ -20,7 +28,7 @@ public class Week implements Iterable<Day>
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + week;
+        result = prime * result + day;
         return result;
     }
 
@@ -40,8 +48,8 @@ public class Week implements Iterable<Day>
         {
             return false;
         }
-        Week other = (Week) obj;
-        if (week != other.week)
+        Day other = (Day) obj;
+        if (day != other.day)
         {
             return false;
         }
@@ -50,67 +58,63 @@ public class Week implements Iterable<Day>
 
 
     @Override
+    public int compareTo(Day that)
+    {
+        return ComparisonChain.start().compare(that.day, this.day).result();
+    }
+
+
+    @Override
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("Week [week=").append(week).append(", days=").append(days).append("]");
+        builder.append("Day [day=").append(day).append(", activities=").append(activities).append("]");
         return builder.toString();
     }
 
 
     @Override
-    public Iterator<Day> iterator()
+    public Iterator<Activity> iterator()
     {
-        return days.iterator();
+        return activities.iterator();
     }
 
 
     public boolean isEmpty()
     {
-        return days.isEmpty();
+        return activities.isEmpty();
     }
 
 
     public long getMinutes()
     {
         long minutes = 0;
-        for (Day day : this)
+        for (Activity activity : this)
         {
-            minutes += day.getMinutes();
+            minutes += activity.getMinutes();
         }
         return minutes;
     }
 
 
-    public int getWeek()
+    public int getDay()
     {
-        return week;
+        return day;
     }
 
 
-    public List<Day> getDays()
+    public SortedSet<Activity> getActivities()
     {
-        return days;
-    }
-
-
-    public List<Activity> getActivities()
-    {
-        List<Activity> allActivities = new ArrayList<Activity>();
-        for (Day day : days)
-        {
-            allActivities.addAll(day.getActivities());
-        }
-        return allActivities;
+        return activities;
     }
 
 
     public Date getStart()
     {
         Date start = null;
-        if (!days.isEmpty())
+        if (!activities.isEmpty())
         {
-            return days.get(days.size() - 1).getStart();
+            return activities.first().getStart();
         }
         return start;
     }
@@ -119,9 +123,9 @@ public class Week implements Iterable<Day>
     public Date getEnd()
     {
         Date end = null;
-        if (!days.isEmpty())
+        if (!activities.isEmpty())
         {
-            return days.get(0).getStart();
+            return activities.last().getStart();
         }
         return end;
     }

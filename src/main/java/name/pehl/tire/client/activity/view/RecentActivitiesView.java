@@ -3,13 +3,13 @@ package name.pehl.tire.client.activity.view;
 import com.google.inject.Inject;
 
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
-import name.pehl.tire.client.activity.model.Activities;
-import name.pehl.tire.client.activity.model.Activity;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesUiHandlers;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.client.ui.SvgPath;
+import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Activity;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

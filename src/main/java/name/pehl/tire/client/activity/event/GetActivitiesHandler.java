@@ -2,10 +2,10 @@ package name.pehl.tire.client.activity.event;
 
 import com.google.inject.Inject;
 
-import name.pehl.tire.client.activity.model.Activities;
 import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.dispatch.TireActionHandler;
 import name.pehl.tire.client.rest.UrlBuilder;
+import name.pehl.tire.shared.model.Activities;
 
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.Resource;

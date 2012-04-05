@@ -1,18 +1,17 @@
 package name.pehl.tire.client.activity.view;
 
-import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import name.pehl.tire.client.activity.event.ActivityAction;
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler;
 import name.pehl.tire.client.activity.event.ActivityActionEvent.HasActivityActionHandlers;
-import name.pehl.tire.client.activity.model.Activities;
-import name.pehl.tire.client.activity.model.Activity;
-import name.pehl.tire.client.tag.Tag;
 import name.pehl.tire.client.ui.FormatUtils;
+import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Status;
+import name.pehl.tire.shared.model.Tag;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -20,6 +19,8 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.TextHeader;
+
+import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
 
 /**
  * @author $LastChangedBy:$
@@ -195,7 +196,7 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
     public void update(Activities activities)
     {
         currentActivities = activities;
-        setRowData(0, activities.getActivities());
+        setRowData(0, new ArrayList<Activity>(activities.getActivities()));
         setRowCount(activities.getActivities().size());
     }
 

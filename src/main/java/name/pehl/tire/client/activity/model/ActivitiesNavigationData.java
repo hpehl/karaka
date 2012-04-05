@@ -1,16 +1,15 @@
 package name.pehl.tire.client.activity.model;
 
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.EnumSet;
 
 import name.pehl.tire.shared.model.TimeUnit;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * Simple value object for navigation over activities by year, month and week.
- * therefore special values for year, month and week the are used in the
- * following manner:
+ * Therefore special values for year, month and week are used in the following
+ * manner:
  * <dl>
  * <dt>0 for year, month and week</dt>
  * <dd>Navigation data for the current month / week</dd>

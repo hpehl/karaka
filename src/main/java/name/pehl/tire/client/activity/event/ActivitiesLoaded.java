@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity.event;
 
-import name.pehl.tire.client.activity.model.Activities;
+import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.TimeUnit;
 
 import com.gwtplatform.dispatch.annotation.GenEvent;

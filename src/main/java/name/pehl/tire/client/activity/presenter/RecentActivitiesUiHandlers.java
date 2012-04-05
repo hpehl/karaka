@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity.presenter;
 
-import name.pehl.tire.client.activity.model.Activity;
+import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.TimeUnit;
 
 import com.gwtplatform.mvp.client.UiHandlers;

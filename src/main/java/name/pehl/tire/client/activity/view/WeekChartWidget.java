@@ -1,16 +1,15 @@
 package name.pehl.tire.client.activity.view;
 
-import static java.lang.Math.max;
+import java.util.SortedSet;
 
-import java.util.List;
-import java.util.ListIterator;
-
-import name.pehl.tire.client.activity.model.Activities;
-import name.pehl.tire.client.activity.model.Day;
 import name.pehl.tire.client.ui.FormatUtils;
+import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Day;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.uibinder.client.UiConstructor;
+
+import static java.lang.Math.max;
 
 /**
  * @author $Author: harald.pehl $
@@ -36,7 +35,7 @@ public class WeekChartWidget extends QuickChartWidget
     {
         if (initialized && activities != null && activities.getDays() != null && !activities.getDays().isEmpty())
         {
-            List<Day> days = activities.getDays();
+            SortedSet<Day> days = activities.getDays();
 
             // update title
             StringBuilder title = new StringBuilder();
@@ -57,9 +56,8 @@ public class WeekChartWidget extends QuickChartWidget
 
             // update columns
             int index = 0;
-            for (ListIterator<Day> iter = days.listIterator(days.size()); iter.hasPrevious();)
+            for (Day day : days)
             {
-                Day day = iter.previous();
                 if (index >= 0 && index < columns.length)
                 {
                     JavaScriptObject column = columns[index];

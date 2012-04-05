@@ -1,17 +1,16 @@
 package name.pehl.tire.client.activity.view;
 
-import static java.lang.Math.max;
+import java.util.SortedSet;
 
-import java.util.List;
-import java.util.ListIterator;
-
-import name.pehl.tire.client.activity.model.Activities;
-import name.pehl.tire.client.activity.model.Week;
 import name.pehl.tire.client.ui.FormatUtils;
+import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Week;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiConstructor;
+
+import static java.lang.Math.max;
 
 /**
  * @author $Author: harald.pehl $
@@ -37,7 +36,7 @@ public class MonthChartWidget extends QuickChartWidget
     {
         if (initialized && activities != null && activities.getWeeks() != null && !activities.getWeeks().isEmpty())
         {
-            List<Week> weeks = activities.getWeeks();
+            SortedSet<Week> weeks = activities.getWeeks();
 
             // update title
             String month = NumberFormat.getFormat("00").format(activities.getMonth());
@@ -59,9 +58,8 @@ public class MonthChartWidget extends QuickChartWidget
 
             // update columns
             int index = 0;
-            for (ListIterator<Week> iter = weeks.listIterator(weeks.size()); iter.hasPrevious();)
+            for (Week week : weeks)
             {
-                Week week = iter.previous();
                 if (index >= 0 && index < columns.length)
                 {
                     JavaScriptObject column = columns[index];

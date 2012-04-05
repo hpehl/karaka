@@ -2,7 +2,7 @@ package name.pehl.tire.client.activity.view;
 
 import static java.lang.Math.max;
 import static java.lang.Math.round;
-import name.pehl.tire.client.activity.model.Activities;
+import name.pehl.tire.shared.model.Activities;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;

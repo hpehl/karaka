@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity.view;
 
-import name.pehl.tire.client.activity.model.Activity;
+import name.pehl.tire.shared.model.Activity;
 
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;
 import com.google.gwt.cell.client.Cell;

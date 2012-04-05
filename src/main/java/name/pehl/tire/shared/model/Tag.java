@@ -1,6 +1,5 @@
-package name.pehl.tire.client.tag;
+package name.pehl.tire.shared.model;
 
-import name.pehl.tire.client.model.NamedModel;
 
 /**
  * @author $Author: harald.pehl $

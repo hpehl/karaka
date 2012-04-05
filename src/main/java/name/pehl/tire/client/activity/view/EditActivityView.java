@@ -4,11 +4,11 @@ import java.util.logging.Logger;
 
 import com.google.inject.Inject;
 
-import name.pehl.tire.client.activity.model.Activity;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
 import name.pehl.tire.client.ui.EscapablePopupPanel;
 import name.pehl.tire.client.ui.PlaceholderTextBox;
 import name.pehl.tire.client.ui.TimeTextBox;
+import name.pehl.tire.shared.model.Activity;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;

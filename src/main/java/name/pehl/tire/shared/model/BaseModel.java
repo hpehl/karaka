@@ -1,6 +1,4 @@
-package name.pehl.tire.client.model;
-
-import name.pehl.piriti.property.client.Setter;
+package name.pehl.tire.shared.model;
 
 /**
  * @author $Author: harald.pehl $
@@ -9,7 +7,6 @@ import name.pehl.piriti.property.client.Setter;
  */
 public abstract class BaseModel
 {
-    @Setter(BaseModelIdSetter.class)
     private Long id;
 
 
@@ -86,13 +83,7 @@ public abstract class BaseModel
     }
 
 
-    /**
-     * Necessary for the Piriti mapping.
-     * 
-     * @param id
-     *            The id to set.
-     */
-    void setId(Long id)
+    public void setId(Long id)
     {
         this.id = id;
     }
