@@ -88,7 +88,7 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
             {
                 if (currentActivities != null)
                 {
-                    return currentActivities.days() + " days";
+                    return currentActivities.getNumberOfDays() + " days";
                 }
                 return null;
             }

@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -14,23 +12,37 @@ import javax.xml.bind.annotation.XmlRootElement;
  *          $
  */
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Activities
 {
-    int year;
-    int yearDiff;
-    int month;
-    int monthDiff;
-    int week;
-    int weekDiff;
-    TimeUnit unit;
-    SortedSet<Week> weeks;
-    SortedSet<Day> days;
-    SortedSet<Activity> activities;
-    Link prev;
-    Link self;
-    Link next;
+    // ------------------------------------------------------- member variables
 
+    private int year;
+    private int yearDiff;
+    private int month;
+    private int monthDiff;
+    private int week;
+    private int weekDiff;
+    private TimeUnit unit;
+    private SortedSet<Day> days;
+    private SortedSet<Week> weeks;
+    private SortedSet<Activity> activities;
+    private Link prev;
+    private Link self;
+    private Link next;
+
+
+    // ------------------------------------------------------------ constructor
+
+    public Activities()
+    {
+        this.unit = TimeUnit.DAY;
+        this.weeks = new TreeSet<Week>();
+        this.days = new TreeSet<Day>();
+        this.activities = new TreeSet<Activity>();
+    }
+
+
+    // --------------------------------------------------------- object methods
 
     /**
      * Based on year, month and week
@@ -98,6 +110,8 @@ public class Activities
     }
 
 
+    // -------------------------------------------------- calculated properties
+
     public Date getStart()
     {
         Date start = null;
@@ -148,7 +162,7 @@ public class Activities
             case DAY:
                 if (!activities.isEmpty())
                 {
-                    end = activities.last().getStart();
+                    end = activities.last().getEnd();
                 }
                 break;
             default:
@@ -188,60 +202,6 @@ public class Activities
     }
 
 
-    public int getYear()
-    {
-        return year;
-    }
-
-
-    public int getYearDiff()
-    {
-        return yearDiff;
-    }
-
-
-    public int getMonth()
-    {
-        return month;
-    }
-
-
-    public int getMonthDiff()
-    {
-        return monthDiff;
-    }
-
-
-    public int getWeek()
-    {
-        return week;
-    }
-
-
-    public int getWeekDiff()
-    {
-        return weekDiff;
-    }
-
-
-    public TimeUnit getUnit()
-    {
-        return unit;
-    }
-
-
-    public SortedSet<Week> getWeeks()
-    {
-        return weeks;
-    }
-
-
-    public SortedSet<Day> getDays()
-    {
-        return days;
-    }
-
-
     public SortedSet<Activity> getActivities()
     {
         SortedSet<Activity> allActivities = new TreeSet<Activity>();
@@ -260,7 +220,7 @@ public class Activities
                 }
                 break;
             case DAY:
-                allActivities = activities;
+                allActivities.addAll(activities);
                 break;
             default:
                 break;
@@ -269,7 +229,7 @@ public class Activities
     }
 
 
-    public int days()
+    public int getNumberOfDays()
     {
         int result = 0;
         switch (unit)
@@ -290,5 +250,157 @@ public class Activities
                 break;
         }
         return result;
+    }
+
+
+    // ------------------------------------------------------------- properties
+
+    public int getYear()
+    {
+        return year;
+    }
+
+
+    public void setYear(int year)
+    {
+        this.year = year;
+    }
+
+
+    public int getYearDiff()
+    {
+        return yearDiff;
+    }
+
+
+    public void setYearDiff(int yearDiff)
+    {
+        this.yearDiff = yearDiff;
+    }
+
+
+    public int getMonth()
+    {
+        return month;
+    }
+
+
+    public void setMonth(int month)
+    {
+        this.month = month;
+    }
+
+
+    public int getMonthDiff()
+    {
+        return monthDiff;
+    }
+
+
+    public void setMonthDiff(int monthDiff)
+    {
+        this.monthDiff = monthDiff;
+    }
+
+
+    public int getWeek()
+    {
+        return week;
+    }
+
+
+    public void setWeek(int week)
+    {
+        this.week = week;
+    }
+
+
+    public int getWeekDiff()
+    {
+        return weekDiff;
+    }
+
+
+    public void setWeekDiff(int weekDiff)
+    {
+        this.weekDiff = weekDiff;
+    }
+
+
+    public TimeUnit getUnit()
+    {
+        return unit;
+    }
+
+
+    public void setUnit(TimeUnit unit)
+    {
+        this.unit = unit;
+    }
+
+
+    public SortedSet<Day> getDays()
+    {
+        return days;
+    }
+
+
+    public void setDays(SortedSet<Day> days)
+    {
+        this.days = days;
+    }
+
+
+    public SortedSet<Week> getWeeks()
+    {
+        return weeks;
+    }
+
+
+    public void setWeeks(SortedSet<Week> weeks)
+    {
+        this.weeks = weeks;
+    }
+
+
+    public Link getPrev()
+    {
+        return prev;
+    }
+
+
+    public void setPrev(Link prev)
+    {
+        this.prev = prev;
+    }
+
+
+    public Link getSelf()
+    {
+        return self;
+    }
+
+
+    public void setSelf(Link self)
+    {
+        this.self = self;
+    }
+
+
+    public Link getNext()
+    {
+        return next;
+    }
+
+
+    public void setNext(Link next)
+    {
+        this.next = next;
+    }
+
+
+    public void setActivities(SortedSet<Activity> activities)
+    {
+        this.activities = activities;
     }
 }
