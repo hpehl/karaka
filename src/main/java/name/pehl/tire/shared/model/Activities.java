@@ -1,14 +1,10 @@
 package name.pehl.tire.shared.model;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.google.common.collect.SortedSetMultimap;
-import com.google.common.collect.TreeMultimap;
 
 /**
  * @author $Author: harald.pehl $
@@ -34,8 +30,7 @@ public class Activities extends BaseModel
 
     // ------------------------------------------------------------ constructor
 
-    public Activities(int year, int yearDiff, int month, int monthDiff, int week, int weekDiff, TimeUnit unit,
-            Collection<Activity> activities)
+    public Activities(int year, int yearDiff, int month, int monthDiff, int week, int weekDiff, TimeUnit unit)
     {
         super();
         this.year = year;
@@ -47,61 +42,7 @@ public class Activities extends BaseModel
         this.unit = unit;
         this.weeks = new TreeSet<Week>();
         this.days = new TreeSet<Day>();
-        this.activities = new TreeSet<Activity>(activities);
-        switch (unit)
-        {
-            case MONTH:
-                this.weeks.addAll(groupByWeek(activities));
-                break;
-            case WEEK:
-                this.days.addAll(groupByDay(activities));
-                break;
-            case DAY:
-                // no grouping necessary
-                break;
-            default:
-                break;
-        }
-    }
-
-
-    private SortedSet<Week> groupByWeek(Collection<Activity> activities)
-    {
-        SortedSet<Week> weeks = new TreeSet<Week>();
-        SortedSetMultimap<Week, Activity> activitiesPerWeek = TreeMultimap.create();
-        for (Activity activity : activities)
-        {
-            Week week = new Week(activity.getStart().getYear(), activity.getStart().getWeek());
-            activitiesPerWeek.put(week, activity);
-        }
-
-        for (Week week : activitiesPerWeek.keySet())
-        {
-            SortedSet<Activity> activitiesOfOneWeek = activitiesPerWeek.get(week);
-            SortedSet<Day> days = groupByDay(activitiesOfOneWeek);
-            week.addAll(days);
-            weeks.add(week);
-
-        }
-        return weeks;
-    }
-
-
-    private SortedSet<Day> groupByDay(Collection<Activity> activities)
-    {
-        SortedSet<Day> days = new TreeSet<Day>();
-        SortedSetMultimap<Day, Activity> activitiesPerDay = TreeMultimap.create();
-        for (Activity activity : activities)
-        {
-            Day day = new Day(activity.getStart().getDay());
-            activitiesPerDay.put(day, activity);
-        }
-        for (Day day : activitiesPerDay.keySet())
-        {
-            day.addAll(activitiesPerDay.get(day));
-            days.add(day);
-        }
-        return days;
+        this.activities = new TreeSet<Activity>();
     }
 
 
@@ -282,14 +223,32 @@ public class Activities extends BaseModel
     }
 
 
+    public void addWeek(Week week)
+    {
+        weeks.add(week);
+    }
+
+
     public SortedSet<Day> getDays()
     {
         return days;
     }
 
 
+    public void addDay(Day day)
+    {
+        days.add(day);
+    }
+
+
     public SortedSet<Activity> getActivities()
     {
         return activities;
+    }
+
+
+    public void addActivity(Activity activity)
+    {
+        activities.add(activity);
     }
 }

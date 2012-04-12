@@ -40,7 +40,7 @@ public class ActivitiesBuilderTest
     public void testSortByMonth()
     {
         List<Activity> data = new ActivitiesGenerator().generateMonth(1973, 9);
-        Activities activities = new Activities.Builder(requestedFixture, DateTimeZone.getDefault(), MONTH, data)
+        Activities activities = new ActivitiesBuilder(requestedFixture, DateTimeZone.getDefault(), MONTH, data)
                 .build();
         assertNotNull(activities);
         assertNotNull(activities.weeks);
@@ -70,7 +70,7 @@ public class ActivitiesBuilderTest
     {
         int cw = 35;
         List<Activity> data = new ActivitiesGenerator().generateWeek(1973, cw);
-        Activities activities = new Activities.Builder(requestedFixture, DateTimeZone.getDefault(), WEEK, data).build();
+        Activities activities = new ActivitiesBuilder(requestedFixture, DateTimeZone.getDefault(), WEEK, data).build();
         assertNotNull(activities);
         assertNull(activities.weeks);
         assertNotNull(activities.days);

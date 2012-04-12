@@ -20,15 +20,16 @@ import com.google.common.collect.ComparisonChain;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Week implements Comparable<Week>, Iterable<Day>
 {
-    int year;
-    int week;
-    SortedSet<Day> days;
+    private final int year;
+    private final int week;
+    private final SortedSet<Day> days;
 
 
-    public Week()
+    public Week(int year, int week)
     {
-        super();
-        days = new TreeSet<Day>();
+        this.year = year;
+        this.week = week;
+        this.days = new TreeSet<Day>();
     }
 
 

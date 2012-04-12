@@ -1,8 +1,11 @@
 package name.pehl.tire.server.rest.activity;
 
+import static name.pehl.tire.shared.model.TimeUnit.*;
+import static org.joda.time.Months.months;
+import static org.joda.time.Weeks.weeks;
+
 import java.util.List;
 
-import com.google.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,17 +16,14 @@ import javax.ws.rs.core.MediaType;
 import name.pehl.tire.server.dao.ActivityDao;
 import name.pehl.tire.server.model.ActivitiesGenerator;
 import name.pehl.tire.server.model.Activity;
+import name.pehl.tire.shared.model.Activities;
 
 import org.jboss.resteasy.spi.NotFoundException;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 
-import static name.pehl.tire.shared.model.TimeUnit.DAY;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-import static org.joda.time.Months.months;
-import static org.joda.time.Weeks.weeks;
+import com.google.inject.Inject;
 
 /**
  * Supported methods:
@@ -58,8 +58,10 @@ public class ActivitiesResource
 
     @GET
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}")
-    public Activities activitiesByYearMonth(@PathParam("year") int year, @PathParam("month") int month,
-            @QueryParam("tz") String timeZoneId)
+    public Activities activitiesByYearMonth(@PathParam("year")
+    int year, @PathParam("month")
+    int month, @QueryParam("tz")
+    String timeZoneId)
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(year, month, 1, timeZone);
@@ -71,13 +73,15 @@ public class ActivitiesResource
         {
             throw new NotFoundException(String.format("No activities found for year %d and month %d", year, month));
         }
-        return new Activities.Builder(requested, timeZone, MONTH, activities).build();
+        return new ActivitiesBuilder(requested, timeZone, MONTH, activities).build();
     }
 
 
     @GET
     @Path("/relative/{month:[+-]?\\d+}")
-    public Activities activitiesByRelativeMonth(@PathParam("month") int month, @QueryParam("tz") String timeZoneId)
+    public Activities activitiesByRelativeMonth(@PathParam("month")
+    int month, @QueryParam("tz")
+    String timeZoneId)
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight now = new DateMidnight(timeZone);
@@ -93,13 +97,14 @@ public class ActivitiesResource
         {
             throw new NotFoundException(String.format("No activities found for relative month %d", month));
         }
-        return new Activities.Builder(requested, timeZone, MONTH, activities).now(now).build();
+        return new ActivitiesBuilder(requested, timeZone, MONTH, activities).now(now).build();
     }
 
 
     @GET
     @Path("/currentMonth")
-    public Activities activitiesByCurrentMonth(@QueryParam("tz") String timeZoneId)
+    public Activities activitiesByCurrentMonth(@QueryParam("tz")
+    String timeZoneId)
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(timeZone);
@@ -111,7 +116,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException("No activities found for current month");
         }
-        return new Activities.Builder(requested, timeZone, MONTH, activities).build();
+        return new ActivitiesBuilder(requested, timeZone, MONTH, activities).build();
     }
 
 
@@ -119,8 +124,10 @@ public class ActivitiesResource
 
     @GET
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}")
-    public Activities activitiesByYearWeek(@PathParam("year") int year, @PathParam("week") int week,
-            @QueryParam("tz") String timeZoneId)
+    public Activities activitiesByYearWeek(@PathParam("year")
+    int year, @PathParam("week")
+    int week, @QueryParam("tz")
+    String timeZoneId)
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(week);
@@ -134,13 +141,15 @@ public class ActivitiesResource
             throw new NotFoundException(String.format("No activities found for year %d and calendar week %d", year,
                     week));
         }
-        return new Activities.Builder(requested, timeZone, WEEK, activities).build();
+        return new ActivitiesBuilder(requested, timeZone, WEEK, activities).build();
     }
 
 
     @GET
     @Path("/relative/cw{week:\\d{1,2}}")
-    public Activities activitiesByRelativeWeek(@PathParam("week") int week, @QueryParam("tz") String timeZoneId)
+    public Activities activitiesByRelativeWeek(@PathParam("week")
+    int week, @QueryParam("tz")
+    String timeZoneId)
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight now = new DateMidnight(timeZone);
@@ -157,13 +166,14 @@ public class ActivitiesResource
         {
             throw new NotFoundException(String.format("No activities found for relative calendar week %d", week));
         }
-        return new Activities.Builder(requested, timeZone, WEEK, activities).now(now).build();
+        return new ActivitiesBuilder(requested, timeZone, WEEK, activities).now(now).build();
     }
 
 
     @GET
     @Path("/currentWeek")
-    public Activities activitiesByCurrentWeek(@QueryParam("tz") String timeZoneId)
+    public Activities activitiesByCurrentWeek(@QueryParam("tz")
+    String timeZoneId)
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(timeZone);
@@ -175,7 +185,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException("No activities found for current calendar week");
         }
-        return new Activities.Builder(requested, timeZone, WEEK, activities).build();
+        return new ActivitiesBuilder(requested, timeZone, WEEK, activities).build();
     }
 
 
@@ -183,8 +193,11 @@ public class ActivitiesResource
 
     @GET
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/{day:\\d{1,2}}")
-    public Activities activitiesByYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
-            @PathParam("day") int day, @QueryParam("tz") String timeZoneId)
+    public Activities activitiesByYearMonthDay(@PathParam("year")
+    int year, @PathParam("month")
+    int month, @PathParam("day")
+    int day, @QueryParam("tz")
+    String timeZoneId)
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(year, month, day, timeZone);
@@ -195,13 +208,14 @@ public class ActivitiesResource
             throw new NotFoundException(String.format("No activities found for year %d, month %d and day %d", year,
                     month, day));
         }
-        return new Activities.Builder(requested, timeZone, DAY, activities).build();
+        return new ActivitiesBuilder(requested, timeZone, DAY, activities).build();
     }
 
 
     @GET
     @Path("/today")
-    public Activities activitiesByYearMonthDay(@QueryParam("tz") String timeZoneId)
+    public Activities activitiesByYearMonthDay(@QueryParam("tz")
+    String timeZoneId)
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(timeZone);
@@ -211,7 +225,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException("No activities found for today");
         }
-        return new Activities.Builder(requested, timeZone, DAY, activities).build();
+        return new ActivitiesBuilder(requested, timeZone, DAY, activities).build();
     }
 
 
