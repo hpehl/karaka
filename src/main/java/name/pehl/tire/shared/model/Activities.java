@@ -1,10 +1,14 @@
 package name.pehl.tire.shared.model;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.google.common.collect.SortedSetMultimap;
+import com.google.common.collect.TreeMultimap;
 
 /**
  * @author $Author: harald.pehl $
@@ -12,94 +16,96 @@ import javax.xml.bind.annotation.XmlRootElement;
  *          $
  */
 @XmlRootElement
-public class Activities
+public class Activities extends BaseModel
 {
     // ------------------------------------------------------- member variables
 
-    private int year;
-    private int yearDiff;
-    private int month;
-    private int monthDiff;
-    private int week;
-    private int weekDiff;
-    private TimeUnit unit;
-    private SortedSet<Day> days;
-    private SortedSet<Week> weeks;
-    private SortedSet<Activity> activities;
-    private Link prev;
-    private Link self;
-    private Link next;
+    final private int year;
+    final private int yearDiff;
+    final private int month;
+    final private int monthDiff;
+    final private int week;
+    final private int weekDiff;
+    final private TimeUnit unit;
+    final private SortedSet<Week> weeks;
+    final private SortedSet<Day> days;
+    final private SortedSet<Activity> activities;
 
 
     // ------------------------------------------------------------ constructor
 
-    public Activities()
+    public Activities(int year, int yearDiff, int month, int monthDiff, int week, int weekDiff, TimeUnit unit,
+            Collection<Activity> activities)
     {
-        this.unit = TimeUnit.DAY;
+        super();
+        this.year = year;
+        this.yearDiff = yearDiff;
+        this.month = month;
+        this.monthDiff = monthDiff;
+        this.week = week;
+        this.weekDiff = weekDiff;
+        this.unit = unit;
         this.weeks = new TreeSet<Week>();
         this.days = new TreeSet<Day>();
-        this.activities = new TreeSet<Activity>();
+        this.activities = new TreeSet<Activity>(activities);
+        switch (unit)
+        {
+            case MONTH:
+                this.weeks.addAll(groupByWeek(activities));
+                break;
+            case WEEK:
+                this.days.addAll(groupByDay(activities));
+                break;
+            case DAY:
+                // no grouping necessary
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    private SortedSet<Week> groupByWeek(Collection<Activity> activities)
+    {
+        SortedSet<Week> weeks = new TreeSet<Week>();
+        SortedSetMultimap<Week, Activity> activitiesPerWeek = TreeMultimap.create();
+        for (Activity activity : activities)
+        {
+            Week week = new Week(activity.getStart().getYear(), activity.getStart().getWeek());
+            activitiesPerWeek.put(week, activity);
+        }
+
+        for (Week week : activitiesPerWeek.keySet())
+        {
+            SortedSet<Activity> activitiesOfOneWeek = activitiesPerWeek.get(week);
+            SortedSet<Day> days = groupByDay(activitiesOfOneWeek);
+            week.addAll(days);
+            weeks.add(week);
+
+        }
+        return weeks;
+    }
+
+
+    private SortedSet<Day> groupByDay(Collection<Activity> activities)
+    {
+        SortedSet<Day> days = new TreeSet<Day>();
+        SortedSetMultimap<Day, Activity> activitiesPerDay = TreeMultimap.create();
+        for (Activity activity : activities)
+        {
+            Day day = new Day(activity.getStart().getDay());
+            activitiesPerDay.put(day, activity);
+        }
+        for (Day day : activitiesPerDay.keySet())
+        {
+            day.addAll(activitiesPerDay.get(day));
+            days.add(day);
+        }
+        return days;
     }
 
 
     // --------------------------------------------------------- object methods
-
-    /**
-     * Based on year, month and week
-     * 
-     * @return
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + year;
-        result = prime * result + month;
-        result = prime * result + week;
-        return result;
-    }
-
-
-    /**
-     * Based on year, month and week
-     * 
-     * @param obj
-     * @return
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        Activities other = (Activities) obj;
-        if (year != other.year)
-        {
-            return false;
-        }
-        if (month != other.month)
-        {
-            return false;
-        }
-        if (week != other.week)
-        {
-            return false;
-        }
-        return true;
-    }
-
 
     @Override
     public String toString()
@@ -202,33 +208,6 @@ public class Activities
     }
 
 
-    public SortedSet<Activity> getActivities()
-    {
-        SortedSet<Activity> allActivities = new TreeSet<Activity>();
-        switch (unit)
-        {
-            case MONTH:
-                for (Week week : weeks)
-                {
-                    allActivities.addAll(week.getActivities());
-                }
-                break;
-            case WEEK:
-                for (Day day : days)
-                {
-                    allActivities.addAll(day.getActivities());
-                }
-                break;
-            case DAY:
-                allActivities.addAll(activities);
-                break;
-            default:
-                break;
-        }
-        return allActivities;
-    }
-
-
     public int getNumberOfDays()
     {
         int result = 0;
@@ -261,21 +240,9 @@ public class Activities
     }
 
 
-    public void setYear(int year)
-    {
-        this.year = year;
-    }
-
-
     public int getYearDiff()
     {
         return yearDiff;
-    }
-
-
-    public void setYearDiff(int yearDiff)
-    {
-        this.yearDiff = yearDiff;
     }
 
 
@@ -285,21 +252,9 @@ public class Activities
     }
 
 
-    public void setMonth(int month)
-    {
-        this.month = month;
-    }
-
-
     public int getMonthDiff()
     {
         return monthDiff;
-    }
-
-
-    public void setMonthDiff(int monthDiff)
-    {
-        this.monthDiff = monthDiff;
     }
 
 
@@ -309,21 +264,9 @@ public class Activities
     }
 
 
-    public void setWeek(int week)
-    {
-        this.week = week;
-    }
-
-
     public int getWeekDiff()
     {
         return weekDiff;
-    }
-
-
-    public void setWeekDiff(int weekDiff)
-    {
-        this.weekDiff = weekDiff;
     }
 
 
@@ -333,9 +276,9 @@ public class Activities
     }
 
 
-    public void setUnit(TimeUnit unit)
+    public SortedSet<Week> getWeeks()
     {
-        this.unit = unit;
+        return weeks;
     }
 
 
@@ -345,62 +288,8 @@ public class Activities
     }
 
 
-    public void setDays(SortedSet<Day> days)
+    public SortedSet<Activity> getActivities()
     {
-        this.days = days;
-    }
-
-
-    public SortedSet<Week> getWeeks()
-    {
-        return weeks;
-    }
-
-
-    public void setWeeks(SortedSet<Week> weeks)
-    {
-        this.weeks = weeks;
-    }
-
-
-    public Link getPrev()
-    {
-        return prev;
-    }
-
-
-    public void setPrev(Link prev)
-    {
-        this.prev = prev;
-    }
-
-
-    public Link getSelf()
-    {
-        return self;
-    }
-
-
-    public void setSelf(Link self)
-    {
-        this.self = self;
-    }
-
-
-    public Link getNext()
-    {
-        return next;
-    }
-
-
-    public void setNext(Link next)
-    {
-        this.next = next;
-    }
-
-
-    public void setActivities(SortedSet<Activity> activities)
-    {
-        this.activities = activities;
+        return activities;
     }
 }

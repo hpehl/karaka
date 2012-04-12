@@ -1,8 +1,5 @@
 package name.pehl.tire.client.activity.model;
 
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +10,9 @@ import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.TimeUnit;
 
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * @author $LastChangedBy:$
@@ -40,14 +40,13 @@ public class ActivitiesNavigationDataAdapter
                 TimeUnit unit = event.getUnit();
                 if (unit == MONTH)
                 {
-                    return new ActivitiesNavigationData(activities.getYear(), activities.getMonth(), 0, unit);
+                    return ActivitiesNavigationData.forMonth(activities.getYear(), activities.getMonth());
                 }
                 else if (unit == WEEK)
                 {
-                    return new ActivitiesNavigationData(activities.getYear(), 0, activities.getWeek(), unit);
+                    return ActivitiesNavigationData.forWeek(activities.getYear(), activities.getWeek());
                 }
             }
-            return new ActivitiesNavigationData(activities.getUnit());
         }
         return new ActivitiesNavigationData();
     }

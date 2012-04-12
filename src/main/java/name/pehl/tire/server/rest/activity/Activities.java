@@ -11,7 +11,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import name.pehl.tire.server.model.Activity;
+import name.pehl.tire.shared.model.Day;
 import name.pehl.tire.shared.model.TimeUnit;
+import name.pehl.tire.shared.model.Week;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;

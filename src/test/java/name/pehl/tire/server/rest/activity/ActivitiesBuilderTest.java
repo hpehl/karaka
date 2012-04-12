@@ -11,6 +11,8 @@ import java.util.List;
 
 import name.pehl.tire.server.model.ActivitiesGenerator;
 import name.pehl.tire.server.model.Activity;
+import name.pehl.tire.shared.model.Day;
+import name.pehl.tire.shared.model.Week;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;

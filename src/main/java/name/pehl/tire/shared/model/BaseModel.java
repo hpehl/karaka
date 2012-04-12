@@ -1,5 +1,8 @@
 package name.pehl.tire.shared.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author $Author: harald.pehl $
  * @version $Date: 2011-05-16 12:54:26 +0200 (Mo, 16. Mai 2011) $ $Revision: 117
@@ -7,8 +10,28 @@ package name.pehl.tire.shared.model;
  */
 public abstract class BaseModel
 {
-    private Long id;
+    // ------------------------------------------------------- member variables
 
+    private final String id;
+    private final Map<String, String> links;
+
+
+    // ------------------------------------------------------------ constructor
+
+    protected BaseModel()
+    {
+        this(null);
+    }
+
+
+    protected BaseModel(String id)
+    {
+        this.id = id;
+        this.links = new HashMap<String, String>();
+    }
+
+
+    // --------------------------------------------------------- object methods
 
     /**
      * Based on the id.
@@ -77,14 +100,22 @@ public abstract class BaseModel
     }
 
 
-    public Long getId()
+    // ------------------------------------------------------------- properties
+
+    public String getId()
     {
         return id;
     }
 
 
-    public void setId(Long id)
+    public Map<String, String> getLinks()
     {
-        this.id = id;
+        return links;
+    }
+
+
+    public void addLink(String rel, String url)
+    {
+        this.links.put(rel, url);
     }
 }

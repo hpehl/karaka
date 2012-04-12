@@ -51,13 +51,13 @@ public class ActivitiesNavigationData
     }
 
 
-    public ActivitiesNavigationData(TimeUnit unit)
+    ActivitiesNavigationData(TimeUnit unit)
     {
         this(0, 0, 0, unit);
     }
 
 
-    public ActivitiesNavigationData(int year, int month, int week, TimeUnit unit)
+    ActivitiesNavigationData(int year, int month, int week, TimeUnit unit)
     {
         this.year = year;
         this.month = month;
@@ -136,7 +136,19 @@ public class ActivitiesNavigationData
     }
 
 
-    // --------------------------------------------------------- change methods
+    // -------------------------------------------------------- factory methods
+
+    public static ActivitiesNavigationData forMonth(int year, int month)
+    {
+        return new ActivitiesNavigationData(year, month, 0, MONTH);
+    }
+
+
+    public static ActivitiesNavigationData forWeek(int year, int week)
+    {
+        return new ActivitiesNavigationData(year, 0, week, WEEK);
+    }
+
 
     public ActivitiesNavigationData current()
     {

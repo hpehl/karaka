@@ -6,23 +6,28 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
+import com.google.common.collect.ComparisonChain;
+
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Activity extends DescriptiveModel
+public class Activity extends DescriptiveModel implements Comparable<Activity>
 {
-    Date start;
-    Date end;
-    long pause;
-    long minutes;
-    boolean billable;
-    Status status;
-    Project project;
-    List<Tag> tags;
-    Link link;
+    // ------------------------------------------------------- member variables
 
+    private Time start;
+    private Time end;
+    private long pause;
+    private long minutes;
+    private boolean billable;
+    private Status status;
+    private Project project;
+    private List<Tag> tags;
+
+
+    // ------------------------------------------------------------ constructor
 
     public Activity()
     {
@@ -32,7 +37,16 @@ public class Activity extends DescriptiveModel
 
     public Activity(Date start)
     {
-        this.start = start;
+        this.start = new start;
+    }
+
+
+    // --------------------------------------------------------- object methods
+
+    @Override
+    public int compareTo(Activity that)
+    {
+        return ComparisonChain.start().compare(that.start, this.start).result();
     }
 
 
@@ -206,17 +220,5 @@ public class Activity extends DescriptiveModel
     public void setTags(List<Tag> tags)
     {
         this.tags = tags;
-    }
-
-
-    public Link getLink()
-    {
-        return link;
-    }
-
-
-    public void setLink(Link link)
-    {
-        this.link = link;
     }
 }

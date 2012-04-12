@@ -9,7 +9,6 @@ import name.pehl.tire.client.about.AboutView;
 import name.pehl.tire.client.activity.event.GetActivitiesHandler;
 import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.activity.model.ActivityReader;
-import name.pehl.tire.client.activity.model.ActivityWriter;
 import name.pehl.tire.client.activity.model.DayReader;
 import name.pehl.tire.client.activity.model.WeekReader;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
@@ -79,7 +78,6 @@ public class TireModule extends AbstractPresenterModule
         bind(WeekReader.class).asEagerSingleton();
         bind(DayReader.class).asEagerSingleton();
         bind(ActivityReader.class).asEagerSingleton();
-        bind(ActivityWriter.class).asEagerSingleton();
         bind(ProjectReader.class).asEagerSingleton();
         bind(ProjectWriter.class).asEagerSingleton();
         bind(TagReader.class).asEagerSingleton();
