@@ -2,6 +2,8 @@ package name.pehl.tire.server.model;
 
 import javax.xml.bind.annotation.XmlTransient;
 
+import name.pehl.tire.server.activity.entity.Activity;
+
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 

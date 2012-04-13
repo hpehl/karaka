@@ -1,13 +1,14 @@
-package name.pehl.tire.server.dao;
+package name.pehl.tire.server.activity.conotrol;
 
 import java.util.EnumSet;
 import java.util.List;
 
 import com.google.inject.Inject;
 
-import name.pehl.tire.server.dao.normalize.Normalizer;
-import name.pehl.tire.server.dao.normalize.TireNormalizer;
-import name.pehl.tire.server.model.Activity;
+import name.pehl.tire.server.activity.entity.Activity;
+import name.pehl.tire.server.dao.NamedEntityDao;
+import name.pehl.tire.server.normalize.Normalizer;
+import name.pehl.tire.server.normalize.TireNormalizer;
 import name.pehl.tire.shared.model.Status;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;

@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Transient;
 
+import name.pehl.tire.server.activity.entity.Activity;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 

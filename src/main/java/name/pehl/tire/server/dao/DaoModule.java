@@ -1,10 +1,11 @@
 package name.pehl.tire.server.dao;
 
-import name.pehl.tire.server.dao.normalize.CompundNormalizer;
-import name.pehl.tire.server.dao.normalize.Normalizer;
-import name.pehl.tire.server.dao.normalize.RemoveNormalizer;
-import name.pehl.tire.server.dao.normalize.ToLowerCaseNormalizer;
-import name.pehl.tire.server.dao.normalize.TrimNormalizer;
+import name.pehl.tire.server.activity.conotrol.ActivityDao;
+import name.pehl.tire.server.normalize.CompundNormalizer;
+import name.pehl.tire.server.normalize.Normalizer;
+import name.pehl.tire.server.normalize.RemoveNormalizer;
+import name.pehl.tire.server.normalize.ToLowerCaseNormalizer;
+import name.pehl.tire.server.normalize.TrimNormalizer;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;

@@ -1,4 +1,4 @@
-package name.pehl.tire.server.rest.activity;
+package name.pehl.tire.server.activity.boundary;
 
 import static name.pehl.tire.shared.model.TimeUnit.*;
 import static org.joda.time.Months.months;
@@ -13,9 +13,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import name.pehl.tire.server.dao.ActivityDao;
+import name.pehl.tire.server.activity.conotrol.ActivityDao;
+import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.model.ActivitiesGenerator;
-import name.pehl.tire.server.model.Activity;
+import name.pehl.tire.server.rest.activity.ActivitiesBuilder;
 import name.pehl.tire.shared.model.Activities;
 
 import org.jboss.resteasy.spi.NotFoundException;

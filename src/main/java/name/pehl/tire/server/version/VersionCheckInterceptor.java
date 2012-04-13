@@ -1,4 +1,4 @@
-package name.pehl.tire.server.rest.version;
+package name.pehl.tire.server.version;
 
 import java.util.List;
 import java.util.regex.Matcher;

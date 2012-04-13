@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import name.pehl.tire.server.dao.normalize.Normalizer;
-import name.pehl.tire.server.model.Activity;
+import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.model.BaseEntity;
 import name.pehl.tire.server.model.Client;
 import name.pehl.tire.server.model.IndexEntry;
 import name.pehl.tire.server.model.Project;
 import name.pehl.tire.server.model.Searchable;
 import name.pehl.tire.server.model.Tag;
+import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.rest.paging.PageInfo;
 import name.pehl.tire.server.rest.paging.PageResult;
 

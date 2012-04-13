@@ -1,10 +1,15 @@
-package name.pehl.tire.server.model;
+package name.pehl.tire.server.activity.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Embedded;
 
+import name.pehl.tire.server.model.DescriptiveEntity;
+import name.pehl.tire.server.model.IfStopped;
+import name.pehl.tire.server.model.Project;
+import name.pehl.tire.server.model.Tag;
+import name.pehl.tire.server.model.Time;
 import name.pehl.tire.shared.model.Status;
 
 import org.joda.time.Minutes;

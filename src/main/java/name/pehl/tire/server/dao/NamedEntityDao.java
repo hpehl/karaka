@@ -1,7 +1,7 @@
 package name.pehl.tire.server.dao;
 
-import name.pehl.tire.server.dao.normalize.Normalizer;
 import name.pehl.tire.server.model.NamedEntity;
+import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.rest.paging.PageResult;
 
 /**

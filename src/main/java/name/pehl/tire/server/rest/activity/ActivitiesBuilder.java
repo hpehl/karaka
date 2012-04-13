@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import name.pehl.tire.server.model.Activity;
+import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Day;
 import name.pehl.tire.shared.model.TimeUnit;

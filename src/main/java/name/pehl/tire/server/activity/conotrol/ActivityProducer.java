@@ -1,4 +1,4 @@
-package name.pehl.tire.server.model;
+package name.pehl.tire.server.activity.conotrol;
 
 import java.util.ArrayList;
 import java.util.List;

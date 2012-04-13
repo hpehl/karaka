@@ -1,4 +1,4 @@
-package name.pehl.tire.server.rest.security;
+package name.pehl.tire.server.security;
 
 /**
  * @author $Author: harald.pehl $

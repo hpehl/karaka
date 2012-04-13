@@ -5,7 +5,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import name.pehl.tire.server.rest.activity.ActivitiesResource;
+import name.pehl.tire.server.activity.boundary.ActivitiesResource;
 
 public class TireApplication extends Application
 {

@@ -1,4 +1,4 @@
-package name.pehl.tire.server.rest.security;
+package name.pehl.tire.server.security;
 
 import java.io.IOException;
 import java.math.BigInteger;

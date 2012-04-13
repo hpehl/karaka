@@ -1,4 +1,4 @@
-package name.pehl.tire.server.rest.version;
+package name.pehl.tire.server.version;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

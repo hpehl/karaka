@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import name.pehl.tire.server.activity.entity.Activity;
+
 import org.joda.time.MutableDateTime;
 
 /**
