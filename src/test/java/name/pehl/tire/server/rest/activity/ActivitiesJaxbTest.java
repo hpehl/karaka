@@ -3,7 +3,8 @@ package name.pehl.tire.server.rest.activity;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import name.pehl.tire.server.activity.conotrol.ActivitiesGenerator;
+import name.pehl.tire.server.activity.control.ActivitiesBuilder;
+import name.pehl.tire.server.activity.control.ActivitiesGenerator;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.AnnotationIntrospector;

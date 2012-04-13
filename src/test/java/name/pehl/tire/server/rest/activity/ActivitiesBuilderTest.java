@@ -9,7 +9,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import name.pehl.tire.server.activity.conotrol.ActivitiesGenerator;
+import name.pehl.tire.server.activity.control.ActivitiesBuilder;
+import name.pehl.tire.server.activity.control.ActivitiesGenerator;
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.shared.model.Day;
 import name.pehl.tire.shared.model.Week;
