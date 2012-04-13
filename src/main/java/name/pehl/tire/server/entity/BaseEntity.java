@@ -3,7 +3,6 @@ package name.pehl.tire.server.entity;
 import java.io.Serializable;
 
 import javax.persistence.Id;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author $LastChangedBy: harald.pehl $
@@ -17,12 +16,11 @@ public abstract class BaseEntity implements Serializable
     private Long id;
 
 
-    BaseEntity()
+    public BaseEntity()
     {
     }
 
 
-    @XmlTransient
     public boolean isTransient()
     {
         return id == null;

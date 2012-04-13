@@ -9,9 +9,9 @@ import name.pehl.tire.server.paging.entity.PageResult;
  * @version $Date: 2010-12-01 17:01:54 +0100 (Mi, 01. Dez 2010) $ $Revision: 161
  *          $
  */
-public abstract class NamedEntityDao<T extends NamedEntity> extends BaseEntityRepository<T>
+public abstract class NamedEntityRepository<T extends NamedEntity> extends BaseEntityRepository<T>
 {
-    protected NamedEntityDao(Class<T> clazz, Normalizer normalizer)
+    protected NamedEntityRepository(Class<T> clazz, Normalizer normalizer)
     {
         super(clazz, normalizer);
     }

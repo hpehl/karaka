@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.normalize.TireNormalizer;
-import name.pehl.tire.server.repository.NamedEntityDao;
+import name.pehl.tire.server.repository.NamedEntityRepository;
 import name.pehl.tire.shared.model.Status;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -19,7 +19,7 @@ import com.googlecode.objectify.Key;
  * @version $Date: 2010-12-01 17:00:49 +0100 (Mi, 01. Dez 2010) $ $Revision: 121
  *          $
  */
-public class ActivityRepository extends NamedEntityDao<Activity>
+public class ActivityRepository extends NamedEntityRepository<Activity>
 {
     @Inject
     public ActivityRepository(@TireNormalizer Normalizer normalizer)

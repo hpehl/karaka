@@ -30,7 +30,7 @@ import name.pehl.tire.server.paging.entity.PageInfo;
  * @author $Author: harald.pehl $
  * @version $Date: 2012-03-02 11:06:21 +0100 (Fr, 02 Mrz 2012) $ $Revision: 97 $
  */
-public abstract class AbstractPagingResource<T>
+public abstract class PagingResource<T>
 {
     /**
      * Query parameter for 'offset'

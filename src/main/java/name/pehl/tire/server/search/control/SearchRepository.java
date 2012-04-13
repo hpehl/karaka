@@ -21,13 +21,13 @@ import com.googlecode.objectify.util.DAOBase;
  * @version $LastChangedRevision:$
  */
 
-public class SearchDao extends DAOBase
+public class SearchRepository extends DAOBase
 {
     private final Normalizer normalizer;
 
 
     @Inject
-    public SearchDao(@TireNormalizer Normalizer normalizer)
+    public SearchRepository(@TireNormalizer Normalizer normalizer)
     {
         this.normalizer = normalizer;
     }
