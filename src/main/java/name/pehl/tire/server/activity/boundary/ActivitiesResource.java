@@ -10,7 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import name.pehl.tire.server.activity.control.ActivitiesBuilder;
-import name.pehl.tire.server.activity.control.ActivitiesGenerator;
+import name.pehl.tire.server.activity.control.ActivitiesProducer;
 import name.pehl.tire.server.activity.control.ActivityRepository;
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.shared.model.Activities;
@@ -56,6 +56,9 @@ public class ActivitiesResource
     @Inject
     ActivityRepository repository;
 
+    @Inject
+    ActivitiesProducer activitiesProducer;
+
 
     // --------------------------------------------------------------- by month
 
@@ -68,8 +71,7 @@ public class ActivitiesResource
         DateMidnight requested = new DateMidnight(year, month, 1, timeZone);
         // activities = dao.findByYearMonth(requested.year().get(),
         // requested.monthOfYear().get());
-        List<Activity> activities = new ActivitiesGenerator().generateMonth(requested.year().get(), requested
-                .monthOfYear().get());
+        List<Activity> activities = activitiesProducer.forMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException(String.format("No activities found for year %d and month %d", year, month));
@@ -90,8 +92,7 @@ public class ActivitiesResource
         DateMidnight requested = new DateMidnight(year, requestedMonth, 1, timeZone);
         // activities = dao.findByYearMonth(requested.year().get(),
         // requested.monthOfYear().get());
-        List<Activity> activities = new ActivitiesGenerator().generateMonth(requested.year().get(), requested
-                .monthOfYear().get());
+        List<Activity> activities = activitiesProducer.forMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException(String.format("No activities found for relative month %d", month));
@@ -108,8 +109,7 @@ public class ActivitiesResource
         DateMidnight requested = new DateMidnight(timeZone);
         // activities = dao.findByYearMonth(requested.year().get(),
         // requested.monthOfYear().get());
-        List<Activity> activities = new ActivitiesGenerator().generateMonth(requested.year().get(), requested
-                .monthOfYear().get());
+        List<Activity> activities = activitiesProducer.forMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException("No activities found for current month");
@@ -130,8 +130,8 @@ public class ActivitiesResource
         DateMidnight requested = new DateMidnight(mdt);
         // activities = dao.findByYearWeek(requested.year().get(),
         // requested.weekOfWeekyear().get());
-        List<Activity> activities = new ActivitiesGenerator().generateWeek(requested.year().get(), requested
-                .weekOfWeekyear().get());
+        List<Activity> activities = activitiesProducer
+                .forWeek(requested.year().get(), requested.weekOfWeekyear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException(String.format("No activities found for year %d and calendar week %d", year,
@@ -154,8 +154,8 @@ public class ActivitiesResource
         DateMidnight requested = new DateMidnight(mdt);
         // activities = dao.findByYearWeek(requested.year().get(),
         // requested.weekOfWeekyear().get());
-        List<Activity> activities = new ActivitiesGenerator().generateWeek(requested.year().get(), requested
-                .weekOfWeekyear().get());
+        List<Activity> activities = activitiesProducer
+                .forWeek(requested.year().get(), requested.weekOfWeekyear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException(String.format("No activities found for relative calendar week %d", week));
@@ -172,8 +172,7 @@ public class ActivitiesResource
         DateMidnight requested = new DateMidnight(timeZone);
         // activities = dao.findByYearWeek(requested.year().get(),
         // requested.weekOfWeekyear().get());
-        List<Activity> activities = new ActivitiesGenerator().generateMonth(requested.year().get(), requested
-                .monthOfYear().get());
+        List<Activity> activities = activitiesProducer.forMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException("No activities found for current calendar week");

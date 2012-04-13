@@ -17,7 +17,7 @@ import org.joda.time.MutableDateTime;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class ActivitiesGenerator
+public class ActivitiesProducer
 {
     static final int ACTIVITIES_PER_MONTH = 23;
     static final int MAX_ACTIVITIES_PER_DAY = 2;
@@ -32,7 +32,7 @@ public class ActivitiesGenerator
     RandomString randomString;
 
 
-    public List<Activity> generateMonth(int year, int month)
+    public List<Activity> forMonth(int year, int month)
     {
         List<Activity> activities = new ArrayList<Activity>();
         MutableDateTime mdt = new MutableDateTime().year().set(year).monthOfYear().set(month).dayOfMonth().set(1);
@@ -53,7 +53,7 @@ public class ActivitiesGenerator
     }
 
 
-    public List<Activity> generateWeek(int year, int week)
+    public List<Activity> forWeek(int year, int week)
     {
         List<Activity> activities = new ArrayList<Activity>();
         MutableDateTime mdt = new MutableDateTime().year().set(year).weekOfWeekyear().set(week).dayOfWeek().set(1);
