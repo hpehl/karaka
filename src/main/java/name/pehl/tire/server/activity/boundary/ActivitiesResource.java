@@ -12,7 +12,6 @@ import javax.ws.rs.core.MediaType;
 import name.pehl.tire.server.activity.control.ActivitiesBuilder;
 import name.pehl.tire.server.activity.control.ActivitiesGenerator;
 import name.pehl.tire.server.activity.control.ActivityRepository;
-import name.pehl.tire.server.activity.control.Month;
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.shared.model.Activities;
 
@@ -56,10 +55,6 @@ public class ActivitiesResource
 {
     @Inject
     ActivityRepository repository;
-
-    @Inject
-    @Month(year = 2012, month = 2)
-    List<Activity> activities;
 
 
     // --------------------------------------------------------------- by month
@@ -196,8 +191,8 @@ public class ActivitiesResource
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(year, month, day, timeZone);
-        List<Activity> activities = repository.findByYearMonthDay(requested.year().get(), requested.monthOfYear().get(),
-                requested.dayOfMonth().get());
+        List<Activity> activities = repository.findByYearMonthDay(requested.year().get(),
+                requested.monthOfYear().get(), requested.dayOfMonth().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException(String.format("No activities found for year %d, month %d and day %d", year,
@@ -213,8 +208,8 @@ public class ActivitiesResource
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(timeZone);
-        List<Activity> activities = repository.findByYearMonthDay(requested.year().get(), requested.monthOfYear().get(),
-                requested.dayOfMonth().get());
+        List<Activity> activities = repository.findByYearMonthDay(requested.year().get(),
+                requested.monthOfYear().get(), requested.dayOfMonth().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException("No activities found for today");
