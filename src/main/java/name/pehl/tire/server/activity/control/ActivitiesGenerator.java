@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.activity.entity.Time;
+import name.pehl.tire.server.config.RandomString;
 import name.pehl.tire.server.tag.entity.Tag;
 
 import org.joda.time.MutableDateTime;
@@ -16,12 +19,17 @@ import org.joda.time.MutableDateTime;
  */
 public class ActivitiesGenerator
 {
-    public static final int ACTIVITIES_PER_MONTH = 23;
-    private static final int MAX_ACTIVITIES_PER_DAY = 2;
-    private static final int MAX_TAGS = 4;
+    static final int ACTIVITIES_PER_MONTH = 23;
+    static final int MAX_ACTIVITIES_PER_DAY = 2;
+    static final int MAX_TAGS = 4;
 
-    private static long nextId = 0;
-    private final Random random = new Random();
+    static long nextId = 0;
+
+    @Inject
+    Random random;
+
+    @Inject
+    RandomString randomString;
 
 
     public List<Activity> generateMonth(int year, int month)
@@ -68,7 +76,7 @@ public class ActivitiesGenerator
 
     private Activity newActivity(MutableDateTime date, int hours)
     {
-        Activity activity = new Activity(randomString(5), randomString(10));
+        Activity activity = new Activity(randomString.next(5), randomString.next(10));
         activity.setId(nextId++);
         activity.setStart(new Time(date.toDate()));
         int hour = date.hourOfDay().get() + hours;
@@ -77,26 +85,10 @@ public class ActivitiesGenerator
         int tags = random.nextInt(MAX_TAGS);
         for (int j = 0; j < tags; j++)
         {
-            Tag tag = new Tag(randomString(5));
+            Tag tag = new Tag(randomString.next(5));
             tag.setId(nextId++);
             activity.addTag(tag);
         }
         return activity;
-    }
-
-
-    private String randomString(int amount)
-    {
-        int start = 'a';
-        int end = 'z';
-        int gap = end - start;
-
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < amount; i++)
-        {
-            char c = (char) (random.nextInt(gap) + start);
-            builder.append(c);
-        }
-        return builder.toString();
     }
 }

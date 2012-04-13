@@ -3,8 +3,6 @@ package name.pehl.tire.server.activity.control;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.normalize.TireNormalizer;
@@ -12,6 +10,7 @@ import name.pehl.tire.server.repository.NamedEntityRepository;
 import name.pehl.tire.shared.model.Status;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.inject.Inject;
 import com.googlecode.objectify.Key;
 
 /**
@@ -66,8 +65,7 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
         {
             if (keys.size() > 1)
             {
-                throw new IllegalStateException(
-                        "Found more than 1 activity with status RUNNING OR PAUSE. Will return first activity found");
+                throw new IllegalStateException("Found more than 1 activity with status RUNNING OR PAUSE!");
             }
             activity = get(keys.get(0));
         }
