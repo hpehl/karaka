@@ -1,6 +1,8 @@
-package name.pehl.tire.server.rest.paging;
+package name.pehl.tire.server.paging.boundary;
 
 import javax.ws.rs.core.MultivaluedMap;
+
+import name.pehl.tire.server.paging.entity.PageInfo;
 
 /**
  * A paging resource which uses query parameters of the resource as input. The

@@ -2,8 +2,8 @@ package name.pehl.tire.server.client.control;
 
 import com.google.inject.Inject;
 
+import name.pehl.tire.server.base.control.NamedEntityDao;
 import name.pehl.tire.server.client.entity.Client;
-import name.pehl.tire.server.dao.NamedEntityDao;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.normalize.TireNormalizer;
 

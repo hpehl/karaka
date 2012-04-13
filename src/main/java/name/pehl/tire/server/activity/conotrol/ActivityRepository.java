@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.inject.Inject;
 
 import name.pehl.tire.server.activity.entity.Activity;
-import name.pehl.tire.server.dao.NamedEntityDao;
+import name.pehl.tire.server.base.control.NamedEntityDao;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.normalize.TireNormalizer;
 import name.pehl.tire.shared.model.Status;

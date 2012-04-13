@@ -1,4 +1,4 @@
-package name.pehl.tire.server.dao;
+package name.pehl.tire.server.search.control;
 
 import java.util.ArrayList;
 import java.util.HashSet;

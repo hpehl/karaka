@@ -1,4 +1,4 @@
-package name.pehl.tire.server.rest.paging;
+package name.pehl.tire.server.paging.entity;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;

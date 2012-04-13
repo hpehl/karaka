@@ -1,9 +1,8 @@
-package name.pehl.tire.server.dao;
+package name.pehl.tire.server.base.control;
 
-import name.pehl.tire.server.base.control.BaseEntityRepository;
 import name.pehl.tire.server.base.entity.NamedEntity;
 import name.pehl.tire.server.normalize.Normalizer;
-import name.pehl.tire.server.rest.paging.PageResult;
+import name.pehl.tire.server.paging.entity.PageResult;
 
 /**
  * @author $Author: harald.pehl $
