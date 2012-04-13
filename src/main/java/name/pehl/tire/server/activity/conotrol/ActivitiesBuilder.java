@@ -1,4 +1,4 @@
-package name.pehl.tire.server.rest.activity;
+package name.pehl.tire.server.activity.conotrol;
 
 import java.util.Collection;
 import java.util.Collections;

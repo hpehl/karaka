@@ -7,7 +7,7 @@ import javax.persistence.Embedded;
 
 import name.pehl.tire.server.base.entity.DescriptiveEntity;
 import name.pehl.tire.server.project.entity.Project;
-import name.pehl.tire.server.tag.Tag;
+import name.pehl.tire.server.tag.entity.Tag;
 import name.pehl.tire.shared.model.Status;
 
 import org.joda.time.Minutes;

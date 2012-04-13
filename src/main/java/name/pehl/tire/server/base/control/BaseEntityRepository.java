@@ -15,7 +15,7 @@ import name.pehl.tire.server.paging.entity.PageResult;
 import name.pehl.tire.server.project.entity.Project;
 import name.pehl.tire.server.search.entity.IndexEntry;
 import name.pehl.tire.server.search.entity.Searchable;
-import name.pehl.tire.server.tag.Tag;
+import name.pehl.tire.server.tag.entity.Tag;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;

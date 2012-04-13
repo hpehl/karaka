@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import name.pehl.tire.server.base.control.NamedEntityDao;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.normalize.TireNormalizer;
-import name.pehl.tire.server.tag.Tag;
+import name.pehl.tire.server.tag.entity.Tag;
 
 /**
  * @author $Author: harald.pehl $

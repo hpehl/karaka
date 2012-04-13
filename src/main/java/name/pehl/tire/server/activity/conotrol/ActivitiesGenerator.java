@@ -6,7 +6,7 @@ import java.util.Random;
 
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.activity.entity.Time;
-import name.pehl.tire.server.tag.Tag;
+import name.pehl.tire.server.tag.entity.Tag;
 
 import org.joda.time.MutableDateTime;
 

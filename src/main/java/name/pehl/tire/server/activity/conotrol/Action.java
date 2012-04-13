@@ -1,4 +1,4 @@
-package name.pehl.tire.server.rest.activity;
+package name.pehl.tire.server.activity.conotrol;
 
 /**
  * @author $Author: harald.pehl $
