@@ -1,4 +1,4 @@
-package name.pehl.tire.server.base.control;
+package name.pehl.tire.server.repository;
 
 import name.pehl.tire.server.entity.NamedEntity;
 import name.pehl.tire.server.normalize.Normalizer;

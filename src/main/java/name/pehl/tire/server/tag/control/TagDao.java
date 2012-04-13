@@ -2,9 +2,9 @@ package name.pehl.tire.server.tag.control;
 
 import com.google.inject.Inject;
 
-import name.pehl.tire.server.base.control.NamedEntityDao;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.normalize.TireNormalizer;
+import name.pehl.tire.server.repository.NamedEntityDao;
 import name.pehl.tire.server.tag.entity.Tag;
 
 /**

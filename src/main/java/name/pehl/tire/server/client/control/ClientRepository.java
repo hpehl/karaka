@@ -2,10 +2,10 @@ package name.pehl.tire.server.client.control;
 
 import com.google.inject.Inject;
 
-import name.pehl.tire.server.base.control.NamedEntityDao;
 import name.pehl.tire.server.client.entity.Client;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.normalize.TireNormalizer;
+import name.pehl.tire.server.repository.NamedEntityDao;
 
 /**
  * @author $Author: harald.pehl $

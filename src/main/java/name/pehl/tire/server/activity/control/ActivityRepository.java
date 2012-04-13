@@ -6,9 +6,9 @@ import java.util.List;
 import com.google.inject.Inject;
 
 import name.pehl.tire.server.activity.entity.Activity;
-import name.pehl.tire.server.base.control.NamedEntityDao;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.normalize.TireNormalizer;
+import name.pehl.tire.server.repository.NamedEntityDao;
 import name.pehl.tire.shared.model.Status;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
