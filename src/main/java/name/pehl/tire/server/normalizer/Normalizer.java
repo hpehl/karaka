@@ -1,4 +1,4 @@
-package name.pehl.tire.server.normalize;
+package name.pehl.tire.server.normalizer;
 
 /**
  * @author $Author: harald.pehl $

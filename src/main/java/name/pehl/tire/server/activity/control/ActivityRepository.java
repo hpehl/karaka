@@ -4,8 +4,8 @@ import java.util.EnumSet;
 import java.util.List;
 
 import name.pehl.tire.server.activity.entity.Activity;
-import name.pehl.tire.server.normalize.Normalizer;
-import name.pehl.tire.server.normalize.TireNormalizer;
+import name.pehl.tire.server.normalizer.Normalizer;
+import name.pehl.tire.server.normalizer.TireNormalizer;
 import name.pehl.tire.server.repository.NamedEntityRepository;
 import name.pehl.tire.shared.model.Status;
 

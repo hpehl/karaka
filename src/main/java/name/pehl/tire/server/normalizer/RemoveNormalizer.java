@@ -1,4 +1,4 @@
-package name.pehl.tire.server.normalize;
+package name.pehl.tire.server.normalizer;
 
 import com.google.common.base.CharMatcher;
 

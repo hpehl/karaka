@@ -1,4 +1,4 @@
-package name.pehl.tire.server.normalize;
+package name.pehl.tire.server.normalizer;
 
 /**
  * Removes leading and trailing whitespaces, multiple whitespaces are replaced

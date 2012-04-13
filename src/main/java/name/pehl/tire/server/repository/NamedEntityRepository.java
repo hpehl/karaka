@@ -1,7 +1,7 @@
 package name.pehl.tire.server.repository;
 
 import name.pehl.tire.server.entity.NamedEntity;
-import name.pehl.tire.server.normalize.Normalizer;
+import name.pehl.tire.server.normalizer.Normalizer;
 import name.pehl.tire.server.paging.entity.PageResult;
 
 /**

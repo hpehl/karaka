@@ -2,8 +2,8 @@ package name.pehl.tire.server.tag.control;
 
 import com.google.inject.Inject;
 
-import name.pehl.tire.server.normalize.Normalizer;
-import name.pehl.tire.server.normalize.TireNormalizer;
+import name.pehl.tire.server.normalizer.Normalizer;
+import name.pehl.tire.server.normalizer.TireNormalizer;
 import name.pehl.tire.server.repository.NamedEntityRepository;
 import name.pehl.tire.server.tag.entity.Tag;
 

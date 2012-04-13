@@ -1,4 +1,4 @@
-package name.pehl.tire.server.normalize;
+package name.pehl.tire.server.normalizer;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

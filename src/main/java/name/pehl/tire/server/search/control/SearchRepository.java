@@ -8,8 +8,8 @@ import java.util.Set;
 
 import com.google.inject.Inject;
 
-import name.pehl.tire.server.normalize.Normalizer;
-import name.pehl.tire.server.normalize.TireNormalizer;
+import name.pehl.tire.server.normalizer.Normalizer;
+import name.pehl.tire.server.normalizer.TireNormalizer;
 import name.pehl.tire.server.search.entity.IndexEntry;
 import name.pehl.tire.server.search.entity.Searchable;
 
