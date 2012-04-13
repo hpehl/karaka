@@ -3,7 +3,7 @@ package name.pehl.tire.server.rest;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-import name.pehl.tire.server.model.Time;
+import name.pehl.tire.server.activity.entity.Time;
 
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;

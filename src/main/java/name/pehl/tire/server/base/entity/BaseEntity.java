@@ -1,4 +1,4 @@
-package name.pehl.tire.server.model;
+package name.pehl.tire.server.base.entity;
 
 import java.io.Serializable;
 

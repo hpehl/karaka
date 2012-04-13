@@ -1,4 +1,4 @@
-package name.pehl.tire.server.model;
+package name.pehl.tire.server.base.control;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;

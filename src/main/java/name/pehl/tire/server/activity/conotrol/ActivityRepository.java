@@ -19,10 +19,10 @@ import com.googlecode.objectify.Key;
  * @version $Date: 2010-12-01 17:00:49 +0100 (Mi, 01. Dez 2010) $ $Revision: 121
  *          $
  */
-public class ActivityDao extends NamedEntityDao<Activity>
+public class ActivityRepository extends NamedEntityDao<Activity>
 {
     @Inject
-    public ActivityDao(@TireNormalizer Normalizer normalizer)
+    public ActivityRepository(@TireNormalizer Normalizer normalizer)
     {
         super(Activity.class, normalizer);
     }

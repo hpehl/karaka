@@ -1,10 +1,12 @@
-package name.pehl.tire.server.model;
+package name.pehl.tire.server.activity.conotrol;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import name.pehl.tire.server.activity.entity.Activity;
+import name.pehl.tire.server.activity.entity.Time;
+import name.pehl.tire.server.tag.Tag;
 
 import org.joda.time.MutableDateTime;
 

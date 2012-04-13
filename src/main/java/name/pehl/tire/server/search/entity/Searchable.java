@@ -1,4 +1,4 @@
-package name.pehl.tire.server.model;
+package name.pehl.tire.server.search.entity;
 
 /**
  * Interface for entities which have some data the user can search for.

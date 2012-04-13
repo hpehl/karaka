@@ -13,9 +13,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import name.pehl.tire.server.activity.conotrol.ActivityDao;
+import name.pehl.tire.server.activity.conotrol.ActivitiesGenerator;
+import name.pehl.tire.server.activity.conotrol.ActivityRepository;
 import name.pehl.tire.server.activity.entity.Activity;
-import name.pehl.tire.server.model.ActivitiesGenerator;
 import name.pehl.tire.server.rest.activity.ActivitiesBuilder;
 import name.pehl.tire.shared.model.Activities;
 
@@ -52,7 +52,7 @@ import com.google.inject.Inject;
 public class ActivitiesResource
 {
     @Inject
-    private ActivityDao dao;
+    private ActivityRepository dao;
 
 
     // --------------------------------------------------------------- by month

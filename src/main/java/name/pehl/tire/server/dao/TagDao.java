@@ -2,9 +2,9 @@ package name.pehl.tire.server.dao;
 
 import com.google.inject.Inject;
 
-import name.pehl.tire.server.model.Tag;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.normalize.TireNormalizer;
+import name.pehl.tire.server.tag.Tag;
 
 /**
  * @author $Author: harald.pehl $

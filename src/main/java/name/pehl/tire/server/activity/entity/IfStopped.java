@@ -1,6 +1,5 @@
-package name.pehl.tire.server.model;
+package name.pehl.tire.server.activity.entity;
 
-import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.shared.model.Status;
 
 import com.googlecode.objectify.condition.ValueIf;

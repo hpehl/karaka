@@ -1,4 +1,4 @@
-package name.pehl.tire.server.model;
+package name.pehl.tire.server.tag.control;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,9 @@ import java.util.List;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
+
+import name.pehl.tire.server.base.control.Count;
+import name.pehl.tire.server.base.control.RandomString;
 
 import biz.accelsis.taima.business.store.entity.Tag;
 

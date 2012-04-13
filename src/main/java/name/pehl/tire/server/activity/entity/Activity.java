@@ -5,11 +5,9 @@ import java.util.List;
 
 import javax.persistence.Embedded;
 
-import name.pehl.tire.server.model.DescriptiveEntity;
-import name.pehl.tire.server.model.IfStopped;
-import name.pehl.tire.server.model.Project;
-import name.pehl.tire.server.model.Tag;
-import name.pehl.tire.server.model.Time;
+import name.pehl.tire.server.base.entity.DescriptiveEntity;
+import name.pehl.tire.server.project.entity.Project;
+import name.pehl.tire.server.tag.Tag;
 import name.pehl.tire.shared.model.Status;
 
 import org.joda.time.Minutes;
@@ -112,7 +110,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
      * &lt;start&gt;, &lt;end&gt;, &lt;pause&gt;, &lt;status&gt;]
      * 
      * @return
-     * @see name.pehl.tire.shared.model.NamedEntity#toString()
+     * @see name.pehl.tire.server.base.entity.NamedEntity#toString()
      */
     @Override
     public String toString()

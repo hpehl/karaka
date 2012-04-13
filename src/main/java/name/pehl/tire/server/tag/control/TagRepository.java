@@ -1,4 +1,4 @@
-package name.pehl.tire.server.model;
+package name.pehl.tire.server.tag.control;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;

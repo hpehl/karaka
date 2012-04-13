@@ -8,10 +8,10 @@ import java.util.Set;
 
 import com.google.inject.Inject;
 
-import name.pehl.tire.server.model.IndexEntry;
-import name.pehl.tire.server.model.Searchable;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.normalize.TireNormalizer;
+import name.pehl.tire.server.search.entity.IndexEntry;
+import name.pehl.tire.server.search.entity.Searchable;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.util.DAOBase;

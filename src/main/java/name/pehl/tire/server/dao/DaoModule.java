@@ -1,6 +1,7 @@
 package name.pehl.tire.server.dao;
 
-import name.pehl.tire.server.activity.conotrol.ActivityDao;
+import name.pehl.tire.server.activity.conotrol.ActivityRepository;
+import name.pehl.tire.server.client.control.ClientRepository;
 import name.pehl.tire.server.normalize.CompundNormalizer;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.normalize.RemoveNormalizer;
@@ -21,8 +22,8 @@ public class DaoModule extends AbstractModule
     @Override
     protected void configure()
     {
-        bind(ActivityDao.class).in(Singleton.class);
-        bind(ClientDao.class).in(Singleton.class);
+        bind(ActivityRepository.class).in(Singleton.class);
+        bind(ClientRepository.class).in(Singleton.class);
         bind(ProjectDao.class).in(Singleton.class);
         bind(SearchDao.class).in(Singleton.class);
         bind(TagDao.class).in(Singleton.class);

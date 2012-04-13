@@ -1,4 +1,4 @@
-package name.pehl.tire.server.dao;
+package name.pehl.tire.server.base.control;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,15 +7,15 @@ import java.util.Map;
 import java.util.Set;
 
 import name.pehl.tire.server.activity.entity.Activity;
-import name.pehl.tire.server.model.BaseEntity;
-import name.pehl.tire.server.model.Client;
-import name.pehl.tire.server.model.IndexEntry;
-import name.pehl.tire.server.model.Project;
-import name.pehl.tire.server.model.Searchable;
-import name.pehl.tire.server.model.Tag;
+import name.pehl.tire.server.base.entity.BaseEntity;
+import name.pehl.tire.server.client.entity.Client;
 import name.pehl.tire.server.normalize.Normalizer;
+import name.pehl.tire.server.project.entity.Project;
 import name.pehl.tire.server.rest.paging.PageInfo;
 import name.pehl.tire.server.rest.paging.PageResult;
+import name.pehl.tire.server.search.entity.IndexEntry;
+import name.pehl.tire.server.search.entity.Searchable;
+import name.pehl.tire.server.tag.Tag;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -34,7 +34,7 @@ import com.googlecode.objectify.util.DAOBase;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public abstract class BaseEntityDao<T extends BaseEntity> extends DAOBase
+public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
 {
     // ------------------------------------------------------ register entities
 
@@ -56,7 +56,7 @@ public abstract class BaseEntityDao<T extends BaseEntity> extends DAOBase
 
     // ----------------------------------------------------------- constructors
 
-    protected BaseEntityDao(Class<T> clazz, Normalizer normalizer)
+    protected BaseEntityRepository(Class<T> clazz, Normalizer normalizer)
     {
         this.clazz = clazz;
         this.normalizer = normalizer;
