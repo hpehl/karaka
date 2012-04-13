@@ -1,6 +1,6 @@
 package name.pehl.tire.server.search.entity;
 
-import name.pehl.tire.server.base.entity.BaseEntity;
+import name.pehl.tire.server.entity.BaseEntity;
 
 import com.googlecode.objectify.Key;
 

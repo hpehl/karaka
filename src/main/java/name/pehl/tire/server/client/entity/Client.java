@@ -1,6 +1,6 @@
 package name.pehl.tire.server.client.entity;
 
-import name.pehl.tire.server.base.entity.DescriptiveEntity;
+import name.pehl.tire.server.entity.DescriptiveEntity;
 
 import com.googlecode.objectify.annotation.Entity;
 

@@ -1,4 +1,4 @@
-package name.pehl.tire.server.rest;
+package name.pehl.tire.server.config;
 
 import java.text.SimpleDateFormat;
 import java.util.logging.Logger;

@@ -1,6 +1,6 @@
 package name.pehl.tire.server.base.control;
 
-import name.pehl.tire.server.base.entity.NamedEntity;
+import name.pehl.tire.server.entity.NamedEntity;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.paging.entity.PageResult;
 

@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import name.pehl.tire.server.activity.entity.Activity;
-import name.pehl.tire.server.base.entity.BaseEntity;
 import name.pehl.tire.server.client.entity.Client;
+import name.pehl.tire.server.entity.BaseEntity;
 import name.pehl.tire.server.normalize.Normalizer;
 import name.pehl.tire.server.paging.entity.PageInfo;
 import name.pehl.tire.server.paging.entity.PageResult;

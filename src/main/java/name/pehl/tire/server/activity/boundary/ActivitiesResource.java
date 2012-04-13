@@ -13,9 +13,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import name.pehl.tire.server.activity.conotrol.ActivitiesBuilder;
-import name.pehl.tire.server.activity.conotrol.ActivitiesGenerator;
-import name.pehl.tire.server.activity.conotrol.ActivityRepository;
+import name.pehl.tire.server.activity.control.ActivitiesBuilder;
+import name.pehl.tire.server.activity.control.ActivitiesGenerator;
+import name.pehl.tire.server.activity.control.ActivityRepository;
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.shared.model.Activities;
 

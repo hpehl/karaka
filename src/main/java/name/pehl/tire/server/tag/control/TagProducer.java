@@ -7,8 +7,8 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 
-import name.pehl.tire.server.base.control.Count;
-import name.pehl.tire.server.base.control.RandomString;
+import name.pehl.tire.server.config.Count;
+import name.pehl.tire.server.config.RandomString;
 
 import biz.accelsis.taima.business.store.entity.Tag;
 

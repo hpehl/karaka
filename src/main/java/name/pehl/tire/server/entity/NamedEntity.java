@@ -1,4 +1,4 @@
-package name.pehl.tire.server.base.entity;
+package name.pehl.tire.server.entity;
 
 import javax.xml.bind.annotation.XmlTransient;
 

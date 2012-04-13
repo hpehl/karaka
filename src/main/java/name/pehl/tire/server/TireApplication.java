@@ -1,4 +1,4 @@
-package name.pehl.tire.server.rest;
+package name.pehl.tire.server;
 
 import java.util.HashSet;
 import java.util.Set;

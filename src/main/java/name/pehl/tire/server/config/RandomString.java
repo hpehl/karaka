@@ -1,4 +1,4 @@
-package name.pehl.tire.server.base.control;
+package name.pehl.tire.server.config;
 
 import java.util.Random;
 

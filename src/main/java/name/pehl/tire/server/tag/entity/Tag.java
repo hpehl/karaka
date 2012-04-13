@@ -3,7 +3,7 @@ package name.pehl.tire.server.tag.entity;
 import javax.xml.bind.annotation.XmlTransient;
 
 import name.pehl.tire.server.activity.entity.Activity;
-import name.pehl.tire.server.base.entity.NamedEntity;
+import name.pehl.tire.server.entity.NamedEntity;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
