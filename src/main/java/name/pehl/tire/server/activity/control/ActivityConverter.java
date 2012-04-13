@@ -1,4 +1,4 @@
-package name.pehl.tire.server.activity.conotrol;
+package name.pehl.tire.server.activity.control;
 
 /**
  * @author $LastChangedBy:$
