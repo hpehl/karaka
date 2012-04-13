@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import name.pehl.tire.server.activity.control.ActivitiesBuilder;
-import name.pehl.tire.server.activity.control.ActivitiesGenerator;
+import name.pehl.tire.server.activity.control.ActivitiesProducer;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.AnnotationIntrospector;
@@ -47,7 +47,7 @@ public class ActivitiesJaxbTest
         StringWriter buffer = new StringWriter();
         DateMidnight now = DateMidnight.now();
         Activities activities = new ActivitiesBuilder(now, DateTimeZone.getDefault(), MONTH,
-                new ActivitiesGenerator().generateMonth(now.year().get(), now.monthOfYear().get())).build();
+                new ActivitiesProducer().forMonth(now.year().get(), now.monthOfYear().get())).build();
         mapper.writeValue(buffer, activities);
         String json = buffer.toString();
         assertNotNull(json);
@@ -61,7 +61,7 @@ public class ActivitiesJaxbTest
         StringWriter buffer = new StringWriter();
         DateMidnight now = DateMidnight.now();
         Activities activities = new ActivitiesBuilder(now, DateTimeZone.getDefault(), WEEK,
-                new ActivitiesGenerator().generateWeek(now.year().get(), now.weekOfWeekyear().get())).build();
+                new ActivitiesProducer().forWeek(now.year().get(), now.weekOfWeekyear().get())).build();
         mapper.writeValue(buffer, activities);
         String json = buffer.toString();
         assertNotNull(json);

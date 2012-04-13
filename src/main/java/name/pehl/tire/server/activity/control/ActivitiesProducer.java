@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.activity.entity.Time;
 import name.pehl.tire.server.config.RandomString;
+import name.pehl.tire.server.tag.control.TagProducer;
 import name.pehl.tire.server.tag.entity.Tag;
 
 import org.joda.time.MutableDateTime;
@@ -30,6 +31,9 @@ public class ActivitiesProducer
 
     @Inject
     RandomString randomString;
+
+    @Inject
+    TagProducer tagProducer;
 
 
     public List<Activity> forMonth(int year, int month)
@@ -82,11 +86,9 @@ public class ActivitiesProducer
         int hour = date.hourOfDay().get() + hours;
         activity.setEnd(new Time(date.copy().hourOfDay().set(hour).toDate()));
 
-        int tags = random.nextInt(MAX_TAGS);
-        for (int j = 0; j < tags; j++)
+        List<Tag> tags = tagProducer.tags(random.nextInt(MAX_TAGS));
+        for (Tag tag : tags)
         {
-            Tag tag = new Tag(randomString.next(5));
-            tag.setId(nextId++);
             activity.addTag(tag);
         }
         return activity;

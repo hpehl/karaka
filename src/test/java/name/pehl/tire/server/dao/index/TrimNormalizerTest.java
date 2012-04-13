@@ -2,8 +2,8 @@ package name.pehl.tire.server.dao.index;
 
 import static org.junit.Assert.*;
 
-import name.pehl.tire.server.normalize.Normalizer;
-import name.pehl.tire.server.normalize.TrimNormalizer;
+import name.pehl.tire.server.normalizer.Normalizer;
+import name.pehl.tire.server.normalizer.TrimNormalizer;
 
 import org.junit.Before;
 import org.junit.Test;

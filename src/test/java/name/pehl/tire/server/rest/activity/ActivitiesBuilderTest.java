@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import name.pehl.tire.server.activity.control.ActivitiesBuilder;
-import name.pehl.tire.server.activity.control.ActivitiesGenerator;
+import name.pehl.tire.server.activity.control.ActivitiesProducer;
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.shared.model.Day;
 import name.pehl.tire.shared.model.Week;
@@ -40,7 +40,7 @@ public class ActivitiesBuilderTest
     @Test
     public void testSortByMonth()
     {
-        List<Activity> data = new ActivitiesGenerator().generateMonth(1973, 9);
+        List<Activity> data = new ActivitiesProducer().forMonth(1973, 9);
         Activities activities = new ActivitiesBuilder(requestedFixture, DateTimeZone.getDefault(), MONTH, data)
                 .build();
         assertNotNull(activities);
@@ -70,7 +70,7 @@ public class ActivitiesBuilderTest
     public void testSortByWeek()
     {
         int cw = 35;
-        List<Activity> data = new ActivitiesGenerator().generateWeek(1973, cw);
+        List<Activity> data = new ActivitiesProducer().forWeek(1973, cw);
         Activities activities = new ActivitiesBuilder(requestedFixture, DateTimeZone.getDefault(), WEEK, data).build();
         assertNotNull(activities);
         assertNull(activities.weeks);
