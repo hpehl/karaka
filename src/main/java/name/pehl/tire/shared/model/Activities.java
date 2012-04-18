@@ -12,20 +12,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  *          $
  */
 @XmlRootElement
-public class Activities extends BaseModel
+public class Activities
 {
     // ------------------------------------------------------- member variables
 
-    final private int year;
-    final private int yearDiff;
-    final private int month;
-    final private int monthDiff;
-    final private int week;
-    final private int weekDiff;
-    final private TimeUnit unit;
-    final private SortedSet<Week> weeks;
-    final private SortedSet<Day> days;
-    final private SortedSet<Activity> activities;
+    int year;
+    int yearDiff;
+    int month;
+    int monthDiff;
+    int week;
+    int weekDiff;
+    TimeUnit unit;
+    SortedSet<Week> weeks;
+    SortedSet<Day> days;
+    SortedSet<Activity> activities;
 
 
     // ------------------------------------------------------------ constructor
@@ -57,7 +57,7 @@ public class Activities extends BaseModel
     }
 
 
-    // -------------------------------------------------- calculated properties
+    // --------------------------------------------------- methods & properties
 
     public Date getStart()
     {
@@ -172,8 +172,6 @@ public class Activities extends BaseModel
         return result;
     }
 
-
-    // ------------------------------------------------------------- properties
 
     public int getYear()
     {

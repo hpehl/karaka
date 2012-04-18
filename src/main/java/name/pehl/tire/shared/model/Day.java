@@ -5,23 +5,34 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 import com.google.common.collect.ComparisonChain;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Day implements Comparable<Day>, Iterable<Activity>
 {
+    // ------------------------------------------------------- member variables
+
     int day;
     SortedSet<Activity> activities;
 
 
-    public Day()
+    // ------------------------------------------------------------ constructor
+
+    public Day(int day)
     {
+        this.day = day;
         this.activities = new TreeSet<Activity>();
     }
 
+
+    // --------------------------------------------------------- object methods
 
     @Override
     public int hashCode()
@@ -73,6 +84,8 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
+    // --------------------------------------------------- methods & properties
+
     @Override
     public Iterator<Activity> iterator()
     {
@@ -106,6 +119,12 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     public SortedSet<Activity> getActivities()
     {
         return activities;
+    }
+
+
+    public void addActivity(Activity activity)
+    {
+        activities.add(activity);
     }
 
 

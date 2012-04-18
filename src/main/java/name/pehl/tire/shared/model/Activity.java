@@ -17,27 +17,29 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
 {
     // ------------------------------------------------------- member variables
 
-    private Time start;
-    private Time end;
-    private long pause;
-    private long minutes;
-    private boolean billable;
-    private Status status;
-    private Project project;
-    private List<Tag> tags;
+    Date start;
+    Date end;
+    long pause;
+    long minutes;
+    boolean billable;
+    Status status;
+    Project project;
+    List<Tag> tags;
 
 
     // ------------------------------------------------------------ constructor
 
-    public Activity()
+    public Activity(String name, Date start)
     {
-        this(null);
+        super(name);
+        this.start = start;
     }
 
 
-    public Activity(Date start)
+    public Activity(String id, String name, Date start)
     {
-        this.start = new start;
+        super(id, name);
+        this.start = start;
     }
 
 

@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import name.pehl.tire.server.activity.control.ActivitiesBuilder;
+import name.pehl.tire.server.activity.control.ActivitiesConverter;
 import name.pehl.tire.server.activity.control.ActivitiesProducer;
 import name.pehl.tire.server.activity.control.ActivityRepository;
 import name.pehl.tire.server.activity.entity.Activity;
@@ -53,11 +53,15 @@ import static org.joda.time.Weeks.weeks;
 @Produces(MediaType.APPLICATION_JSON)
 public class ActivitiesResource
 {
+    // Can be removed as soon as the repository can be used.
+    @Inject
+    ActivitiesProducer activitiesProducer;
+
     @Inject
     ActivityRepository repository;
 
     @Inject
-    ActivitiesProducer activitiesProducer;
+    ActivitiesConverter activitiesConverter;
 
 
     // --------------------------------------------------------------- by month
@@ -76,7 +80,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException(String.format("No activities found for year %d and month %d", year, month));
         }
-        return new ActivitiesBuilder(requested, timeZone, MONTH, activities).build();
+        return activitiesConverter.convert(requested, now(timeZone), MONTH, activities);
     }
 
 
@@ -85,7 +89,7 @@ public class ActivitiesResource
     public Activities activitiesByRelativeMonth(@PathParam("month") int month, @QueryParam("tz") String timeZoneId)
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
-        DateMidnight now = new DateMidnight(timeZone);
+        DateMidnight now = now(timeZone);
         DateMidnight relative = now.plus(months(month));
         int year = relative.year().get();
         int requestedMonth = relative.monthOfYear().get();
@@ -97,7 +101,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException(String.format("No activities found for relative month %d", month));
         }
-        return new ActivitiesBuilder(requested, timeZone, MONTH, activities).now(now).build();
+        return activitiesConverter.convert(requested, now, MONTH, activities);
     }
 
 
@@ -114,7 +118,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException("No activities found for current month");
         }
-        return new ActivitiesBuilder(requested, timeZone, MONTH, activities).build();
+        return activitiesConverter.convert(requested, now(timeZone), MONTH, activities);
     }
 
 
@@ -137,7 +141,7 @@ public class ActivitiesResource
             throw new NotFoundException(String.format("No activities found for year %d and calendar week %d", year,
                     week));
         }
-        return new ActivitiesBuilder(requested, timeZone, WEEK, activities).build();
+        return activitiesConverter.convert(requested, now(timeZone), WEEK, activities);
     }
 
 
@@ -146,7 +150,7 @@ public class ActivitiesResource
     public Activities activitiesByRelativeWeek(@PathParam("week") int week, @QueryParam("tz") String timeZoneId)
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
-        DateMidnight now = new DateMidnight(timeZone);
+        DateMidnight now = now(timeZone);
         DateMidnight relative = now.plus(weeks(week));
         int year = relative.year().get();
         int requestedWeek = relative.weekOfWeekyear().get();
@@ -160,7 +164,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException(String.format("No activities found for relative calendar week %d", week));
         }
-        return new ActivitiesBuilder(requested, timeZone, WEEK, activities).now(now).build();
+        return activitiesConverter.convert(requested, now, WEEK, activities);
     }
 
 
@@ -177,7 +181,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException("No activities found for current calendar week");
         }
-        return new ActivitiesBuilder(requested, timeZone, WEEK, activities).build();
+        return activitiesConverter.convert(requested, now(timeZone), WEEK, activities);
     }
 
 
@@ -197,7 +201,7 @@ public class ActivitiesResource
             throw new NotFoundException(String.format("No activities found for year %d, month %d and day %d", year,
                     month, day));
         }
-        return new ActivitiesBuilder(requested, timeZone, DAY, activities).build();
+        return activitiesConverter.convert(requested, now(timeZone), DAY, activities);
     }
 
 
@@ -213,7 +217,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException("No activities found for today");
         }
-        return new ActivitiesBuilder(requested, timeZone, DAY, activities).build();
+        return activitiesConverter.convert(requested, now(timeZone), DAY, activities);
     }
 
 
@@ -226,5 +230,11 @@ public class ActivitiesResource
             return DateTimeZone.forID(timeZoneId);
         }
         return DateTimeZone.getDefault();
+    }
+
+
+    private DateMidnight now(DateTimeZone timeZone)
+    {
+        return new DateMidnight(timeZone);
     }
 }

@@ -20,10 +20,14 @@ import com.google.common.collect.ComparisonChain;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Week implements Comparable<Week>, Iterable<Day>
 {
-    private final int year;
-    private final int week;
-    private final SortedSet<Day> days;
+    // ------------------------------------------------------- member variables
 
+    int year;
+    int week;
+    SortedSet<Day> days;
+
+
+    // ------------------------------------------------------------ constructor
 
     public Week(int year, int week)
     {
@@ -33,17 +37,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
     }
 
 
-    public boolean add(Day day)
-    {
-        return days.add(day);
-    }
-
-
-    public boolean addAll(Collection<? extends Day> c)
-    {
-        return days.addAll(c);
-    }
-
+    // --------------------------------------------------------- object methods
 
     @Override
     public int hashCode()
@@ -92,6 +86,20 @@ public class Week implements Comparable<Week>, Iterable<Day>
         StringBuilder builder = new StringBuilder();
         builder.append("Week [week=").append(week).append(", days=").append(days).append("]");
         return builder.toString();
+    }
+
+
+    // --------------------------------------------------- methods & properties
+
+    public boolean add(Day day)
+    {
+        return days.add(day);
+    }
+
+
+    public boolean addAll(Collection<? extends Day> c)
+    {
+        return days.addAll(c);
     }
 
 

@@ -3,28 +3,32 @@ package name.pehl.tire.shared.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 /**
  * @author $Author: harald.pehl $
  * @version $Date: 2011-05-16 12:54:26 +0200 (Mo, 16. Mai 2011) $ $Revision: 117
  *          $
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class BaseModel
 {
     // ------------------------------------------------------- member variables
 
-    private final String id;
-    private final Map<String, String> links;
+    String id;
+    Map<String, String> links;
 
 
     // ------------------------------------------------------------ constructor
 
-    protected BaseModel()
+    BaseModel()
     {
         this(null);
     }
 
 
-    protected BaseModel(String id)
+    BaseModel(String id)
     {
         this.id = id;
         this.links = new HashMap<String, String>();

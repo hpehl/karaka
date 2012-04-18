@@ -6,7 +6,7 @@ package name.pehl.tire.server.activity.control;
  */
 public class ActivityConverter
 {
-    public name.pehl.tire.shared.model.Activity entityToTransfer(name.pehl.tire.server.activity.entity.Activity entity)
+    public name.pehl.tire.shared.model.Activity toModel(name.pehl.tire.server.activity.entity.Activity entity)
     {
         return null;
     }
