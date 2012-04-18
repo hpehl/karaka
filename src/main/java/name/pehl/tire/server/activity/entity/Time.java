@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Transient;
 
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -44,12 +43,6 @@ public class Time implements Comparable<Time>
 
 
     // ----------------------------------------------------------- constructors
-
-    public Time()
-    {
-        this(DateTimeZone.getDefault(), null);
-    }
-
 
     public Time(Date date)
     {
