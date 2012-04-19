@@ -7,6 +7,12 @@ package name.pehl.tire.shared.model;
  */
 public class Project extends DescriptiveModel
 {
+    public Project()
+    {
+        super();
+    }
+
+
     public Project(String name)
     {
         super(name);

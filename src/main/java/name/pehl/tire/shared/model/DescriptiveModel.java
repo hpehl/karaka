@@ -14,13 +14,19 @@ public abstract class DescriptiveModel extends NamedModel
     String description;
 
 
-    public DescriptiveModel(String name)
+    DescriptiveModel()
+    {
+        super();
+    }
+
+
+    DescriptiveModel(String name)
     {
         super(name);
     }
 
 
-    public DescriptiveModel(String id, String name)
+    DescriptiveModel(String id, String name)
     {
         super(id, name);
     }

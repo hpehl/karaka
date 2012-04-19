@@ -17,7 +17,6 @@ import name.pehl.tire.server.search.entity.IndexEntry;
 import name.pehl.tire.server.search.entity.Searchable;
 import name.pehl.tire.server.tag.entity.Tag;
 
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
@@ -118,13 +117,13 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
 
     // ------------------------------------------------------------- get entity
 
-    public T get(Long id) throws EntityNotFoundException
+    public T get(Long id)
     {
         return ofy().get(clazz, id);
     }
 
 
-    public T get(Key<T> key) throws EntityNotFoundException
+    public T get(Key<T> key)
     {
         return ofy().get(key);
     }

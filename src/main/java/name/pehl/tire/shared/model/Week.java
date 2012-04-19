@@ -1,7 +1,6 @@
 package name.pehl.tire.shared.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +27,12 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
 
     // ------------------------------------------------------------ constructor
+
+    public Week()
+    {
+        this(0, 0);
+    }
+
 
     public Week(int year, int week)
     {
@@ -91,54 +96,6 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
     // --------------------------------------------------- methods & properties
 
-    public boolean add(Day day)
-    {
-        return days.add(day);
-    }
-
-
-    public boolean addAll(Collection<? extends Day> c)
-    {
-        return days.addAll(c);
-    }
-
-
-    @Override
-    public Iterator<Day> iterator()
-    {
-        return days.iterator();
-    }
-
-
-    public boolean isEmpty()
-    {
-        return days.isEmpty();
-    }
-
-
-    public long getMinutes()
-    {
-        long minutes = 0;
-        for (Day day : this)
-        {
-            minutes += day.getMinutes();
-        }
-        return minutes;
-    }
-
-
-    public int getWeek()
-    {
-        return week;
-    }
-
-
-    public SortedSet<Day> getDays()
-    {
-        return days;
-    }
-
-
     public List<Activity> getActivities()
     {
         List<Activity> allActivities = new ArrayList<Activity>();
@@ -169,5 +126,71 @@ public class Week implements Comparable<Week>, Iterable<Day>
             return days.last().getStart();
         }
         return end;
+    }
+
+
+    public long getMinutes()
+    {
+        long minutes = 0;
+        for (Day day : this)
+        {
+            minutes += day.getMinutes();
+        }
+        return minutes;
+    }
+
+
+    public SortedSet<Day> getDays()
+    {
+        return days;
+    }
+
+
+    public boolean add(Day day)
+    {
+        return days.add(day);
+    }
+
+
+    public void setDays(SortedSet<Day> days)
+    {
+        this.days = days;
+    }
+
+
+    @Override
+    public Iterator<Day> iterator()
+    {
+        return days.iterator();
+    }
+
+
+    public boolean isEmpty()
+    {
+        return days.isEmpty();
+    }
+
+
+    public int getYear()
+    {
+        return year;
+    }
+
+
+    public void setYear(int year)
+    {
+        this.year = year;
+    }
+
+
+    public int getWeek()
+    {
+        return week;
+    }
+
+
+    public void setWeek(int week)
+    {
+        this.week = week;
     }
 }

@@ -32,11 +32,14 @@
 	<listener>
 		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
 	</listener>
+    <listener>
+        <listener-class>name.pehl.tire.server.sampledata.SampleDataContextListener</listener-class>
+    </listener>
 
 
 	<filter>
 		<filter-name>securityToken</filter-name>
-		<filter-class>name.pehl.tire.server.rest.security.SecurityTokenCookieFilter</filter-class>
+		<filter-class>name.pehl.tire.server.security.SecurityTokenCookieFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>securityToken</filter-name>

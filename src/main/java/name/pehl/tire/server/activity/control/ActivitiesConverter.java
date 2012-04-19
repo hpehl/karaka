@@ -72,7 +72,7 @@ public class ActivitiesConverter
         {
             SortedSet<Activity> activitiesOfOneWeek = activitiesPerWeek.get(week);
             SortedSet<Day> days = groupByDays(activitiesOfOneWeek);
-            week.addAll(days);
+            week.setDays(days);
             weeks.add(week);
         }
         return weeks;

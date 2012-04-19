@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
 import name.pehl.tire.server.normalizer.Normalizer;
 import name.pehl.tire.server.normalizer.TireNormalizer;

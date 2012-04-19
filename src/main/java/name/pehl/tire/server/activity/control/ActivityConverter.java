@@ -15,8 +15,6 @@ import name.pehl.tire.server.tag.control.TagConverter;
 import name.pehl.tire.server.tag.control.TagRepository;
 import name.pehl.tire.server.tag.entity.Tag;
 
-import com.google.appengine.api.datastore.EntityNotFoundException;
-
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
@@ -50,7 +48,8 @@ public class ActivityConverter extends
 
         // basic properties
         name.pehl.tire.shared.model.Activity model = new name.pehl.tire.shared.model.Activity(String.valueOf(entity
-                .getId()), entity.getName(), entity.getStart().getDate());
+                .getId()), entity.getName());
+        model.setStart(entity.getStart().getDate());
         model.setEnd(entity.getEnd().getDate());
         model.setPause(entity.getPause());
         model.setMinutes(entity.getMinutes());
@@ -58,15 +57,8 @@ public class ActivityConverter extends
         model.setStatus(entity.getStatus());
 
         // relations
-        try
-        {
-            Project project = projectRepository.get(entity.getProject());
-            model.setProject(projectConverter.toModel(project));
-        }
-        catch (EntityNotFoundException e)
-        {
-            // TODO Auto-generated catch block
-        }
+        Project project = projectRepository.get(entity.getProject());
+        model.setProject(projectConverter.toModel(project));
         List<name.pehl.tire.shared.model.Tag> modelTags = new ArrayList<name.pehl.tire.shared.model.Tag>();
         Collection<Tag> entityTags = tagRepository.ofy().get(entity.getTags()).values();
         for (name.pehl.tire.server.tag.entity.Tag entityTag : entityTags)

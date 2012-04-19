@@ -4,7 +4,11 @@ import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * @author $Author: harald.pehl $
@@ -12,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *          $
  */
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Activities
 {
     // ------------------------------------------------------- member variables
@@ -29,6 +34,12 @@ public class Activities
 
 
     // ------------------------------------------------------------ constructor
+
+    public Activities()
+    {
+        this(0, 0, 0, 0, 0, 0, WEEK);
+    }
+
 
     public Activities(int year, int yearDiff, int month, int monthDiff, int week, int weekDiff, TimeUnit unit)
     {
@@ -179,9 +190,21 @@ public class Activities
     }
 
 
+    public void setYear(int year)
+    {
+        this.year = year;
+    }
+
+
     public int getYearDiff()
     {
         return yearDiff;
+    }
+
+
+    public void setYearDiff(int yearDiff)
+    {
+        this.yearDiff = yearDiff;
     }
 
 
@@ -191,9 +214,21 @@ public class Activities
     }
 
 
+    public void setMonth(int month)
+    {
+        this.month = month;
+    }
+
+
     public int getMonthDiff()
     {
         return monthDiff;
+    }
+
+
+    public void setMonthDiff(int monthDiff)
+    {
+        this.monthDiff = monthDiff;
     }
 
 
@@ -203,9 +238,21 @@ public class Activities
     }
 
 
+    public void setWeek(int week)
+    {
+        this.week = week;
+    }
+
+
     public int getWeekDiff()
     {
         return weekDiff;
+    }
+
+
+    public void setWeekDiff(int weekDiff)
+    {
+        this.weekDiff = weekDiff;
     }
 
 
@@ -215,15 +262,21 @@ public class Activities
     }
 
 
+    public void setUnit(TimeUnit unit)
+    {
+        this.unit = unit;
+    }
+
+
     public SortedSet<Week> getWeeks()
     {
         return weeks;
     }
 
 
-    public void addWeek(Week week)
+    public void setWeeks(SortedSet<Week> weeks)
     {
-        weeks.add(week);
+        this.weeks = weeks;
     }
 
 
@@ -233,15 +286,21 @@ public class Activities
     }
 
 
-    public void addDay(Day day)
+    public void setDays(SortedSet<Day> days)
     {
-        days.add(day);
+        this.days = days;
     }
 
 
     public SortedSet<Activity> getActivities()
     {
         return activities;
+    }
+
+
+    public void setActivities(SortedSet<Activity> activities)
+    {
+        this.activities = activities;
     }
 
 

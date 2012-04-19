@@ -44,6 +44,12 @@ public class Time implements Comparable<Time>
 
     // ----------------------------------------------------------- constructors
 
+    Time()
+    {
+        this(new Date());
+    }
+
+
     public Time(Date date)
     {
         this(DateTimeZone.getDefault(), date);

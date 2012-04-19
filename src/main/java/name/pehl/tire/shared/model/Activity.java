@@ -1,5 +1,6 @@
 package name.pehl.tire.shared.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,17 +30,23 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
 
     // ------------------------------------------------------------ constructor
 
-    public Activity(String name, Date start)
+    public Activity()
     {
-        super(name);
-        this.start = start;
+        this(null, null);
     }
 
 
-    public Activity(String id, String name, Date start)
+    public Activity(String name)
+    {
+        this(null, name);
+    }
+
+
+    public Activity(String id, String name)
     {
         super(id, name);
-        this.start = start;
+        this.start = new Date();
+        this.tags = new ArrayList<Tag>();
     }
 
 

@@ -14,14 +14,20 @@ public abstract class NamedModel extends BaseModel
     String name;
 
 
-    public NamedModel(String name)
+    NamedModel()
+    {
+        super();
+    }
+
+
+    NamedModel(String name)
     {
         super();
         this.name = name;
     }
 
 
-    public NamedModel(String id, String name)
+    NamedModel(String id, String name)
     {
         super(id);
         this.name = name;

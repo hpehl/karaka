@@ -25,6 +25,12 @@ public class Day implements Comparable<Day>, Iterable<Activity>
 
     // ------------------------------------------------------------ constructor
 
+    public Day()
+    {
+        this(0);
+    }
+
+
     public Day(int day)
     {
         this.day = day;
@@ -110,15 +116,15 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
-    public int getDay()
-    {
-        return day;
-    }
-
-
     public SortedSet<Activity> getActivities()
     {
         return activities;
+    }
+
+
+    public void setActivities(SortedSet<Activity> activities)
+    {
+        this.activities = activities;
     }
 
 
@@ -147,5 +153,17 @@ public class Day implements Comparable<Day>, Iterable<Activity>
             return activities.last().getStart();
         }
         return end;
+    }
+
+
+    public int getDay()
+    {
+        return day;
+    }
+
+
+    public void setDay(int day)
+    {
+        this.day = day;
     }
 }

@@ -2,13 +2,13 @@ package name.pehl.tire.server.sampledata;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.server.activity.control.ActivityRepository;
 import name.pehl.tire.server.activity.entity.Activity;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.Months;
-
-import com.google.inject.Inject;
 
 class SampleData
 {

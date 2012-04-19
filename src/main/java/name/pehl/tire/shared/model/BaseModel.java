@@ -1,7 +1,7 @@
 package name.pehl.tire.shared.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -17,7 +17,7 @@ public abstract class BaseModel
     // ------------------------------------------------------- member variables
 
     String id;
-    Map<String, String> links;
+    List<Link> links;
 
 
     // ------------------------------------------------------------ constructor
@@ -31,7 +31,7 @@ public abstract class BaseModel
     BaseModel(String id)
     {
         this.id = id;
-        this.links = new HashMap<String, String>();
+        this.links = new ArrayList<Link>();
     }
 
 
@@ -112,7 +112,13 @@ public abstract class BaseModel
     }
 
 
-    public Map<String, String> getLinks()
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+
+    public List<Link> getLinks()
     {
         return links;
     }
@@ -120,6 +126,19 @@ public abstract class BaseModel
 
     public void addLink(String rel, String url)
     {
-        this.links.put(rel, url);
+        if (rel != null && url != null)
+        {
+            Link link = new Link(rel, url);
+            if (!this.links.contains(link))
+            {
+                this.links.add(link);
+            }
+        }
+    }
+
+
+    public void setLinks(List<Link> links)
+    {
+        this.links = links;
     }
 }

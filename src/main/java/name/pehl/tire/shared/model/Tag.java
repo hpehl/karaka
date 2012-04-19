@@ -7,6 +7,12 @@ package name.pehl.tire.shared.model;
  */
 public class Tag extends NamedModel
 {
+    public Tag()
+    {
+        super();
+    }
+
+
     public Tag(String name)
     {
         super(name);
