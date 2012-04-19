@@ -7,9 +7,9 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 
-import name.pehl.tire.server.project.entity.Project;
+import name.pehl.tire.server.client.entity.Client;
 
-class ProjectProducer
+class ClientProducer
 {
     @Inject
     IdGenerator idGenerator;
@@ -20,18 +20,18 @@ class ProjectProducer
 
     @Produces
     @Count
-    public List<Project> produceProjects(InjectionPoint ip)
+    public List<Client> produceClients(InjectionPoint ip)
     {
-        List<Project> projects = new ArrayList<Project>();
+        List<Client> clients = new ArrayList<Client>();
         Count count = ip.getAnnotated().getAnnotation(Count.class);
         if (count != null && count.value() > 0)
         {
             for (int i = 0; i < count.value(); i++)
             {
-                Project project = new Project("Project " + randomString.next(5), randomString.next(10));
-                projects.add(project);
+                Client client = new Client("Client " + randomString.next(5), randomString.next(10));
+                clients.add(client);
             }
         }
-        return projects;
+        return clients;
     }
 }

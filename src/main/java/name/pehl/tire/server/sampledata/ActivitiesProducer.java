@@ -2,15 +2,24 @@ package name.pehl.tire.server.sampledata;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.inject.Inject;
 
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.activity.entity.Time;
+import name.pehl.tire.server.client.control.ClientRepository;
+import name.pehl.tire.server.client.entity.Client;
+import name.pehl.tire.server.project.control.ProjectRepository;
+import name.pehl.tire.server.project.entity.Project;
+import name.pehl.tire.server.tag.control.TagRepository;
 import name.pehl.tire.server.tag.entity.Tag;
 
+import org.joda.time.DateMidnight;
 import org.joda.time.MutableDateTime;
+
+import com.googlecode.objectify.Key;
 
 /**
  * @author $Author:$
@@ -18,78 +27,69 @@ import org.joda.time.MutableDateTime;
  */
 class ActivitiesProducer
 {
-    static final int ACTIVITIES_PER_MONTH = 23;
-    static final int MAX_ACTIVITIES_PER_DAY = 2;
-    static final int MAX_TAGS = 4;
+    static final int ACTIVITIES_PER_DAY = 2;
 
-    @Inject
-    IdGenerator idGenerator;
+    static final int CLIENTS = 3;
+    static final int PROJECTS = 5;
+    static final int TAGS = 7;
+    static final int TAGS_PER_ACTIVITY = 3;
 
-    @Inject
-    Random random;
+    //@formatter:off
+    @Inject @Count(CLIENTS) List<Client> clients;
+    @Inject @Count(PROJECTS) List<Project> projects;
+    @Inject @Count(TAGS) List<Tag> tags;
 
-    @Inject
-    RandomString randomString;
+    @Inject Random random;
+    @Inject RandomString randomString;
 
-    @Inject
-    TagProducer tagProducer;
+    @Inject ClientRepository clientRepository;
+    @Inject ProjectRepository projectRepository;
+    @Inject TagRepository tagRepository;
+    //@formatter:on
 
-
-    public List<Activity> forMonth(int year, int month)
+    public List<Activity> produceActivities(DateMidnight start, DateMidnight end)
     {
+        // Clients
+        Map<Key<Client>, Client> persistentClients = clientRepository.putAll(clients);
+        List<Key<Client>> clientKeys = new ArrayList<Key<Client>>(persistentClients.keySet());
+
+        // Projects
+        for (Project project : projects)
+        {
+            Key<Client> client = clientKeys.get(random.nextInt(CLIENTS));
+            project.setClient(client);
+        }
+        Map<Key<Project>, Project> persistentProjects = projectRepository.putAll(projects);
+        List<Key<Project>> projectKeys = new ArrayList<Key<Project>>(persistentProjects.keySet());
+
+        // Tags
+        Map<Key<Tag>, Tag> persistentTags = tagRepository.putAll(tags);
+        List<Key<Tag>> tagKeys = new ArrayList<Key<Tag>>(persistentTags.keySet());
+
+        // Activities
         List<Activity> activities = new ArrayList<Activity>();
-        MutableDateTime mdt = new MutableDateTime().year().set(year).monthOfYear().set(month).dayOfMonth().set(1);
-        for (int i = 0; i < ACTIVITIES_PER_MONTH; i++)
+        MutableDateTime mdt = new MutableDateTime(start);
+        while (mdt.isBefore(end))
         {
             mdt.hourOfDay().set(9);
-            int activitiesCount = 1 + random.nextInt(MAX_ACTIVITIES_PER_DAY);
+            int activitiesCount = 1 + random.nextInt(ACTIVITIES_PER_DAY);
             int hours = 2 + random.nextInt(6) / activitiesCount;
             for (int j = 0; j < activitiesCount; j++)
             {
-                Activity activity = newActivity(mdt, hours);
+                Activity activity = new Activity(randomString.next(5), randomString.next(10));
+                activity.setStart(new Time(mdt.toDate()));
+                int hour = mdt.hourOfDay().get() + hours;
+                activity.setEnd(new Time(mdt.copy().hourOfDay().set(hour).toDate()));
+                activity.setProject(projectKeys.get(random.nextInt(PROJECTS)));
+                for (int i = 0; i < TAGS_PER_ACTIVITY; i++)
+                {
+                    activity.addTag(tagKeys.get(random.nextInt(TAGS)));
+                }
                 activities.add(activity);
                 mdt.hourOfDay().add(hours);
             }
             mdt.addDays(1);
         }
         return activities;
-    }
-
-
-    public List<Activity> forWeek(int year, int week)
-    {
-        List<Activity> activities = new ArrayList<Activity>();
-        MutableDateTime mdt = new MutableDateTime().year().set(year).weekOfWeekyear().set(week).dayOfWeek().set(1);
-        for (int i = 0; i < 7; i++)
-        {
-            mdt.hourOfDay().set(9);
-            int activitiesCount = 1 + random.nextInt(MAX_ACTIVITIES_PER_DAY);
-            int hours = 2 + random.nextInt(8) / activitiesCount;
-            for (int j = 0; j < activitiesCount; j++)
-            {
-                Activity activity = newActivity(mdt, hours);
-                activities.add(activity);
-                mdt.hourOfDay().add(hours);
-            }
-            mdt.addDays(1);
-        }
-        return activities;
-    }
-
-
-    private Activity newActivity(MutableDateTime date, int hours)
-    {
-        Activity activity = new Activity(randomString.next(5), randomString.next(10));
-        activity.setId(idGenerator.nextId());
-        activity.setStart(new Time(date.toDate()));
-        int hour = date.hourOfDay().get() + hours;
-        activity.setEnd(new Time(date.copy().hourOfDay().set(hour).toDate()));
-
-        List<Tag> tags = tagProducer.tags(random.nextInt(MAX_TAGS));
-        for (Tag tag : tags)
-        {
-            activity.addTag(tag);
-        }
-        return activity;
     }
 }

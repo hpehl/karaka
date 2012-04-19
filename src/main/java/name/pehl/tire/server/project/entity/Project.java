@@ -36,11 +36,14 @@ public class Project extends DescriptiveEntity
     }
 
 
-    /**
-     * @return the client.
-     */
     public Key<Client> getClient()
     {
         return client;
+    }
+
+
+    public void setClient(Key<Client> client)
+    {
+        this.client = client;
     }
 }

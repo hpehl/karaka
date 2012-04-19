@@ -53,8 +53,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     @Unindexed(IfStopped.class)
     private Status status;
 
-    @Embedded
-    private final List<Tag> tags;
+    private final List<Key<Tag>> tags;
 
     private Key<Project> project;
 
@@ -92,7 +91,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
         super(name, description);
         this.start = new Time(timeZoneId);
         this.status = Status.STOPPED;
-        this.tags = new ArrayList<Tag>();
+        this.tags = new ArrayList<Key<Tag>>();
     }
 
 
@@ -169,13 +168,13 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
 
-    public List<Tag> getTags()
+    public List<Key<Tag>> getTags()
     {
         return this.tags;
     }
 
 
-    public void addTag(Tag tag)
+    public void addTag(Key<Tag> tag)
     {
         if (!this.tags.contains(tag))
         {
@@ -184,7 +183,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
 
-    public void removeTag(Tag tag)
+    public void removeTag(Key<Tag> tag)
     {
         this.tags.remove(tag);
     }

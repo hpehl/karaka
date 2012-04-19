@@ -1,6 +1,7 @@
 package name.pehl.tire.server.activity.control;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,6 +12,8 @@ import name.pehl.tire.server.project.control.ProjectConverter;
 import name.pehl.tire.server.project.control.ProjectRepository;
 import name.pehl.tire.server.project.entity.Project;
 import name.pehl.tire.server.tag.control.TagConverter;
+import name.pehl.tire.server.tag.control.TagRepository;
+import name.pehl.tire.server.tag.entity.Tag;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
@@ -28,6 +31,9 @@ public class ActivityConverter extends
 
     @Inject
     ProjectRepository projectRepository;
+
+    @Inject
+    TagRepository tagRepository;
 
     @Inject
     TagConverter tagConverter;
@@ -62,7 +68,7 @@ public class ActivityConverter extends
             // TODO Auto-generated catch block
         }
         List<name.pehl.tire.shared.model.Tag> modelTags = new ArrayList<name.pehl.tire.shared.model.Tag>();
-        List<name.pehl.tire.server.tag.entity.Tag> entityTags = entity.getTags();
+        Collection<Tag> entityTags = tagRepository.ofy().get(entity.getTags()).values();
         for (name.pehl.tire.server.tag.entity.Tag entityTag : entityTags)
         {
             name.pehl.tire.shared.model.Tag modelTag = tagConverter.toModel(entityTag);
