@@ -73,14 +73,14 @@ public class ActivitiesResource
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(year, month, 1, timeZone);
-        // activities = dao.findByYearMonth(requested.year().get(),
+        // activities = repository.findByYearMonth(requested.year().get(),
         // requested.monthOfYear().get());
         List<Activity> activities = activitiesProducer.forMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException(String.format("No activities found for year %d and month %d", year, month));
         }
-        return activitiesConverter.convert(requested, now(timeZone), MONTH, activities);
+        return activitiesConverter.toModel(requested, now(timeZone), MONTH, activities);
     }
 
 
@@ -94,14 +94,14 @@ public class ActivitiesResource
         int year = relative.year().get();
         int requestedMonth = relative.monthOfYear().get();
         DateMidnight requested = new DateMidnight(year, requestedMonth, 1, timeZone);
-        // activities = dao.findByYearMonth(requested.year().get(),
+        // activities = repository.findByYearMonth(requested.year().get(),
         // requested.monthOfYear().get());
         List<Activity> activities = activitiesProducer.forMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException(String.format("No activities found for relative month %d", month));
         }
-        return activitiesConverter.convert(requested, now, MONTH, activities);
+        return activitiesConverter.toModel(requested, now, MONTH, activities);
     }
 
 
@@ -118,7 +118,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException("No activities found for current month");
         }
-        return activitiesConverter.convert(requested, now(timeZone), MONTH, activities);
+        return activitiesConverter.toModel(requested, now(timeZone), MONTH, activities);
     }
 
 
@@ -132,7 +132,7 @@ public class ActivitiesResource
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(week);
         DateMidnight requested = new DateMidnight(mdt);
-        // activities = dao.findByYearWeek(requested.year().get(),
+        // activities = repository.findByYearWeek(requested.year().get(),
         // requested.weekOfWeekyear().get());
         List<Activity> activities = activitiesProducer
                 .forWeek(requested.year().get(), requested.weekOfWeekyear().get());
@@ -141,7 +141,7 @@ public class ActivitiesResource
             throw new NotFoundException(String.format("No activities found for year %d and calendar week %d", year,
                     week));
         }
-        return activitiesConverter.convert(requested, now(timeZone), WEEK, activities);
+        return activitiesConverter.toModel(requested, now(timeZone), WEEK, activities);
     }
 
 
@@ -156,7 +156,7 @@ public class ActivitiesResource
         int requestedWeek = relative.weekOfWeekyear().get();
         MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(requestedWeek);
         DateMidnight requested = new DateMidnight(mdt);
-        // activities = dao.findByYearWeek(requested.year().get(),
+        // activities = repository.findByYearWeek(requested.year().get(),
         // requested.weekOfWeekyear().get());
         List<Activity> activities = activitiesProducer
                 .forWeek(requested.year().get(), requested.weekOfWeekyear().get());
@@ -164,7 +164,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException(String.format("No activities found for relative calendar week %d", week));
         }
-        return activitiesConverter.convert(requested, now, WEEK, activities);
+        return activitiesConverter.toModel(requested, now, WEEK, activities);
     }
 
 
@@ -174,14 +174,14 @@ public class ActivitiesResource
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(timeZone);
-        // activities = dao.findByYearWeek(requested.year().get(),
+        // activities = repository.findByYearWeek(requested.year().get(),
         // requested.weekOfWeekyear().get());
         List<Activity> activities = activitiesProducer.forMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException("No activities found for current calendar week");
         }
-        return activitiesConverter.convert(requested, now(timeZone), WEEK, activities);
+        return activitiesConverter.toModel(requested, now(timeZone), WEEK, activities);
     }
 
 
@@ -201,7 +201,7 @@ public class ActivitiesResource
             throw new NotFoundException(String.format("No activities found for year %d, month %d and day %d", year,
                     month, day));
         }
-        return activitiesConverter.convert(requested, now(timeZone), DAY, activities);
+        return activitiesConverter.toModel(requested, now(timeZone), DAY, activities);
     }
 
 
@@ -217,7 +217,7 @@ public class ActivitiesResource
         {
             throw new NotFoundException("No activities found for today");
         }
-        return activitiesConverter.convert(requested, now(timeZone), DAY, activities);
+        return activitiesConverter.toModel(requested, now(timeZone), DAY, activities);
     }
 
 

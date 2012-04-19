@@ -1,7 +1,12 @@
 package name.pehl.tire.server.activity.control;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
+import name.pehl.tire.server.converter.AbstractEntityConverter;
+import name.pehl.tire.server.converter.EntityConverter;
 import name.pehl.tire.server.project.control.ProjectConverter;
 import name.pehl.tire.server.project.control.ProjectRepository;
 import name.pehl.tire.server.project.entity.Project;
@@ -13,7 +18,10 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class ActivityConverter
+public class ActivityConverter extends
+        AbstractEntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.shared.model.Activity>
+        implements
+        EntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.shared.model.Activity>
 {
     @Inject
     ProjectConverter projectConverter;
@@ -25,16 +33,10 @@ public class ActivityConverter
     TagConverter tagConverter;
 
 
+    @Override
     public name.pehl.tire.shared.model.Activity toModel(name.pehl.tire.server.activity.entity.Activity entity)
     {
-        if (entity == null)
-        {
-            throw new IllegalStateException("Server side activity is null");
-        }
-        if (entity.isTransient())
-        {
-            throw new IllegalStateException("Server side activity is transient");
-        }
+        assertEntity(entity);
         if (entity.getStart() == null)
         {
             throw new IllegalStateException("Server side activity has no start date");
@@ -50,17 +52,30 @@ public class ActivityConverter
         model.setStatus(entity.getStatus());
 
         // relations
-        Project project;
         try
         {
-            project = projectRepository.get(entity.getProject());
+            Project project = projectRepository.get(entity.getProject());
             model.setProject(projectConverter.toModel(project));
         }
         catch (EntityNotFoundException e)
         {
             // TODO Auto-generated catch block
         }
-        // TODO Tags
+        List<name.pehl.tire.shared.model.Tag> modelTags = new ArrayList<name.pehl.tire.shared.model.Tag>();
+        List<name.pehl.tire.server.tag.entity.Tag> entityTags = entity.getTags();
+        for (name.pehl.tire.server.tag.entity.Tag entityTag : entityTags)
+        {
+            name.pehl.tire.shared.model.Tag modelTag = tagConverter.toModel(entityTag);
+            modelTags.add(modelTag);
+        }
+        model.setTags(modelTags);
         return model;
+    }
+
+
+    @Override
+    public name.pehl.tire.server.activity.entity.Activity fromModel(name.pehl.tire.shared.model.Activity model)
+    {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }

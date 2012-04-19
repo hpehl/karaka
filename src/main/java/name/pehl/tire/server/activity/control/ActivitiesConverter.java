@@ -26,7 +26,7 @@ public class ActivitiesConverter
     ActivityConverter activityConverter;
 
 
-    public Activities convert(DateMidnight requested, DateMidnight now, TimeUnit timeunit, List<Activity> activities)
+    public Activities toModel(DateMidnight requested, DateMidnight now, TimeUnit timeunit, List<Activity> activities)
     {
         int year = requested.year().get();
         // Years.yearsBetween(now, requested).getYears() returns wrong
