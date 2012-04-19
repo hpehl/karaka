@@ -1,4 +1,4 @@
-package name.pehl.tire.server.dao.index;
+package name.pehl.tire.server.normalizer;
 
 import static org.junit.Assert.*;
 
