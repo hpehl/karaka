@@ -1,4 +1,4 @@
-package name.pehl.tire.server.activity.control;
+package name.pehl.tire.server.sampledata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,6 @@ import javax.inject.Inject;
 
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.activity.entity.Time;
-import name.pehl.tire.server.config.RandomString;
-import name.pehl.tire.server.tag.control.TagProducer;
 import name.pehl.tire.server.tag.entity.Tag;
 
 import org.joda.time.MutableDateTime;
@@ -24,7 +22,8 @@ public class ActivitiesProducer
     static final int MAX_ACTIVITIES_PER_DAY = 2;
     static final int MAX_TAGS = 4;
 
-    static long nextId = 0;
+    @Inject
+    IdGenerator idGenerator;
 
     @Inject
     Random random;
@@ -81,7 +80,7 @@ public class ActivitiesProducer
     private Activity newActivity(MutableDateTime date, int hours)
     {
         Activity activity = new Activity(randomString.next(5), randomString.next(10));
-        activity.setId(nextId++);
+        activity.setId(idGenerator.nextId());
         activity.setStart(new Time(date.toDate()));
         int hour = date.hourOfDay().get() + hours;
         activity.setEnd(new Time(date.copy().hourOfDay().set(hour).toDate()));

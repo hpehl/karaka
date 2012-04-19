@@ -10,9 +10,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import name.pehl.tire.server.activity.control.ActivitiesConverter;
-import name.pehl.tire.server.activity.control.ActivitiesProducer;
 import name.pehl.tire.server.activity.control.ActivityRepository;
 import name.pehl.tire.server.activity.entity.Activity;
+import name.pehl.tire.server.sampledata.ActivitiesProducer;
 import name.pehl.tire.shared.model.Activities;
 
 import org.jboss.resteasy.spi.NotFoundException;

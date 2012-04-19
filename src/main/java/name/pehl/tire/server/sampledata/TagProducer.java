@@ -1,15 +1,17 @@
-package name.pehl.tire.server.tag.control;
+package name.pehl.tire.server.sampledata;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import name.pehl.tire.server.config.RandomString;
 import name.pehl.tire.server.tag.entity.Tag;
 
 public class TagProducer
 {
+    @Inject
+    IdGenerator idGenerator;
+
     @Inject
     RandomString randomString;
 
@@ -22,6 +24,7 @@ public class TagProducer
             for (int i = 0; i < count; i++)
             {
                 Tag tag = new Tag("Tag " + randomString.next(5));
+                tag.setId(idGenerator.nextId());
                 tags.add(tag);
             }
         }
