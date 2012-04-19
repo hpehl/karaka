@@ -3,6 +3,8 @@ package name.pehl.tire.server.activity.control;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.normalizer.Normalizer;
 import name.pehl.tire.server.normalizer.TireNormalizer;
@@ -18,6 +20,7 @@ import com.googlecode.objectify.Key;
  * @version $Date: 2010-12-01 17:00:49 +0100 (Mi, 01. Dez 2010) $ $Revision: 121
  *          $
  */
+@ApplicationScoped
 public class ActivityRepository extends NamedEntityRepository<Activity>
 {
     @Inject

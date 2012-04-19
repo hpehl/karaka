@@ -16,7 +16,7 @@ import org.joda.time.MutableDateTime;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class ActivitiesProducer
+class ActivitiesProducer
 {
     static final int ACTIVITIES_PER_MONTH = 23;
     static final int MAX_ACTIVITIES_PER_DAY = 2;

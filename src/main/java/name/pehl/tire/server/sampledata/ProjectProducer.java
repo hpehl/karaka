@@ -4,7 +4,7 @@ import javax.inject.Inject;
 
 import name.pehl.tire.server.project.entity.Project;
 
-public class ProjectProducer
+class ProjectProducer
 {
     @Inject
     IdGenerator idGenerator;

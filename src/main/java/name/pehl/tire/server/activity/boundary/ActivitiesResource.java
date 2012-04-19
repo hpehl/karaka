@@ -12,7 +12,6 @@ import javax.ws.rs.core.MediaType;
 import name.pehl.tire.server.activity.control.ActivitiesConverter;
 import name.pehl.tire.server.activity.control.ActivityRepository;
 import name.pehl.tire.server.activity.entity.Activity;
-import name.pehl.tire.server.sampledata.ActivitiesProducer;
 import name.pehl.tire.shared.model.Activities;
 
 import org.jboss.resteasy.spi.NotFoundException;
@@ -53,10 +52,6 @@ import static org.joda.time.Weeks.weeks;
 @Produces(MediaType.APPLICATION_JSON)
 public class ActivitiesResource
 {
-    // Can be removed as soon as the repository can be used.
-    @Inject
-    ActivitiesProducer activitiesProducer;
-
     @Inject
     ActivityRepository repository;
 
@@ -73,9 +68,7 @@ public class ActivitiesResource
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(year, month, 1, timeZone);
-        // activities = repository.findByYearMonth(requested.year().get(),
-        // requested.monthOfYear().get());
-        List<Activity> activities = activitiesProducer.forMonth(requested.year().get(), requested.monthOfYear().get());
+        List<Activity> activities = repository.findByYearMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException(String.format("No activities found for year %d and month %d", year, month));
@@ -94,9 +87,7 @@ public class ActivitiesResource
         int year = relative.year().get();
         int requestedMonth = relative.monthOfYear().get();
         DateMidnight requested = new DateMidnight(year, requestedMonth, 1, timeZone);
-        // activities = repository.findByYearMonth(requested.year().get(),
-        // requested.monthOfYear().get());
-        List<Activity> activities = activitiesProducer.forMonth(requested.year().get(), requested.monthOfYear().get());
+        List<Activity> activities = repository.findByYearMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException(String.format("No activities found for relative month %d", month));
@@ -111,9 +102,7 @@ public class ActivitiesResource
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(timeZone);
-        // activities = dao.findByYearMonth(requested.year().get(),
-        // requested.monthOfYear().get());
-        List<Activity> activities = activitiesProducer.forMonth(requested.year().get(), requested.monthOfYear().get());
+        List<Activity> activities = repository.findByYearMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException("No activities found for current month");
@@ -132,10 +121,7 @@ public class ActivitiesResource
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(week);
         DateMidnight requested = new DateMidnight(mdt);
-        // activities = repository.findByYearWeek(requested.year().get(),
-        // requested.weekOfWeekyear().get());
-        List<Activity> activities = activitiesProducer
-                .forWeek(requested.year().get(), requested.weekOfWeekyear().get());
+        List<Activity> activities = repository.findByYearWeek(requested.year().get(), requested.weekOfWeekyear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException(String.format("No activities found for year %d and calendar week %d", year,
@@ -156,10 +142,7 @@ public class ActivitiesResource
         int requestedWeek = relative.weekOfWeekyear().get();
         MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(requestedWeek);
         DateMidnight requested = new DateMidnight(mdt);
-        // activities = repository.findByYearWeek(requested.year().get(),
-        // requested.weekOfWeekyear().get());
-        List<Activity> activities = activitiesProducer
-                .forWeek(requested.year().get(), requested.weekOfWeekyear().get());
+        List<Activity> activities = repository.findByYearWeek(requested.year().get(), requested.weekOfWeekyear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException(String.format("No activities found for relative calendar week %d", week));
@@ -174,9 +157,7 @@ public class ActivitiesResource
     {
         DateTimeZone timeZone = parseTimeZone(timeZoneId);
         DateMidnight requested = new DateMidnight(timeZone);
-        // activities = repository.findByYearWeek(requested.year().get(),
-        // requested.weekOfWeekyear().get());
-        List<Activity> activities = activitiesProducer.forMonth(requested.year().get(), requested.monthOfYear().get());
+        List<Activity> activities = repository.findByYearWeek(requested.year().get(), requested.weekOfWeekyear().get());
         if (activities.isEmpty())
         {
             throw new NotFoundException("No activities found for current calendar week");

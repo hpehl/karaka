@@ -7,7 +7,7 @@ import javax.inject.Inject;
 
 import name.pehl.tire.server.tag.entity.Tag;
 
-public class TagProducer
+class TagProducer
 {
     @Inject
     IdGenerator idGenerator;
