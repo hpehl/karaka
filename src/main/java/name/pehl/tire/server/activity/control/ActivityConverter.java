@@ -24,17 +24,13 @@ public class ActivityConverter extends
         implements
         EntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.shared.model.Activity>
 {
-    @Inject
-    ProjectConverter projectConverter;
+    @Inject ProjectConverter projectConverter;
 
-    @Inject
-    ProjectRepository projectRepository;
+    @Inject ProjectRepository projectRepository;
 
-    @Inject
-    TagRepository tagRepository;
+    @Inject TagRepository tagRepository;
 
-    @Inject
-    TagConverter tagConverter;
+    @Inject TagConverter tagConverter;
 
 
     @Override

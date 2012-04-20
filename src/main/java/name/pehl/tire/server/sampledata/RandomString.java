@@ -6,8 +6,7 @@ import javax.inject.Inject;
 
 public class RandomString
 {
-    @Inject
-    Random random;
+    @Inject Random random;
 
 
     public String next(int length)

@@ -20,12 +20,9 @@ public class ActivityAction
         DELETE
     }
 
-    @Order(1)
-    int rowIndex;
+    @Order(1) int rowIndex;
 
-    @Order(2)
-    Activity activity;
+    @Order(2) Activity activity;
 
-    @Order(3)
-    Action action;
+    @Order(3) Action action;
 }

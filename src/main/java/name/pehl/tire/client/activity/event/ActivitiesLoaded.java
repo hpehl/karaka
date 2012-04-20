@@ -14,9 +14,7 @@ import com.gwtplatform.dispatch.annotation.Order;
 @GenEvent
 public class ActivitiesLoaded
 {
-    @Order(1)
-    Activities activities;
+    @Order(1) Activities activities;
 
-    @Order(2)
-    TimeUnit unit;
+    @Order(2) TimeUnit unit;
 }

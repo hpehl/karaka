@@ -1,5 +1,9 @@
 package name.pehl.tire.server.activity.boundary;
 
+import static name.pehl.tire.shared.model.TimeUnit.*;
+import static org.joda.time.Months.months;
+import static org.joda.time.Weeks.weeks;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,18 +17,14 @@ import javax.ws.rs.core.MediaType;
 import name.pehl.tire.server.activity.control.ActivitiesConverter;
 import name.pehl.tire.server.activity.control.ActivityRepository;
 import name.pehl.tire.server.activity.entity.Activity;
+import name.pehl.tire.server.settings.control.CurrentSettings;
+import name.pehl.tire.server.settings.entity.Settings;
 import name.pehl.tire.shared.model.Activities;
 
 import org.jboss.resteasy.spi.NotFoundException;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
-
-import static name.pehl.tire.shared.model.TimeUnit.DAY;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-import static org.joda.time.Months.months;
-import static org.joda.time.Weeks.weeks;
 
 /**
  * Supported methods:
@@ -40,7 +40,6 @@ import static org.joda.time.Weeks.weeks;
  * <li>GET /activities/today: Find activities
  * </ul>
  * 
- * @todo Need a timezone offset for current* resources
  * @todo Add hyperlinks to current, previous and next activities. If there are
  *       no previous / next activities omit the links
  * @author $Author: harald.pehl $
@@ -51,22 +50,19 @@ import static org.joda.time.Weeks.weeks;
 @Produces(MediaType.APPLICATION_JSON)
 public class ActivitiesResource
 {
-    @Inject
-    ActivityRepository repository;
-
-    @Inject
-    ActivitiesConverter activitiesConverter;
+    @Inject @CurrentSettings Settings settings;
+    @Inject ActivityRepository repository;
+    @Inject ActivitiesConverter activitiesConverter;
 
 
     // --------------------------------------------------------------- by month
 
     @GET
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}")
-    public Activities activitiesByYearMonth(@PathParam("year") int year, @PathParam("month") int month,
-            @QueryParam("tz") String timeZoneId)
+    public Activities activitiesByYearMonth(@PathParam("year") int year, @PathParam("month") int month)
     {
-        DateTimeZone timeZone = parseTimeZone(timeZoneId);
-        DateMidnight requested = new DateMidnight(year, month, 1, timeZone);
+        DateTimeZone timeZone = settings.getTimeZone();
+        DateMidnight requested = new DateMidnight(year, month, 1, settings.getTimeZone());
         List<Activity> activities = repository.findByYearMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
         {
@@ -78,9 +74,9 @@ public class ActivitiesResource
 
     @GET
     @Path("/relative/{month:[+-]?\\d+}")
-    public Activities activitiesByRelativeMonth(@PathParam("month") int month, @QueryParam("tz") String timeZoneId)
+    public Activities activitiesByRelativeMonth(@PathParam("month") int month)
     {
-        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateTimeZone timeZone = settings.getTimeZone();
         DateMidnight now = now(timeZone);
         DateMidnight relative = now.plus(months(month));
         int year = relative.year().get();
@@ -114,10 +110,9 @@ public class ActivitiesResource
 
     @GET
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}")
-    public Activities activitiesByYearWeek(@PathParam("year") int year, @PathParam("week") int week,
-            @QueryParam("tz") String timeZoneId)
+    public Activities activitiesByYearWeek(@PathParam("year") int year, @PathParam("week") int week)
     {
-        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateTimeZone timeZone = settings.getTimeZone();
         MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(week);
         DateMidnight requested = new DateMidnight(mdt);
         List<Activity> activities = repository.findByYearWeek(requested.year().get(), requested.weekOfWeekyear().get());
@@ -132,9 +127,9 @@ public class ActivitiesResource
 
     @GET
     @Path("/relative/cw{week:\\d{1,2}}")
-    public Activities activitiesByRelativeWeek(@PathParam("week") int week, @QueryParam("tz") String timeZoneId)
+    public Activities activitiesByRelativeWeek(@PathParam("week") int week)
     {
-        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateTimeZone timeZone = settings.getTimeZone();
         DateMidnight now = now(timeZone);
         DateMidnight relative = now.plus(weeks(week));
         int year = relative.year().get();
@@ -170,9 +165,9 @@ public class ActivitiesResource
     @GET
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/{day:\\d{1,2}}")
     public Activities activitiesByYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
-            @PathParam("day") int day, @QueryParam("tz") String timeZoneId)
+            @PathParam("day") int day)
     {
-        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateTimeZone timeZone = settings.getTimeZone();
         DateMidnight requested = new DateMidnight(year, month, day, timeZone);
         List<Activity> activities = repository.findByYearMonthDay(requested.year().get(),
                 requested.monthOfYear().get(), requested.dayOfMonth().get());
@@ -187,9 +182,9 @@ public class ActivitiesResource
 
     @GET
     @Path("/today")
-    public Activities activitiesByYearMonthDay(@QueryParam("tz") String timeZoneId)
+    public Activities activitiesByYearMonthDay()
     {
-        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateTimeZone timeZone = settings.getTimeZone();
         DateMidnight requested = new DateMidnight(timeZone);
         List<Activity> activities = repository.findByYearMonthDay(requested.year().get(),
                 requested.monthOfYear().get(), requested.dayOfMonth().get());

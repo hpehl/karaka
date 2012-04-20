@@ -14,9 +14,7 @@ import com.gwtplatform.dispatch.annotation.Out;
 @GenDispatch
 public class GetActivities
 {
-    @In(1)
-    ActivitiesNavigationData and;
+    @In(1) ActivitiesNavigationData and;
 
-    @Out(1)
-    Activities activities;
+    @Out(1) Activities activities;
 }

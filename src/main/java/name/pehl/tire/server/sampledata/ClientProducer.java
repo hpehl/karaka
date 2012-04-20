@@ -11,11 +11,9 @@ import name.pehl.tire.server.client.entity.Client;
 
 class ClientProducer
 {
-    @Inject
-    IdGenerator idGenerator;
+    @Inject IdGenerator idGenerator;
 
-    @Inject
-    RandomString randomString;
+    @Inject RandomString randomString;
 
 
     @Produces

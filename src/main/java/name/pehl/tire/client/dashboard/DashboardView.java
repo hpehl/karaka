@@ -17,11 +17,9 @@ public class DashboardView extends ViewImpl implements DashboardPresenter.MyView
 
     private static DashboardUi uiBinder = GWT.create(DashboardUi.class);
 
-    @UiField
-    FlowPanel newActivityPanel;
+    @UiField FlowPanel newActivityPanel;
 
-    @UiField
-    FlowPanel recentActivitiesPanel;
+    @UiField FlowPanel recentActivitiesPanel;
 
     private final Widget widget;
 

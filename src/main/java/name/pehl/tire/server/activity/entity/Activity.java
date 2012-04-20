@@ -41,27 +41,19 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
 
     private static final long serialVersionUID = 3829933815690771262L;
 
-    @Embedded
-    private Time start;
+    @Embedded private Time start;
 
-    @Embedded
-    @Unindexed
-    private Time end;
+    @Embedded @Unindexed private Time end;
 
-    @Unindexed
-    private String timeZoneId;
+    @Unindexed private String timeZoneId;
 
-    @Transient
-    private DateTimeZone timeZone;
+    @Transient private DateTimeZone timeZone;
 
-    @Unindexed
-    private int pause;
+    @Unindexed private int pause;
 
-    @Unindexed
-    private boolean billable;
+    @Unindexed private boolean billable;
 
-    @Unindexed(IfStopped.class)
-    private Status status;
+    @Unindexed(IfStopped.class) private Status status;
 
     private List<Key<Tag>> tags;
 

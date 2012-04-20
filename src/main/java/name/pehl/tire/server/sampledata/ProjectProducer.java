@@ -11,11 +11,9 @@ import name.pehl.tire.server.project.entity.Project;
 
 class ProjectProducer
 {
-    @Inject
-    IdGenerator idGenerator;
+    @Inject IdGenerator idGenerator;
 
-    @Inject
-    RandomString randomString;
+    @Inject RandomString randomString;
 
 
     @Produces

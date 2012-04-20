@@ -48,8 +48,7 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     /**
      * Use this in leaf presenters, inside their {@link #revealInParent} method.
      */
-    @ContentSlot
-    public static final Type<RevealContentHandler<?>> TYPE_SetMainContent = new Type<RevealContentHandler<?>>();
+    @ContentSlot public static final Type<RevealContentHandler<?>> TYPE_SetMainContent = new Type<RevealContentHandler<?>>();
 
     /**
      * Constant for the static navigation slot.

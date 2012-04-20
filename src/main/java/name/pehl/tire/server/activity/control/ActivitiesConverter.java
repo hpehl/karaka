@@ -22,8 +22,7 @@ import com.google.common.collect.TreeMultimap;
 
 public class ActivitiesConverter
 {
-    @Inject
-    ActivityConverter activityConverter;
+    @Inject ActivityConverter activityConverter;
 
 
     public Activities toModel(DateMidnight requested, DateMidnight now, TimeUnit timeunit, List<Activity> activities)

@@ -13,14 +13,11 @@ import org.slf4j.Logger;
 
 class SampleData
 {
-    @Inject
-    Logger logger;
+    @Inject Logger logger;
 
-    @Inject
-    ActivityRepository activityRepository;
+    @Inject ActivityRepository activityRepository;
 
-    @Inject
-    ActivitiesProducer activitiesProducer;
+    @Inject ActivitiesProducer activitiesProducer;
 
 
     void generateAndPersit()

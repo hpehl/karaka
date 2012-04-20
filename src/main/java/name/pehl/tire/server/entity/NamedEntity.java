@@ -11,8 +11,7 @@ import com.googlecode.objectify.annotation.Unindexed;
 @SuppressWarnings("serial")
 public abstract class NamedEntity extends BaseEntity implements Searchable
 {
-    @Unindexed
-    private String name;
+    @Unindexed private String name;
 
 
     protected NamedEntity(String name)

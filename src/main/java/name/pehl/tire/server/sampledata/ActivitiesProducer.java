@@ -13,6 +13,7 @@ import name.pehl.tire.server.client.control.ClientRepository;
 import name.pehl.tire.server.client.entity.Client;
 import name.pehl.tire.server.project.control.ProjectRepository;
 import name.pehl.tire.server.project.entity.Project;
+import name.pehl.tire.server.settings.control.CurrentSettings;
 import name.pehl.tire.server.settings.entity.Settings;
 import name.pehl.tire.server.tag.control.TagRepository;
 import name.pehl.tire.server.tag.entity.Tag;
@@ -36,9 +37,8 @@ class ActivitiesProducer
     static final int TAGS = 7;
     static final int TAGS_PER_ACTIVITY = 3;
 
-    //@formatter:off
-    @Inject Settings settings;
-    
+    @Inject @CurrentSettings Settings settings;
+
     @Inject @Count(CLIENTS) List<Client> clients;
     @Inject @Count(PROJECTS) List<Project> projects;
     @Inject @Count(TAGS) List<Tag> tags;
@@ -49,7 +49,7 @@ class ActivitiesProducer
     @Inject ClientRepository clientRepository;
     @Inject ProjectRepository projectRepository;
     @Inject TagRepository tagRepository;
-    //@formatter:on
+
 
     public List<Activity> produceActivities(DateMidnight start, DateMidnight end)
     {

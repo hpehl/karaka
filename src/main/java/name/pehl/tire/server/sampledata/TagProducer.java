@@ -11,11 +11,9 @@ import name.pehl.tire.server.tag.entity.Tag;
 
 class TagProducer
 {
-    @Inject
-    IdGenerator idGenerator;
+    @Inject IdGenerator idGenerator;
 
-    @Inject
-    RandomString randomString;
+    @Inject RandomString randomString;
 
 
     @Count

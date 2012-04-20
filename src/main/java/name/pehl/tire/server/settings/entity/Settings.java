@@ -13,8 +13,7 @@ public class Settings extends BaseEntity
 
     private String timeZoneId;
 
-    @Transient
-    private DateTimeZone timeZone;
+    @Transient private DateTimeZone timeZone;
 
 
     public Settings()
