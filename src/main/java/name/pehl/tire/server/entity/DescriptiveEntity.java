@@ -14,7 +14,7 @@ public abstract class DescriptiveEntity extends NamedEntity
     private String description;
 
 
-    public DescriptiveEntity(String name, String description)
+    protected DescriptiveEntity(String name, String description)
     {
         super(name);
         this.description = description;

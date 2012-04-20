@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Embedded;
+import javax.persistence.Transient;
 
 import name.pehl.tire.server.entity.DescriptiveEntity;
 import name.pehl.tire.server.project.entity.Project;
 import name.pehl.tire.server.tag.entity.Tag;
 import name.pehl.tire.shared.model.Status;
 
+import org.joda.time.DateTimeZone;
 import org.joda.time.Minutes;
 
 import com.google.common.collect.ComparisonChain;
@@ -45,7 +47,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     private Time end;
 
     @Unindexed
-    private long pause;
+    private int pause;
 
     @Unindexed
     private boolean billable;
@@ -53,9 +55,12 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     @Unindexed(IfStopped.class)
     private Status status;
 
-    private final List<Key<Tag>> tags;
+    private List<Key<Tag>> tags;
 
     private Key<Project> project;
+
+    @Transient
+    private final DateTimeZone timeZone;
 
 
     // ----------------------------------------------------------- constructors
@@ -66,15 +71,16 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
 
-    public Activity(String name)
+    /**
+     * Construct a new instance of this class
+     * 
+     * @param name
+     * @param timeZone
+     *            If <code>null</code> the default time zone is used.
+     */
+    public Activity(String name, DateTimeZone timeZone)
     {
-        this(name, null, null);
-    }
-
-
-    public Activity(String name, String description)
-    {
-        this(name, description, null);
+        this(name, null, timeZone);
     }
 
 
@@ -83,19 +89,40 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
      * 
      * @param name
      * @param description
-     * @param timeZoneId
+     * @param timeZone
      *            If <code>null</code> the default time zone is used.
      */
-    public Activity(String name, String description, String timeZoneId)
+    public Activity(String name, String description, DateTimeZone timeZone)
     {
         super(name, description);
-        this.start = new Time(timeZoneId);
         this.status = Status.STOPPED;
         this.tags = new ArrayList<Key<Tag>>();
+        if (timeZone == null)
+        {
+            this.timeZone = DateTimeZone.getDefault();
+        }
+        else
+        {
+            this.timeZone = timeZone;
+        }
     }
 
 
     // --------------------------------------------------------- public methods
+
+    public void start()
+    {
+        status = Status.RUNNING;
+        setStart(new Time(timeZone));
+    }
+
+
+    public void stop()
+    {
+        status = Status.STOPPED;
+        setEnd(new Time(timeZone));
+    }
+
 
     @Override
     public int compareTo(Activity that)
@@ -105,8 +132,8 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
 
 
     /**
-     * Returns {@link Class#getSimpleName()} [&lt;id&gt;, &lt;name&gt;,
-     * &lt;start&gt;, &lt;end&gt;, &lt;pause&gt;, &lt;status&gt;]
+     * Returns "Activity [&lt;id&gt;, &lt;name&gt;, &lt;start&gt;, &lt;end&gt;,
+     * &lt;pause&gt;, &lt;status&gt;]"
      * 
      * @return
      * @see name.pehl.tire.server.entity.NamedEntity#toString()
@@ -114,19 +141,19 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     @Override
     public String toString()
     {
-        return new StringBuilder(getClass().getSimpleName()).append(" [").append(getId()).append(", ")
-                .append(getName()).append(", ").append(start).append(", ").append(end).append(", ").append(pause)
-                .append(", ").append(status).append("]").toString();
+        return new StringBuilder().append("Activity [").append(getId()).append(", ").append(getName()).append(", ")
+                .append(start).append(", ").append(end).append(", ").append(pause).append(", ").append(status)
+                .append("]").toString();
     }
 
 
     public int getMinutes()
     {
         int minutes = 0;
-        if (start != null && end != null)
+        if (start != null && end != null && start.getDateTime().isBefore(end.getDateTime()))
         {
             Minutes m = Minutes.minutesBetween(start.getDateTime(), end.getDateTime());
-            minutes = m.getMinutes();
+            minutes = m.getMinutes() - pause;
         }
         return minutes;
     }
@@ -156,13 +183,13 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
 
-    public long getPause()
+    public int getPause()
     {
         return pause;
     }
 
 
-    public void setPause(long pause)
+    public void setPause(int pause)
     {
         this.pause = pause;
     }

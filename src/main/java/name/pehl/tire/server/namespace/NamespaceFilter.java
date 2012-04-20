@@ -13,6 +13,9 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 
+import static com.google.appengine.api.utils.SystemProperty.environment;
+import static com.google.appengine.api.utils.SystemProperty.Environment.Value.Production;
+
 public class NamespaceFilter implements Filter
 {
     @Override
@@ -31,16 +34,19 @@ public class NamespaceFilter implements Filter
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException
     {
-        if (NamespaceManager.get() == null)
+        if (environment.value() == Production)
         {
-            User currentUser = UserServiceFactory.getUserService().getCurrentUser();
-            if (currentUser == null)
+            if (NamespaceManager.get() == null)
             {
-                NamespaceManager.set(NamespaceManager.getGoogleAppsNamespace());
-            }
-            else
-            {
-                NamespaceManager.set(currentUser.getUserId());
+                User currentUser = UserServiceFactory.getUserService().getCurrentUser();
+                if (currentUser == null)
+                {
+                    NamespaceManager.set(NamespaceManager.getGoogleAppsNamespace());
+                }
+                else
+                {
+                    NamespaceManager.set(currentUser.getUserId());
+                }
             }
         }
         chain.doFilter(request, response);

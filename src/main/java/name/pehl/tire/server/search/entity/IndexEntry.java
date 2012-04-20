@@ -13,8 +13,8 @@ public class IndexEntry extends BaseEntity
 {
     private static final long serialVersionUID = 5319841455603288912L;
 
-    private final Key<?> key;
-    private final String data;
+    private Key<?> key;
+    private String data;
 
 
     IndexEntry()
@@ -23,11 +23,11 @@ public class IndexEntry extends BaseEntity
     }
 
 
-    public IndexEntry(Key<?> key, String index)
+    public IndexEntry(Key<?> key, String data)
     {
         super();
         this.key = key;
-        this.data = index;
+        this.data = data;
     }
 
 

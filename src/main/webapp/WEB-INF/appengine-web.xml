@@ -10,7 +10,7 @@
         <include path="**" />
         <include path="**.nocache.*" expiration="0s" />
         <include path="**.cache.*" expiration="365d" />
-        <exclude path="/rest/v1/*" />
+        <exclude path="/rest/*" />
     </static-files>
 
     <system-properties>

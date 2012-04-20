@@ -30,19 +30,19 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
 
     public List<Activity> findByYearMonth(int year, int month)
     {
-        return query().filter("start.year", year).filter("start.month", month).list();
+        return query().filter("start.year =", year).filter("start.month =", month).list();
     }
 
 
     public List<Activity> findByYearWeek(int year, int week)
     {
-        return query().filter("start.year", year).filter("start.week", week).list();
+        return query().filter("start.year =", year).filter("start.week =", week).list();
     }
 
 
     public List<Activity> findByYearMonthDay(int year, int month, int day)
     {
-        return query().filter("start.year", year).filter("start.month", month).filter("start.day", day).list();
+        return query().filter("start.year =", year).filter("start.month =", month).filter("start.day =", day).list();
     }
 
 
@@ -61,7 +61,7 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
     public Activity findActiveActivity() throws EntityNotFoundException
     {
         Activity activity = null;
-        List<Key<Activity>> keys = query().filter("status IN", EnumSet.of(Status.RUNNING, Status.PAUSE)).listKeys();
+        List<Key<Activity>> keys = query().filter("status in", EnumSet.of(Status.RUNNING, Status.PAUSE)).listKeys();
         if (!keys.isEmpty())
         {
             if (keys.size() > 1)

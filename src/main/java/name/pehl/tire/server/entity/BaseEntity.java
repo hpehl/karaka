@@ -16,7 +16,7 @@ public abstract class BaseEntity implements Serializable
     private Long id;
 
 
-    public BaseEntity()
+    protected BaseEntity()
     {
     }
 
@@ -91,12 +91,6 @@ public abstract class BaseEntity implements Serializable
     public String toString()
     {
         return new StringBuilder(getClass().getSimpleName()).append(" [").append(id).append("]").toString();
-    }
-
-
-    public void setId(Long id)
-    {
-        this.id = id;
     }
 
 

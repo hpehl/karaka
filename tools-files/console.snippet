@@ -1,0 +1,20 @@
+import java.util.*;
+import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.images.*;
+import com.google.appengine.api.xmpp.*;
+import com.google.appengine.api.mail.*;
+import com.google.appengine.api.urlfetch.*;
+import com.google.appengine.api.memcache.*;
+import com.googlecode.objectify.*;
+import name.pehl.tire.server.activity.entity.*;
+
+Objectify ofy = ObjectifyService.begin();
+List<Activity> activities = ofy.query(Activity.class)
+	.filter("start.year", new Integer(2012))
+	.filter("start.month", new Integer(2))
+	.list();
+out.println(String.format("Found %d activities", activities.size())); 
+for(Activity activity : activities)
+{
+    out.println(activity);
+}

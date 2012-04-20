@@ -17,6 +17,9 @@ import name.pehl.tire.server.search.entity.IndexEntry;
 import name.pehl.tire.server.search.entity.Searchable;
 import name.pehl.tire.server.tag.entity.Tag;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
@@ -27,7 +30,6 @@ import com.googlecode.objectify.util.DAOBase;
  * following interfaces
  * <ul>
  * <li> {@link Searchable}
- * <li> {@link HasUser}
  * </ul>
  * 
  * @author $Author:$
@@ -35,6 +37,7 @@ import com.googlecode.objectify.util.DAOBase;
  */
 public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
 {
+
     // ------------------------------------------------------ register entities
 
     static
@@ -49,6 +52,7 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
 
     // -------------------------------------------------------- private members
 
+    protected final Logger logger;
     protected final Class<T> clazz;
     protected final Normalizer normalizer;
 
@@ -57,6 +61,8 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
 
     protected BaseEntityRepository(Class<T> clazz, Normalizer normalizer)
     {
+        super();
+        this.logger = LoggerFactory.getLogger(getClass());
         this.clazz = clazz;
         this.normalizer = normalizer;
     }

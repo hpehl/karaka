@@ -17,6 +17,7 @@ import name.pehl.tire.server.tag.control.TagRepository;
 import name.pehl.tire.server.tag.entity.Tag;
 
 import org.joda.time.DateMidnight;
+import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 
 import com.googlecode.objectify.Key;
@@ -76,7 +77,7 @@ class ActivitiesProducer
             int hours = 2 + random.nextInt(6) / activitiesCount;
             for (int j = 0; j < activitiesCount; j++)
             {
-                Activity activity = new Activity(randomString.next(5), randomString.next(10));
+                Activity activity = new Activity(randomString.next(5), randomString.next(10), DateTimeZone.getDefault());
                 activity.setStart(new Time(mdt.toDate()));
                 int hour = mdt.hourOfDay().get() + hours;
                 activity.setEnd(new Time(mdt.copy().hourOfDay().set(hour).toDate()));

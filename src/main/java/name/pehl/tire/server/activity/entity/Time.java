@@ -8,7 +8,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.google.common.collect.ComparisonChain;
-import com.googlecode.objectify.annotation.Unindexed;
 
 /**
  * Value object which is used in {@link Activity} to store the moment at which
@@ -32,14 +31,14 @@ public class Time implements Comparable<Time>
 {
     // -------------------------------------------------------- private members
 
-    @Unindexed
-    private final Date date;
+    private Date date;
+
     @Transient
-    private final DateTime dateTime;
-    private final int year;
-    private final int month;
-    private final int week;
-    private final int day;
+    private DateTime dateTime;
+    private int year;
+    private int month;
+    private int week;
+    private int day;
 
 
     // ----------------------------------------------------------- constructors
@@ -90,11 +89,11 @@ public class Time implements Comparable<Time>
     {
         if (date == null)
         {
-            dateTime = new DateTime(timeZone);
+            this.dateTime = new DateTime(timeZone);
         }
         else
         {
-            dateTime = new DateTime(date.getTime(), timeZone);
+            this.dateTime = new DateTime(date.getTime(), timeZone);
         }
         this.date = dateTime.toDate();
         this.year = dateTime.year().get();

@@ -15,7 +15,7 @@ public abstract class NamedEntity extends BaseEntity implements Searchable
     private String name;
 
 
-    public NamedEntity(String name)
+    protected NamedEntity(String name)
     {
         super();
         this.name = name;
