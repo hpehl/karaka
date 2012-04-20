@@ -1,5 +1,7 @@
 package name.pehl.tire.client.activity.view;
 
+import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,14 +15,13 @@ import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Status;
 import name.pehl.tire.shared.model.Tag;
 
+import com.google.common.base.Strings;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.TextHeader;
-
-import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
 
 /**
  * @author $LastChangedBy:$
@@ -139,7 +140,7 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
             public SafeHtml render(Activity activity)
             {
                 SafeHtml nameDescription = ActivityTemplates.INSTANCE.nameDescription(activity.getName(),
-                        activity.getDescription());
+                        Strings.nullToEmpty(activity.getDescription()));
                 List<Tag> tags = activity.getTags();
                 if (tags.isEmpty())
                 {

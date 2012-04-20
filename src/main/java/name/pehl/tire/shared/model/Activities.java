@@ -1,5 +1,7 @@
 package name.pehl.tire.shared.model;
 
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -7,8 +9,6 @@ import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * @author $Author: harald.pehl $
@@ -294,7 +294,28 @@ public class Activities
 
     public SortedSet<Activity> getActivities()
     {
-        return activities;
+        SortedSet<Activity> computedActivities = new TreeSet<Activity>();
+        switch (unit)
+        {
+            case MONTH:
+                for (Week week : weeks)
+                {
+                    computedActivities.addAll(week.getActivities());
+                }
+                break;
+            case WEEK:
+                for (Day day : days)
+                {
+                    computedActivities.addAll(day.getActivities());
+                }
+                break;
+            case DAY:
+                computedActivities.addAll(activities);
+                break;
+            default:
+                break;
+        }
+        return computedActivities;
     }
 
 
