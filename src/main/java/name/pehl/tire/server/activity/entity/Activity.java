@@ -1,9 +1,11 @@
 package name.pehl.tire.server.activity.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Embedded;
+import javax.persistence.PostLoad;
 import javax.persistence.Transient;
 
 import name.pehl.tire.server.entity.DescriptiveEntity;
@@ -47,6 +49,12 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     private Time end;
 
     @Unindexed
+    private String timeZoneId;
+
+    @Transient
+    private DateTimeZone timeZone;
+
+    @Unindexed
     private int pause;
 
     @Unindexed
@@ -58,9 +66,6 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     private List<Key<Tag>> tags;
 
     private Key<Project> project;
-
-    @Transient
-    private final DateTimeZone timeZone;
 
 
     // ----------------------------------------------------------- constructors
@@ -105,6 +110,31 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
         {
             this.timeZone = timeZone;
         }
+        this.timeZoneId = this.timeZone.getID();
+    }
+
+
+    // ------------------------------------------------------ lifecycle methods
+
+    @PostLoad
+    void restoreDateTimes()
+    {
+        if (timeZoneId == null)
+        {
+            timeZone = DateTimeZone.getDefault();
+        }
+        else
+        {
+            timeZone = DateTimeZone.forID(timeZoneId);
+        }
+        if (start != null && start.date != null)
+        {
+            start.init(start.date, timeZone);
+        }
+        if (end != null && end.date != null)
+        {
+            end.init(end.date, timeZone);
+        }
     }
 
 
@@ -113,14 +143,14 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     public void start()
     {
         status = Status.RUNNING;
-        setStart(new Time(timeZone));
+        setStart(new Time(new Date(), timeZone));
     }
 
 
     public void stop()
     {
         status = Status.STOPPED;
-        setEnd(new Time(timeZone));
+        setEnd(new Time(new Date(), timeZone));
     }
 
 

@@ -31,61 +31,31 @@ public class Time implements Comparable<Time>
 {
     // -------------------------------------------------------- private members
 
-    private Date date;
+    Date date;
 
     @Transient
-    private DateTime dateTime;
-    private int year;
-    private int month;
-    private int week;
-    private int day;
+    DateTime dateTime;
+    int year;
+    int month;
+    int week;
+    int day;
 
 
     // ----------------------------------------------------------- constructors
 
     Time()
     {
-        this(new Date());
+        this(new Date(), DateTimeZone.getDefault());
     }
 
 
-    public Time(Date date)
+    public Time(Date date, DateTimeZone timeZone)
     {
-        this(DateTimeZone.getDefault(), date);
+        init(date, timeZone);
     }
 
 
-    /**
-     * Construct a new instance of this class
-     * 
-     * @param timeZoneId
-     *            If <code>null</code> the default time zone is used.
-     */
-    public Time(String timeZoneId)
-    {
-        this(DateTimeZone.forID(timeZoneId), null);
-    }
-
-
-    /**
-     * Construct a new instance of this class
-     * 
-     * @param timeZoneId
-     *            If <code>null</code> the default time zone is used.
-     */
-    public Time(String timeZoneId, Date date)
-    {
-        this(DateTimeZone.forID(timeZoneId), date);
-    }
-
-
-    public Time(DateTimeZone timeZone)
-    {
-        this(timeZone, null);
-    }
-
-
-    public Time(DateTimeZone timeZone, Date date)
+    void init(Date date, DateTimeZone timeZone)
     {
         if (date == null)
         {
