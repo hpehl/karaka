@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 import name.pehl.tire.server.activity.boundary.ActivitiesResource;
+import name.pehl.tire.server.settings.boundary.SettingsResource;
 
 public class TireApplication extends Application
 {
@@ -16,6 +17,7 @@ public class TireApplication extends Application
     {
         this.classes = new HashSet<Class<?>>();
         this.classes.add(ActivitiesResource.class);
+        this.classes.add(SettingsResource.class);
     }
 
 

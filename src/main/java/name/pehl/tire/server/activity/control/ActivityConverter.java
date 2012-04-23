@@ -20,9 +20,9 @@ import name.pehl.tire.server.tag.entity.Tag;
  * @version $LastChangedRevision:$
  */
 public class ActivityConverter extends
-        AbstractEntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.shared.model.Activity>
-        implements
-        EntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.shared.model.Activity>
+AbstractEntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.shared.model.Activity>
+implements
+EntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.shared.model.Activity>
 {
     @Inject ProjectConverter projectConverter;
 
@@ -45,8 +45,8 @@ public class ActivityConverter extends
         // basic properties
         name.pehl.tire.shared.model.Activity model = new name.pehl.tire.shared.model.Activity(String.valueOf(entity
                 .getId()), entity.getName());
-        model.setStart(entity.getStart().getDate());
-        model.setEnd(entity.getEnd().getDate());
+        model.setStart(entity.getStart().getDateTime().toDate());
+        model.setEnd(entity.getEnd().getDateTime().toDate());
         model.setPause(entity.getPause());
         model.setMinutes(entity.getMinutes());
         model.setBillable(entity.isBillable());

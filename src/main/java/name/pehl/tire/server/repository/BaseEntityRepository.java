@@ -15,6 +15,7 @@ import name.pehl.tire.server.paging.entity.PageResult;
 import name.pehl.tire.server.project.entity.Project;
 import name.pehl.tire.server.search.entity.IndexEntry;
 import name.pehl.tire.server.search.entity.Searchable;
+import name.pehl.tire.server.settings.entity.Settings;
 import name.pehl.tire.server.tag.entity.Tag;
 
 import org.slf4j.Logger;
@@ -47,6 +48,7 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
         ObjectifyService.register(Client.class);
         ObjectifyService.register(IndexEntry.class);
         ObjectifyService.register(Project.class);
+        ObjectifyService.register(Settings.class);
         ObjectifyService.register(Tag.class);
     }
 
@@ -258,6 +260,6 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
             List<T> page = q.offset(pageInfo.getOffset()).limit(pageInfo.getPageSize()).list();
             return new PageResult<T>(pageInfo, page, total);
         }
-        return new PageResult<T>(pageInfo, q.list());
+        return new PageResult<T>(new PageInfo(0, PageInfo.MAX_PAGE_SIZE), q.list());
     }
 }

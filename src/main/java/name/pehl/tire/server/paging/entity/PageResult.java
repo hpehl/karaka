@@ -1,14 +1,14 @@
 package name.pehl.tire.server.paging.entity;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * Contains the results for one page of a larger dataset based on a
@@ -38,8 +38,6 @@ public class PageResult<T> implements Iterable<T>
 
     public static final int MIN_TOTAL = 0;
     public static final int MAX_TOTAL = 0xffffff;
-
-    private static final long serialVersionUID = 1L;
 
     // -------------------------------------------------------- private members
 
