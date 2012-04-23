@@ -1,21 +1,23 @@
 package name.pehl.tire.client.dashboard;
 
+import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.GetActivitiesAction;
 import name.pehl.tire.client.activity.event.GetActivitiesResult;
-import name.pehl.tire.client.activity.model.ActivitiesNavigationData;
-import name.pehl.tire.client.activity.model.ActivitiesNavigationDataAdapter;
+import name.pehl.tire.client.activity.model.ActivitiesNavigator;
 import name.pehl.tire.client.activity.presenter.NewActivityPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.TimeUnit;
 
-import com.google.web.bindery.event.shared.EventBus;
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -27,6 +29,8 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import static java.util.logging.Level.FINE;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * @author $Author: harald.pehl $
@@ -55,14 +59,20 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
      */
     public static final Object SLOT_RecentActivities = new Object();
 
+    static final String PARAM_YEAR = "year";
+    static final String PARAM_MONTH = "month";
+    static final String PARAM_WEEK = "week";
+    static final String PARAM_OFFSET = "offset";
+    static final String VALUE_CURRENT = "current";
+    static final String VALUE_RELATIVE = "relative";
+
     private static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
-    private boolean useCache;
-    private ActivitiesNavigationData currentAnd;
     private final DispatchAsync dispatcher;
     private final PlaceManager placeManager;
     private final NewActivityPresenter newActivityPresenter;
     private final RecentActivitiesPresenter recentActivitiesPresenter;
+    private ActivitiesNavigator activitiesNavigator;
 
 
     @Inject
@@ -76,9 +86,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         this.placeManager = placeManager;
         this.newActivityPresenter = newActivityPresenter;
         this.recentActivitiesPresenter = recentActivitiesPresenter;
-
-        this.currentAnd = null;
-        this.useCache = false;
     }
 
 
@@ -106,10 +113,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     /**
      * Turns the parameters in the place request into an
-     * {@link ActivitiesNavigationData} instance using the
-     * {@link ActivitiesNavigationDataAdapter}. If the parsed
-     * {@link ActivitiesNavigationData} differs from the cached one, new data is
-     * requested from the server.
+     * {@link ActivitiesNavigator} instance.
      * 
      * @param request
      * @see com.gwtplatform.mvp.client.Presenter#prepareFromRequest(com.gwtplatform.mvp.client.proxy.PlaceRequest)
@@ -118,48 +122,82 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     public void prepareFromRequest(PlaceRequest request)
     {
         super.prepareFromRequest(request);
-        if (currentAnd != null && request.getParameterNames().isEmpty())
+        activitiesNavigator = fromPlaceRequest(request);
+    }
+
+
+    private ActivitiesNavigator fromPlaceRequest(PlaceRequest request)
+    {
+        Set<String> names = request.getParameterNames();
+        String year = request.getParameter(PARAM_YEAR, "0");
+        String month = request.getParameter(PARAM_MONTH, "0");
+        String week = request.getParameter(PARAM_WEEK, "0");
+
+        if (names.contains(PARAM_MONTH) && VALUE_CURRENT.equals(month))
         {
-            // Special case when activities are already present and coming from
-            // another place
-            useCache = true;
+            return new ActivitiesNavigator(MONTH);
+        }
+        else if (names.contains(PARAM_MONTH) && VALUE_RELATIVE.equals(month))
+        {
+            int offsetValue = parseInt(request.getParameter(PARAM_OFFSET, "0"));
+            return new ActivitiesNavigator(0, offsetValue, 0, MONTH);
+        }
+        else if (names.contains(PARAM_WEEK) && VALUE_CURRENT.equals(week))
+        {
+            return new ActivitiesNavigator(WEEK);
+        }
+        else if (names.contains(PARAM_WEEK) && VALUE_RELATIVE.equals(week))
+        {
+            int offsetValue = parseInt(request.getParameter(PARAM_OFFSET, "0"));
+            return new ActivitiesNavigator(0, 0, offsetValue, WEEK);
         }
         else
         {
-            ActivitiesNavigationData and = new ActivitiesNavigationDataAdapter().fromPlaceRequest(request);
-            // TODO Does caching really make sense, or is it better to request
-            // the data from the server each time?
-            if (!and.equals(currentAnd))
+            TimeUnit unit = TimeUnit.WEEK;
+            int yearValue = parseInt(year);
+            int monthValue = parseInt(month);
+            int weekValue = parseInt(week);
+            if (names.contains(PARAM_YEAR) && names.contains(PARAM_MONTH) && !names.contains(PARAM_WEEK))
             {
-                useCache = false;
-                currentAnd = and;
+                unit = TimeUnit.MONTH;
             }
+            return new ActivitiesNavigator(yearValue, monthValue, weekValue, unit);
         }
+    }
+
+
+    private int parseInt(String value)
+    {
+        int result = 0;
+        try
+        {
+            result = Integer.parseInt(value);
+        }
+        catch (NumberFormatException e)
+        {
+            logger.log(Level.WARNING, "Cannot parse \"" + value + "\" as integer");
+        }
+        return result;
     }
 
 
     @Override
     protected void onReset()
     {
-        if (!useCache)
+        super.onReset();
+        logger.log(FINE, "Requesting new activities");
+        dispatcher.execute(new GetActivitiesAction(activitiesNavigator), new TireCallback<GetActivitiesResult>(
+                placeManager)
         {
-            logger.log(FINE, "Requesting new activities");
-            dispatcher.execute(new GetActivitiesAction(currentAnd), new TireCallback<GetActivitiesResult>(placeManager)
+            @Override
+            public void onSuccess(GetActivitiesResult result)
             {
-                @Override
-                public void onSuccess(GetActivitiesResult result)
+                Activities activities = result.getActivities();
+                if (activities != null)
                 {
-                    Activities activities = result.getActivities();
-                    if (activities != null)
-                    {
-                        ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities, currentAnd.getUnit());
-                    }
+                    ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities, activitiesNavigator.getUnit());
                 }
-            });
-        }
-        else
-        {
-            logger.log(FINE, "Using cached activities");
-        }
+            }
+        });
     }
 }
