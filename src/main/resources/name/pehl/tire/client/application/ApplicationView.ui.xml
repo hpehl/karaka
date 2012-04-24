@@ -69,7 +69,7 @@
             </g:HTMLPanel>
         </g:east>
         <g:center>
-            <g:ScrollPanel ui:field="mainPanel" addStyleNames="{style.mainPanel} {style.roundedWhiteBox}"></g:ScrollPanel>
+            <g:SimplePanel ui:field="mainPanel" addStyleNames="{style.mainPanel} {style.roundedWhiteBox}"></g:SimplePanel>
         </g:center>
     </g:DockLayoutPanel>
 </ui:UiBinder> 

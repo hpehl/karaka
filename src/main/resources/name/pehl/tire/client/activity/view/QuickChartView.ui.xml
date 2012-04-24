@@ -1,11 +1,11 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
-    xmlns:tire="urn:import:name.pehl.tire.client.activity.view">
+    xmlns:tac="urn:import:name.pehl.tire.client.activity.view">
 
     <g:HTMLPanel>
-        <tire:WeekChartWidget ui:field="weekChart" width="200" height="200"
+        <tac:WeekChartWidget ui:field="weekChart" width="200" height="200"
             legendTitles="Mo, Tue, Wed, Thu, Fr, Sat, Sun" />
-        <tire:MonthChartWidget ui:field="monthChart" width="200" height="200" legendTitles="CW?, CW?, CW?, CW?" />
+        <tac:MonthChartWidget ui:field="monthChart" width="200" height="200" legendTitles="CW?, CW?, CW?, CW?" />
     </g:HTMLPanel>
 
 </ui:UiBinder> 
