@@ -1,9 +1,5 @@
 package name.pehl.tire.server.activity.boundary;
 
-import static name.pehl.tire.shared.model.TimeUnit.*;
-import static org.joda.time.Months.months;
-import static org.joda.time.Weeks.weeks;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,6 +21,12 @@ import org.jboss.resteasy.spi.NotFoundException;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
+
+import static name.pehl.tire.shared.model.TimeUnit.DAY;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+import static org.joda.time.Months.months;
+import static org.joda.time.Weeks.weeks;
 
 /**
  * Supported methods:
@@ -126,7 +128,7 @@ public class ActivitiesResource
 
 
     @GET
-    @Path("/relative/cw{week:\\d{1,2}}")
+    @Path("/relative/cw{week:[+-]?\\d+}")
     public Activities activitiesByRelativeWeek(@PathParam("week") int week)
     {
         DateTimeZone timeZone = settings.getTimeZone();

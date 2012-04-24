@@ -27,7 +27,8 @@ public class SampleDataContextListener implements ServletContextListener
                 Bean<SampleData> bean = (Bean<SampleData>) beanManager.getBeans(SampleData.class).iterator().next();
                 CreationalContext<SampleData> context = beanManager.createCreationalContext(bean);
                 SampleData sampleData = (SampleData) beanManager.getReference(bean, SampleData.class, context);
-                sampleData.generateAndPersit();
+                sampleData.cleanup();
+                sampleData.persit();
             }
         }
     }

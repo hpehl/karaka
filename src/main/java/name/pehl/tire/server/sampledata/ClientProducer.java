@@ -4,31 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 
 import name.pehl.tire.server.client.entity.Client;
 
 class ClientProducer
 {
-    @Inject IdGenerator idGenerator;
-
-    @Inject RandomString randomString;
+    static String[] names = new String[] {"ACME", "FooBar", "United", "Blabla"};
+    @Inject LoremIpsum loremIpsum;
 
 
     @Produces
-    @Count
-    public List<Client> produceClients(InjectionPoint ip)
+    public List<Client> produceClients()
     {
         List<Client> clients = new ArrayList<Client>();
-        Count count = ip.getAnnotated().getAnnotation(Count.class);
-        if (count != null && count.value() > 0)
+        for (String name : names)
         {
-            for (int i = 0; i < count.value(); i++)
-            {
-                Client client = new Client("Client " + randomString.next(5), randomString.next(10));
-                clients.add(client);
-            }
+            Client client = new Client(name, loremIpsum.randomWords(3));
+            clients.add(client);
         }
         return clients;
     }
