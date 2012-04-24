@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.activity.model.ActivitiesNavigator;
-import name.pehl.tire.client.activity.model.ActivitiesNavigatorAdapter;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.TimeUnit;
@@ -49,10 +48,9 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
     private static Logger logger = Logger.getLogger(RecentActivitiesPresenter.class.getName());
 
     private final PlaceManager placeManager;
-    private final ActivitiesNavigatorAdapter anda;
     private final EditActivityPresenter editActivityPresenter;
-    private Activities currentActivities;
-    private ActivitiesNavigator currentAnd;
+    private Activities activities;
+    private ActivitiesNavigator activitiesNavigator;
 
 
     @Inject
@@ -61,7 +59,6 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
     {
         super(eventBus, view);
         this.placeManager = placeManager;
-        this.anda = new ActivitiesNavigatorAdapter();
         this.editActivityPresenter = editActivityPresenter;
 
         getView().setUiHandlers(this);
@@ -72,9 +69,9 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
     @Override
     public final void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
-        currentAnd = fromEvent(event);
-        currentActivities = event.getActivities();
-        getView().updateActivities(currentActivities);
+        activitiesNavigator = fromEvent(event);
+        activities = event.getActivities();
+        getView().updateActivities(activities);
     }
 
 
@@ -93,41 +90,42 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
                 return ActivitiesNavigator.forWeek(activities.getYear(), activities.getWeek());
             }
         }
+        return new ActivitiesNavigator();
     }
 
 
     @Override
     public void onRelative(int offset)
     {
-        placeManager.revealPlace(anda.toPlaceRequest(currentAnd.relative(offset)));
+        placeManager.revealPlace(activitiesNavigator.relative(offset).toPlaceRequest());
     }
 
 
     @Override
     public void onPrev()
     {
-        placeManager.revealPlace(anda.toPlaceRequest(currentAnd.decrease()));
+        placeManager.revealPlace(activitiesNavigator.decrease().toPlaceRequest());
     }
 
 
     @Override
     public void onCurrent()
     {
-        placeManager.revealPlace(anda.toPlaceRequest(currentAnd.current()));
+        placeManager.revealPlace(activitiesNavigator.current().toPlaceRequest());
     }
 
 
     @Override
     public void onNext()
     {
-        placeManager.revealPlace(anda.toPlaceRequest(currentAnd.increase()));
+        placeManager.revealPlace(activitiesNavigator.increase().toPlaceRequest());
     }
 
 
     @Override
     public void changeUnit(TimeUnit unit)
     {
-        currentAnd = currentAnd.changeUnit(unit);
+        activitiesNavigator = activitiesNavigator.changeUnit(unit);
     }
 
 

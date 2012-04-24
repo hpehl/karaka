@@ -1,7 +1,5 @@
 package name.pehl.tire.client.dashboard;
 
-import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
@@ -14,7 +12,6 @@ import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.Activities;
-import name.pehl.tire.shared.model.TimeUnit;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -29,8 +26,6 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import static java.util.logging.Level.FINE;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * @author $Author: harald.pehl $
@@ -58,13 +53,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
      * Constant for the recent activities slot.
      */
     public static final Object SLOT_RecentActivities = new Object();
-
-    static final String PARAM_YEAR = "year";
-    static final String PARAM_MONTH = "month";
-    static final String PARAM_WEEK = "week";
-    static final String PARAM_OFFSET = "offset";
-    static final String VALUE_CURRENT = "current";
-    static final String VALUE_RELATIVE = "relative";
 
     private static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
@@ -122,62 +110,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     public void prepareFromRequest(PlaceRequest request)
     {
         super.prepareFromRequest(request);
-        activitiesNavigator = fromPlaceRequest(request);
-    }
-
-
-    private ActivitiesNavigator fromPlaceRequest(PlaceRequest request)
-    {
-        Set<String> names = request.getParameterNames();
-        String year = request.getParameter(PARAM_YEAR, "0");
-        String month = request.getParameter(PARAM_MONTH, "0");
-        String week = request.getParameter(PARAM_WEEK, "0");
-
-        if (names.contains(PARAM_MONTH) && VALUE_CURRENT.equals(month))
-        {
-            return new ActivitiesNavigator(MONTH);
-        }
-        else if (names.contains(PARAM_MONTH) && VALUE_RELATIVE.equals(month))
-        {
-            int offsetValue = parseInt(request.getParameter(PARAM_OFFSET, "0"));
-            return new ActivitiesNavigator(0, offsetValue, 0, MONTH);
-        }
-        else if (names.contains(PARAM_WEEK) && VALUE_CURRENT.equals(week))
-        {
-            return new ActivitiesNavigator(WEEK);
-        }
-        else if (names.contains(PARAM_WEEK) && VALUE_RELATIVE.equals(week))
-        {
-            int offsetValue = parseInt(request.getParameter(PARAM_OFFSET, "0"));
-            return new ActivitiesNavigator(0, 0, offsetValue, WEEK);
-        }
-        else
-        {
-            TimeUnit unit = TimeUnit.WEEK;
-            int yearValue = parseInt(year);
-            int monthValue = parseInt(month);
-            int weekValue = parseInt(week);
-            if (names.contains(PARAM_YEAR) && names.contains(PARAM_MONTH) && !names.contains(PARAM_WEEK))
-            {
-                unit = TimeUnit.MONTH;
-            }
-            return new ActivitiesNavigator(yearValue, monthValue, weekValue, unit);
-        }
-    }
-
-
-    private int parseInt(String value)
-    {
-        int result = 0;
-        try
-        {
-            result = Integer.parseInt(value);
-        }
-        catch (NumberFormatException e)
-        {
-            logger.log(Level.WARNING, "Cannot parse \"" + value + "\" as integer");
-        }
-        return result;
+        activitiesNavigator = ActivitiesNavigator.fromPlaceRequest(request);
     }
 
 

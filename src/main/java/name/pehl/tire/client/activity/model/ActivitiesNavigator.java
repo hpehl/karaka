@@ -1,8 +1,15 @@
 package name.pehl.tire.client.activity.model;
 
 import java.util.EnumSet;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.shared.model.TimeUnit;
+
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
@@ -24,7 +31,7 @@ import static name.pehl.tire.shared.model.TimeUnit.WEEK;
  * @version $Date: 2010-12-20 15:50:23 +0100 (Mo, 20. Dez 2010) $ $Revision: 180
  *          $
  */
-public class ActivitiesNavigationData
+public class ActivitiesNavigator
 {
     // -------------------------------------------------------------- constants
 
@@ -34,6 +41,15 @@ public class ActivitiesNavigationData
      * Developers need something to do for the next millenium change ;-)
      */
     public static final int MAX_YEAR = 2999;
+
+    public static final String PARAM_YEAR = "year";
+    public static final String PARAM_MONTH = "month";
+    public static final String PARAM_WEEK = "week";
+    public static final String PARAM_OFFSET = "offset";
+    public static final String VALUE_CURRENT = "current";
+    public static final String VALUE_RELATIVE = "relative";
+
+    private static final Logger logger = Logger.getLogger(ActivitiesNavigator.class.getName());
 
     // ---------------------------------------------------------- inner classes
 
@@ -45,19 +61,19 @@ public class ActivitiesNavigationData
 
     // ----------------------------------------------------------- constructors
 
-    public ActivitiesNavigationData()
+    public ActivitiesNavigator()
     {
         this(0, 0, 0, WEEK);
     }
 
 
-    ActivitiesNavigationData(TimeUnit unit)
+    public ActivitiesNavigator(TimeUnit unit)
     {
         this(0, 0, 0, unit);
     }
 
 
-    ActivitiesNavigationData(int year, int month, int week, TimeUnit unit)
+    public ActivitiesNavigator(int year, int month, int week, TimeUnit unit)
     {
         this.year = year;
         this.month = month;
@@ -105,7 +121,7 @@ public class ActivitiesNavigationData
         {
             return false;
         }
-        ActivitiesNavigationData other = (ActivitiesNavigationData) obj;
+        ActivitiesNavigator other = (ActivitiesNavigator) obj;
         if (year != other.year)
         {
             return false;
@@ -138,25 +154,25 @@ public class ActivitiesNavigationData
 
     // -------------------------------------------------------- factory methods
 
-    public static ActivitiesNavigationData forMonth(int year, int month)
+    public static ActivitiesNavigator forMonth(int year, int month)
     {
-        return new ActivitiesNavigationData(year, month, 0, MONTH);
+        return new ActivitiesNavigator(year, month, 0, MONTH);
     }
 
 
-    public static ActivitiesNavigationData forWeek(int year, int week)
+    public static ActivitiesNavigator forWeek(int year, int week)
     {
-        return new ActivitiesNavigationData(year, 0, week, WEEK);
+        return new ActivitiesNavigator(year, 0, week, WEEK);
     }
 
 
-    public ActivitiesNavigationData current()
+    public ActivitiesNavigator current()
     {
-        return new ActivitiesNavigationData(0, 0, 0, unit);
+        return new ActivitiesNavigator(0, 0, 0, unit);
     }
 
 
-    public ActivitiesNavigationData relative(int offset)
+    public ActivitiesNavigator relative(int offset)
     {
         if (offset > 0)
         {
@@ -169,29 +185,29 @@ public class ActivitiesNavigationData
         }
         if (offset == 0)
         {
-            return new ActivitiesNavigationData(0, 0, 0, unit);
+            return new ActivitiesNavigator(0, 0, 0, unit);
         }
         else
         {
             if (unit == TimeUnit.MONTH)
             {
-                return new ActivitiesNavigationData(0, offset, 0, unit);
+                return new ActivitiesNavigator(0, offset, 0, unit);
             }
             else
             {
-                return new ActivitiesNavigationData(0, 0, offset, unit);
+                return new ActivitiesNavigator(0, 0, offset, unit);
             }
         }
     }
 
 
-    public ActivitiesNavigationData changeUnit(TimeUnit newUnit)
+    public ActivitiesNavigator changeUnit(TimeUnit newUnit)
     {
-        return new ActivitiesNavigationData(year, month, week, newUnit);
+        return new ActivitiesNavigator(year, month, week, newUnit);
     }
 
 
-    public ActivitiesNavigationData increase()
+    public ActivitiesNavigator increase()
     {
         int newYear = year;
         int newMonth = month;
@@ -214,11 +230,11 @@ public class ActivitiesNavigationData
                 newYear = internalIncreaseYear();
             }
         }
-        return new ActivitiesNavigationData(newYear, newMonth, newWeek, unit);
+        return new ActivitiesNavigator(newYear, newMonth, newWeek, unit);
     }
 
 
-    public ActivitiesNavigationData decrease()
+    public ActivitiesNavigator decrease()
     {
         int newYear = year;
         int newMonth = month;
@@ -241,7 +257,7 @@ public class ActivitiesNavigationData
                 newYear = internalDecreaseYear();
             }
         }
-        return new ActivitiesNavigationData(newYear, newMonth, newWeek, unit);
+        return new ActivitiesNavigator(newYear, newMonth, newWeek, unit);
     }
 
 
@@ -262,6 +278,103 @@ public class ActivitiesNavigationData
             return year - 1;
         }
         return year;
+    }
+
+
+    // ----------------------------------------------------- conversion methods
+
+    public static ActivitiesNavigator fromPlaceRequest(PlaceRequest request)
+
+    {
+        Set<String> names = request.getParameterNames();
+        String year = request.getParameter(ActivitiesNavigator.PARAM_YEAR, "0");
+        String month = request.getParameter(ActivitiesNavigator.PARAM_MONTH, "0");
+        String week = request.getParameter(ActivitiesNavigator.PARAM_WEEK, "0");
+
+        if (names.contains(ActivitiesNavigator.PARAM_MONTH) && ActivitiesNavigator.VALUE_CURRENT.equals(month))
+        {
+            return new ActivitiesNavigator(MONTH);
+        }
+        else if (names.contains(ActivitiesNavigator.PARAM_MONTH) && ActivitiesNavigator.VALUE_RELATIVE.equals(month))
+        {
+            int offsetValue = parseInt(request.getParameter(PARAM_OFFSET, "0"));
+            return new ActivitiesNavigator(0, offsetValue, 0, MONTH);
+        }
+        else if (names.contains(PARAM_WEEK) && VALUE_CURRENT.equals(week))
+        {
+            return new ActivitiesNavigator(WEEK);
+        }
+        else if (names.contains(PARAM_WEEK) && VALUE_RELATIVE.equals(week))
+        {
+            int offsetValue = parseInt(request.getParameter(PARAM_OFFSET, "0"));
+            return new ActivitiesNavigator(0, 0, offsetValue, WEEK);
+        }
+        else
+        {
+            TimeUnit unit = TimeUnit.WEEK;
+            int yearValue = parseInt(year);
+            int monthValue = parseInt(month);
+            int weekValue = parseInt(week);
+            if (names.contains(PARAM_YEAR) && names.contains(PARAM_MONTH) && !names.contains(PARAM_WEEK))
+            {
+                unit = TimeUnit.MONTH;
+            }
+            return new ActivitiesNavigator(yearValue, monthValue, weekValue, unit);
+        }
+    }
+
+
+    private static int parseInt(String value)
+    {
+        int result = 0;
+        try
+        {
+            result = Integer.parseInt(value);
+        }
+        catch (NumberFormatException e)
+        {
+            logger.log(Level.WARNING, "Cannot parse \"" + value + "\" as integer");
+        }
+        return result;
+    }
+
+
+    public PlaceRequest toPlaceRequest()
+    {
+        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard);
+        if (unit == TimeUnit.MONTH)
+        {
+            if (year == 0 && month == 0)
+            {
+                placeRequest = placeRequest.with(PARAM_MONTH, VALUE_CURRENT);
+            }
+            else if (year == 0 && month != 0)
+            {
+                placeRequest = placeRequest.with(PARAM_MONTH, VALUE_RELATIVE).with(PARAM_OFFSET, String.valueOf(month));
+            }
+            else
+            {
+                placeRequest = placeRequest.with(PARAM_YEAR, String.valueOf(year)).with(PARAM_MONTH,
+                        String.valueOf(month));
+            }
+        }
+        else if (unit == TimeUnit.WEEK)
+        {
+            if (year == 0 && week == 0)
+            {
+                placeRequest = placeRequest.with(PARAM_WEEK, VALUE_CURRENT);
+            }
+            else if (year == 0 && week != 0)
+            {
+                placeRequest = placeRequest.with(PARAM_WEEK, VALUE_RELATIVE).with(PARAM_OFFSET, String.valueOf(week));
+            }
+            else
+            {
+                placeRequest = placeRequest.with(PARAM_YEAR, String.valueOf(year)).with(PARAM_WEEK,
+                        String.valueOf(week));
+            }
+        }
+        return placeRequest;
     }
 
 

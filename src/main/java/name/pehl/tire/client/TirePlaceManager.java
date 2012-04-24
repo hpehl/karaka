@@ -24,6 +24,6 @@ public class TirePlaceManager extends PlaceManagerImpl
     @Override
     public void revealDefaultPlace()
     {
-        revealPlace(defaultPlaceRequest);
+        revealPlace(defaultPlaceRequest, false);
     }
 }
