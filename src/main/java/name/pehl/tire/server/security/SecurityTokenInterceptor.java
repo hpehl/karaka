@@ -16,6 +16,9 @@ import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.UnauthorizedException;
 import org.jboss.resteasy.spi.interception.PreProcessInterceptor;
 
+import static com.google.appengine.api.utils.SystemProperty.environment;
+import static com.google.appengine.api.utils.SystemProperty.Environment.Value.Production;
+
 /**
  * @author $Author: harald.pehl $
  * @version $Revision: 180 $
@@ -29,11 +32,14 @@ public class SecurityTokenInterceptor implements PreProcessInterceptor, Security
     public ServerResponse preProcess(HttpRequest request, ResourceMethod method) throws Failure,
             WebApplicationException
     {
-        String token = readToken(request);
-        String cookie = readCookie(request);
-        if (!(token.equals(cookie)))
+        if (environment.value() == Production)
         {
-            throw new UnauthorizedException("Invalid security token");
+            String token = readToken(request);
+            String cookie = readCookie(request);
+            if (!(token.equals(cookie)))
+            {
+                throw new UnauthorizedException("Invalid security token");
+            }
         }
         return null;
     }

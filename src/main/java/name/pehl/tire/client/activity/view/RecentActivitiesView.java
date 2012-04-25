@@ -1,7 +1,5 @@
 package name.pehl.tire.client.activity.view;
 
-import com.google.inject.Inject;
-
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesUiHandlers;
@@ -18,6 +16,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
@@ -34,6 +33,7 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
     // @formatter:off
     interface RecentActivitiesUi extends UiBinder<Widget, RecentActivitiesView> {}
     private static RecentActivitiesUi uiBinder = GWT.create(RecentActivitiesUi.class);
+    // @formatter:on
 
     @UiField InlineLabel header;
     @UiField SvgPath previous;
@@ -43,7 +43,6 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
     @UiField SvgPath currentMonth;
     @UiField SvgPath currentWeek;
     @UiField(provided = true) ActivitiesTable activitiesTable;
-    // @formatter:on
 
     private final I18n i18n;
     private final Widget widget;

@@ -50,7 +50,11 @@ public abstract class TireActionHandler<T, A extends Action<R>, R extends Result
         if (action.isSecured())
         {
             // Add the security token as header
-            method = method.header(securityCookieName, securityCookieAccessor.getCookieContent());
+            String cookieContent = securityCookieAccessor.getCookieContent();
+            if (cookieContent != null)
+            {
+                method = method.header(securityCookieName, cookieContent);
+            }
         }
         method.text(securityCookieName).send(new JsonCallback()
         {

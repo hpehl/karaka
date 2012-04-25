@@ -1,7 +1,7 @@
 package name.pehl.tire.client.ui;
 
 import com.google.gwt.user.client.ui.HasText;
-import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -23,7 +23,7 @@ public final class UiUtils
      * @param container
      * @param content
      */
-    public static void setContent(Panel container, Widget content)
+    public static void setContent(HasWidgets container, Widget content)
     {
         if (container != null)
         {
