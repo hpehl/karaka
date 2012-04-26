@@ -25,26 +25,13 @@
 			cursor: pointer;
 		}
 		
-		.container {
-			padding: 10px 0;
-			/*
-						            width: 100%;
-						            box-sizing: border-box;
-						            -o-box-sizing: border-box;
-						            -icab-box-sizing: border-box;
-						            -khtml-box-sizing: border-box;
-						            -moz-box-sizing: border-box;
-						            -webkit-box-sizing: border-box;
-						            */
-		}
-		
 		.table {
 			width: 100%;
 		}
 	</ui:style>
 
-	<g:LayoutPanel>
-		<g:layer>
+	<g:DockLayoutPanel unit="PX">
+		<g:north size="52">
 			<g:HTMLPanel>
 				<h1 class="{style.noBorder}">
 					<g:InlineLabel ui:field="header">Recent Activities</g:InlineLabel>
@@ -73,11 +60,12 @@
 					</div>
 				</h1>
 			</g:HTMLPanel>
-		</g:layer>
-		<g:layer top="40px" height="100%">
-			<g:CustomScrollPanel addStyleNames="{style.container}">
-				<tac:ActivitiesTable ui:field="activitiesTable" addStyleNames="{style.table}" />
-			</g:CustomScrollPanel>
-		</g:layer>
-	</g:LayoutPanel>
+		</g:north>
+		<g:center>
+			<g:ScrollPanel>
+				<tac:ActivitiesTable ui:field="activitiesTable"
+					addStyleNames="{style.table}" />
+			</g:ScrollPanel>
+		</g:center>
+	</g:DockLayoutPanel>
 </ui:UiBinder> 

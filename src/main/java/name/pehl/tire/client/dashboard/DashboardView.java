@@ -5,8 +5,7 @@ import name.pehl.tire.client.ui.UiUtils;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.SimpleLayoutPanel;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
 
@@ -18,8 +17,8 @@ public class DashboardView extends ViewImpl implements DashboardPresenter.MyView
 
     private static DashboardUi uiBinder = GWT.create(DashboardUi.class);
 
-    @UiField FlowPanel newActivityPanel;
-    @UiField SimpleLayoutPanel recentActivitiesPanel;
+    @UiField HasWidgets newActivityPanel;
+    @UiField HasWidgets recentActivitiesPanel;
     private final Widget widget;
 
 

@@ -2,12 +2,12 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
-	<g:LayoutPanel>
-		<g:layer>
+	<g:DockLayoutPanel unit="PX">
+		<g:north size="118">
 			<g:FlowPanel ui:field="newActivityPanel" />
-		</g:layer>
-		<g:layer top="120px" height="100%">
+		</g:north>
+		<g:center>
 			<g:SimpleLayoutPanel ui:field="recentActivitiesPanel" />
-		</g:layer>
-	</g:LayoutPanel>
+		</g:center>
+	</g:DockLayoutPanel>
 </ui:UiBinder> 

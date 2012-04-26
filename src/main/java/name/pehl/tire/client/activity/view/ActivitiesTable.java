@@ -1,7 +1,5 @@
 package name.pehl.tire.client.activity.view;
 
-import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +20,8 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.TextHeader;
+
+import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
 
 /**
  * @author $LastChangedBy:$
