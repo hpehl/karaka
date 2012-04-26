@@ -39,7 +39,7 @@
 
 
 	<properties>
-		<gae.version>1.6.3</gae.version>
+		<gae.version>1.6.4</gae.version>
 		<gin.version>1.5.0</gin.version>
 		<guava.version>11.0.2</guava.version>
 		<gwt.version>2.4.0</gwt.version>
