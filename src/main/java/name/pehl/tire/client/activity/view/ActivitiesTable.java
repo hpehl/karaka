@@ -152,7 +152,10 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
                     safeHtmlBuilder.append(nameDescription);
                     for (Tag tag : tags)
                     {
-                        safeHtmlBuilder.append(' ').append(ActivityTemplates.INSTANCE.tag(tag.getName()));
+                        if (tag.getName() != null)
+                        {
+                            safeHtmlBuilder.append(' ').append(ActivityTemplates.INSTANCE.tag(tag.getName()));
+                        }
                     }
                     return safeHtmlBuilder.toSafeHtml();
                 }
