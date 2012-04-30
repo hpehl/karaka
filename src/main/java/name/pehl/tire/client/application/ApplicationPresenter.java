@@ -1,13 +1,12 @@
 package name.pehl.tire.client.application;
 
-import com.google.inject.Inject;
-
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
 import name.pehl.tire.client.cockpit.CockpitPresenter;
 import name.pehl.tire.client.navigation.NavigationPresenter;
 
-import com.google.web.bindery.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
@@ -65,21 +64,28 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
      */
     public static final Object SLOT_QuickChart = new Object();
 
+    /**
+     * Constant for the static message slot.
+     */
+    public static final Object SLOT_Message = new Object();
+
     private final NavigationPresenter navigationPresenter;
     private final CockpitPresenter cockpitPresenter;
     private final QuickChartPresenter quickChartPresenter;
+    private final MessagePresenter messagePresenter;
 
 
     @Inject
     public ApplicationPresenter(final EventBus eventBus, final MyView view, final MyProxy proxy,
 
     final NavigationPresenter navigationPresenter, final CockpitPresenter cockpitPresenter,
-            final QuickChartPresenter quickChartPresenter)
+            final QuickChartPresenter quickChartPresenter, final MessagePresenter messagePresenter)
     {
         super(eventBus, view, proxy);
         this.navigationPresenter = navigationPresenter;
         this.cockpitPresenter = cockpitPresenter;
         this.quickChartPresenter = quickChartPresenter;
+        this.messagePresenter = messagePresenter;
     }
 
 
@@ -92,16 +98,30 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 
     /**
      * Sets {@link NavigationPresenter} in {@link #SLOT_Navigation},
-     * {@link CockpitPresenter} in {@link #SLOT_Cockpit} and
-     * {@link QuickChartPresenter} in {@link #SLOT_QuickChart}.
+     * {@link CockpitPresenter} in {@link #SLOT_Cockpit},
+     * {@link QuickChartPresenter} in {@link #SLOT_QuickChart} and .
+     * {@link MessagePresenter} in {@link #SLOT_Message}.
      * 
      * @see com.gwtplatform.mvp.client.PresenterWidget#onReveal()
      */
     @Override
     protected void onReveal()
     {
+        super.onReveal();
         setInSlot(SLOT_Navigation, navigationPresenter);
         setInSlot(SLOT_Cockpit, cockpitPresenter);
         setInSlot(SLOT_QuickChart, quickChartPresenter);
+        setInSlot(SLOT_Message, messagePresenter);
+    }
+
+
+    @Override
+    protected void onHide()
+    {
+        super.onHide();
+        setInSlot(SLOT_Navigation, null);
+        setInSlot(SLOT_Cockpit, null);
+        setInSlot(SLOT_QuickChart, null);
+        setInSlot(SLOT_Message, null);
     }
 }

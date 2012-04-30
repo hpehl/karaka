@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity.view;
 
-import name.pehl.tire.client.activity.event.ActivityActionEvent;
+import name.pehl.tire.client.activity.event.ProcessActivityEvent;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesUiHandlers;
 import name.pehl.tire.client.resources.I18n;
@@ -204,7 +204,7 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
 
 
     @UiHandler("activitiesTable")
-    public void onActivityAction(ActivityActionEvent event)
+    public void onActivityAction(ProcessActivityEvent event)
     {
         if (getUiHandlers() != null)
         {

@@ -89,8 +89,18 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     @Override
     protected void onReveal()
     {
+        super.onReveal();
         setInSlot(SLOT_NewActivity, newActivityPresenter);
         setInSlot(SLOT_RecentActivities, recentActivitiesPresenter);
+    }
+
+
+    @Override
+    protected void onHide()
+    {
+        super.onHide();
+        setInSlot(SLOT_NewActivity, null);
+        setInSlot(SLOT_RecentActivities, null);
     }
 
 

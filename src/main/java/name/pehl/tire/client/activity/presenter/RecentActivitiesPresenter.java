@@ -37,11 +37,6 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
         void updateActivities(Activities activities);
     }
 
-    /**
-     * Constant for the edit activity slot.
-     */
-    public static final Object SLOT_EditActivity = new Object();
-
     private static Logger logger = Logger.getLogger(RecentActivitiesPresenter.class.getName());
 
     private final PlaceManager placeManager;

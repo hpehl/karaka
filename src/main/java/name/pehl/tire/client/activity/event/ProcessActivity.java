@@ -10,7 +10,7 @@ import com.gwtplatform.dispatch.annotation.Order;
  * @version $LastChangedRevision:$
  */
 @GenEvent
-public class ActivityAction
+public class ProcessActivity
 {
     public static enum Action
     {
