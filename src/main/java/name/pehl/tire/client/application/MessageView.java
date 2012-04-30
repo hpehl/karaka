@@ -1,12 +1,13 @@
 package name.pehl.tire.client.application;
 
-import com.google.gwt.event.shared.EventBus;
+import name.pehl.tire.client.resources.Resources;
+
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.PopupViewImpl;
+import com.gwtplatform.mvp.client.ViewImpl;
 
-public class MessageView extends PopupViewImpl implements MessagePresenter.MyView
+public class MessageView extends ViewImpl implements MessagePresenter.MyView
 {
     private final Widget widget;
 
@@ -14,11 +15,13 @@ public class MessageView extends PopupViewImpl implements MessagePresenter.MyVie
     {
     }
 
+    private final Resources resources;
+
 
     @Inject
-    public MessageView(final EventBus eventBus, final Binder binder)
+    public MessageView(final Resources resources, final Binder binder)
     {
-        super(eventBus);
+        this.resources = resources;
         widget = binder.createAndBindUi(this);
     }
 
@@ -33,7 +36,12 @@ public class MessageView extends PopupViewImpl implements MessagePresenter.MyVie
     @Override
     public void show(Message message)
     {
-        // TODO Auto-generated method stub
+    }
+
+
+    @Override
+    public void hide()
+    {
     }
 
 
