@@ -6,6 +6,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
+import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
+import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.TimeUnit;
 
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
@@ -15,12 +17,12 @@ import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * Simple value object for navigation over activities by year, month and week.
- * Therefore special values for year, month and week are used in the following
- * manner:
+ * Due to the lack of reasonable date/time classes in GWT/JRE, special values
+ * for year, month and week are used in the following manner:
  * <dl>
  * <dt>0 for year, month and week</dt>
  * <dd>Navigation data for the current month / week</dd>
- * <dt>0 for year and -n for either month or week</dt>
+ * <dt>0 for year and [-|+]n for either month or week</dt>
  * <dd>Navigation data for the month / week relative to the current month / week
  * with offset n.</dd>
  * <dt>Absolute values for year and either month or week within valid ranges</dt>
@@ -67,13 +69,7 @@ public class ActivitiesNavigator
     }
 
 
-    public ActivitiesNavigator(TimeUnit unit)
-    {
-        this(0, 0, 0, unit);
-    }
-
-
-    public ActivitiesNavigator(int year, int month, int week, TimeUnit unit)
+    ActivitiesNavigator(int year, int month, int week, TimeUnit unit)
     {
         this.year = year;
         this.month = month;
@@ -152,19 +148,7 @@ public class ActivitiesNavigator
     }
 
 
-    // -------------------------------------------------------- factory methods
-
-    public static ActivitiesNavigator forMonth(int year, int month)
-    {
-        return new ActivitiesNavigator(year, month, 0, MONTH);
-    }
-
-
-    public static ActivitiesNavigator forWeek(int year, int week)
-    {
-        return new ActivitiesNavigator(year, 0, week, WEEK);
-    }
-
+    // ----------------------------------------------------- navigation methods
 
     public ActivitiesNavigator current()
     {
@@ -283,6 +267,25 @@ public class ActivitiesNavigator
 
     // ----------------------------------------------------- conversion methods
 
+    public static ActivitiesNavigator fromEvent(ActivitiesLoadedEvent event)
+    {
+        Activities activities = event.getActivities();
+        if (activities != null)
+        {
+            TimeUnit unit = event.getUnit();
+            if (unit == MONTH)
+            {
+                return new ActivitiesNavigator(activities.getYear(), activities.getMonth(), 0, MONTH);
+            }
+            else if (unit == WEEK)
+            {
+                return new ActivitiesNavigator(activities.getYear(), 0, activities.getWeek(), WEEK);
+            }
+        }
+        return new ActivitiesNavigator();
+    }
+
+
     public static ActivitiesNavigator fromPlaceRequest(PlaceRequest request)
 
     {
@@ -293,7 +296,7 @@ public class ActivitiesNavigator
 
         if (names.contains(ActivitiesNavigator.PARAM_MONTH) && ActivitiesNavigator.VALUE_CURRENT.equals(month))
         {
-            return new ActivitiesNavigator(MONTH);
+            return new ActivitiesNavigator(0, 0, 0, MONTH);
         }
         else if (names.contains(ActivitiesNavigator.PARAM_MONTH) && ActivitiesNavigator.VALUE_RELATIVE.equals(month))
         {
@@ -302,7 +305,7 @@ public class ActivitiesNavigator
         }
         else if (names.contains(PARAM_WEEK) && VALUE_CURRENT.equals(week))
         {
-            return new ActivitiesNavigator(WEEK);
+            return new ActivitiesNavigator(0, 0, 0, WEEK);
         }
         else if (names.contains(PARAM_WEEK) && VALUE_RELATIVE.equals(week))
         {

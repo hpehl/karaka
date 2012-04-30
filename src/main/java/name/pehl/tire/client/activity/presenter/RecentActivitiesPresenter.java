@@ -16,9 +16,6 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 /**
  * Presenter which shows details about the recent activities by week / month
  * 
@@ -60,6 +57,7 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
         super(eventBus, view);
         this.placeManager = placeManager;
         this.editActivityPresenter = editActivityPresenter;
+        this.activitiesNavigator = new ActivitiesNavigator();
 
         getView().setUiHandlers(this);
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
@@ -69,56 +67,41 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
     @Override
     public final void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
-        activitiesNavigator = fromEvent(event);
+        activitiesNavigator = ActivitiesNavigator.fromEvent(event);
         activities = event.getActivities();
         getView().updateActivities(activities);
-    }
-
-
-    private ActivitiesNavigator fromEvent(ActivitiesLoadedEvent event)
-    {
-        Activities activities = event.getActivities();
-        if (activities != null)
-        {
-            TimeUnit unit = event.getUnit();
-            if (unit == MONTH)
-            {
-                return ActivitiesNavigator.forMonth(activities.getYear(), activities.getMonth());
-            }
-            else if (unit == WEEK)
-            {
-                return ActivitiesNavigator.forWeek(activities.getYear(), activities.getWeek());
-            }
-        }
-        return new ActivitiesNavigator();
     }
 
 
     @Override
     public void onRelative(int offset)
     {
-        placeManager.revealPlace(activitiesNavigator.relative(offset).toPlaceRequest());
+        activitiesNavigator = activitiesNavigator.relative(offset);
+        placeManager.revealPlace(activitiesNavigator.toPlaceRequest());
     }
 
 
     @Override
     public void onPrev()
     {
-        placeManager.revealPlace(activitiesNavigator.decrease().toPlaceRequest());
+        activitiesNavigator = activitiesNavigator.decrease();
+        placeManager.revealPlace(activitiesNavigator.toPlaceRequest());
     }
 
 
     @Override
     public void onCurrent()
     {
-        placeManager.revealPlace(activitiesNavigator.current().toPlaceRequest());
+        activitiesNavigator = activitiesNavigator.current();
+        placeManager.revealPlace(activitiesNavigator.toPlaceRequest());
     }
 
 
     @Override
     public void onNext()
     {
-        placeManager.revealPlace(activitiesNavigator.increase().toPlaceRequest());
+        activitiesNavigator = activitiesNavigator.increase();
+        placeManager.revealPlace(activitiesNavigator.toPlaceRequest());
     }
 
 

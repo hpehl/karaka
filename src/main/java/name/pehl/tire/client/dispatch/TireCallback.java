@@ -1,9 +1,11 @@
 package name.pehl.tire.client.dispatch;
 
+import java.util.logging.Logger;
+
 import name.pehl.tire.client.NameTokens;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.google.web.bindery.event.shared.EventBus;
 
 /**
  * @author $Author:$
@@ -11,12 +13,13 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
  */
 public abstract class TireCallback<T> implements AsyncCallback<T>
 {
-    private final PlaceManager placeManager;
+    private static Logger logger = Logger.getLogger(TireCallback.class.getName());
+    private final EventBus eventBus;
 
 
-    public TireCallback(PlaceManager placeManager)
+    public TireCallback(EventBus eventBus)
     {
-        this.placeManager = placeManager;
+        this.eventBus = eventBus;
     }
 
 
@@ -29,7 +32,7 @@ public abstract class TireCallback<T> implements AsyncCallback<T>
     @Override
     public void onFailure(Throwable caught)
     {
-        // TODO Error handling
-        placeManager.revealErrorPlace(NameTokens.dashboard);
+        // TODO Error handling with custom error event
+        logger.severe(caught.getMessage());
     }
 }

@@ -36,7 +36,7 @@ class ActivitiesProducer
     public List<Activity> produceActivities(List<Key<Project>> projectKeys, List<Key<Tag>> tagKeys,
             DateTimeZone timeZone)
     {
-        DateMidnight end = DateMidnight.now();
+        DateMidnight end = DateMidnight.now().plusDays(1);
         DateMidnight start = end.minus(Months.months(2));
         List<Activity> activities = new ArrayList<Activity>();
         MutableDateTime mdt = new MutableDateTime(start);

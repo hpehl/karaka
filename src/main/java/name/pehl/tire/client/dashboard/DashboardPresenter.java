@@ -20,7 +20,6 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
-import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
@@ -57,21 +56,17 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     private static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
     private final DispatchAsync dispatcher;
-    private final PlaceManager placeManager;
     private final NewActivityPresenter newActivityPresenter;
     private final RecentActivitiesPresenter recentActivitiesPresenter;
-    private ActivitiesNavigator activitiesNavigator;
 
 
     @Inject
     public DashboardPresenter(EventBus eventBus, MyView view, MyProxy proxy, final DispatchAsync dispatcher,
-            final PlaceManager placeManager, final NewActivityPresenter newActivityPresenter,
-            final RecentActivitiesPresenter recentActivitiesPresenter)
+            final NewActivityPresenter newActivityPresenter, final RecentActivitiesPresenter recentActivitiesPresenter)
     {
         super(eventBus, view, proxy);
 
         this.dispatcher = dispatcher;
-        this.placeManager = placeManager;
         this.newActivityPresenter = newActivityPresenter;
         this.recentActivitiesPresenter = recentActivitiesPresenter;
     }
@@ -110,17 +105,10 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     public void prepareFromRequest(PlaceRequest request)
     {
         super.prepareFromRequest(request);
-        activitiesNavigator = ActivitiesNavigator.fromPlaceRequest(request);
-    }
-
-
-    @Override
-    protected void onReset()
-    {
-        super.onReset();
+        final ActivitiesNavigator activitiesNavigator = ActivitiesNavigator.fromPlaceRequest(request);
         logger.log(FINE, "Requesting new activities");
         dispatcher.execute(new GetActivitiesAction(activitiesNavigator), new TireCallback<GetActivitiesResult>(
-                placeManager)
+                getEventBus())
         {
             @Override
             public void onSuccess(GetActivitiesResult result)
