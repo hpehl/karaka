@@ -53,7 +53,6 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
         this.placeManager = placeManager;
         this.editActivityPresenter = editActivityPresenter;
         this.activitiesNavigator = new ActivitiesNavigator();
-
         getView().setUiHandlers(this);
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
     }

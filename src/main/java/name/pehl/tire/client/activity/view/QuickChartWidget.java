@@ -69,14 +69,7 @@ public abstract class QuickChartWidget extends Widget
         columns = new JavaScriptObject[columnCount];
         legends = new JavaScriptObject[columnCount];
         columnWidth = (width - (this.legendTitles.length - 1) * columnGap) / columnCount;
-    }
 
-
-    // ------------------------------------------------------------------- init
-
-    @Override
-    protected void onLoad()
-    {
         // paper and title
         raphael = initRaphael(width, height);
         int x = width / 2;
@@ -84,46 +77,57 @@ public abstract class QuickChartWidget extends Widget
         title = initTitle(x, y);
 
         // columns and legend
-        for (int i = 0; i < legendTitles.length; i++)
+        for (int i = 0; i < this.legendTitles.length; i++)
         {
             String path = path(i, 0);
             columns[i] = initColumn(path);
             x = (int) round(i * (columnWidth + columnGap) + columnWidth / 2);
             y = (int) round(height - LEGEND_HEIGHT / 2.0);
-            legends[i] = initLegend(x, y, legendTitles[i]);
+            legends[i] = initLegend(x, y, this.legendTitles[i]);
         }
         initialized = true;
     }
 
 
+    // ------------------------------------------------------------------- init
+
     private native JavaScriptObject initRaphael(int width, int height) /*-{
-                                                                       var holder = this.@name.pehl.tire.client.activity.view.QuickChartWidget::holder;
-                                                                       return $wnd.Raphael(holder, width, height);
-                                                                       }-*/;
+		var holder = this.@name.pehl.tire.client.activity.view.QuickChartWidget::holder;
+		return $wnd.Raphael(holder, width, height);
+    }-*/;
 
 
     private native JavaScriptObject initTitle(int x, int y) /*-{
-                                                            var safeThis = this;
-                                                            var raphael = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::raphael;
-                                                            var color = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::color;
-                                                            var bgColor = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::bgColor;
-                                                            var text = raphael.text(x, y, "").attr({font: "10px Verdana", fill: color});
-                                                            return text;
-                                                            }-*/;
+		var safeThis = this;
+		var raphael = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::raphael;
+		var color = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::color;
+		var bgColor = safeThis.@name.pehl.tire.client.activity.view.QuickChartWidget::bgColor;
+		var text = raphael.text(x, y, "").attr({
+			font : "10px Verdana",
+			fill : color
+		});
+		return text;
+    }-*/;
 
 
     private native JavaScriptObject initColumn(String path) /*-{
-                                                            var raphael = this.@name.pehl.tire.client.activity.view.QuickChartWidget::raphael;
-                                                            var color = this.@name.pehl.tire.client.activity.view.QuickChartWidget::color;
-                                                            return raphael.path(path).attr({stroke: color, fill: color});
-                                                            }-*/;
+		var raphael = this.@name.pehl.tire.client.activity.view.QuickChartWidget::raphael;
+		var color = this.@name.pehl.tire.client.activity.view.QuickChartWidget::color;
+		return raphael.path(path).attr({
+			stroke : color,
+			fill : color
+		});
+    }-*/;
 
 
     private native JavaScriptObject initLegend(int x, int y, String text) /*-{
-                                                                          var raphael = this.@name.pehl.tire.client.activity.view.QuickChartWidget::raphael;
-                                                                          var color = this.@name.pehl.tire.client.activity.view.QuickChartWidget::color;
-                                                                          return raphael.text(x, y, text).attr({font: "10px Verdana", fill: color});
-                                                                          }-*/;
+		var raphael = this.@name.pehl.tire.client.activity.view.QuickChartWidget::raphael;
+		var color = this.@name.pehl.tire.client.activity.view.QuickChartWidget::color;
+		return raphael.text(x, y, text).attr({
+			font : "10px Verdana",
+			fill : color
+		});
+    }-*/;
 
 
     // ----------------------------------------------------------------- update
@@ -132,25 +136,30 @@ public abstract class QuickChartWidget extends Widget
 
 
     protected native void updateTitle(String newTitle) /*-{
-                                                       var title = this.@name.pehl.tire.client.activity.view.QuickChartWidget::title;
-                                                       title.attr("text", newTitle);
-                                                       }-*/;
+		var title = this.@name.pehl.tire.client.activity.view.QuickChartWidget::title;
+		title.attr("text", newTitle);
+    }-*/;
 
 
     protected native void animateColumn(JavaScriptObject column, String path, String tooltip) /*-{
-                                                                                              column.animate({path: path}, 1500, ">");
-                                                                                              column.attr("title", tooltip);
-                                                                                              }-*/;
+		column.animate({
+			path : path
+		}, 1500, ">");
+		column.attr("title", tooltip);
+    }-*/;
 
 
     protected native void updateColumn(JavaScriptObject column, String path, String tooltip) /*-{
-                                                                                             column.attr({path: path, title: tooltip});
-                                                                                             }-*/;
+		column.attr({
+			path : path,
+			title : tooltip
+		});
+    }-*/;
 
 
     protected native void updateLegend(JavaScriptObject legend, String newLegend) /*-{
-                                                                                  legend.attr("text", newLegend);
-                                                                                  }-*/;
+		legend.attr("text", newLegend);
+    }-*/;
 
 
     // --------------------------------------------------------- helper methods

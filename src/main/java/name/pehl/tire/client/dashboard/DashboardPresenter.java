@@ -1,5 +1,7 @@
 package name.pehl.tire.client.dashboard;
 
+import static java.util.logging.Level.FINE;
+
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
@@ -25,8 +27,6 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
-
-import static java.util.logging.Level.FINE;
 
 /**
  * @author $Author: harald.pehl $
@@ -67,7 +67,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             final NewActivityPresenter newActivityPresenter, final RecentActivitiesPresenter recentActivitiesPresenter)
     {
         super(eventBus, view, proxy);
-
         this.dispatcher = dispatcher;
         this.newActivityPresenter = newActivityPresenter;
         this.recentActivitiesPresenter = recentActivitiesPresenter;

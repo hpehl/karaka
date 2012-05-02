@@ -44,8 +44,8 @@
 			font-size: 12px;
 			line-height: 26px;
 			padding: 0 5px;
-			margin: 0 5px 0 35%;
-			width: 30%;
+			margin: 0 5px 0 37%;
+			width: 26%;
 			float: center;
 			color: #62635e;
 			background-color: white;
