@@ -24,6 +24,8 @@ import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
 import name.pehl.tire.client.application.MessagePresenter;
 import name.pehl.tire.client.application.MessageView;
+import name.pehl.tire.client.application.NavigationPresenter;
+import name.pehl.tire.client.application.NavigationView;
 import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.client.ClientView;
 import name.pehl.tire.client.cockpit.CockpitPresenter;
@@ -32,8 +34,6 @@ import name.pehl.tire.client.dashboard.DashboardPresenter;
 import name.pehl.tire.client.dashboard.DashboardView;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
-import name.pehl.tire.client.navigation.NavigationPresenter;
-import name.pehl.tire.client.navigation.NavigationView;
 import name.pehl.tire.client.project.ProjectPresenter;
 import name.pehl.tire.client.project.ProjectReader;
 import name.pehl.tire.client.project.ProjectView;
@@ -96,7 +96,7 @@ public class TireModule extends AbstractPresenterModule
         // PresenterWidgets (a-z)
         bindPresenterWidget(CockpitPresenter.class, CockpitPresenter.MyView.class, CockpitView.class);
         bindPresenterWidget(EditActivityPresenter.class, EditActivityPresenter.MyView.class, EditActivityView.class);
-        bindSingletonPresenterWidget(MessagePresenter.class, MessagePresenter.MyView.class, MessageView.class);
+        bindPresenterWidget(MessagePresenter.class, MessagePresenter.MyView.class, MessageView.class);
         bindPresenterWidget(NavigationPresenter.class, NavigationPresenter.MyView.class, NavigationView.class);
         bindPresenterWidget(NewActivityPresenter.class, NewActivityPresenter.MyView.class, NewActivityView.class);
         bindPresenterWidget(QuickChartPresenter.class, QuickChartPresenter.MyView.class, QuickChartView.class);

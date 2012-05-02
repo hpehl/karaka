@@ -10,6 +10,8 @@ import name.pehl.tire.client.activity.model.ActivitiesNavigator;
 import name.pehl.tire.client.activity.presenter.NewActivityPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
 import name.pehl.tire.client.application.ApplicationPresenter;
+import name.pehl.tire.client.application.Message;
+import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.Activities;
 
@@ -99,8 +101,8 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     protected void onHide()
     {
         super.onHide();
-        setInSlot(SLOT_NewActivity, null);
-        setInSlot(SLOT_RecentActivities, null);
+        removeFromSlot(SLOT_NewActivity, newActivityPresenter);
+        removeFromSlot(SLOT_RecentActivities, recentActivitiesPresenter);
     }
 
 
@@ -117,6 +119,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         super.prepareFromRequest(request);
         final ActivitiesNavigator activitiesNavigator = ActivitiesNavigator.fromPlaceRequest(request);
         logger.log(FINE, "Requesting new activities");
+        ShowMessageEvent.fire(this, new Message("Loading activities..."));
         dispatcher.execute(new GetActivitiesAction(activitiesNavigator), new TireCallback<GetActivitiesResult>(
                 getEventBus())
         {

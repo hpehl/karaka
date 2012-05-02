@@ -1,16 +1,17 @@
 package name.pehl.tire.client.activity.view;
 
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesUiHandlers;
 import name.pehl.tire.shared.model.Activities;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * View for the quick chart showing the activites by week / month.
@@ -24,20 +25,19 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 public class QuickChartView extends ViewWithUiHandlers<RecentActivitiesUiHandlers> implements
         QuickChartPresenter.MyView
 {
-    // @formatter:off
-    interface WeekChartUi extends UiBinder<Widget, QuickChartView> {}
-    private static WeekChartUi uiBinder = GWT.create(WeekChartUi.class);
-    
-    @UiField WeekChartWidget weekChart;
-    @UiField MonthChartWidget monthChart;
-    // @formatter:on
+    public interface Binder extends UiBinder<Widget, QuickChartView>
+    {
+    }
 
     private final Widget widget;
+    @UiField WeekChartWidget weekChart;
+    @UiField MonthChartWidget monthChart;
 
 
-    public QuickChartView()
+    @Inject
+    public QuickChartView(final Binder binder)
     {
-        this.widget = uiBinder.createAndBindUi(this);
+        this.widget = binder.createAndBindUi(this);
         this.monthChart.setVisible(false);
     }
 

@@ -3,7 +3,6 @@ package name.pehl.tire.client.application;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.UiUtils;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -13,33 +12,25 @@ import com.gwtplatform.mvp.client.ViewImpl;
 
 public class ApplicationView extends ViewImpl implements ApplicationPresenter.MyView
 {
-    interface ApplicationUi extends UiBinder<Widget, ApplicationView>
+    public interface Binder extends UiBinder<Widget, ApplicationView>
     {
     }
 
-    private static ApplicationUi uiBinder = GWT.create(ApplicationUi.class);
-
-    // ------------------------------------------------ panels for nested slots
-
+    private final Widget widget;
+    private final Resources resources;
     @UiField HasWidgets navigationPanel;
     @UiField HasWidgets mainPanel;
     @UiField HasWidgets cockpitPanel;
     @UiField HasWidgets quickChartPanel;
 
-    // -------------------------------------------------------- private members
-
-    private final Widget widget;
-    private final Resources resources;
-
 
     @Inject
-    public ApplicationView(Resources resources)
+    public ApplicationView(final Binder binder, final Resources resources)
     {
-        // Inject the global CSS resources
         this.resources = resources;
         this.resources.tire().ensureInjected();
         this.resources.widgets().ensureInjected();
-        this.widget = uiBinder.createAndBindUi(this);
+        this.widget = binder.createAndBindUi(this);
     }
 
 

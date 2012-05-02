@@ -9,7 +9,6 @@ import name.pehl.tire.client.ui.SvgPath;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -30,11 +29,12 @@ import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiHandlers> implements
         RecentActivitiesPresenter.MyView
 {
-    // @formatter:off
-    interface RecentActivitiesUi extends UiBinder<Widget, RecentActivitiesView> {}
-    private static RecentActivitiesUi uiBinder = GWT.create(RecentActivitiesUi.class);
-    // @formatter:on
+    public interface Binder extends UiBinder<Widget, RecentActivitiesView>
+    {
+    }
 
+    private final I18n i18n;
+    private final Widget widget;
     @UiField InlineLabel header;
     @UiField SvgPath previous;
     @UiField SvgPath next;
@@ -44,16 +44,13 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
     @UiField SvgPath currentWeek;
     @UiField(provided = true) ActivitiesTable activitiesTable;
 
-    private final I18n i18n;
-    private final Widget widget;
-
 
     @Inject
-    public RecentActivitiesView(final I18n i18n, final ActivitiesTableResources atr)
+    public RecentActivitiesView(final Binder binder, final I18n i18n, final ActivitiesTableResources atr)
     {
-        this.i18n = i18n;
         this.activitiesTable = new ActivitiesTable(atr);
-        this.widget = uiBinder.createAndBindUi(this);
+        this.widget = binder.createAndBindUi(this);
+        this.i18n = i18n;
     }
 
 

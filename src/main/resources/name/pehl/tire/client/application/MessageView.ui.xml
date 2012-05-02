@@ -1,10 +1,27 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:g='urn:import:com.google.gwt.user.client.ui'
-	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
-	ui:generateLocales='default'>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tui="urn:import:name.pehl.tire.client.ui">
 
-	<g:PopupPanel/>
+	<ui:style>
+		.message {
+			line-height: 30px;
+			font-size: 12px;
+			padding: 0px 5px;
+			margin: 0px 5px;
+			color: #62635e;
+			background-color: white;
+			/*
+			position: absolute;
+			left: 400px;
+			top: 0;
+			width: 200px;
+			height: 30px;
+			*/
+		}
+	</ui:style>
+
+	<tui:EscapablePopupPanel>
+		<g:Label ui:field="messageHolder" addStyleNames="{style.message}">Some message</g:Label>
+	</tui:EscapablePopupPanel>
 </ui:UiBinder>

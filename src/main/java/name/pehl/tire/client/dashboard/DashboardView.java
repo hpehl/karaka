@@ -2,29 +2,28 @@ package name.pehl.tire.client.dashboard;
 
 import name.pehl.tire.client.ui.UiUtils;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 
 public class DashboardView extends ViewImpl implements DashboardPresenter.MyView
 {
-    interface DashboardUi extends UiBinder<Widget, DashboardView>
+    public interface Binder extends UiBinder<Widget, DashboardView>
     {
     }
 
-    private static DashboardUi uiBinder = GWT.create(DashboardUi.class);
-
+    private final Widget widget;
     @UiField HasWidgets newActivityPanel;
     @UiField HasWidgets recentActivitiesPanel;
-    private final Widget widget;
 
 
-    public DashboardView()
+    @Inject
+    public DashboardView(final Binder binder)
     {
-        widget = uiBinder.createAndBindUi(this);
+        widget = binder.createAndBindUi(this);
     }
 
 

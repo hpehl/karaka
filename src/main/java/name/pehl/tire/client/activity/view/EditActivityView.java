@@ -2,21 +2,19 @@ package name.pehl.tire.client.activity.view;
 
 import java.util.logging.Logger;
 
-import com.google.inject.Inject;
-
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
 import name.pehl.tire.client.ui.EscapablePopupPanel;
 import name.pehl.tire.client.ui.PlaceholderTextBox;
 import name.pehl.tire.client.ui.TimeTextBox;
 import name.pehl.tire.shared.model.Activity;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
-import com.google.web.bindery.event.shared.EventBus;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PopupViewCloseHandler;
 import com.gwtplatform.mvp.client.PopupViewImpl;
 
@@ -26,30 +24,31 @@ import com.gwtplatform.mvp.client.PopupViewImpl;
  */
 public class EditActivityView extends PopupViewImpl implements EditActivityPresenter.MyView, Editor<Activity>
 {
+    public interface Driver extends SimpleBeanEditorDriver<Activity, EditActivityView>
+    {
+    }
+
+    public interface Binder extends UiBinder<EscapablePopupPanel, EditActivityView>
+    {
+    }
+
     private static Logger logger = Logger.getLogger(EditActivityView.class.getName());
 
-    // @formatter:off
-    interface Driver extends SimpleBeanEditorDriver<Activity, EditActivityView> {}
-    private static Driver driver = GWT.create(Driver.class);
-    
-    interface EditActivityUi extends UiBinder<EscapablePopupPanel, EditActivityView> {}
-    private static EditActivityUi uiBinder = GWT.create(EditActivityUi.class);
-    
+    private final EscapablePopupPanel popupPanel;
+    private final Driver driver;
+    private Activity activityToEdit;
     @UiField PlaceholderTextBox name;
     @UiField PlaceholderTextBox description;
     @UiField TimeTextBox start;
     @UiField TimeTextBox end;
-    // @formatter:on
-
-    private Activity activityToEdit;
-    private final EscapablePopupPanel popupPanel;
 
 
     @Inject
-    public EditActivityView(EventBus eventBus)
+    public EditActivityView(final EventBus eventBus, final Binder binder, final Driver driver)
     {
         super(eventBus);
-        this.popupPanel = uiBinder.createAndBindUi(this);
+        this.popupPanel = binder.createAndBindUi(this);
+        this.driver = driver;
         setAutoHideOnNavigationEventEnabled(true);
         setCloseHandler(new PopupViewCloseHandler()
         {

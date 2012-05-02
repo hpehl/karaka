@@ -1,21 +1,15 @@
 package name.pehl.tire.client.application;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
-import com.gwtplatform.mvp.client.View;
 
 public class MessagePresenter extends PresenterWidget<MessagePresenter.MyView>
 {
-    public interface MyView extends View
+    public interface MyView extends PopupView
     {
         void show(Message message);
-
-
-        void hide();
-
-
-        boolean isVisible();
     }
 
 
@@ -26,9 +20,8 @@ public class MessagePresenter extends PresenterWidget<MessagePresenter.MyView>
     }
 
 
-    @Override
-    protected void onBind()
+    public void show(Message message)
     {
-        super.onBind();
+        getView().show(message);
     }
 }

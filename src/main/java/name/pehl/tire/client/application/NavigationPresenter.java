@@ -1,4 +1,4 @@
-package name.pehl.tire.client.navigation;
+package name.pehl.tire.client.application;
 
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.inject.Inject;

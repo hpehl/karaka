@@ -2,7 +2,6 @@ package name.pehl.tire.client.cockpit;
 
 import name.pehl.tire.client.resources.Resources;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -21,32 +20,27 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
  */
 public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implements CockpitPresenter.MyView
 {
-    interface CockpitUi extends UiBinder<Widget, CockpitView>
+    public interface Binder extends UiBinder<Widget, CockpitView>
     {
     }
 
-    private static CockpitUi uiBinder = GWT.create(CockpitUi.class);
-
-    // @formatter:off
+    private boolean recording;
+    private final Widget widget;
+    private final Resources resources;
     @UiField Image startStop;
     @UiField Label today;
     @UiField InlineLabel week;
     @UiField InlineLabel month;
     @UiField Label description;
     @UiField Label project;
-    // @formatter:on
-
-    private boolean recording;
-    private final Widget widget;
-    private final Resources resources;
 
 
     @Inject
-    public CockpitView(final Resources resources)
+    public CockpitView(final Binder binder, final Resources resources)
     {
+        this.widget = binder.createAndBindUi(this);
         this.recording = false;
         this.resources = resources;
-        this.widget = uiBinder.createAndBindUi(this);
     }
 
 

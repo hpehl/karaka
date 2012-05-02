@@ -1,8 +1,7 @@
-package name.pehl.tire.client.navigation;
+package name.pehl.tire.client.application;
 
 import name.pehl.tire.client.resources.Resources;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.InlineHyperlink;
@@ -17,13 +16,13 @@ import com.gwtplatform.mvp.client.ViewImpl;
  */
 public class NavigationView extends ViewImpl implements NavigationPresenter.MyView
 {
-    interface NavigationUi extends UiBinder<Widget, NavigationView>
+    public interface Binder extends UiBinder<Widget, NavigationView>
     {
     }
 
-    private static NavigationUi uiBinder = GWT.create(NavigationUi.class);
-
-    // @formatter:off
+    private final Widget widget;
+    private final Resources resources;
+    private final InlineHyperlink[] navigationLinks;
     @UiField InlineHyperlink dashboard;
     @UiField InlineHyperlink projects;
     @UiField InlineHyperlink clients;
@@ -31,19 +30,14 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
     @UiField InlineHyperlink reports;
     @UiField InlineHyperlink help;
     @UiField InlineHyperlink settings;
-    private final InlineHyperlink[] navigationLinks;
-    // @formatter:on
-
-    private final Widget widget;
-    private final Resources resources;
 
 
     @Inject
-    public NavigationView(final Resources resources)
+    public NavigationView(final Binder binder, final Resources resources)
     {
         this.resources = resources;
         this.resources.navigation().ensureInjected();
-        this.widget = uiBinder.createAndBindUi(this);
+        this.widget = binder.createAndBindUi(this);
         this.navigationLinks = new InlineHyperlink[] {dashboard, projects, clients, tags, reports, help, settings,};
     }
 
