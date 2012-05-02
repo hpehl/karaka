@@ -1,5 +1,7 @@
 package name.pehl.tire.client.application;
 
+import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
+import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
 
 import com.google.inject.Inject;
@@ -14,7 +16,8 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
  * @version $Date: 2010-12-06 17:48:50 +0100 (Mo, 06. Dez 2010) $ $Revision: 95
  *          $
  */
-public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyView> implements ShowMessageHandler
+public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyView> implements ShowMessageHandler,
+        ActivitiesLoadedHandler
 {
     public interface MyView extends View
     {
@@ -32,7 +35,8 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
     {
         super(eventBus, view);
         this.placeManager = placeManager;
-        eventBus.addHandler(ShowMessageEvent.getType(), this);
+        getEventBus().addHandler(ShowMessageEvent.getType(), this);
+        getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
     }
 
 
@@ -56,5 +60,12 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
     public void onShowMessage(ShowMessageEvent event)
     {
         getView().showMessage(event.getMessage());
+    }
+
+
+    @Override
+    public void onActivitiesLoaded(ActivitiesLoadedEvent event)
+    {
+        getView().showMessage(new Message("Activities successfully loaded."));
     }
 }

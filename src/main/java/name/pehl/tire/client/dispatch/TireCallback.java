@@ -3,6 +3,8 @@ package name.pehl.tire.client.dispatch;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
+import name.pehl.tire.client.application.Message;
+import name.pehl.tire.client.application.ShowMessageEvent;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.EventBus;
@@ -32,7 +34,8 @@ public abstract class TireCallback<T> implements AsyncCallback<T>
     @Override
     public void onFailure(Throwable caught)
     {
-        // TODO Error handling with custom error event
         logger.severe(caught.getMessage());
+        ShowMessageEvent event = new ShowMessageEvent(new Message("No activities found"));
+        eventBus.fireEvent(event);
     }
 }
