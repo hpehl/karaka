@@ -5,6 +5,7 @@ import name.pehl.tire.client.resources.Resources;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.InlineHyperlink;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -30,6 +31,7 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
     @UiField InlineHyperlink reports;
     @UiField InlineHyperlink help;
     @UiField InlineHyperlink settings;
+    @UiField Label messageHolder;
 
 
     @Inject
@@ -66,5 +68,12 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
                 }
             }
         }
+    }
+
+
+    @Override
+    public void showMessage(Message message)
+    {
+        messageHolder.setText(message.getText());
     }
 }

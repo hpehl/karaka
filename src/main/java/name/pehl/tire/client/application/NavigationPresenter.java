@@ -1,7 +1,9 @@
 package name.pehl.tire.client.application;
 
-import com.google.web.bindery.event.shared.EventBus;
+import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
+
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
@@ -12,11 +14,14 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
  * @version $Date: 2010-12-06 17:48:50 +0100 (Mo, 06. Dez 2010) $ $Revision: 95
  *          $
  */
-public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyView>
+public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyView> implements ShowMessageHandler
 {
     public interface MyView extends View
     {
         void highlight(String token);
+
+
+        void showMessage(Message message);
     }
 
     private final PlaceManager placeManager;
@@ -27,6 +32,7 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
     {
         super(eventBus, view);
         this.placeManager = placeManager;
+        eventBus.addHandler(ShowMessageEvent.getType(), this);
     }
 
 
@@ -43,5 +49,12 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
         PlaceRequest request = placeManager.getCurrentPlaceRequest();
         String token = request.getNameToken();
         getView().highlight(token);
+    }
+
+
+    @Override
+    public void onShowMessage(ShowMessageEvent event)
+    {
+        getView().showMessage(event.getMessage());
     }
 }

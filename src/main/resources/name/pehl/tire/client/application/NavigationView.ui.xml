@@ -10,7 +10,7 @@
             padding: 0px 30px;
         }
         
-        header nav a, header nav a:visited {
+        header nav a, header nav a:visited, header nav div {
             font-size: 12px;
             float: left;
             color: white;
@@ -35,6 +35,11 @@
             color: #62635e;
             background-color: white;
         }
+        
+        .message {
+            color: #62635e;
+            background-color: white;
+        }
     </ui:style>
 
     <g:HTMLPanel>
@@ -45,6 +50,7 @@
                 <g:InlineHyperlink ui:field="clients" targetHistoryToken="{nameTokens.clients}">Clients</g:InlineHyperlink>
                 <g:InlineHyperlink ui:field="tags" targetHistoryToken="{nameTokens.tags}">Tags</g:InlineHyperlink>
                 <g:InlineHyperlink ui:field="reports" targetHistoryToken="{nameTokens.reports}">Reports</g:InlineHyperlink>
+                <g:Label ui:field="messageHolder" addStyleNames="{style.message}">Some message</g:Label>
                 <!-- rtl -->
                 <a class="{style.right} {style.last}" title="Logout" href="#">Logged in as Harald Pehl</a>
                 <g:InlineHyperlink ui:field="settings" addStyleNames="{style.right}"

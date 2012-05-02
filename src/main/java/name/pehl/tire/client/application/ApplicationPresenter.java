@@ -1,7 +1,6 @@
 package name.pehl.tire.client.application;
 
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
-import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
 import name.pehl.tire.client.cockpit.CockpitPresenter;
 
 import com.google.gwt.event.shared.GwtEvent.Type;
@@ -15,7 +14,6 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.Proxy;
 import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
 import com.gwtplatform.mvp.client.proxy.RevealRootLayoutContentEvent;
-import com.gwtplatform.mvp.client.proxy.RevealRootPopupContentEvent;
 
 /**
  * This is the top-level presenter of the hierarchy. Other presenters reveal
@@ -35,7 +33,6 @@ import com.gwtplatform.mvp.client.proxy.RevealRootPopupContentEvent;
  *          $
  */
 public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView, ApplicationPresenter.MyProxy>
-        implements ShowMessageHandler
 {
     @ProxyStandard
     public interface MyProxy extends Proxy<ApplicationPresenter>
@@ -69,20 +66,17 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     private final NavigationPresenter navigationPresenter;
     private final CockpitPresenter cockpitPresenter;
     private final QuickChartPresenter quickChartPresenter;
-    private final MessagePresenter messagePresenter;
 
 
     @Inject
     public ApplicationPresenter(final EventBus eventBus, final MyView view, final MyProxy proxy,
             final NavigationPresenter navigationPresenter, final CockpitPresenter cockpitPresenter,
-            final QuickChartPresenter quickChartPresenter, final MessagePresenter messagePresenter)
+            final QuickChartPresenter quickChartPresenter)
     {
         super(eventBus, view, proxy);
         this.navigationPresenter = navigationPresenter;
         this.cockpitPresenter = cockpitPresenter;
         this.quickChartPresenter = quickChartPresenter;
-        this.messagePresenter = messagePresenter;
-        eventBus.addHandler(ShowMessageEvent.getType(), this);
     }
 
 
@@ -118,13 +112,5 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
         removeFromSlot(SLOT_Navigation, navigationPresenter);
         removeFromSlot(SLOT_Cockpit, cockpitPresenter);
         removeFromSlot(SLOT_QuickChart, quickChartPresenter);
-    }
-
-
-    @Override
-    public void onShowMessage(ShowMessageEvent event)
-    {
-        RevealRootPopupContentEvent.fire(this, messagePresenter);
-        messagePresenter.show(event.getMessage());
     }
 }
