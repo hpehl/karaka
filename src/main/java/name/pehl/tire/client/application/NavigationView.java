@@ -1,10 +1,15 @@
 package name.pehl.tire.client.application;
 
+import java.util.Map;
+
+import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.UiUtils;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.InlineHyperlink;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -24,7 +29,7 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
 
     private final Widget widget;
     private final Resources resources;
-    private final InlineHyperlink[] navigationLinks;
+    private final Map<String, Hyperlink> navigationLinks;
     @UiField InlineHyperlink dashboard;
     @UiField InlineHyperlink projects;
     @UiField InlineHyperlink clients;
@@ -41,7 +46,9 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
         this.resources = resources;
         this.resources.navigation().ensureInjected();
         this.widget = binder.createAndBindUi(this);
-        this.navigationLinks = new InlineHyperlink[] {dashboard, projects, clients, tags, reports, help, settings,};
+        this.navigationLinks = new ImmutableMap.Builder<String, Hyperlink>().put(NameTokens.dashboard, dashboard)
+                .put(NameTokens.projects, projects).put(NameTokens.clients, clients).put(NameTokens.tags, tags)
+                .put(NameTokens.reports, reports).put(NameTokens.help, help).put(NameTokens.settings, settings).build();
     }
 
 
@@ -67,15 +74,17 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
     {
         if (token != null)
         {
-            for (InlineHyperlink link : navigationLinks)
+            for (Map.Entry<String, Hyperlink> entry : navigationLinks.entrySet())
             {
-                if (token.equals(link.getTargetHistoryToken()))
+                String currentToken = entry.getKey();
+                Hyperlink currentLink = entry.getValue();
+                if (token.equals(currentToken))
                 {
-                    link.addStyleName(resources.navigation().selectedNavigationEntry());
+                    currentLink.addStyleName(resources.navigation().selectedNavigationEntry());
                 }
                 else
                 {
-                    link.removeStyleName(resources.navigation().selectedNavigationEntry());
+                    currentLink.removeStyleName(resources.navigation().selectedNavigationEntry());
                 }
             }
         }
