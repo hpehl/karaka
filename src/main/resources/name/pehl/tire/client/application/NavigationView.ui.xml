@@ -5,7 +5,7 @@
 	<ui:with field="nameTokens" type="name.pehl.tire.client.NameTokens" />
 	<ui:image field="header" repeatStyle="Horizontal" src="../resources/header.png" />
 	<ui:style>
-		@sprite header {
+        @sprite header {
 			color: white;
 			gwt-image: "header";
 			padding: 0px 30px;
@@ -39,18 +39,10 @@
 			background-color: white;
 		}
 		
-		header nav div.message {
-			text-align: center;
-			font-size: 12px;
-			line-height: 26px;
-			padding: 0 5px;
-			margin: 0 5px 0 37%;
-			width: 26%;
-			float: center;
-			color: #62635e;
-			background-color: white;
-			border: 2px solid #62635E;
-			border-radius: 5px;
+		header nav .messagePanel {
+            margin: 0 5px 0 37%;
+            width: 26%;
+            float: center;
 		}
 	</ui:style>
 
@@ -74,7 +66,7 @@
 					addStyleNames="{style.right}" targetHistoryToken="{nameTokens.settings}">Settings</g:InlineHyperlink>
 				<g:InlineHyperlink ui:field="help"
 					targetHistoryToken="{nameTokens.help}" addStyleNames="{style.right}">Help</g:InlineHyperlink>
-                <g:Label ui:field="messageHolder" addStyleNames="{style.message}">Some message</g:Label>
+		        <g:SimplePanel ui:field="messagePanel" addStyleNames="{style.messagePanel}"/>
 			</nav>
 		</header>
 	</g:HTMLPanel>

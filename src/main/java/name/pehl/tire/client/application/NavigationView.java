@@ -1,11 +1,12 @@
 package name.pehl.tire.client.application;
 
 import name.pehl.tire.client.resources.Resources;
+import name.pehl.tire.client.ui.UiUtils;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.InlineHyperlink;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -31,7 +32,7 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
     @UiField InlineHyperlink reports;
     @UiField InlineHyperlink help;
     @UiField InlineHyperlink settings;
-    @UiField Label messageHolder;
+    @UiField SimplePanel messagePanel;
 
 
     @Inject
@@ -52,6 +53,16 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
 
 
     @Override
+    public void setInSlot(Object slot, Widget content)
+    {
+        if (slot == NavigationPresenter.SLOT_Message)
+        {
+            UiUtils.setContent(messagePanel, content);
+        }
+    }
+
+
+    @Override
     public void highlight(String token)
     {
         if (token != null)
@@ -68,12 +79,5 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
                 }
             }
         }
-    }
-
-
-    @Override
-    public void showMessage(Message message)
-    {
-        messageHolder.setText(message.getText());
     }
 }

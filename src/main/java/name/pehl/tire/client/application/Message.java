@@ -18,15 +18,14 @@ public class Message
 
     public Message(String text)
     {
-        this(text, INFO);
+        this(INFO, text);
     }
 
 
-    public Message(String text, Level level)
+    public Message(Level level, String text)
     {
-        super();
-        this.text = text;
         this.level = level;
+        this.text = text;
     }
 
 

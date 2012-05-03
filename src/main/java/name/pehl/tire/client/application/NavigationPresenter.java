@@ -1,9 +1,5 @@
 package name.pehl.tire.client.application;
 
-import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
-import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
-import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
-
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PresenterWidget;
@@ -16,27 +12,50 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
  * @version $Date: 2010-12-06 17:48:50 +0100 (Mo, 06. Dez 2010) $ $Revision: 95
  *          $
  */
-public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyView> implements ShowMessageHandler,
-        ActivitiesLoadedHandler
+public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyView>
 {
     public interface MyView extends View
     {
         void highlight(String token);
-
-
-        void showMessage(Message message);
     }
 
+    /**
+     * Constant for the static message slot.
+     */
+    public static final Object SLOT_Message = new Object();
+
     private final PlaceManager placeManager;
+    private final MessagePresenter messagePresenter;
 
 
     @Inject
-    public NavigationPresenter(final EventBus eventBus, final MyView view, final PlaceManager placeManager)
+    public NavigationPresenter(final EventBus eventBus, final MyView view, final PlaceManager placeManager,
+            final MessagePresenter messagePresenter)
     {
         super(eventBus, view);
         this.placeManager = placeManager;
-        getEventBus().addHandler(ShowMessageEvent.getType(), this);
-        getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
+        this.messagePresenter = messagePresenter;
+    }
+
+
+    /**
+     * Sets {@link MessagePresenter} in {@link #SLOT_Message}.
+     * 
+     * @see com.gwtplatform.mvp.client.PresenterWidget#onReveal()
+     */
+    @Override
+    protected void onReveal()
+    {
+        super.onReveal();
+        setInSlot(SLOT_Message, messagePresenter);
+    }
+
+
+    @Override
+    protected void onHide()
+    {
+        super.onHide();
+        removeFromSlot(SLOT_Message, messagePresenter);
     }
 
 
@@ -53,19 +72,5 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
         PlaceRequest request = placeManager.getCurrentPlaceRequest();
         String token = request.getNameToken();
         getView().highlight(token);
-    }
-
-
-    @Override
-    public void onShowMessage(ShowMessageEvent event)
-    {
-        getView().showMessage(event.getMessage());
-    }
-
-
-    @Override
-    public void onActivitiesLoaded(ActivitiesLoadedEvent event)
-    {
-        getView().showMessage(new Message("Activities successfully loaded."));
     }
 }
