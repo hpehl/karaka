@@ -9,6 +9,8 @@ import name.pehl.tire.client.application.ShowMessageEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.EventBus;
 
+import static java.util.logging.Level.SEVERE;
+
 /**
  * @author $Author:$
  * @version $Date:$ $Revision:$
@@ -34,8 +36,8 @@ public abstract class TireCallback<T> implements AsyncCallback<T>
     @Override
     public void onFailure(Throwable caught)
     {
-        logger.severe(caught.getMessage());
-        ShowMessageEvent event = new ShowMessageEvent(new Message("No activities found"));
-        eventBus.fireEvent(event);
+        String message = caught.getMessage();
+        logger.severe(message);
+        eventBus.fireEvent(new ShowMessageEvent(new Message(SEVERE, message)));
     }
 }

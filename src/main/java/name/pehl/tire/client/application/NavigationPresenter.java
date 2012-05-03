@@ -1,5 +1,9 @@
 package name.pehl.tire.client.application;
 
+import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
+import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
+import name.pehl.tire.client.activity.model.ActivitiesNavigator;
+
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PresenterWidget;
@@ -12,11 +16,14 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
  * @version $Date: 2010-12-06 17:48:50 +0100 (Mo, 06. Dez 2010) $ $Revision: 95
  *          $
  */
-public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyView>
+public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyView> implements ActivitiesLoadedHandler
 {
     public interface MyView extends View
     {
         void highlight(String token);
+
+
+        void setDashboardToken(String token);
     }
 
     /**
@@ -35,6 +42,7 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
         super(eventBus, view);
         this.placeManager = placeManager;
         this.messagePresenter = messagePresenter;
+        getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
     }
 
 
@@ -72,5 +80,15 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
         PlaceRequest request = placeManager.getCurrentPlaceRequest();
         String token = request.getNameToken();
         getView().highlight(token);
+    }
+
+
+    @Override
+    public void onActivitiesLoaded(ActivitiesLoadedEvent event)
+    {
+        ActivitiesNavigator activitiesNavigator = ActivitiesNavigator.fromEvent(event);
+        PlaceRequest placeRequest = activitiesNavigator.toPlaceRequest();
+        String token = placeManager.buildHistoryToken(placeRequest);
+        getView().setDashboardToken(token);
     }
 }

@@ -80,4 +80,14 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
             }
         }
     }
+
+
+    @Override
+    public void setDashboardToken(String token)
+    {
+        if (token != null)
+        {
+            dashboard.setTargetHistoryToken(token);
+        }
+    }
 }

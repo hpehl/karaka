@@ -2,7 +2,9 @@ package name.pehl.tire.client.application;
 
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
+import name.pehl.tire.client.activity.model.ActivitiesFormater;
 import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
+import name.pehl.tire.client.resources.I18n;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -17,11 +19,14 @@ public class MessagePresenter extends PresenterWidget<MessagePresenter.MyView> i
         void show(Message message);
     }
 
+    private final I18n i18n;
+
 
     @Inject
-    public MessagePresenter(final EventBus eventBus, final MyView view)
+    public MessagePresenter(final EventBus eventBus, final MyView view, final I18n i18n)
     {
         super(eventBus, view);
+        this.i18n = i18n;
         getEventBus().addHandler(ShowMessageEvent.getType(), this);
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
     }
@@ -37,6 +42,7 @@ public class MessagePresenter extends PresenterWidget<MessagePresenter.MyView> i
     @Override
     public void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
-        getView().show(new Message("Activities successfully loaded."));
+        final String instant = new ActivitiesFormater().instant(event.getActivities(), i18n.enums());
+        getView().show(new Message("Activities successfully loaded for " + instant + "."));
     }
 }

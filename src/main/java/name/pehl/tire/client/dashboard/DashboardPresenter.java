@@ -1,13 +1,12 @@
 package name.pehl.tire.client.dashboard;
 
-import static java.util.logging.Level.FINE;
-
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.GetActivitiesAction;
 import name.pehl.tire.client.activity.event.GetActivitiesResult;
+import name.pehl.tire.client.activity.model.ActivitiesFormater;
 import name.pehl.tire.client.activity.model.ActivitiesNavigator;
 import name.pehl.tire.client.activity.presenter.NewActivityPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
@@ -15,6 +14,7 @@ import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireCallback;
+import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.shared.model.Activities;
 
 import com.google.inject.Inject;
@@ -27,6 +27,8 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
+
+import static java.util.logging.Level.FINE;
 
 /**
  * @author $Author: harald.pehl $
@@ -57,6 +59,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     private static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
+    private final I18n i18n;
     private final DispatchAsync dispatcher;
     private final NewActivityPresenter newActivityPresenter;
     private final RecentActivitiesPresenter recentActivitiesPresenter;
@@ -64,9 +67,11 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     @Inject
     public DashboardPresenter(EventBus eventBus, MyView view, MyProxy proxy, final DispatchAsync dispatcher,
-            final NewActivityPresenter newActivityPresenter, final RecentActivitiesPresenter recentActivitiesPresenter)
+            final NewActivityPresenter newActivityPresenter, final RecentActivitiesPresenter recentActivitiesPresenter,
+            final I18n i18n)
     {
         super(eventBus, view, proxy);
+        this.i18n = i18n;
         this.dispatcher = dispatcher;
         this.newActivityPresenter = newActivityPresenter;
         this.recentActivitiesPresenter = recentActivitiesPresenter;
@@ -117,8 +122,10 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     {
         super.prepareFromRequest(request);
         final ActivitiesNavigator activitiesNavigator = ActivitiesNavigator.fromPlaceRequest(request);
-        logger.log(FINE, "Requesting new activities");
-        ShowMessageEvent.fire(this, new Message("Loading activities..."));
+        final String instant = new ActivitiesFormater().instant(activitiesNavigator, i18n.enums());
+        String message = "Loading activities for " + instant + "...";
+        logger.log(FINE, message);
+        ShowMessageEvent.fire(this, new Message(message));
         dispatcher.execute(new GetActivitiesAction(activitiesNavigator), new TireCallback<GetActivitiesResult>(
                 getEventBus())
         {
@@ -130,6 +137,15 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 {
                     ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities, activitiesNavigator.getUnit());
                 }
+            }
+
+
+            @Override
+            public void onFailure(Throwable caught)
+            {
+                String errorMessage = "Failed to load activities for " + instant;
+                ShowMessageEvent.fire(DashboardPresenter.this, new Message(errorMessage));
+                logger.severe(errorMessage);
             }
         });
     }

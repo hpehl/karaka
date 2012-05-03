@@ -1,10 +1,10 @@
 package name.pehl.tire.client.activity.view;
 
 import name.pehl.tire.client.activity.event.ProcessActivityEvent;
+import name.pehl.tire.client.activity.model.ActivitiesFormater;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesUiHandlers;
 import name.pehl.tire.client.resources.I18n;
-import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.client.ui.SvgPath;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
@@ -77,26 +77,11 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
     public void updateActivities(Activities activities)
     {
         // Update header
-        StringBuilder text = new StringBuilder("Recent Activities");
-        StringBuilder tooltip = new StringBuilder();
-        if (activities.getUnit() == WEEK)
-        {
-            String cw = "CW " + activities.getWeek() + " / " + activities.getYear();
-            text.append(": ").append(cw);
-            tooltip.append(cw);
-        }
-        else if (activities.getUnit() == MONTH)
-        {
-            String monthKey = "month_" + activities.getMonth();
-            String month = i18n.enums().getString(monthKey) + " " + activities.getYear();
-            text.append(": ").append(month);
-            tooltip.append(month);
-        }
-        tooltip.append(" - ").append(FormatUtils.hours(activities.getMinutes())).append(" - ")
-                .append(FormatUtils.date(activities.getStart())).append(" - ")
-                .append(FormatUtils.date(activities.getEnd()));
-        header.setText(text.toString());
-        header.setTitle(tooltip.toString());
+        ActivitiesFormater activitiesFormater = new ActivitiesFormater();
+        String instant = activitiesFormater.instant(activities, i18n.enums());
+        String period = activitiesFormater.period(activities);
+        header.setText(instant);
+        header.setTitle(instant + " - " + period);
 
         // Update navigation
         // TODO Define colors as resources / constants
