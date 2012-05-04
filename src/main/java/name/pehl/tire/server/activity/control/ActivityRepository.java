@@ -28,6 +28,12 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
     }
 
 
+    public List<Activity> findByYear(int year)
+    {
+        return query().filter("start.year =", year).list();
+    }
+
+
     public List<Activity> findByYearMonth(int year, int month)
     {
         return query().filter("start.year =", year).filter("start.month =", month).list();

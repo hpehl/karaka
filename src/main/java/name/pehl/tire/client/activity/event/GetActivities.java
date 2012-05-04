@@ -15,6 +15,5 @@ import com.gwtplatform.dispatch.annotation.Out;
 public class GetActivities
 {
     @In(1) ActivitiesNavigator activitiesNavigator;
-
     @Out(1) Activities activities;
 }

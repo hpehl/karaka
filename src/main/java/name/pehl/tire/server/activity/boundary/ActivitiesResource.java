@@ -1,6 +1,9 @@
 package name.pehl.tire.server.activity.boundary;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -13,9 +16,12 @@ import javax.ws.rs.core.MediaType;
 import name.pehl.tire.server.activity.control.ActivitiesConverter;
 import name.pehl.tire.server.activity.control.ActivityRepository;
 import name.pehl.tire.server.activity.entity.Activity;
+import name.pehl.tire.server.paging.entity.PageResult;
 import name.pehl.tire.server.settings.control.CurrentSettings;
 import name.pehl.tire.server.settings.entity.Settings;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Year;
+import name.pehl.tire.shared.model.Years;
 
 import org.jboss.resteasy.spi.NotFoundException;
 import org.joda.time.DateMidnight;
@@ -44,6 +50,7 @@ import static org.joda.time.Weeks.weeks;
  * 
  * @todo Add hyperlinks to current, previous and next activities. If there are
  *       no previous / next activities omit the links
+ * @todo implement ETag
  * @author $Author: harald.pehl $
  * @version $Date: 2011-05-16 12:54:26 +0200 (Mo, 16. Mai 2011) $ $Revision: 110
  *          $
@@ -55,6 +62,36 @@ public class ActivitiesResource
     @Inject @CurrentSettings Settings settings;
     @Inject ActivityRepository repository;
     @Inject ActivitiesConverter activitiesConverter;
+
+
+    // ------------------------------------------------- years / months / weeks
+
+    @GET
+    @Path("/years")
+    public Years years()
+    {
+        PageResult<Activity> activities = repository.list();
+        if (activities.isEmpty())
+        {
+            throw new NotFoundException("No activities found");
+        }
+        Map<Integer, Year> lookup = new HashMap<Integer, Year>();
+        for (Activity activity : activities)
+        {
+            int y = activity.getStart().getYear();
+            int m = activity.getStart().getMonth();
+            int w = activity.getStart().getWeek();
+            Year year = lookup.get(y);
+            if (year == null)
+            {
+                year = new Year(y);
+                lookup.put(y, year);
+            }
+            year.addMonth(m);
+            year.addWeek(w);
+        }
+        return new Years(new TreeSet<Year>(lookup.values()));
+    }
 
 
     // --------------------------------------------------------------- by month

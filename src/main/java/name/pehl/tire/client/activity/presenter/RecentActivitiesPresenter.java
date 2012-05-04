@@ -19,6 +19,9 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 /**
  * Presenter which shows details about the recent activities by week / month
  * 
+ * @todo Enable / disable previous / next links based on the links in the
+ *       current activities
+ * @todo Add popups for year / month / week selection
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-23 16:27:42 +0100 (Do, 23. Dez 2010) $ $Revision: 180
  *          $

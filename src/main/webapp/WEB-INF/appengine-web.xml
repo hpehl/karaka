@@ -5,6 +5,7 @@
     <version>2</version>
     <sessions-enabled>true</sessions-enabled>
     <precompilation-enabled>true</precompilation-enabled>
+    <threadsafe>true</threadsafe>
 
     <static-files>
         <include path="**" />
