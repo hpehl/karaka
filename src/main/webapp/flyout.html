@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link
+	href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,400italic,500italic"
+	rel="stylesheet" type="text/css">
+<style type="text/css">
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,dialog,figure,footer,header,hgroup,menu,nav,section,time,mark,audio,video
+	{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	font-family: 'Ubuntu', sans-serif;
+	vertical-align: baseline;
+	background: transparent;
+}
+
+body {
+	line-height: 1;
+}
+
+article,aside,dialog,figure,footer,header,hgroup,nav,section {
+	display: block;
+}
+
+h1 {
+	font-size: 133%;
+	font-style: italic;
+	text-transform: capitalize;
+	margin: 10px 10px 0px 10px;
+	border-bottom: 1px solid #dedede;
+}
+
+p {
+	margin: 10px;
+	line-height: 1.2em;
+}
+
+ul {
+	list-style: none;
+}
+
+a {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: none;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+	text-decoration: none;
+}
+
+ul.flyout {
+	display: none;
+	padding: 0;
+	margin: 10px 0 0 10px;
+	list-style: none;
+	position: absolute;
+	width: 130px;
+	padding: 0;
+}
+
+ul.flyout ul {
+	padding: 0;
+	margin: 0;
+	width: 130px;
+	height: auto;
+	position: absolute;
+	left: -9999px;
+	top: 0;
+}
+
+ul.flyout li {
+	float: left;
+	margin-bottom: 1px;
+}
+
+ul.flyout li a {
+	display: block;
+	float: left;
+	width: 130px;
+	font-size: 12px;
+	line-height: 30px;
+	background: #888;
+	color: #000;
+	text-indent: 10px;
+}
+
+ul.flyout li:hover {
+	position: relative;
+}
+
+ul.flyout li a:hover {
+	position: relative;
+	background-color: #e60;
+	color: #fff;
+}
+
+ul.flyout li:hover>a {
+	background-color: #e60;
+	color: #fff;
+}
+
+ul.flyout ul li a {
+	background: #aaa;
+}
+
+ul.flyout :hover ul,ul.flyout :hover ul :hover ul {
+	left: 120px;
+}
+
+ul.flyout :hover ul ul {
+	left: -9999px;
+}
+
+ul.flyout ul li:hover>a {
+	background-color: #e60;
+	color: #fff;
+}
+
+ul.flyout ul ul li:hover>a {
+	background-color: #e60;
+	color: #fff;
+}
+</style>
+</head>
+<body>
+
+	<h1>Select month or week</h1>
+	<p>
+		Please select either a combination of <a id="yearMonthLink" href="#">year
+			/ month</a> or <a id="yearWeekLink" href="#">year / week</a>.
+	</p>
+
+	<p>
+		Selected values: <span id="year">??</span> / <span id="monthOrWeek">??</span>
+	</p>
+
+	<ul id="yearMonthFlyout" class="flyout">
+		<li><a href="#">2012</a>
+			<ul>
+				<li><a href="#">May</a>
+				<li><a href="#">April</a>
+				<li><a href="#">March</a>
+				<li><a href="#">February</a>
+				<li><a href="#">January</a>
+			</ul></li>
+		<li><a href="#">2011</a>
+			<ul>
+				<li><a href="#">December</a>
+				<li><a href="#">November</a>
+				<li><a href="#">October</a>
+			</ul></li>
+	</ul>
+
+	<ul id="yearWeekFlyout" class="flyout">
+		<li><a class="fly" href="#">2012</a>
+			<ul>
+				<li><a href="#">12</a>
+				<li><a href="#">11</a>
+				<li><a href="#">10</a>
+				<li><a href="#">9</a>
+				<li><a href="#">8</a>
+				<li><a href="#">7</a>
+				<li><a href="#">6</a>
+				<li><a href="#">5</a>
+				<li><a href="#">4</a>
+				<li><a href="#">3</a>
+				<li><a href="#">2</a>
+				<li><a href="#">1</a>
+			</ul></li>
+		<li><a class="fly" href="#">2011</a>
+			<ul>
+				<li><a href="#">52</a>
+				<li><a href="#">51</a>
+				<li><a href="#">50</a>
+				<li><a href="#">49</a>
+			</ul></li>
+	</ul>
+
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$("html").click(function(event) {
+				$("ul#yearMonthFlyout").css("display", "none");
+				$("ul#yearWeekFlyout").css("display", "none");
+			});
+			$("a#yearMonthLink").click(function(event) {
+				event.stopPropagation();
+				$("ul#yearWeekFlyout").css("display", "none");
+				$("ul#yearMonthFlyout").css("left", event.pageX);
+				$("ul#yearMonthFlyout").css("top", event.pageY);
+				$("ul#yearMonthFlyout").css("display", "block");
+			});
+			$("a#yearWeekLink").click(function(event) {
+				event.stopPropagation();
+				$("ul#yearMonthFlyout").css("display", "none");
+				$("ul#yearWeekFlyout").css("left", event.pageX);
+				$("ul#yearWeekFlyout").css("top", event.pageY);
+				$("ul#yearWeekFlyout").css("display", "block");
+			});
+		});
+	</script>
+</body>
+</html>

@@ -86,15 +86,12 @@ mark {
     padding: 2px 2px 2px 5px;
 }
 
-/* Let's get this party started */ 
 ::-webkit-scrollbar {
     width: 5px;
 }
 ::-webkit-scrollbar:horizontal {
 	height: 5px;
 }
-
-/* Handle */
 ::-webkit-scrollbar-thumb {
     background: rgba(61,61,61,0.6); 
     border-radius: 5px;
@@ -103,8 +100,6 @@ mark {
 ::-webkit-scrollbar-thumb:window-inactive {
     background: rgba(61,61,61,0.4); 
 }
-
-/* Track */
 ::-webkit-scrollbar-track {
     background-color: #eaeaea; 
 	border-radius: 5px;
