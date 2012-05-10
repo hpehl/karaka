@@ -18,8 +18,6 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.UListElement;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -31,6 +29,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 /**
  * Widget for selecting one {@link YearAndMonthOrWeek} instance. The widget
@@ -45,8 +44,7 @@ import com.google.gwt.user.client.ui.HasValue;
  * @author $Author$
  * @version $Revision$
  */
-public class YearAndMonthOrWeekPicker extends SvgPath implements HasValue<YearAndMonthOrWeek>, ClickHandler,
-        BlurHandler
+public class YearAndMonthOrWeekPicker extends SvgPath implements HasValue<YearAndMonthOrWeek>, ClickHandler
 {
     /**
      * CSS class for the &lt;ul/&gt; containing the available years and months
@@ -68,10 +66,22 @@ public class YearAndMonthOrWeekPicker extends SvgPath implements HasValue<YearAn
         this.ulVisible = false;
         this.ul = Document.get().createULElement();
         this.ul.setClassName(CSS_STYLE_NAME);
+        RootLayoutPanel.get().getElement().appendChild(this.ul);
 
+        hideList();
         clearList();
         addDomHandler(this, ClickEvent.getType());
-        addDomHandler(this, BlurEvent.getType());
+
+        Element rootElement = RootLayoutPanel.get().getElement();
+        DOM.sinkEvents(rootElement, Event.ONCLICK);
+        DOM.setEventListener(rootElement, new EventListener()
+        {
+            @Override
+            public void onBrowserEvent(Event event)
+            {
+                hideList();
+            }
+        });
     }
 
 
@@ -82,13 +92,6 @@ public class YearAndMonthOrWeekPicker extends SvgPath implements HasValue<YearAn
         {
             showList(event.getClientX(), event.getClientY());
         }
-    }
-
-
-    @Override
-    public void onBlur(BlurEvent event)
-    {
-        hideList();
     }
 
 
@@ -214,6 +217,7 @@ public class YearAndMonthOrWeekPicker extends SvgPath implements HasValue<YearAn
         String rel = String.valueOf(year.getYear()) + "|" + text;
         link.setInnerText(text);
         link.setAttribute("rel", rel);
+        link.setAttribute("href", "#");
 
         Element linkElement = (Element) Element.as(link);
         DOM.sinkEvents(linkElement, Event.ONCLICK);

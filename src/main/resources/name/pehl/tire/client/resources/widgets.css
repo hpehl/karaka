@@ -1,6 +1,7 @@
 @external tire-YearAndMonthOrWeekPicker, tire-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton, gwt-PopupPanelGlass;
 .tire-YearAndMonthOrWeekPicker,.tire-YearAndMonthOrWeekPicker ul {
 	position: absolute;
+	z-index: 1;
 	width: 100px;
 	padding: 0;
 	list-style: none;
@@ -146,7 +147,6 @@ td.datePickerMonth {
 
 .datePickerPreviousButton,.datePickerNextButton {
 	font-size: 110%;
-	line-height: 1em;
 	color: white;
 	background: #1b92a8;
 	cursor: hand;

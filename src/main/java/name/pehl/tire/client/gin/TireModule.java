@@ -23,6 +23,7 @@ import name.pehl.tire.client.activity.view.EditActivityView;
 import name.pehl.tire.client.activity.view.NewActivityView;
 import name.pehl.tire.client.activity.view.QuickChartView;
 import name.pehl.tire.client.activity.view.RecentActivitiesView;
+import name.pehl.tire.client.activity.view.SelectYearAndMonthOrWeekView;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
 import name.pehl.tire.client.application.MessagePresenter;
@@ -57,6 +58,7 @@ import name.pehl.tire.client.terms.TermsView;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
+import name.pehl.tire.client.activity.presenter.SelectYearAndMonthOrWeekPresenter;
 
 /**
  * @author $LastChangedBy: harald.pehl $
@@ -124,5 +126,8 @@ public class TireModule extends AbstractPresenterModule
                 ReportPresenter.MyProxy.class);
         bindPresenter(TagPresenter.class, TagPresenter.MyView.class, TagView.class, TagPresenter.MyProxy.class);
         bindPresenter(TermsPresenter.class, TermsPresenter.MyView.class, TermsView.class, TermsPresenter.MyProxy.class);
+
+        bindPresenterWidget(SelectYearAndMonthOrWeekPresenter.class, SelectYearAndMonthOrWeekPresenter.MyView.class,
+                SelectYearAndMonthOrWeekView.class);
     }
 }
