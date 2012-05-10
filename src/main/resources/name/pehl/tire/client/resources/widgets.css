@@ -1,103 +1,162 @@
-@external tire-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton, gwt-PopupPanelGlass;
+@external tire-YearAndMonthOrWeekPicker, tire-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton, gwt-PopupPanelGlass;
+.tire-YearAndMonthOrWeekPicker,.tire-YearAndMonthOrWeekPicker ul {
+	position: absolute;
+	width: 100px;
+	padding: 0;
+	list-style: none;
+	background-color: white;
+	border: 1px solid #3d3d3d;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	box-shadow: 2px 2px 2px #62635e;
+	-moz-box-shadow: 2px 2px 2px #62635e;
+	-webkit-box-shadow: 2px 2px 2px #62635e;
+}
+
+.tire-YearAndMonthOrWeekPicker {
+	display: none;
+	margin: 10px 0 0 10px;
+}
+
+.tire-YearAndMonthOrWeekPicker ul {
+	left: -9999px;
+	top: 0;
+	width: 100px;
+	margin: 0;
+}
+
+.tire-YearAndMonthOrWeekPicker li,.tire-YearAndMonthOrWeekPicker li a {
+	display: block;
+	color: #3d3d3d;
+	float: left;
+	width: 100px;
+	font-size: 12px;
+	line-height: 30px;
+	text-indent: 10px;
+}
+
+.tire-YearAndMonthOrWeekPicker li {
+	border-bottom: 1px solid #3d3d3d;
+}
+
+.tire-YearAndMonthOrWeekPicker :hover ul {
+	left: 95px;
+	top: 5px;
+}
+
+.tire-YearAndMonthOrWeekPicker li:hover,.tire-YearAndMonthOrWeekPicker li a:hover
+	{
+	position: relative;
+	background-color: #3d3d3d;
+	color: #fff;
+}
+
+.tire-YearAndMonthOrWeekPicker li:hover>a,.tire-YearAndMonthOrWeekPicker ul li:hover>a
+	{
+	background-color: #3d3d3d;
+	color: #fff;
+}
+
 .tire-calendarPopup {
-    box-shadow: #666 0px 4px 10px;
-    -moz-box-shadow: #666 0 px 4 px 10 px;
-    -webkit-box-shadow: #666 0 px 4 px 10 px;
+	box-shadow: #666 0px 4px 10px;
+	-moz-box-shadow: #666 0 px 4 px 10 px;
+	-webkit-box-shadow: #666 0 px 4 px 10 px;
 }
 
 .gwt-DatePicker {
-    border: 1px solid #3d3d3d;
-    color: #3d3d3d;
-    cursor: default;
+	border: 1px solid #3d3d3d;
+	color: #3d3d3d;
+	cursor: default;
 }
 
 .gwt-DatePicker td,.datePickerMonthSelector td:focus {
-    outline: none
+	outline: none
 }
 
 .datePickerDays {
-    width: 100%;
-    background: white;
+	width: 100%;
+	background: white;
 }
 
 .datePickerDay,.datePickerWeekdayLabel,.datePickerWeekendLabel {
-    font-size: 90%;
-    text-align: center;
-    padding: 5px;
-    outline: none;
+	font-size: 90%;
+	text-align: center;
+	padding: 5px;
+	outline: none;
 }
 
 .datePickerWeekdayLabel,.datePickerWeekendLabel {
-    color: white;
-    background: #1b92a8;
-    padding: 5px;
-    cursor: default;
+	color: white;
+	background: #1b92a8;
+	padding: 5px;
+	cursor: default;
 }
 
 .datePickerDay {
-    padding: 5px;
-    cursor: hand;
-    cursor: pointer;
+	padding: 5px;
+	cursor: hand;
+	cursor: pointer;
 }
 
 .datePickerDayIsToday {
-    border: 1px solid black;
-    padding: 4px;
+	border: 1px solid black;
+	padding: 4px;
 }
 
 .datePickerDayIsWeekend {
-    background: #dedede;
+	background: #dedede;
 }
 
 .datePickerDayIsFiller {
-    color: #62635e;
+	color: #62635e;
 }
 
 .datePickerDayIsValue {
-    color: white;
-    background: #68d6ea;
+	color: white;
+	background: #68d6ea;
 }
 
 .datePickerDayIsDisabled {
-    color: #dedede;
-    font-style: italic;
+	color: #dedede;
+	font-style: italic;
 }
 
 .datePickerDayIsHighlighted {
-    background: #b8f5ff;
+	background: #b8f5ff;
 }
 
 .datePickerDayIsValueAndHighlighted {
-    background: #3cc5de;
+	background: #3cc5de;
 }
 
 .datePickerMonthSelector {
-    background: #c3d9ff;
-    width: 100%;
+	background: #c3d9ff;
+	width: 100%;
 }
 
 td.datePickerMonth {
-    text-align: center;
-    vertical-align: center;
-    white-space: nowrap;
-    font-size: 90%;
-    color: white;
-    background: #1b92a8;
+	text-align: center;
+	vertical-align: center;
+	white-space: nowrap;
+	font-size: 90%;
+	color: white;
+	background: #1b92a8;
 }
 
 .datePickerPreviousButton,.datePickerNextButton {
-    font-size: 110%;
-    line-height: 1em;
-    color: white;
-    background: #1b92a8;
-    cursor: hand;
-    cursor: pointer;
-    padding: 0px 5px;
+	font-size: 110%;
+	line-height: 1em;
+	color: white;
+	background: #1b92a8;
+	cursor: hand;
+	cursor: pointer;
+	padding: 0px 5px;
 }
 
 .gwt-PopupPanelGlass {
-    background-color: #333;
-    -moz-opacity: 0.5;
-    -khtml-opacity: 0.5;
-    opacity: 0.5;
+	background-color: #333;
+	-moz-opacity: 0.5;
+	-khtml-opacity: 0.5;
+	opacity: 0.5;
 }

@@ -20,7 +20,7 @@ import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * Widget to display simple SVG graphics defined by 1 to n paths. See <a
+ * Widget to display simple SVG graphics defined by 1 to n paths inside. See <a
  * href="http://thenounproject.com/">http://thenounproject.com/</a> and <a
  * href="http://raphaeljs.com/icons/">http://raphaeljs.com/icons/</a> for sample
  * SVGs. The SVG is placed inside a SPAN element. <h3>CSS Style Rules</h3>
@@ -33,12 +33,11 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class SvgPath extends Widget implements HasClickHandlers
 {
+    public static final String CSS_STYLE_NAME = "tire-SvgPath";
     private static final String SEPERATOR = "|";
 
     // -------------------------------------------------------- private members
 
-    private static int nextId = 0;
-    private final boolean initialized = false;
     private final JavaScriptObject raphael;
     private final List<JavaScriptObject> allPaths;
     private final Map<String, JavaScriptObject> pathsById;
@@ -46,8 +45,8 @@ public class SvgPath extends Widget implements HasClickHandlers
 
     // ----------------------------------------------------------- constructors
 
-    public @UiConstructor
-    SvgPath(int width, int height, String ids, String fills, String strokes, String paths)
+    @UiConstructor
+    public SvgPath(int width, int height, String ids, String fills, String strokes, String paths)
     {
         SpanElement element = Document.get().createSpanElement();
         setElement(element);

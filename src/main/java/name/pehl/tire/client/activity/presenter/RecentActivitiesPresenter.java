@@ -4,13 +4,18 @@ import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
+import name.pehl.tire.client.activity.event.GetYearsAction;
+import name.pehl.tire.client.activity.event.GetYearsResult;
 import name.pehl.tire.client.activity.model.ActivitiesNavigator;
+import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.TimeUnit;
+import name.pehl.tire.shared.model.Years;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
@@ -37,11 +42,15 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
         void unmask();
 
 
+        void updateYears(Years years);
+
+
         void updateActivities(Activities activities);
     }
 
     private static Logger logger = Logger.getLogger(RecentActivitiesPresenter.class.getName());
 
+    private final DispatchAsync dispatcher;
     private final PlaceManager placeManager;
     private final EditActivityPresenter editActivityPresenter;
     private Activities activities;
@@ -49,15 +58,33 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
 
 
     @Inject
-    public RecentActivitiesPresenter(final EventBus eventBus, final RecentActivitiesPresenter.MyView view,
-            final PlaceManager placeManager, final EditActivityPresenter editActivityPresenter)
+    public RecentActivitiesPresenter(final DispatchAsync dispatcher, final EventBus eventBus,
+            final RecentActivitiesPresenter.MyView view, final PlaceManager placeManager,
+            final EditActivityPresenter editActivityPresenter)
     {
         super(eventBus, view);
+        this.dispatcher = dispatcher;
         this.placeManager = placeManager;
         this.editActivityPresenter = editActivityPresenter;
         this.activitiesNavigator = new ActivitiesNavigator();
         getView().setUiHandlers(this);
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
+    }
+
+
+    @Override
+    protected void onReset()
+    {
+        super.onReset();
+        dispatcher.execute(new GetYearsAction(), new TireCallback<GetYearsResult>(getEventBus())
+        {
+            @Override
+            public void onSuccess(GetYearsResult result)
+            {
+                Years years = result.getYears();
+                getView().updateYears(years);
+            }
+        });
     }
 
 
@@ -71,9 +98,9 @@ public class RecentActivitiesPresenter extends PresenterWidget<RecentActivitiesP
 
 
     @Override
-    public void onRelative(int offset)
+    public void onGoto(int year, int monthOrWeek, TimeUnit unit)
     {
-        activitiesNavigator = activitiesNavigator.relative(offset);
+        activitiesNavigator = activitiesNavigator.goTo(year, monthOrWeek, unit);
         placeManager.revealPlace(activitiesNavigator.toPlaceRequest());
     }
 

@@ -12,7 +12,7 @@ import com.gwtplatform.mvp.client.UiHandlers;
  */
 public interface RecentActivitiesUiHandlers extends UiHandlers
 {
-    void onRelative(int offset);
+    void onGoto(int year, int monthOrWeek, TimeUnit unit);
 
 
     void onPrev();

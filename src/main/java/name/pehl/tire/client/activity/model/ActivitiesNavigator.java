@@ -156,30 +156,22 @@ public class ActivitiesNavigator
     }
 
 
-    public ActivitiesNavigator relative(int offset)
+    public ActivitiesNavigator goTo(int year, int monthOrWeek, TimeUnit unit)
     {
-        if (offset > 0)
-        {
-            throw new IllegalArgumentException("Illegal offset " + offset + ": Offset must be <= 0");
-        }
         if (unit == TimeUnit.DAY)
         {
             throw new IllegalArgumentException("Illegal unit " + unit + ": Unit must be one of "
                     + EnumSet.of(MONTH, WEEK));
         }
-        if (offset == 0)
-        {
-            return new ActivitiesNavigator(0, 0, 0, unit);
-        }
         else
         {
             if (unit == TimeUnit.MONTH)
             {
-                return new ActivitiesNavigator(0, offset, 0, unit);
+                return new ActivitiesNavigator(year, monthOrWeek, 0, unit);
             }
             else
             {
-                return new ActivitiesNavigator(0, 0, offset, unit);
+                return new ActivitiesNavigator(year, 0, monthOrWeek, unit);
             }
         }
     }

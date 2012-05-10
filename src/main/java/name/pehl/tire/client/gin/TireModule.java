@@ -12,6 +12,7 @@ import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.activity.model.ActivityReader;
 import name.pehl.tire.client.activity.model.DayReader;
 import name.pehl.tire.client.activity.model.WeekReader;
+import name.pehl.tire.client.activity.model.YearReader;
 import name.pehl.tire.client.activity.model.YearsReader;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
 import name.pehl.tire.client.activity.presenter.NewActivityPresenter;
@@ -91,6 +92,7 @@ public class TireModule extends AbstractPresenterModule
         bind(TagWriter.class).asEagerSingleton();
         bind(UserReader.class).asEagerSingleton();
         bind(WeekReader.class).asEagerSingleton();
+        bind(YearReader.class).asEagerSingleton();
         bind(YearsReader.class).asEagerSingleton();
 
         // Constants

@@ -6,8 +6,10 @@ import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
 import name.pehl.tire.client.activity.presenter.RecentActivitiesUiHandlers;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.ui.SvgPath;
+import name.pehl.tire.client.ui.YearAndMonthOrWeekPicker;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Years;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -38,8 +40,8 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
     @UiField InlineLabel header;
     @UiField SvgPath previous;
     @UiField SvgPath next;
-    @UiField SvgPath lastMonth;
-    @UiField SvgPath lastWeek;
+    @UiField YearAndMonthOrWeekPicker lastMonth;
+    @UiField YearAndMonthOrWeekPicker lastWeek;
     @UiField SvgPath currentMonth;
     @UiField SvgPath currentWeek;
     @UiField(provided = true) ActivitiesTable activitiesTable;
@@ -74,6 +76,14 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
 
 
     @Override
+    public void updateYears(Years years)
+    {
+        lastMonth.setPossibleValues(years, MONTH);
+        lastWeek.setPossibleValues(years, WEEK);
+    }
+
+
+    @Override
     public void updateActivities(Activities activities)
     {
         // Update header
@@ -93,11 +103,7 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
         {
             previous.setTitle("Previous week");
             next.setTitle("Next week");
-            if (activities.getWeekDiff() == -1)
-            {
-                lastWeek.fill("#1b92a8");
-            }
-            else if (activities.getWeekDiff() == 0)
+            if (activities.getWeekDiff() == 0)
             {
                 currentWeek.fill("#1b92a8");
             }
@@ -106,11 +112,7 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
         {
             previous.setTitle("Previous month");
             next.setTitle("Next month");
-            if (activities.getMonthDiff() == -1)
-            {
-                lastMonth.fill("#1b92a8");
-            }
-            else if (activities.getMonthDiff() == 0)
+            if (activities.getMonthDiff() == 0)
             {
                 currentMonth.fill("#1b92a8");
             }
@@ -127,28 +129,6 @@ public class RecentActivitiesView extends ViewWithUiHandlers<RecentActivitiesUiH
         if (getUiHandlers() != null)
         {
             getUiHandlers().onPrev();
-        }
-    }
-
-
-    @UiHandler("lastMonth")
-    public void onRecentMonthClicked(ClickEvent event)
-    {
-        if (getUiHandlers() != null)
-        {
-            getUiHandlers().changeUnit(MONTH);
-            getUiHandlers().onRelative(-1);
-        }
-    }
-
-
-    @UiHandler("lastWeek")
-    public void onRecentWeekClicked(ClickEvent event)
-    {
-        if (getUiHandlers() != null)
-        {
-            getUiHandlers().changeUnit(WEEK);
-            getUiHandlers().onRelative(-1);
         }
     }
 
