@@ -4,6 +4,7 @@
 
 	<ui:style>
 		.popup {
+			margin: 10px 0 0 10px;
 			width: 100px;
 			background-color: white;
 			border: 1px solid #3d3d3d;
@@ -15,16 +16,7 @@
 			-webkit-box-shadow: 2px 2px 2px #62635e;
 		}
 		
-		ul.select,ul.select ul {
-			padding: 0;
-			list-style: none;
 		}
-		
-		ul.select {
-			display: none;
-			margin: 10px 0 0 10px;
-		}
-		
 		ul.select ul {
 			left: -9999px;
 			top: 0;
@@ -38,6 +30,7 @@
 			font-size: 12px;
 			line-height: 30px;
 			text-indent: 10px;
+			width: 100%;
 		}
 		
 		ul.select li {
@@ -66,7 +59,7 @@
 		addStyleNames="{style.popup}">
 		<g:HTMLPanel>
 			<ul class="{style.select}" ui:field="list">
-				<li>No data</li>
+				<li>n/a</li>
 			</ul>
 		</g:HTMLPanel>
 	</tui:EscapablePopupPanel>

@@ -1,10 +1,10 @@
 package name.pehl.tire.client.activity.event;
 
-import name.pehl.tire.client.activity.model.ActivitiesNavigator;
 import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.dispatch.TireActionHandler;
 import name.pehl.tire.client.rest.UrlBuilder;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.YearAndMonthOrWeek;
 
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.Resource;
@@ -35,37 +35,29 @@ public class GetActivitiesHandler extends TireActionHandler<Activities, GetActiv
     protected Method getMethod(GetActivitiesAction action)
     {
         UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities");
-        ActivitiesNavigator activitiesNavigator = action.getActivitiesNavigator();
-        if (activitiesNavigator.getUnit() == WEEK)
+        YearAndMonthOrWeek yearAndMonthOrWeek = action.getActivitiesRequest().getYearAndMonthOrWeek();
+        if (yearAndMonthOrWeek.getUnit() == WEEK)
         {
-            if (activitiesNavigator.getYear() == 0 && activitiesNavigator.getWeek() == 0)
+            if (yearAndMonthOrWeek.getYear() == 0 && yearAndMonthOrWeek.getMonthOrWeek() == 0)
             {
                 urlBuilder = urlBuilder.path("currentWeek");
             }
-            else if (activitiesNavigator.getYear() == 0 && activitiesNavigator.getWeek() != 0)
-            {
-                urlBuilder = urlBuilder.path("relative", "cw" + activitiesNavigator.getWeek());
-            }
             else
             {
-                urlBuilder = urlBuilder.path(String.valueOf(activitiesNavigator.getYear()),
-                        "cw" + activitiesNavigator.getWeek());
+                urlBuilder = urlBuilder.path(String.valueOf(yearAndMonthOrWeek.getYear()),
+                        "cw" + yearAndMonthOrWeek.getMonthOrWeek());
             }
         }
-        else if (activitiesNavigator.getUnit() == MONTH)
+        else if (yearAndMonthOrWeek.getUnit() == MONTH)
         {
-            if (activitiesNavigator.getYear() == 0 && activitiesNavigator.getMonth() == 0)
+            if (yearAndMonthOrWeek.getYear() == 0 && yearAndMonthOrWeek.getMonthOrWeek() == 0)
             {
                 urlBuilder = urlBuilder.path("currentMonth");
             }
-            else if (activitiesNavigator.getYear() == 0 && activitiesNavigator.getMonth() != 0)
-            {
-                urlBuilder = urlBuilder.path("relative", String.valueOf(activitiesNavigator.getMonth()));
-            }
             else
             {
-                urlBuilder = urlBuilder.path(String.valueOf(activitiesNavigator.getYear()),
-                        String.valueOf(activitiesNavigator.getMonth()));
+                urlBuilder = urlBuilder.path(String.valueOf(yearAndMonthOrWeek.getYear()),
+                        String.valueOf(yearAndMonthOrWeek.getMonthOrWeek()));
             }
         }
         return new Resource(urlBuilder.toUrl()).get();

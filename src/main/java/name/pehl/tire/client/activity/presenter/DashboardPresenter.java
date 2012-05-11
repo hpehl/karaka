@@ -8,13 +8,11 @@ import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.activity.event.GetActivitiesAction;
 import name.pehl.tire.client.activity.event.GetActivitiesResult;
-import name.pehl.tire.client.activity.model.ActivitiesFormater;
-import name.pehl.tire.client.activity.model.ActivitiesNavigator;
+import name.pehl.tire.client.activity.model.ActivitiesRequest;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireCallback;
-import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.TimeUnit;
@@ -32,7 +30,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
-import static java.util.logging.Level.FINE;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
@@ -61,7 +58,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     private static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
-    private final I18n i18n;
     private final DispatchAsync dispatcher;
     private final PlaceManager placeManager;
     private final EditActivityPresenter editActivityPresenter;
@@ -79,7 +75,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             final EditActivityPresenter editActivityPresenter,
             final SelectYearAndMonthOrWeekPresenter selectMonthPresenter,
             final SelectYearAndMonthOrWeekPresenter selectWeekPresenter, final DispatchAsync dispatcher,
-            final PlaceManager placeManager, final I18n i18n)
+            final PlaceManager placeManager)
     {
         super(eventBus, view, proxy);
         this.editActivityPresenter = editActivityPresenter;
@@ -87,7 +83,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         this.selectMonthPresenter.setUnit(MONTH);
         this.selectWeekPresenter = selectWeekPresenter;
         this.selectWeekPresenter.setUnit(WEEK);
-        this.i18n = i18n;
         this.dispatcher = dispatcher;
         this.placeManager = placeManager;
 
@@ -109,19 +104,17 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
      * Turns the parameters in the place request into an
      * {@link ActivitiesNavigator} instance.
      * 
-     * @param request
+     * @param placeRequest
      * @see com.gwtplatform.mvp.client.Presenter#prepareFromRequest(com.gwtplatform.mvp.client.proxy.PlaceRequest)
      */
     @Override
-    public void prepareFromRequest(PlaceRequest request)
+    public void prepareFromRequest(PlaceRequest placeRequest)
     {
-        super.prepareFromRequest(request);
-        final ActivitiesNavigator activitiesNavigator = ActivitiesNavigator.fromPlaceRequest(request);
-        final String instant = new ActivitiesFormater().instant(activitiesNavigator, i18n.enums());
-        String message = "Loading activities for " + instant + "...";
-        logger.log(FINE, message);
-        ShowMessageEvent.fire(this, new Message(message));
-        dispatcher.execute(new GetActivitiesAction(activitiesNavigator), new TireCallback<GetActivitiesResult>(
+        super.prepareFromRequest(placeRequest);
+        final ActivitiesRequest activitiesRequest = new ActivitiesRequest(placeRequest);
+        ShowMessageEvent.fire(this, new Message("Loading activities for " + activitiesRequest.getYearAndMonthOrWeek()
+                + "..."));
+        dispatcher.execute(new GetActivitiesAction(activitiesRequest), new TireCallback<GetActivitiesResult>(
                 getEventBus())
         {
             @Override
@@ -133,7 +126,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                     // don't just call getView().updateActivities(activities) as
                     // other classes might also be interested about updated
                     // activities.
-                    ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities, activitiesNavigator.getUnit());
+                    ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities);
                 }
             }
 
@@ -141,7 +134,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             @Override
             public void onFailure(Throwable caught)
             {
-                String errorMessage = "Failed to load activities for " + instant;
+                String errorMessage = "Failed to load activities for " + activitiesRequest.getYearAndMonthOrWeek();
                 ShowMessageEvent.fire(DashboardPresenter.this, new Message(errorMessage));
                 logger.severe(errorMessage);
             }
@@ -172,52 +165,54 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     @Override
     public void onCurrentWeek()
     {
-        PlaceRequest request = new PlaceRequest(NameTokens.dashboard).with("current", TimeUnit.WEEK.name()
+        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("current", TimeUnit.WEEK.name()
                 .toLowerCase());
-        placeManager.revealPlace(request);
+        placeManager.revealPlace(placeRequest);
     }
 
 
     @Override
     public void onCurrentMonth()
     {
-        PlaceRequest request = new PlaceRequest(NameTokens.dashboard).with("current", TimeUnit.MONTH.name()
+        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("current", TimeUnit.MONTH.name()
                 .toLowerCase());
-        placeManager.revealPlace(request);
+        placeManager.revealPlace(placeRequest);
     }
 
 
     @Override
     public void onSelectWeek(int left, int top)
     {
-        selectMonthPresenter.getView().setPosition(left, top);
-        addToPopupSlot(selectMonthPresenter, false);
+        addToPopupSlot(null);
+        selectWeekPresenter.getView().setPosition(left, top);
+        addToPopupSlot(selectWeekPresenter, false);
     }
 
 
     @Override
     public void onSelectMonth(int left, int top)
     {
+        addToPopupSlot(null);
         selectMonthPresenter.getView().setPosition(left, top);
-        addToPopupSlot(selectWeekPresenter, false);
+        addToPopupSlot(selectMonthPresenter, false);
     }
 
 
     @Override
     public void onPrevious()
     {
-        PlaceRequest request = new PlaceRequest(NameTokens.dashboard).with("previous", activities.getUnit().name()
+        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("previous", activities.getUnit().name()
                 .toLowerCase());
-        placeManager.revealPlace(request);
+        placeManager.revealPlace(placeRequest);
     }
 
 
     @Override
     public void onNext()
     {
-        PlaceRequest request = new PlaceRequest(NameTokens.dashboard).with("next", activities.getUnit().name()
+        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("next", activities.getUnit().name()
                 .toLowerCase());
-        placeManager.revealPlace(request);
+        placeManager.revealPlace(placeRequest);
     }
 
 
@@ -226,6 +221,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     {
         logger.fine("Edit " + activity + " in row #" + rowIndex);
         editActivityPresenter.getView().setActivity(activity);
+        addToPopupSlot(null);
         addToPopupSlot(editActivityPresenter);
     }
 

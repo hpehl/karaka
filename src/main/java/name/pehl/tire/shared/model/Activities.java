@@ -1,7 +1,5 @@
 package name.pehl.tire.shared.model;
 
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -9,6 +7,8 @@ import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * @author $Author: harald.pehl $
@@ -62,8 +62,20 @@ public class Activities
     @Override
     public String toString()
     {
-        StringBuilder builder = new StringBuilder("Activities [").append(year).append(", ").append(month)
-                .append(", cw").append(week).append("]");
+        StringBuilder builder = new StringBuilder();
+        if (unit == TimeUnit.MONTH)
+        {
+            builder.append(month);
+        }
+        else if (unit == WEEK)
+        {
+            builder.append("CW ").append(week);
+        }
+        else
+        {
+            builder.append("undefined");
+        }
+        builder.append(" / ").append(year);
         return builder.toString();
     }
 

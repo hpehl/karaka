@@ -3,11 +3,11 @@ package name.pehl.tire.client.activity.view;
 import java.util.Date;
 
 import name.pehl.tire.client.activity.event.ProcessActivityEvent;
-import name.pehl.tire.client.activity.model.ActivitiesFormater;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardUiHandlers;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
+import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.client.ui.SvgPath;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
@@ -90,11 +90,26 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     public void updateActivities(Activities activities)
     {
         // Update header
-        ActivitiesFormater activitiesFormater = new ActivitiesFormater();
-        String instant = activitiesFormater.instant(activities, i18n.enums());
-        String period = activitiesFormater.period(activities);
-        header.setText(instant);
-        header.setTitle(instant + " - " + period);
+        StringBuilder text = new StringBuilder("Recent Activities");
+        StringBuilder title = new StringBuilder();
+        if (activities.getUnit() == WEEK)
+        {
+            String cw = "CW " + activities.getWeek() + " / " + activities.getYear();
+            text.append(": ").append(cw);
+            title.append(cw);
+        }
+        else if (activities.getUnit() == MONTH)
+        {
+            String monthKey = "month_" + activities.getMonth();
+            String month = i18n.enums().getString(monthKey) + " " + activities.getYear();
+            text.append(": ").append(month);
+            title.append(month);
+        }
+        title.append(" - ").append(FormatUtils.hours(activities.getMinutes())).append(" - ")
+                .append(FormatUtils.date(activities.getStart())).append(" - ")
+                .append(FormatUtils.date(activities.getEnd()));
+        header.setText(text.toString());
+        header.setTitle(title.toString());
 
         // Update navigation
         // TODO Define colors as resources / constants

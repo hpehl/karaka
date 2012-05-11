@@ -50,18 +50,6 @@ public class QuickChartView extends ViewWithUiHandlers<RecentActivitiesUiHandler
 
 
     @Override
-    public void mask()
-    {
-    }
-
-
-    @Override
-    public void unmask()
-    {
-    }
-
-
-    @Override
     public void updateActivities(Activities activities)
     {
         if (activities.getUnit() == WEEK)

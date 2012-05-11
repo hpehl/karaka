@@ -35,7 +35,7 @@ public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYea
 
 
     @Override
-    protected void onReset()
+    protected void onReveal()
     {
         super.onReset();
         // TODO Implement some caching to prevent server roundtrip

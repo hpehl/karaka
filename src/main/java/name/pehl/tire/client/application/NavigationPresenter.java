@@ -1,8 +1,9 @@
 package name.pehl.tire.client.application;
 
+import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
-import name.pehl.tire.client.activity.model.ActivitiesNavigator;
+import name.pehl.tire.shared.model.Activities;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -10,6 +11,9 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * @author $Author: harald.pehl $
@@ -86,8 +90,18 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
     @Override
     public void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
-        ActivitiesNavigator activitiesNavigator = ActivitiesNavigator.fromEvent(event);
-        PlaceRequest placeRequest = activitiesNavigator.toPlaceRequest();
+        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard);
+        Activities activities = event.getActivities();
+        if (activities.getUnit() == MONTH)
+        {
+            placeRequest = placeRequest.with("year", String.valueOf(activities.getYear())).with("month",
+                    String.valueOf(activities.getMonth()));
+        }
+        else if (activities.getUnit() == WEEK)
+        {
+            placeRequest = placeRequest.with("year", String.valueOf(activities.getYear())).with("week",
+                    String.valueOf(activities.getWeek()));
+        }
         String token = placeManager.buildHistoryToken(placeRequest);
         getView().setDashboardToken(token);
     }

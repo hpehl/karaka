@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity.event;
 
-import name.pehl.tire.client.activity.model.ActivitiesNavigator;
+import name.pehl.tire.client.activity.model.ActivitiesRequest;
 import name.pehl.tire.shared.model.Activities;
 
 import com.gwtplatform.dispatch.annotation.GenDispatch;
@@ -14,6 +14,6 @@ import com.gwtplatform.dispatch.annotation.Out;
 @GenDispatch
 public class GetActivities
 {
-    @In(1) ActivitiesNavigator activitiesNavigator;
+    @In(1) ActivitiesRequest activitiesRequest;
     @Out(1) Activities activities;
 }

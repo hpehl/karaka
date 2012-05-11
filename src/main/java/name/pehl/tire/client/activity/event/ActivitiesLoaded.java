@@ -1,7 +1,6 @@
 package name.pehl.tire.client.activity.event;
 
 import name.pehl.tire.shared.model.Activities;
-import name.pehl.tire.shared.model.TimeUnit;
 
 import com.gwtplatform.dispatch.annotation.GenEvent;
 import com.gwtplatform.dispatch.annotation.Order;
@@ -15,6 +14,4 @@ import com.gwtplatform.dispatch.annotation.Order;
 public class ActivitiesLoaded
 {
     @Order(1) Activities activities;
-
-    @Order(2) TimeUnit unit;
 }

@@ -27,6 +27,7 @@ public class SelectYearAndMonthOrWeekView extends PopupViewImpl implements Selec
     {
         super(eventBus);
         this.popupPanel = binder.createAndBindUi(this);
+        setAutoHideOnNavigationEventEnabled(true);
     }
 
 
