@@ -1,9 +1,9 @@
 package name.pehl.tire.client.gin;
 
 import name.pehl.tire.client.about.AboutPresenter;
+import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.client.ClientPresenter;
-import name.pehl.tire.client.dashboard.DashboardPresenter;
 import name.pehl.tire.client.dispatch.ClientDispatchModule;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.project.ProjectPresenter;

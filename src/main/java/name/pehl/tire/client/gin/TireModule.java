@@ -14,15 +14,14 @@ import name.pehl.tire.client.activity.model.DayReader;
 import name.pehl.tire.client.activity.model.WeekReader;
 import name.pehl.tire.client.activity.model.YearReader;
 import name.pehl.tire.client.activity.model.YearsReader;
+import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
-import name.pehl.tire.client.activity.presenter.NewActivityPresenter;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
-import name.pehl.tire.client.activity.presenter.RecentActivitiesPresenter;
+import name.pehl.tire.client.activity.presenter.SelectYearAndMonthOrWeekPresenter;
 import name.pehl.tire.client.activity.view.ActivitiesTableResources;
+import name.pehl.tire.client.activity.view.DashboardView;
 import name.pehl.tire.client.activity.view.EditActivityView;
-import name.pehl.tire.client.activity.view.NewActivityView;
 import name.pehl.tire.client.activity.view.QuickChartView;
-import name.pehl.tire.client.activity.view.RecentActivitiesView;
 import name.pehl.tire.client.activity.view.SelectYearAndMonthOrWeekView;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
@@ -34,8 +33,6 @@ import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.client.ClientView;
 import name.pehl.tire.client.cockpit.CockpitPresenter;
 import name.pehl.tire.client.cockpit.CockpitView;
-import name.pehl.tire.client.dashboard.DashboardPresenter;
-import name.pehl.tire.client.dashboard.DashboardView;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
 import name.pehl.tire.client.project.ProjectPresenter;
@@ -58,7 +55,6 @@ import name.pehl.tire.client.terms.TermsView;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
-import name.pehl.tire.client.activity.presenter.SelectYearAndMonthOrWeekPresenter;
 
 /**
  * @author $LastChangedBy: harald.pehl $
@@ -106,10 +102,9 @@ public class TireModule extends AbstractPresenterModule
         bindPresenterWidget(EditActivityPresenter.class, EditActivityPresenter.MyView.class, EditActivityView.class);
         bindPresenterWidget(MessagePresenter.class, MessagePresenter.MyView.class, MessageView.class);
         bindPresenterWidget(NavigationPresenter.class, NavigationPresenter.MyView.class, NavigationView.class);
-        bindPresenterWidget(NewActivityPresenter.class, NewActivityPresenter.MyView.class, NewActivityView.class);
         bindPresenterWidget(QuickChartPresenter.class, QuickChartPresenter.MyView.class, QuickChartView.class);
-        bindPresenterWidget(RecentActivitiesPresenter.class, RecentActivitiesPresenter.MyView.class,
-                RecentActivitiesView.class);
+        bindPresenterWidget(SelectYearAndMonthOrWeekPresenter.class, SelectYearAndMonthOrWeekPresenter.MyView.class,
+                SelectYearAndMonthOrWeekView.class);
 
         // Presenters (a-z)
         bindPresenter(AboutPresenter.class, AboutPresenter.MyView.class, AboutView.class, AboutPresenter.MyProxy.class);
@@ -126,8 +121,5 @@ public class TireModule extends AbstractPresenterModule
                 ReportPresenter.MyProxy.class);
         bindPresenter(TagPresenter.class, TagPresenter.MyView.class, TagView.class, TagPresenter.MyProxy.class);
         bindPresenter(TermsPresenter.class, TermsPresenter.MyView.class, TermsView.class, TermsPresenter.MyProxy.class);
-
-        bindPresenterWidget(SelectYearAndMonthOrWeekPresenter.class, SelectYearAndMonthOrWeekPresenter.MyView.class,
-                SelectYearAndMonthOrWeekView.class);
     }
 }

@@ -1,10 +1,73 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tui="urn:import:name.pehl.tire.client.ui">
 
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:g='urn:import:com.google.gwt.user.client.ui'
-	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
-	ui:generateLocales='default'>
+	<ui:style>
+		.popup {
+			width: 100px;
+			background-color: white;
+			border: 1px solid #3d3d3d;
+			border-radius: 5px;
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			box-shadow: 2px 2px 2px #62635e;
+			-moz-box-shadow: 2px 2px 2px #62635e;
+			-webkit-box-shadow: 2px 2px 2px #62635e;
+		}
+		
+		ul.select,ul.select ul {
+			padding: 0;
+			list-style: none;
+		}
+		
+		ul.select {
+			display: none;
+			margin: 10px 0 0 10px;
+		}
+		
+		ul.select ul {
+			left: -9999px;
+			top: 0;
+			margin: 0;
+		}
+		
+		ul.select li,ul.select li a {
+			display: block;
+			color: #3d3d3d;
+			float: left;
+			font-size: 12px;
+			line-height: 30px;
+			text-indent: 10px;
+		}
+		
+		ul.select li {
+			border-bottom: 1px solid #3d3d3d;
+		}
+		
+		ul.select :hover ul {
+			left: 95px;
+			top: 5px;
+		}
+		
+		ul.select li:hover,ul.select li a:hover {
+			position: relative;
+			background-color: #3d3d3d;
+			color: #fff;
+		}
+		
+		ul.select li:hover>a,ul.select ul li:hover>a {
+			background-color: #3d3d3d;
+			color: #fff;
+		}
+	</ui:style>
 
-	<g:PopupPanel/>
+	<tui:EscapablePopupPanel animationEnabled="false"
+		autoHideEnabled="true" modal="false" glassEnabled="false"
+		addStyleNames="{style.popup}">
+		<g:HTMLPanel>
+			<ul class="{style.select}" ui:field="list">
+				<li>No data</li>
+			</ul>
+		</g:HTMLPanel>
+	</tui:EscapablePopupPanel>
 </ui:UiBinder>
