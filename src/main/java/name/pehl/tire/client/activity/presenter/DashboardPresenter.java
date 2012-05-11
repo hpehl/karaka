@@ -111,7 +111,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     public void prepareFromRequest(PlaceRequest placeRequest)
     {
         super.prepareFromRequest(placeRequest);
-        final ActivitiesRequest activitiesRequest = new ActivitiesRequest(placeRequest);
+        final ActivitiesRequest activitiesRequest = new ActivitiesRequest(placeRequest, activities);
         ShowMessageEvent.fire(this, new Message("Loading activities for " + activitiesRequest.getYearAndMonthOrWeek()
                 + "..."));
         dispatcher.execute(new GetActivitiesAction(activitiesRequest), new TireCallback<GetActivitiesResult>(

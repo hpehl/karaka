@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.TimeUnit;
 import name.pehl.tire.shared.model.YearAndMonthOrWeek;
 
@@ -26,26 +27,49 @@ public class ActivitiesRequest
     private final YearAndMonthOrWeek yearAndMonthOrWeek;
 
 
-    public ActivitiesRequest(PlaceRequest request)
+    public ActivitiesRequest(PlaceRequest request, Activities activities)
     {
         this.yearAndMonthOrWeek = new YearAndMonthOrWeek();
         Set<String> names = request.getParameterNames();
         if (names.contains(PARAM_CURRENT) || names.contains(PARAM_PREVIOUS) || names.contains(PARAM_NEXT))
         {
             String value = null;
+            TimeUnit unit = WEEK;
             if (names.contains(PARAM_CURRENT))
             {
                 value = request.getParameter(PARAM_CURRENT, null);
+                unit = parseTimeUnit(value);
             }
             else if (names.contains(PARAM_PREVIOUS))
             {
-                value = request.getParameter(PARAM_CURRENT, null);
+                value = request.getParameter(PARAM_PREVIOUS, null);
+                unit = parseTimeUnit(value);
+                int[] previous = previous(activities, unit);
+                this.yearAndMonthOrWeek.setUnit(unit);
+                if (unit == MONTH)
+                {
+                    this.yearAndMonthOrWeek.setYear(previous[0]);
+                }
+                else if (unit == WEEK)
+                {
+
+                }
             }
-            else if (names.contains(PARAM_PREVIOUS))
+            else if (names.contains(PARAM_NEXT))
             {
-                value = request.getParameter(PARAM_CURRENT, null);
+                value = request.getParameter(PARAM_NEXT, null);
+                unit = parseTimeUnit(value);
+                int[] next = next(activities, unit);
+                this.yearAndMonthOrWeek.setUnit(unit);
+                if (unit == MONTH)
+                {
+                    this.yearAndMonthOrWeek.setYear(next[0]);
+                }
+                else if (unit == WEEK)
+                {
+
+                }
             }
-            TimeUnit unit = parseTimeUnit(value);
             this.yearAndMonthOrWeek.setUnit(unit);
         }
         else if (names.contains(PARAM_YEAR) && (names.contains(PARAM_MONTH) || names.contains(PARAM_WEEK)))
@@ -66,6 +90,60 @@ public class ActivitiesRequest
                 this.yearAndMonthOrWeek.setMonthOrWeek(week);
             }
         }
+    }
+
+
+    private int[] previous(Activities activities, TimeUnit unit)
+    {
+        int newYear = activities.getYear();
+        int newMonth = activities.getMonth();
+        int newWeek = activities.getWeek();
+        if (unit == MONTH)
+        {
+            newMonth++;
+            if (newMonth > 12)
+            {
+                newMonth = 1;
+                newYear++;
+            }
+        }
+        else if (unit == WEEK)
+        {
+            newWeek++;
+            if (newWeek > 52)
+            {
+                newWeek = 1;
+                newYear++;
+            }
+        }
+        return new int[] {newYear, newMonth, newWeek};
+    }
+
+
+    public int[] next(Activities activities, TimeUnit unit)
+    {
+        int newYear = activities.getYear();
+        int newMonth = activities.getMonth();
+        int newWeek = activities.getWeek();
+        if (unit == MONTH)
+        {
+            newMonth--;
+            if (newMonth < 1)
+            {
+                newMonth = 12;
+                newYear--;
+            }
+        }
+        else if (unit == WEEK)
+        {
+            newWeek--;
+            if (newWeek < 1)
+            {
+                newWeek = 52;
+                newYear--;
+            }
+        }
+        return new int[] {newYear, newMonth, newWeek};
     }
 
 
