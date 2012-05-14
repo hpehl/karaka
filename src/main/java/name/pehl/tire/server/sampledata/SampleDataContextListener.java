@@ -1,5 +1,8 @@
 package name.pehl.tire.server.sampledata;
 
+import static com.google.appengine.api.utils.SystemProperty.environment;
+import static com.google.appengine.api.utils.SystemProperty.Environment.Value.Development;
+
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -15,19 +18,19 @@ public class SampleDataContextListener implements ServletContextListener
     @SuppressWarnings("unchecked")
     public void contextInitialized(ServletContextEvent event)
     {
-        // if (environment.value() == Development)
-        // {
-        ServletContext servletContext = event.getServletContext();
-        BeanManager beanManager = (BeanManager) servletContext.getAttribute(Listener.BEAN_MANAGER_ATTRIBUTE_NAME);
-        if (beanManager != null)
+        if (environment.value() == Development)
         {
-            Bean<SampleData> bean = (Bean<SampleData>) beanManager.getBeans(SampleData.class).iterator().next();
-            CreationalContext<SampleData> context = beanManager.createCreationalContext(bean);
-            SampleData sampleData = (SampleData) beanManager.getReference(bean, SampleData.class, context);
-            sampleData.cleanup();
-            sampleData.persit();
+            ServletContext servletContext = event.getServletContext();
+            BeanManager beanManager = (BeanManager) servletContext.getAttribute(Listener.BEAN_MANAGER_ATTRIBUTE_NAME);
+            if (beanManager != null)
+            {
+                Bean<SampleData> bean = (Bean<SampleData>) beanManager.getBeans(SampleData.class).iterator().next();
+                CreationalContext<SampleData> context = beanManager.createCreationalContext(bean);
+                SampleData sampleData = (SampleData) beanManager.getReference(bean, SampleData.class, context);
+                sampleData.cleanup();
+                sampleData.persit();
+            }
         }
-        // }
     }
 
 
