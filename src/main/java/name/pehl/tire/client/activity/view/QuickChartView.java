@@ -1,17 +1,15 @@
 package name.pehl.tire.client.activity.view;
 
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
-import name.pehl.tire.client.activity.presenter.RecentActivitiesUiHandlers;
 import name.pehl.tire.shared.model.Activities;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+import com.gwtplatform.mvp.client.ViewImpl;
 
 /**
  * View for the quick chart showing the activites by week / month.
@@ -22,8 +20,7 @@ import static name.pehl.tire.shared.model.TimeUnit.WEEK;
  * @version $Date: 2010-12-22 16:43:49 +0100 (Mi, 22. Dez 2010) $ $Revision: 102
  *          $
  */
-public class QuickChartView extends ViewWithUiHandlers<RecentActivitiesUiHandlers> implements
-        QuickChartPresenter.MyView
+public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyView
 {
     public interface Binder extends UiBinder<Widget, QuickChartView>
     {

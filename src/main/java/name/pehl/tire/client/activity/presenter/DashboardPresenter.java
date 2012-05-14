@@ -1,5 +1,8 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -15,7 +18,6 @@ import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
-import name.pehl.tire.shared.model.TimeUnit;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -29,9 +31,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
-
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * @author $Author: harald.pehl $
@@ -166,8 +165,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     @Override
     public void onCurrentWeek()
     {
-        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("current", TimeUnit.WEEK.name()
-                .toLowerCase());
+        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("current", WEEK.name().toLowerCase());
         placeManager.revealPlace(placeRequest);
     }
 
@@ -175,8 +173,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     @Override
     public void onCurrentMonth()
     {
-        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("current", TimeUnit.MONTH.name()
-                .toLowerCase());
+        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("current", MONTH.name().toLowerCase());
         placeManager.revealPlace(placeRequest);
     }
 
@@ -202,18 +199,72 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     @Override
     public void onPrevious()
     {
-        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("previous", activities.getUnit().name()
-                .toLowerCase());
-        placeManager.revealPlace(placeRequest);
+        PlaceRequest placeRequest = null;
+        int newYear = activities.getYear();
+        if (activities.getUnit() == MONTH)
+        {
+            int newMonth = activities.getMonth();
+            newMonth--;
+            if (newMonth < 1)
+            {
+                newMonth = 12;
+                newYear--;
+            }
+            placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(newYear)).with("month",
+                    String.valueOf(newMonth));
+        }
+        else if (activities.getUnit() == WEEK)
+        {
+            int newWeek = activities.getWeek();
+            newWeek--;
+            if (newWeek < 1)
+            {
+                newWeek = 52;
+                newYear--;
+            }
+            placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(newYear)).with("week",
+                    String.valueOf(newWeek));
+        }
+        if (placeRequest != null)
+        {
+            placeManager.revealPlace(placeRequest);
+        }
     }
 
 
     @Override
     public void onNext()
     {
-        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("next", activities.getUnit().name()
-                .toLowerCase());
-        placeManager.revealPlace(placeRequest);
+        PlaceRequest placeRequest = null;
+        int newYear = activities.getYear();
+        if (activities.getUnit() == MONTH)
+        {
+            int newMonth = activities.getMonth();
+            newMonth++;
+            if (newMonth > 12)
+            {
+                newMonth = 1;
+                newYear++;
+            }
+            placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(newYear)).with("month",
+                    String.valueOf(newMonth));
+        }
+        else if (activities.getUnit() == WEEK)
+        {
+            int newWeek = activities.getWeek();
+            newWeek++;
+            if (newWeek > 52)
+            {
+                newWeek = 1;
+                newYear++;
+            }
+            placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(newYear)).with("week",
+                    String.valueOf(newWeek));
+        }
+        if (placeRequest != null)
+        {
+            placeManager.revealPlace(placeRequest);
+        }
     }
 
 

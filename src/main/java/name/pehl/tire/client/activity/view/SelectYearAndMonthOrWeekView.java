@@ -1,14 +1,20 @@
 package name.pehl.tire.client.activity.view;
 
+import static java.util.logging.Level.SEVERE;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+
 import java.util.SortedSet;
+import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.presenter.SelectYearAndMonthOrWeekPresenter;
+import name.pehl.tire.client.activity.presenter.SelectYearAndMonthOrWeekUiHandlers;
+import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.ui.EscapablePopupPanel;
 import name.pehl.tire.shared.model.TimeUnit;
 import name.pehl.tire.shared.model.Year;
+import name.pehl.tire.shared.model.YearAndMonthOrWeek;
 import name.pehl.tire.shared.model.Years;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.EventTarget;
@@ -25,23 +31,32 @@ import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.mvp.client.PopupViewImpl;
+import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
 
-public class SelectYearAndMonthOrWeekView extends PopupViewImpl implements SelectYearAndMonthOrWeekPresenter.MyView
+public class SelectYearAndMonthOrWeekView extends PopupViewWithUiHandlers<SelectYearAndMonthOrWeekUiHandlers> implements
+        SelectYearAndMonthOrWeekPresenter.MyView
 {
     public interface Binder extends UiBinder<EscapablePopupPanel, SelectYearAndMonthOrWeekView>
     {
     }
 
+    private static final Logger logger = Logger.getLogger(SelectYearAndMonthOrWeekView.class.getName());
+
     private final EscapablePopupPanel popupPanel;
+    private final I18n i18n;
+    private TimeUnit unit;
     @UiField UListElement list;
 
 
     @Inject
-    public SelectYearAndMonthOrWeekView(final EventBus eventBus, final Binder binder)
+    public SelectYearAndMonthOrWeekView(final EventBus eventBus, final Binder binder, final I18n i18n)
     {
         super(eventBus);
         this.popupPanel = binder.createAndBindUi(this);
+        this.i18n = i18n;
+        LIElement noDataLi = Document.get().createLIElement();
+        noDataLi.setInnerText("Loading...");
+        this.list.appendChild(noDataLi);
         setAutoHideOnNavigationEventEnabled(true);
     }
 
@@ -54,8 +69,16 @@ public class SelectYearAndMonthOrWeekView extends PopupViewImpl implements Selec
 
 
     @Override
-    public void updateYears(Years years, TimeUnit unit)
+    public void setUnit(TimeUnit unit)
     {
+        this.unit = unit;
+    }
+
+
+    @Override
+    public void updateYears(Years years)
+    {
+
         if (years != null)
         {
             // clear list
@@ -87,7 +110,7 @@ public class SelectYearAndMonthOrWeekView extends PopupViewImpl implements Selec
                     for (Integer monthOrWeek : monthsOrWeeks)
                     {
                         LIElement li = Document.get().createLIElement();
-                        AnchorElement link = newLink(linkListener, year, monthOrWeek);
+                        AnchorElement link = newLink(linkListener, year, monthOrWeek, unit);
                         li.appendChild(link);
                         nestedUl.appendChild(li);
                     }
@@ -99,12 +122,19 @@ public class SelectYearAndMonthOrWeekView extends PopupViewImpl implements Selec
     }
 
 
-    private AnchorElement newLink(LinkListener linkListener, Year year, Integer monthOrWeek)
+    private AnchorElement newLink(LinkListener linkListener, Year year, Integer monthOrWeek, TimeUnit unit)
     {
         AnchorElement link = Document.get().createAnchorElement();
-
-        String text = String.valueOf(monthOrWeek);
-        String rel = String.valueOf(year.getYear()) + "|" + text;
+        String text;
+        if (unit == MONTH)
+        {
+            text = i18n.enums().getString("month_" + monthOrWeek);
+        }
+        else
+        {
+            text = String.valueOf(monthOrWeek);
+        }
+        String rel = String.valueOf(year.getYear()) + "|" + monthOrWeek;
         link.setInnerText(text);
         link.setAttribute("rel", rel);
         link.setAttribute("href", "#");
@@ -124,7 +154,28 @@ public class SelectYearAndMonthOrWeekView extends PopupViewImpl implements Selec
             EventTarget target = event.getEventTarget();
             AnchorElement link = (AnchorElement) Element.as(target);
             String yearAndMonthOrWeek = link.getAttribute("rel");
-            GWT.log(yearAndMonthOrWeek);
+            String[] parts = yearAndMonthOrWeek.split("\\|");
+            if (parts != null && parts.length == 2)
+            {
+                try
+                {
+                    int year = Integer.parseInt(parts[0]);
+                    int monthOrWeek = Integer.parseInt(parts[1]);
+                    YearAndMonthOrWeek result = new YearAndMonthOrWeek();
+                    result.setYear(year);
+                    result.setMonthOrWeek(monthOrWeek);
+                    result.setUnit(unit);
+                    if (getUiHandlers() != null)
+                    {
+                        getUiHandlers().onSelectYearAndMonthOrWeek(result);
+                    }
+                }
+                catch (NumberFormatException e)
+                {
+                    logger.log(SEVERE, "Cannot parse " + yearAndMonthOrWeek
+                            + ": Expected format <yyyy|mm> or <yyyy|cw>.");
+                }
+            }
         }
     }
 }

@@ -1,5 +1,8 @@
 package name.pehl.tire.client.activity.model;
 
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,9 +11,6 @@ import name.pehl.tire.shared.model.TimeUnit;
 import name.pehl.tire.shared.model.YearAndMonthOrWeek;
 
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
-
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * TODO Tests, tests, tests
@@ -21,8 +21,6 @@ import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 public class ActivitiesRequest
 {
     public static final String PARAM_CURRENT = "current";
-    public static final String PARAM_PREVIOUS = "previous";
-    public static final String PARAM_NEXT = "next";
     public static final String PARAM_YEAR = "year";
     public static final String PARAM_MONTH = "month";
     public static final String PARAM_WEEK = "week";
@@ -39,35 +37,6 @@ public class ActivitiesRequest
         {
             TimeUnit unit = parseTimeUnit(placeRequest.getParameter(PARAM_CURRENT, null));
             this.yearAndMonthOrWeek.setUnit(unit);
-        }
-        else if (hasParameter(placeRequest, PARAM_PREVIOUS))
-        {
-            TimeUnit unit = parseTimeUnit(placeRequest.getParameter(PARAM_PREVIOUS, null));
-            this.yearAndMonthOrWeek.setUnit(unit);
-            if (activities != null)
-            {
-                populatePreviousYearAndMonthOrWeek(activities, unit);
-            }
-            else
-            {
-                logger.log(Level.WARNING, "No activities available for calculating previous "
-                        + unit.name().toLowerCase() + ". Fall back to " + this.yearAndMonthOrWeek);
-            }
-        }
-        else if (hasParameter(placeRequest, PARAM_NEXT))
-        {
-            TimeUnit unit = parseTimeUnit(placeRequest.getParameter(PARAM_NEXT, null));
-            this.yearAndMonthOrWeek.setUnit(unit);
-            if (activities != null)
-            {
-                populateNextYearAndMonthOrWeek(activities, unit);
-            }
-            else
-            {
-                logger.log(Level.WARNING, "No activities available for calculating next " + unit.name().toLowerCase()
-                        + ". Fall back to " + this.yearAndMonthOrWeek);
-            }
-
         }
         else if (hasParameter(placeRequest, PARAM_YEAR)
                 && (hasParameter(placeRequest, PARAM_MONTH) || hasParameter(placeRequest, PARAM_WEEK)))
@@ -124,64 +93,6 @@ public class ActivitiesRequest
             }
         }
         return result;
-    }
-
-
-    private void populatePreviousYearAndMonthOrWeek(Activities activities, TimeUnit unit)
-    {
-        int newYear = activities.getYear();
-        if (unit == MONTH)
-        {
-            int newMonth = activities.getMonth();
-            newMonth--;
-            if (newMonth < 1)
-            {
-                newMonth = 12;
-                newYear--;
-            }
-            this.yearAndMonthOrWeek.setMonthOrWeek(newMonth);
-        }
-        else if (unit == WEEK)
-        {
-            int newWeek = activities.getWeek();
-            newWeek--;
-            if (newWeek < 1)
-            {
-                newWeek = 52;
-                newYear--;
-            }
-            this.yearAndMonthOrWeek.setMonthOrWeek(newWeek);
-        }
-        this.yearAndMonthOrWeek.setYear(newYear);
-    }
-
-
-    private void populateNextYearAndMonthOrWeek(Activities activities, TimeUnit unit)
-    {
-        int newYear = activities.getYear();
-        if (unit == MONTH)
-        {
-            int newMonth = activities.getMonth();
-            newMonth++;
-            if (newMonth > 12)
-            {
-                newMonth = 1;
-                newYear++;
-            }
-            this.yearAndMonthOrWeek.setMonthOrWeek(newMonth);
-        }
-        else if (unit == WEEK)
-        {
-            int newWeek = activities.getWeek();
-            newWeek++;
-            if (newWeek > 52)
-            {
-                newWeek = 1;
-                newYear++;
-            }
-            this.yearAndMonthOrWeek.setMonthOrWeek(newWeek);
-        }
-        this.yearAndMonthOrWeek.setYear(newYear);
     }
 
 

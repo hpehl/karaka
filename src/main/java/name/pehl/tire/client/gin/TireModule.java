@@ -55,6 +55,8 @@ import name.pehl.tire.client.terms.TermsView;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
+import name.pehl.tire.client.settings.SettingsPresenter;
+import name.pehl.tire.client.settings.SettingsView;
 
 /**
  * @author $LastChangedBy: harald.pehl $
@@ -121,5 +123,8 @@ public class TireModule extends AbstractPresenterModule
                 ReportPresenter.MyProxy.class);
         bindPresenter(TagPresenter.class, TagPresenter.MyView.class, TagView.class, TagPresenter.MyProxy.class);
         bindPresenter(TermsPresenter.class, TermsPresenter.MyView.class, TermsView.class, TermsPresenter.MyProxy.class);
+
+        bindPresenter(SettingsPresenter.class, SettingsPresenter.MyView.class, SettingsView.class,
+                SettingsPresenter.MyProxy.class);
     }
 }

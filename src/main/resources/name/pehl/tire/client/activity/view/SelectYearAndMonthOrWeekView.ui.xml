@@ -6,21 +6,36 @@
 		.popup {
 			margin: 10px 0 0 10px;
 			width: 100px;
-			background-color: white;
-			border: 1px solid #3d3d3d;
-			border-radius: 5px;
-			-webkit-border-radius: 5px;
-			-moz-border-radius: 5px;
-			box-shadow: 2px 2px 2px #62635e;
-			-moz-box-shadow: 2px 2px 2px #62635e;
-			-webkit-box-shadow: 2px 2px 2px #62635e;
+            background-color: white;
+            border: 1px solid #3d3d3d;
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            box-shadow: 2px 2px 2px #62635e;
+            -moz-box-shadow: 2px 2px 2px #62635e;
+            -webkit-box-shadow: 2px 2px 2px #62635e;
 		}
 		
-		}
 		ul.select ul {
+            position: absolute;
 			left: -9999px;
 			top: 0;
+			width: 100px;
+			z-index: 2;
 			margin: 0;
+			background-color: white;
+            border: 1px solid #3d3d3d;
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            box-shadow: 2px 2px 2px #62635e;
+            -moz-box-shadow: 2px 2px 2px #62635e;
+            -webkit-box-shadow: 2px 2px 2px #62635e;
+		}
+		
+		ul.select:hover ul {
+			left: 95px;
+			top: 5px;
 		}
 		
 		ul.select li,ul.select li a {
@@ -35,11 +50,6 @@
 		
 		ul.select li {
 			border-bottom: 1px solid #3d3d3d;
-		}
-		
-		ul.select :hover ul {
-			left: 95px;
-			top: 5px;
 		}
 		
 		ul.select li:hover,ul.select li a:hover {

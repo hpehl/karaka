@@ -1,0 +1,23 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <g:HTML>
+        <h1>Settings</h1>
+        <p>
+            Lorem ipsum dolor sit amet , consectetur adipiscing elit. Morbi arcu magna, elementum non gravida sed, luctus
+            vitae dui.
+            Integer in gravida metus. Phasellus ac hendrerit tellus. Donec fermentum nisl id dui feugiat
+            ornare. Sed eget
+            neque nunc, et lacinia lorem . Morbi rhoncus pretium ipsum nec mollis. Maecenas auctor erat
+            commodo velit
+            lacinia et pellentesque turpis scelerisque. Cras tellus purus, tincidunt in pretium quis,
+            interdum sit amet
+            nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nibh turpis,
+            gravida sollicitudin
+            aliquet ac, porttitor ac felis. Nulla pretium metus justo, ut molestie enim. Mauris
+            suscipit feugiat quam sit
+            amet molestie.
+        </p>
+    </g:HTML>
+
+</ui:UiBinder> 

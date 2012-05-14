@@ -17,6 +17,7 @@ import com.google.gwt.inject.client.Ginjector;
 import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import name.pehl.tire.client.settings.SettingsPresenter;
 
 /**
  * @author $LastChangedBy: harald.pehl $
@@ -42,4 +43,5 @@ public interface TireGinjector extends Ginjector
     AsyncProvider<ReportPresenter> getReportPresenter();
     AsyncProvider<TagPresenter> getTagPresenter();
     AsyncProvider<TermsPresenter> getTermsPresenter();
+    AsyncProvider<SettingsPresenter> getSettingsPresenter();
 }
