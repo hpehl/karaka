@@ -58,9 +58,7 @@
 		autoHideEnabled="true" modal="false" glassEnabled="false"
 		addStyleNames="{style.popup}">
 		<g:HTMLPanel>
-			<ul class="{style.select}" ui:field="list">
-				<li>n/a</li>
-			</ul>
+			<ul class="{style.select}" ui:field="list" />
 		</g:HTMLPanel>
 	</tui:EscapablePopupPanel>
 </ui:UiBinder>

@@ -4,7 +4,6 @@ import name.pehl.tire.client.activity.event.GetYearsAction;
 import name.pehl.tire.client.activity.event.GetYearsResult;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.TimeUnit;
-import name.pehl.tire.shared.model.YearAndMonthOrWeek;
 import name.pehl.tire.shared.model.Years;
 
 import com.google.inject.Inject;
@@ -17,13 +16,12 @@ public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYea
 {
     public interface MyView extends PopupView
     {
-        void updateYears(Years years);
+        void updateYears(Years years, TimeUnit unit);
     }
 
     private final DispatchAsync dispatcher;
     private Years years;
     private TimeUnit unit;
-    private YearAndMonthOrWeek currentValue;
 
 
     @Inject
@@ -45,7 +43,7 @@ public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYea
             public void onSuccess(GetYearsResult result)
             {
                 years = result.getYears();
-                getView().updateYears(years);
+                getView().updateYears(years, unit);
             }
         });
     }

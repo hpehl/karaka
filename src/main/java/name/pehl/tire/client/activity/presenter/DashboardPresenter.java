@@ -102,7 +102,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     /**
      * Turns the parameters in the place request into an
-     * {@link ActivitiesNavigator} instance.
+     * {@link ActivitiesRequest} instance and calls {@link GetActivitiesAction}.
      * 
      * @param placeRequest
      * @see com.gwtplatform.mvp.client.Presenter#prepareFromRequest(com.gwtplatform.mvp.client.proxy.PlaceRequest)
@@ -112,8 +112,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     {
         super.prepareFromRequest(placeRequest);
         final ActivitiesRequest activitiesRequest = new ActivitiesRequest(placeRequest, activities);
-        ShowMessageEvent.fire(this, new Message("Loading activities for " + activitiesRequest.getYearAndMonthOrWeek()
-                + "..."));
+        String message = "Loading activities for " + activitiesRequest.getYearAndMonthOrWeek() + "...";
+        logger.fine(message);
+        ShowMessageEvent.fire(this, new Message(message));
         dispatcher.execute(new GetActivitiesAction(activitiesRequest), new TireCallback<GetActivitiesResult>(
                 getEventBus())
         {
@@ -124,7 +125,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 if (activities != null)
                 {
                     // don't just call getView().updateActivities(activities) as
-                    // other classes might also be interested about updated
+                    // other classes might also be interested in updated
                     // activities.
                     ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities);
                 }

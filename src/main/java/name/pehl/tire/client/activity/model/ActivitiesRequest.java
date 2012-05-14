@@ -1,6 +1,5 @@
 package name.pehl.tire.client.activity.model;
 
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,6 +12,12 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
+/**
+ * TODO Tests, tests, tests
+ * 
+ * @author $Author$
+ * @version $Revision$
+ */
 public class ActivitiesRequest
 {
     public static final String PARAM_CURRENT = "current";
@@ -27,56 +32,49 @@ public class ActivitiesRequest
     private final YearAndMonthOrWeek yearAndMonthOrWeek;
 
 
-    public ActivitiesRequest(PlaceRequest request, Activities activities)
+    public ActivitiesRequest(PlaceRequest placeRequest, Activities activities)
     {
         this.yearAndMonthOrWeek = new YearAndMonthOrWeek();
-        Set<String> names = request.getParameterNames();
-        if (names.contains(PARAM_CURRENT) || names.contains(PARAM_PREVIOUS) || names.contains(PARAM_NEXT))
+        if (hasParameter(placeRequest, PARAM_CURRENT))
         {
-            String value = null;
-            TimeUnit unit = WEEK;
-            if (names.contains(PARAM_CURRENT))
-            {
-                value = request.getParameter(PARAM_CURRENT, null);
-                unit = parseTimeUnit(value);
-            }
-            else if (names.contains(PARAM_PREVIOUS))
-            {
-                value = request.getParameter(PARAM_PREVIOUS, null);
-                unit = parseTimeUnit(value);
-                int[] previous = previous(activities, unit);
-                this.yearAndMonthOrWeek.setUnit(unit);
-                if (unit == MONTH)
-                {
-                    this.yearAndMonthOrWeek.setYear(previous[0]);
-                }
-                else if (unit == WEEK)
-                {
-
-                }
-            }
-            else if (names.contains(PARAM_NEXT))
-            {
-                value = request.getParameter(PARAM_NEXT, null);
-                unit = parseTimeUnit(value);
-                int[] next = next(activities, unit);
-                this.yearAndMonthOrWeek.setUnit(unit);
-                if (unit == MONTH)
-                {
-                    this.yearAndMonthOrWeek.setYear(next[0]);
-                }
-                else if (unit == WEEK)
-                {
-
-                }
-            }
+            TimeUnit unit = parseTimeUnit(placeRequest.getParameter(PARAM_CURRENT, null));
             this.yearAndMonthOrWeek.setUnit(unit);
         }
-        else if (names.contains(PARAM_YEAR) && (names.contains(PARAM_MONTH) || names.contains(PARAM_WEEK)))
+        else if (hasParameter(placeRequest, PARAM_PREVIOUS))
         {
-            int year = parseInt(request.getParameter(PARAM_YEAR, "0"));
-            int month = parseInt(request.getParameter(PARAM_MONTH, "0"));
-            int week = parseInt(request.getParameter(PARAM_WEEK, "0"));
+            TimeUnit unit = parseTimeUnit(placeRequest.getParameter(PARAM_PREVIOUS, null));
+            this.yearAndMonthOrWeek.setUnit(unit);
+            if (activities != null)
+            {
+                populatePreviousYearAndMonthOrWeek(activities, unit);
+            }
+            else
+            {
+                logger.log(Level.WARNING, "No activities available for calculating previous "
+                        + unit.name().toLowerCase() + ". Fall back to " + this.yearAndMonthOrWeek);
+            }
+        }
+        else if (hasParameter(placeRequest, PARAM_NEXT))
+        {
+            TimeUnit unit = parseTimeUnit(placeRequest.getParameter(PARAM_NEXT, null));
+            this.yearAndMonthOrWeek.setUnit(unit);
+            if (activities != null)
+            {
+                populateNextYearAndMonthOrWeek(activities, unit);
+            }
+            else
+            {
+                logger.log(Level.WARNING, "No activities available for calculating next " + unit.name().toLowerCase()
+                        + ". Fall back to " + this.yearAndMonthOrWeek);
+            }
+
+        }
+        else if (hasParameter(placeRequest, PARAM_YEAR)
+                && (hasParameter(placeRequest, PARAM_MONTH) || hasParameter(placeRequest, PARAM_WEEK)))
+        {
+            int year = parseInt(placeRequest.getParameter(PARAM_YEAR, "0"));
+            int month = parseInt(placeRequest.getParameter(PARAM_MONTH, "0"));
+            int week = parseInt(placeRequest.getParameter(PARAM_WEEK, "0"));
             this.yearAndMonthOrWeek.setYear(year);
             if (month != 0)
             {
@@ -90,60 +88,24 @@ public class ActivitiesRequest
                 this.yearAndMonthOrWeek.setMonthOrWeek(week);
             }
         }
+        else
+        {
+            logger.log(Level.WARNING, "No valid parameters in " + placeRequest.getParameterNames() + ". Fall back to "
+                    + this.yearAndMonthOrWeek);
+        }
     }
 
 
-    private int[] previous(Activities activities, TimeUnit unit)
+    /**
+     * For better readability
+     * 
+     * @param placeRequest
+     * @param parameter
+     * @return
+     */
+    private boolean hasParameter(PlaceRequest placeRequest, String parameter)
     {
-        int newYear = activities.getYear();
-        int newMonth = activities.getMonth();
-        int newWeek = activities.getWeek();
-        if (unit == MONTH)
-        {
-            newMonth++;
-            if (newMonth > 12)
-            {
-                newMonth = 1;
-                newYear++;
-            }
-        }
-        else if (unit == WEEK)
-        {
-            newWeek++;
-            if (newWeek > 52)
-            {
-                newWeek = 1;
-                newYear++;
-            }
-        }
-        return new int[] {newYear, newMonth, newWeek};
-    }
-
-
-    public int[] next(Activities activities, TimeUnit unit)
-    {
-        int newYear = activities.getYear();
-        int newMonth = activities.getMonth();
-        int newWeek = activities.getWeek();
-        if (unit == MONTH)
-        {
-            newMonth--;
-            if (newMonth < 1)
-            {
-                newMonth = 12;
-                newYear--;
-            }
-        }
-        else if (unit == WEEK)
-        {
-            newWeek--;
-            if (newWeek < 1)
-            {
-                newWeek = 52;
-                newYear--;
-            }
-        }
-        return new int[] {newYear, newMonth, newWeek};
+        return placeRequest.getParameter(parameter, null) != null;
     }
 
 
@@ -162,6 +124,64 @@ public class ActivitiesRequest
             }
         }
         return result;
+    }
+
+
+    private void populatePreviousYearAndMonthOrWeek(Activities activities, TimeUnit unit)
+    {
+        int newYear = activities.getYear();
+        if (unit == MONTH)
+        {
+            int newMonth = activities.getMonth();
+            newMonth--;
+            if (newMonth < 1)
+            {
+                newMonth = 12;
+                newYear--;
+            }
+            this.yearAndMonthOrWeek.setMonthOrWeek(newMonth);
+        }
+        else if (unit == WEEK)
+        {
+            int newWeek = activities.getWeek();
+            newWeek--;
+            if (newWeek < 1)
+            {
+                newWeek = 52;
+                newYear--;
+            }
+            this.yearAndMonthOrWeek.setMonthOrWeek(newWeek);
+        }
+        this.yearAndMonthOrWeek.setYear(newYear);
+    }
+
+
+    private void populateNextYearAndMonthOrWeek(Activities activities, TimeUnit unit)
+    {
+        int newYear = activities.getYear();
+        if (unit == MONTH)
+        {
+            int newMonth = activities.getMonth();
+            newMonth++;
+            if (newMonth > 12)
+            {
+                newMonth = 1;
+                newYear++;
+            }
+            this.yearAndMonthOrWeek.setMonthOrWeek(newMonth);
+        }
+        else if (unit == WEEK)
+        {
+            int newWeek = activities.getWeek();
+            newWeek++;
+            if (newWeek > 52)
+            {
+                newWeek = 1;
+                newYear++;
+            }
+            this.yearAndMonthOrWeek.setMonthOrWeek(newWeek);
+        }
+        this.yearAndMonthOrWeek.setYear(newYear);
     }
 
 
