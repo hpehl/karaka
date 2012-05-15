@@ -1,5 +1,8 @@
 package name.pehl.tire.client.activity.view;
 
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.Date;
 
 import name.pehl.tire.client.activity.event.ProcessActivityEvent;
@@ -12,21 +15,17 @@ import name.pehl.tire.client.ui.SvgPath;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.InlineHyperlink;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> implements DashboardPresenter.MyView
 {
@@ -45,9 +44,9 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     private final Widget widget;
     private final Resources resources;
 
-    @UiField InlineHyperlink theDayBeforeYesterday;
-    @UiField InlineHyperlink yesterday;
-    @UiField InlineHyperlink today;
+    @UiField Anchor theDayBeforeYesterday;
+    @UiField Anchor yesterday;
+    @UiField Anchor today;
     @UiField CalendarLink calendar;
     @UiField InlineLabel header;
     @UiField SvgPath previous;
@@ -146,7 +145,6 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @UiHandler("theDayBeforeYesterday")
     void onTheDayBeforeYesterdayClicked(ClickEvent event)
     {
-        GWT.log("The day before yesterday selected");
         theDayBeforeYesterday.addStyleName(resources.navigation().selectedDate());
         yesterday.removeStyleName(resources.navigation().selectedDate());
         today.removeStyleName(resources.navigation().selectedDate());
@@ -163,7 +161,6 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @UiHandler("yesterday")
     void onYesterdayClicked(ClickEvent event)
     {
-        GWT.log("Yesterday selected");
         theDayBeforeYesterday.removeStyleName(resources.navigation().selectedDate());
         yesterday.addStyleName(resources.navigation().selectedDate());
         today.removeStyleName(resources.navigation().selectedDate());
@@ -180,7 +177,6 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @UiHandler("today")
     void onTodayClicked(ClickEvent event)
     {
-        GWT.log("Today selected");
         theDayBeforeYesterday.removeStyleName(resources.navigation().selectedDate());
         yesterday.removeStyleName(resources.navigation().selectedDate());
         today.addStyleName(resources.navigation().selectedDate());
@@ -206,7 +202,6 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @UiHandler("calendar")
     void onCalendarChanged(ValueChangeEvent<Date> event)
     {
-        GWT.log(event.getValue() + " selected");
         if (getUiHandlers() != null)
         {
             getUiHandlers().onSelectDate(event.getValue());

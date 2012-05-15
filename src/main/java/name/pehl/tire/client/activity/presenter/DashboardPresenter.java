@@ -160,7 +160,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     public void onSelectDate(Date date)
     {
         this.activityDate = date;
-        logger.fine("Selected date " + activityDate);
+        logger.info("Selected date " + activityDate);
     }
 
 
