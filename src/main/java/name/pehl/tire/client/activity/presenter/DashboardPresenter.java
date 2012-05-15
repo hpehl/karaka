@@ -1,5 +1,7 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.SEVERE;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
@@ -113,7 +115,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         final ActivitiesRequest activitiesRequest = new ActivitiesRequest(placeRequest, activities);
         String message = "Loading activities for " + activitiesRequest.getYearAndMonthOrWeek() + "...";
         logger.fine(message);
-        ShowMessageEvent.fire(this, new Message(message));
+        ShowMessageEvent.fire(this, new Message(INFO, message, false));
         dispatcher.execute(new GetActivitiesAction(activitiesRequest), new TireCallback<GetActivitiesResult>(
                 getEventBus())
         {
@@ -135,7 +137,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             public void onFailure(Throwable caught)
             {
                 String errorMessage = "Failed to load activities for " + activitiesRequest.getYearAndMonthOrWeek();
-                ShowMessageEvent.fire(DashboardPresenter.this, new Message(errorMessage));
+                ShowMessageEvent.fire(DashboardPresenter.this, new Message(SEVERE, errorMessage, true));
                 logger.severe(errorMessage);
             }
         });

@@ -1,5 +1,6 @@
 package name.pehl.tire.client.application;
 
+import static java.util.logging.Level.INFO;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
@@ -37,6 +38,6 @@ public class MessagePresenter extends PresenterWidget<MessagePresenter.MyView> i
     @Override
     public void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
-        getView().show(new Message("Activities successfully loaded for " + event.getActivities() + "."));
+        getView().show(new Message(INFO, "Activities successfully loaded for " + event.getActivities() + ".", true));
     }
 }

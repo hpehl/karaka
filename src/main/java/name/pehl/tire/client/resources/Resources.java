@@ -59,12 +59,12 @@ public interface Resources extends ClientBundle
 
     public interface Message extends CssResource
     {
-        @ClassName("fadeIn")
-        String fadeIn();
+        @ClassName("show")
+        String show();
 
 
-        @ClassName("fadeOut")
-        String fadeOut();
+        @ClassName("hide")
+        String hide();
     }
 
 

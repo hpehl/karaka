@@ -2,8 +2,6 @@ package name.pehl.tire.client.application;
 
 import java.util.logging.Level;
 
-import static java.util.logging.Level.INFO;
-
 /**
  * Value object for a message shown in the {@link MessagePresenter}.
  * 
@@ -12,20 +10,16 @@ import static java.util.logging.Level.INFO;
  */
 public class Message
 {
-    private final String text;
     private final Level level;
+    private final String text;
+    private final boolean autoHide;
 
 
-    public Message(String text)
-    {
-        this(INFO, text);
-    }
-
-
-    public Message(Level level, String text)
+    public Message(Level level, String text, boolean autoHide)
     {
         this.level = level;
         this.text = text;
+        this.autoHide = autoHide;
     }
 
 
@@ -34,8 +28,9 @@ public class Message
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((level == null) ? 0 : level.hashCode());
-        result = prime * result + ((text == null) ? 0 : text.hashCode());
+        result = prime * result + (autoHide ? 1231 : 1237);
+        result = prime * result + (level == null ? 0 : level.hashCode());
+        result = prime * result + (text == null ? 0 : text.hashCode());
         return result;
     }
 
@@ -56,6 +51,10 @@ public class Message
             return false;
         }
         Message other = (Message) obj;
+        if (autoHide != other.autoHide)
+        {
+            return false;
+        }
         if (level == null)
         {
             if (other.level != null)
@@ -85,7 +84,14 @@ public class Message
     @Override
     public String toString()
     {
-        return new StringBuilder().append(level).append(": ").append(text).toString();
+        return new StringBuilder().append(level).append(": ").append(text).append(", autoHide=").append(autoHide)
+                .toString();
+    }
+
+
+    public Level getLevel()
+    {
+        return level;
     }
 
 
@@ -95,8 +101,8 @@ public class Message
     }
 
 
-    public Level getLevel()
+    public boolean isAutoHide()
     {
-        return level;
+        return autoHide;
     }
 }

@@ -1,5 +1,6 @@
 package name.pehl.tire.client.application;
 
+import static java.util.logging.Level.SEVERE;
 import name.pehl.tire.client.resources.Resources;
 
 import com.google.gwt.uibinder.client.UiBinder;
@@ -16,12 +17,11 @@ public class MessageView extends ViewImpl implements MessagePresenter.MyView
     {
     }
 
-    private static final int HIDE_DELAY = 4000;
-
     private boolean visible;
     private final Widget widget;
     private final Resources resources;
-    private final HideTimer hideTimer;
+    private final AutoHideTimer autoHideTimer;
+    private final TimeoutTimer timeoutTimer;
     @UiField Label messageHolder;
 
 
@@ -32,7 +32,8 @@ public class MessageView extends ViewImpl implements MessagePresenter.MyView
         this.resources = resources;
         this.resources.message().ensureInjected();
         this.widget = binder.createAndBindUi(this);
-        this.hideTimer = new HideTimer();
+        this.autoHideTimer = new AutoHideTimer();
+        this.timeoutTimer = new TimeoutTimer();
     }
 
 
@@ -46,31 +47,76 @@ public class MessageView extends ViewImpl implements MessagePresenter.MyView
     @Override
     public void show(Message message)
     {
-        hideTimer.cancel();
+        autoHideTimer.cancel();
+        timeoutTimer.cancel();
         messageHolder.setText(message.getText());
         if (!visible)
         {
-            messageHolder.removeStyleName(resources.message().fadeOut());
-            messageHolder.addStyleName(resources.message().fadeIn());
+            messageHolder.removeStyleName(resources.message().hide());
+            messageHolder.addStyleName(resources.message().show());
         }
         visible = true;
-        hideTimer.schedule(HIDE_DELAY);
+        if (message.isAutoHide())
+        {
+            autoHideTimer.schedule();
+        }
+        else
+        {
+            timeoutTimer.schedule();
+        }
     }
 
-
-    private void hide()
+    /**
+     * Timer for auto hide messages.
+     * 
+     * @author $LastChangedBy:$
+     * @version $LastChangedRevision:$
+     */
+    class AutoHideTimer extends Timer
     {
-        messageHolder.removeStyleName(resources.message().fadeIn());
-        messageHolder.addStyleName(resources.message().fadeOut());
-        visible = false;
-    }
+        void schedule()
+        {
+            super.schedule(4000);
+        }
 
-    class HideTimer extends Timer
-    {
+
+        /**
+         * Hides the message pane
+         * 
+         * @see com.google.gwt.user.client.Timer#run()
+         */
         @Override
         public void run()
         {
-            hide();
+            messageHolder.removeStyleName(resources.message().show());
+            messageHolder.addStyleName(resources.message().hide());
+            visible = false;
+        }
+    }
+
+    /**
+     * Timer for none auto hide messages.
+     * 
+     * @author $LastChangedBy:$
+     * @version $LastChangedRevision:$
+     */
+    class TimeoutTimer extends Timer
+    {
+        void schedule()
+        {
+            super.schedule(15000);
+        }
+
+
+        /**
+         * Shows a auto hide timeout message
+         * 
+         * @see com.google.gwt.user.client.Timer#run()
+         */
+        @Override
+        public void run()
+        {
+            show(new Message(SEVERE, "The last operation timed out.", true));
         }
     }
 }

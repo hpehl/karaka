@@ -1,5 +1,7 @@
 package name.pehl.tire.client.dispatch;
 
+import static java.util.logging.Level.SEVERE;
+
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
@@ -8,8 +10,6 @@ import name.pehl.tire.client.application.ShowMessageEvent;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.EventBus;
-
-import static java.util.logging.Level.SEVERE;
 
 /**
  * @author $Author:$
@@ -38,6 +38,6 @@ public abstract class TireCallback<T> implements AsyncCallback<T>
     {
         String message = caught.getMessage();
         logger.severe(message);
-        eventBus.fireEvent(new ShowMessageEvent(new Message(SEVERE, message)));
+        eventBus.fireEvent(new ShowMessageEvent(new Message(SEVERE, message, true)));
     }
 }
