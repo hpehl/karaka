@@ -47,7 +47,7 @@ public class ActivitiesConverter
             case DAY:
                 for (Activity activity : activities)
                 {
-                    result.getActivities().add(activityConverter.toModel(activity));
+                    result.addActivity(activityConverter.toModel(activity));
                 }
                 break;
             default:

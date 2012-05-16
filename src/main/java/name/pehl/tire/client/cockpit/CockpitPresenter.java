@@ -6,17 +6,17 @@ import name.pehl.tire.client.activity.event.GetActivitiesAction;
 import name.pehl.tire.client.activity.event.GetActivitiesResult;
 import name.pehl.tire.client.activity.model.ActivitiesRequest;
 import name.pehl.tire.client.dispatch.TireCallback;
+import name.pehl.tire.client.rest.UrlBuilder;
 import name.pehl.tire.shared.model.Activities;
-import name.pehl.tire.shared.model.YearAndMonthOrWeek;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
-
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 
 /**
  * @author $Author: harald.pehl $
@@ -30,11 +30,16 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         void initializeRecording(boolean recording);
 
 
-        void updateTimes(Activities activities);
+        void updateMonth(Activities activities);
+
+
+        void updateWeek(Activities activities);
+
+
+        void updateToday(Activities activities);
     }
 
     private static final Logger logger = Logger.getLogger(CockpitPresenter.class.getName());
-
     private final DispatchAsync dispatcher;
 
 
@@ -52,29 +57,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     protected void onReveal()
     {
         super.onReveal();
-        YearAndMonthOrWeek yearAndMonthOrWeek = new YearAndMonthOrWeek();
-        yearAndMonthOrWeek.setUnit(MONTH);
-        final ActivitiesRequest activitiesRequest = new ActivitiesRequest(yearAndMonthOrWeek);
-        dispatcher.execute(new GetActivitiesAction(activitiesRequest), new TireCallback<GetActivitiesResult>(
-                getEventBus())
-        {
-            @Override
-            public void onSuccess(GetActivitiesResult result)
-            {
-                Activities activities = result.getActivities();
-                if (activities != null)
-                {
-                    getView().updateTimes(activities);
-                }
-            }
-
-
-            @Override
-            public void onFailure(Throwable caught)
-            {
-                logger.severe("Cannot load activities for " + activitiesRequest);
-            }
-        });
+        Scheduler.get().scheduleDeferred(new InitCockpitCommand());
     }
 
 
@@ -89,5 +72,68 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     public void onStopRecording()
     {
         logger.info("Stop recording");
+    }
+
+    class InitCockpitCommand implements ScheduledCommand
+    {
+        @Override
+        public void execute()
+        {
+            final ActivitiesRequest currentMonth = new ActivitiesRequest(new UrlBuilder().module("rest")
+                    .path("activities", "currentMonth").toUrl());
+            dispatcher.execute(new GetActivitiesAction(currentMonth), new TireCallback<GetActivitiesResult>(
+                    getEventBus())
+            {
+                @Override
+                public void onSuccess(GetActivitiesResult result)
+                {
+                    getView().updateMonth(result.getActivities());
+                }
+
+
+                @Override
+                public void onFailure(Throwable caught)
+                {
+                    logger.warning("Cannot load activities for " + currentMonth);
+                }
+            });
+
+            final ActivitiesRequest currentWeek = new ActivitiesRequest(new UrlBuilder().module("rest")
+                    .path("activities", "currentWeek").toUrl());
+            dispatcher.execute(new GetActivitiesAction(currentWeek), new TireCallback<GetActivitiesResult>(
+                    getEventBus())
+            {
+                @Override
+                public void onSuccess(GetActivitiesResult result)
+                {
+                    getView().updateWeek(result.getActivities());
+                }
+
+
+                @Override
+                public void onFailure(Throwable caught)
+                {
+                    logger.warning("Cannot load activities for " + currentWeek);
+                }
+            });
+
+            final ActivitiesRequest today = new ActivitiesRequest(new UrlBuilder().module("rest")
+                    .path("activities", "today").toUrl());
+            dispatcher.execute(new GetActivitiesAction(today), new TireCallback<GetActivitiesResult>(getEventBus())
+            {
+                @Override
+                public void onSuccess(GetActivitiesResult result)
+                {
+                    getView().updateToday(result.getActivities());
+                }
+
+
+                @Override
+                public void onFailure(Throwable caught)
+                {
+                    logger.warning("Cannot load activities for " + today);
+                }
+            });
+        }
     }
 }

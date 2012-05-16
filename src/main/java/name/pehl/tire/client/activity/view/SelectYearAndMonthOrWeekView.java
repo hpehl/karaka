@@ -1,5 +1,8 @@
 package name.pehl.tire.client.activity.view;
 
+import static java.util.logging.Level.SEVERE;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
@@ -10,7 +13,6 @@ import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.ui.EscapablePopupPanel;
 import name.pehl.tire.shared.model.TimeUnit;
 import name.pehl.tire.shared.model.Year;
-import name.pehl.tire.shared.model.YearAndMonthOrWeek;
 import name.pehl.tire.shared.model.Years;
 
 import com.google.common.collect.Ordering;
@@ -31,9 +33,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
-
-import static java.util.logging.Level.SEVERE;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 
 public class SelectYearAndMonthOrWeekView extends PopupViewWithUiHandlers<SelectYearAndMonthOrWeekUiHandlers> implements
         SelectYearAndMonthOrWeekPresenter.MyView
@@ -113,7 +112,7 @@ public class SelectYearAndMonthOrWeekView extends PopupViewWithUiHandlers<Select
                     for (Integer monthOrWeek : reversed)
                     {
                         LIElement li = Document.get().createLIElement();
-                        AnchorElement link = newLink(linkListener, year, monthOrWeek, unit);
+                        AnchorElement link = newLink(linkListener, year, monthOrWeek);
                         li.appendChild(link);
                         nestedUl.appendChild(li);
                     }
@@ -125,7 +124,7 @@ public class SelectYearAndMonthOrWeekView extends PopupViewWithUiHandlers<Select
     }
 
 
-    private AnchorElement newLink(LinkListener linkListener, Year year, Integer monthOrWeek, TimeUnit unit)
+    private AnchorElement newLink(LinkListener linkListener, Year year, Integer monthOrWeek)
     {
         AnchorElement link = Document.get().createAnchorElement();
         String text;
@@ -138,9 +137,9 @@ public class SelectYearAndMonthOrWeekView extends PopupViewWithUiHandlers<Select
             text = String.valueOf(monthOrWeek);
         }
         String rel = String.valueOf(year.getYear()) + "|" + monthOrWeek;
-        link.setInnerText(text);
         link.setAttribute("rel", rel);
         link.setAttribute("href", "#");
+        link.setInnerText(text);
 
         Element linkElement = (Element) Element.as(link);
         DOM.sinkEvents(linkElement, Event.ONCLICK);
@@ -164,13 +163,16 @@ public class SelectYearAndMonthOrWeekView extends PopupViewWithUiHandlers<Select
                 {
                     int year = Integer.parseInt(parts[0]);
                     int monthOrWeek = Integer.parseInt(parts[1]);
-                    YearAndMonthOrWeek result = new YearAndMonthOrWeek();
-                    result.setYear(year);
-                    result.setMonthOrWeek(monthOrWeek);
-                    result.setUnit(unit);
                     if (getUiHandlers() != null)
                     {
-                        getUiHandlers().onSelectYearAndMonthOrWeek(result);
+                        if (unit == MONTH)
+                        {
+                            getUiHandlers().onSelectYearAndMonth(year, monthOrWeek);
+                        }
+                        else
+                        {
+                            getUiHandlers().onSelectYearAndWeek(year, monthOrWeek);
+                        }
                     }
                 }
                 catch (NumberFormatException e)

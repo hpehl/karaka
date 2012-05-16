@@ -1,11 +1,8 @@
 package name.pehl.tire.client.cockpit;
 
-import java.util.Date;
-
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
-import name.pehl.tire.shared.model.Activity;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -72,36 +69,23 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
 
 
     @Override
-    public void updateTimes(Activities activities)
+    public void updateMonth(Activities activities)
     {
-        if (activities != null)
-        {
-            Activity first = activities.getActivities().first();
-            if (isToday(first.getStart()))
-            {
-                today.setText(FormatUtils.hours(first.getMinutes()));
-            }
-            if (activities.getWeekDiff() == 0)
-            {
-                week.setText(FormatUtils.hours(activities.getWeeks().last().getMinutes()));
-            }
-            if (activities.getMonthDiff() == 0)
-            {
-                month.setText(FormatUtils.hours(activities.getMinutes()));
-            }
-        }
+        month.setText(FormatUtils.hours(activities.getMinutes()));
     }
 
 
-    @SuppressWarnings("deprecation")
-    private boolean isToday(Date date)
+    @Override
+    public void updateWeek(Activities activities)
     {
-        Date now = new Date();
-        if (now.getDay() == date.getDay() && now.getMonth() == date.getMonth() && now.getYear() == date.getYear())
-        {
-            return true;
-        }
-        return false;
+        week.setText(FormatUtils.hours(activities.getMinutes()));
+    }
+
+
+    @Override
+    public void updateToday(Activities activities)
+    {
+        today.setText(FormatUtils.hours(activities.getMinutes()));
     }
 
 

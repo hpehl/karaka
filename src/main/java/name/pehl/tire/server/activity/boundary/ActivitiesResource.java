@@ -1,5 +1,9 @@
 package name.pehl.tire.server.activity.boundary;
 
+import static name.pehl.tire.shared.model.TimeUnit.*;
+import static org.joda.time.Months.months;
+import static org.joda.time.Weeks.weeks;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +14,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import name.pehl.tire.server.activity.control.ActivitiesConverter;
@@ -27,12 +30,6 @@ import org.jboss.resteasy.spi.NotFoundException;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
-
-import static name.pehl.tire.shared.model.TimeUnit.DAY;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-import static org.joda.time.Months.months;
-import static org.joda.time.Weeks.weeks;
 
 /**
  * Supported methods:
@@ -134,9 +131,9 @@ public class ActivitiesResource
 
     @GET
     @Path("/currentMonth")
-    public Activities activitiesByCurrentMonth(@QueryParam("tz") String timeZoneId)
+    public Activities activitiesByCurrentMonth()
     {
-        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateTimeZone timeZone = settings.getTimeZone();
         DateMidnight requested = new DateMidnight(timeZone);
         List<Activity> activities = repository.findByYearMonth(requested.year().get(), requested.monthOfYear().get());
         if (activities.isEmpty())
@@ -188,9 +185,9 @@ public class ActivitiesResource
 
     @GET
     @Path("/currentWeek")
-    public Activities activitiesByCurrentWeek(@QueryParam("tz") String timeZoneId)
+    public Activities activitiesByCurrentWeek()
     {
-        DateTimeZone timeZone = parseTimeZone(timeZoneId);
+        DateTimeZone timeZone = settings.getTimeZone();
         DateMidnight requested = new DateMidnight(timeZone);
         List<Activity> activities = repository.findByYearWeek(requested.year().get(), requested.weekOfWeekyear().get());
         if (activities.isEmpty())
@@ -223,7 +220,7 @@ public class ActivitiesResource
 
     @GET
     @Path("/today")
-    public Activities activitiesByYearMonthDay()
+    public Activities activitiesByToday()
     {
         DateTimeZone timeZone = settings.getTimeZone();
         DateMidnight requested = new DateMidnight(timeZone);
@@ -238,16 +235,6 @@ public class ActivitiesResource
 
 
     // --------------------------------------------------------- helper methods
-
-    private DateTimeZone parseTimeZone(String timeZoneId)
-    {
-        if (timeZoneId != null)
-        {
-            return DateTimeZone.forID(timeZoneId);
-        }
-        return DateTimeZone.getDefault();
-    }
-
 
     private DateMidnight now(DateTimeZone timeZone)
     {

@@ -5,7 +5,7 @@
     <g:HTMLPanel>
         <tac:WeekChartWidget ui:field="weekChart" width="200" height="200"
             legendTitles="Mo, Tue, Wed, Thu, Fr, Sat, Sun" />
-        <tac:MonthChartWidget ui:field="monthChart" width="200" height="200" legendTitles="CW--, CW--, CW--, CW--" />
+        <tac:MonthChartWidget ui:field="monthChart" width="200" height="200" legendTitles="CW, CW, CW, CW" />
     </g:HTMLPanel>
 
 </ui:UiBinder> 

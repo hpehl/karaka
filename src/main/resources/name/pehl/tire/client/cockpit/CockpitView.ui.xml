@@ -46,6 +46,7 @@
         
         .description,.project {
             font-size: 12px;
+            line-height: 14px;
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -58,12 +59,12 @@
             </div>
         </div>
         <div class="{style.infoContainer}">
-            <g:Label ui:field="today" title="Today" addStyleNames="{style.day}">n/a</g:Label>
+            <g:Label ui:field="today" title="Today" addStyleNames="{style.day}">0h</g:Label>
             <div class="{style.weekAndMonth}">
-                <g:InlineLabel ui:field="week" title="Current week">n/a</g:InlineLabel>&nbsp;/&nbsp;<g:InlineLabel ui:field="month" title="Current month">n/a</g:InlineLabel>
+                <g:InlineLabel ui:field="week" title="Current week">0h</g:InlineLabel>&nbsp;&ndash;&nbsp;<g:InlineLabel ui:field="month" title="Current month">0h</g:InlineLabel>
             </div>
             <g:Label ui:field="description" addStyleNames="{style.description}">No activity running</g:Label>
-            <g:Label ui:field="project" addStyleNames="{style.project}">n/a</g:Label>
+            <g:Label ui:field="project" addStyleNames="{style.project}">No project selected</g:Label>
         </div>
     </g:HTMLPanel>
 

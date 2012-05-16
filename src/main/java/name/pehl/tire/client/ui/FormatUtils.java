@@ -22,7 +22,7 @@ public final class FormatUtils
         {
             return Defaults.NUMBER_FORMAT.format(minutes / 60.0) + "h";
         }
-        return "";
+        return "0h";
     }
 
 

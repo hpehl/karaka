@@ -1,13 +1,10 @@
 package name.pehl.tire.client.activity.presenter;
 
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.event.GetYearsAction;
 import name.pehl.tire.client.activity.event.GetYearsResult;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.TimeUnit;
-import name.pehl.tire.shared.model.YearAndMonthOrWeek;
 import name.pehl.tire.shared.model.Years;
 
 import com.google.inject.Inject;
@@ -70,27 +67,19 @@ public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYea
 
 
     @Override
-    public void onSelectYearAndMonthOrWeek(YearAndMonthOrWeek yearAndMonthOrWeek)
+    public void onSelectYearAndMonth(int year, int month)
     {
-        PlaceRequest placeRequest = null;
-        if (yearAndMonthOrWeek != null)
-        {
-            if (yearAndMonthOrWeek.getUnit() == MONTH)
-            {
-                placeRequest = new PlaceRequest(NameTokens.dashboard).with("year",
-                        String.valueOf(yearAndMonthOrWeek.getYear())).with("month",
-                        String.valueOf(yearAndMonthOrWeek.getMonthOrWeek()));
-            }
-            else if (yearAndMonthOrWeek.getUnit() == WEEK)
-            {
-                placeRequest = new PlaceRequest(NameTokens.dashboard).with("year",
-                        String.valueOf(yearAndMonthOrWeek.getYear())).with("week",
-                        String.valueOf(yearAndMonthOrWeek.getMonthOrWeek()));
-            }
-        }
-        if (placeRequest != null)
-        {
-            placeManager.revealPlace(placeRequest);
-        }
+        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(year)).with(
+                "month", String.valueOf(month));
+        placeManager.revealPlace(placeRequest);
+    }
+
+
+    @Override
+    public void onSelectYearAndWeek(int year, int week)
+    {
+        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(year)).with(
+                "week", String.valueOf(week));
+        placeManager.revealPlace(placeRequest);
     }
 }

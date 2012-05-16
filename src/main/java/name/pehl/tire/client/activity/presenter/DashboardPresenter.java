@@ -21,6 +21,8 @@ import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
@@ -112,33 +114,41 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     public void prepareFromRequest(PlaceRequest placeRequest)
     {
         super.prepareFromRequest(placeRequest);
-        final ActivitiesRequest activitiesRequest = new ActivitiesRequest(placeRequest, activities);
-        String message = "Loading activities for " + activitiesRequest.getYearAndMonthOrWeek() + "...";
+        final ActivitiesRequest activitiesRequest = new ActivitiesRequest(placeRequest);
+        String message = "Loading activities for " + activitiesRequest + "...";
         logger.fine(message);
         ShowMessageEvent.fire(this, new Message(INFO, message, false));
-        dispatcher.execute(new GetActivitiesAction(activitiesRequest), new TireCallback<GetActivitiesResult>(
-                getEventBus())
+        Scheduler.get().scheduleDeferred(new ScheduledCommand()
         {
             @Override
-            public void onSuccess(GetActivitiesResult result)
+            public void execute()
             {
-                Activities activities = result.getActivities();
-                if (activities != null)
+                dispatcher.execute(new GetActivitiesAction(activitiesRequest), new TireCallback<GetActivitiesResult>(
+                        getEventBus())
                 {
-                    // don't just call getView().updateActivities(activities) as
-                    // other classes might also be interested in updated
-                    // activities.
-                    ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities);
-                }
-            }
+                    @Override
+                    public void onSuccess(GetActivitiesResult result)
+                    {
+                        Activities activities = result.getActivities();
+                        if (activities != null)
+                        {
+                            // don't just call
+                            // getView().updateActivities(activities) as
+                            // other classes might also be interested in updated
+                            // activities.
+                            ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities);
+                        }
+                    }
 
 
-            @Override
-            public void onFailure(Throwable caught)
-            {
-                String errorMessage = "Failed to load activities for " + activitiesRequest.getYearAndMonthOrWeek();
-                ShowMessageEvent.fire(DashboardPresenter.this, new Message(SEVERE, errorMessage, true));
-                logger.severe(errorMessage);
+                    @Override
+                    public void onFailure(Throwable caught)
+                    {
+                        String errorMessage = "Failed to load activities for " + activitiesRequest;
+                        ShowMessageEvent.fire(DashboardPresenter.this, new Message(SEVERE, errorMessage, true));
+                        logger.severe(errorMessage);
+                    }
+                });
             }
         });
     }

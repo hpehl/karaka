@@ -1,5 +1,7 @@
 package name.pehl.tire.client.activity.view;
 
+import static java.lang.Math.max;
+
 import java.util.Iterator;
 import java.util.SortedSet;
 
@@ -9,8 +11,6 @@ import name.pehl.tire.shared.model.Week;
 
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiConstructor;
-
-import static java.lang.Math.max;
 
 /**
  * @author $Author: harald.pehl $
@@ -74,7 +74,7 @@ public class MonthChartWidget extends QuickChartWidget
                 else
                 {
                     path = path(index, 0);
-                    cw = "CW--";
+                    cw = "n/a";
                 }
                 animateColumn(columns[index], path, tooltip);
                 updateLegend(legends[index], cw);

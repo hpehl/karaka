@@ -1,16 +1,14 @@
 package name.pehl.tire.client.activity.model;
 
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.client.rest.UrlBuilder;
 import name.pehl.tire.shared.model.TimeUnit;
-import name.pehl.tire.shared.model.YearAndMonthOrWeek;
 
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
-
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * TODO Tests, tests, tests
@@ -27,47 +25,67 @@ public class ActivitiesRequest
 
     private static final Logger logger = Logger.getLogger(ActivitiesRequest.class.getName());
 
-    private final YearAndMonthOrWeek yearAndMonthOrWeek;
+    private final String url;
+    private final String text;
 
 
-    public ActivitiesRequest(YearAndMonthOrWeek yearAndMonthOrWeek)
+    public ActivitiesRequest(String url)
     {
-        this.yearAndMonthOrWeek = yearAndMonthOrWeek;
+        this.url = url;
+        this.text = "n/a";
     }
 
 
-    public ActivitiesRequest(PlaceRequest placeRequest, Activities activities)
+    public ActivitiesRequest(PlaceRequest placeRequest)
     {
-        this.yearAndMonthOrWeek = new YearAndMonthOrWeek();
+        String text = "n/a";
+        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities");
         if (hasParameter(placeRequest, PARAM_CURRENT))
         {
             TimeUnit unit = parseTimeUnit(placeRequest.getParameter(PARAM_CURRENT, null));
-            this.yearAndMonthOrWeek.setUnit(unit);
+            switch (unit)
+            {
+                case MONTH:
+                    urlBuilder = urlBuilder.path("currentMonth");
+                    text = "current month";
+                    break;
+                case WEEK:
+                    urlBuilder = urlBuilder.path("currentWeek");
+                    text = "current week";
+                    break;
+                case DAY:
+                    urlBuilder = urlBuilder.path("today");
+                    text = "today";
+                    break;
+            }
         }
         else if (hasParameter(placeRequest, PARAM_YEAR)
                 && (hasParameter(placeRequest, PARAM_MONTH) || hasParameter(placeRequest, PARAM_WEEK)))
         {
-            int year = parseInt(placeRequest.getParameter(PARAM_YEAR, "0"));
-            int month = parseInt(placeRequest.getParameter(PARAM_MONTH, "0"));
-            int week = parseInt(placeRequest.getParameter(PARAM_WEEK, "0"));
-            this.yearAndMonthOrWeek.setYear(year);
-            if (month != 0)
+            String year = placeRequest.getParameter(PARAM_YEAR, null);
+            String month = placeRequest.getParameter(PARAM_MONTH, null);
+            String week = placeRequest.getParameter(PARAM_WEEK, null);
+            if (month != null)
             {
-                this.yearAndMonthOrWeek.setUnit(MONTH);
-                this.yearAndMonthOrWeek.setMonthOrWeek(month);
+                urlBuilder = urlBuilder.path(year, month);
+                text = month + " / " + year;
 
             }
-            else if (week != 0)
+            else if (week != null)
             {
-                this.yearAndMonthOrWeek.setUnit(WEEK);
-                this.yearAndMonthOrWeek.setMonthOrWeek(week);
+                urlBuilder = urlBuilder.path(year, "cw" + week);
+                text = "CW " + week + " / " + year;
             }
         }
         else
         {
-            logger.log(Level.WARNING, "No valid parameters in " + placeRequest.getParameterNames() + ". Fall back to "
-                    + this.yearAndMonthOrWeek);
+            logger.log(Level.WARNING, "No valid parameters in " + placeRequest.getParameterNames()
+                    + ". Fall back to current week");
+            urlBuilder = urlBuilder.path("currentWeek");
+            text = "current week";
         }
+        this.url = urlBuilder.toUrl();
+        this.text = text;
     }
 
 
@@ -102,23 +120,15 @@ public class ActivitiesRequest
     }
 
 
-    private int parseInt(String value)
+    @Override
+    public String toString()
     {
-        int result = 0;
-        try
-        {
-            result = Integer.parseInt(value);
-        }
-        catch (NumberFormatException e)
-        {
-            logger.log(Level.WARNING, "Cannot parse \"" + value + "\" as integer");
-        }
-        return result;
+        return text;
     }
 
 
-    public YearAndMonthOrWeek getYearAndMonthOrWeek()
+    public String toUrl()
     {
-        return yearAndMonthOrWeek;
+        return url;
     }
 }

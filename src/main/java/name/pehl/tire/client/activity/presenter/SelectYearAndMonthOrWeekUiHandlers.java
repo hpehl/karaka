@@ -1,7 +1,5 @@
 package name.pehl.tire.client.activity.presenter;
 
-import name.pehl.tire.shared.model.YearAndMonthOrWeek;
-
 import com.gwtplatform.mvp.client.UiHandlers;
 
 /**
@@ -10,5 +8,8 @@ import com.gwtplatform.mvp.client.UiHandlers;
  */
 public interface SelectYearAndMonthOrWeekUiHandlers extends UiHandlers
 {
-    void onSelectYearAndMonthOrWeek(YearAndMonthOrWeek yearAndMonthOrWeek);
+    void onSelectYearAndMonth(int year, int month);
+
+
+    void onSelectYearAndWeek(int year, int week);
 }
