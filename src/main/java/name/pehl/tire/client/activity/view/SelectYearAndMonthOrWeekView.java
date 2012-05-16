@@ -1,9 +1,7 @@
 package name.pehl.tire.client.activity.view;
 
-import static java.util.logging.Level.SEVERE;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-
 import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.presenter.SelectYearAndMonthOrWeekPresenter;
@@ -15,6 +13,7 @@ import name.pehl.tire.shared.model.Year;
 import name.pehl.tire.shared.model.YearAndMonthOrWeek;
 import name.pehl.tire.shared.model.Years;
 
+import com.google.common.collect.Ordering;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.EventTarget;
@@ -32,6 +31,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
+
+import static java.util.logging.Level.SEVERE;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 
 public class SelectYearAndMonthOrWeekView extends PopupViewWithUiHandlers<SelectYearAndMonthOrWeekUiHandlers> implements
         SelectYearAndMonthOrWeekPresenter.MyView
@@ -78,7 +80,6 @@ public class SelectYearAndMonthOrWeekView extends PopupViewWithUiHandlers<Select
     @Override
     public void updateYears(Years years)
     {
-
         if (years != null)
         {
             // clear list
@@ -104,10 +105,12 @@ public class SelectYearAndMonthOrWeekView extends PopupViewWithUiHandlers<Select
                 }
                 if (monthsOrWeeks != null && !monthsOrWeeks.isEmpty())
                 {
+                    SortedSet<Integer> reversed = new TreeSet<Integer>(Ordering.natural().reverse());
+                    reversed.addAll(monthsOrWeeks);
                     LIElement yearLi = Document.get().createLIElement();
                     yearLi.setInnerText(String.valueOf(year.getYear()));
                     UListElement nestedUl = Document.get().createULElement();
-                    for (Integer monthOrWeek : monthsOrWeeks)
+                    for (Integer monthOrWeek : reversed)
                     {
                         LIElement li = Document.get().createLIElement();
                         AnchorElement link = newLink(linkListener, year, monthOrWeek, unit);

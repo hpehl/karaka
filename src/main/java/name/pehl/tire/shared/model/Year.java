@@ -3,6 +3,10 @@ package name.pehl.tire.shared.model;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+/**
+ * @author $Author$
+ * @version $Revision$
+ */
 public class Year implements Comparable<Year>
 {
     int year;
@@ -62,7 +66,7 @@ public class Year implements Comparable<Year>
     @Override
     public int compareTo(Year that)
     {
-        return this.year - that.year;
+        return that.year - this.year;
     }
 
 

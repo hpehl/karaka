@@ -11,6 +11,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
+ * Weeks and days are sorted ascending, activities are sorted descending.
+ * 
  * @author $Author: harald.pehl $
  * @version $Date: 2011-08-31 22:05:44 +0200 (Mi, 31. Aug 2011) $ $Revision: 177
  *          $

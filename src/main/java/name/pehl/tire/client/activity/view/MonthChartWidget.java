@@ -1,12 +1,12 @@
 package name.pehl.tire.client.activity.view;
 
+import java.util.Iterator;
 import java.util.SortedSet;
 
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Week;
 
-import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiConstructor;
 
@@ -57,20 +57,26 @@ public class MonthChartWidget extends QuickChartWidget
             oneMinute = (double) usableHeight / max;
 
             // update columns
-            int index = 0;
-            for (Week week : weeks)
+            Iterator<Week> iter = weeks.iterator();
+            for (int index = 0; index < columns.length; index++)
             {
-                if (index >= 0 && index < columns.length)
+                String path;
+                String cw = "";
+                String tooltip = "";
+                if (iter.hasNext())
                 {
-                    JavaScriptObject column = columns[index];
-                    JavaScriptObject legend = legends[index];
-                    String path = path(index, week.getMinutes());
-                    String cw = "CW " + week.getWeek();
-                    String tooltip = cw + ": " + FormatUtils.hours(week.getMinutes());
-                    animateColumn(column, path, tooltip);
-                    updateLegend(legend, cw);
+                    Week week = iter.next();
+                    path = path(index, week.getMinutes());
+                    cw = "CW " + week.getWeek();
+                    tooltip = cw + ": " + FormatUtils.hours(week.getMinutes());
+
                 }
-                index++;
+                else
+                {
+                    path = path(index, 0);
+                }
+                animateColumn(columns[index], path, tooltip);
+                updateLegend(legends[index], cw);
             }
         }
     }

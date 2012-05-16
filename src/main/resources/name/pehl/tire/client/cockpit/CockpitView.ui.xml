@@ -58,12 +58,12 @@
             </div>
         </div>
         <div class="{style.infoContainer}">
-            <g:Label ui:field="today" title="Today" addStyleNames="{style.day}">12:34</g:Label>
+            <g:Label ui:field="today" title="Today" addStyleNames="{style.day}">n/a</g:Label>
             <div class="{style.weekAndMonth}">
-                <g:InlineLabel ui:field="week" title="Current week">34:12</g:InlineLabel>&nbsp;&mdash;&nbsp;<g:InlineLabel ui:field="month"  title="Current month">123:55</g:InlineLabel>
+                <g:InlineLabel ui:field="week" title="Current week">n/a</g:InlineLabel>&nbsp;/&nbsp;<g:InlineLabel ui:field="month" title="Current month">n/a</g:InlineLabel>
             </div>
-            <g:Label ui:field="description" addStyleNames="{style.description}">Some description</g:Label>
-            <g:Label ui:field="project" addStyleNames="{style.project}">Some project</g:Label>
+            <g:Label ui:field="description" addStyleNames="{style.description}">No activity running</g:Label>
+            <g:Label ui:field="project" addStyleNames="{style.project}">n/a</g:Label>
         </div>
     </g:HTMLPanel>
 

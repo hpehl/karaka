@@ -37,7 +37,7 @@ class ActivitiesProducer
             DateTimeZone timeZone)
     {
         DateMidnight end = DateMidnight.now().plusDays(1);
-        DateMidnight start = end.minus(Months.months(2));
+        DateMidnight start = end.minus(Months.months(8));
         List<Activity> activities = new ArrayList<Activity>();
         MutableDateTime mdt = new MutableDateTime(start);
         while (mdt.isBefore(end))

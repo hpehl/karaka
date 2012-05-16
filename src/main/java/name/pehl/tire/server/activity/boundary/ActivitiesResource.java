@@ -46,6 +46,8 @@ import static org.joda.time.Weeks.weeks;
  * <li>GET /activities/currentWeek: Find activities
  * <li>GET /activities/{year}/{month}/{day}: Find activities
  * <li>GET /activities/today: Find activities
+ * <li>GET /years: Returns the years, months and weeks in which activities are
+ * stored
  * </ul>
  * 
  * @todo Add hyperlinks to current, previous and next activities. If there are

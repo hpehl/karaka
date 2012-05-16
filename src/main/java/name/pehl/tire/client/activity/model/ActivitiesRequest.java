@@ -1,8 +1,5 @@
 package name.pehl.tire.client.activity.model;
 
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,6 +8,9 @@ import name.pehl.tire.shared.model.TimeUnit;
 import name.pehl.tire.shared.model.YearAndMonthOrWeek;
 
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * TODO Tests, tests, tests
@@ -28,6 +28,12 @@ public class ActivitiesRequest
     private static final Logger logger = Logger.getLogger(ActivitiesRequest.class.getName());
 
     private final YearAndMonthOrWeek yearAndMonthOrWeek;
+
+
+    public ActivitiesRequest(YearAndMonthOrWeek yearAndMonthOrWeek)
+    {
+        this.yearAndMonthOrWeek = yearAndMonthOrWeek;
+    }
 
 
     public ActivitiesRequest(PlaceRequest placeRequest, Activities activities)

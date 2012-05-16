@@ -77,7 +77,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     @Override
     public int compareTo(Day that)
     {
-        return ComparisonChain.start().compare(that.day, this.day).result();
+        return ComparisonChain.start().compare(this.day, that.day).result();
     }
 
 

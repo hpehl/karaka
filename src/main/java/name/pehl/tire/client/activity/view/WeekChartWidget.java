@@ -1,12 +1,12 @@
 package name.pehl.tire.client.activity.view;
 
+import java.util.Iterator;
 import java.util.SortedSet;
 
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Day;
 
-import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.uibinder.client.UiConstructor;
 
 import static java.lang.Math.max;
@@ -55,17 +55,23 @@ public class WeekChartWidget extends QuickChartWidget
             oneMinute = (double) usableHeight / max;
 
             // update columns
-            int index = 0;
-            for (Day day : days)
+            Iterator<Day> iter = days.iterator();
+            for (int index = 0; index < columns.length; index++)
             {
-                if (index >= 0 && index < columns.length)
+                String path;
+                String tooltip = "";
+                if (iter.hasNext())
                 {
-                    JavaScriptObject column = columns[index];
-                    String path = path(index, day.getMinutes());
-                    String tooltip = FormatUtils.date(day.getStart()) + ": " + FormatUtils.hours(day.getMinutes());
-                    animateColumn(column, path, tooltip);
+                    Day day = iter.next();
+                    path = path(index, day.getMinutes());
+                    tooltip = FormatUtils.date(day.getStart()) + ": " + FormatUtils.hours(day.getMinutes());
+
                 }
-                index++;
+                else
+                {
+                    path = path(index, 0);
+                }
+                animateColumn(columns[index], path, tooltip);
             }
         }
     }
