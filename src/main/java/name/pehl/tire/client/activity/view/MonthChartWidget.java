@@ -74,6 +74,7 @@ public class MonthChartWidget extends QuickChartWidget
                 else
                 {
                     path = path(index, 0);
+                    cw = "CW--";
                 }
                 animateColumn(columns[index], path, tooltip);
                 updateLegend(legends[index], cw);
