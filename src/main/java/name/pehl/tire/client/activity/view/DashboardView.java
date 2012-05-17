@@ -89,19 +89,19 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     public void updateActivities(Activities activities)
     {
         // Update header
-        StringBuilder text = new StringBuilder("Recent Activities");
+        StringBuilder text = new StringBuilder();
         StringBuilder title = new StringBuilder();
         if (activities.getUnit() == WEEK)
         {
             String cw = "CW " + activities.getWeek() + " / " + activities.getYear();
-            text.append(": ").append(cw);
+            text.append(cw);
             title.append(cw);
         }
         else if (activities.getUnit() == MONTH)
         {
             String monthKey = "month_" + activities.getMonth();
             String month = i18n.enums().getString(monthKey) + " " + activities.getYear();
-            text.append(": ").append(month);
+            text.append(month);
             title.append(month);
         }
         title.append(" - ").append(FormatUtils.hours(activities.getMinutes())).append(" - ")

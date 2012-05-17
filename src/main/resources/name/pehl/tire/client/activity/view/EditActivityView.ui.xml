@@ -14,6 +14,14 @@
             -moz-box-shadow: 2px 2px 2px #3d3d3d;
             -webkit-box-shadow: 2px 2px 2px #3d3d3d;
         }
+        
+        .popup input {
+            margin-right: 5px;
+        }
+        
+        .popup input.last {
+            margin-right: 0;
+        }
     </ui:style>
 
     <tui:EscapablePopupPanel animationEnabled="false" autoHideEnabled="true" modal="true"
@@ -22,7 +30,7 @@
             <tui:PlaceholderTextBox ui:field="name" />
             <tui:PlaceholderTextBox ui:field="description" />
             <tui:TimeTextBox ui:field="start" />
-            <tui:TimeTextBox ui:field="end" />
+            <tui:TimeTextBox ui:field="end" addStyleNames="{style.last}" />
         </g:FlowPanel>
     </tui:EscapablePopupPanel>
 
