@@ -5,11 +5,13 @@
 
     <ui:style>
         .message {
-            overflow: hidden;
             text-align: center;
+            overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
             font-size: 12px;
             line-height: 26px;
+            max-height: 26px;
             padding: 0 5px;
             color: #62635e;
             background-color: white;
