@@ -104,7 +104,7 @@ public class MessageView extends ViewImpl implements MessagePresenter.MyView
     {
         void schedule()
         {
-            super.schedule(15000);
+            super.schedule(20000);
         }
 
 
