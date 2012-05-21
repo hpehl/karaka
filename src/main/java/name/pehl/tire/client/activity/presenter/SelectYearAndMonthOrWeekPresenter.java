@@ -1,8 +1,8 @@
 package name.pehl.tire.client.activity.presenter;
 
 import name.pehl.tire.client.NameTokens;
-import name.pehl.tire.client.activity.event.GetYearsAction;
-import name.pehl.tire.client.activity.event.GetYearsResult;
+import name.pehl.tire.client.activity.dispatch.GetYearsAction;
+import name.pehl.tire.client.activity.dispatch.GetYearsResult;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.TimeUnit;
 import name.pehl.tire.shared.model.Years;

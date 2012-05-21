@@ -1,9 +1,8 @@
 package name.pehl.tire.client.activity.presenter;
 
-import com.google.inject.Inject;
-
 import name.pehl.tire.shared.model.Activity;
 
+import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;

@@ -1,7 +1,7 @@
 package name.pehl.tire.client.dispatch;
 
-import name.pehl.tire.client.activity.event.GetActivitiesHandler;
-import name.pehl.tire.client.activity.event.GetYearsHandler;
+import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
+import name.pehl.tire.client.activity.dispatch.GetYearsHandler;
 
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.client.actionhandler.DefaultClientActionHandlerRegistry;

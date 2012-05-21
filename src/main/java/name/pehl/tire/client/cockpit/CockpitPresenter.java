@@ -2,10 +2,10 @@ package name.pehl.tire.client.cockpit;
 
 import java.util.logging.Logger;
 
-import name.pehl.tire.client.activity.event.GetActiveActivityAction;
-import name.pehl.tire.client.activity.event.GetActiveActivityResult;
-import name.pehl.tire.client.activity.event.GetActivitiesAction;
-import name.pehl.tire.client.activity.event.GetActivitiesResult;
+import name.pehl.tire.client.activity.dispatch.GetActiveActivityAction;
+import name.pehl.tire.client.activity.dispatch.GetActiveActivityResult;
+import name.pehl.tire.client.activity.dispatch.GetActivitiesAction;
+import name.pehl.tire.client.activity.dispatch.GetActivitiesResult;
 import name.pehl.tire.client.activity.model.ActivitiesRequest;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.client.rest.UrlBuilder;

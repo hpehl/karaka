@@ -4,10 +4,10 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
+import name.pehl.tire.client.activity.dispatch.GetActivitiesAction;
+import name.pehl.tire.client.activity.dispatch.GetActivitiesResult;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
-import name.pehl.tire.client.activity.event.GetActivitiesAction;
-import name.pehl.tire.client.activity.event.GetActivitiesResult;
 import name.pehl.tire.client.activity.model.ActivitiesRequest;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.Message;

@@ -1,4 +1,4 @@
-package name.pehl.tire.client.activity.event;
+package name.pehl.tire.client.activity.dispatch;
 
 import name.pehl.tire.shared.model.Years;
 
