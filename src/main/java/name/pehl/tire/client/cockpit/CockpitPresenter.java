@@ -2,12 +2,15 @@ package name.pehl.tire.client.cockpit;
 
 import java.util.logging.Logger;
 
+import name.pehl.tire.client.activity.event.GetActiveActivityAction;
+import name.pehl.tire.client.activity.event.GetActiveActivityResult;
 import name.pehl.tire.client.activity.event.GetActivitiesAction;
 import name.pehl.tire.client.activity.event.GetActivitiesResult;
 import name.pehl.tire.client.activity.model.ActivitiesRequest;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.client.rest.UrlBuilder;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Activity;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -27,9 +30,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
 {
     public interface MyView extends View, HasUiHandlers<CockpitUiHandlers>
     {
-        void initializeRecording(boolean recording);
-
-
         void updateMonth(Activities activities);
 
 
@@ -37,6 +37,9 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
 
 
         void updateToday(Activities activities);
+
+
+        void updateStatus(Activity activity);
     }
 
     private static final Logger logger = Logger.getLogger(CockpitPresenter.class.getName());
@@ -49,7 +52,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         super(eventBus, view);
         this.dispatcher = dispatcher;
         getView().setUiHandlers(this);
-        getView().initializeRecording(false);
     }
 
 
@@ -132,6 +134,25 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                 public void onFailure(Throwable caught)
                 {
                     logger.warning("Cannot load activities for " + today);
+                }
+            });
+
+            dispatcher.execute(new GetActiveActivityAction(), new TireCallback<GetActiveActivityResult>(getEventBus())
+            {
+                @Override
+                public void onSuccess(GetActiveActivityResult result)
+                {
+                    Activity activity = result.getActivity();
+                    logger.info("Active activity: " + activity);
+                    getView().updateStatus(activity);
+                }
+
+
+                @Override
+                public void onFailure(Throwable caught)
+                {
+                    logger.info("No active activity available");
+                    getView().updateStatus(null);
                 }
             });
         }

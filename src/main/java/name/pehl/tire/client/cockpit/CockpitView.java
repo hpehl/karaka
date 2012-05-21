@@ -3,6 +3,7 @@ package name.pehl.tire.client.cockpit;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Activity;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -15,6 +16,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
+import static name.pehl.tire.shared.model.Status.RUNNING;
+
 /**
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-07 16:33:54 +0100 (Di, 07. Dez 2010) $ $Revision: 102
@@ -26,9 +29,9 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
     {
     }
 
-    private boolean recording;
     private final Widget widget;
     private final Resources resources;
+    private boolean recording;
     @UiField Image startStop;
     @UiField Label today;
     @UiField InlineLabel week;
@@ -41,8 +44,8 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
     public CockpitView(final Binder binder, final Resources resources)
     {
         this.widget = binder.createAndBindUi(this);
-        this.recording = false;
         this.resources = resources;
+        this.recording = false;
     }
 
 
@@ -50,21 +53,6 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
     public Widget asWidget()
     {
         return widget;
-    }
-
-
-    @Override
-    public void initializeRecording(boolean recording)
-    {
-        this.recording = recording;
-        if (recording)
-        {
-            startRecording();
-        }
-        else
-        {
-            stopRecording();
-        }
     }
 
 
@@ -89,41 +77,36 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
     }
 
 
+    @Override
+    public void updateStatus(Activity activity)
+    {
+        if (activity != null && activity.getStatus() == RUNNING)
+        {
+            startStop.setResource(resources.recordOn());
+            recording = true;
+        }
+        else
+        {
+            startStop.setResource(resources.recordOff());
+            recording = false;
+        }
+    }
+
+
     @UiHandler("startStop")
     void onRecordClicked(ClickEvent event)
     {
         if (getUiHandlers() != null)
         {
+            // CSS and flag will be updated in updateStatus()
             if (recording)
             {
-                stopRecording();
+                getUiHandlers().onStopRecording();
             }
             else
             {
-                startRecording();
+                getUiHandlers().onStartRecording();
             }
-        }
-    }
-
-
-    private void startRecording()
-    {
-        if (getUiHandlers() != null)
-        {
-            this.recording = true;
-            startStop.setResource(resources.recordOn());
-            getUiHandlers().onStartRecording();
-        }
-    }
-
-
-    private void stopRecording()
-    {
-        if (getUiHandlers() != null)
-        {
-            this.recording = false;
-            startStop.setResource(resources.recordOff());
-            getUiHandlers().onStopRecording();
         }
     }
 }

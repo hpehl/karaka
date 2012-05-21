@@ -1,8 +1,5 @@
 package name.pehl.tire.client.activity.view;
 
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.Date;
 
 import name.pehl.tire.client.activity.event.ProcessActivityEvent;
@@ -26,6 +23,9 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> implements DashboardPresenter.MyView
 {
@@ -70,7 +70,6 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
         this.activitiesTable = new ActivitiesTable(atr);
         this.widget = binder.createAndBindUi(this);
         this.today.addStyleName(resources.navigation().selectedDate());
-
         this.yesterday.setText(DATE_FORMAT.format(new Date(System.currentTimeMillis() - ONE_DAY)));
         this.theDayBeforeYesterday.setText(DATE_FORMAT.format(new Date(System.currentTimeMillis() - 2 * ONE_DAY)));
     }

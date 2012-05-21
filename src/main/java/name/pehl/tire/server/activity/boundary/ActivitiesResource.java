@@ -1,9 +1,5 @@
 package name.pehl.tire.server.activity.boundary;
 
-import static name.pehl.tire.shared.model.TimeUnit.*;
-import static org.joda.time.Months.months;
-import static org.joda.time.Weeks.weeks;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import name.pehl.tire.server.activity.control.ActivitiesConverter;
+import name.pehl.tire.server.activity.control.ActivityConverter;
 import name.pehl.tire.server.activity.control.ActivityRepository;
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.paging.entity.PageResult;
@@ -31,6 +28,14 @@ import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 
+import com.google.appengine.api.datastore.EntityNotFoundException;
+
+import static name.pehl.tire.shared.model.TimeUnit.DAY;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+import static org.joda.time.Months.months;
+import static org.joda.time.Weeks.weeks;
+
 /**
  * Supported methods:
  * <ul>
@@ -43,6 +48,7 @@ import org.joda.time.MutableDateTime;
  * <li>GET /activities/currentWeek: Find activities
  * <li>GET /activities/{year}/{month}/{day}: Find activities
  * <li>GET /activities/today: Find activities
+ * <li>GET /activities/active: Find the active activity
  * <li>GET /years: Returns the years, months and weeks in which activities are
  * stored
  * </ul>
@@ -61,6 +67,7 @@ public class ActivitiesResource
     @Inject @CurrentSettings Settings settings;
     @Inject ActivityRepository repository;
     @Inject ActivitiesConverter activitiesConverter;
+    @Inject ActivityConverter activityConverter;
 
 
     // ------------------------------------------------- years / months / weeks
@@ -231,6 +238,24 @@ public class ActivitiesResource
             throw new NotFoundException("No activities found for today");
         }
         return activitiesConverter.toModel(requested, now(timeZone), DAY, activities);
+    }
+
+
+    // -------------------------------------------------------------- by status
+
+    @GET
+    @Path("/active")
+    public name.pehl.tire.shared.model.Activity activeActivity()
+    {
+        try
+        {
+            Activity activity = repository.findActiveActivity();
+            return activityConverter.toModel(activity);
+        }
+        catch (EntityNotFoundException e)
+        {
+            throw new NotFoundException("No active activity");
+        }
     }
 
 

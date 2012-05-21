@@ -52,6 +52,29 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
 
     // --------------------------------------------------------- object methods
 
+    /**
+     * Creates a new activity which is a copy of this activitiy with the
+     * following differences:
+     * <ul>
+     * <li>Id is <code>null</code> i.e. the copy is a transient activity
+     * <li>Start date is the current date/time
+     * <li>status is {@link Status#STOPPED}
+     * </ul>
+     * 
+     * @return
+     */
+    public Activity copy()
+    {
+        Activity copy = new Activity(this.name);
+        copy.setStart(new Date());
+        copy.setBillable(this.billable);
+        copy.setStatus(Status.STOPPED);
+        copy.setProject(this.project);
+        copy.getTags().addAll(this.tags);
+        return copy;
+    }
+
+
     @Override
     public int compareTo(Activity that)
     {

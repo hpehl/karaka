@@ -3,13 +3,62 @@
 <title>Transition Test</title>
 <style type="text/css">
 @-webkit-keyframes pulse {
-    from { 
-        background-color: inherit
-    }
-    to {
+    0% {        
+        background-color: #dbf1aa;    
+    }   
+    50% {       
+        background-color: rgba(196, 233, 110, 1);    
+    }  
+    100% {
         background-color: #dbf1aa;
-    }
+    } 
 }
+@-moz-keyframes pulse {
+    0% {        
+        background-color: #dbf1aa;    
+    }   
+    50% {       
+        background-color: rgba(196, 233, 110, 1);    
+    }  
+    100% {
+        background-color: #dbf1aa;
+    } 
+}
+@-ms-keyframes pulse {
+    0% {        
+        background-color: #dbf1aa;    
+    }   
+    50% {       
+        background-color: rgba(196, 233, 110, 1);    
+    }  
+    100% {
+        background-color: #dbf1aa;
+    } 
+}
+@-o-keyframes pulse {
+    0% {        
+        background-color: #dbf1aa;    
+    }   
+    50% {       
+        background-color: rgba(196, 233, 110, 1);    
+    }  
+    100% {
+        background-color: #dbf1aa;
+    } 
+}
+@keyframes pulse {
+    0% {        
+        background-color: #dbf1aa;    
+    }   
+    50% {       
+        background-color: rgba(196, 233, 110, 1);    
+    }  
+    100% {
+        background-color: #dbf1aa;
+    } 
+}
+ 
+
 div {
     padding: 1em;
     text-align: center;
@@ -18,11 +67,32 @@ div {
 }
 
 div.active {
+    background-color: #dbf1aa;
     -webkit-animation-name: pulse;
-    -webkit-animation-duration: 2s;
+    -webkit-animation-duration: 3s;
     -webkit-animation-direction: alternate;
     -webkit-animation-iteration-count: infinite;
-    -webkit-animation-timing-function: ease-in;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: pulse;
+    -moz-animation-duration: 3s;
+    -moz-animation-direction: alternate;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+    -ms-animation-name: pulse;
+    -ms-animation-duration: 3s;
+    -ms-animation-direction: alternate;
+    -ms-animation-iteration-count: infinite;
+    -ms-animation-timing-function: ease-in-out;
+    -o-animation-name: pulse;
+    -o-animation-duration: 3s;
+    -o-animation-direction: alternate;
+    -o-animation-iteration-count: infinite;
+    -o-animation-timing-function: ease-in-out;
+    animation-name: pulse;
+    animation-duration: 3s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
 }
 </style>
 </head>
