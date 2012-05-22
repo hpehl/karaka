@@ -43,7 +43,7 @@ public interface ActivitiesTableResources extends CellTable.Resources
     ImageResource copy();
 
 
-    ImageResource goon();
+    ImageResource startStop();
 
 
     ImageResource delete();

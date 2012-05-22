@@ -80,7 +80,16 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
     @Override
     public void updateStatus(Activity activity)
     {
-        if (activity != null && activity.getStatus() == RUNNING)
+        description.setText(activity.getName());
+        if (activity.getProject() != null)
+        {
+            project.setText(activity.getProject().getName());
+        }
+        else
+        {
+            project.setText("No project selected");
+        }
+        if (activity.getStatus() == RUNNING)
         {
             startStop.setResource(resources.recordOn());
             recording = true;

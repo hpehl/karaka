@@ -14,6 +14,7 @@ import name.pehl.tire.client.activity.model.DayReader;
 import name.pehl.tire.client.activity.model.WeekReader;
 import name.pehl.tire.client.activity.model.YearReader;
 import name.pehl.tire.client.activity.model.YearsReader;
+import name.pehl.tire.client.activity.presenter.ActivityStateMachine;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
@@ -43,7 +44,9 @@ import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.report.ReportView;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
+import name.pehl.tire.client.settings.SettingsPresenter;
 import name.pehl.tire.client.settings.SettingsReader;
+import name.pehl.tire.client.settings.SettingsView;
 import name.pehl.tire.client.settings.UserReader;
 import name.pehl.tire.client.tag.TagPresenter;
 import name.pehl.tire.client.tag.TagReader;
@@ -55,8 +58,6 @@ import name.pehl.tire.client.terms.TermsView;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
-import name.pehl.tire.client.settings.SettingsPresenter;
-import name.pehl.tire.client.settings.SettingsView;
 
 /**
  * @author $LastChangedBy: harald.pehl $
@@ -99,6 +100,9 @@ public class TireModule extends AbstractPresenterModule
         bindConstant().annotatedWith(SecurityCookie.class).to("TST");
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
+        // Misc
+        bind(ActivityStateMachine.class).asEagerSingleton();
+
         // PresenterWidgets (a-z)
         bindPresenterWidget(CockpitPresenter.class, CockpitPresenter.MyView.class, CockpitView.class);
         bindPresenterWidget(EditActivityPresenter.class, EditActivityPresenter.MyView.class, EditActivityView.class);
@@ -121,10 +125,9 @@ public class TireModule extends AbstractPresenterModule
                 ProjectPresenter.MyProxy.class);
         bindPresenter(ReportPresenter.class, ReportPresenter.MyView.class, ReportView.class,
                 ReportPresenter.MyProxy.class);
-        bindPresenter(TagPresenter.class, TagPresenter.MyView.class, TagView.class, TagPresenter.MyProxy.class);
-        bindPresenter(TermsPresenter.class, TermsPresenter.MyView.class, TermsView.class, TermsPresenter.MyProxy.class);
-
         bindPresenter(SettingsPresenter.class, SettingsPresenter.MyView.class, SettingsView.class,
                 SettingsPresenter.MyProxy.class);
+        bindPresenter(TagPresenter.class, TagPresenter.MyView.class, TagView.class, TagPresenter.MyProxy.class);
+        bindPresenter(TermsPresenter.class, TermsPresenter.MyView.class, TermsView.class, TermsPresenter.MyProxy.class);
     }
 }

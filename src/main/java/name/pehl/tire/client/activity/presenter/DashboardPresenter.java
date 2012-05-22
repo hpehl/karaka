@@ -8,6 +8,12 @@ import name.pehl.tire.client.activity.dispatch.GetActivitiesAction;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesResult;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
+import name.pehl.tire.client.activity.event.ActivityStartedEvent;
+import name.pehl.tire.client.activity.event.ActivityStartedEvent.ActivityStartedHandler;
+import name.pehl.tire.client.activity.event.ActivityStoppedEvent;
+import name.pehl.tire.client.activity.event.ActivityStoppedEvent.ActivityStoppedHandler;
+import name.pehl.tire.client.activity.event.StartActivityEvent;
+import name.pehl.tire.client.activity.event.StopActivityEvent;
 import name.pehl.tire.client.activity.model.ActivitiesRequest;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.Message;
@@ -15,6 +21,7 @@ import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Status;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -32,7 +39,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
@@ -42,7 +49,7 @@ import static name.pehl.tire.shared.model.TimeUnit.WEEK;
  *          $
  */
 public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, DashboardPresenter.MyProxy> implements
-        DashboardUiHandlers, ActivitiesLoadedHandler
+        DashboardUiHandlers, ActivitiesLoadedHandler, ActivityStartedHandler, ActivityStoppedHandler
 {
     // ---------------------------------------------------------- inner classes
 
@@ -91,6 +98,8 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
         getView().setUiHandlers(this);
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
+        getEventBus().addHandler(ActivityStartedEvent.getType(), this);
+        getEventBus().addHandler(ActivityStoppedEvent.getType(), this);
     }
 
 
@@ -144,9 +153,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                     @Override
                     public void onFailure(Throwable caught)
                     {
-                        String errorMessage = "Failed to load activities for " + activitiesRequest;
-                        ShowMessageEvent.fire(DashboardPresenter.this, new Message(SEVERE, errorMessage, true));
-                        logger.severe(errorMessage);
+                        String errorMessage = "No activities found for " + activitiesRequest;
+                        ShowMessageEvent.fire(DashboardPresenter.this, new Message(WARNING, errorMessage, true));
+                        logger.warning(errorMessage);
                     }
                 });
             }
@@ -160,6 +169,24 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     public final void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
         activities = event.getActivities();
+        getView().updateActivities(activities);
+    }
+
+
+    @Override
+    public void onActivityStarted(ActivityStartedEvent event)
+    {
+        // TODO updateActivities() necessary? The started activity might not be
+        // in the matching range!?
+        getView().updateActivities(activities);
+    }
+
+
+    @Override
+    public void onActivityStopped(ActivityStoppedEvent event)
+    {
+        // TODO updateActivities() necessary? The stopped activity might not be
+        // in the matching range!?
         getView().updateActivities(activities);
     }
 
@@ -298,9 +325,16 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
 
     @Override
-    public void onGoon(int rowIndex, Activity activity)
+    public void onStartStop(int rowIndex, Activity activity)
     {
-        logger.fine("Continue " + activity + " in row #" + rowIndex);
+        if (activity.getStatus() == Status.RUNNING)
+        {
+            StopActivityEvent.fire(this, activity);
+        }
+        else
+        {
+            StartActivityEvent.fire(this, activity);
+        }
     }
 
 

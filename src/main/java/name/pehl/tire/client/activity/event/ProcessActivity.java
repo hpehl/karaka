@@ -16,7 +16,7 @@ public class ProcessActivity
     {
         EDIT,
         COPY,
-        GOON,
+        START_STOP,
         DELETE
     }
 

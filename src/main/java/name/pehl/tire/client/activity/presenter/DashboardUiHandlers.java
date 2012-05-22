@@ -40,7 +40,7 @@ public interface DashboardUiHandlers extends UiHandlers
     void onCopy(int rowIndex, Activity activity);
 
 
-    void onGoon(int rowIndex, Activity activity);
+    void onStartStop(int rowIndex, Activity activity);
 
 
     void onDelete(int rowIndex, Activity activity);

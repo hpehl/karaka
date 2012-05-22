@@ -308,28 +308,30 @@ public class Activities
 
     public SortedSet<Activity> getActivities()
     {
-        SortedSet<Activity> computedActivities = new TreeSet<Activity>();
+        SortedSet<Activity> allActivities = new TreeSet<Activity>();
         switch (unit)
         {
             case MONTH:
                 for (Week week : weeks)
                 {
-                    computedActivities.addAll(week.getActivities());
+                    // TODO Fix order
+                    allActivities.addAll(week.getActivities());
                 }
                 break;
             case WEEK:
                 for (Day day : days)
                 {
-                    computedActivities.addAll(day.getActivities());
+                    // TODO Fix order
+                    allActivities.addAll(day.getActivities());
                 }
                 break;
             case DAY:
-                computedActivities.addAll(activities);
+                allActivities.addAll(activities);
                 break;
             default:
                 break;
         }
-        return computedActivities;
+        return allActivities;
     }
 
 

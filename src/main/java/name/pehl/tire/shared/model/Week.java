@@ -1,9 +1,7 @@
 package name.pehl.tire.shared.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -96,14 +94,14 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
     // --------------------------------------------------- methods & properties
 
-    public List<Activity> getActivities()
+    public SortedSet<Activity> getActivities()
     {
-        List<Activity> allActivities = new ArrayList<Activity>();
+        SortedSet<Activity> activities = new TreeSet<Activity>();
         for (Day day : days)
         {
-            allActivities.addAll(day.getActivities());
+            activities.addAll(day.getActivities());
         }
-        return allActivities;
+        return activities;
     }
 
 

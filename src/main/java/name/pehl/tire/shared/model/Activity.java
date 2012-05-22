@@ -75,6 +75,27 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
+    /**
+     * @return <code>true</code> if the start date of this activity is today,
+     *         <code>false</code> otherwise.
+     */
+    @SuppressWarnings("deprecation")
+    public boolean isToday()
+    {
+        boolean today = false;
+        if (start != null)
+        {
+            Date now = new Date();
+            if (now.getYear() == start.getYear() && now.getMonth() == start.getMonth()
+                    && now.getDate() == start.getDate())
+            {
+                today = true;
+            }
+        }
+        return today;
+    }
+
+
     @Override
     public int compareTo(Activity that)
     {

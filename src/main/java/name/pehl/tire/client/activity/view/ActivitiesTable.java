@@ -226,9 +226,9 @@ public class ActivitiesTable extends CellTable<Activity> implements HasProcessAc
     }
 
 
-    public void onGoon(int rowIndex, Activity activity)
+    public void onStartStop(int rowIndex, Activity activity)
     {
-        ProcessActivityEvent.fire(this, rowIndex, activity, ProcessActivity.Action.GOON);
+        ProcessActivityEvent.fire(this, rowIndex, activity, ProcessActivity.Action.START_STOP);
     }
 
 

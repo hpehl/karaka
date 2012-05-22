@@ -283,8 +283,8 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
                 case COPY:
                     getUiHandlers().onCopy(rowIndex, activity);
                     break;
-                case GOON:
-                    getUiHandlers().onGoon(rowIndex, activity);
+                case START_STOP:
+                    getUiHandlers().onStartStop(rowIndex, activity);
                     break;
                 case DELETE:
                     getUiHandlers().onDelete(rowIndex, activity);

@@ -49,15 +49,15 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
                 if (ImageElement.is(img))
                 {
                     ImageElement copy = findImage(parent, 0);
-                    ImageElement goon = findImage(parent, 1);
+                    ImageElement startStop = findImage(parent, 1);
                     ImageElement delete = findImage(parent, 2);
                     if (img == copy)
                     {
                         activitiesTable.onCopy(rowIndex, value);
                     }
-                    else if (img == goon)
+                    else if (img == startStop)
                     {
-                        activitiesTable.onGoon(rowIndex, value);
+                        activitiesTable.onStartStop(rowIndex, value);
                     }
                     else if (img == delete)
                     {
@@ -220,10 +220,10 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
         public SafeHtml render(Activity object)
         {
             SafeHtml copyHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(atr.copy()).getHTML());
-            SafeHtml goonHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(atr.goon()).getHTML());
+            SafeHtml startStopHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(atr.startStop()).getHTML());
             SafeHtml deleteHtml = SafeHtmlUtils
                     .fromTrustedString(AbstractImagePrototype.create(atr.delete()).getHTML());
-            return ActivityTemplates.INSTANCE.actions(atr.cellTableStyle().hideActions(), copyHtml, goonHtml,
+            return ActivityTemplates.INSTANCE.actions(atr.cellTableStyle().hideActions(), copyHtml, startStopHtml,
                     deleteHtml);
         }
     }

@@ -6,7 +6,7 @@ import com.gwtplatform.dispatch.annotation.GenEvent;
 import com.gwtplatform.dispatch.annotation.Order;
 
 @GenEvent
-public class StartActivity
+public class ActivityStopped
 {
     @Order(1) Activity activity;
 }
