@@ -1,5 +1,8 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static name.pehl.tire.shared.model.Status.RUNNING;
+import static name.pehl.tire.shared.model.Status.STOPPED;
+
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.event.ActiveActivityLoadedEvent;
@@ -16,9 +19,6 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-
-import static name.pehl.tire.shared.model.Status.RUNNING;
-import static name.pehl.tire.shared.model.Status.STOPPED;
 
 /**
  * This class is responsible for managing the currently running, paused or
@@ -87,8 +87,11 @@ public class ActivityStateMachine implements HasHandlers, ActiveActivityLoadedHa
                 logger.info("Activity " + activity + " already running");
                 break;
             case STOPPED:
+                // TODO Before starting an activity check for another running
+                // activity
                 if (activity.isToday())
                 {
+                    // TODO Only resume if the activity is the last activity!
                     logger.info("Resuming activity " + activity);
                     activity.setStatus(RUNNING);
                 }

@@ -1,6 +1,8 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
+    <ui:with field="res" type="name.pehl.tire.client.resources.Resources"/>
+    
     <ui:style>
         div.startStopContainer {
             padding: 20px 68px 0px 68px;
@@ -55,7 +57,7 @@
     <g:HTMLPanel>
         <div class="{style.startStopContainer}">
             <div class="{style.startStopImg}">
-                <g:Image ui:field="startStop" />
+                <g:Image ui:field="startStop" resource="{res.recordOff}" />
             </div>
         </div>
         <div class="{style.infoContainer}">

@@ -1,5 +1,6 @@
 package name.pehl.tire.client.cockpit;
 
+import static name.pehl.tire.shared.model.Status.RUNNING;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
@@ -15,8 +16,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-
-import static name.pehl.tire.shared.model.Status.RUNNING;
 
 /**
  * @author $Author: harald.pehl $

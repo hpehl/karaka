@@ -1,5 +1,7 @@
 package name.pehl.tire.client.cockpit;
 
+import static java.util.logging.Level.WARNING;
+
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.dispatch.GetActiveActivityAction;
@@ -30,8 +32,6 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
-
-import static java.util.logging.Level.WARNING;
 
 /**
  * @author $Author: harald.pehl $
@@ -121,14 +121,16 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     @Override
     public void onActivityStarted(ActivityStartedEvent event)
     {
-        getView().updateStatus(event.getActivity());
+        activity = event.getActivity();
+        getView().updateStatus(activity);
     }
 
 
     @Override
     public void onActivityStopped(ActivityStoppedEvent event)
     {
-        getView().updateStatus(event.getActivity());
+        activity = event.getActivity();
+        getView().updateStatus(activity);
     }
 
     class InitCockpitCommand implements ScheduledCommand
