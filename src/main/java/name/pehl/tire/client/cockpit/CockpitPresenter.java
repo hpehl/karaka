@@ -1,19 +1,19 @@
 package name.pehl.tire.client.cockpit;
 
-import static java.util.logging.Level.WARNING;
-
 import java.util.logging.Logger;
 
-import name.pehl.tire.client.activity.dispatch.GetActiveActivityAction;
-import name.pehl.tire.client.activity.dispatch.GetActiveActivityResult;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesAction;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesResult;
-import name.pehl.tire.client.activity.event.ActiveActivityLoadedEvent;
-import name.pehl.tire.client.activity.event.ActiveActivityLoadedEvent.ActiveActivityLoadedHandler;
+import name.pehl.tire.client.activity.dispatch.GetRunningActivityAction;
+import name.pehl.tire.client.activity.dispatch.GetRunningActivityResult;
+import name.pehl.tire.client.activity.event.ActivityResumedEvent;
+import name.pehl.tire.client.activity.event.ActivityResumedEvent.ActivityResumedHandler;
 import name.pehl.tire.client.activity.event.ActivityStartedEvent;
 import name.pehl.tire.client.activity.event.ActivityStartedEvent.ActivityStartedHandler;
 import name.pehl.tire.client.activity.event.ActivityStoppedEvent;
 import name.pehl.tire.client.activity.event.ActivityStoppedEvent.ActivityStoppedHandler;
+import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent;
+import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent.RunningActivityLoadedHandler;
 import name.pehl.tire.client.activity.event.StartActivityEvent;
 import name.pehl.tire.client.activity.event.StopActivityEvent;
 import name.pehl.tire.client.activity.model.ActivitiesRequest;
@@ -33,13 +33,15 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 
+import static java.util.logging.Level.WARNING;
+
 /**
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-06 17:48:50 +0100 (Mo, 06. Dez 2010) $ $Revision: 175
  *          $
  */
 public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> implements CockpitUiHandlers,
-        ActiveActivityLoadedHandler, ActivityStartedHandler, ActivityStoppedHandler
+        RunningActivityLoadedHandler, ActivityStartedHandler, ActivityResumedHandler, ActivityStoppedHandler
 {
     public interface MyView extends View, HasUiHandlers<CockpitUiHandlers>
     {
@@ -67,8 +69,9 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         this.dispatcher = dispatcher;
 
         getView().setUiHandlers(this);
-        getEventBus().addHandler(ActiveActivityLoadedEvent.getType(), this);
+        getEventBus().addHandler(RunningActivityLoadedEvent.getType(), this);
         getEventBus().addHandler(ActivityStartedEvent.getType(), this);
+        getEventBus().addHandler(ActivityResumedEvent.getType(), this);
         getEventBus().addHandler(ActivityStoppedEvent.getType(), this);
     }
 
@@ -111,26 +114,37 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
 
 
     @Override
-    public void onActiveActivityLoaded(ActiveActivityLoadedEvent event)
+    public void onRunningActivityLoaded(RunningActivityLoadedEvent event)
     {
-        activity = event.getActivity();
-        getView().updateStatus(event.getActivity());
+        internalUpdate(event.getActivity());
     }
 
 
     @Override
     public void onActivityStarted(ActivityStartedEvent event)
     {
-        activity = event.getActivity();
-        getView().updateStatus(activity);
+        internalUpdate(event.getActivity());
+    }
+
+
+    @Override
+    public void onActivityResumed(ActivityResumedEvent event)
+    {
+        internalUpdate(event.getActivity());
     }
 
 
     @Override
     public void onActivityStopped(ActivityStoppedEvent event)
     {
-        activity = event.getActivity();
-        getView().updateStatus(activity);
+        internalUpdate(event.getActivity());
+    }
+
+
+    private void internalUpdate(Activity activity)
+    {
+        this.activity = activity;
+        getView().updateStatus(this.activity);
     }
 
     class InitCockpitCommand implements ScheduledCommand
@@ -194,21 +208,22 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                 }
             });
 
-            dispatcher.execute(new GetActiveActivityAction(), new TireCallback<GetActiveActivityResult>(getEventBus())
-            {
-                @Override
-                public void onSuccess(GetActiveActivityResult result)
-                {
-                    ActiveActivityLoadedEvent.fire(CockpitPresenter.this, result.getActivity());
-                }
+            dispatcher.execute(new GetRunningActivityAction(),
+                    new TireCallback<GetRunningActivityResult>(getEventBus())
+                    {
+                        @Override
+                        public void onSuccess(GetRunningActivityResult result)
+                        {
+                            RunningActivityLoadedEvent.fire(CockpitPresenter.this, result.getActivity());
+                        }
 
 
-                @Override
-                public void onFailure(Throwable caught)
-                {
-                    logger.info("No active activity found.");
-                }
-            });
+                        @Override
+                        public void onFailure(Throwable caught)
+                        {
+                            logger.info("No active activity found.");
+                        }
+                    });
         }
     }
 }

@@ -11,7 +11,7 @@ import com.gwtplatform.dispatch.annotation.Order;
  *          $
  */
 @GenEvent
-public class ActiveActivityLoaded
+public class RunningActivityLoaded
 {
     @Order(1) Activity activity;
 }

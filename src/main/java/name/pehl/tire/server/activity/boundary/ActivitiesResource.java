@@ -48,7 +48,7 @@ import static org.joda.time.Weeks.weeks;
  * <li>GET /activities/currentWeek: Find activities
  * <li>GET /activities/{year}/{month}/{day}: Find activities
  * <li>GET /activities/today: Find activities
- * <li>GET /activities/active: Find the active activity
+ * <li>GET /activities/running: Find the running activity
  * <li>GET /years: Returns the years, months and weeks in which activities are
  * stored
  * </ul>
@@ -244,17 +244,17 @@ public class ActivitiesResource
     // -------------------------------------------------------------- by status
 
     @GET
-    @Path("/active")
-    public name.pehl.tire.shared.model.Activity activeActivity()
+    @Path("/running")
+    public name.pehl.tire.shared.model.Activity runningActivity()
     {
         try
         {
-            Activity activity = repository.findActiveActivity();
+            Activity activity = repository.findRunningActivity();
             return activityConverter.toModel(activity);
         }
         catch (EntityNotFoundException e)
         {
-            throw new NotFoundException("No active activity");
+            throw new NotFoundException("No running activity");
         }
     }
 

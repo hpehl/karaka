@@ -8,6 +8,8 @@ import name.pehl.tire.client.activity.dispatch.GetActivitiesAction;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesResult;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
+import name.pehl.tire.client.activity.event.ActivityResumedEvent;
+import name.pehl.tire.client.activity.event.ActivityResumedEvent.ActivityResumedHandler;
 import name.pehl.tire.client.activity.event.ActivityStartedEvent;
 import name.pehl.tire.client.activity.event.ActivityStartedEvent.ActivityStartedHandler;
 import name.pehl.tire.client.activity.event.ActivityStoppedEvent;
@@ -49,7 +51,8 @@ import static name.pehl.tire.shared.model.TimeUnit.WEEK;
  *          $
  */
 public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, DashboardPresenter.MyProxy> implements
-        DashboardUiHandlers, ActivitiesLoadedHandler, ActivityStartedHandler, ActivityStoppedHandler
+        DashboardUiHandlers, ActivitiesLoadedHandler, ActivityStartedHandler, ActivityResumedHandler,
+        ActivityStoppedHandler
 {
     // ---------------------------------------------------------- inner classes
 
@@ -99,6 +102,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         getView().setUiHandlers(this);
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
         getEventBus().addHandler(ActivityStartedEvent.getType(), this);
+        getEventBus().addHandler(ActivityResumedEvent.getType(), this);
         getEventBus().addHandler(ActivityStoppedEvent.getType(), this);
     }
 
@@ -176,18 +180,34 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     @Override
     public void onActivityStarted(ActivityStartedEvent event)
     {
-        // TODO updateActivities() necessary? The started activity might not be
-        // in the matching range!?
-        getView().updateActivities(activities);
+        internalUpdate(event.getActivity(), true);
+    }
+
+
+    @Override
+    public void onActivityResumed(ActivityResumedEvent event)
+    {
+        internalUpdate(event.getActivity(), false);
     }
 
 
     @Override
     public void onActivityStopped(ActivityStoppedEvent event)
     {
-        // TODO updateActivities() necessary? The stopped activity might not be
-        // in the matching range!?
-        getView().updateActivities(activities);
+        internalUpdate(event.getActivity(), false);
+    }
+
+
+    private void internalUpdate(Activity activity, boolean addToActivities)
+    {
+        if (activities.matchingRange(activity))
+        {
+            if (addToActivities)
+            {
+                activities.addActivity(activity);
+            }
+            getView().updateActivities(activities);
+        }
     }
 
 

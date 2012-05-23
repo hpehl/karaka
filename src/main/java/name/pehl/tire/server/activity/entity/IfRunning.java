@@ -4,27 +4,29 @@ import name.pehl.tire.shared.model.Status;
 
 import com.googlecode.objectify.condition.ValueIf;
 
+import static name.pehl.tire.shared.model.Status.RUNNING;
+
 /**
  * Condition to setup a partial index on {@link Activity#getStatus()}. This way
- * only active (status != {@link Status#STOPPED} ) activities are indexed.
+ * only the running activity is indexed.
  * 
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class IfStopped extends ValueIf<Status>
+public class IfRunning extends ValueIf<Status>
 {
     /**
-     * Returns <code>true</code> if status == {@link Status#STOPPED},
+     * Returns <code>true</code> if status == {@link Status#RUNNING},
      * <code>false</code> otherwise.
      * 
      * @param status
-     * @return <code>true</code> if status == {@link Status#STOPPED},
+     * @return <code>true</code> if status == {@link Status#RUNNING},
      *         <code>false</code> otherwise.
      * @see com.googlecode.objectify.condition.ValueIf#matches(java.lang.Object)
      */
     @Override
     public boolean matches(Status status)
     {
-        return status == Status.STOPPED;
+        return status == RUNNING;
     }
 }

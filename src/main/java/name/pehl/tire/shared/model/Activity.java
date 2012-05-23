@@ -18,8 +18,8 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
 {
     // ------------------------------------------------------- member variables
 
-    Date start;
-    Date end;
+    Time start;
+    Time end;
     long pause;
     long minutes;
     boolean billable;
@@ -45,7 +45,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     public Activity(String id, String name)
     {
         super(id, name);
-        this.start = new Date();
+        this.start = new Time();
         this.tags = new ArrayList<Tag>();
     }
 
@@ -66,7 +66,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     public Activity copy()
     {
         Activity copy = new Activity(this.name);
-        copy.setStart(new Date());
+        copy.setStart(new Time());
         copy.setBillable(this.billable);
         copy.setStatus(Status.STOPPED);
         copy.setProject(this.project);
@@ -86,8 +86,9 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
         if (start != null)
         {
             Date now = new Date();
-            if (now.getYear() == start.getYear() && now.getMonth() == start.getMonth()
-                    && now.getDate() == start.getDate())
+            Date startDate = start.getDate();
+            if (now.getYear() == startDate.getYear() && now.getMonth() == startDate.getMonth()
+                    && now.getDate() == startDate.getDate())
             {
                 today = true;
             }
@@ -178,25 +179,25 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
-    public Date getStart()
+    public Time getStart()
     {
         return start;
     }
 
 
-    public void setStart(Date start)
+    public void setStart(Time start)
     {
         this.start = start;
     }
 
 
-    public Date getEnd()
+    public Time getEnd()
     {
         return end;
     }
 
 
-    public void setEnd(Date end)
+    public void setEnd(Time end)
     {
         this.end = end;
     }

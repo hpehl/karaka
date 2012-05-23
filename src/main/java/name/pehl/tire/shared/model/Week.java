@@ -1,6 +1,5 @@
 package name.pehl.tire.shared.model;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -94,6 +93,40 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
     // --------------------------------------------------- methods & properties
 
+    public void addActivity(Activity activity)
+    {
+        if (activity != null)
+        {
+            Time start = activity.getStart();
+            Day matchinDay = null;
+            if (start.getYear() == year && start.getWeek() == week)
+            {
+                matchinDay = findDay(activity);
+            }
+            if (matchinDay == null)
+            {
+                matchinDay = new Day(start.getDay());
+                days.add(matchinDay);
+            }
+            matchinDay.addActivity(activity);
+        }
+    }
+
+
+    private Day findDay(Activity activity)
+    {
+        Time start = activity.getStart();
+        for (Day day : days)
+        {
+            if (day.getDay() == start.getDay())
+            {
+                return day;
+            }
+        }
+        return null;
+    }
+
+
     public SortedSet<Activity> getActivities()
     {
         SortedSet<Activity> activities = new TreeSet<Activity>();
@@ -105,9 +138,9 @@ public class Week implements Comparable<Week>, Iterable<Day>
     }
 
 
-    public Date getStart()
+    public Time getStart()
     {
-        Date start = null;
+        Time start = null;
         if (!days.isEmpty())
         {
             return days.first().getStart();
@@ -116,9 +149,9 @@ public class Week implements Comparable<Week>, Iterable<Day>
     }
 
 
-    public Date getEnd()
+    public Time getEnd()
     {
-        Date end = null;
+        Time end = null;
         if (!days.isEmpty())
         {
             return days.last().getStart();

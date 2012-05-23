@@ -7,6 +7,5 @@ package name.pehl.tire.shared.model;
 public enum Status
 {
     STOPPED,
-    RUNNING,
-    PAUSE;
+    RUNNING;
 }

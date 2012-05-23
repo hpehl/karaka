@@ -47,14 +47,13 @@ public class ActivitiesTable extends CellTable<Activity> implements HasProcessAc
         setRowStyles(new RowStyles<Activity>()
         {
             @Override
-            @SuppressWarnings("deprecation")
             public String getStyleNames(Activity row, int rowIndex)
             {
                 if (row.getStatus() == Status.RUNNING)
                 {
                     return atr.cellTableStyle().activeActivity();
                 }
-                if (row.getStart().getDate() % 2 != 0)
+                if (row.getStart().getDay() % 2 != 0)
                 {
                     return atr.cellTableStyle().oddDays();
                 }
@@ -101,7 +100,8 @@ public class ActivitiesTable extends CellTable<Activity> implements HasProcessAc
             @Override
             public String getValue(Activity activity)
             {
-                return FormatUtils.time(activity.getStart()) + " - " + FormatUtils.time(activity.getEnd());
+
+                return FormatUtils.timeDuration(activity.getStart(), activity.getEnd());
             }
         });
         addColumnStyleName(1, atr.cellTableStyle().durationFromToColumn());

@@ -41,8 +41,7 @@ public class WeekChartWidget extends QuickChartWidget
             StringBuilder title = new StringBuilder();
             title.append("CW ").append(activities.getWeek()).append(" / ").append(activities.getYear()).append(" - ")
                     .append(FormatUtils.hours(activities.getMinutes())).append("\n")
-                    .append(FormatUtils.date(activities.getStart())).append(" - ")
-                    .append(FormatUtils.date(activities.getEnd()));
+                    .append(FormatUtils.dateDuration(activities.getStart(), activities.getEnd()));
             updateTitle(title.toString());
 
             // update max

@@ -1,8 +1,7 @@
 package name.pehl.tire.client.ui;
 
-import java.util.Date;
-
 import name.pehl.tire.client.Defaults;
+import name.pehl.tire.shared.model.Time;
 
 /**
  * @author $Author: harald.pehl $
@@ -26,21 +25,51 @@ public final class FormatUtils
     }
 
 
-    public static String date(Date date)
+    public static String dateDuration(Time start, Time end)
     {
-        if (date != null)
+        StringBuilder duration = new StringBuilder();
+        if (start != null && start.getDate() != null)
         {
-            return Defaults.DATE_FORMAT.format(date);
+            duration.append(date(start)).append(" - ");
+        }
+        if (end != null && end.getDate() != null)
+        {
+            duration.append(date(end));
+        }
+        return duration.toString();
+    }
+
+
+    public static String date(Time time)
+    {
+        if (time != null && time.getDate() != null)
+        {
+            return Defaults.DATE_FORMAT.format(time.getDate());
         }
         return "";
     }
 
 
-    public static String time(Date date)
+    public static String timeDuration(Time start, Time end)
     {
-        if (date != null)
+        StringBuilder duration = new StringBuilder();
+        if (start != null && start.getDate() != null)
         {
-            return Defaults.TIME_FORMAT.format(date);
+            duration.append(time(start)).append(" - ");
+        }
+        if (end != null && end.getDate() != null)
+        {
+            duration.append(time(end));
+        }
+        return duration.toString();
+    }
+
+
+    public static String time(Time time)
+    {
+        if (time != null && time.getDate() != null)
+        {
+            return Defaults.TIME_FORMAT.format(time.getDate());
         }
         return "";
     }

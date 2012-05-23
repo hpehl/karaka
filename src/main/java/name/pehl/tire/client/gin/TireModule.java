@@ -11,6 +11,7 @@ import name.pehl.tire.client.activity.dispatch.GetYearsHandler;
 import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.activity.model.ActivityReader;
 import name.pehl.tire.client.activity.model.DayReader;
+import name.pehl.tire.client.activity.model.TimeReader;
 import name.pehl.tire.client.activity.model.WeekReader;
 import name.pehl.tire.client.activity.model.YearReader;
 import name.pehl.tire.client.activity.model.YearsReader;
@@ -91,6 +92,7 @@ public class TireModule extends AbstractPresenterModule
         bind(SettingsReader.class).asEagerSingleton();
         bind(TagReader.class).asEagerSingleton();
         bind(TagWriter.class).asEagerSingleton();
+        bind(TimeReader.class).asEagerSingleton();
         bind(UserReader.class).asEagerSingleton();
         bind(WeekReader.class).asEagerSingleton();
         bind(YearReader.class).asEagerSingleton();

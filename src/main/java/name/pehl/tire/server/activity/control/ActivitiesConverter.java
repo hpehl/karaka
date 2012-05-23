@@ -14,6 +14,7 @@ import name.pehl.tire.shared.model.TimeUnit;
 import name.pehl.tire.shared.model.Week;
 
 import org.joda.time.DateMidnight;
+import org.joda.time.Days;
 import org.joda.time.Months;
 import org.joda.time.Weeks;
 
@@ -35,7 +36,9 @@ public class ActivitiesConverter
         int monthDiff = Months.monthsBetween(now, requested).getMonths();
         int week = requested.weekOfWeekyear().get();
         int weekDiff = Weeks.weeksBetween(now, requested).getWeeks();
-        Activities result = new Activities(year, yearDiff, month, monthDiff, week, weekDiff, timeunit);
+        int day = requested.dayOfMonth().get();
+        int dayDiff = Days.daysBetween(now, requested).getDays();
+        Activities result = new Activities(year, yearDiff, month, monthDiff, week, weekDiff, day, dayDiff, timeunit);
         switch (timeunit)
         {
             case MONTH:

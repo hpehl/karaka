@@ -1,6 +1,5 @@
 package name.pehl.tire.shared.model;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -134,9 +133,9 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
-    public Date getStart()
+    public Time getStart()
     {
-        Date start = null;
+        Time start = null;
         if (!activities.isEmpty())
         {
             return activities.first().getStart();
@@ -145,9 +144,9 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
-    public Date getEnd()
+    public Time getEnd()
     {
-        Date end = null;
+        Time end = null;
         if (!activities.isEmpty())
         {
             return activities.last().getStart();

@@ -1,6 +1,5 @@
 package name.pehl.tire.shared.model;
 
-import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -29,6 +28,8 @@ public class Activities
     int monthDiff;
     int week;
     int weekDiff;
+    int day;
+    int dayDiff;
     TimeUnit unit;
     SortedSet<Week> weeks;
     SortedSet<Day> days;
@@ -39,11 +40,12 @@ public class Activities
 
     public Activities()
     {
-        this(0, 0, 0, 0, 0, 0, WEEK);
+        this(0, 0, 0, 0, 0, 0, 0, 0, WEEK);
     }
 
 
-    public Activities(int year, int yearDiff, int month, int monthDiff, int week, int weekDiff, TimeUnit unit)
+    public Activities(int year, int yearDiff, int month, int monthDiff, int week, int weekDiff, int day, int dayDiff,
+            TimeUnit unit)
     {
         super();
         this.year = year;
@@ -52,6 +54,8 @@ public class Activities
         this.monthDiff = monthDiff;
         this.week = week;
         this.weekDiff = weekDiff;
+        this.day = day;
+        this.dayDiff = dayDiff;
         this.unit = unit;
         this.weeks = new TreeSet<Week>();
         this.days = new TreeSet<Day>();
@@ -84,9 +88,34 @@ public class Activities
 
     // --------------------------------------------------- methods & properties
 
-    public Date getStart()
+    public boolean matchingRange(Activity activity)
     {
-        Date start = null;
+        boolean match = false;
+        if (activity != null)
+        {
+            Time start = activity.getStart();
+            switch (unit)
+            {
+                case MONTH:
+                    match = start.getMonth() == month;
+                    break;
+                case WEEK:
+                    match = start.getWeek() == week;
+                    break;
+                case DAY:
+                    match = start.getDay() == day;
+                    break;
+                default:
+                    break;
+            }
+        }
+        return match;
+    }
+
+
+    public Time getStart()
+    {
+        Time start = null;
         switch (unit)
         {
             case MONTH:
@@ -114,9 +143,9 @@ public class Activities
     }
 
 
-    public Date getEnd()
+    public Time getEnd()
     {
-        Date end = null;
+        Time end = null;
         switch (unit)
         {
             case MONTH:
@@ -270,6 +299,30 @@ public class Activities
     }
 
 
+    public int getDay()
+    {
+        return day;
+    }
+
+
+    public void setDay(int day)
+    {
+        this.day = day;
+    }
+
+
+    public int getDayDiff()
+    {
+        return dayDiff;
+    }
+
+
+    public void setDayDiff(int dayDiff)
+    {
+        this.dayDiff = dayDiff;
+    }
+
+
     public TimeUnit getUnit()
     {
         return unit;
@@ -343,6 +396,71 @@ public class Activities
 
     public void addActivity(Activity activity)
     {
-        activities.add(activity);
+        if (activity != null)
+        {
+            Time start = activity.getStart();
+            switch (unit)
+            {
+                case MONTH:
+                    Week matchingWeek = null;
+                    if (start.getYear() == year && start.getMonth() == month)
+                    {
+                        matchingWeek = findWeek(activity);
+                    }
+                    if (matchingWeek == null)
+                    {
+                        matchingWeek = new Week(start.getYear(), start.getMonth());
+                        weeks.add(matchingWeek);
+                    }
+                    matchingWeek.addActivity(activity);
+                    break;
+                case WEEK:
+                    Day matchinDay = null;
+                    if (start.getYear() == year && start.getWeek() == week)
+                    {
+                        matchinDay = findDay(activity);
+                    }
+                    if (matchinDay == null)
+                    {
+                        matchinDay = new Day(start.getDay());
+                        days.add(matchinDay);
+                    }
+                    matchinDay.addActivity(activity);
+                    break;
+                case DAY:
+                    activities.add(activity);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+
+    private Week findWeek(Activity activity)
+    {
+        Time start = activity.getStart();
+        for (Week week : weeks)
+        {
+            if (week.getWeek() == start.getWeek() && week.getYear() == start.getYear())
+            {
+                return week;
+            }
+        }
+        return null;
+    }
+
+
+    private Day findDay(Activity activity)
+    {
+        Time start = activity.getStart();
+        for (Day day : days)
+        {
+            if (day.getDay() == start.getDay())
+            {
+                return day;
+            }
+        }
+        return null;
     }
 }

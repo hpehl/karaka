@@ -14,15 +14,16 @@ import name.pehl.tire.server.project.entity.Project;
 import name.pehl.tire.server.tag.control.TagConverter;
 import name.pehl.tire.server.tag.control.TagRepository;
 import name.pehl.tire.server.tag.entity.Tag;
+import name.pehl.tire.shared.model.Time;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
 public class ActivityConverter extends
-AbstractEntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.shared.model.Activity>
-implements
-EntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.shared.model.Activity>
+        AbstractEntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.shared.model.Activity>
+        implements
+        EntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.shared.model.Activity>
 {
     @Inject ProjectConverter projectConverter;
 
@@ -45,8 +46,10 @@ EntityConverter<name.pehl.tire.server.activity.entity.Activity, name.pehl.tire.s
         // basic properties
         name.pehl.tire.shared.model.Activity model = new name.pehl.tire.shared.model.Activity(String.valueOf(entity
                 .getId()), entity.getName());
-        model.setStart(entity.getStart().getDateTime().toDate());
-        model.setEnd(entity.getEnd().getDateTime().toDate());
+        model.setStart(new Time(entity.getStart().getDateTime().toDate(), entity.getStart().getYear(), entity
+                .getStart().getMonth(), entity.getStart().getWeek(), entity.getStart().getDay()));
+        model.setEnd(new Time(entity.getEnd().getDateTime().toDate(), entity.getEnd().getYear(), entity.getEnd()
+                .getMonth(), entity.getEnd().getWeek(), entity.getEnd().getDay()));
         model.setPause(entity.getPause());
         model.setMinutes(entity.getMinutes());
         model.setBillable(entity.isBillable());

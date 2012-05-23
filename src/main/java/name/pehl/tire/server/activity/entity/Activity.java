@@ -19,6 +19,7 @@ import org.joda.time.Minutes;
 import com.google.common.collect.ComparisonChain;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.Unindexed;
 
 /**
@@ -53,7 +54,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
 
     @Unindexed private boolean billable;
 
-    @Unindexed(IfStopped.class) private Status status;
+    @Indexed(IfRunning.class) private Status status;
 
     private List<Key<Tag>> tags;
 

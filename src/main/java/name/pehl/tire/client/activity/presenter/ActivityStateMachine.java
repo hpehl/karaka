@@ -1,14 +1,14 @@
 package name.pehl.tire.client.activity.presenter;
 
-import static name.pehl.tire.shared.model.Status.RUNNING;
-import static name.pehl.tire.shared.model.Status.STOPPED;
-
 import java.util.logging.Logger;
 
-import name.pehl.tire.client.activity.event.ActiveActivityLoadedEvent;
-import name.pehl.tire.client.activity.event.ActiveActivityLoadedEvent.ActiveActivityLoadedHandler;
+import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
+import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
+import name.pehl.tire.client.activity.event.ActivityResumedEvent;
 import name.pehl.tire.client.activity.event.ActivityStartedEvent;
 import name.pehl.tire.client.activity.event.ActivityStoppedEvent;
+import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent;
+import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent.RunningActivityLoadedHandler;
 import name.pehl.tire.client.activity.event.StartActivityEvent;
 import name.pehl.tire.client.activity.event.StartActivityEvent.StartActivityHandler;
 import name.pehl.tire.client.activity.event.StopActivityEvent;
@@ -19,6 +19,10 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.shared.DispatchAsync;
+
+import static name.pehl.tire.shared.model.Status.RUNNING;
+import static name.pehl.tire.shared.model.Status.STOPPED;
 
 /**
  * This class is responsible for managing the currently running, paused or
@@ -29,29 +33,41 @@ import com.google.web.bindery.event.shared.EventBus;
  * stopped activity can be changed. The communication is done by the following
  * events:
  * <ul>
- * <li>IN {@link ActiveActivityLoadedEvent}
+ * <li>IN {@link ActivitiesLoadedEvent}
+ * <li>IN {@link RunningActivityLoadedEvent}
  * <li>IN {@link StartActivityEvent}
  * <li>IN {@link StopActivityEvent}
  * <li>OUT {@link ActivityStartedEvent}
+ * <li>OUT {@link ActivityResumedEvent}
  * <li>OUT {@link ActivityStoppedEvent}
  * </ul>
  * 
  * @author $Author$
  * @version $Revision$
  */
-public class ActivityStateMachine implements HasHandlers, ActiveActivityLoadedHandler, StartActivityHandler,
-        StopActivityHandler
+public class ActivityStateMachine implements HasHandlers, ActivitiesLoadedHandler, RunningActivityLoadedHandler,
+        StartActivityHandler, StopActivityHandler
 {
     private static final Logger logger = Logger.getLogger(ActivityStateMachine.class.getName());
-    private Activity activity;
+    /**
+     * The currently managed actvity
+     */
+    private Activity currentActivity;
+    /**
+     * The latest / newest activity currently displayed in the dashboard.
+     */
+    private Activity latestActivity;
     private final EventBus eventBus;
+    private final DispatchAsync dispatcher;
 
 
     @Inject
-    public ActivityStateMachine(final EventBus eventBus)
+    public ActivityStateMachine(final EventBus eventBus, final DispatchAsync dispatcher)
     {
         this.eventBus = eventBus;
-        this.eventBus.addHandler(ActiveActivityLoadedEvent.getType(), this);
+        this.dispatcher = dispatcher;
+        this.eventBus.addHandler(ActivitiesLoadedEvent.getType(), this);
+        this.eventBus.addHandler(RunningActivityLoadedEvent.getType(), this);
         this.eventBus.addHandler(StartActivityEvent.getType(), this);
         this.eventBus.addHandler(StopActivityEvent.getType(), this);
     }
@@ -67,42 +83,60 @@ public class ActivityStateMachine implements HasHandlers, ActiveActivityLoadedHa
 
 
     @Override
-    public void onActiveActivityLoaded(ActiveActivityLoadedEvent event)
+    public void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
-        this.activity = event.getActivity();
+        this.latestActivity = event.getActivities().getActivities().first();
+    }
+
+
+    @Override
+    public void onRunningActivityLoaded(RunningActivityLoadedEvent event)
+    {
+        this.currentActivity = event.getActivity();
     }
 
 
     @Override
     public void onStartActivity(StartActivityEvent event)
     {
-        activity = event.getActivity();
-        logger.info("About to start activity " + activity);
-        switch (activity.getStatus())
+        // TODO Make this method somehow 'transactional'
+        // TODO Move code to start / stop activity to Activity.start() /
+        // Activity.stop()
+        Activity eventActivity = event.getActivity();
+        logger.info("About to start activity " + eventActivity);
+        switch (eventActivity.getStatus())
         {
-            case PAUSE:
-                logger.info("Pause not yet implemented");
-                break;
             case RUNNING:
-                logger.info("Activity " + activity + " already running");
+                logger.info("Activity " + eventActivity + " already running");
                 break;
             case STOPPED:
-                // TODO Before starting an activity check for another running
-                // activity
-                if (activity.isToday())
+                // if there's currently another activity running stop it.
+                if (isRunning() && !eventActivity.equals(currentActivity))
                 {
-                    // TODO Only resume if the activity is the last activity!
-                    logger.info("Resuming activity " + activity);
-                    activity.setStatus(RUNNING);
+                    // TODO Store this activity on the server
+                    logger.info("Stopping currently running activity " + currentActivity);
+                    currentActivity.setStatus(STOPPED);
+                }
+                if (eventActivity.isToday() && eventActivity.equals(latestActivity))
+                {
+                    logger.info("Resuming activity " + eventActivity);
+                    eventActivity.setStatus(RUNNING);
+                    // TODO Update pause
+                    currentActivity = eventActivity;
+                    // TODO Fire event after updated activity was successfully
+                    // saved on the server!
+                    ActivityResumedEvent.fire(this, currentActivity);
                 }
                 else
                 {
-                    logger.info("Copy activity " + activity + " and start as a new activity");
-                    Activity newActivity = activity.copy();
+                    logger.info("Copy activity " + eventActivity + " and start as a new activity");
+                    Activity newActivity = eventActivity.copy();
                     newActivity.setStatus(RUNNING);
+                    currentActivity = newActivity;
+                    // TODO Fire event after new activity was successfully
+                    // saved on the server!
+                    ActivityStartedEvent.fire(this, currentActivity);
                 }
-                // TODO Save new / updated activity on the server!
-                ActivityStartedEvent.fire(this, activity);
                 break;
             default:
                 break;
@@ -113,24 +147,31 @@ public class ActivityStateMachine implements HasHandlers, ActiveActivityLoadedHa
     @Override
     public void onStopActivity(StopActivityEvent event)
     {
-        activity = event.getActivity();
-        logger.info("About to stop activity " + activity);
-        switch (activity.getStatus())
+        // TODO Make this method somehow 'transactional'
+        // TODO Move code to start / stop activity to Activity.start() /
+        // Activity.stop()
+        currentActivity = event.getActivity();
+        logger.info("About to stop activity " + currentActivity);
+        switch (currentActivity.getStatus())
         {
-            case PAUSE:
-                logger.info("Pause not yet implemented");
-                break;
             case RUNNING:
-                logger.info("Stopping activity " + activity);
-                activity.setStatus(STOPPED);
-                // TODO Save stopped activity on the server!
-                ActivityStoppedEvent.fire(this, activity);
+                logger.info("Stopping activity " + currentActivity);
+                currentActivity.setStatus(STOPPED);
+                // TODO Fire event after activity was successfully saved on the
+                // server!
+                ActivityStoppedEvent.fire(this, currentActivity);
                 break;
             case STOPPED:
-                logger.info("Activity " + activity + " already stopped");
+                logger.info("Activity " + currentActivity + " already stopped");
                 break;
             default:
                 break;
         }
+    }
+
+
+    private boolean isRunning()
+    {
+        return currentActivity != null && currentActivity.getStatus() == RUNNING;
     }
 }

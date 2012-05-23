@@ -33,8 +33,7 @@ public class Time implements Comparable<Time>
 
     Date date;
 
-    @Transient
-    DateTime dateTime;
+    @Transient DateTime dateTime;
     int year;
     int month;
     int week;

@@ -112,64 +112,64 @@
 /* ----------------------------------------------- Custom CellTable classes */
 @-webkit-keyframes pulse {
     0% {        
-        background-color: #dbf1aa;    
+        background-color: rgb(231, 248, 251);    
     }   
     50% {       
-        background-color: rgba(196, 233, 110, 1);    
+        background-color: rgb(184, 245, 255);    
     }  
     100% {
-        background-color: #dbf1aa;
+        background-color: rgb(231, 248, 251);
     } 
 }
 @-moz-keyframes pulse {
     0% {        
-        background-color: #dbf1aa;    
+        background-color: rgb(231, 248, 251);
     }   
     50% {       
-        background-color: rgba(196, 233, 110, 1);    
+        background-color: rgb(184, 245, 255);    
     }  
     100% {
-        background-color: #dbf1aa;
+        background-color: rgb(231, 248, 251);
     } 
 }
 @-ms-keyframes pulse {
     0% {        
-        background-color: #dbf1aa;    
+        background-color: rgb(231, 248, 251);
     }   
     50% {       
-        background-color: rgba(196, 233, 110, 1);    
+        background-color: rgb(184, 245, 255);    
     }  
     100% {
-        background-color: #dbf1aa;
+        background-color: rgb(231, 248, 251);
     } 
 }
 @-o-keyframes pulse {
     0% {        
-        background-color: #dbf1aa;    
+        background-color: rgb(231, 248, 251);
     }   
     50% {       
-        background-color: rgba(196, 233, 110, 1);    
+        background-color: rgb(184, 245, 255);    
     }  
     100% {
-        background-color: #dbf1aa;
+        background-color: rgb(231, 248, 251);
     } 
 }
 @keyframes pulse {
     0% {        
-        background-color: #dbf1aa;    
+        background-color: rgb(231, 248, 251);
     }   
     50% {       
-        background-color: rgba(196, 233, 110, 1);    
+        background-color: rgb(184, 245, 255);    
     }  
     100% {
-        background-color: #dbf1aa;
+        background-color: rgb(231, 248, 251);
     } 
 }
 
 .activeActivity {
-    background-color: #dbf1aa;
+    background-color: rgb(231, 248, 251);
     -webkit-animation-name: pulse;
-    -webkit-animation-duration: 3s;
+    -webkit-animation-duration: 4s;
     -webkit-animation-direction: alternate;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: ease-in-out;

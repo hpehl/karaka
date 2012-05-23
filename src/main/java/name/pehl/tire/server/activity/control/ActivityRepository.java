@@ -1,6 +1,5 @@
 package name.pehl.tire.server.activity.control;
 
-import java.util.EnumSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -53,9 +52,8 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
 
 
     /**
-     * Finds the activity with {@link Status#RUNNING} or {@link Status#PAUSE}.
-     * If no activity is either {@link Status#RUNNING} or {@link Status#PAUSE}
-     * <code>null</code> is returned.
+     * Finds the activity with {@link Status#RUNNING}. If no activity is
+     * {@link Status#RUNNING} <code>null</code> is returned.
      * 
      * @return the activity with {@link Status#RUNNING} or {@link Status#PAUSE},
      *         <code>null</code> otherwise.
@@ -64,10 +62,10 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
      *             if more thaan one activity is {@link Status#RUNNING} or
      *             {@link Status#PAUSE}.
      */
-    public Activity findActiveActivity() throws EntityNotFoundException
+    public Activity findRunningActivity() throws EntityNotFoundException
     {
         Activity activity = null;
-        List<Key<Activity>> keys = query().filter("status in", EnumSet.of(Status.RUNNING, Status.PAUSE)).listKeys();
+        List<Key<Activity>> keys = query().filter("status =", Status.RUNNING).listKeys();
         if (!keys.isEmpty())
         {
             if (keys.size() > 1)

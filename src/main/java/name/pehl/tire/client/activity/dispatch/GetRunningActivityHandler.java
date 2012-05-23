@@ -13,27 +13,27 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-public class GetActiveActivityHandler extends
-        TireActionHandler<Activity, GetActiveActivityAction, GetActiveActivityResult>
+public class GetRunningActivityHandler extends
+        TireActionHandler<Activity, GetRunningActivityAction, GetRunningActivityResult>
 {
     @Inject
-    protected GetActiveActivityHandler(@SecurityCookie String securityCookieName,
+    protected GetRunningActivityHandler(@SecurityCookie String securityCookieName,
             SecurityCookieAccessor securityCookieAccessor, ActivityReader activityReader)
     {
-        super(GetActiveActivityAction.class, securityCookieName, securityCookieAccessor, activityReader);
+        super(GetRunningActivityAction.class, securityCookieName, securityCookieAccessor, activityReader);
     }
 
 
     @Override
-    protected Method getMethod(GetActiveActivityAction action)
+    protected Method getMethod(GetRunningActivityAction action)
     {
-        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities", "active");
+        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities", "running");
         return new Resource(urlBuilder.toUrl()).get();
     }
 
 
     @Override
-    protected GetActiveActivityResult extractResult(JSONObject jsonObject)
+    protected GetRunningActivityResult extractResult(JSONObject jsonObject)
     {
         return null;
     }

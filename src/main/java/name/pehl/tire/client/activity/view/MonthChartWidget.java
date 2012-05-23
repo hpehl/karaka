@@ -1,7 +1,5 @@
 package name.pehl.tire.client.activity.view;
 
-import static java.lang.Math.max;
-
 import java.util.Iterator;
 import java.util.SortedSet;
 
@@ -11,6 +9,8 @@ import name.pehl.tire.shared.model.Week;
 
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiConstructor;
+
+import static java.lang.Math.max;
 
 /**
  * @author $Author: harald.pehl $
@@ -43,8 +43,7 @@ public class MonthChartWidget extends QuickChartWidget
             StringBuilder title = new StringBuilder();
             title.append(month).append(" ").append(activities.getYear()).append(" - ")
                     .append(FormatUtils.hours(activities.getMinutes())).append("\n")
-                    .append(FormatUtils.date(activities.getStart())).append(" - ")
-                    .append(FormatUtils.date(activities.getEnd()));
+                    .append(FormatUtils.dateDuration(activities.getStart(), activities.getEnd()));
             updateTitle(title.toString());
 
             // update max
