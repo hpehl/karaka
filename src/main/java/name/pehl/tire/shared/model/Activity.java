@@ -1,5 +1,8 @@
 package name.pehl.tire.shared.model;
 
+import static name.pehl.tire.shared.model.Status.RUNNING;
+import static name.pehl.tire.shared.model.Status.STOPPED;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,7 +53,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
-    // --------------------------------------------------------- object methods
+    // --------------------------------------------------------- public methods
 
     /**
      * Creates a new activity which is a copy of this activitiy with the
@@ -96,6 +99,68 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
         return today;
     }
 
+
+    public void start()
+    {
+        if (start == null)
+        {
+            start = new Time();
+        }
+        start.setDate(new Date());
+        if (end == null)
+        {
+            end = new Time();
+        }
+        end.setDate(new Date());
+        status = RUNNING;
+    }
+
+
+    public void resume()
+    {
+        if (start == null)
+        {
+            start = new Time();
+        }
+        if (end == null)
+        {
+            end = new Time();
+        }
+        Date now = new Date();
+        pause += minutes(end.getDate(), now);
+        end.setDate(now);
+        status = RUNNING;
+    }
+
+
+    public void stop()
+    {
+        if (start == null)
+        {
+            start = new Time();
+        }
+        if (end == null)
+        {
+            end = new Time();
+        }
+        end.setDate(new Date());
+        minutes = minutes(start.getDate(), end.getDate());
+        status = STOPPED;
+    }
+
+
+    private long minutes(Date from, Date to)
+    {
+        long minutes = to.getTime() - from.getTime();
+        if (minutes > 0)
+        {
+            minutes /= 60000;
+        }
+        return 0;
+    }
+
+
+    // --------------------------------------------------------- object methods
 
     @Override
     public int compareTo(Activity that)
@@ -178,6 +243,8 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
                 .append("]").toString();
     }
 
+
+    // ------------------------------------------------------------- properties
 
     public Time getStart()
     {

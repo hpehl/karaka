@@ -1,13 +1,17 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.Date;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesAction;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesResult;
-import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
-import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
+import name.pehl.tire.client.activity.event.ActivitiesChangedEvent;
 import name.pehl.tire.client.activity.event.ActivityResumedEvent;
 import name.pehl.tire.client.activity.event.ActivityResumedEvent.ActivityResumedHandler;
 import name.pehl.tire.client.activity.event.ActivityStartedEvent;
@@ -40,19 +44,13 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 /**
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-23 13:52:44 +0100 (Do, 23. Dez 2010) $ $Revision: 192
  *          $
  */
 public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, DashboardPresenter.MyProxy> implements
-        DashboardUiHandlers, ActivitiesLoadedHandler, ActivityStartedHandler, ActivityResumedHandler,
-        ActivityStoppedHandler
+        DashboardUiHandlers, ActivityStartedHandler, ActivityResumedHandler, ActivityStoppedHandler
 {
     // ---------------------------------------------------------- inner classes
 
@@ -100,7 +98,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         this.placeManager = placeManager;
 
         getView().setUiHandlers(this);
-        getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
         getEventBus().addHandler(ActivityStartedEvent.getType(), this);
         getEventBus().addHandler(ActivityResumedEvent.getType(), this);
         getEventBus().addHandler(ActivityStoppedEvent.getType(), this);
@@ -142,15 +139,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                     @Override
                     public void onSuccess(GetActivitiesResult result)
                     {
-                        Activities activities = result.getActivities();
-                        if (activities != null)
-                        {
-                            // don't just call
-                            // getView().updateActivities(activities) as
-                            // other classes might also be interested in updated
-                            // activities.
-                            ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities);
-                        }
+                        activities = result.getActivities();
+                        getView().updateActivities(activities);
+                        ActivitiesChangedEvent.fire(DashboardPresenter.this, activities, false);
                     }
 
 
@@ -170,41 +161,34 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     // --------------------------------------------------------- event handlers
 
     @Override
-    public final void onActivitiesLoaded(ActivitiesLoadedEvent event)
-    {
-        activities = event.getActivities();
-        getView().updateActivities(activities);
-    }
-
-
-    @Override
     public void onActivityStarted(ActivityStartedEvent event)
     {
-        internalUpdate(event.getActivity(), true);
+        internalUpdateActivity(event.getActivity(), true);
     }
 
 
     @Override
     public void onActivityResumed(ActivityResumedEvent event)
     {
-        internalUpdate(event.getActivity(), false);
+        internalUpdateActivity(event.getActivity(), false);
     }
 
 
     @Override
     public void onActivityStopped(ActivityStoppedEvent event)
     {
-        internalUpdate(event.getActivity(), false);
+        internalUpdateActivity(event.getActivity(), false);
     }
 
 
-    private void internalUpdate(Activity activity, boolean addToActivities)
+    private void internalUpdateActivity(Activity activity, boolean addToActivities)
     {
         if (activities.matchingRange(activity))
         {
             if (addToActivities)
             {
                 activities.addActivity(activity);
+                ActivitiesChangedEvent.fire(DashboardPresenter.this, activities, true);
             }
             getView().updateActivities(activities);
         }

@@ -1,8 +1,8 @@
 package name.pehl.tire.client.application;
 
 import static java.util.logging.Level.INFO;
-import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
-import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
+import name.pehl.tire.client.activity.event.ActivitiesChangedEvent;
+import name.pehl.tire.client.activity.event.ActivitiesChangedEvent.ActivitiesChangedHandler;
 import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
 
 import com.google.inject.Inject;
@@ -11,7 +11,7 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 
 public class MessagePresenter extends PresenterWidget<MessagePresenter.MyView> implements ShowMessageHandler,
-        ActivitiesLoadedHandler
+        ActivitiesChangedHandler
 {
     public interface MyView extends View
     {
@@ -24,7 +24,7 @@ public class MessagePresenter extends PresenterWidget<MessagePresenter.MyView> i
     {
         super(eventBus, view);
         getEventBus().addHandler(ShowMessageEvent.getType(), this);
-        getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
+        getEventBus().addHandler(ActivitiesChangedEvent.getType(), this);
     }
 
 
@@ -36,8 +36,12 @@ public class MessagePresenter extends PresenterWidget<MessagePresenter.MyView> i
 
 
     @Override
-    public void onActivitiesLoaded(ActivitiesLoadedEvent event)
+    public void onActivitiesChanged(ActivitiesChangedEvent event)
     {
-        getView().show(new Message(INFO, "Activities successfully loaded for " + event.getActivities() + ".", true));
+        if (!event.isSilent())
+        {
+            getView()
+                    .show(new Message(INFO, "Activities successfully loaded for " + event.getActivities() + ".", true));
+        }
     }
 }
