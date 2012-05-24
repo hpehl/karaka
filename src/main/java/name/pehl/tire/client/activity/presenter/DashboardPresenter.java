@@ -181,8 +181,8 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     @Override
     public void onRunningActivityLoaded(RunningActivityLoadedEvent event)
     {
-        this.currentActivity = event.getActivity();
-        // TODO What else has to be done??
+        currentActivity = event.getActivity();
+        tickCommand.start(currentActivity);
     }
 
 
