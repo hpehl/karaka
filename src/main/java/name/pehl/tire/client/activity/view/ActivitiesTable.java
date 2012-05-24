@@ -100,7 +100,6 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
             @Override
             public String getValue(Activity activity)
             {
-
                 return FormatUtils.timeDuration(activity.getStart(), activity.getEnd());
             }
         });
@@ -108,17 +107,25 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
         addColumn(durationFromToColumn);
 
         // Column #2: Duration in hours
-        // TODO Right align as soon as
-        // http://code.google.com/p/google-web-toolkit/issues/detail?id=5623 is
-        // released
-        ActivityColumn durationInHoursColumn = new ActivityColumn(this, actionCell, new ActivityTextRenderer()
+        ActivityColumn durationInHoursColumn = new ActivityColumn(this, actionCell, new ActivityRenderer()
         {
             @Override
-            public String getValue(Activity activity)
+            public SafeHtml render(Activity activity)
             {
-                return FormatUtils.hours(activity.getMinutes());
+                String duration = FormatUtils.hours(activity.getMinutes());
+                if (activity.getPause() > 0)
+                {
+                    String pause = FormatUtils.hours(activity.getPause());
+                    return ActivityTemplates.INSTANCE.duration(duration, pause);
+                }
+                else
+                {
+                    return toSafeHtml(duration);
+                }
             }
+
         });
+        durationInHoursColumn.setHorizontalAlignment(ActivityColumn.ALIGN_RIGHT);
         addColumnStyleName(2, atr.cellTableStyle().durationInHoursColumn());
         addColumn(durationInHoursColumn, null, new TextHeader(null)
         {

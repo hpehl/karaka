@@ -357,6 +357,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 {
                     start(activity);
                 }
+                break;
             case DELETE:
                 delete(activity);
                 break;
@@ -399,7 +400,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             {
                 logger.info("Resuming " + activity);
                 activity.resume();
-                // TODO Store on the server
+                // TODO Store on the server, then
                 getView().updateActivities(activities);
                 ActivityResumedEvent.fire(this, activity);
                 tickCommand.start(activity);
@@ -410,7 +411,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 logger.info("Copy " + activity + " and start as a new activity");
                 Activity newActivity = activity.copy();
                 newActivity.start();
-                // TODO Store on the server and remove test code
+                // TODO Store on the server and remove test code, then
                 newActivity.getStart().setDay(24);
                 newActivity.getStart().setWeek(21);
                 newActivity.getStart().setMonth(5);

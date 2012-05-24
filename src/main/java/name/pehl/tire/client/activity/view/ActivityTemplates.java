@@ -9,6 +9,10 @@ interface ActivityTemplates extends SafeHtmlTemplates
     ActivityTemplates INSTANCE = GWT.create(ActivityTemplates.class);
 
 
+    @Template("<span title=\"{1} pause\">{0}<sup>P</sup></span>")
+    SafeHtml duration(String duration, String pause);
+
+
     @Template("<span title=\"{1}\">{0}</span>")
     SafeHtml nameDescription(String name, String description);
 

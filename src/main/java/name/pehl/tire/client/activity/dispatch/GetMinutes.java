@@ -8,5 +8,5 @@ import com.gwtplatform.dispatch.annotation.Out;
 public class GetMinutes
 {
     @In(1) ActivitiesRequest activitiesRequest;
-    @Out(1) int minutes;
+    @Out(1) long minutes;
 }

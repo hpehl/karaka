@@ -15,7 +15,6 @@ import name.pehl.tire.client.activity.event.ActivityStartedEvent.ActivityStarted
 import name.pehl.tire.client.activity.event.ActivityStoppedEvent;
 import name.pehl.tire.client.activity.event.ActivityStoppedEvent.ActivityStoppedHandler;
 import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent;
-import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent.RunningActivityLoadedHandler;
 import name.pehl.tire.client.activity.event.TickEvent;
 import name.pehl.tire.client.activity.event.TickEvent.TickHandler;
 import name.pehl.tire.client.application.Message;
@@ -42,18 +41,17 @@ import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_S
  *          $
  */
 public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> implements CockpitUiHandlers,
-        RunningActivityLoadedHandler, ActivityStartedHandler, ActivityResumedHandler, ActivityStoppedHandler,
-        TickHandler
+        ActivityStartedHandler, ActivityResumedHandler, ActivityStoppedHandler, TickHandler
 {
     public interface MyView extends View, HasUiHandlers<CockpitUiHandlers>
     {
-        void updateMonth(int minutes);
+        void updateMonth(long minutes);
 
 
-        void updateWeek(int minutes);
+        void updateWeek(long minutes);
 
 
-        void updateToday(int minutes);
+        void updateToday(long minutes);
 
 
         void updateStatus(Activity activity);
@@ -77,7 +75,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         this.dispatcher = dispatcher;
 
         getView().setUiHandlers(this);
-        getEventBus().addHandler(RunningActivityLoadedEvent.getType(), this);
         getEventBus().addHandler(ActivityStartedEvent.getType(), this);
         getEventBus().addHandler(ActivityResumedEvent.getType(), this);
         getEventBus().addHandler(ActivityStoppedEvent.getType(), this);
@@ -91,13 +88,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         super.onReveal();
         scheduler.scheduleDeferred(new GetMinutesCommand());
         scheduler.scheduleDeferred(new GetRunningActivityCommand());
-    }
-
-
-    @Override
-    public void onRunningActivityLoaded(RunningActivityLoadedEvent event)
-    {
-        internalUpdate(event.getActivity());
     }
 
 
@@ -140,6 +130,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     {
         currentActivity = activity;
         getView().updateStatus(currentActivity);
+        scheduler.scheduleDeferred(new GetMinutesCommand());
     }
 
 
@@ -221,7 +212,9 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                         @Override
                         public void onSuccess(GetRunningActivityResult result)
                         {
-                            RunningActivityLoadedEvent.fire(CockpitPresenter.this, result.getActivity());
+                            Activity activity = result.getActivity();
+                            internalUpdate(activity);
+                            RunningActivityLoadedEvent.fire(CockpitPresenter.this, activity);
                         }
 
 

@@ -38,7 +38,7 @@ public class TickCommand implements HasHandlers, RepeatingCommand
     {
         this.running = true;
         this.activity = activity;
-        this.scheduler.scheduleFixedPeriod(this, 55000);
+        this.scheduler.scheduleFixedPeriod(this, 60000);
     }
 
 

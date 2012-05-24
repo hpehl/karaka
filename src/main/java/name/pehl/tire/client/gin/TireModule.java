@@ -7,6 +7,8 @@ import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.about.AboutView;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
+import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
+import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetYearsHandler;
 import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.activity.model.ActivityReader;
@@ -79,8 +81,10 @@ public class TireModule extends AbstractPresenterModule
         bind(ActivitiesTableResources.class).in(Singleton.class);
 
         // Rest Action Handlers
-        bind(GetYearsHandler.class);
         bind(GetActivitiesHandler.class);
+        bind(GetMinutesHandler.class);
+        bind(GetRunningActivityHandler.class);
+        bind(GetYearsHandler.class);
 
         // JsonReader / Writer
         // Bind them as eager singletons so that the JsonRegistry

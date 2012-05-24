@@ -113,6 +113,12 @@ mark {
     padding: 2px 2px 2px 5px;
 }
 
+sup {
+	font-size: 66%;
+    vertical-align: super;
+    line-height: 100%;
+}
+
 ::-webkit-scrollbar {
     width: 5px;
 }

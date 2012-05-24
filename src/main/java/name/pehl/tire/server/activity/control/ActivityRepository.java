@@ -55,14 +55,13 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
      * Finds the activity with {@link Status#RUNNING}. If no activity is
      * {@link Status#RUNNING} <code>null</code> is returned.
      * 
-     * @return the activity with {@link Status#RUNNING} or {@link Status#PAUSE},
-     *         <code>null</code> otherwise.
+     * @return the activity with {@link Status#RUNNING}, <code>null</code>
+     *         otherwise.
      * @throws EntityNotFoundException
      * @throws IllegalStateException
-     *             if more thaan one activity is {@link Status#RUNNING} or
-     *             {@link Status#PAUSE}.
+     *             if more thaan one activity is {@link Status#RUNNING}.
      */
-    public Activity findRunningActivity() throws EntityNotFoundException
+    public Activity findRunningActivity()
     {
         Activity activity = null;
         List<Key<Activity>> keys = query().filter("status =", Status.RUNNING).listKeys();
@@ -70,7 +69,7 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
         {
             if (keys.size() > 1)
             {
-                throw new IllegalStateException("Found more than 1 activity with status RUNNING OR PAUSE!");
+                throw new IllegalStateException("Found more than 1 activity with status RUNNING!");
             }
             activity = get(keys.get(0));
         }

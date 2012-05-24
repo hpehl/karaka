@@ -54,21 +54,21 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
 
 
     @Override
-    public void updateMonth(int minutes)
+    public void updateMonth(long minutes)
     {
         month.setText(FormatUtils.hours(minutes));
     }
 
 
     @Override
-    public void updateWeek(int minutes)
+    public void updateWeek(long minutes)
     {
         week.setText(FormatUtils.hours(minutes));
     }
 
 
     @Override
-    public void updateToday(int minutes)
+    public void updateToday(long minutes)
     {
         today.setText(FormatUtils.hours(minutes));
     }

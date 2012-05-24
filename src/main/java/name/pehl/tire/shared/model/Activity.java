@@ -127,9 +127,10 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
             end = new Time();
         }
         Date now = new Date();
-        pause += minutes(end.getDate(), now);
+        pause += diffInMinutes(end.getDate(), now);
         end.setDate(now);
         status = RUNNING;
+        calculateMinutes();
     }
 
 
@@ -144,8 +145,8 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
             end = new Time();
         }
         end.setDate(new Date());
-        minutes = minutes(start.getDate(), end.getDate());
         status = STOPPED;
+        calculateMinutes();
     }
 
 
@@ -162,12 +163,18 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
                 end = new Time();
             }
             end.setDate(new Date());
-            minutes = minutes(start.getDate(), end.getDate());
+            calculateMinutes();
         }
     }
 
 
-    private long minutes(Date from, Date to)
+    private void calculateMinutes()
+    {
+        minutes = diffInMinutes(start.getDate(), end.getDate()) - pause;
+    }
+
+
+    private long diffInMinutes(Date from, Date to)
     {
         long minutes = to.getTime() - from.getTime();
         if (minutes > 0)

@@ -1,8 +1,14 @@
 package name.pehl.tire.client.dispatch;
 
+import name.pehl.piriti.json.client.JsonReader;
+
+import org.fusesource.restygwt.client.JsonCallback;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.Resource;
+import org.fusesource.restygwt.client.ResponseFormatException;
 
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtplatform.dispatch.client.actionhandler.AbstractClientActionHandler;
 import com.gwtplatform.dispatch.client.actionhandler.ExecuteCommand;
@@ -18,33 +24,21 @@ import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public abstract class TireActionHandler<A extends Action<R>, R extends Result> extends
+public abstract class JsonActionHandler<T, A extends Action<R>, R extends Result> extends
         AbstractClientActionHandler<A, R>
 {
-    public enum HttpMethod
-    {
-        HEAD,
-        GET,
-        PUT,
-        POST,
-        DELETE,
-        OPTIONS;
-    }
-
-    private final HttpMethod httpMethod;
-    private final String contentType;
-    private final String securityCookieName;
-    private final SecurityCookieAccessor securityCookieAccessor;
+    protected final String securityCookieName;
+    protected final SecurityCookieAccessor securityCookieAccessor;
+    protected final JsonReader<T> jsonReader;
 
 
-    protected TireActionHandler(final Class<A> actionType, final HttpMethod httpMethod, final String contentType,
-            final String securityCookieName, final SecurityCookieAccessor securityCookieAccessor)
+    protected JsonActionHandler(final Class<A> actionType, final String securityCookieName,
+            final SecurityCookieAccessor securityCookieAccessor, final JsonReader<T> jsonReader)
     {
         super(actionType);
-        this.httpMethod = httpMethod;
-        this.contentType = contentType;
         this.securityCookieName = securityCookieName;
         this.securityCookieAccessor = securityCookieAccessor;
+        this.jsonReader = jsonReader;
     }
 
 
@@ -52,8 +46,7 @@ public abstract class TireActionHandler<A extends Action<R>, R extends Result> e
     public DispatchRequest execute(final A action, final AsyncCallback<R> resultCallback,
             final ExecuteCommand<A, R> executeCommand)
     {
-        final Resource resource = resourceFor(action);
-        Method method = new Method(resource, httpMethod.name()).header(Resource.HEADER_CONTENT_TYPE, contentType);
+        Method method = getMethod(action).header(Resource.HEADER_CONTENT_TYPE, Resource.CONTENT_TYPE_JSON);
         if (action.isSecured())
         {
             // Add the security token as header
@@ -63,15 +56,37 @@ public abstract class TireActionHandler<A extends Action<R>, R extends Result> e
                 method = method.header(securityCookieName, cookieContent);
             }
         }
-        executeMethod(method, resultCallback);
+        method.text(securityCookieName).send(new JsonCallback()
+        {
+            @Override
+            public void onSuccess(Method method, JSONValue response)
+            {
+                JSONObject jsonObject = response.isObject();
+                if (jsonObject != null)
+                {
+                    resultCallback.onSuccess(extractResult(jsonObject));
+                }
+                else
+                {
+                    resultCallback.onFailure(new ResponseFormatException("Response was NOT a valid JSON object"));
+                }
+            }
+
+
+            @Override
+            public void onFailure(Method method, Throwable exception)
+            {
+                resultCallback.onFailure(exception);
+            }
+        });
         return new DispatchRequestRestletImpl(method);
     }
 
 
-    protected abstract Resource resourceFor(A action);
+    protected abstract Method getMethod(A action);
 
 
-    protected abstract void executeMethod(final Method method, final AsyncCallback<R> resultCallback);
+    protected abstract R extractResult(JSONObject jsonObject);
 
 
     /**

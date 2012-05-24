@@ -28,8 +28,6 @@ import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 
-import com.google.appengine.api.datastore.EntityNotFoundException;
-
 import static name.pehl.tire.shared.model.TimeUnit.DAY;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
@@ -331,15 +329,12 @@ public class ActivitiesResource
     @Path("/running")
     public name.pehl.tire.shared.model.Activity runningActivity()
     {
-        try
-        {
-            Activity activity = repository.findRunningActivity();
-            return activityConverter.toModel(activity);
-        }
-        catch (EntityNotFoundException e)
+        Activity activity = repository.findRunningActivity();
+        if (activity == null)
         {
             throw new NotFoundException("No running activity");
         }
+        return activityConverter.toModel(activity);
     }
 
 
