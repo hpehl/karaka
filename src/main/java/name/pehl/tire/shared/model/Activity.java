@@ -1,8 +1,5 @@
 package name.pehl.tire.shared.model;
 
-import static name.pehl.tire.shared.model.Status.RUNNING;
-import static name.pehl.tire.shared.model.Status.STOPPED;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +8,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 import com.google.common.collect.ComparisonChain;
+
+import static name.pehl.tire.shared.model.Status.RUNNING;
+import static name.pehl.tire.shared.model.Status.STOPPED;
 
 /**
  * @author $LastChangedBy:$
@@ -149,6 +149,24 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
+    public void tick()
+    {
+        if (status == RUNNING)
+        {
+            if (start == null)
+            {
+                start = new Time();
+            }
+            if (end == null)
+            {
+                end = new Time();
+            }
+            end.setDate(new Date());
+            minutes = minutes(start.getDate(), end.getDate());
+        }
+    }
+
+
     private long minutes(Date from, Date to)
     {
         long minutes = to.getTime() - from.getTime();
@@ -156,7 +174,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
         {
             minutes /= 60000;
         }
-        return 0;
+        return minutes;
     }
 
 

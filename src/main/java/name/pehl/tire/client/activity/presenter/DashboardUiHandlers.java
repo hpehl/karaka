@@ -2,6 +2,7 @@ package name.pehl.tire.client.activity.presenter;
 
 import java.util.Date;
 
+import name.pehl.tire.client.activity.event.ActivityAction.Action;
 import name.pehl.tire.shared.model.Activity;
 
 import com.gwtplatform.mvp.client.UiHandlers;
@@ -34,14 +35,5 @@ public interface DashboardUiHandlers extends UiHandlers
     void onSelectMonth(int left, int top);
 
 
-    void onEdit(int rowIndex, Activity activity);
-
-
-    void onCopy(int rowIndex, Activity activity);
-
-
-    void onStartStop(int rowIndex, Activity activity);
-
-
-    void onDelete(int rowIndex, Activity activity);
+    void onActivityAction(Activity activity, Action action);
 }

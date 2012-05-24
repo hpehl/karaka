@@ -41,16 +41,32 @@ import static org.joda.time.Weeks.weeks;
  * <ul>
  * <li>POST: Create a new activity
  * <li>GET /activities/{year}/{month}: Find activities
+ * <li>GET /activities/{year}/{month}/minutes: Get the minutes of the specified
+ * activities
  * <li>GET /activities/relative/{month}: Find activities
+ * <li>GET /activities/relative/{month}/minutes: Get the minutes of the
+ * specified activities
  * <li>GET /activities/currentMonth: Find activities
+ * <li>GET /activities/currentMonth/minutes: Get the minutes of the specified
+ * activities
  * <li>GET /activities/{year}/cw{week}: Find activities
+ * <li>GET /activities/{year}/cw{week}/minutes: Get the minutes of the specified
+ * activities
  * <li>GET /activities/relative/cw{week}: Find activities
+ * <li>GET /activities/relative/cw{week}/minutes: Get the minutes of the
+ * specified activities
  * <li>GET /activities/currentWeek: Find activities
+ * <li>GET /activities/currentWeek/minutes: Get the minutes of the specified
+ * activities
  * <li>GET /activities/{year}/{month}/{day}: Find activities
+ * <li>GET /activities/{year}/{month}/{day}/minutes: Get the minutes of the
+ * specified activities
  * <li>GET /activities/today: Find activities
+ * <li>GET /activities/today/minutes: Get the minutes of the specified
+ * activities
  * <li>GET /activities/running: Find the running activity
- * <li>GET /years: Returns the years, months and weeks in which activities are
- * stored
+ * <li>GET /activities/years: Returns the years, months and weeks in which
+ * activities are stored
  * </ul>
  * 
  * @todo Add hyperlinks to current, previous and next activities. If there are
@@ -104,50 +120,75 @@ public class ActivitiesResource
 
     @GET
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}")
-    public Activities activitiesByYearMonth(@PathParam("year") int year, @PathParam("month") int month)
+    public Activities activitiesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
     {
         DateTimeZone timeZone = settings.getTimeZone();
-        DateMidnight requested = new DateMidnight(year, month, 1, settings.getTimeZone());
-        List<Activity> activities = repository.findByYearMonth(requested.year().get(), requested.monthOfYear().get());
-        if (activities.isEmpty())
-        {
-            throw new NotFoundException(String.format("No activities found for year %d and month %d", year, month));
-        }
-        return activitiesConverter.toModel(requested, now(timeZone), MONTH, activities);
+        DateMidnight yearMonth = new DateMidnight(year, month, 1, timeZone);
+        return activitiesConverter.toModel(yearMonth, now(timeZone), MONTH, forYearMonth(yearMonth));
+    }
+
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/{year:\\d{4}}/{month:\\d{1,2}}/minutes")
+    public int minutesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
+    {
+        return minutes(forYearMonth(new DateMidnight(year, month, 1, settings.getTimeZone())));
     }
 
 
     @GET
     @Path("/relative/{month:[+-]?\\d+}")
-    public Activities activitiesByRelativeMonth(@PathParam("month") int month)
+    public Activities activitiesForRelativeMonth(@PathParam("month") int month)
     {
-        DateTimeZone timeZone = settings.getTimeZone();
-        DateMidnight now = now(timeZone);
-        DateMidnight relative = now.plus(months(month));
-        int year = relative.year().get();
-        int requestedMonth = relative.monthOfYear().get();
-        DateMidnight requested = new DateMidnight(year, requestedMonth, 1, timeZone);
-        List<Activity> activities = repository.findByYearMonth(requested.year().get(), requested.monthOfYear().get());
-        if (activities.isEmpty())
-        {
-            throw new NotFoundException(String.format("No activities found for relative month %d", month));
-        }
-        return activitiesConverter.toModel(requested, now, MONTH, activities);
+        DateMidnight absolute = absoluteMonth(month);
+        return activitiesConverter.toModel(absolute, now(settings.getTimeZone()), MONTH, forYearMonth(absolute));
+    }
+
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/relative/{month:[+-]?\\d+}/minutes")
+    public int minutesForRelativeMonth(@PathParam("month") int month)
+    {
+        return minutes(forYearMonth(absoluteMonth(month)));
     }
 
 
     @GET
     @Path("/currentMonth")
-    public Activities activitiesByCurrentMonth()
+    public Activities activitiesForCurrentMonth()
     {
-        DateTimeZone timeZone = settings.getTimeZone();
-        DateMidnight requested = new DateMidnight(timeZone);
-        List<Activity> activities = repository.findByYearMonth(requested.year().get(), requested.monthOfYear().get());
+        DateMidnight now = now(settings.getTimeZone());
+        return activitiesConverter.toModel(now, now, MONTH, forYearMonth(now));
+    }
+
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/currentMonth/minutes")
+    public int minutesForCurrentMonth()
+    {
+        return minutes(forYearMonth(now(settings.getTimeZone())));
+    }
+
+
+    private List<Activity> forYearMonth(DateMidnight date)
+    {
+        List<Activity> activities = repository.findByYearMonth(date.year().get(), date.monthOfYear().get());
         if (activities.isEmpty())
         {
-            throw new NotFoundException("No activities found for current month");
+            throw new NotFoundException(String.format("No activities found for %d/%d", date.monthOfYear().get(), date
+                    .year().get()));
         }
-        return activitiesConverter.toModel(requested, now(timeZone), MONTH, activities);
+        return activities;
+    }
+
+
+    private DateMidnight absoluteMonth(int month)
+    {
+        DateMidnight now = now(settings.getTimeZone());
+        return now.plus(months(month));
     }
 
 
@@ -155,53 +196,78 @@ public class ActivitiesResource
 
     @GET
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}")
-    public Activities activitiesByYearWeek(@PathParam("year") int year, @PathParam("week") int week)
+    public Activities activitiesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
     {
         DateTimeZone timeZone = settings.getTimeZone();
         MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(week);
-        DateMidnight requested = new DateMidnight(mdt);
-        List<Activity> activities = repository.findByYearWeek(requested.year().get(), requested.weekOfWeekyear().get());
-        if (activities.isEmpty())
-        {
-            throw new NotFoundException(String.format("No activities found for year %d and calendar week %d", year,
-                    week));
-        }
-        return activitiesConverter.toModel(requested, now(timeZone), WEEK, activities);
+        DateMidnight yearWeek = new DateMidnight(mdt);
+        return activitiesConverter.toModel(yearWeek, now(timeZone), WEEK, forYearWeek(yearWeek));
+    }
+
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}/minutes")
+    public int minutesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
+    {
+        MutableDateTime mdt = new MutableDateTime(settings.getTimeZone()).year().set(year).weekOfWeekyear().set(week);
+        DateMidnight yearWeek = new DateMidnight(mdt);
+        return minutes(forYearWeek(yearWeek));
     }
 
 
     @GET
     @Path("/relative/cw{week:[+-]?\\d+}")
-    public Activities activitiesByRelativeWeek(@PathParam("week") int week)
+    public Activities activitiesForRelativeWeek(@PathParam("week") int week)
     {
-        DateTimeZone timeZone = settings.getTimeZone();
-        DateMidnight now = now(timeZone);
-        DateMidnight relative = now.plus(weeks(week));
-        int year = relative.year().get();
-        int requestedWeek = relative.weekOfWeekyear().get();
-        MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(requestedWeek);
-        DateMidnight requested = new DateMidnight(mdt);
-        List<Activity> activities = repository.findByYearWeek(requested.year().get(), requested.weekOfWeekyear().get());
-        if (activities.isEmpty())
-        {
-            throw new NotFoundException(String.format("No activities found for relative calendar week %d", week));
-        }
-        return activitiesConverter.toModel(requested, now, WEEK, activities);
+        DateMidnight absolute = absoluteWeek(week);
+        return activitiesConverter.toModel(absolute, now(settings.getTimeZone()), WEEK, forYearWeek(absolute));
+    }
+
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/relative/cw{week:[+-]?\\d+}/minutes")
+    public int minutesForRelativeWeek(@PathParam("week") int week)
+    {
+        return minutes(forYearWeek(absoluteWeek(week)));
     }
 
 
     @GET
     @Path("/currentWeek")
-    public Activities activitiesByCurrentWeek()
+    public Activities activitiesForCurrentWeek()
     {
-        DateTimeZone timeZone = settings.getTimeZone();
-        DateMidnight requested = new DateMidnight(timeZone);
-        List<Activity> activities = repository.findByYearWeek(requested.year().get(), requested.weekOfWeekyear().get());
+        DateMidnight now = now(settings.getTimeZone());
+        return activitiesConverter.toModel(now, now, WEEK, forYearWeek(now));
+    }
+
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/currentWeek/minutes")
+    public int minutesForCurrentWeek()
+    {
+        return minutes(forYearWeek(now(settings.getTimeZone())));
+    }
+
+
+    private List<Activity> forYearWeek(DateMidnight date)
+    {
+        List<Activity> activities = repository.findByYearWeek(date.year().get(), date.weekOfWeekyear().get());
         if (activities.isEmpty())
         {
-            throw new NotFoundException("No activities found for current calendar week");
+            throw new NotFoundException(String.format("No activities found for CW %d/%d", date.weekOfWeekyear().get(),
+                    date.year().get()));
         }
-        return activitiesConverter.toModel(requested, now(timeZone), WEEK, activities);
+        return activities;
+    }
+
+
+    private DateMidnight absoluteWeek(int week)
+    {
+        DateMidnight now = now(settings.getTimeZone());
+        return now.plus(weeks(week));
     }
 
 
@@ -209,35 +275,53 @@ public class ActivitiesResource
 
     @GET
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/{day:\\d{1,2}}")
-    public Activities activitiesByYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
+    public Activities activitiesForYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
             @PathParam("day") int day)
     {
         DateTimeZone timeZone = settings.getTimeZone();
-        DateMidnight requested = new DateMidnight(year, month, day, timeZone);
-        List<Activity> activities = repository.findByYearMonthDay(requested.year().get(),
-                requested.monthOfYear().get(), requested.dayOfMonth().get());
-        if (activities.isEmpty())
-        {
-            throw new NotFoundException(String.format("No activities found for year %d, month %d and day %d", year,
-                    month, day));
-        }
-        return activitiesConverter.toModel(requested, now(timeZone), DAY, activities);
+        DateMidnight yearMonthDay = new DateMidnight(year, month, day, timeZone);
+        return activitiesConverter.toModel(yearMonthDay, now(timeZone), DAY, forYearMonthDay(yearMonthDay));
+    }
+
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/{year:\\d{4}}/{month:\\d{1,2}}/{day:\\d{1,2}}/minutes")
+    public int minutesForYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
+            @PathParam("day") int day)
+    {
+        return minutes(forYearMonthDay(new DateMidnight(year, month, day, settings.getTimeZone())));
     }
 
 
     @GET
     @Path("/today")
-    public Activities activitiesByToday()
+    public Activities activitiesForToday()
     {
-        DateTimeZone timeZone = settings.getTimeZone();
-        DateMidnight requested = new DateMidnight(timeZone);
-        List<Activity> activities = repository.findByYearMonthDay(requested.year().get(),
-                requested.monthOfYear().get(), requested.dayOfMonth().get());
+        DateMidnight now = now(settings.getTimeZone());
+        return activitiesConverter.toModel(now, now, DAY, forYearMonthDay(now));
+    }
+
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/today/minutes")
+    public int minutesForToday()
+    {
+        return minutes(forYearMonthDay(now(settings.getTimeZone())));
+    }
+
+
+    private List<Activity> forYearMonthDay(DateMidnight date)
+    {
+        List<Activity> activities = repository.findByYearMonthDay(date.year().get(), date.monthOfYear().get(), date
+                .dayOfMonth().get());
         if (activities.isEmpty())
         {
-            throw new NotFoundException("No activities found for today");
+            throw new NotFoundException(String.format("No activities found for %d/%d/%d", date.dayOfMonth().get(), date
+                    .monthOfYear().get(), date.year().get()));
         }
-        return activitiesConverter.toModel(requested, now(timeZone), DAY, activities);
+        return activities;
     }
 
 
@@ -264,5 +348,16 @@ public class ActivitiesResource
     private DateMidnight now(DateTimeZone timeZone)
     {
         return new DateMidnight(timeZone);
+    }
+
+
+    private int minutes(List<Activity> activities)
+    {
+        int minutes = 0;
+        for (Activity activity : activities)
+        {
+            minutes += activity.getMinutes();
+        }
+        return minutes;
     }
 }

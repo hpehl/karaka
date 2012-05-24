@@ -11,8 +11,7 @@ import com.gwtplatform.dispatch.annotation.Order;
  *          $
  */
 @GenEvent
-public class ActivitiesChanged
+public class ActivitiesLoaded
 {
     @Order(1) Activities activities;
-    @Order(2) boolean silent;
 }

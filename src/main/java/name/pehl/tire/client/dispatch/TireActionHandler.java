@@ -19,7 +19,7 @@ import com.gwtplatform.dispatch.shared.Result;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
 /**
- * Implementation of the command pattern using Restlet instead of GWT-RPC.
+ * Implementation of the command pattern using RestyGWT instead of GWT-RPC.
  * 
  * @author $Author:$
  * @version $Date:$ $Revision:$

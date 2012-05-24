@@ -3,10 +3,10 @@ package name.pehl.tire.client.activity.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import name.pehl.tire.client.activity.event.ProcessActivity;
-import name.pehl.tire.client.activity.event.ProcessActivityEvent;
-import name.pehl.tire.client.activity.event.ProcessActivityEvent.HasProcessActivityHandlers;
-import name.pehl.tire.client.activity.event.ProcessActivityEvent.ProcessActivityHandler;
+import name.pehl.tire.client.activity.event.ActivityAction.Action;
+import name.pehl.tire.client.activity.event.ActivityActionEvent;
+import name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler;
+import name.pehl.tire.client.activity.event.ActivityActionEvent.HasActivityActionHandlers;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
@@ -27,7 +27,7 @@ import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.Key
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class ActivitiesTable extends CellTable<Activity> implements HasProcessActivityHandlers
+public class ActivitiesTable extends CellTable<Activity> implements HasActivityActionHandlers
 {
     // -------------------------------------------------------- private members
 
@@ -208,32 +208,14 @@ public class ActivitiesTable extends CellTable<Activity> implements HasProcessAc
     // --------------------------------------------------------- event handling
 
     @Override
-    public HandlerRegistration addProcessActivityHandler(ProcessActivityHandler handler)
+    public HandlerRegistration addActivityActionHandler(ActivityActionHandler handler)
     {
-        return addHandler(handler, ProcessActivityEvent.getType());
+        return addHandler(handler, ActivityActionEvent.getType());
     }
 
 
-    public void onEdit(int rowIndex, Activity activity)
+    public void onActivityAction(Activity activity, Action action)
     {
-        ProcessActivityEvent.fire(this, rowIndex, activity, ProcessActivity.Action.EDIT);
-    }
-
-
-    public void onCopy(int rowIndex, Activity activity)
-    {
-        ProcessActivityEvent.fire(this, rowIndex, activity, ProcessActivity.Action.COPY);
-    }
-
-
-    public void onStartStop(int rowIndex, Activity activity)
-    {
-        ProcessActivityEvent.fire(this, rowIndex, activity, ProcessActivity.Action.START_STOP);
-    }
-
-
-    public void onDelete(int rowIndex, Activity activity)
-    {
-        ProcessActivityEvent.fire(this, rowIndex, activity, ProcessActivity.Action.DELETE);
+        ActivityActionEvent.fire(this, activity, action);
     }
 }

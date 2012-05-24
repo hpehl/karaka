@@ -1,6 +1,5 @@
 package name.pehl.tire.client.activity.dispatch;
 
-import name.pehl.tire.client.activity.model.ActivitiesRequest;
 import name.pehl.tire.shared.model.Activities;
 
 import com.gwtplatform.dispatch.annotation.GenDispatch;

@@ -9,8 +9,5 @@ import com.gwtplatform.mvp.client.UiHandlers;
  */
 public interface CockpitUiHandlers extends UiHandlers
 {
-    void onStartRecording();
-
-
-    void onStopRecording();
+    void onStartStop();
 }

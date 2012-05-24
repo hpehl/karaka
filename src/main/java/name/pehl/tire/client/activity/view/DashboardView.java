@@ -2,7 +2,7 @@ package name.pehl.tire.client.activity.view;
 
 import java.util.Date;
 
-import name.pehl.tire.client.activity.event.ProcessActivityEvent;
+import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardUiHandlers;
 import name.pehl.tire.client.resources.I18n;
@@ -10,7 +10,6 @@ import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.client.ui.SvgPath;
 import name.pehl.tire.shared.model.Activities;
-import name.pehl.tire.shared.model.Activity;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -268,29 +267,11 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
 
 
     @UiHandler("activitiesTable")
-    public void onActivityAction(ProcessActivityEvent event)
+    public void onActivityAction(ActivityActionEvent event)
     {
         if (getUiHandlers() != null)
         {
-            int rowIndex = event.getRowIndex();
-            Activity activity = event.getActivity();
-            switch (event.getAction())
-            {
-                case EDIT:
-                    getUiHandlers().onEdit(rowIndex, activity);
-                    break;
-                case COPY:
-                    getUiHandlers().onCopy(rowIndex, activity);
-                    break;
-                case START_STOP:
-                    getUiHandlers().onStartStop(rowIndex, activity);
-                    break;
-                case DELETE:
-                    getUiHandlers().onDelete(rowIndex, activity);
-                    break;
-                default:
-                    break;
-            }
+            getUiHandlers().onActivityAction(event.getActivity(), event.getAction());
         }
     }
 }

@@ -11,6 +11,8 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.SafeHtmlRenderer;
 
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.EDIT;
+
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
@@ -37,9 +39,8 @@ public class ActivityCell extends AbstractSafeHtmlCell<Activity>
         super.onBrowserEvent(context, parent, value, event, valueUpdater);
         if ("click".equals(event.getType()))
         {
-            int rowIndex = context.getIndex();
             actionCell.hideActions(parent);
-            activitiesTable.onEdit(rowIndex, value);
+            activitiesTable.onActivityAction(value, EDIT);
         }
         else if ("mouseover".equals(event.getType()))
         {

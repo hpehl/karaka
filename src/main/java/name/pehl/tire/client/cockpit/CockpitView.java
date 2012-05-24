@@ -1,9 +1,7 @@
 package name.pehl.tire.client.cockpit;
 
-import static name.pehl.tire.shared.model.Status.RUNNING;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
-import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -16,6 +14,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+
+import static name.pehl.tire.shared.model.Status.RUNNING;
 
 /**
  * @author $Author: harald.pehl $
@@ -30,7 +30,6 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
 
     private final Widget widget;
     private final Resources resources;
-    private boolean recording;
     @UiField Image startStop;
     @UiField Label today;
     @UiField InlineLabel week;
@@ -44,7 +43,6 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
     {
         this.widget = binder.createAndBindUi(this);
         this.resources = resources;
-        this.recording = false;
     }
 
 
@@ -56,23 +54,23 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
 
 
     @Override
-    public void updateMonth(Activities activities)
+    public void updateMonth(int minutes)
     {
-        month.setText(FormatUtils.hours(activities.getMinutes()));
+        month.setText(FormatUtils.hours(minutes));
     }
 
 
     @Override
-    public void updateWeek(Activities activities)
+    public void updateWeek(int minutes)
     {
-        week.setText(FormatUtils.hours(activities.getMinutes()));
+        week.setText(FormatUtils.hours(minutes));
     }
 
 
     @Override
-    public void updateToday(Activities activities)
+    public void updateToday(int minutes)
     {
-        today.setText(FormatUtils.hours(activities.getMinutes()));
+        today.setText(FormatUtils.hours(minutes));
     }
 
 
@@ -91,30 +89,21 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
         if (activity.getStatus() == RUNNING)
         {
             startStop.setResource(resources.recordOn());
-            recording = true;
         }
         else
         {
             startStop.setResource(resources.recordOff());
-            recording = false;
         }
     }
 
 
     @UiHandler("startStop")
-    void onRecordClicked(ClickEvent event)
+    void onStartStopClicked(ClickEvent event)
     {
         if (getUiHandlers() != null)
         {
-            // CSS and flag will be updated in updateStatus()
-            if (recording)
-            {
-                getUiHandlers().onStopRecording();
-            }
-            else
-            {
-                getUiHandlers().onStartRecording();
-            }
+            // CSS, text and flag will be updated in updateStatus()
+            getUiHandlers().onStartStop();
         }
     }
 }

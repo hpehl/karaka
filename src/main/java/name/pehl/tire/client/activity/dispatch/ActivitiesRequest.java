@@ -1,4 +1,4 @@
-package name.pehl.tire.client.activity.model;
+package name.pehl.tire.client.activity.dispatch;
 
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 

@@ -15,7 +15,6 @@ import name.pehl.tire.client.activity.model.TimeReader;
 import name.pehl.tire.client.activity.model.WeekReader;
 import name.pehl.tire.client.activity.model.YearReader;
 import name.pehl.tire.client.activity.model.YearsReader;
-import name.pehl.tire.client.activity.presenter.ActivityStateMachine;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
@@ -56,6 +55,8 @@ import name.pehl.tire.client.tag.TagWriter;
 import name.pehl.tire.client.terms.TermsPresenter;
 import name.pehl.tire.client.terms.TermsView;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.inject.Provides;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
@@ -102,9 +103,6 @@ public class TireModule extends AbstractPresenterModule
         bindConstant().annotatedWith(SecurityCookie.class).to("TST");
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
-        // Misc
-        bind(ActivityStateMachine.class).asEagerSingleton();
-
         // PresenterWidgets (a-z)
         bindPresenterWidget(CockpitPresenter.class, CockpitPresenter.MyView.class, CockpitView.class);
         bindPresenterWidget(EditActivityPresenter.class, EditActivityPresenter.MyView.class, EditActivityView.class);
@@ -131,5 +129,12 @@ public class TireModule extends AbstractPresenterModule
                 SettingsPresenter.MyProxy.class);
         bindPresenter(TagPresenter.class, TagPresenter.MyView.class, TagView.class, TagPresenter.MyProxy.class);
         bindPresenter(TermsPresenter.class, TermsPresenter.MyView.class, TermsView.class, TermsPresenter.MyProxy.class);
+    }
+
+
+    @Provides
+    public Scheduler provideScheduler()
+    {
+        return Scheduler.get();
     }
 }

@@ -10,7 +10,7 @@ import com.gwtplatform.dispatch.annotation.Order;
  * @version $LastChangedRevision:$
  */
 @GenEvent
-public class ProcessActivity
+public class ActivityAction
 {
     public static enum Action
     {
@@ -20,9 +20,7 @@ public class ProcessActivity
         DELETE
     }
 
-    @Order(1) int rowIndex;
+    @Order(1) Activity activity;
 
-    @Order(2) Activity activity;
-
-    @Order(3) Action action;
+    @Order(2) Action action;
 }

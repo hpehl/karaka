@@ -16,6 +16,10 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.COPY;
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.DELETE;
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
+
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
@@ -41,7 +45,6 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
         super.onBrowserEvent(context, parent, value, event, valueUpdater);
         if ("click".equals(event.getType()))
         {
-            int rowIndex = context.getIndex();
             EventTarget eventTarget = event.getEventTarget();
             if (eventTarget != null)
             {
@@ -53,15 +56,15 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
                     ImageElement delete = findImage(parent, 2);
                     if (img == copy)
                     {
-                        activitiesTable.onCopy(rowIndex, value);
+                        activitiesTable.onActivityAction(value, COPY);
                     }
                     else if (img == startStop)
                     {
-                        activitiesTable.onStartStop(rowIndex, value);
+                        activitiesTable.onActivityAction(value, START_STOP);
                     }
                     else if (img == delete)
                     {
-                        activitiesTable.onDelete(rowIndex, value);
+                        activitiesTable.onActivityAction(value, DELETE);
                     }
                 }
             }
@@ -220,7 +223,8 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
         public SafeHtml render(Activity object)
         {
             SafeHtml copyHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(atr.copy()).getHTML());
-            SafeHtml startStopHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(atr.startStop()).getHTML());
+            SafeHtml startStopHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(atr.startStop())
+                    .getHTML());
             SafeHtml deleteHtml = SafeHtmlUtils
                     .fromTrustedString(AbstractImagePrototype.create(atr.delete()).getHTML());
             return ActivityTemplates.INSTANCE.actions(atr.cellTableStyle().hideActions(), copyHtml, startStopHtml,

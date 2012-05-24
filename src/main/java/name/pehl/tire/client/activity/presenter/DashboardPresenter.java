@@ -1,26 +1,23 @@
 package name.pehl.tire.client.activity.presenter;
 
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.Date;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
+import name.pehl.tire.client.activity.dispatch.ActivitiesRequest;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesAction;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesResult;
-import name.pehl.tire.client.activity.event.ActivitiesChangedEvent;
+import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
+import name.pehl.tire.client.activity.event.ActivityAction.Action;
+import name.pehl.tire.client.activity.event.ActivityActionEvent;
+import name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler;
 import name.pehl.tire.client.activity.event.ActivityResumedEvent;
-import name.pehl.tire.client.activity.event.ActivityResumedEvent.ActivityResumedHandler;
 import name.pehl.tire.client.activity.event.ActivityStartedEvent;
-import name.pehl.tire.client.activity.event.ActivityStartedEvent.ActivityStartedHandler;
 import name.pehl.tire.client.activity.event.ActivityStoppedEvent;
-import name.pehl.tire.client.activity.event.ActivityStoppedEvent.ActivityStoppedHandler;
-import name.pehl.tire.client.activity.event.StartActivityEvent;
-import name.pehl.tire.client.activity.event.StopActivityEvent;
-import name.pehl.tire.client.activity.model.ActivitiesRequest;
+import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent;
+import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent.RunningActivityLoadedHandler;
+import name.pehl.tire.client.activity.event.TickEvent;
+import name.pehl.tire.client.activity.event.TickEvent.TickHandler;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
@@ -44,13 +41,19 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.shared.model.Status.RUNNING;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 /**
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-23 13:52:44 +0100 (Do, 23. Dez 2010) $ $Revision: 192
  *          $
  */
 public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, DashboardPresenter.MyProxy> implements
-        DashboardUiHandlers, ActivityStartedHandler, ActivityResumedHandler, ActivityStoppedHandler
+        DashboardUiHandlers, RunningActivityLoadedHandler, ActivityActionHandler, TickHandler
 {
     // ---------------------------------------------------------- inner classes
 
@@ -69,13 +72,25 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     private static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
+    private final TickCommand tickCommand;
+    private final Scheduler scheduler;
     private final DispatchAsync dispatcher;
     private final PlaceManager placeManager;
     private final EditActivityPresenter editActivityPresenter;
     private final SelectYearAndMonthOrWeekPresenter selectMonthPresenter;
     private final SelectYearAndMonthOrWeekPresenter selectWeekPresenter;
 
+    /**
+     * The currently managed actvity
+     */
+    private Activity currentActivity;
+    /**
+     * The selected date
+     */
     private Date activityDate;
+    /**
+     * The currently displayed activities
+     */
     private Activities activities;
 
 
@@ -86,7 +101,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             final EditActivityPresenter editActivityPresenter,
             final SelectYearAndMonthOrWeekPresenter selectMonthPresenter,
             final SelectYearAndMonthOrWeekPresenter selectWeekPresenter, final DispatchAsync dispatcher,
-            final PlaceManager placeManager)
+            final PlaceManager placeManager, final Scheduler scheduler)
     {
         super(eventBus, view, proxy);
         this.editActivityPresenter = editActivityPresenter;
@@ -96,11 +111,13 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         this.selectWeekPresenter.setUnit(WEEK);
         this.dispatcher = dispatcher;
         this.placeManager = placeManager;
+        this.scheduler = scheduler;
+        this.tickCommand = new TickCommand(eventBus, scheduler);
 
         getView().setUiHandlers(this);
-        getEventBus().addHandler(ActivityStartedEvent.getType(), this);
-        getEventBus().addHandler(ActivityResumedEvent.getType(), this);
-        getEventBus().addHandler(ActivityStoppedEvent.getType(), this);
+        getEventBus().addHandler(RunningActivityLoadedEvent.getType(), this);
+        getEventBus().addHandler(ActivityActionEvent.getType(), this);
+        getEventBus().addHandler(TickEvent.getType(), this);
     }
 
 
@@ -128,7 +145,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         String message = "Loading activities for " + activitiesRequest + "...";
         logger.fine(message);
         ShowMessageEvent.fire(this, new Message(INFO, message, false));
-        Scheduler.get().scheduleDeferred(new ScheduledCommand()
+        scheduler.scheduleDeferred(new ScheduledCommand()
         {
             @Override
             public void execute()
@@ -141,7 +158,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                     {
                         activities = result.getActivities();
                         getView().updateActivities(activities);
-                        ActivitiesChangedEvent.fire(DashboardPresenter.this, activities, false);
+                        ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities);
                     }
 
 
@@ -161,35 +178,32 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     // --------------------------------------------------------- event handlers
 
     @Override
-    public void onActivityStarted(ActivityStartedEvent event)
+    public void onRunningActivityLoaded(RunningActivityLoadedEvent event)
     {
-        internalUpdateActivity(event.getActivity(), true);
+        this.currentActivity = event.getActivity();
+        // TODO What else has to be done??
+    }
+
+
+    /**
+     * This method is called from the <em>application</em> event
+     * {@link ActivityActionEvent}.
+     * 
+     * @see name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler#onActivityAction(name.pehl.tire.client.activity.event.ActivityActionEvent)
+     */
+    @Override
+    public void onActivityAction(ActivityActionEvent event)
+    {
+        activityAction(event.getActivity(), event.getAction());
     }
 
 
     @Override
-    public void onActivityResumed(ActivityResumedEvent event)
+    public void onTick(TickEvent event)
     {
-        internalUpdateActivity(event.getActivity(), false);
-    }
-
-
-    @Override
-    public void onActivityStopped(ActivityStoppedEvent event)
-    {
-        internalUpdateActivity(event.getActivity(), false);
-    }
-
-
-    private void internalUpdateActivity(Activity activity, boolean addToActivities)
-    {
-        if (activities.matchingRange(activity))
+        Activity activity = event.getActivity();
+        if (activities.getActivities().contains(activity))
         {
-            if (addToActivities)
-            {
-                activities.addActivity(activity);
-                ActivitiesChangedEvent.fire(DashboardPresenter.this, activities, true);
-            }
             getView().updateActivities(activities);
         }
     }
@@ -311,40 +325,136 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     }
 
 
+    /**
+     * This method is called from the <em>UI</em> event
+     * {@link ActivityActionEvent}
+     */
     @Override
-    public void onEdit(int rowIndex, Activity activity)
+    public void onActivityAction(Activity activity, Action action)
     {
-        logger.fine("Edit " + activity + " in row #" + rowIndex);
+        activityAction(activity, action);
+    }
+
+
+    // ------------------------------------------------------- business methods
+
+    private void activityAction(Activity activity, Action action)
+    {
+        switch (action)
+        {
+            case EDIT:
+                edit(activity);
+                break;
+            case COPY:
+                copy(activity);
+                break;
+            case START_STOP:
+                if (activity.getStatus() == RUNNING)
+                {
+                    stop(activity);
+                }
+                else
+                {
+                    start(activity);
+                }
+            case DELETE:
+                delete(activity);
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    private void edit(Activity activity)
+    {
+        logger.fine("Open " + activity + " for edit");
         editActivityPresenter.getView().setActivity(activity);
         addToPopupSlot(null);
         addToPopupSlot(editActivityPresenter);
     }
 
 
-    @Override
-    public void onCopy(int rowIndex, Activity activity)
+    private void copy(Activity activity)
     {
-        logger.fine("Copy " + activity + " in row #" + rowIndex);
+        logger.fine("About to copy " + activity);
     }
 
 
-    @Override
-    public void onStartStop(int rowIndex, Activity activity)
+    private void start(Activity activity)
     {
-        if (activity.getStatus() == Status.RUNNING)
+        // TODO Make this method somehow 'transactional'
+        logger.info("About to start " + activity);
+        if (activity.getStatus() == Status.STOPPED)
         {
-            StopActivityEvent.fire(this, activity);
+            // if there's currently another activity running stop it.
+            if (currentActivity != null && currentActivity.getStatus() == RUNNING && !activity.equals(currentActivity))
+            {
+                // TODO Store this activity on the server
+                logger.info("Stopping currently running " + currentActivity);
+                currentActivity.stop();
+            }
+            Activity latestActivity = activities != null ? activities.getActivities().first() : null;
+            if (activity.isToday() && activity.equals(latestActivity))
+            {
+                logger.info("Resuming " + activity);
+                activity.resume();
+                // TODO Store on the server
+                getView().updateActivities(activities);
+                ActivityResumedEvent.fire(this, activity);
+                tickCommand.start(activity);
+                currentActivity = activity;
+            }
+            else
+            {
+                logger.info("Copy " + activity + " and start as a new activity");
+                Activity newActivity = activity.copy();
+                newActivity.start();
+                // TODO Store on the server and remove test code
+                newActivity.getStart().setDay(24);
+                newActivity.getStart().setWeek(21);
+                newActivity.getStart().setMonth(5);
+                newActivity.getStart().setYear(2012);
+                if (activities.matchingRange(newActivity))
+                {
+                    activities.addActivity(newActivity);
+                    getView().updateActivities(activities);
+                }
+                ActivityStartedEvent.fire(this, newActivity);
+                tickCommand.start(newActivity);
+                currentActivity = newActivity;
+            }
         }
         else
         {
-            StartActivityEvent.fire(this, activity);
+            logger.info(activity + " already running");
         }
     }
 
 
-    @Override
-    public void onDelete(int rowIndex, Activity activity)
+    private void stop(Activity activity)
     {
-        logger.fine("Delete " + activity + " in row #" + rowIndex);
+        // TODO Make this method somehow 'transactional'
+        logger.info("About to stop " + currentActivity);
+        if (activity.getStatus() == RUNNING)
+        {
+            logger.info("Stopping " + currentActivity);
+            tickCommand.stop();
+            activity.stop();
+            // TODO Store on the server
+            getView().updateActivities(activities);
+            ActivityStoppedEvent.fire(this, currentActivity);
+            currentActivity = activity;
+        }
+        else
+        {
+            logger.info(activity + " already stopped");
+        }
+    }
+
+
+    private void delete(Activity activity)
+    {
+        logger.info("About to delete activity " + currentActivity);
     }
 }
