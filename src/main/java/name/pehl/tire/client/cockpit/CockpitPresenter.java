@@ -106,17 +106,13 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     @Override
     public void onActivityChanged(ActivityChangedEvent event)
     {
-        internalUpdate(event.getActivity(), event.getAction());
-    }
-
-
-    private void internalUpdate(Activity activity, ChangeAction action)
-    {
-        if (action == null || action == RESUMED || action == STARTED || action == STOPPED)
+        Activity activity = event.getActivity();
+        ChangeAction action = event.getAction();
+        if (action == RESUMED || action == STARTED || action == STOPPED)
         {
             currentActivity = activity;
+            getView().updateStatus(currentActivity);
         }
-        getView().updateStatus(currentActivity);
         scheduler.scheduleDeferred(new GetMinutesCommand());
     }
 
@@ -199,9 +195,9 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                         @Override
                         public void onSuccess(GetRunningActivityResult result)
                         {
-                            Activity activity = result.getActivity();
-                            internalUpdate(activity, null);
-                            RunningActivityLoadedEvent.fire(CockpitPresenter.this, activity);
+                            currentActivity = result.getActivity();
+                            getView().updateStatus(currentActivity);
+                            RunningActivityLoadedEvent.fire(CockpitPresenter.this, currentActivity);
                         }
 
 
