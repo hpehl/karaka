@@ -8,12 +8,9 @@ import name.pehl.tire.client.activity.dispatch.GetMinutesResult;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityAction;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityResult;
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
-import name.pehl.tire.client.activity.event.ActivityResumedEvent;
-import name.pehl.tire.client.activity.event.ActivityResumedEvent.ActivityResumedHandler;
-import name.pehl.tire.client.activity.event.ActivityStartedEvent;
-import name.pehl.tire.client.activity.event.ActivityStartedEvent.ActivityStartedHandler;
-import name.pehl.tire.client.activity.event.ActivityStoppedEvent;
-import name.pehl.tire.client.activity.event.ActivityStoppedEvent.ActivityStoppedHandler;
+import name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction;
+import name.pehl.tire.client.activity.event.ActivityChangedEvent;
+import name.pehl.tire.client.activity.event.ActivityChangedEvent.ActivityChangedHandler;
 import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent;
 import name.pehl.tire.client.activity.event.TickEvent;
 import name.pehl.tire.client.activity.event.TickEvent.TickHandler;
@@ -34,6 +31,9 @@ import com.gwtplatform.mvp.client.View;
 
 import static java.util.logging.Level.WARNING;
 import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
 
 /**
  * @author $Author: harald.pehl $
@@ -41,7 +41,7 @@ import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_S
  *          $
  */
 public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> implements CockpitUiHandlers,
-        ActivityStartedHandler, ActivityResumedHandler, ActivityStoppedHandler, TickHandler
+        ActivityChangedHandler, TickHandler
 {
     public interface MyView extends View, HasUiHandlers<CockpitUiHandlers>
     {
@@ -75,9 +75,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         this.dispatcher = dispatcher;
 
         getView().setUiHandlers(this);
-        getEventBus().addHandler(ActivityStartedEvent.getType(), this);
-        getEventBus().addHandler(ActivityResumedEvent.getType(), this);
-        getEventBus().addHandler(ActivityStoppedEvent.getType(), this);
+        getEventBus().addHandler(ActivityChangedEvent.getType(), this);
         getEventBus().addHandler(TickEvent.getType(), this);
     }
 
@@ -106,29 +104,18 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
 
 
     @Override
-    public void onActivityStarted(ActivityStartedEvent event)
+    public void onActivityChanged(ActivityChangedEvent event)
     {
-        internalUpdate(event.getActivity());
+        internalUpdate(event.getActivity(), event.getAction());
     }
 
 
-    @Override
-    public void onActivityResumed(ActivityResumedEvent event)
+    private void internalUpdate(Activity activity, ChangeAction action)
     {
-        internalUpdate(event.getActivity());
-    }
-
-
-    @Override
-    public void onActivityStopped(ActivityStoppedEvent event)
-    {
-        internalUpdate(event.getActivity());
-    }
-
-
-    private void internalUpdate(Activity activity)
-    {
-        currentActivity = activity;
+        if (action == null || action == RESUMED || action == STARTED || action == STOPPED)
+        {
+            currentActivity = activity;
+        }
         getView().updateStatus(currentActivity);
         scheduler.scheduleDeferred(new GetMinutesCommand());
     }
@@ -213,7 +200,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                         public void onSuccess(GetRunningActivityResult result)
                         {
                             Activity activity = result.getActivity();
-                            internalUpdate(activity);
+                            internalUpdate(activity, null);
                             RunningActivityLoadedEvent.fire(CockpitPresenter.this, activity);
                         }
 

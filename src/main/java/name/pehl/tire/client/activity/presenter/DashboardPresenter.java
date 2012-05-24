@@ -11,9 +11,8 @@ import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivityAction.Action;
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler;
-import name.pehl.tire.client.activity.event.ActivityResumedEvent;
-import name.pehl.tire.client.activity.event.ActivityStartedEvent;
-import name.pehl.tire.client.activity.event.ActivityStoppedEvent;
+import name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction;
+import name.pehl.tire.client.activity.event.ActivityChangedEvent;
 import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent;
 import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent.RunningActivityLoadedHandler;
 import name.pehl.tire.client.activity.event.TickEvent;
@@ -43,6 +42,8 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
 import static name.pehl.tire.shared.model.Status.RUNNING;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
@@ -402,7 +403,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 activity.resume();
                 // TODO Store on the server, then
                 getView().updateActivities(activities);
-                ActivityResumedEvent.fire(this, activity);
+                ActivityChangedEvent.fire(this, activity, RESUMED);
                 tickCommand.start(activity);
                 currentActivity = activity;
             }
@@ -421,7 +422,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                     activities.addActivity(newActivity);
                     getView().updateActivities(activities);
                 }
-                ActivityStartedEvent.fire(this, newActivity);
+                ActivityChangedEvent.fire(this, newActivity, STARTED);
                 tickCommand.start(newActivity);
                 currentActivity = newActivity;
             }
@@ -444,7 +445,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             activity.stop();
             // TODO Store on the server
             getView().updateActivities(activities);
-            ActivityStoppedEvent.fire(this, currentActivity);
+            ActivityChangedEvent.fire(this, currentActivity, ChangeAction.STOPPED);
             currentActivity = activity;
         }
         else
