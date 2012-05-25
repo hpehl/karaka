@@ -2,12 +2,21 @@ package name.pehl.tire.client.activity.presenter;
 
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
+import name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction;
+import name.pehl.tire.client.activity.event.ActivityChangedEvent;
+import name.pehl.tire.client.activity.event.ActivityChangedEvent.ActivityChangedHandler;
+import name.pehl.tire.client.activity.event.TickEvent;
+import name.pehl.tire.client.activity.event.TickEvent.TickHandler;
 import name.pehl.tire.shared.model.Activities;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
+
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
 
 /**
  * Presenter for the quick chart showing the activites by week / month.
@@ -25,12 +34,15 @@ import com.gwtplatform.mvp.client.View;
  * @version $Date: 2010-12-22 16:43:49 +0100 (Mi, 22. Dez 2010) $ $Revision: 102
  *          $
  */
-public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyView> implements ActivitiesLoadedHandler
+public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyView> implements
+        ActivitiesLoadedHandler, ActivityChangedHandler, TickHandler
 {
     public interface MyView extends View
     {
         void updateActivities(Activities activities);
     }
+
+    private Activities activities;
 
 
     @Inject
@@ -38,12 +50,33 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     {
         super(eventBus, view);
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
+        getEventBus().addHandler(ActivityChangedEvent.getType(), this);
+        getEventBus().addHandler(TickEvent.getType(), this);
     }
 
 
     @Override
     public final void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
+        activities = event.getActivities();
         getView().updateActivities(event.getActivities());
+    }
+
+
+    @Override
+    public void onActivityChanged(ActivityChangedEvent event)
+    {
+        ChangeAction action = event.getAction();
+        if (action == RESUMED || action == STARTED || action == STOPPED)
+        {
+            getView().updateActivities(activities);
+        }
+    }
+
+
+    @Override
+    public void onTick(TickEvent event)
+    {
+        getView().updateActivities(activities);
     }
 }

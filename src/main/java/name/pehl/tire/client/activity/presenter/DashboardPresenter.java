@@ -25,6 +25,8 @@ import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Status;
 
+import org.fusesource.restygwt.client.FailedStatusCodeException;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.inject.Inject;
@@ -166,9 +168,17 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                     @Override
                     public void onFailure(Throwable caught)
                     {
-                        String errorMessage = "No activities found for " + activitiesRequest;
-                        ShowMessageEvent.fire(DashboardPresenter.this, new Message(WARNING, errorMessage, true));
-                        logger.warning(errorMessage);
+                        if (caught instanceof FailedStatusCodeException
+                                && ((FailedStatusCodeException) caught).getStatusCode() == 404)
+                        {
+                            String errorMessage = "No activities found for " + activitiesRequest;
+                            ShowMessageEvent.fire(DashboardPresenter.this, new Message(WARNING, errorMessage, true));
+                            logger.warning(errorMessage);
+                        }
+                        else
+                        {
+                            super.onFailure(caught);
+                        }
                     }
                 });
             }
@@ -380,6 +390,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     private void copy(Activity activity)
     {
         logger.fine("About to copy " + activity);
+        ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Copy not yet implemented", true));
     }
 
 
@@ -406,6 +417,8 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 ActivityChangedEvent.fire(this, activity, RESUMED);
                 tickCommand.start(activity);
                 currentActivity = activity;
+                ShowMessageEvent.fire(DashboardPresenter.this,
+                        new Message(INFO, "Activity \"" + currentActivity.getName() + "\" resumed", true));
             }
             else
             {
@@ -413,7 +426,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 Activity newActivity = activity.copy();
                 newActivity.start();
                 // TODO Store on the server and remove test code, then
-                newActivity.getStart().setDay(24);
+                newActivity.getStart().setDay(25);
                 newActivity.getStart().setWeek(21);
                 newActivity.getStart().setMonth(5);
                 newActivity.getStart().setYear(2012);
@@ -425,6 +438,8 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 ActivityChangedEvent.fire(this, newActivity, STARTED);
                 tickCommand.start(newActivity);
                 currentActivity = newActivity;
+                ShowMessageEvent.fire(DashboardPresenter.this,
+                        new Message(INFO, "New activity \"" + currentActivity.getName() + "\" started", true));
             }
         }
         else
@@ -447,6 +462,8 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             getView().updateActivities(activities);
             ActivityChangedEvent.fire(this, currentActivity, ChangeAction.STOPPED);
             currentActivity = activity;
+            ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Activity \"" + currentActivity.getName()
+                    + "\" stopped", true));
         }
         else
         {
@@ -458,5 +475,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     private void delete(Activity activity)
     {
         logger.info("About to delete activity " + currentActivity);
+        ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Delete not yet implemented", true));
     }
 }
