@@ -1,4 +1,4 @@
-package name.pehl.tire.client.cockpit;
+package name.pehl.tire.client.activity.presenter;
 
 import java.util.logging.Logger;
 

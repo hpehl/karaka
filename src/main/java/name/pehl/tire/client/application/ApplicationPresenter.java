@@ -1,7 +1,7 @@
 package name.pehl.tire.client.application;
 
+import name.pehl.tire.client.activity.presenter.CockpitPresenter;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
-import name.pehl.tire.client.cockpit.CockpitPresenter;
 
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.inject.Inject;

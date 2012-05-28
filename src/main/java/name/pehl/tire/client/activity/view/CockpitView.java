@@ -1,5 +1,8 @@
-package name.pehl.tire.client.cockpit;
+package name.pehl.tire.client.activity.view;
 
+import name.pehl.tire.client.activity.presenter.CockpitPresenter;
+import name.pehl.tire.client.activity.presenter.CockpitUiHandlers;
+import name.pehl.tire.client.activity.presenter.CockpitPresenter.MyView;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activity;
