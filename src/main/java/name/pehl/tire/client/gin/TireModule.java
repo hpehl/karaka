@@ -10,10 +10,13 @@ import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetYearsHandler;
+import name.pehl.tire.client.activity.dispatch.SaveActivityHandler;
 import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.activity.model.ActivityReader;
+import name.pehl.tire.client.activity.model.ActivityWriter;
 import name.pehl.tire.client.activity.model.DayReader;
 import name.pehl.tire.client.activity.model.TimeReader;
+import name.pehl.tire.client.activity.model.TimeWriter;
 import name.pehl.tire.client.activity.model.WeekReader;
 import name.pehl.tire.client.activity.model.YearReader;
 import name.pehl.tire.client.activity.model.YearsReader;
@@ -85,12 +88,14 @@ public class TireModule extends AbstractPresenterModule
         bind(GetMinutesHandler.class);
         bind(GetRunningActivityHandler.class);
         bind(GetYearsHandler.class);
+        bind(SaveActivityHandler.class);
 
         // JsonReader / Writer
         // Bind them as eager singletons so that the JsonRegistry
         // is setup correctly!
         bind(ActivitiesReader.class).asEagerSingleton();
         bind(ActivityReader.class).asEagerSingleton();
+        bind(ActivityWriter.class).asEagerSingleton();
         bind(DayReader.class).asEagerSingleton();
         bind(ProjectReader.class).asEagerSingleton();
         bind(ProjectWriter.class).asEagerSingleton();
@@ -98,6 +103,7 @@ public class TireModule extends AbstractPresenterModule
         bind(TagReader.class).asEagerSingleton();
         bind(TagWriter.class).asEagerSingleton();
         bind(TimeReader.class).asEagerSingleton();
+        bind(TimeWriter.class).asEagerSingleton();
         bind(UserReader.class).asEagerSingleton();
         bind(WeekReader.class).asEagerSingleton();
         bind(YearReader.class).asEagerSingleton();

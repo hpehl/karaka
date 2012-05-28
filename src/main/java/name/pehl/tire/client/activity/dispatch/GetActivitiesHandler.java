@@ -15,9 +15,6 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-import static name.pehl.tire.client.dispatch.TireActionHandler.HttpMethod.GET;
-import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON;
-
 /**
  * @author $Author:$
  * @version $Date:$ $Revision:$
@@ -31,7 +28,7 @@ public class GetActivitiesHandler extends TireActionHandler<GetActivitiesAction,
     protected GetActivitiesHandler(@SecurityCookie String securityCookieName,
             SecurityCookieAccessor securityCookieAccessor, ActivitiesReader activitiesReader)
     {
-        super(GetActivitiesAction.class, GET, CONTENT_TYPE_JSON, securityCookieName, securityCookieAccessor);
+        super(GetActivitiesAction.class, securityCookieName, securityCookieAccessor);
         this.activitiesReader = activitiesReader;
     }
 

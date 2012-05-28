@@ -16,9 +16,6 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-import static name.pehl.tire.client.dispatch.TireActionHandler.HttpMethod.GET;
-import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON;
-
 public class GetRunningActivityHandler extends TireActionHandler<GetRunningActivityAction, GetRunningActivityResult>
 {
     private final ActivityReader activityReader;
@@ -28,7 +25,7 @@ public class GetRunningActivityHandler extends TireActionHandler<GetRunningActiv
     protected GetRunningActivityHandler(@SecurityCookie String securityCookieName,
             SecurityCookieAccessor securityCookieAccessor, ActivityReader activityReader)
     {
-        super(GetRunningActivityAction.class, GET, CONTENT_TYPE_JSON, securityCookieName, securityCookieAccessor);
+        super(GetRunningActivityAction.class, securityCookieName, securityCookieAccessor);
         this.activityReader = activityReader;
     }
 
@@ -36,8 +33,7 @@ public class GetRunningActivityHandler extends TireActionHandler<GetRunningActiv
     @Override
     protected Resource resourceFor(GetRunningActivityAction action)
     {
-        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities", "running");
-        return new Resource(urlBuilder.toUrl());
+        return new Resource(new UrlBuilder().module("rest").path("activities", "running").toUrl());
     }
 
 

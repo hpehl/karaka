@@ -118,6 +118,12 @@ public abstract class BaseModel
     }
 
 
+    public boolean isTransient()
+    {
+        return this.id == null;
+    }
+
+
     public List<Link> getLinks()
     {
         return links;

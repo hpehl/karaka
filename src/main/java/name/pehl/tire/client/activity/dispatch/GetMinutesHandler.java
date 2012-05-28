@@ -1,5 +1,7 @@
 package name.pehl.tire.client.activity.dispatch;
 
+import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_TEXT;
+import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
 import name.pehl.tire.client.dispatch.TireActionHandler;
 
 import org.fusesource.restygwt.client.Method;
@@ -11,9 +13,6 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-import static name.pehl.tire.client.dispatch.TireActionHandler.HttpMethod.GET;
-import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_TEXT;
-
 /**
  * @author $Author:$
  * @version $Date:$ $Revision:$
@@ -23,7 +22,7 @@ public class GetMinutesHandler extends TireActionHandler<GetMinutesAction, GetMi
     @Inject
     protected GetMinutesHandler(@SecurityCookie String securityCookieName, SecurityCookieAccessor securityCookieAccessor)
     {
-        super(GetMinutesAction.class, GET, CONTENT_TYPE_TEXT, securityCookieName, securityCookieAccessor);
+        super(GetMinutesAction.class, securityCookieName, securityCookieAccessor);
     }
 
 
@@ -31,6 +30,13 @@ public class GetMinutesHandler extends TireActionHandler<GetMinutesAction, GetMi
     protected Resource resourceFor(GetMinutesAction action)
     {
         return new Resource(action.getActivitiesRequest().toUrl());
+    }
+
+
+    @Override
+    protected Method methodFor(GetMinutesAction action, Resource resource)
+    {
+        return new Method(resource, HttpMethod.GET.name()).header(HEADER_CONTENT_TYPE, CONTENT_TYPE_TEXT);
     }
 
 

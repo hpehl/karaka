@@ -1,5 +1,9 @@
 package name.pehl.tire.client.dispatch;
 
+import static name.pehl.tire.client.dispatch.TireActionHandler.HttpMethod.GET;
+import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON;
+import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
+
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.Resource;
 
@@ -31,18 +35,14 @@ public abstract class TireActionHandler<A extends Action<R>, R extends Result> e
         OPTIONS;
     }
 
-    private final HttpMethod httpMethod;
-    private final String contentType;
     private final String securityCookieName;
     private final SecurityCookieAccessor securityCookieAccessor;
 
 
-    protected TireActionHandler(final Class<A> actionType, final HttpMethod httpMethod, final String contentType,
-            final String securityCookieName, final SecurityCookieAccessor securityCookieAccessor)
+    protected TireActionHandler(final Class<A> actionType, final String securityCookieName,
+            final SecurityCookieAccessor securityCookieAccessor)
     {
         super(actionType);
-        this.httpMethod = httpMethod;
-        this.contentType = contentType;
         this.securityCookieName = securityCookieName;
         this.securityCookieAccessor = securityCookieAccessor;
     }
@@ -53,22 +53,53 @@ public abstract class TireActionHandler<A extends Action<R>, R extends Result> e
             final ExecuteCommand<A, R> executeCommand)
     {
         final Resource resource = resourceFor(action);
-        Method method = new Method(resource, httpMethod.name()).header(Resource.HEADER_CONTENT_TYPE, contentType);
-        if (action.isSecured())
-        {
-            // Add the security token as header
-            String cookieContent = securityCookieAccessor.getCookieContent();
-            if (cookieContent != null)
-            {
-                method = method.header(securityCookieName, cookieContent);
-            }
-        }
+        Method method = methodFor(action, resource);
+        applySecurity(action, resource, method);
         executeMethod(method, resultCallback);
         return new DispatchRequestRestletImpl(method);
     }
 
 
     protected abstract Resource resourceFor(A action);
+
+
+    /**
+     * Creates a new GET method with content type
+     * {@value Resource#CONTENT_TYPE_JSON}. Overwrite if you nee another method
+     * or content type.
+     * 
+     * @param action
+     * @param resource
+     * @return
+     */
+    protected Method methodFor(A action, Resource resource)
+    {
+        return new Method(resource, GET.name()).header(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON);
+    }
+
+
+    /**
+     * Adds the security token if necessary
+     * 
+     * @param action
+     * @param resource
+     * @param method
+     * @return
+     */
+    protected Method applySecurity(A action, Resource resource, Method method)
+    {
+        Method result = method;
+        if (action.isSecured())
+        {
+            // Add the security token as header
+            String cookieContent = securityCookieAccessor.getCookieContent();
+            if (cookieContent != null)
+            {
+                result = result.header(securityCookieName, cookieContent);
+            }
+        }
+        return result;
+    }
 
 
     protected abstract void executeMethod(final Method method, final AsyncCallback<R> resultCallback);

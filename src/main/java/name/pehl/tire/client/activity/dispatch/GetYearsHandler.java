@@ -16,9 +16,6 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-import static name.pehl.tire.client.dispatch.TireActionHandler.HttpMethod.GET;
-import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON;
-
 /**
  * @author $Author:$
  * @version $Date:$ $Revision:$
@@ -32,7 +29,7 @@ public class GetYearsHandler extends TireActionHandler<GetYearsAction, GetYearsR
     protected GetYearsHandler(@SecurityCookie String securityCookieName, SecurityCookieAccessor securityCookieAccessor,
             YearsReader yearsReader)
     {
-        super(GetYearsAction.class, GET, CONTENT_TYPE_JSON, securityCookieName, securityCookieAccessor);
+        super(GetYearsAction.class, securityCookieName, securityCookieAccessor);
         this.yearsReader = yearsReader;
     }
 
@@ -40,8 +37,7 @@ public class GetYearsHandler extends TireActionHandler<GetYearsAction, GetYearsR
     @Override
     protected Resource resourceFor(GetYearsAction action)
     {
-        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities", "years");
-        return new Resource(urlBuilder.toUrl());
+        return new Resource(new UrlBuilder().module("rest").path("activities", "years").toUrl());
     }
 
 
