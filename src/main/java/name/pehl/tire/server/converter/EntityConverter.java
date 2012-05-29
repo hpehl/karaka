@@ -9,4 +9,7 @@ public interface EntityConverter<E extends BaseEntity, M extends BaseModel>
 
 
     E fromModel(M model);
+
+
+    void merge(M model, E entity);
 }

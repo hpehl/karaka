@@ -22,6 +22,8 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.Unindexed;
 
+import static java.util.Collections.unmodifiableList;
+
 /**
  * Represent an activity of an user. An Activity has a specific state:
  * <ul>
@@ -50,7 +52,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
 
     @Transient private DateTimeZone timeZone;
 
-    @Unindexed private int pause;
+    @Unindexed private long pause;
 
     @Unindexed private boolean billable;
 
@@ -170,9 +172,9 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
 
-    public int getMinutes()
+    public long getMinutes()
     {
-        int minutes = 0;
+        long minutes = 0;
         if (start != null && end != null && start.getDateTime().isBefore(end.getDateTime()))
         {
             Minutes m = Minutes.minutesBetween(start.getDateTime(), end.getDateTime());
@@ -206,13 +208,13 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
 
-    public int getPause()
+    public long getPause()
     {
         return pause;
     }
 
 
-    public void setPause(int pause)
+    public void setPause(long pause)
     {
         this.pause = pause;
     }
@@ -220,28 +222,19 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
 
     public List<Key<Tag>> getTags()
     {
-        return this.tags;
+        return unmodifiableList(this.tags);
     }
 
 
-    public void addTag(Key<Tag> tag)
+    public void addTag(Key<Tag> key)
     {
-        if (!this.tags.contains(tag))
-        {
-            this.tags.add(tag);
-        }
+        this.tags.add(key);
     }
 
 
-    public void removeTag(Key<Tag> tag)
+    public void setTags(List<Key<Tag>> tags)
     {
-        this.tags.remove(tag);
-    }
-
-
-    public void clearTags()
-    {
-        this.tags.clear();
+        this.tags = tags;
     }
 
 

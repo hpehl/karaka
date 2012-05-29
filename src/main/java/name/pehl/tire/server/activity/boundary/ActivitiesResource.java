@@ -6,11 +6,15 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import name.pehl.tire.server.activity.control.ActivitiesConverter;
 import name.pehl.tire.server.activity.control.ActivityConverter;
@@ -28,6 +32,9 @@ import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 
+import com.googlecode.objectify.Key;
+
+import static javax.ws.rs.core.Response.Status.CREATED;
 import static name.pehl.tire.shared.model.TimeUnit.DAY;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
@@ -37,7 +44,6 @@ import static org.joda.time.Weeks.weeks;
 /**
  * Supported methods:
  * <ul>
- * <li>POST: Create a new activity
  * <li>GET /activities/{year}/{month}: Find activities
  * <li>GET /activities/{year}/{month}/minutes: Get the minutes of the specified
  * activities
@@ -65,6 +71,9 @@ import static org.joda.time.Weeks.weeks;
  * <li>GET /activities/running: Find the running activity
  * <li>GET /activities/years: Returns the years, months and weeks in which
  * activities are stored
+ * <li>POST: Create a new activity
+ * <li>PUT /activities/{id}: Update an existing activity
+ * <li>DELETE /activities/{id}: Delete an existing activity
  * </ul>
  * 
  * @todo Add hyperlinks to current, previous and next activities. If there are
@@ -335,6 +344,40 @@ public class ActivitiesResource
             throw new NotFoundException("No running activity");
         }
         return activityConverter.toModel(activity);
+    }
+
+
+    // ------------------------------------------------------------ CUD methods
+
+    @POST
+    public Response saveNewActivity(name.pehl.tire.shared.model.Activity newClientActivity)
+    {
+        Activity newServerActivity = activityConverter.fromModel(newClientActivity);
+        repository.put(newServerActivity);
+        name.pehl.tire.shared.model.Activity createdClientActivity = activityConverter.toModel(newServerActivity);
+        return Response.status(CREATED).entity(createdClientActivity).build();
+    }
+
+
+    @PUT
+    @Path("{id}")
+    public Response updateExistingActivity(@PathParam("id") String id,
+            name.pehl.tire.shared.model.Activity modifiedClientActivity)
+    {
+        Activity existingServerActivity = repository.get(Key.<Activity> create(id));
+        activityConverter.merge(modifiedClientActivity, existingServerActivity);
+        repository.put(existingServerActivity);
+        name.pehl.tire.shared.model.Activity updatedClientActivity = activityConverter.toModel(existingServerActivity);
+        return Response.ok(updatedClientActivity).build();
+    }
+
+
+    @DELETE
+    @Path("{id}")
+    public Response deleteExistingActivity(@PathParam("id") String id)
+    {
+        repository.deleteKey(Key.<Activity> create(id));
+        return Response.noContent().build();
     }
 
 

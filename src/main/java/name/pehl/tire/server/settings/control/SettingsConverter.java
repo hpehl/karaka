@@ -2,6 +2,7 @@ package name.pehl.tire.server.settings.control;
 
 import name.pehl.tire.server.converter.AbstractEntityConverter;
 import name.pehl.tire.server.converter.EntityConverter;
+import name.pehl.tire.shared.model.Settings;
 
 /**
  * @author $LastChangedBy:$
@@ -18,8 +19,8 @@ public class SettingsConverter extends
         assertEntity(entity);
 
         // basic properties
-        name.pehl.tire.shared.model.Settings model = new name.pehl.tire.shared.model.Settings(String.valueOf(entity
-                .getId()));
+        name.pehl.tire.shared.model.Settings model = new name.pehl.tire.shared.model.Settings(websafeKey(
+                name.pehl.tire.server.settings.entity.Settings.class, entity));
         model.setHoursPerMonth(entity.getHoursPerMonth());
         model.setTimeZoneId(entity.getTimeZone().getID());
         name.pehl.tire.server.settings.entity.User entityUser = entity.getUser();
@@ -37,6 +38,13 @@ public class SettingsConverter extends
 
     @Override
     public name.pehl.tire.server.settings.entity.Settings fromModel(name.pehl.tire.shared.model.Settings model)
+    {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+
+    @Override
+    public void merge(Settings model, name.pehl.tire.server.settings.entity.Settings entity)
     {
         throw new UnsupportedOperationException("Not yet implemented");
     }
