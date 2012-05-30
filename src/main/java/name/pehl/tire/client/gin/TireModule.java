@@ -6,6 +6,7 @@ import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.about.AboutView;
+import name.pehl.tire.client.activity.dispatch.DeleteActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
@@ -88,6 +89,7 @@ public class TireModule extends AbstractPresenterModule
         bind(GetMinutesHandler.class);
         bind(GetRunningActivityHandler.class);
         bind(GetYearsHandler.class);
+        bind(DeleteActivityHandler.class);
         bind(SaveActivityHandler.class);
 
         // JsonReader / Writer

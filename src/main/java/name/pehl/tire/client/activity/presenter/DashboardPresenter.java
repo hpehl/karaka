@@ -1,19 +1,12 @@
 package name.pehl.tire.client.activity.presenter;
 
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.tire.shared.model.Status.RUNNING;
-import static name.pehl.tire.shared.model.Status.STOPPED;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.Date;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.dispatch.ActivitiesRequest;
+import name.pehl.tire.client.activity.dispatch.DeleteActivityAction;
+import name.pehl.tire.client.activity.dispatch.DeleteActivityResult;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesAction;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesResult;
 import name.pehl.tire.client.activity.dispatch.SaveActivityAction;
@@ -22,7 +15,6 @@ import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivityAction.Action;
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler;
-import name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction;
 import name.pehl.tire.client.activity.event.ActivityChangedEvent;
 import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent;
 import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent.RunningActivityLoadedHandler;
@@ -52,6 +44,16 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
+import static name.pehl.tire.shared.model.Status.RUNNING;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 /**
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-23 13:52:44 +0100 (Do, 23. Dez 2010) $ $Revision: 192
@@ -77,13 +79,15 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     private static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
-    private final TickCommand tickCommand;
     private final Scheduler scheduler;
     private final DispatchAsync dispatcher;
     private final PlaceManager placeManager;
     private final EditActivityPresenter editActivityPresenter;
     private final SelectYearAndMonthOrWeekPresenter selectMonthPresenter;
     private final SelectYearAndMonthOrWeekPresenter selectWeekPresenter;
+    private final TickCommand tickCommand;
+    private final StartResumeCallback startCallback;
+    private final StartResumeCallback resumeCallback;
 
     /**
      * The currently managed actvity
@@ -117,7 +121,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         this.dispatcher = dispatcher;
         this.placeManager = placeManager;
         this.scheduler = scheduler;
-        this.tickCommand = new TickCommand(eventBus, scheduler);
+        this.tickCommand = new TickCommand(eventBus, scheduler, dispatcher);
+        this.startCallback = new StartResumeCallback(eventBus, true);
+        this.resumeCallback = new StartResumeCallback(eventBus, false);
 
         getView().setUiHandlers(this);
         getEventBus().addHandler(RunningActivityLoadedEvent.getType(), this);
@@ -362,7 +368,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 copy(activity);
                 break;
             case START_STOP:
-                if (activity.getStatus() == RUNNING)
+                if (activity.isRunning())
                 {
                     stop(activity);
                 }
@@ -393,6 +399,8 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     {
         logger.fine("About to copy " + activity);
         ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Copy not yet implemented", true));
+        // TODO Call server side resource which adds one day to the specified
+        // activity
     }
 
 
@@ -400,12 +408,11 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     {
         // TODO Make this method somehow 'transactional'
         logger.info("About to start " + activity);
-        if (activity.getStatus() == STOPPED)
+        if (activity.isStopped())
         {
             // if there's currently another activity running stop it.
             if (currentActivity != null && currentActivity.getStatus() == RUNNING && !activity.equals(currentActivity))
             {
-                // TODO Store this activity on the server
                 logger.info("Stopping currently running " + currentActivity);
                 currentActivity.stop();
                 dispatcher.execute(new SaveActivityAction(currentActivity), new TireCallback<SaveActivityResult>(
@@ -423,46 +430,14 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             {
                 logger.info("Resuming " + activity);
                 activity.resume();
-                dispatcher.execute(new SaveActivityAction(activity),
-                        new TireCallback<SaveActivityResult>(getEventBus())
-                        {
-                            @Override
-                            public void onSuccess(SaveActivityResult result)
-                            {
-                                Activity storedActivity = result.getStoredActivity();
-                                getView().updateActivities(activities);
-                                ActivityChangedEvent.fire(DashboardPresenter.this, storedActivity, RESUMED);
-                                tickCommand.start(storedActivity);
-                                currentActivity = storedActivity;
-                                ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Activity \""
-                                        + currentActivity.getName() + "\" resumed", true));
-                            }
-                        });
+                dispatcher.execute(new SaveActivityAction(activity), resumeCallback);
             }
             else
             {
                 logger.info("Copy " + activity + " and start as a new activity");
                 Activity newActivity = activity.copy();
                 newActivity.start();
-                dispatcher.execute(new SaveActivityAction(activity),
-                        new TireCallback<SaveActivityResult>(getEventBus())
-                        {
-                            @Override
-                            public void onSuccess(SaveActivityResult result)
-                            {
-                                Activity storedActivity = result.getStoredActivity();
-                                if (activities.matchingRange(storedActivity))
-                                {
-                                    activities.addActivity(storedActivity);
-                                    getView().updateActivities(activities);
-                                }
-                                ActivityChangedEvent.fire(DashboardPresenter.this, storedActivity, STARTED);
-                                tickCommand.start(storedActivity);
-                                currentActivity = storedActivity;
-                                ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "New activity \""
-                                        + currentActivity.getName() + "\" started", true));
-                            }
-                        });
+                dispatcher.execute(new SaveActivityAction(newActivity), startCallback);
             }
         }
         else
@@ -476,17 +451,29 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     {
         // TODO Make this method somehow 'transactional'
         logger.info("About to stop " + currentActivity);
-        if (activity.getStatus() == RUNNING)
+        if (activity.isRunning())
         {
             logger.info("Stopping " + currentActivity);
             tickCommand.stop();
             activity.stop();
-            // TODO Store on the server
-            getView().updateActivities(activities);
-            ActivityChangedEvent.fire(this, currentActivity, ChangeAction.STOPPED);
-            currentActivity = activity;
-            ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Activity \"" + currentActivity.getName()
-                    + "\" stopped", true));
+            dispatcher.execute(new SaveActivityAction(activity), new TireCallback<SaveActivityResult>(getEventBus())
+            {
+                @Override
+                public void onSuccess(SaveActivityResult result)
+                {
+                    Activity previousActivity = currentActivity;
+                    currentActivity = result.getStoredActivity();
+                    if (activities.contains(previousActivity))
+                    {
+                        activities.remove(previousActivity);
+                        activities.add(currentActivity);
+                    }
+                    getView().updateActivities(activities);
+                    ActivityChangedEvent.fire(DashboardPresenter.this, currentActivity, STOPPED);
+                    ShowMessageEvent.fire(DashboardPresenter.this,
+                            new Message(INFO, "Activity \"" + currentActivity.getName() + "\" stopped", true));
+                }
+            });
         }
         else
         {
@@ -495,9 +482,61 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     }
 
 
-    private void delete(Activity activity)
+    private void delete(final Activity activity)
     {
         logger.info("About to delete activity " + currentActivity);
-        ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Delete not yet implemented", true));
+        if (activity.isRunning())
+        {
+            tickCommand.stop();
+            activity.stop();
+            ActivityChangedEvent.fire(DashboardPresenter.this, currentActivity, STOPPED);
+        }
+        dispatcher.execute(new DeleteActivityAction(activity), new TireCallback<DeleteActivityResult>(getEventBus())
+        {
+            @Override
+            public void onSuccess(DeleteActivityResult result)
+            {
+                currentActivity = null;
+                activities.remove(activity);
+                getView().updateActivities(activities);
+                ActivityChangedEvent.fire(DashboardPresenter.this, activity, DELETE);
+                ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Activity \"" + activity.getName()
+                        + "\" deleted", true));
+            }
+        });
+    }
+
+    class StartResumeCallback extends TireCallback<SaveActivityResult>
+    {
+        final boolean start;
+
+
+        StartResumeCallback(EventBus eventBus, boolean start)
+        {
+            super(eventBus);
+            this.start = start;
+        }
+
+
+        @Override
+        public void onSuccess(SaveActivityResult result)
+        {
+            Activity previousActivity = currentActivity;
+            currentActivity = result.getStoredActivity();
+            if (activities.contains(previousActivity))
+            {
+                activities.remove(previousActivity);
+                activities.add(currentActivity);
+            }
+            if (activities.matchingRange(currentActivity))
+            {
+                activities.add(currentActivity);
+                getView().updateActivities(activities);
+            }
+            ActivityChangedEvent.fire(DashboardPresenter.this, currentActivity, start ? STARTED : RESUMED);
+            ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Activity \"" + currentActivity.getName()
+                    + "\" " + (start ? "started" : "resumed"), true));
+            tickCommand.start(currentActivity);
+        }
     }
 }

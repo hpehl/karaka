@@ -31,6 +31,7 @@ import com.gwtplatform.mvp.client.View;
 
 import static java.util.logging.Level.WARNING;
 import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
@@ -111,8 +112,15 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         if (action == RESUMED || action == STARTED || action == STOPPED)
         {
             currentActivity = activity;
-            getView().updateStatus(currentActivity);
         }
+        else if (action == DELETE)
+        {
+            if (activity.equals(currentActivity))
+            {
+                currentActivity = null;
+            }
+        }
+        getView().updateStatus(currentActivity);
         scheduler.scheduleDeferred(new GetMinutesCommand());
     }
 

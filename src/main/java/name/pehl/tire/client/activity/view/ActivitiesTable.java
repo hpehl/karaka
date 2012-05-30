@@ -10,7 +10,6 @@ import name.pehl.tire.client.activity.event.ActivityActionEvent.HasActivityActio
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
-import name.pehl.tire.shared.model.Status;
 import name.pehl.tire.shared.model.Tag;
 
 import com.google.common.base.Strings;
@@ -49,7 +48,7 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
             @Override
             public String getStyleNames(Activity row, int rowIndex)
             {
-                if (row.getStatus() == Status.RUNNING)
+                if (row.isRunning())
                 {
                     return atr.cellTableStyle().activeActivity();
                 }

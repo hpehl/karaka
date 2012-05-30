@@ -50,7 +50,7 @@ public class ActivitiesConverter
             case DAY:
                 for (Activity activity : activities)
                 {
-                    result.addActivity(activityConverter.toModel(activity));
+                    result.add(activityConverter.toModel(activity));
                 }
                 break;
             default:
@@ -95,7 +95,7 @@ public class ActivitiesConverter
             SortedSet<Activity> activitiesOfOneDay = activitiesPerDay.get(day);
             for (Activity activity : activitiesOfOneDay)
             {
-                day.addActivity(activityConverter.toModel(activity));
+                day.add(activityConverter.toModel(activity));
             }
             days.add(day);
         }

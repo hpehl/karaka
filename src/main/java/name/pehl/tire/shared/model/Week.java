@@ -93,7 +93,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
     // --------------------------------------------------- methods & properties
 
-    public void addActivity(Activity activity)
+    public void add(Activity activity)
     {
         if (activity != null)
         {
@@ -108,7 +108,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
                 matchinDay = new Day(start.getDay());
                 days.add(matchinDay);
             }
-            matchinDay.addActivity(activity);
+            matchinDay.add(activity);
         }
     }
 
@@ -124,6 +124,36 @@ public class Week implements Comparable<Week>, Iterable<Day>
             }
         }
         return null;
+    }
+
+
+    public boolean contains(Activity activity)
+    {
+        boolean result = false;
+        if (activity != null)
+        {
+            for (Day day : days)
+            {
+                result = day.contains(activity);
+                if (result)
+                {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+
+    public void remove(Activity activity)
+    {
+        if (activity != null)
+        {
+            for (Day day : days)
+            {
+                day.remove(activity);
+            }
+        }
     }
 
 

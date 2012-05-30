@@ -69,6 +69,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     public Activity copy()
     {
         Activity copy = new Activity(this.name);
+        copy.setDescription(description);
         copy.setStart(new Time());
         copy.setBillable(this.billable);
         copy.setStatus(Status.STOPPED);
@@ -194,72 +195,6 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
-    /**
-     * Based on start and end.
-     * 
-     * @return
-     * @see name.pehl.tire.shared.model.BaseModel#hashCode()
-     */
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + (start == null ? 0 : start.hashCode());
-        result = prime * result + (end == null ? 0 : end.hashCode());
-        return result;
-    }
-
-
-    /**
-     * Based on start and end.
-     * 
-     * @param obj
-     * @return
-     * @see name.pehl.tire.shared.model.BaseModel#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        Activity other = (Activity) obj;
-        if (start == null)
-        {
-            if (other.start != null)
-            {
-                return false;
-            }
-        }
-        else if (!start.equals(other.start))
-        {
-            return false;
-        }
-        if (end == null)
-        {
-            if (other.end != null)
-            {
-                return false;
-            }
-        }
-        else if (!end.equals(other.end))
-        {
-            return false;
-        }
-        return true;
-    }
-
-
     @Override
     public String toString()
     {
@@ -336,6 +271,18 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     public Status getStatus()
     {
         return status;
+    }
+
+
+    public boolean isStopped()
+    {
+        return status == STOPPED;
+    }
+
+
+    public boolean isRunning()
+    {
+        return status == RUNNING;
     }
 
 

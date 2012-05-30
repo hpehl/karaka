@@ -104,6 +104,25 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
+    public boolean contains(Activity activity)
+    {
+        if (activity != null)
+        {
+            return activities.contains(activity);
+        }
+        return false;
+    }
+
+
+    public void remove(Activity activity)
+    {
+        if (activity != null)
+        {
+            activities.remove(activity);
+        }
+    }
+
+
     public long getMinutes()
     {
         long minutes = 0;
@@ -127,7 +146,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
-    public void addActivity(Activity activity)
+    public void add(Activity activity)
     {
         activities.add(activity);
     }

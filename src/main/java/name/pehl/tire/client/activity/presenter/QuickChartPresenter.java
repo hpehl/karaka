@@ -14,9 +14,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
 
 /**
  * Presenter for the quick chart showing the activites by week / month.
@@ -67,10 +65,11 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     public void onActivityChanged(ActivityChangedEvent event)
     {
         ChangeAction action = event.getAction();
-        if (action == RESUMED || action == STARTED || action == STOPPED)
+        if (action == DELETE)
         {
-            getView().updateActivities(activities);
+            activities.remove(event.getActivity());
         }
+        getView().updateActivities(activities);
     }
 
 

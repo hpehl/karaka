@@ -88,6 +88,72 @@ public class Activities
 
     // --------------------------------------------------- methods & properties
 
+    public boolean contains(Activity activity)
+    {
+        boolean result = false;
+        if (activity != null)
+        {
+            switch (unit)
+            {
+                case MONTH:
+                    for (Week week : weeks)
+                    {
+                        result = week.contains(activity);
+                        if (result)
+                        {
+                            break;
+                        }
+                    }
+                    break;
+                case WEEK:
+                    for (Day day : days)
+                    {
+                        result = day.contains(activity);
+                        if (result)
+                        {
+                            break;
+                        }
+                    }
+                    break;
+                case DAY:
+                    result = activities.contains(activity);
+                    break;
+                default:
+                    break;
+            }
+        }
+        return result;
+    }
+
+
+    public void remove(Activity activity)
+    {
+        if (activity != null)
+        {
+            switch (unit)
+            {
+                case MONTH:
+                    for (Week week : weeks)
+                    {
+                        week.remove(activity);
+                    }
+                    break;
+                case WEEK:
+                    for (Day day : days)
+                    {
+                        day.remove(activity);
+                    }
+                    break;
+                case DAY:
+                    activities.remove(activity);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+
     public boolean matchingRange(Activity activity)
     {
         boolean match = false;
@@ -394,7 +460,7 @@ public class Activities
     }
 
 
-    public void addActivity(Activity activity)
+    public void add(Activity activity)
     {
         if (activity != null)
         {
@@ -412,7 +478,7 @@ public class Activities
                         matchingWeek = new Week(start.getYear(), start.getMonth());
                         weeks.add(matchingWeek);
                     }
-                    matchingWeek.addActivity(activity);
+                    matchingWeek.add(activity);
                     break;
                 case WEEK:
                     Day matchinDay = null;
@@ -425,7 +491,7 @@ public class Activities
                         matchinDay = new Day(start.getDay());
                         days.add(matchinDay);
                     }
-                    matchinDay.addActivity(activity);
+                    matchinDay.add(activity);
                     break;
                 case DAY:
                     activities.add(activity);

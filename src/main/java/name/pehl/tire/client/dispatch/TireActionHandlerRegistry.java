@@ -1,5 +1,6 @@
 package name.pehl.tire.client.dispatch;
 
+import name.pehl.tire.client.activity.dispatch.DeleteActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
@@ -14,12 +15,14 @@ public class TireActionHandlerRegistry extends DefaultClientActionHandlerRegistr
     @Inject
     public TireActionHandlerRegistry(final GetActivitiesHandler getActivitiesHandler,
             final GetMinutesHandler getMinutesHandler, final GetRunningActivityHandler getRunningActivityHandler,
-            final GetYearsHandler getYearsHandler, SaveActivityHandler saveActivityHandler)
+            final GetYearsHandler getYearsHandler, DeleteActivityHandler deleteActivityHandler,
+            SaveActivityHandler saveActivityHandler)
     {
         register(getActivitiesHandler);
         register(getMinutesHandler);
         register(getRunningActivityHandler);
         register(getYearsHandler);
+        register(deleteActivityHandler);
         register(saveActivityHandler);
     }
 }

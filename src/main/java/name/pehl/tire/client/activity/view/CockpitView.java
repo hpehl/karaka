@@ -2,7 +2,6 @@ package name.pehl.tire.client.activity.view;
 
 import name.pehl.tire.client.activity.presenter.CockpitPresenter;
 import name.pehl.tire.client.activity.presenter.CockpitUiHandlers;
-import name.pehl.tire.client.activity.presenter.CockpitPresenter.MyView;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activity;
@@ -17,8 +16,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-
-import static name.pehl.tire.shared.model.Status.RUNNING;
 
 /**
  * @author $Author: harald.pehl $
@@ -80,22 +77,25 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
     @Override
     public void updateStatus(Activity activity)
     {
-        description.setText(activity.getName());
-        if (activity.getProject() != null)
+        if (activity != null)
         {
-            project.setText(activity.getProject().getName());
-        }
-        else
-        {
-            project.setText("No project selected");
-        }
-        if (activity.getStatus() == RUNNING)
-        {
-            startStop.setResource(resources.recordOn());
-        }
-        else
-        {
-            startStop.setResource(resources.recordOff());
+            description.setText(activity.getName());
+            if (activity.getProject() != null)
+            {
+                project.setText(activity.getProject().getName());
+            }
+            else
+            {
+                project.setText("No project selected");
+            }
+            if (activity.isRunning())
+            {
+                startStop.setResource(resources.recordOn());
+            }
+            else
+            {
+                startStop.setResource(resources.recordOff());
+            }
         }
     }
 
