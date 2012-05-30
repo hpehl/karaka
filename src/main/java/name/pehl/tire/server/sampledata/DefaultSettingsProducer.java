@@ -12,6 +12,7 @@ public class DefaultSettingsProducer
     public Settings defaultSettings()
     {
         Settings settings = new Settings();
+        settings.setFormatHoursAsFloatingPointNumber(false);
         settings.setHoursPerMonth(40);
         User user = new User("foobar", "foo@bar.com");
         user.setFirstname("Foo");

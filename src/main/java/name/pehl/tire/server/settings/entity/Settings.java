@@ -12,11 +12,11 @@ public class Settings extends BaseEntity
 {
     private static final long serialVersionUID = 5319841453603258758L;
 
+    private boolean formatHoursAsFloatingPointNumber;
     private int hoursPerMonth;
     private String timeZoneId;
 
     @Transient private DateTimeZone timeZone;
-
     @Embedded private User user;
 
 
@@ -59,6 +59,18 @@ public class Settings extends BaseEntity
         {
             defaultTimeZone();
         }
+    }
+
+
+    public boolean isFormatHoursAsFloatingPointNumber()
+    {
+        return formatHoursAsFloatingPointNumber;
+    }
+
+
+    public void setFormatHoursAsFloatingPointNumber(boolean formatHoursAsFloatingPointNumber)
+    {
+        this.formatHoursAsFloatingPointNumber = formatHoursAsFloatingPointNumber;
     }
 
 

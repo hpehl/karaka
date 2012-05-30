@@ -16,4 +16,5 @@ public interface Defaults
     DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat("dd.MM.yyyy");
     DateTimeFormat TIME_FORMAT = DateTimeFormat.getFormat("HH:mm");
     NumberFormat NUMBER_FORMAT = NumberFormat.getFormat("#0.00");
+    NumberFormat HOUR_MINUTE_FORMAT = NumberFormat.getFormat("00");
 }

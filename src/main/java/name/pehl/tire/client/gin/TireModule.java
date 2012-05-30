@@ -50,6 +50,7 @@ import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.report.ReportView;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
+import name.pehl.tire.client.settings.GetSettingsHandler;
 import name.pehl.tire.client.settings.SettingsPresenter;
 import name.pehl.tire.client.settings.SettingsReader;
 import name.pehl.tire.client.settings.SettingsView;
@@ -88,6 +89,7 @@ public class TireModule extends AbstractPresenterModule
         bind(GetActivitiesHandler.class);
         bind(GetMinutesHandler.class);
         bind(GetRunningActivityHandler.class);
+        bind(GetSettingsHandler.class);
         bind(GetYearsHandler.class);
         bind(DeleteActivityHandler.class);
         bind(SaveActivityHandler.class);

@@ -6,6 +6,7 @@ import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetYearsHandler;
 import name.pehl.tire.client.activity.dispatch.SaveActivityHandler;
+import name.pehl.tire.client.settings.GetSettingsHandler;
 
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.client.actionhandler.DefaultClientActionHandlerRegistry;
@@ -15,12 +16,13 @@ public class TireActionHandlerRegistry extends DefaultClientActionHandlerRegistr
     @Inject
     public TireActionHandlerRegistry(final GetActivitiesHandler getActivitiesHandler,
             final GetMinutesHandler getMinutesHandler, final GetRunningActivityHandler getRunningActivityHandler,
-            final GetYearsHandler getYearsHandler, DeleteActivityHandler deleteActivityHandler,
-            SaveActivityHandler saveActivityHandler)
+            final GetSettingsHandler getSettingsHandler, final GetYearsHandler getYearsHandler,
+            final DeleteActivityHandler deleteActivityHandler, final SaveActivityHandler saveActivityHandler)
     {
         register(getActivitiesHandler);
         register(getMinutesHandler);
         register(getRunningActivityHandler);
+        register(getSettingsHandler);
         register(getYearsHandler);
         register(deleteActivityHandler);
         register(saveActivityHandler);

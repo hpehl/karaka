@@ -21,6 +21,7 @@ public class SettingsConverter extends
         // basic properties
         name.pehl.tire.shared.model.Settings model = new name.pehl.tire.shared.model.Settings(websafeKey(
                 name.pehl.tire.server.settings.entity.Settings.class, entity));
+        model.setFormatHoursAsFloatingPointNumber(entity.isFormatHoursAsFloatingPointNumber());
         model.setHoursPerMonth(entity.getHoursPerMonth());
         model.setTimeZoneId(entity.getTimeZone().getID());
         name.pehl.tire.server.settings.entity.User entityUser = entity.getUser();

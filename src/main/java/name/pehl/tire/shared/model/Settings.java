@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Settings extends BaseModel
 {
+    boolean formatHoursAsFloatingPointNumber;
     int hoursPerMonth;
     String timeZoneId;
     User user;
@@ -25,6 +26,18 @@ public class Settings extends BaseModel
     public Settings(String id)
     {
         super(id);
+    }
+
+
+    public boolean isFormatHoursAsFloatingPointNumber()
+    {
+        return formatHoursAsFloatingPointNumber;
+    }
+
+
+    public void setFormatHoursAsFloatingPointNumber(boolean formatHoursAsFloatingPointNumber)
+    {
+        this.formatHoursAsFloatingPointNumber = formatHoursAsFloatingPointNumber;
     }
 
 

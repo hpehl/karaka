@@ -200,6 +200,16 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     public void onRunningActivityLoaded(RunningActivityLoadedEvent event)
     {
         currentActivity = event.getActivity();
+        if (activities.contains(currentActivity))
+        {
+            activities.remove(currentActivity);
+            activities.add(currentActivity);
+        }
+        if (activities.matchingRange(currentActivity))
+        {
+            activities.add(currentActivity);
+            getView().updateActivities(activities);
+        }
         tickCommand.start(currentActivity);
     }
 
