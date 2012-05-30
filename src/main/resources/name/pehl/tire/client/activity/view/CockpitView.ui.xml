@@ -38,7 +38,7 @@
             cursor: help;
         }
         
-        .description {
+        .activity {
             padding-top: 20px;
         }
         
@@ -65,7 +65,7 @@
             <div class="{style.weekAndMonth}">
                 <g:InlineLabel ui:field="week" title="Current week">0h</g:InlineLabel>&nbsp;&ndash;&nbsp;<g:InlineLabel ui:field="month" title="Current month">0h</g:InlineLabel>
             </div>
-            <g:Label ui:field="description" addStyleNames="{style.description}">No activity running</g:Label>
+            <g:Label ui:field="activity" addStyleNames="{style.activity}">No activity running</g:Label>
             <g:Label ui:field="project" addStyleNames="{style.project}">No project selected</g:Label>
         </div>
     </g:HTMLPanel>

@@ -34,7 +34,7 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
     @UiField Label today;
     @UiField InlineLabel week;
     @UiField InlineLabel month;
-    @UiField Label description;
+    @UiField Label activity;
     @UiField Label project;
 
 
@@ -77,24 +77,30 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
     @Override
     public void updateStatus(Activity activity)
     {
-        if (activity != null)
+        if (activity == null)
         {
-            description.setText(activity.getName());
+            this.activity.setText("No activity running");
+            this.project.setText("No project selected");
+            this.startStop.setResource(resources.recordOff());
+        }
+        else
+        {
+            this.activity.setText(activity.getName());
             if (activity.getProject() != null)
             {
-                project.setText(activity.getProject().getName());
+                this.project.setText(activity.getProject().getName());
             }
             else
             {
-                project.setText("No project selected");
+                this.project.setText("No project selected");
             }
             if (activity.isRunning())
             {
-                startStop.setResource(resources.recordOn());
+                this.startStop.setResource(resources.recordOn());
             }
             else
             {
-                startStop.setResource(resources.recordOff());
+                this.startStop.setResource(resources.recordOff());
             }
         }
     }
