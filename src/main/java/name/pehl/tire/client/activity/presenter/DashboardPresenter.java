@@ -1,5 +1,12 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.*;
+import static name.pehl.tire.shared.model.Status.RUNNING;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -44,16 +51,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
-import static name.pehl.tire.shared.model.Status.RUNNING;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 /**
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-23 13:52:44 +0100 (Do, 23. Dez 2010) $ $Revision: 192
@@ -93,10 +90,12 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
      * The currently managed actvity
      */
     private Activity currentActivity;
+
     /**
      * The selected date
      */
     private Date activityDate;
+
     /**
      * The currently displayed activities
      */
@@ -168,6 +167,11 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                     public void onSuccess(GetActivitiesResult result)
                     {
                         activities = result.getActivities();
+                        currentActivity = activities.getRunningActivity();
+                        if (currentActivity != null)
+                        {
+                            tickCommand.update(currentActivity);
+                        }
                         getView().updateActivities(activities);
                         ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities);
                     }
@@ -231,8 +235,10 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     public void onTick(TickEvent event)
     {
         Activity activity = event.getActivity();
-        if (activities.getActivities().contains(activity))
+        if (activities.contains(activity))
         {
+            activities.remove(activity);
+            activities.add(activity);
             getView().updateActivities(activities);
         }
     }
@@ -416,6 +422,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     private void start(Activity activity)
     {
+        // TODO Maybe it's better to reload all activities?
         // TODO Make this method somehow 'transactional'
         logger.info("About to start " + activity);
         if (activity.isStopped())

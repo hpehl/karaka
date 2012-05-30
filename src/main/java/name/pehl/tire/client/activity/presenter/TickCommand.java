@@ -56,6 +56,12 @@ public class TickCommand implements HasHandlers, RepeatingCommand
     }
 
 
+    public void update(Activity activity)
+    {
+        this.activity = activity;
+    }
+
+
     @Override
     public boolean execute()
     {
