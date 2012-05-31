@@ -1,5 +1,11 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.*;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -44,15 +50,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
-
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * <p>
@@ -103,6 +100,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     // ---------------------------------------------------------- private stuff
 
+    private static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     private static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
     private final Scheduler scheduler;
@@ -428,9 +426,19 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     private void copy(Activity activity)
     {
         logger.fine("About to copy " + activity);
-        ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Copy not yet implemented", true));
-        // TODO Call server side resource which adds one day to the specified
-        // activity
+        Activity plusOneDay = activity.plus(ONE_DAY_IN_MILLIS);
+        dispatcher.execute(new SaveActivityAction(plusOneDay), new TireCallback<SaveActivityResult>(getEventBus())
+        {
+            @Override
+            public void onSuccess(SaveActivityResult result)
+            {
+                Activity newActivity = result.getStoredActivity();
+                update(newActivity);
+                ActivityChangedEvent.fire(DashboardPresenter.this, newActivity, NEW);
+                ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Activity \"" + newActivity.getName()
+                        + "\" added", true));
+            }
+        });
     }
 
 

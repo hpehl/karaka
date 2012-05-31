@@ -1,5 +1,8 @@
 package name.pehl.tire.shared.model;
 
+import static name.pehl.tire.shared.model.Status.RUNNING;
+import static name.pehl.tire.shared.model.Status.STOPPED;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,9 +11,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 import com.google.common.collect.ComparisonChain;
-
-import static name.pehl.tire.shared.model.Status.RUNNING;
-import static name.pehl.tire.shared.model.Status.STOPPED;
 
 /**
  * @author $LastChangedBy:$
@@ -73,6 +73,38 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
         copy.setStart(new Time());
         copy.setBillable(this.billable);
         copy.setStatus(Status.STOPPED);
+        copy.setProject(this.project);
+        copy.getTags().addAll(this.tags);
+        return copy;
+    }
+
+
+    /**
+     * Creates a copy of this activity and adds the specified amount of
+     * milliseconds to both start and end. No matter what the status of this
+     * activity is, the copied status will be {@link Status#STOPPED}.
+     * 
+     * @param millis
+     *            The amount of milliseconds to add to this start and end.
+     * @return
+     */
+    public Activity plus(long millis)
+    {
+        if (this.start == null)
+        {
+            this.start = new Time();
+        }
+        if (this.end == null)
+        {
+            this.end = new Time();
+        }
+
+        Activity copy = new Activity(this.name);
+        copy.setDescription(description);
+        copy.setStart(new Time(new Date(this.start.getDate().getTime() + millis)));
+        copy.setEnd(new Time(new Date(this.end.getDate().getTime() + millis)));
+        copy.setBillable(this.billable);
+        copy.setStatus(STOPPED);
         copy.setProject(this.project);
         copy.getTags().addAll(this.tags);
         return copy;

@@ -31,6 +31,12 @@ public class Time implements Comparable<Time>
     }
 
 
+    public Time(Date date)
+    {
+        this(date, 0, 0, 0, 0);
+    }
+
+
     public Time(Date date, int year, int month, int week, int day)
     {
         super();
@@ -56,7 +62,7 @@ public class Time implements Comparable<Time>
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((date == null) ? 0 : date.hashCode());
+        result = prime * result + (date == null ? 0 : date.hashCode());
         return result;
     }
 

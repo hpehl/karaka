@@ -1,5 +1,8 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
+
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.dispatch.GetMinutesAction;
@@ -27,13 +30,6 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
-
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
 
 /**
  * <p>
@@ -136,16 +132,23 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     {
         Activity activity = event.getActivity();
         ChangeAction action = event.getAction();
-        if (action == RESUMED || action == STARTED || action == STOPPED)
+        switch (action)
         {
-            currentActivity = activity;
-        }
-        else if (action == DELETE)
-        {
-            if (activity.equals(currentActivity))
-            {
-                currentActivity = null;
-            }
+            case NEW:
+                break;
+            case RESUMED:
+            case STARTED:
+            case STOPPED:
+                currentActivity = activity;
+                break;
+            case DELETE:
+                if (activity.equals(currentActivity))
+                {
+                    currentActivity = null;
+                }
+                break;
+            default:
+                break;
         }
         getView().updateStatus(currentActivity);
         getMinutesCommand.execute();
