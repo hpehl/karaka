@@ -1,16 +1,12 @@
 package name.pehl.tire.client.activity.presenter;
 
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
-import name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction;
 import name.pehl.tire.client.activity.event.ActivityChangedEvent;
 import name.pehl.tire.client.activity.event.ActivityChangedEvent.ActivityChangedHandler;
 import name.pehl.tire.client.activity.event.TickEvent;
 import name.pehl.tire.client.activity.event.TickEvent.TickHandler;
 import name.pehl.tire.shared.model.Activities;
-import name.pehl.tire.shared.model.Activity;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -83,19 +79,6 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     @Override
     public void onActivityChanged(ActivityChangedEvent event)
     {
-        ChangeAction action = event.getAction();
-        Activity activity = event.getActivity();
-        if (action == NEW)
-        {
-            if (activities.matchingRange(activity))
-            {
-                activities.add(activity);
-            }
-        }
-        else if (action == DELETE)
-        {
-            activities.remove(event.getActivity());
-        }
         getView().updateActivities(activities);
     }
 

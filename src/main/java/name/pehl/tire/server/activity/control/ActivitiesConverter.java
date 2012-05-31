@@ -87,7 +87,7 @@ public class ActivitiesConverter
         SortedSetMultimap<Day, Activity> activitiesPerDay = TreeMultimap.create();
         for (Activity activity : activities)
         {
-            Day day = new Day(activity.getStart().getDay());
+            Day day = new Day(activity.getStart().getMonth(), activity.getStart().getDay());
             activitiesPerDay.put(day, activity);
         }
         for (Day day : activitiesPerDay.keySet())

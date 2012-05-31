@@ -105,7 +105,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
             }
             if (matchinDay == null)
             {
-                matchinDay = new Day(start.getDay());
+                matchinDay = new Day(start.getMonth(), start.getDay());
                 days.add(matchinDay);
             }
             matchinDay.add(activity);

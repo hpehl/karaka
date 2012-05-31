@@ -60,7 +60,8 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
      * following differences:
      * <ul>
      * <li>Id is <code>null</code> i.e. the copy is a transient activity
-     * <li>Start date is the current date/time
+     * <li>Start and end is <code>null</code>
+     * <li>pause and minutes are 0.
      * <li>status is {@link Status#STOPPED}
      * </ul>
      * 
@@ -103,6 +104,8 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
         copy.setDescription(description);
         copy.setStart(new Time(new Date(this.start.getDate().getTime() + millis)));
         copy.setEnd(new Time(new Date(this.end.getDate().getTime() + millis)));
+        copy.setPause(this.pause);
+        copy.calculateMinutes();
         copy.setBillable(this.billable);
         copy.setStatus(STOPPED);
         copy.setProject(this.project);

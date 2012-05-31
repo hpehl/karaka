@@ -19,6 +19,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     // ------------------------------------------------------- member variables
 
     int day;
+    int month;
     SortedSet<Activity> activities;
 
 
@@ -26,12 +27,13 @@ public class Day implements Comparable<Day>, Iterable<Activity>
 
     public Day()
     {
-        this(0);
+        this(0, 0);
     }
 
 
-    public Day(int day)
+    public Day(int month, int day)
     {
+        this.month = month;
         this.day = day;
         this.activities = new TreeSet<Activity>();
     }
@@ -39,16 +41,30 @@ public class Day implements Comparable<Day>, Iterable<Activity>
 
     // --------------------------------------------------------- object methods
 
+    /**
+     * Based on month and day
+     * 
+     * @return
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode()
     {
         final int prime = 31;
         int result = 1;
         result = prime * result + day;
+        result = prime * result + month;
         return result;
     }
 
 
+    /**
+     * Based on month and day;
+     * 
+     * @param obj
+     * @return
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -60,12 +76,16 @@ public class Day implements Comparable<Day>, Iterable<Activity>
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof Day))
         {
             return false;
         }
         Day other = (Day) obj;
         if (day != other.day)
+        {
+            return false;
+        }
+        if (month != other.month)
         {
             return false;
         }
@@ -76,7 +96,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     @Override
     public int compareTo(Day that)
     {
-        return ComparisonChain.start().compare(this.day, that.day).result();
+        return ComparisonChain.start().compare(this.monthDay(), that.monthDay()).result();
     }
 
 
@@ -174,6 +194,18 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
+    public int getMonth()
+    {
+        return month;
+    }
+
+
+    public void setMonth(int month)
+    {
+        this.month = month;
+    }
+
+
     public int getDay()
     {
         return day;
@@ -183,5 +215,11 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     public void setDay(int day)
     {
         this.day = day;
+    }
+
+
+    int monthDay()
+    {
+        return month * 100 + day;
     }
 }
