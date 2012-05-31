@@ -5,10 +5,13 @@ import java.util.Map;
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.UiUtils;
+import name.pehl.tire.shared.model.User;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.InlineHyperlink;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -37,6 +40,8 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
     @UiField InlineHyperlink reports;
     @UiField InlineHyperlink help;
     @UiField InlineHyperlink settings;
+    @UiField Anchor logout;
+    @UiField SpanElement username;
     @UiField SimplePanel messagePanel;
 
 
@@ -97,6 +102,16 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
         if (token != null)
         {
             dashboard.setTargetHistoryToken(token);
+        }
+    }
+
+
+    @Override
+    public void updateUser(User user)
+    {
+        if (user != null)
+        {
+            username.setInnerText(user.getUsername());
         }
     }
 }

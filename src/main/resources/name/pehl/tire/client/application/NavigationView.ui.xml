@@ -60,8 +60,8 @@
 				<g:InlineHyperlink ui:field="reports"
 					targetHistoryToken="{nameTokens.reports}">Reports</g:InlineHyperlink>
 				<!-- rtl -->
-				<a class="{style.right} {style.last}" title="Logout" href="#">Logged
-					in as Harald Pehl</a>
+				<g:Anchor ui:field="logout" addStyleNames="{style.right} {style.last}" title="Click to logout" href="#">Logged
+					in as <span ui:field="username">n/a</span></g:Anchor>
 				<g:InlineHyperlink ui:field="settings"
 					addStyleNames="{style.right}" targetHistoryToken="{nameTokens.settings}">Settings</g:InlineHyperlink>
 				<g:InlineHyperlink ui:field="help"

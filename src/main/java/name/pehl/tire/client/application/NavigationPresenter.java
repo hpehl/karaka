@@ -3,7 +3,9 @@ package name.pehl.tire.client.application;
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
+import name.pehl.tire.client.settings.CurrentSettings;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.User;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -28,6 +30,9 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
 
 
         void setDashboardToken(String token);
+
+
+        void updateUser(User user);
     }
 
     /**
@@ -59,6 +64,7 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
     protected void onReveal()
     {
         super.onReveal();
+        getView().updateUser(CurrentSettings.get().settings().getUser());
         setInSlot(SLOT_Message, messagePresenter);
     }
 
