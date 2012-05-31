@@ -61,9 +61,9 @@
             </div>
         </div>
         <div class="{style.infoContainer}">
-            <g:Label ui:field="today" title="Today" addStyleNames="{style.day}">0h</g:Label>
+            <g:Label ui:field="today" title="Today" addStyleNames="{style.day}"></g:Label>
             <div class="{style.weekAndMonth}">
-                <g:InlineLabel ui:field="week" title="Current week">0h</g:InlineLabel>&nbsp;&ndash;&nbsp;<g:InlineLabel ui:field="month" title="Current month">0h</g:InlineLabel>
+                <g:InlineLabel ui:field="week" title="Current week"></g:InlineLabel>&nbsp;&ndash;&nbsp;<g:InlineLabel ui:field="month" title="Current month"></g:InlineLabel>
             </div>
             <g:Label ui:field="activity" addStyleNames="{style.activity}">No activity running</g:Label>
             <g:Label ui:field="project" addStyleNames="{style.project}">No project selected</g:Label>

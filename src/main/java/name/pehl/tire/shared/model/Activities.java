@@ -1,13 +1,13 @@
 package name.pehl.tire.shared.model;
 
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * Weeks and days are sorted ascending, activities are sorted descending.
@@ -150,6 +150,19 @@ public class Activities
                 default:
                     break;
             }
+        }
+    }
+
+
+    public void update(Activity activity)
+    {
+        if (contains(activity))
+        {
+            // Since Activity.hashCode() and Activity.equals() are id based,
+            // removing and re-adding asures that the data of the activity is
+            // uptodate.
+            remove(activity);
+            add(activity);
         }
     }
 

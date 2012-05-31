@@ -2,7 +2,6 @@ package name.pehl.tire.client.activity.presenter;
 
 import java.util.logging.Logger;
 
-import name.pehl.tire.client.activity.dispatch.ActivitiesRequest;
 import name.pehl.tire.client.activity.dispatch.GetMinutesAction;
 import name.pehl.tire.client.activity.dispatch.GetMinutesResult;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityAction;
@@ -37,6 +36,30 @@ import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
 
 /**
+ * <p>
+ * Presenter which displays the most recent activity the duration for today, the
+ * current week and month. The user can start / stop the activity. The activity
+ * does not depend on the activities displayed in the dashboard.
+ * </p>
+ * <h3>Events</h3>
+ * <ol>
+ * <li>IN</li>
+ * <ul>
+ * <li>{@linkplain ActivityChangedEvent}</li>
+ * <li>{@linkplain TickEvent}</li>
+ * </ul>
+ * <li>OUT</li>
+ * <ul>
+ * <li>{@linkplain ShowMessageEvent}</li>
+ * <li>{@linkplain RunningActivityLoadedEvent}</li>
+ * </ul>
+ * </ol>
+ * <h3>Dispatcher actions</h3>
+ * <ul>
+ * <li>{@linkplain GetMinutesAction}
+ * <li>{@linkplain GetRunningActivityAction}
+ * </ul>
+ * 
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-06 17:48:50 +0100 (Mo, 06. Dez 2010) $ $Revision: 175
  *          $
@@ -65,6 +88,8 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     private Activity currentActivity;
     private final Scheduler scheduler;
     private final DispatchAsync dispatcher;
+    private final GetMinutesCommand getMinutesCommand;
+    private final GetRunningActivityCommand getRunningActivityCommand;
 
 
     @Inject
@@ -74,6 +99,8 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         super(eventBus, view);
         this.scheduler = scheduler;
         this.dispatcher = dispatcher;
+        this.getMinutesCommand = new GetMinutesCommand();
+        this.getRunningActivityCommand = new GetRunningActivityCommand();
 
         getView().setUiHandlers(this);
         getEventBus().addHandler(ActivityChangedEvent.getType(), this);
@@ -85,8 +112,8 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     protected void onReveal()
     {
         super.onReveal();
-        scheduler.scheduleDeferred(new GetMinutesCommand());
-        scheduler.scheduleDeferred(new GetRunningActivityCommand());
+        scheduler.scheduleDeferred(getMinutesCommand);
+        scheduler.scheduleDeferred(getRunningActivityCommand);
     }
 
 
@@ -121,14 +148,14 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
             }
         }
         getView().updateStatus(currentActivity);
-        scheduler.scheduleDeferred(new GetMinutesCommand());
+        getMinutesCommand.execute();
     }
 
 
     @Override
     public void onTick(TickEvent event)
     {
-        scheduler.scheduleDeferred(new GetMinutesCommand());
+        getMinutesCommand.execute();
     }
 
     class GetMinutesCommand implements ScheduledCommand
@@ -136,59 +163,63 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         @Override
         public void execute()
         {
-            final ActivitiesRequest currentMonth = new ActivitiesRequest(new UrlBuilder().module("rest")
-                    .path("activities", "currentMonth", "minutes").toUrl());
-            dispatcher.execute(new GetMinutesAction(currentMonth), new TireCallback<GetMinutesResult>(getEventBus())
-            {
-                @Override
-                public void onSuccess(GetMinutesResult result)
-                {
-                    getView().updateMonth(result.getMinutes());
-                }
+            dispatcher.execute(
+                    new GetMinutesAction(new UrlBuilder().module("rest").path("activities", "currentMonth", "minutes")
+                            .toUrl()), new TireCallback<GetMinutesResult>(getEventBus())
+                    {
+                        @Override
+                        public void onSuccess(GetMinutesResult result)
+                        {
+                            getView().updateMonth(result.getMinutes());
+                        }
 
 
-                @Override
-                public void onFailure(Throwable caught)
-                {
-                    logger.warning("Cannot load minutes for " + currentMonth);
-                }
-            });
+                        @Override
+                        public void onFailure(Throwable caught)
+                        {
+                            logger.warning("Cannot load minutes for current month");
+                            getView().updateMonth(0);
+                        }
+                    });
 
-            final ActivitiesRequest currentWeek = new ActivitiesRequest(new UrlBuilder().module("rest")
-                    .path("activities", "currentWeek", "minutes").toUrl());
-            dispatcher.execute(new GetMinutesAction(currentWeek), new TireCallback<GetMinutesResult>(getEventBus())
-            {
-                @Override
-                public void onSuccess(GetMinutesResult result)
-                {
-                    getView().updateWeek(result.getMinutes());
-                }
-
-
-                @Override
-                public void onFailure(Throwable caught)
-                {
-                    logger.warning("Cannot load minutes for " + currentWeek);
-                }
-            });
-
-            final ActivitiesRequest today = new ActivitiesRequest(new UrlBuilder().module("rest")
-                    .path("activities", "today", "minutes").toUrl());
-            dispatcher.execute(new GetMinutesAction(today), new TireCallback<GetMinutesResult>(getEventBus())
-            {
-                @Override
-                public void onSuccess(GetMinutesResult result)
-                {
-                    getView().updateToday(result.getMinutes());
-                }
+            dispatcher.execute(
+                    new GetMinutesAction(new UrlBuilder().module("rest").path("activities", "currentWeek", "minutes")
+                            .toUrl()), new TireCallback<GetMinutesResult>(getEventBus())
+                    {
+                        @Override
+                        public void onSuccess(GetMinutesResult result)
+                        {
+                            getView().updateWeek(result.getMinutes());
+                        }
 
 
-                @Override
-                public void onFailure(Throwable caught)
-                {
-                    logger.warning("Cannot load activities for " + today);
-                }
-            });
+                        @Override
+                        public void onFailure(Throwable caught)
+                        {
+                            logger.warning("Cannot load minutes for current week");
+                            getView().updateWeek(0);
+                        }
+                    });
+
+            dispatcher
+                    .execute(new GetMinutesAction(new UrlBuilder().module("rest")
+                            .path("activities", "today", "minutes").toUrl()), new TireCallback<GetMinutesResult>(
+                            getEventBus())
+                    {
+                        @Override
+                        public void onSuccess(GetMinutesResult result)
+                        {
+                            getView().updateToday(result.getMinutes());
+                        }
+
+
+                        @Override
+                        public void onFailure(Throwable caught)
+                        {
+                            logger.warning("Cannot load activities for today");
+                            getView().updateToday(0);
+                        }
+                    });
         }
     }
 

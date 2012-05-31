@@ -17,15 +17,33 @@ import com.gwtplatform.mvp.client.View;
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
 
 /**
- * Presenter for the quick chart showing the activites by week / month.
  * <p>
- * Ideas
+ * Presenter for the quick chart showing the activites by week / month. The
+ * quickchart syncs with the activities displayed in the dashboard.
  * </p>
+ * <h3>Ideas</h3>
  * <ul>
  * <li>When unit == month and clicking on a week, switch / animate to this week.
  * <li>When unit == week and clicking on a day, switch / animate to this day.
  * <li>Provide links to the parent level
  * <li>Provide previous / next links to go to the previous / next day / week
+ * </ul>
+ * <h3>Events</h3>
+ * <ol>
+ * <li>IN</li>
+ * <ul>
+ * <li>{@linkplain ActivitiesLoadedEvent}</li>
+ * <li>{@linkplain ActivityChangedEvent}</li>
+ * <li>{@linkplain TickEvent}</li>
+ * </ul>
+ * <li>OUT</li>
+ * <ul>
+ * <li>none</li>
+ * </ul>
+ * </ol>
+ * <h3>Dispatcher actions</h3>
+ * <ul>
+ * <li>none
  * </ul>
  * 
  * @author $Author: harald.pehl $

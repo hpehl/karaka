@@ -7,6 +7,6 @@ import com.gwtplatform.dispatch.annotation.Out;
 @GenDispatch
 public class GetMinutes
 {
-    @In(1) ActivitiesRequest activitiesRequest;
+    @In(1) String url;
     @Out(1) long minutes;
 }

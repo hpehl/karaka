@@ -1,7 +1,5 @@
 package name.pehl.tire.client.activity.dispatch;
 
-import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_TEXT;
-import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
 import name.pehl.tire.client.dispatch.TireActionHandler;
 
 import org.fusesource.restygwt.client.Method;
@@ -12,6 +10,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
+
+import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_TEXT;
+import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
 
 /**
  * @author $Author:$
@@ -29,7 +30,7 @@ public class GetMinutesHandler extends TireActionHandler<GetMinutesAction, GetMi
     @Override
     protected Resource resourceFor(GetMinutesAction action)
     {
-        return new Resource(action.getActivitiesRequest().toUrl());
+        return new Resource(action.getUrl());
     }
 
 

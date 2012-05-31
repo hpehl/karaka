@@ -119,7 +119,12 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
 
     public void resume()
     {
+        Date now = new Date();
         if (start == null)
+        {
+            start = new Time();
+        }
+        else if (start.after(now))
         {
             start = new Time();
         }
@@ -127,7 +132,10 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
         {
             end = new Time();
         }
-        Date now = new Date();
+        else if (end.after(now))
+        {
+            end = new Time();
+        }
         pause += diffInMinutes(end.getDate(), now);
         end.setDate(now);
         status = RUNNING;
