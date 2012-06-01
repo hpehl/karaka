@@ -1,8 +1,5 @@
 package name.pehl.tire.shared.model;
 
-import static name.pehl.tire.shared.model.Status.RUNNING;
-import static name.pehl.tire.shared.model.Status.STOPPED;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +8,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 import com.google.common.collect.ComparisonChain;
+
+import static name.pehl.tire.shared.model.Status.RUNNING;
+import static name.pehl.tire.shared.model.Status.STOPPED;
 
 /**
  * @author $LastChangedBy:$
@@ -48,8 +48,9 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     public Activity(String id, String name)
     {
         super(id, name);
-        this.start = new Time();
+        this.status = STOPPED;
         this.tags = new ArrayList<Tag>();
+        ensureStart();
     }
 
 
@@ -60,7 +61,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
      * following differences:
      * <ul>
      * <li>Id is <code>null</code> i.e. the copy is a transient activity
-     * <li>Start and end is <code>null</code>
+     * <li>Start is the current time, and end is <code>null</code>
      * <li>pause and minutes are 0.
      * <li>status is {@link Status#STOPPED}
      * </ul>
@@ -71,7 +72,6 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     {
         Activity copy = new Activity(this.name);
         copy.setDescription(description);
-        copy.setStart(new Time());
         copy.setBillable(this.billable);
         copy.setStatus(Status.STOPPED);
         copy.setProject(this.project);
@@ -91,26 +91,75 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
      */
     public Activity plus(long millis)
     {
-        if (this.start == null)
+        Time startCopy = new Time();
+        if (this.start != null)
         {
-            this.start = new Time();
+            startCopy.setDate(new Date(this.start.getDate().getTime() + millis));
         }
-        if (this.end == null)
+        Time endCopy = new Time();
+        if (this.end != null)
         {
-            this.end = new Time();
+            endCopy.setDate(new Date(this.end.getDate().getTime() + millis));
         }
-
+        else
+        {
+            endCopy.setDate(startCopy.getDate());
+        }
         Activity copy = new Activity(this.name);
         copy.setDescription(description);
-        copy.setStart(new Time(new Date(this.start.getDate().getTime() + millis)));
-        copy.setEnd(new Time(new Date(this.end.getDate().getTime() + millis)));
+        copy.setStart(startCopy);
+        copy.setEnd(endCopy);
         copy.setPause(this.pause);
-        copy.calculateMinutes();
         copy.setBillable(this.billable);
         copy.setStatus(STOPPED);
         copy.setProject(this.project);
         copy.getTags().addAll(this.tags);
         return copy;
+    }
+
+
+    public void start()
+    {
+        ensureStart().setDate(new Date());
+        ensureEnd().setDate(new Date());
+        status = RUNNING;
+    }
+
+
+    public void resume()
+    {
+        ensureStart();
+        ensureEnd();
+        Date now = new Date();
+        if (start.after(now))
+        {
+            start = new Time();
+        }
+        if (end.after(now))
+        {
+            end = new Time();
+        }
+        pause += diffInMinutes(end.getDate(), now);
+        end.setDate(now);
+        status = RUNNING;
+    }
+
+
+    public void stop()
+    {
+        ensureStart();
+        ensureEnd().setDate(new Date());
+        status = STOPPED;
+    }
+
+
+    public void tick()
+    {
+        if (status == RUNNING)
+        {
+            ensureStart();
+            ensureEnd().setDate(new Date());
+        }
     }
 
 
@@ -136,85 +185,12 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
-    public void start()
-    {
-        if (start == null)
-        {
-            start = new Time();
-        }
-        start.setDate(new Date());
-        if (end == null)
-        {
-            end = new Time();
-        }
-        end.setDate(new Date());
-        status = RUNNING;
-    }
-
-
-    public void resume()
-    {
-        Date now = new Date();
-        if (start == null)
-        {
-            start = new Time();
-        }
-        else if (start.after(now))
-        {
-            start = new Time();
-        }
-        if (end == null)
-        {
-            end = new Time();
-        }
-        else if (end.after(now))
-        {
-            end = new Time();
-        }
-        pause += diffInMinutes(end.getDate(), now);
-        end.setDate(now);
-        status = RUNNING;
-        calculateMinutes();
-    }
-
-
-    public void stop()
-    {
-        if (start == null)
-        {
-            start = new Time();
-        }
-        if (end == null)
-        {
-            end = new Time();
-        }
-        end.setDate(new Date());
-        status = STOPPED;
-        calculateMinutes();
-    }
-
-
-    public void tick()
-    {
-        if (status == RUNNING)
-        {
-            if (start == null)
-            {
-                start = new Time();
-            }
-            if (end == null)
-            {
-                end = new Time();
-            }
-            end.setDate(new Date());
-            calculateMinutes();
-        }
-    }
-
-
     private void calculateMinutes()
     {
-        minutes = diffInMinutes(start.getDate(), end.getDate()) - pause;
+        if (start != null && end != null)
+        {
+            minutes = diffInMinutes(start.getDate(), end.getDate()) - pause;
+        }
     }
 
 
@@ -226,6 +202,26 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
             minutes /= 60000;
         }
         return minutes;
+    }
+
+
+    private Time ensureStart()
+    {
+        if (this.start == null)
+        {
+            this.start = new Time();
+        }
+        return this.start;
+    }
+
+
+    private Time ensureEnd()
+    {
+        if (this.end == null)
+        {
+            this.end = new Time();
+        }
+        return this.end;
     }
 
 
@@ -255,9 +251,15 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
+    /**
+     * Calls {@link #calculateMinutes()} after assignement.
+     * 
+     * @param start
+     */
     public void setStart(Time start)
     {
         this.start = start;
+        calculateMinutes();
     }
 
 
@@ -267,9 +269,15 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
+    /**
+     * Calls {@link #calculateMinutes()} after assignement.
+     * 
+     * @param end
+     */
     public void setEnd(Time end)
     {
         this.end = end;
+        calculateMinutes();
     }
 
 
@@ -279,9 +287,15 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
+    /**
+     * Calls {@link #calculateMinutes()} after assignement.
+     * 
+     * @param pause
+     */
     public void setPause(long pause)
     {
         this.pause = pause;
+        calculateMinutes();
     }
 
 
@@ -291,10 +305,16 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
+    /**
+     * Public due to JSON (de)serialization. Please don't call directly. Minutes
+     * are calculated when calling {@link #setStart(Time)},
+     * {@link #setEnd(Time)}, {@link #setPause(long)}, {@link #start()},
+     * {@link #stop()}, {@link #resume()} and {@link #tick()}.
+     * 
+     * @param minutes
+     */
     public void setMinutes(long minutes)
     {
-        // TODO Remove public visibility when test code in
-        // QuickChartPresenter.onReset() is no longer needed
         this.minutes = minutes;
     }
 
