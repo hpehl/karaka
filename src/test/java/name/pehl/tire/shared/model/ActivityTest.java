@@ -1,7 +1,7 @@
 package name.pehl.tire.shared.model;
 
-import java.util.Date;
-
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.junit.Test;
 
 import com.google.common.testing.EqualsTester;
@@ -14,7 +14,6 @@ import static org.junit.Assert.assertTrue;
 
 public class ActivityTest
 {
-    final static long ONE_MINUTES_IN_MILLIS = 60000;
     final static long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
 
 
@@ -87,12 +86,13 @@ public class ActivityTest
     @Test
     public void plus()
     {
-        Time now = new Time();
-        Time plusOneSecond = new Time(new Date(now.getDate().getTime() + ONE_MINUTES_IN_MILLIS));
-        Time plusTwoSecond = new Time(new Date(now.getDate().getTime() + ONE_MINUTES_IN_MILLIS * 2));
+        Time now = now();
+        Time plusOneSecond = minutes(now, 1);
+        Time plusTwoSecond = minutes(now, 2);
+        long oneMinuteInMillis = Duration.standardMinutes(1).getMillis();
 
         Activity blank = blankActivity(now);
-        Activity cut = blank.plus(ONE_MINUTES_IN_MILLIS);
+        Activity cut = blank.plus(oneMinuteInMillis);
         assertNull(cut.getId());
         assertEquals(plusOneSecond, cut.getStart());
         assertNotNull(cut.getEnd());
@@ -104,7 +104,7 @@ public class ActivityTest
         assertBlank(blank); // origin must not be changed
 
         Activity running = runningActivity(now);
-        cut = running.plus(ONE_MINUTES_IN_MILLIS);
+        cut = running.plus(oneMinuteInMillis);
         assertNull(cut.getId());
         assertEquals(plusOneSecond, cut.getStart());
         assertNotNull(cut.getEnd());
@@ -116,12 +116,12 @@ public class ActivityTest
         assertTrue(running.isRunning()); // origin must not be changed
 
         Activity oneMinute = oneMinuteActivity(now);
-        cut = oneMinute.plus(ONE_MINUTES_IN_MILLIS);
+        cut = oneMinute.plus(oneMinuteInMillis);
         assertNull(cut.getId());
         assertEquals(plusOneSecond, cut.getStart());
         assertEquals(plusTwoSecond, cut.getEnd());
-        assertEquals(1, cut.getMinutes());
         assertEquals(0, cut.getPause());
+        assertEquals(1, cut.getMinutes());
         assertTrue(cut.isStopped());
         assertFalse(cut.isRunning());
         assertNull(cut.getProject());
@@ -135,35 +135,84 @@ public class ActivityTest
     {
         Activity blank = blankActivity();
         assertTrue(blank.isToday());
-        assertFalse(blank.plus(ONE_DAY_IN_MILLIS).isToday());
-    }
-
-
-    @Test
-    public void resume()
-    {
-
+        assertFalse(blank.plus(Duration.standardDays(1).getMillis()).isToday());
     }
 
 
     @Test
     public void start()
     {
-
+        Activity cut = blankActivity();
+        cut.start();
+        assertFalse(cut.isStopped());
+        assertTrue(cut.isRunning());
+        assertNotNull(cut.getStart());
+        assertNotNull(cut.getEnd());
+        assertEquals(0, cut.getPause());
     }
 
 
     @Test
     public void stop()
     {
+        Activity cut = blankActivity();
+        cut.stop();
+        assertTrue(cut.isStopped());
+        assertFalse(cut.isRunning());
+        assertNotNull(cut.getStart());
+        assertNotNull(cut.getEnd());
+        assertEquals(0, cut.getPause());
+    }
 
+
+    @Test
+    public void resume()
+    {
+        Activity cut = blankActivity();
+        cut.resume();
+        assertFalse(cut.isStopped());
+        assertTrue(cut.isRunning());
+        assertNotNull(cut.getStart());
+        assertNotNull(cut.getEnd());
+        assertEquals(0, cut.getPause());
+
+        cut = blankActivity();
+        Time plusOneMinute = minutes(now(), 1);
+        cut.setStart(plusOneMinute);
+        cut.setEnd(plusOneMinute);
+        cut.resume();
+        assertFalse(cut.isStopped());
+        assertTrue(cut.isRunning());
+        assertNotNull(cut.getStart());
+        assertNotNull(cut.getEnd());
+        assertEquals(0, cut.getPause());
+
+        // TODO Test resume with pause
     }
 
 
     @Test
     public void tick()
     {
+        Activity cut = blankActivity();
+        cut.start();
+        cut.tick();
+        assertFalse(cut.isStopped());
+        assertTrue(cut.isRunning());
+        assertNotNull(cut.getStart());
+        assertNotNull(cut.getEnd());
+        assertEquals(0, cut.getPause());
 
+        cut = blankActivity();
+        cut.tick();
+        assertBlank(cut);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void startMustNotBeNull()
+    {
+        blankActivity().setStart(null);
     }
 
 
@@ -188,7 +237,7 @@ public class ActivityTest
 
     Activity blankActivity()
     {
-        return blankActivity(new Time());
+        return blankActivity(now());
     }
 
 
@@ -203,7 +252,7 @@ public class ActivityTest
 
     Activity runningActivity()
     {
-        return runningActivity(new Time());
+        return runningActivity(now());
     }
 
 
@@ -218,7 +267,7 @@ public class ActivityTest
 
     Activity oneMinuteActivity()
     {
-        return oneMinuteActivity(new Time());
+        return oneMinuteActivity(now());
     }
 
 
@@ -226,7 +275,31 @@ public class ActivityTest
     {
         Activity oneMinute = new Activity();
         oneMinute.setStart(start);
-        oneMinute.setEnd(new Time(new Date(start.getDate().getTime() + ONE_MINUTES_IN_MILLIS)));
+        oneMinute.setEnd(minutes(start, 1));
         return oneMinute;
+    }
+
+
+    Time now()
+    {
+        DateTime now = new DateTime();
+        return new Time(now.toDate(), now.year().get(), now.monthOfYear().get(), now.weekOfWeekyear().get(), now
+                .dayOfMonth().get());
+    }
+
+
+    Time minutes(Time time, int minutes)
+    {
+        DateTime then = new DateTime(time.getDate().getTime()).plusMinutes(minutes);
+        return new Time(then.toDate(), then.year().get(), then.monthOfYear().get(), then.weekOfWeekyear().get(), then
+                .dayOfMonth().get());
+    }
+
+
+    Time days(Time time, int days)
+    {
+        DateTime then = new DateTime(time.getDate().getTime()).plusDays(days);
+        return new Time(then.toDate(), then.year().get(), then.monthOfYear().get(), then.weekOfWeekyear().get(), then
+                .dayOfMonth().get());
     }
 }

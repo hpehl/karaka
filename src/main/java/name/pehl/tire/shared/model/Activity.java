@@ -13,6 +13,13 @@ import static name.pehl.tire.shared.model.Status.RUNNING;
 import static name.pehl.tire.shared.model.Status.STOPPED;
 
 /**
+ * <h3>Design by contract</h3>
+ * <ul>
+ * <li>Invariants: {@link #getStart()} is never <code>null</code>. Calling
+ * {@link #setStart(Time)} with <code>null</code> will throw an
+ * {@link IllegalArgumentException}.
+ * </ul>
+ * 
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
@@ -91,11 +98,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
      */
     public Activity plus(long millis)
     {
-        Time startCopy = new Time();
-        if (this.start != null)
-        {
-            startCopy.setDate(new Date(this.start.getDate().getTime() + millis));
-        }
+        Time startCopy = new Time(new Date(this.start.getDate().getTime() + millis));
         Time endCopy = new Time();
         if (this.end != null)
         {
@@ -170,24 +173,20 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     @SuppressWarnings("deprecation")
     public boolean isToday()
     {
-        boolean today = false;
-        if (start != null)
+        Date now = new Date();
+        Date startDate = start.getDate();
+        if (now.getYear() == startDate.getYear() && now.getMonth() == startDate.getMonth()
+                && now.getDate() == startDate.getDate())
         {
-            Date now = new Date();
-            Date startDate = start.getDate();
-            if (now.getYear() == startDate.getYear() && now.getMonth() == startDate.getMonth()
-                    && now.getDate() == startDate.getDate())
-            {
-                today = true;
-            }
+            return true;
         }
-        return today;
+        return false;
     }
 
 
     private void calculateMinutes()
     {
-        if (start != null && end != null)
+        if (end != null)
         {
             minutes = diffInMinutes(start.getDate(), end.getDate()) - pause;
         }
@@ -255,9 +254,16 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
      * Calls {@link #calculateMinutes()} after assignement.
      * 
      * @param start
+     *            must not be null
+     * @throws IllegalArgumentException
+     *             if start is <code>null</code>
      */
     public void setStart(Time start)
     {
+        if (start == null)
+        {
+            throw new IllegalArgumentException("Start must not be null!");
+        }
         this.start = start;
         calculateMinutes();
     }
