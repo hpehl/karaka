@@ -1,5 +1,7 @@
 package name.pehl.tire.shared.model;
 
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -9,8 +11,6 @@ import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * Main model class for managing activities. Weeks and days are sorted
@@ -250,13 +250,13 @@ public class Activities
             switch (unit)
             {
                 case MONTH:
-                    match = start.getMonth() == month;
+                    match = start.getYear() == year && start.getMonth() == month;
                     break;
                 case WEEK:
                     match = start.getWeek() == week;
                     break;
                 case DAY:
-                    match = start.getDay() == day;
+                    match = start.getYear() == year && start.getMonth() == month && start.getDay() == day;
                     break;
                 default:
                     break;

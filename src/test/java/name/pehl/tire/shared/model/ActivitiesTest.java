@@ -1,19 +1,14 @@
 package name.pehl.tire.shared.model;
 
+import static name.pehl.tire.shared.model.TimeUnit.*;
+import static org.junit.Assert.*;
+
 import java.util.UUID;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 import org.junit.Test;
-
-import static name.pehl.tire.shared.model.TimeUnit.DAY;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * TODO Replace current date/times with fixed ones? TODO Move common code to
@@ -181,6 +176,14 @@ public class ActivitiesTest
     @Test
     public void activities()
     {
+        // empty
+        Activities cut = newActivities(WEEK);
+        assertEquals(0, cut.activities().size());
+
+        // month, week and day
+        assertEquals(10, month(10).activities().size());
+        assertEquals(10, week(10).activities().size());
+        assertEquals(10, day(10).activities().size());
 
     }
 
@@ -188,14 +191,53 @@ public class ActivitiesTest
     @Test
     public void matchingRange()
     {
+        Activity activity = newActivity();
+        DateTime date = new DateTime().minusYears(1);
+        Activity lastYear = newActivity(date, date.plusHours(1));
 
+        // empty
+        Activities cut = newActivities(WEEK);
+        assertTrue(cut.matchingRange(activity));
+        assertFalse(cut.matchingRange(lastYear));
+
+        // month, week, day
+        internalMatchingRange(month(), activity, lastYear);
+        internalMatchingRange(week(), activity, lastYear);
+        internalMatchingRange(day(), activity, lastYear);
+    }
+
+
+    private void internalMatchingRange(Activities cut, Activity activity, Activity lastYear)
+    {
+        assertTrue(cut.matchingRange(activity));
+        assertFalse(cut.matchingRange(lastYear));
     }
 
 
     @Test
     public void getRunningActivity()
     {
+        // empty
+        Activities cut = newActivities(WEEK);
+        assertNull(cut.getRunningActivity());
 
+        // month, week, day
+        internalGetRunningActivity(month());
+        internalGetRunningActivity(week());
+        internalGetRunningActivity(day());
+    }
+
+
+    private void internalGetRunningActivity(Activities cut)
+    {
+        Activity activity = newActivity();
+        assertNull(cut.getRunningActivity());
+        cut.add(activity);
+        assertNull(cut.getRunningActivity());
+        activity.start();
+        assertEquals(activity, cut.getRunningActivity());
+        activity.stop();
+        assertNull(cut.getRunningActivity());
     }
 
 
