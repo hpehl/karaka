@@ -14,9 +14,6 @@ import name.pehl.tire.shared.model.TimeUnit;
 import name.pehl.tire.shared.model.Week;
 
 import org.joda.time.DateMidnight;
-import org.joda.time.Days;
-import org.joda.time.Months;
-import org.joda.time.Weeks;
 
 import com.google.common.collect.SortedSetMultimap;
 import com.google.common.collect.TreeMultimap;
@@ -26,19 +23,10 @@ public class ActivitiesConverter
     @Inject ActivityConverter activityConverter;
 
 
-    public Activities toModel(DateMidnight requested, DateMidnight now, TimeUnit timeunit, List<Activity> activities)
+    public Activities toModel(DateMidnight date, TimeUnit timeunit, List<Activity> activities)
     {
-        int year = requested.year().get();
-        // Years.yearsBetween(now, requested).getYears() returns wrong
-        // results!
-        int yearDiff = requested.year().get() - now.year().get();
-        int month = requested.monthOfYear().get();
-        int monthDiff = Months.monthsBetween(now, requested).getMonths();
-        int week = requested.weekOfWeekyear().get();
-        int weekDiff = Weeks.weeksBetween(now, requested).getWeeks();
-        int day = requested.dayOfMonth().get();
-        int dayDiff = Days.daysBetween(now, requested).getDays();
-        Activities result = new Activities(year, yearDiff, month, monthDiff, week, weekDiff, day, dayDiff, timeunit);
+        Activities result = new Activities(date.getYear(), date.getMonthOfYear(), date.getWeekOfWeekyear(),
+                date.getDayOfMonth(), timeunit);
         switch (timeunit)
         {
             case MONTH:

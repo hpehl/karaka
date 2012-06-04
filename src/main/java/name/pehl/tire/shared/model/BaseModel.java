@@ -2,11 +2,19 @@ package name.pehl.tire.shared.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 /**
+ * <h3>Design by contract</h3>
+ * <ul>
+ * <li>Invariants: {@link #getId()} is never <code>null</code>. Calling
+ * {@link #setId(String)} with <code>null</code> will throw an
+ * {@link IllegalArgumentException}.
+ * </ul>
+ * 
  * @author $Author: harald.pehl $
  * @version $Date: 2011-05-16 12:54:26 +0200 (Mo, 16. Mai 2011) $ $Revision: 117
  *          $
@@ -14,6 +22,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class BaseModel
 {
+    static final Random random = new Random();
+    static final String TRANSIENT_ID_PREFIX = "__transient__";
+
     // ------------------------------------------------------- member variables
 
     String id;
@@ -24,14 +35,30 @@ public abstract class BaseModel
 
     BaseModel()
     {
-        this(null);
+        this(newId());
     }
 
 
+    /**
+     * @param id
+     *            The id - must not be <code>null</code>
+     * @throws IllegalArgumentException
+     *             if the id is <code>null</code>
+     */
     BaseModel(String id)
     {
+        if (id == null)
+        {
+            throw new IllegalArgumentException("Id must not be null!");
+        }
         this.id = id;
         this.links = new ArrayList<Link>();
+    }
+
+
+    static String newId()
+    {
+        return TRANSIENT_ID_PREFIX + random.nextInt(100) + "__" + System.currentTimeMillis() + "__";
     }
 
 
@@ -112,15 +139,26 @@ public abstract class BaseModel
     }
 
 
+    /**
+     * @param id
+     *            The id - must not be <code>null</code>
+     * @throws IllegalArgumentException
+     *             if the id is <code>null</code>
+     */
     public void setId(String id)
     {
+        if (id == null)
+        {
+            throw new IllegalArgumentException("Id must not be null!");
+        }
+        this.id = id;
         this.id = id;
     }
 
 
     public boolean isTransient()
     {
-        return this.id == null;
+        return this.id.startsWith(TRANSIENT_ID_PREFIX);
     }
 
 

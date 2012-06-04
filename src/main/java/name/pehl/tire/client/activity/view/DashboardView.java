@@ -1,8 +1,5 @@
 package name.pehl.tire.client.activity.view;
 
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.Date;
 
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
@@ -25,6 +22,9 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> implements DashboardPresenter.MyView
 {
@@ -108,28 +108,15 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
         header.setTitle(title.toString());
 
         // Update navigation
-        // TODO Define colors as resources / constants
-        selectMonth.fill("#3d3d3d");
-        selectWeek.fill("#3d3d3d");
-        currentMonth.fill("#3d3d3d");
-        currentWeek.fill("#3d3d3d");
         if (activities.getUnit() == WEEK)
         {
             previous.setTitle("Previous week");
             next.setTitle("Next week");
-            if (activities.getWeekDiff() == 0)
-            {
-                currentWeek.fill("#1b92a8");
-            }
         }
         else if (activities.getUnit() == MONTH)
         {
             previous.setTitle("Previous month");
             next.setTitle("Next month");
-            if (activities.getMonthDiff() == 0)
-            {
-                currentMonth.fill("#1b92a8");
-            }
         }
 
         // Update table

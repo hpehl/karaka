@@ -10,7 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
- * Weeks and days are sorted ascending, activities are sorted descending.
+ * Main model class for managing activities. Weeks and days are sorted
+ * ascending, activities are sorted descending.
  * 
  * @author $Author: harald.pehl $
  * @version $Date: 2011-08-31 22:05:44 +0200 (Mi, 31. Aug 2011) $ $Revision: 177
@@ -23,13 +24,9 @@ public class Activities
     // ------------------------------------------------------- member variables
 
     int year;
-    int yearDiff;
     int month;
-    int monthDiff;
     int week;
-    int weekDiff;
     int day;
-    int dayDiff;
     TimeUnit unit;
     SortedSet<Week> weeks;
     SortedSet<Day> days;
@@ -40,22 +37,17 @@ public class Activities
 
     public Activities()
     {
-        this(0, 0, 0, 0, 0, 0, 0, 0, WEEK);
+        this(0, 0, 0, 0, WEEK);
     }
 
 
-    public Activities(int year, int yearDiff, int month, int monthDiff, int week, int weekDiff, int day, int dayDiff,
-            TimeUnit unit)
+    public Activities(int year, int month, int week, int day, TimeUnit unit)
     {
         super();
         this.year = year;
-        this.yearDiff = yearDiff;
         this.month = month;
-        this.monthDiff = monthDiff;
         this.week = week;
-        this.weekDiff = weekDiff;
         this.day = day;
-        this.dayDiff = dayDiff;
         this.unit = unit;
         this.weeks = new TreeSet<Week>();
         this.days = new TreeSet<Day>();
@@ -86,7 +78,70 @@ public class Activities
     }
 
 
-    // --------------------------------------------------- methods & properties
+    // ------------------------------------------------------- business methods
+
+    public void add(Activity activity)
+    {
+        if (activity != null)
+        {
+            Time start = activity.getStart();
+            switch (unit)
+            {
+                case MONTH:
+                    Week matchingWeek = findWeek(activity);
+                    if (matchingWeek == null)
+                    {
+                        matchingWeek = new Week(start.getYear(), start.getWeek());
+                        weeks.add(matchingWeek);
+                    }
+                    matchingWeek.add(activity);
+                    break;
+                case WEEK:
+                    Day matchinDay = findDay(activity);
+                    if (matchinDay == null)
+                    {
+                        matchinDay = new Day(start.getYear(), start.getMonth(), start.getDay());
+                        days.add(matchinDay);
+                    }
+                    matchinDay.add(activity);
+                    break;
+                case DAY:
+                    activities.add(activity);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+
+    public void remove(Activity activity)
+    {
+        if (activity != null)
+        {
+            switch (unit)
+            {
+                case MONTH:
+                    for (Week week : weeks)
+                    {
+                        week.remove(activity);
+                    }
+                    break;
+                case WEEK:
+                    for (Day day : days)
+                    {
+                        day.remove(activity);
+                    }
+                    break;
+                case DAY:
+                    activities.remove(activity);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
 
     public boolean contains(Activity activity)
     {
@@ -126,34 +181,6 @@ public class Activities
     }
 
 
-    public void remove(Activity activity)
-    {
-        if (activity != null)
-        {
-            switch (unit)
-            {
-                case MONTH:
-                    for (Week week : weeks)
-                    {
-                        week.remove(activity);
-                    }
-                    break;
-                case WEEK:
-                    for (Day day : days)
-                    {
-                        day.remove(activity);
-                    }
-                    break;
-                case DAY:
-                    activities.remove(activity);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-
     public void update(Activity activity)
     {
         if (contains(activity))
@@ -164,6 +191,35 @@ public class Activities
             remove(activity);
             add(activity);
         }
+    }
+
+
+    public SortedSet<Activity> getActivities()
+    {
+        SortedSet<Activity> allActivities = new TreeSet<Activity>();
+        switch (unit)
+        {
+            case MONTH:
+                for (Week week : weeks)
+                {
+                    // TODO Fix order
+                    allActivities.addAll(week.getActivities());
+                }
+                break;
+            case WEEK:
+                for (Day day : days)
+                {
+                    // TODO Fix order
+                    allActivities.addAll(day.getActivities());
+                }
+                break;
+            case DAY:
+                allActivities.addAll(activities);
+                break;
+            default:
+                break;
+        }
+        return allActivities;
     }
 
 
@@ -319,6 +375,8 @@ public class Activities
     }
 
 
+    // ------------------------------------------------------------- properties
+
     public int getYear()
     {
         return year;
@@ -328,18 +386,6 @@ public class Activities
     public void setYear(int year)
     {
         this.year = year;
-    }
-
-
-    public int getYearDiff()
-    {
-        return yearDiff;
-    }
-
-
-    public void setYearDiff(int yearDiff)
-    {
-        this.yearDiff = yearDiff;
     }
 
 
@@ -355,18 +401,6 @@ public class Activities
     }
 
 
-    public int getMonthDiff()
-    {
-        return monthDiff;
-    }
-
-
-    public void setMonthDiff(int monthDiff)
-    {
-        this.monthDiff = monthDiff;
-    }
-
-
     public int getWeek()
     {
         return week;
@@ -379,18 +413,6 @@ public class Activities
     }
 
 
-    public int getWeekDiff()
-    {
-        return weekDiff;
-    }
-
-
-    public void setWeekDiff(int weekDiff)
-    {
-        this.weekDiff = weekDiff;
-    }
-
-
     public int getDay()
     {
         return day;
@@ -400,18 +422,6 @@ public class Activities
     public void setDay(int day)
     {
         this.day = day;
-    }
-
-
-    public int getDayDiff()
-    {
-        return dayDiff;
-    }
-
-
-    public void setDayDiff(int dayDiff)
-    {
-        this.dayDiff = dayDiff;
     }
 
 
@@ -451,83 +461,13 @@ public class Activities
     }
 
 
-    public SortedSet<Activity> getActivities()
-    {
-        SortedSet<Activity> allActivities = new TreeSet<Activity>();
-        switch (unit)
-        {
-            case MONTH:
-                for (Week week : weeks)
-                {
-                    // TODO Fix order
-                    allActivities.addAll(week.getActivities());
-                }
-                break;
-            case WEEK:
-                for (Day day : days)
-                {
-                    // TODO Fix order
-                    allActivities.addAll(day.getActivities());
-                }
-                break;
-            case DAY:
-                allActivities.addAll(activities);
-                break;
-            default:
-                break;
-        }
-        return allActivities;
-    }
-
-
     public void setActivities(SortedSet<Activity> activities)
     {
         this.activities = activities;
     }
 
 
-    public void add(Activity activity)
-    {
-        if (activity != null)
-        {
-            Time start = activity.getStart();
-            switch (unit)
-            {
-                case MONTH:
-                    Week matchingWeek = null;
-                    if (start.getYear() == year && start.getMonth() == month)
-                    {
-                        matchingWeek = findWeek(activity);
-                    }
-                    if (matchingWeek == null)
-                    {
-                        matchingWeek = new Week(start.getYear(), start.getMonth());
-                        weeks.add(matchingWeek);
-                    }
-                    matchingWeek.add(activity);
-                    break;
-                case WEEK:
-                    Day matchinDay = null;
-                    if (start.getYear() == year && start.getWeek() == week)
-                    {
-                        matchinDay = findDay(activity);
-                    }
-                    if (matchinDay == null)
-                    {
-                        matchinDay = new Day(start.getYear(), start.getMonth(), start.getDay());
-                        days.add(matchinDay);
-                    }
-                    matchinDay.add(activity);
-                    break;
-                case DAY:
-                    activities.add(activity);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
+    // --------------------------------------------------------- helper methods
 
     private Week findWeek(Activity activity)
     {

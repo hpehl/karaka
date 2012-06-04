@@ -86,7 +86,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("Week [week=").append(week).append(", days=").append(days).append("]");
+        builder.append("Week [year=" + year + ", week=").append(week).append(", days=").append(days).append("]");
         return builder.toString();
     }
 
@@ -98,11 +98,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
         if (activity != null)
         {
             Time start = activity.getStart();
-            Day matchinDay = null;
-            if (start.getYear() == year && start.getWeek() == week)
-            {
-                matchinDay = findDay(activity);
-            }
+            Day matchinDay = findDay(activity);
             if (matchinDay == null)
             {
                 matchinDay = new Day(start.getYear(), start.getMonth(), start.getDay());

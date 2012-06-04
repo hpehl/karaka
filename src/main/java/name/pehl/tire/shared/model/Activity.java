@@ -42,13 +42,13 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
 
     public Activity()
     {
-        this(null, null);
+        this(newId(), null);
     }
 
 
     public Activity(String name)
     {
-        this(null, name);
+        this(newId(), name);
     }
 
 
@@ -229,7 +229,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     @Override
     public int compareTo(Activity that)
     {
-        return ComparisonChain.start().compare(that.start, this.start).result();
+        return ComparisonChain.start().compare(that.start, this.start).compare(that.id, this.id).result();
     }
 
 

@@ -93,7 +93,7 @@ public class ActivityTest
 
         Activity blank = blankActivity(now);
         Activity cut = blank.plus(oneMinuteInMillis);
-        assertNull(cut.getId());
+        assertTrue(cut.isTransient());
         assertEquals(plusOneSecond, cut.getStart());
         assertNotNull(cut.getEnd());
         assertEquals(0, cut.getPause());
@@ -105,7 +105,7 @@ public class ActivityTest
 
         Activity running = runningActivity(now);
         cut = running.plus(oneMinuteInMillis);
-        assertNull(cut.getId());
+        assertTrue(cut.isTransient());
         assertEquals(plusOneSecond, cut.getStart());
         assertNotNull(cut.getEnd());
         assertEquals(0, cut.getPause());
@@ -117,7 +117,7 @@ public class ActivityTest
 
         Activity oneMinute = oneMinuteActivity(now);
         cut = oneMinute.plus(oneMinuteInMillis);
-        assertNull(cut.getId());
+        assertTrue(cut.isTransient());
         assertEquals(plusOneSecond, cut.getStart());
         assertEquals(plusTwoSecond, cut.getEnd());
         assertEquals(0, cut.getPause());
@@ -220,7 +220,7 @@ public class ActivityTest
 
     void assertBlank(Activity activity)
     {
-        assertNull(activity.getId());
+        assertTrue(activity.isTransient());
         assertNotNull(activity.getStart());
         assertNull(activity.getEnd());
         assertEquals(0, activity.getMinutes());
@@ -233,7 +233,7 @@ public class ActivityTest
     }
 
 
-    // -------------------------------------------------------------- factories
+    // -------------------------------------------------------- factory methods
 
     Activity blankActivity()
     {

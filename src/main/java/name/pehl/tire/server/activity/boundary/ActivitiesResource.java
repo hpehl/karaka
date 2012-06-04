@@ -129,9 +129,8 @@ public class ActivitiesResource
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}")
     public Activities activitiesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
     {
-        DateTimeZone timeZone = settings.getTimeZone();
-        DateMidnight yearMonth = new DateMidnight(year, month, 1, timeZone);
-        return activitiesConverter.toModel(yearMonth, now(timeZone), MONTH, forYearMonth(yearMonth));
+        DateMidnight yearMonth = new DateMidnight(year, month, 1, settings.getTimeZone());
+        return activitiesConverter.toModel(yearMonth, MONTH, forYearMonth(yearMonth));
     }
 
 
@@ -149,7 +148,7 @@ public class ActivitiesResource
     public Activities activitiesForRelativeMonth(@PathParam("month") int month)
     {
         DateMidnight absolute = absoluteMonth(month);
-        return activitiesConverter.toModel(absolute, now(settings.getTimeZone()), MONTH, forYearMonth(absolute));
+        return activitiesConverter.toModel(absolute, MONTH, forYearMonth(absolute));
     }
 
 
@@ -167,7 +166,7 @@ public class ActivitiesResource
     public Activities activitiesForCurrentMonth()
     {
         DateMidnight now = now(settings.getTimeZone());
-        return activitiesConverter.toModel(now, now, MONTH, forYearMonth(now));
+        return activitiesConverter.toModel(now, MONTH, forYearMonth(now));
     }
 
 
@@ -205,10 +204,9 @@ public class ActivitiesResource
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}")
     public Activities activitiesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
     {
-        DateTimeZone timeZone = settings.getTimeZone();
-        MutableDateTime mdt = new MutableDateTime(timeZone).year().set(year).weekOfWeekyear().set(week);
-        DateMidnight yearWeek = new DateMidnight(mdt);
-        return activitiesConverter.toModel(yearWeek, now(timeZone), WEEK, forYearWeek(yearWeek));
+        DateMidnight yearWeek = new MutableDateTime(settings.getTimeZone()).year().set(year).weekOfWeekyear().set(week)
+                .toDateTime().toDateMidnight();
+        return activitiesConverter.toModel(yearWeek, WEEK, forYearWeek(yearWeek));
     }
 
 
@@ -217,8 +215,8 @@ public class ActivitiesResource
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}/minutes")
     public int minutesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
     {
-        MutableDateTime mdt = new MutableDateTime(settings.getTimeZone()).year().set(year).weekOfWeekyear().set(week);
-        DateMidnight yearWeek = new DateMidnight(mdt);
+        DateMidnight yearWeek = new MutableDateTime(settings.getTimeZone()).year().set(year).weekOfWeekyear().set(week)
+                .toDateTime().toDateMidnight();
         return minutes(forYearWeek(yearWeek));
     }
 
@@ -228,7 +226,7 @@ public class ActivitiesResource
     public Activities activitiesForRelativeWeek(@PathParam("week") int week)
     {
         DateMidnight absolute = absoluteWeek(week);
-        return activitiesConverter.toModel(absolute, now(settings.getTimeZone()), WEEK, forYearWeek(absolute));
+        return activitiesConverter.toModel(absolute, WEEK, forYearWeek(absolute));
     }
 
 
@@ -246,7 +244,7 @@ public class ActivitiesResource
     public Activities activitiesForCurrentWeek()
     {
         DateMidnight now = now(settings.getTimeZone());
-        return activitiesConverter.toModel(now, now, WEEK, forYearWeek(now));
+        return activitiesConverter.toModel(now, WEEK, forYearWeek(now));
     }
 
 
@@ -285,9 +283,8 @@ public class ActivitiesResource
     public Activities activitiesForYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
             @PathParam("day") int day)
     {
-        DateTimeZone timeZone = settings.getTimeZone();
-        DateMidnight yearMonthDay = new DateMidnight(year, month, day, timeZone);
-        return activitiesConverter.toModel(yearMonthDay, now(timeZone), DAY, forYearMonthDay(yearMonthDay));
+        DateMidnight yearMonthDay = new DateMidnight(year, month, day, settings.getTimeZone());
+        return activitiesConverter.toModel(yearMonthDay, DAY, forYearMonthDay(yearMonthDay));
     }
 
 
@@ -306,7 +303,7 @@ public class ActivitiesResource
     public Activities activitiesForToday()
     {
         DateMidnight now = now(settings.getTimeZone());
-        return activitiesConverter.toModel(now, now, DAY, forYearMonthDay(now));
+        return activitiesConverter.toModel(now, DAY, forYearMonthDay(now));
     }
 
 
