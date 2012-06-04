@@ -206,8 +206,8 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
     public void update(Activities activities)
     {
         currentActivities = activities;
-        setRowData(0, new ArrayList<Activity>(activities.getActivities()));
-        setRowCount(activities.getActivities().size());
+        setRowData(0, new ArrayList<Activity>(activities.activities()));
+        setRowCount(activities.activities().size());
     }
 
 

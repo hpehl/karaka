@@ -1,5 +1,8 @@
 package name.pehl.tire.shared.model;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -30,11 +33,14 @@ public class Activities
     TimeUnit unit;
     SortedSet<Week> weeks;
     SortedSet<Day> days;
-    SortedSet<Activity> activities;
+    Set<Activity> activities;
 
 
     // ------------------------------------------------------------ constructor
 
+    /**
+     * Required for JSON (de)serialization - please don't call directly.
+     */
     public Activities()
     {
         this(0, 0, 0, 0, WEEK);
@@ -51,7 +57,7 @@ public class Activities
         this.unit = unit;
         this.weeks = new TreeSet<Week>();
         this.days = new TreeSet<Day>();
-        this.activities = new TreeSet<Activity>();
+        this.activities = new HashSet<Activity>();
     }
 
 
@@ -122,15 +128,25 @@ public class Activities
             switch (unit)
             {
                 case MONTH:
-                    for (Week week : weeks)
+                    for (Iterator<Week> iter = weeks.iterator(); iter.hasNext();)
                     {
+                        Week week = iter.next();
                         week.remove(activity);
+                        if (week.isEmpty())
+                        {
+                            iter.remove();
+                        }
                     }
                     break;
                 case WEEK:
-                    for (Day day : days)
+                    for (Iterator<Day> iter = days.iterator(); iter.hasNext();)
                     {
+                        Day day = iter.next();
                         day.remove(activity);
+                        if (day.isEmpty())
+                        {
+                            iter.remove();
+                        }
                     }
                     break;
                 case DAY:
@@ -187,39 +203,41 @@ public class Activities
         {
             // Since Activity.hashCode() and Activity.equals() are id based,
             // removing and re-adding asures that the data of the activity is
-            // uptodate.
+            // up to date.
             remove(activity);
             add(activity);
         }
     }
 
 
-    public SortedSet<Activity> getActivities()
+    /**
+     * @return a sorted set (ascending) of all activities managed by this
+     *         instance.
+     */
+    public SortedSet<Activity> activities()
     {
-        SortedSet<Activity> allActivities = new TreeSet<Activity>();
+        SortedSet<Activity> ordered = new TreeSet<Activity>(new ActivityComparator());
         switch (unit)
         {
             case MONTH:
                 for (Week week : weeks)
                 {
-                    // TODO Fix order
-                    allActivities.addAll(week.getActivities());
+                    ordered.addAll(week.activities());
                 }
                 break;
             case WEEK:
                 for (Day day : days)
                 {
-                    // TODO Fix order
-                    allActivities.addAll(day.getActivities());
+                    ordered.addAll(day.activities());
                 }
                 break;
             case DAY:
-                allActivities.addAll(activities);
+                ordered.addAll(activities);
                 break;
             default:
                 break;
         }
-        return allActivities;
+        return ordered;
     }
 
 
@@ -250,7 +268,7 @@ public class Activities
 
     public Activity getRunningActivity()
     {
-        for (Activity activity : getActivities())
+        for (Activity activity : activities())
         {
             if (activity.isRunning())
             {
@@ -279,9 +297,10 @@ public class Activities
                 }
                 break;
             case DAY:
-                if (!activities.isEmpty())
+                SortedSet<Activity> orderedActivities = activities();
+                if (!orderedActivities.isEmpty())
                 {
-                    start = activities.first().getStart();
+                    start = orderedActivities.first().getStart();
                 }
                 break;
             default:
@@ -309,9 +328,10 @@ public class Activities
                 }
                 break;
             case DAY:
-                if (!activities.isEmpty())
+                SortedSet<Activity> orderedActivities = activities();
+                if (!orderedActivities.isEmpty())
                 {
-                    end = activities.last().getEnd();
+                    end = orderedActivities.last().getEnd();
                 }
                 break;
             default:
@@ -339,7 +359,7 @@ public class Activities
                 }
                 break;
             case DAY:
-                for (Activity activity : activities)
+                for (Activity activity : activities())
                 {
                     minutes += activity.getMinutes();
                 }
@@ -461,7 +481,25 @@ public class Activities
     }
 
 
-    public void setActivities(SortedSet<Activity> activities)
+    /**
+     * Required for JSON (de)serialization - please don't call directly. Use
+     * {@link #activities()} instead.
+     * 
+     * @return
+     */
+    public Set<Activity> getActivities()
+    {
+        return activities;
+    }
+
+
+    /**
+     * Required for JSON (de)serialization - please don't call directly. Use
+     * {@link #add(Activity)} instead.
+     * 
+     * @param activities
+     */
+    public void setActivities(Set<Activity> activities)
     {
         this.activities = activities;
     }

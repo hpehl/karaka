@@ -25,6 +25,9 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
     // ------------------------------------------------------------ constructor
 
+    /**
+     * Required for JSON (de)serialization - please don't call directly.
+     */
     public Week()
     {
         this(0, 0);
@@ -41,16 +44,26 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
     // --------------------------------------------------------- object methods
 
+    /**
+     * Based on {@link #weight()}
+     * 
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode()
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + week;
+        result = prime * result + weight();
         return result;
     }
 
 
+    /**
+     * Based on {@link #weight()}
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -67,7 +80,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
             return false;
         }
         Week other = (Week) obj;
-        if (week != other.week)
+        if (weight() != other.weight())
         {
             return false;
         }
@@ -75,6 +88,11 @@ public class Week implements Comparable<Week>, Iterable<Day>
     }
 
 
+    /**
+     * Based on {@link #weight()}
+     * 
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
     @Override
     public int compareTo(Week that)
     {
@@ -86,12 +104,12 @@ public class Week implements Comparable<Week>, Iterable<Day>
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("Week [year=" + year + ", week=").append(week).append(", days=").append(days).append("]");
+        builder.append("Week [cw").append(week).append("/").append(year).append(", days=").append(days).append("]");
         return builder.toString();
     }
 
 
-    // --------------------------------------------------- methods & properties
+    // ------------------------------------------------------- business methods
 
     public void add(Activity activity)
     {
@@ -109,17 +127,20 @@ public class Week implements Comparable<Week>, Iterable<Day>
     }
 
 
-    private Day findDay(Activity activity)
+    public void remove(Activity activity)
     {
-        Time start = activity.getStart();
-        for (Day day : days)
+        if (activity != null)
         {
-            if (day.getDay() == start.getDay())
+            for (Iterator<Day> iter = days.iterator(); iter.hasNext();)
             {
-                return day;
+                Day day = iter.next();
+                day.remove(activity);
+                if (day.isEmpty())
+                {
+                    iter.remove();
+                }
             }
         }
-        return null;
     }
 
 
@@ -141,26 +162,31 @@ public class Week implements Comparable<Week>, Iterable<Day>
     }
 
 
-    public void remove(Activity activity)
+    @Override
+    public Iterator<Day> iterator()
     {
-        if (activity != null)
-        {
-            for (Day day : days)
-            {
-                day.remove(activity);
-            }
-        }
+        return days.iterator();
     }
 
 
-    public SortedSet<Activity> getActivities()
+    public boolean isEmpty()
     {
-        SortedSet<Activity> activities = new TreeSet<Activity>();
+        return days.isEmpty();
+    }
+
+
+    /**
+     * @return a sorted set (ascending) of all activities managed by this
+     *         instance.
+     */
+    public SortedSet<Activity> activities()
+    {
+        SortedSet<Activity> ordered = new TreeSet<Activity>(new ActivityComparator());
         for (Day day : days)
         {
-            activities.addAll(day.getActivities());
+            ordered.addAll(day.getActivities());
         }
-        return activities;
+        return ordered;
     }
 
 
@@ -197,34 +223,29 @@ public class Week implements Comparable<Week>, Iterable<Day>
     }
 
 
-    public SortedSet<Day> getDays()
-    {
-        return days;
-    }
-
-
     public boolean add(Day day)
     {
         return days.add(day);
     }
 
 
+    // ------------------------------------------------------------- properties
+
+    public SortedSet<Day> getDays()
+    {
+        return days;
+    }
+
+
+    /**
+     * Required for JSON (de)serialization - please don't call directly. Use
+     * {@link #add(Day)} and/or {@link #add(Activity)} instead.
+     * 
+     * @param days
+     */
     public void setDays(SortedSet<Day> days)
     {
         this.days = days;
-    }
-
-
-    @Override
-    public Iterator<Day> iterator()
-    {
-        return days.iterator();
-    }
-
-
-    public boolean isEmpty()
-    {
-        return days.isEmpty();
     }
 
 
@@ -249,5 +270,27 @@ public class Week implements Comparable<Week>, Iterable<Day>
     public void setWeek(int week)
     {
         this.week = week;
+    }
+
+
+    // --------------------------------------------------------- helper methods
+
+    Day findDay(Activity activity)
+    {
+        Time start = activity.getStart();
+        for (Day day : days)
+        {
+            if (day.getDay() == start.getDay())
+            {
+                return day;
+            }
+        }
+        return null;
+    }
+
+
+    int weight()
+    {
+        return year * 100 + week;
     }
 }

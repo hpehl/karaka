@@ -1,6 +1,8 @@
 package name.pehl.tire.shared.model;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -21,11 +23,14 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     int year;
     int month;
     int day;
-    SortedSet<Activity> activities;
+    Set<Activity> activities;
 
 
     // ------------------------------------------------------------ constructor
 
+    /**
+     * Required for JSON (de)serialization - please don't call directly.
+     */
     public Day()
     {
         this(0, 0, 0);
@@ -37,14 +42,14 @@ public class Day implements Comparable<Day>, Iterable<Activity>
         this.year = year;
         this.month = month;
         this.day = day;
-        this.activities = new TreeSet<Activity>();
+        this.activities = new HashSet<Activity>();
     }
 
 
     // --------------------------------------------------------- object methods
 
     /**
-     * Based on year, month and day
+     * Based on {@link #weight()}
      * 
      * @see java.lang.Object#hashCode()
      */
@@ -53,15 +58,13 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + day;
-        result = prime * result + month;
-        result = prime * result + year;
+        result = prime * weight();
         return result;
     }
 
 
     /**
-     * Based on year, month and day
+     * Based on {@link #weight()}
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -81,15 +84,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
             return false;
         }
         Day other = (Day) obj;
-        if (day != other.day)
-        {
-            return false;
-        }
-        if (month != other.month)
-        {
-            return false;
-        }
-        if (year != other.year)
+        if (weight() != other.weight())
         {
             return false;
         }
@@ -97,6 +92,11 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
+    /**
+     * Based on {@link #weight()}
+     * 
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
     @Override
     public int compareTo(Day that)
     {
@@ -108,23 +108,29 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.append("Day [day=").append(day).append(", activities=").append(activities).append("]");
+        builder.append("Day [").append(day).append(".").append(month).append(".").append(year).append(", activities=")
+                .append(activities).append("]");
         return builder.toString();
     }
 
 
-    // --------------------------------------------------- methods & properties
+    // ------------------------------------------------------- business methods
 
-    @Override
-    public Iterator<Activity> iterator()
+    public void add(Activity activity)
     {
-        return activities.iterator();
+        if (activity != null)
+        {
+            activities.add(activity);
+        }
     }
 
 
-    public boolean isEmpty()
+    public void remove(Activity activity)
     {
-        return activities.isEmpty();
+        if (activity != null)
+        {
+            activities.remove(activity);
+        }
     }
 
 
@@ -138,12 +144,52 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
-    public void remove(Activity activity)
+    @Override
+    public Iterator<Activity> iterator()
     {
-        if (activity != null)
+        return activities().iterator();
+    }
+
+
+    public boolean isEmpty()
+    {
+        return activities.isEmpty();
+    }
+
+
+    /**
+     * @return a sorted set (ascending) of all activities managed by this
+     *         instance.
+     */
+    public SortedSet<Activity> activities()
+    {
+        TreeSet<Activity> ordered = new TreeSet<Activity>(new ActivityComparator());
+        ordered.addAll(activities);
+        return ordered;
+    }
+
+
+    public Time getStart()
+    {
+        Time start = null;
+        if (!activities.isEmpty())
         {
-            activities.remove(activity);
+            // Activities are sorted descending!
+            return activities().last().getStart();
         }
+        return start;
+    }
+
+
+    public Time getEnd()
+    {
+        Time end = null;
+        if (!activities.isEmpty())
+        {
+            // Activities are sorted descending!
+            return activities().first().getEnd();
+        }
+        return end;
     }
 
 
@@ -158,45 +204,29 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
-    public SortedSet<Activity> getActivities()
+    // ------------------------------------------------------------- properties
+
+    /**
+     * Required for JSON (de)serialization - please don't call directly. Use
+     * {@link #activities()} instead.
+     * 
+     * @return
+     */
+    public Set<Activity> getActivities()
     {
         return activities;
     }
 
 
-    public void setActivities(SortedSet<Activity> activities)
+    /**
+     * Required for JSON (de)serialization - please don't call directly. Use
+     * {@link #add(Activity)} instead.
+     * 
+     * @param activities
+     */
+    public void setActivities(Set<Activity> activities)
     {
         this.activities = activities;
-    }
-
-
-    public void add(Activity activity)
-    {
-        activities.add(activity);
-    }
-
-
-    public Time getStart()
-    {
-        Time start = null;
-        if (!activities.isEmpty())
-        {
-            // Activities are sorted descending!
-            return activities.last().getStart();
-        }
-        return start;
-    }
-
-
-    public Time getEnd()
-    {
-        Time end = null;
-        if (!activities.isEmpty())
-        {
-            // Activities are sorted descending!
-            return activities.first().getEnd();
-        }
-        return end;
     }
 
 
@@ -235,6 +265,8 @@ public class Day implements Comparable<Day>, Iterable<Activity>
         this.day = day;
     }
 
+
+    // --------------------------------------------------------- helper methods
 
     int weight()
     {

@@ -61,7 +61,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
-    // --------------------------------------------------------- public methods
+    // ------------------------------------------------------- business methods
 
     /**
      * Creates a new activity which is a copy of this activitiy with the
@@ -312,7 +312,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
 
 
     /**
-     * Public due to JSON (de)serialization. Please don't call directly. Minutes
+     * Required for JSON (de)serialization - please don't call directly. Minutes
      * are calculated when calling {@link #setStart(Time)},
      * {@link #setEnd(Time)}, {@link #setPause(long)}, {@link #start()},
      * {@link #stop()}, {@link #resume()} and {@link #tick()}.

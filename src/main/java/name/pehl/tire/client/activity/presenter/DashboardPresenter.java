@@ -469,7 +469,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             }
             else
             {
-                Activity latestActivity = activities != null ? activities.getActivities().first() : null;
+                Activity latestActivity = activities != null ? activities.activities().first() : null;
                 if (activity.isToday() && activity.equals(latestActivity))
                 {
                     activity.resume();

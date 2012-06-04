@@ -12,6 +12,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * TODO Replace current date/times with fixed ones?
+ * 
+ * @author $Author$
+ * @version $Revision$
+ */
 public class ActivityTest
 {
     final static long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
