@@ -226,12 +226,12 @@
 			<artifactId>guava</artifactId>
 			<version>${guava.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava-testlib</artifactId>
-            <version>${guava.version}</version>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava-testlib</artifactId>
+			<version>${guava.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava-gwt</artifactId>
@@ -494,17 +494,17 @@ encoding/<project>=${project.build.sourceEncoding}
 							<i18nConstantsBundles>
 								<i18nConstantsBundle>
 									name.pehl.tire.client.resources.Constants
-                        </i18nConstantsBundle>
+								</i18nConstantsBundle>
 							</i18nConstantsBundles>
 							<i18nConstantsWithLookupBundles>
 								<i18nConstantsWithLookupBundle>
 									name.pehl.tire.client.resources.Enums
-                        </i18nConstantsWithLookupBundle>
+								</i18nConstantsWithLookupBundle>
 							</i18nConstantsWithLookupBundles>
 							<i18nMessagesBundles>
 								<i18nMessagesBundles>
 									name.pehl.tire.client.resources.Messages
-                        </i18nMessagesBundles>
+								</i18nMessagesBundles>
 							</i18nMessagesBundles>
 						</configuration>
 						<executions>
