@@ -109,13 +109,21 @@ public class Time implements Comparable<Time>
 
     public boolean before(Date when)
     {
-        return date != null && date.before(when);
+        if (date == null || when == null)
+        {
+            return false;
+        }
+        return date.before(when);
     }
 
 
     public boolean after(Date when)
     {
-        return date != null && date.after(when);
+        if (date == null || when == null)
+        {
+            return false;
+        }
+        return date.after(when);
     }
 
 

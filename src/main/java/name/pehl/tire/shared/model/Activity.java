@@ -7,8 +7,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
-import com.google.common.collect.ComparisonChain;
-
 import static name.pehl.tire.shared.model.Status.RUNNING;
 import static name.pehl.tire.shared.model.Status.STOPPED;
 
@@ -24,7 +22,7 @@ import static name.pehl.tire.shared.model.Status.STOPPED;
  * @version $LastChangedRevision:$
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Activity extends DescriptiveModel implements Comparable<Activity>
+public class Activity extends DescriptiveModel
 {
     // ------------------------------------------------------- member variables
 
@@ -225,13 +223,6 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
 
 
     // --------------------------------------------------------- object methods
-
-    @Override
-    public int compareTo(Activity that)
-    {
-        return ComparisonChain.start().compare(that.start, this.start).compare(that.id, this.id).result();
-    }
-
 
     @Override
     public String toString()

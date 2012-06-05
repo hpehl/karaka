@@ -1,14 +1,16 @@
 package name.pehl.tire.shared.model;
 
-import static name.pehl.tire.shared.model.TimeUnit.*;
-import static org.junit.Assert.*;
-
-import java.util.UUID;
-
-import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
-import org.joda.time.MutableDateTime;
+import org.junit.Before;
 import org.junit.Test;
+
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * TODO Replace current date/times with fixed ones? TODO Move common code to
@@ -19,29 +21,41 @@ import org.junit.Test;
  */
 public class ActivitiesTest
 {
+    // ------------------------------------------------------------------ setup
+
+    TestData td;
+
+
+    @Before
+    public void setUp()
+    {
+        td = new TestData();
+    }
+
+
     // ------------------------------------------------------------------ tests
 
     @Test
     public void add()
     {
-        Activity activity = newActivity();
-        Activity anotherActivity = newActivity();
+        Activity activity = td.newActivity();
+        Activity anotherActivity = td.newActivity();
 
         // null
-        Activities cut = newActivities(WEEK);
+        Activities cut = td.newActivities(WEEK);
         cut.add(null);
         assertEquals(0, cut.activities().size());
         assertFalse(cut.contains(activity));
         assertFalse(cut.contains(anotherActivity));
 
         // month, week and day
-        internatAdd(month(), activity, anotherActivity);
-        internatAdd(week(), activity, anotherActivity);
-        internatAdd(day(), activity, anotherActivity);
+        internatAdd(td.month(), activity, anotherActivity);
+        internatAdd(td.week(), activity, anotherActivity);
+        internatAdd(td.day(), activity, anotherActivity);
     }
 
 
-    private void internatAdd(Activities cut, Activity activity, Activity anotherActivity)
+    void internatAdd(Activities cut, Activity activity, Activity anotherActivity)
     {
         cut.add(activity);
         assertEquals(1, cut.activities().size());
@@ -63,24 +77,24 @@ public class ActivitiesTest
     @Test
     public void remove()
     {
-        Activity activity = newActivity();
-        Activity anotherActivity = newActivity();
+        Activity activity = td.newActivity();
+        Activity anotherActivity = td.newActivity();
 
         // null
-        Activities cut = newActivities(WEEK);
+        Activities cut = td.newActivities(WEEK);
         cut.remove(null);
         assertEquals(0, cut.activities().size());
         assertFalse(cut.contains(activity));
         assertFalse(cut.contains(anotherActivity));
 
         // month, week and day
-        internalRemove(month(), activity, anotherActivity);
-        internalRemove(week(), activity, anotherActivity);
-        internalRemove(day(), activity, anotherActivity);
+        internalRemove(td.month(), activity, anotherActivity);
+        internalRemove(td.week(), activity, anotherActivity);
+        internalRemove(td.day(), activity, anotherActivity);
     }
 
 
-    private void internalRemove(Activities cut, Activity activity, Activity anotherActivity)
+    void internalRemove(Activities cut, Activity activity, Activity anotherActivity)
     {
         assertEquals(0, cut.activities().size());
         assertFalse(cut.contains(activity));
@@ -104,21 +118,21 @@ public class ActivitiesTest
     @Test
     public void contains()
     {
-        Activity activity = newActivity();
-        Activity anotherActivity = newActivity();
+        Activity activity = td.newActivity();
+        Activity anotherActivity = td.newActivity();
 
         // null
-        Activities cut = newActivities(WEEK);
+        Activities cut = td.newActivities(WEEK);
         assertFalse(cut.contains(null));
 
         // month, week and day
-        internalContains(month(), activity, anotherActivity);
-        internalContains(week(), activity, anotherActivity);
-        internalContains(day(), activity, anotherActivity);
+        internalContains(td.month(), activity, anotherActivity);
+        internalContains(td.week(), activity, anotherActivity);
+        internalContains(td.day(), activity, anotherActivity);
     }
 
 
-    private void internalContains(Activities cut, Activity activity, Activity anotherActivity)
+    void internalContains(Activities cut, Activity activity, Activity anotherActivity)
     {
         assertFalse(cut.contains(activity));
         assertFalse(cut.contains(anotherActivity));
@@ -135,7 +149,7 @@ public class ActivitiesTest
     public void update()
     {
         DateTime now = new DateTime();
-        Activity activity = newActivity(now, now.plusHours(1));
+        Activity activity = td.newActivity(now, now.plusHours(1));
         activity.setName("A");
 
         Activity sameIdOtherData = new Activity(activity.getId(), activity.getName());
@@ -146,20 +160,20 @@ public class ActivitiesTest
         sameIdOtherData.setEnd(newEnd);
 
         // null
-        Activities cut = newActivities(WEEK);
+        Activities cut = td.newActivities(WEEK);
         cut.update(null);
         assertEquals(0, cut.activities().size());
         assertFalse(cut.contains(activity));
         assertFalse(cut.contains(sameIdOtherData));
 
         // month, week and day
-        internalUpdate(month(), activity, sameIdOtherData, newEnd);
-        internalUpdate(week(), activity, sameIdOtherData, newEnd);
-        internalUpdate(day(), activity, sameIdOtherData, newEnd);
+        internalUpdate(td.month(), activity, sameIdOtherData, newEnd);
+        internalUpdate(td.week(), activity, sameIdOtherData, newEnd);
+        internalUpdate(td.day(), activity, sameIdOtherData, newEnd);
     }
 
 
-    private void internalUpdate(Activities cut, Activity activity, Activity sameIdOtherData, Time newEnd)
+    void internalUpdate(Activities cut, Activity activity, Activity sameIdOtherData, Time newEnd)
     {
         cut.add(activity);
         assertEquals(1, cut.activities().size());
@@ -177,13 +191,13 @@ public class ActivitiesTest
     public void activities()
     {
         // empty
-        Activities cut = newActivities(WEEK);
+        Activities cut = td.newActivities(WEEK);
         assertEquals(0, cut.activities().size());
 
         // month, week and day
-        assertEquals(10, month(10).activities().size());
-        assertEquals(10, week(10).activities().size());
-        assertEquals(10, day(10).activities().size());
+        assertEquals(10, td.month(10).activities().size());
+        assertEquals(10, td.week(10).activities().size());
+        assertEquals(10, td.day(10).activities().size());
 
     }
 
@@ -191,23 +205,23 @@ public class ActivitiesTest
     @Test
     public void matchingRange()
     {
-        Activity activity = newActivity();
+        Activity activity = td.newActivity();
         DateTime date = new DateTime().minusYears(1);
-        Activity lastYear = newActivity(date, date.plusHours(1));
+        Activity lastYear = td.newActivity(date, date.plusHours(1));
 
         // empty
-        Activities cut = newActivities(WEEK);
+        Activities cut = td.newActivities(WEEK);
         assertTrue(cut.matchingRange(activity));
         assertFalse(cut.matchingRange(lastYear));
 
         // month, week, day
-        internalMatchingRange(month(), activity, lastYear);
-        internalMatchingRange(week(), activity, lastYear);
-        internalMatchingRange(day(), activity, lastYear);
+        internalMatchingRange(td.month(), activity, lastYear);
+        internalMatchingRange(td.week(), activity, lastYear);
+        internalMatchingRange(td.day(), activity, lastYear);
     }
 
 
-    private void internalMatchingRange(Activities cut, Activity activity, Activity lastYear)
+    void internalMatchingRange(Activities cut, Activity activity, Activity lastYear)
     {
         assertTrue(cut.matchingRange(activity));
         assertFalse(cut.matchingRange(lastYear));
@@ -218,19 +232,19 @@ public class ActivitiesTest
     public void getRunningActivity()
     {
         // empty
-        Activities cut = newActivities(WEEK);
+        Activities cut = td.newActivities(WEEK);
         assertNull(cut.getRunningActivity());
 
         // month, week, day
-        internalGetRunningActivity(month());
-        internalGetRunningActivity(week());
-        internalGetRunningActivity(day());
+        internalGetRunningActivity(td.month());
+        internalGetRunningActivity(td.week());
+        internalGetRunningActivity(td.day());
     }
 
 
-    private void internalGetRunningActivity(Activities cut)
+    void internalGetRunningActivity(Activities cut)
     {
-        Activity activity = newActivity();
+        Activity activity = td.newActivity();
         assertNull(cut.getRunningActivity());
         cut.add(activity);
         assertNull(cut.getRunningActivity());
@@ -242,16 +256,47 @@ public class ActivitiesTest
 
 
     @Test
-    public void getStart()
+    public void getStartEnd()
     {
 
+        // empty
+        Activities cut = td.newActivities(WEEK);
+        assertNull(cut.getStart());
+        assertNull(cut.getEnd());
+
+        // month
+        DateTime startDate = new DateTime().dayOfMonth().withMinimumValue();
+        DateTime endDate = new DateTime().dayOfMonth().withMaximumValue();
+        Activity start = td.newActivity(startDate, startDate.plusHours(1));
+        Activity end = td.newActivity(endDate, endDate.plusHours(1));
+        internalGetStartEnd(td.month(), start, end);
+
+        // week
+        startDate = new DateTime().dayOfWeek().withMinimumValue();
+        endDate = new DateTime().dayOfWeek().withMaximumValue();
+        start = td.newActivity(startDate, startDate.plusHours(1));
+        end = td.newActivity(endDate, endDate.plusHours(1));
+        internalGetStartEnd(td.week(), start, end);
+
+        // day
+        startDate = new DateTime().hourOfDay().withMinimumValue();
+        endDate = new DateTime().hourOfDay().withMaximumValue().minusHours(1);
+        start = td.newActivity(startDate, startDate.plusHours(1));
+        end = td.newActivity(endDate, endDate.plusHours(1));
+        internalGetStartEnd(td.day(), start, end);
     }
 
 
-    @Test
-    public void getEnd()
+    void internalGetStartEnd(Activities cut, Activity start, Activity end)
     {
-
+        assertNull(cut.getStart());
+        assertNull(cut.getEnd());
+        cut.add(start);
+        assertEquals(start.getStart(), cut.getStart());
+        assertEquals(start.getEnd(), cut.getEnd());
+        cut.add(end);
+        assertEquals(start.getStart(), cut.getStart());
+        assertEquals(end.getEnd(), cut.getEnd());
     }
 
 
@@ -259,13 +304,13 @@ public class ActivitiesTest
     public void getMinutes()
     {
         // empty
-        Activities cut = newActivities(WEEK);
+        Activities cut = td.newActivities(WEEK);
         assertEquals(0, cut.getMinutes());
 
         // month, week and day
-        assertEquals(10 * 60, month(10).getMinutes());
-        assertEquals(10 * 60, week(10).getMinutes());
-        assertEquals(10 * 60, day(10).getMinutes());
+        assertEquals(10 * 60, td.month(10).getMinutes());
+        assertEquals(10 * 60, td.week(10).getMinutes());
+        assertEquals(10 * 60, td.day(10).getMinutes());
     }
 
 
@@ -273,105 +318,23 @@ public class ActivitiesTest
     public void getNumberOfDays()
     {
         // empty
-        Activities cut = newActivities(WEEK);
+        Activities cut = td.newActivities(WEEK);
         assertEquals(0, cut.getNumberOfDays());
 
         // month, week and day
-        assertEquals(10, month(10).getNumberOfDays());
-        assertEquals(10, week(10).getNumberOfDays());
-        assertEquals(1, day(10).getNumberOfDays());
+        assertEquals(10, td.month(10).getNumberOfDays());
+        assertEquals(10, td.week(10).getNumberOfDays());
+        assertEquals(1, td.day(10).getNumberOfDays());
     }
 
 
-    // -------------------------------------------------------- factory methods
-
-    Activities month()
+    @Test
+    public void toStringTest()
     {
-        return newActivities(MONTH);
-    }
-
-
-    Activities month(int numberOfActivities)
-    {
-        Activities activities = newActivities(MONTH);
-        DateTime start = new MutableDateTime().dayOfMonth().set(1).hourOfDay().set(8).toDateTime();
-        for (int i = 0; i < numberOfActivities; i++)
-        {
-            DateTime end = start.plusHours(1);
-            activities.add(newActivity(start, end));
-            start = start.plusDays(1);
-        }
-        return activities;
-    }
-
-
-    Activities week()
-    {
-        return newActivities(WEEK);
-    }
-
-
-    Activities week(int numberOfActivities)
-    {
-        Activities activities = newActivities(WEEK);
-        DateTime start = new MutableDateTime().dayOfWeek().set(1).hourOfDay().set(8).toDateTime();
-        for (int i = 0; i < numberOfActivities; i++)
-        {
-            DateTime end = start.plusHours(1);
-            activities.add(newActivity(start, end));
-            start = start.plusDays(1);
-        }
-        return activities;
-    }
-
-
-    Activities day()
-    {
-        return newActivities(DAY);
-    }
-
-
-    Activities day(int numberOfActivities)
-    {
-        Activities activities = newActivities(DAY);
-        DateTime start = new MutableDateTime().dayOfMonth().set(1).hourOfDay().set(8).toDateTime();
-        for (int i = 0; i < numberOfActivities; i++)
-        {
-            DateTime end = start.plusHours(1);
-            activities.add(newActivity(start, end));
-            start = end.plusHours(1);
-        }
-        return activities;
-    }
-
-
-    Activities newActivities(TimeUnit unit)
-    {
-        DateMidnight now = new DateMidnight();
-        return new Activities(now.getYear(), now.getMonthOfYear(), now.getWeekOfWeekyear(), now.getDayOfMonth(), unit);
-    }
-
-
-    Activity newActivity()
-    {
-        DateTime now = new DateTime();
-        return newActivity(now, now.plusMillis(100));
-    }
-
-
-    Activity newActivity(DateTime start, DateTime end)
-    {
-        Activity activity = new Activity(UUID.randomUUID().toString(), "Test activity");
-        if (start != null)
-        {
-            activity.setStart(new Time(start.toDate(), start.year().get(), start.monthOfYear().get(), start
-                    .weekOfWeekyear().get(), start.dayOfMonth().get()));
-        }
-        if (end != null)
-        {
-            activity.setEnd(new Time(end.toDate(), end.year().get(), end.monthOfYear().get(), end.weekOfWeekyear()
-                    .get(), end.dayOfMonth().get()));
-        }
-        return activity;
+        Activities cut = td.newActivities(WEEK);
+        assertNotNull(cut.toString());
+        assertNotNull(td.month().toString());
+        assertNotNull(td.week().toString());
+        assertNotNull(td.day().toString());
     }
 }

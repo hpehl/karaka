@@ -11,7 +11,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class DayTest
+public class WeekTest
 {
     // ------------------------------------------------------------------ setup
 
@@ -30,14 +30,13 @@ public class DayTest
     @Test
     public void equalsAndHashcode()
     {
-        Day birthday = new Day(1973, 9, 2);
-        Day foo = new Day(1, 2, 3);
-        Day bar = new Day(1, 2, 3);
+        Week birthday = new Week(1973, 35);
+        Week foo = new Week(2000, 1);
+        Week bar = new Week(2000, 1);
         bar.add(new Activity());
-        new EqualsTester().addEqualityGroup(new Day(), new Day()).addEqualityGroup(new Day(1, 1, 1), new Day(1, 1, 1))
-                .addEqualityGroup(new Day(1, 1, 2), new Day(1, 1, 2))
-                .addEqualityGroup(new Day(1, 2, 1), new Day(1, 2, 1))
-                .addEqualityGroup(new Day(2, 1, 1), new Day(2, 1, 1)).addEqualityGroup(birthday, birthday)
+        new EqualsTester().addEqualityGroup(new Week(), new Week()).addEqualityGroup(new Week(1, 1), new Week(1, 1))
+                .addEqualityGroup(new Week(1, 2), new Week(1, 2)).addEqualityGroup(new Week(2, 1), new Week(2, 1))
+                .addEqualityGroup(new Week(2, 2), new Week(2, 2)).addEqualityGroup(birthday, birthday)
                 .addEqualityGroup(foo, bar).testEquals();
     }
 
@@ -45,8 +44,8 @@ public class DayTest
     @Test
     public void weight()
     {
-        Day silvester2000 = new Day(2000, 12, 31);
-        Day newYear2001 = new Day(2001, 1, 1);
+        Week silvester2000 = new Week(2000, 52);
+        Week newYear2001 = new Week(2001, 1);
         assertTrue(silvester2000.weight() < newYear2001.weight());
         assertTrue(newYear2001.weight() > silvester2000.weight());
     }
@@ -55,8 +54,8 @@ public class DayTest
     @Test
     public void compare()
     {
-        Day silvester2000 = new Day(2000, 12, 31);
-        Day newYear2001 = new Day(2001, 1, 1);
+        Week silvester2000 = new Week(2000, 52);
+        Week newYear2001 = new Week(2001, 1);
         assertEquals(0, silvester2000.compareTo(silvester2000));
         assertEquals(0, newYear2001.compareTo(newYear2001));
         assertEquals(1, newYear2001.compareTo(silvester2000));
@@ -67,7 +66,7 @@ public class DayTest
     @Test
     public void iteratorIsEmpty()
     {
-        Day cut = new Day();
+        Week cut = new Week();
         assertTrue(cut.isEmpty());
         assertFalse(cut.iterator().hasNext());
 
@@ -75,14 +74,14 @@ public class DayTest
         cut.add(activity);
         assertFalse(cut.isEmpty());
         assertTrue(cut.contains(activity));
-        assertEquals(activity, cut.iterator().next());
+        assertEquals(activity, cut.iterator().next().iterator().next());
     }
 
 
     @Test
     public void contains()
     {
-        Day cut = new Day();
+        Week cut = new Week();
         Activity activity = td.newActivity();
 
         assertFalse(cut.contains(null));
@@ -95,7 +94,7 @@ public class DayTest
     @Test
     public void remove()
     {
-        Day cut = new Day();
+        Week cut = new Week();
         Activity activity = td.newActivity();
 
         cut.remove(null);
@@ -116,7 +115,7 @@ public class DayTest
         Activity start = td.newActivity(startDate, startDate.plusHours(1));
         Activity end = td.newActivity(endDate, endDate.plusHours(1));
 
-        Day cut = new Day();
+        Week cut = new Week();
         assertNull(cut.getStart());
         assertNull(cut.getEnd());
         cut.add(start);

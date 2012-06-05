@@ -1,7 +1,5 @@
 package name.pehl.tire.shared.model;
 
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -11,6 +9,8 @@ import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * Main model class for managing activities. Weeks and days are sorted
@@ -67,19 +67,21 @@ public class Activities
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
-        if (unit == TimeUnit.MONTH)
+        switch (unit)
         {
-            builder.append(month);
+            case MONTH:
+                builder.append(month).append("/");
+                break;
+            case WEEK:
+                builder.append("cw").append(week).append("/");
+                break;
+            case DAY:
+                builder.append(day).append(".").append(month);
+                break;
+            default:
+                break;
         }
-        else if (unit == WEEK)
-        {
-            builder.append("CW ").append(week);
-        }
-        else
-        {
-            builder.append("undefined");
-        }
-        builder.append(" / ").append(year);
+        builder.append(year);
         return builder.toString();
     }
 
@@ -300,7 +302,8 @@ public class Activities
                 SortedSet<Activity> orderedActivities = activities();
                 if (!orderedActivities.isEmpty())
                 {
-                    start = orderedActivities.first().getStart();
+                    // Activities are sorted descending!
+                    start = orderedActivities.last().getStart();
                 }
                 break;
             default:
@@ -331,7 +334,8 @@ public class Activities
                 SortedSet<Activity> orderedActivities = activities();
                 if (!orderedActivities.isEmpty())
                 {
-                    end = orderedActivities.last().getEnd();
+                    // Activities are sorted descending!
+                    end = orderedActivities.first().getEnd();
                 }
                 break;
             default:
