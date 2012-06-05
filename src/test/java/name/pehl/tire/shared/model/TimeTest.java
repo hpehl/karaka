@@ -51,8 +51,8 @@ public class TimeTest
         Time future = td.newTime(now.plusSeconds(1));
 
         assertEquals(0, cut.compareTo(cut));
-        assertEquals(-1, cut.compareTo(future));
-        assertEquals(1, cut.compareTo(past));
+        assertTrue(cut.compareTo(future) < 0);
+        assertTrue(cut.compareTo(past) > 0);
     }
 
 

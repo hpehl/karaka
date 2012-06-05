@@ -83,21 +83,6 @@ class TestData
 
     // --------------------------------------------------------------- activity
 
-    Activity runningActivity()
-    {
-        Activity running = newActivity();
-        running.start();
-        return running;
-    }
-
-
-    Activity oneMinuteActivity()
-    {
-        DateTime now = new DateTime();
-        return newActivity(now, now.plusMinutes(1));
-    }
-
-
     Activity newActivity()
     {
         DateTime now = new DateTime();

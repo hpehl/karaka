@@ -14,13 +14,13 @@ public class User extends BaseModel
 
     public User()
     {
-        this(null, null, null);
+        this(newId(), null, null);
     }
 
 
     public User(String username, String email)
     {
-        this(null, username, email);
+        this(newId(), username, email);
     }
 
 

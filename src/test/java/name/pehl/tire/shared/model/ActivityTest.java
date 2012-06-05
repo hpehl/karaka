@@ -71,15 +71,11 @@ public class ActivityTest
         assertBlank(cut);
         assertBlank(blank); // origin must not be changed
 
-        Activity running = td.runningActivity();
+        Activity running = td.newActivity();
+        running.start();
         cut = running.copy();
         assertBlank(cut);
         assertTrue(running.isRunning()); // origin must not be changed
-
-        Activity oneMinute = td.oneMinuteActivity();
-        cut = oneMinute.copy();
-        assertBlank(cut);
-        assertEquals(1, oneMinute.getMinutes()); // origin must not be changed
     }
 
 
@@ -88,14 +84,11 @@ public class ActivityTest
     {
         DateTime now = new DateTime();
         DateTime m1 = now.plusMinutes(1);
-        DateTime m2 = now.plusMinutes(2);
         Time plusOneMinute = td.newTime(m1);
-        Time plusTwoMinutes = td.newTime(m2);
         long oneMinuteInMillis = Duration.standardMinutes(1).getMillis();
 
-        Activity blank = td.newActivity();
+        Activity blank = td.newActivity(now, null);
         Activity cut = blank.plus(oneMinuteInMillis);
-        assertTrue(cut.isTransient());
         assertEquals(plusOneMinute, cut.getStart());
         assertNotNull(cut.getEnd());
         assertEquals(0, cut.getPause());
@@ -104,31 +97,6 @@ public class ActivityTest
         assertNull(cut.getProject());
         assertTrue(cut.getTags().isEmpty());
         assertBlank(blank); // origin must not be changed
-
-        Activity running = td.runningActivity();
-        cut = running.plus(oneMinuteInMillis);
-        assertTrue(cut.isTransient());
-        assertEquals(plusOneMinute, cut.getStart());
-        assertNotNull(cut.getEnd());
-        assertEquals(0, cut.getPause());
-        assertTrue(cut.isStopped());
-        assertFalse(cut.isRunning());
-        assertNull(cut.getProject());
-        assertTrue(cut.getTags().isEmpty());
-        assertTrue(running.isRunning()); // origin must not be changed
-
-        Activity oneMinute = td.oneMinuteActivity();
-        cut = oneMinute.plus(oneMinuteInMillis);
-        assertTrue(cut.isTransient());
-        assertEquals(plusOneMinute, cut.getStart());
-        assertEquals(plusTwoMinutes, cut.getEnd());
-        assertEquals(0, cut.getPause());
-        assertEquals(1, cut.getMinutes());
-        assertTrue(cut.isStopped());
-        assertFalse(cut.isRunning());
-        assertNull(cut.getProject());
-        assertTrue(cut.getTags().isEmpty());
-        assertEquals(1, oneMinute.getMinutes()); // origin must not be changed
     }
 
 
