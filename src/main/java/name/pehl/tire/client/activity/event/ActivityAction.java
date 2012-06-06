@@ -21,6 +21,5 @@ public class ActivityAction
     }
 
     @Order(1) Activity activity;
-
     @Order(2) Action action;
 }

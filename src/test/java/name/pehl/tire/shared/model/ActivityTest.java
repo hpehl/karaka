@@ -1,5 +1,7 @@
 package name.pehl.tire.shared.model;
 
+import name.pehl.tire.TestData;
+
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.junit.Before;

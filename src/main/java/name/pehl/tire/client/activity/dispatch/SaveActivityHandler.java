@@ -1,9 +1,5 @@
 package name.pehl.tire.client.activity.dispatch;
 
-import static name.pehl.tire.client.dispatch.TireActionHandler.HttpMethod.POST;
-import static name.pehl.tire.client.dispatch.TireActionHandler.HttpMethod.PUT;
-import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON;
-import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
 import name.pehl.piriti.json.client.JsonReader;
 import name.pehl.tire.client.activity.model.ActivityReader;
 import name.pehl.tire.client.activity.model.ActivityWriter;
@@ -20,6 +16,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
+
+import static name.pehl.tire.client.dispatch.TireActionHandler.HttpMethod.POST;
+import static name.pehl.tire.client.dispatch.TireActionHandler.HttpMethod.PUT;
+import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON;
+import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
 
 /**
  * @author $Author:$

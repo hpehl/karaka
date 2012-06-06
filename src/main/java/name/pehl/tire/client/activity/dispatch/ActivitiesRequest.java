@@ -1,7 +1,5 @@
 package name.pehl.tire.client.activity.dispatch;
 
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,6 +7,8 @@ import name.pehl.tire.client.rest.UrlBuilder;
 import name.pehl.tire.shared.model.TimeUnit;
 
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * TODO Tests, tests, tests

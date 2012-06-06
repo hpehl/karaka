@@ -1,5 +1,7 @@
 package name.pehl.tire.shared.model;
 
+import name.pehl.tire.TestData;
+
 import org.junit.Before;
 import org.junit.Test;
 

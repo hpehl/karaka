@@ -19,6 +19,5 @@ public class ActivityChanged
     }
 
     @Order(1) Activity activity;
-
     @Order(2) ChangeAction action;
 }

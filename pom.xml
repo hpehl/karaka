@@ -50,6 +50,7 @@
 		<mockito.version>1.9.0</mockito.version>
 		<objectify.version>3.1</objectify.version>
 		<piriti.version>0.8</piriti.version>
+		<powermock.version>1.4.12</powermock.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<resteasy.version>2.3.4.Final</resteasy.version>
 		<slf4j.version>1.6.4</slf4j.version>
@@ -272,6 +273,18 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>${powermock.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

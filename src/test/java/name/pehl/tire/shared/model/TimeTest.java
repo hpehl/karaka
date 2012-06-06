@@ -2,6 +2,8 @@ package name.pehl.tire.shared.model;
 
 import java.util.Date;
 
+import name.pehl.tire.TestData;
+
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.junit.Before;

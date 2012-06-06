@@ -1,8 +1,5 @@
 package name.pehl.tire.client.activity.presenter;
 
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
-
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.dispatch.GetMinutesAction;
@@ -30,6 +27,9 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
+
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
 
 /**
  * <p>
@@ -77,15 +77,15 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         void updateStatus(Activity activity);
     }
 
-    private static final Logger logger = Logger.getLogger(CockpitPresenter.class.getName());
+    static final Logger logger = Logger.getLogger(CockpitPresenter.class.getName());
     /**
      * The currently managed actvity
      */
-    private Activity currentActivity;
-    private final Scheduler scheduler;
-    private final DispatchAsync dispatcher;
-    private final GetMinutesCommand getMinutesCommand;
-    private final GetRunningActivityCommand getRunningActivityCommand;
+    Activity currentActivity;
+    final Scheduler scheduler;
+    final DispatchAsync dispatcher;
+    final GetMinutesCommand getMinutesCommand;
+    final GetRunningActivityCommand getRunningActivityCommand;
 
 
     @Inject
