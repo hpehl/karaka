@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity.presenter;
 
-import name.pehl.tire.client.NameTokens;
+import static name.pehl.tire.client.NameTokens.dashboard;
 import name.pehl.tire.client.activity.dispatch.GetYearsAction;
 import name.pehl.tire.client.activity.dispatch.GetYearsResult;
 import name.pehl.tire.client.dispatch.TireCallback;
@@ -69,8 +69,8 @@ public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYea
     @Override
     public void onSelectYearAndMonth(int year, int month)
     {
-        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(year)).with(
-                "month", String.valueOf(month));
+        PlaceRequest placeRequest = new PlaceRequest(dashboard).with("year", String.valueOf(year)).with("month",
+                String.valueOf(month));
         placeManager.revealPlace(placeRequest);
     }
 
@@ -78,8 +78,8 @@ public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYea
     @Override
     public void onSelectYearAndWeek(int year, int week)
     {
-        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(year)).with(
-                "week", String.valueOf(week));
+        PlaceRequest placeRequest = new PlaceRequest(dashboard).with("year", String.valueOf(year)).with("week",
+                String.valueOf(week));
         placeManager.revealPlace(placeRequest);
     }
 }

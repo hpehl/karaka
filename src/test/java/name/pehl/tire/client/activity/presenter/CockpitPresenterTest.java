@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Stack;
 
 import name.pehl.tire.TestData;
+import name.pehl.tire.client.PresenterTest;
 import name.pehl.tire.client.activity.dispatch.GetMinutesAction;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetMinutesResult;
@@ -35,12 +36,9 @@ import name.pehl.tire.shared.model.Activity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -58,9 +56,8 @@ import com.gwtplatform.tester.MockHandlerModule;
 import com.gwtplatform.tester.TestDispatchAsync;
 import com.gwtplatform.tester.TestDispatchService;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({GWT.class, URL.class})
-public class CockpitPresenterTest implements ShowMessageHandler, ActivityActionHandler, RunningActivityLoadedHandler
+public class CockpitPresenterTest extends PresenterTest implements ShowMessageHandler, ActivityActionHandler,
+        RunningActivityLoadedHandler
 {
     // ------------------------------------------------------------------ setup
 
@@ -77,11 +74,19 @@ public class CockpitPresenterTest implements ShowMessageHandler, ActivityActionH
 
 
     @Before
+    @Override
     public void setUp()
     {
         // client action handlers
         getMinutesHandler = mock(GetMinutesHandler.class);
         getRunningActivityHandler = mock(GetRunningActivityHandler.class);
+        // new ImmutableMap.Builder<Action, AbstractClientActionHandler>();
+        //
+        // put(GetMinutesAction.class,
+        // getMinutesHandler).put(GetRunningActivityAction.class,
+        // getRunningActivityHandler).bu
+        // Injector injector = setUpClientHandlersHandlers(null);
+
         Injector injector = Guice.createInjector(new MockHandlerModule()
         {
             @Override
@@ -163,7 +168,7 @@ public class CockpitPresenterTest implements ShowMessageHandler, ActivityActionH
         cut.onStartStop();
         ActivityActionEvent event = (ActivityActionEvent) events.pop();
         assertEquals(START_STOP, event.getAction());
-        assertEquals(cut.currentActivity, event.getActivity());
+        assertSame(cut.currentActivity, event.getActivity());
     }
 
 
@@ -174,7 +179,7 @@ public class CockpitPresenterTest implements ShowMessageHandler, ActivityActionH
         Activity activity = td.newActivity();
         cut.currentActivity = activity;
         cut.onActivityChanged(td.newActivityChangedEvent(NEW));
-        assertEquals(activity, cut.currentActivity);
+        assertSame(activity, cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
         verifyGetMinutes();
     }
@@ -186,7 +191,7 @@ public class CockpitPresenterTest implements ShowMessageHandler, ActivityActionH
         prepareGetMinutes();
         ActivityChangedEvent event = td.newActivityChangedEvent(RESUMED);
         cut.onActivityChanged(event);
-        assertEquals(event.getActivity(), cut.currentActivity);
+        assertSame(event.getActivity(), cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
         verifyGetMinutes();
 
@@ -194,7 +199,7 @@ public class CockpitPresenterTest implements ShowMessageHandler, ActivityActionH
         prepareGetMinutes();
         event = td.newActivityChangedEvent(STARTED);
         cut.onActivityChanged(event);
-        assertEquals(event.getActivity(), cut.currentActivity);
+        assertSame(event.getActivity(), cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
         verifyGetMinutes();
 
@@ -202,7 +207,7 @@ public class CockpitPresenterTest implements ShowMessageHandler, ActivityActionH
         prepareGetMinutes();
         event = td.newActivityChangedEvent(STOPPED);
         cut.onActivityChanged(event);
-        assertEquals(event.getActivity(), cut.currentActivity);
+        assertSame(event.getActivity(), cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
         verifyGetMinutes();
     }
@@ -228,7 +233,7 @@ public class CockpitPresenterTest implements ShowMessageHandler, ActivityActionH
         Activity activity = td.newActivity();
         cut.currentActivity = activity;
         cut.onActivityChanged(td.newActivityChangedEvent(DELETE));
-        assertEquals(activity, cut.currentActivity);
+        assertSame(activity, cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
         verifyGetMinutes();
     }
@@ -264,10 +269,10 @@ public class CockpitPresenterTest implements ShowMessageHandler, ActivityActionH
                 any(AsyncCallback.class), any(ExecuteCommand.class));
 
         cut.getRunningActivityCommand.execute();
-        assertEquals(activity, cut.currentActivity);
+        assertSame(activity, cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
         RunningActivityLoadedEvent event = (RunningActivityLoadedEvent) events.pop();
-        assertEquals(activity, event.getActivity());
+        assertSame(activity, event.getActivity());
     }
 
 

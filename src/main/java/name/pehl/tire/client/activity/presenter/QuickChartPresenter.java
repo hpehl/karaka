@@ -55,7 +55,7 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
         void updateActivities(Activities activities);
     }
 
-    private Activities activities;
+    Activities activities;
 
 
     @Inject

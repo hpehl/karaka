@@ -1,5 +1,7 @@
 package name.pehl.tire;
 
+import static name.pehl.tire.shared.model.TimeUnit.*;
+
 import java.util.UUID;
 
 import name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction;
@@ -13,10 +15,6 @@ import name.pehl.tire.shared.model.TimeUnit;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
-
-import static name.pehl.tire.shared.model.TimeUnit.DAY;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 public class TestData
 {
