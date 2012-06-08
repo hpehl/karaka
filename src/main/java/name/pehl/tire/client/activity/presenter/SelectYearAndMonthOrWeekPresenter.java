@@ -1,6 +1,5 @@
 package name.pehl.tire.client.activity.presenter;
 
-import static name.pehl.tire.client.NameTokens.dashboard;
 import name.pehl.tire.client.activity.dispatch.GetYearsAction;
 import name.pehl.tire.client.activity.dispatch.GetYearsResult;
 import name.pehl.tire.client.dispatch.TireCallback;
@@ -16,6 +15,8 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
+import static name.pehl.tire.client.NameTokens.dashboard;
+
 public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYearAndMonthOrWeekPresenter.MyView>
         implements SelectYearAndMonthOrWeekUiHandlers
 {
@@ -27,9 +28,9 @@ public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYea
         void updateYears(Years years);
     }
 
-    private final DispatchAsync dispatcher;
-    private final PlaceManager placeManager;
-    private Years years;
+    final DispatchAsync dispatcher;
+    final PlaceManager placeManager;
+    Years years;
 
 
     @Inject
@@ -46,7 +47,7 @@ public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYea
     @Override
     protected void onReveal()
     {
-        super.onReset();
+        super.onReveal();
         // TODO Implement some caching to prevent server roundtrip
         dispatcher.execute(new GetYearsAction(), new TireCallback<GetYearsResult>(getEventBus())
         {

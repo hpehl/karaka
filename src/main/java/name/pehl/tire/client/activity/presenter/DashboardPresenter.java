@@ -1,11 +1,5 @@
 package name.pehl.tire.client.activity.presenter;
 
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.*;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -50,6 +44,16 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
+
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * <p>
@@ -100,33 +104,33 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     // ---------------------------------------------------------- private stuff
 
-    private static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
-    private static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
+    static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
+    static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
-    private final Scheduler scheduler;
-    private final DispatchAsync dispatcher;
-    private final PlaceManager placeManager;
-    private final EditActivityPresenter editActivityPresenter;
-    private final SelectYearAndMonthOrWeekPresenter selectMonthPresenter;
-    private final SelectYearAndMonthOrWeekPresenter selectWeekPresenter;
-    private final TickCommand tickCommand;
-    private final StartAndResumeCallback startCallback;
-    private final StartAndResumeCallback resumeCallback;
+    final Scheduler scheduler;
+    final DispatchAsync dispatcher;
+    final PlaceManager placeManager;
+    final EditActivityPresenter editActivityPresenter;
+    final SelectYearAndMonthOrWeekPresenter selectMonthPresenter;
+    final SelectYearAndMonthOrWeekPresenter selectWeekPresenter;
+    final TickCommand tickCommand;
+    final StartAndResumeCallback startCallback;
+    final StartAndResumeCallback resumeCallback;
 
     /**
      * The currently running actvity. Null if no activity is running.
      */
-    private Activity runningActivity;
+    Activity runningActivity;
 
     /**
      * The selected date
      */
-    private Date activityDate;
+    Date activityDate;
 
     /**
      * The currently displayed activities
      */
-    private Activities activities;
+    Activities activities;
 
 
     // ------------------------------------------------------------------ setup
@@ -182,46 +186,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         String message = "Loading activities for " + activitiesRequest + "...";
         logger.fine(message);
         ShowMessageEvent.fire(this, new Message(INFO, message, false));
-        scheduler.scheduleDeferred(new ScheduledCommand()
-        {
-            @Override
-            public void execute()
-            {
-                dispatcher.execute(new GetActivitiesAction(activitiesRequest), new TireCallback<GetActivitiesResult>(
-                        getEventBus())
-                {
-                    @Override
-                    public void onSuccess(GetActivitiesResult result)
-                    {
-                        activities = result.getActivities();
-                        runningActivity = activities.getRunningActivity();
-                        if (runningActivity != null)
-                        {
-                            tickCommand.update(runningActivity);
-                        }
-                        getView().updateActivities(activities);
-                        ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities);
-                    }
-
-
-                    @Override
-                    public void onFailure(Throwable caught)
-                    {
-                        if (caught instanceof FailedStatusCodeException
-                                && ((FailedStatusCodeException) caught).getStatusCode() == 404)
-                        {
-                            String errorMessage = "No activities found for " + activitiesRequest;
-                            ShowMessageEvent.fire(DashboardPresenter.this, new Message(WARNING, errorMessage, true));
-                            logger.warning(errorMessage);
-                        }
-                        else
-                        {
-                            super.onFailure(caught);
-                        }
-                    }
-                });
-            }
-        });
+        scheduler.scheduleDeferred(new GetActivitiesCommand(activitiesRequest));
     }
 
 
@@ -557,7 +522,57 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         }
     }
 
-    // -------------------------------------------------------------- callbacks
+    // --------------------------------------------------- commands & callbacks
+
+    class GetActivitiesCommand implements ScheduledCommand
+    {
+        final ActivitiesRequest activitiesRequest;
+
+
+        GetActivitiesCommand(ActivitiesRequest activitiesRequest)
+        {
+            this.activitiesRequest = activitiesRequest;
+        }
+
+
+        @Override
+        public void execute()
+        {
+            dispatcher.execute(new GetActivitiesAction(activitiesRequest), new TireCallback<GetActivitiesResult>(
+                    getEventBus())
+            {
+                @Override
+                public void onSuccess(GetActivitiesResult result)
+                {
+                    activities = result.getActivities();
+                    runningActivity = activities.getRunningActivity();
+                    if (runningActivity != null)
+                    {
+                        tickCommand.update(runningActivity);
+                    }
+                    getView().updateActivities(activities);
+                    ActivitiesLoadedEvent.fire(DashboardPresenter.this, activities);
+                }
+
+
+                @Override
+                public void onFailure(Throwable caught)
+                {
+                    if (caught instanceof FailedStatusCodeException
+                            && ((FailedStatusCodeException) caught).getStatusCode() == 404)
+                    {
+                        String errorMessage = "No activities found for " + activitiesRequest;
+                        ShowMessageEvent.fire(DashboardPresenter.this, new Message(WARNING, errorMessage, true));
+                        logger.warning(errorMessage);
+                    }
+                    else
+                    {
+                        super.onFailure(caught);
+                    }
+                }
+            });
+        }
+    }
 
     class StartAndResumeCallback extends TireCallback<SaveActivityResult>
     {

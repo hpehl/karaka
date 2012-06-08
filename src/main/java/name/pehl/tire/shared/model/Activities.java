@@ -63,6 +63,70 @@ public class Activities
 
     // --------------------------------------------------------- object methods
 
+    /**
+     * Based on year, month, week and day
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + day;
+        result = prime * result + month;
+        result = prime * result + ((unit == null) ? 0 : unit.hashCode());
+        result = prime * result + week;
+        result = prime * result + year;
+        return result;
+    }
+
+
+    /**
+     * Based on year, month, week and day
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (!(obj instanceof Activities))
+        {
+            return false;
+        }
+        Activities other = (Activities) obj;
+        if (day != other.day)
+        {
+            return false;
+        }
+        if (month != other.month)
+        {
+            return false;
+        }
+        if (unit != other.unit)
+        {
+            return false;
+        }
+        if (week != other.week)
+        {
+            return false;
+        }
+        if (year != other.year)
+        {
+            return false;
+        }
+        return true;
+    }
+
+
     @Override
     public String toString()
     {

@@ -1,18 +1,7 @@
 package name.pehl.tire.client.activity.presenter;
 
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.*;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-
 import java.util.List;
-import java.util.Stack;
 
-import name.pehl.tire.TestData;
 import name.pehl.tire.client.PresenterTest;
 import name.pehl.tire.client.activity.dispatch.GetMinutesAction;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
@@ -27,114 +16,67 @@ import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent;
 import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent.RunningActivityLoadedHandler;
 import name.pehl.tire.client.activity.presenter.CockpitPresenter.GetMinutesCommand;
 import name.pehl.tire.client.activity.presenter.CockpitPresenter.GetRunningActivityCommand;
-import name.pehl.tire.client.activity.presenter.CockpitPresenter.MyView;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
 import name.pehl.tire.shared.model.Activity;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.google.gwt.core.client.GWT;
+import com.google.common.collect.ImmutableMap;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.core.client.testing.StubScheduler;
-import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.web.bindery.event.shared.Event;
-import com.google.web.bindery.event.shared.testing.CountingEventBus;
+import com.gwtplatform.dispatch.client.actionhandler.ClientActionHandler;
 import com.gwtplatform.dispatch.client.actionhandler.ExecuteCommand;
-import com.gwtplatform.dispatch.server.Dispatch;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
-import com.gwtplatform.tester.MockHandlerModule;
-import com.gwtplatform.tester.TestDispatchAsync;
-import com.gwtplatform.tester.TestDispatchService;
+
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
 
 public class CockpitPresenterTest extends PresenterTest implements ShowMessageHandler, ActivityActionHandler,
         RunningActivityLoadedHandler
 {
     // ------------------------------------------------------------------ setup
 
-    TestData td;
-    Stack<Event<?>> events;
-    CountingEventBus eventBus;
-    MyView view;
-    Dispatch dispatch;
     GetMinutesHandler getMinutesHandler;
     GetRunningActivityHandler getRunningActivityHandler;
-    DispatchAsync dispatcher;
-    StubScheduler scheduler;
+    CockpitPresenter.MyView view;
     CockpitPresenter cut;
 
 
     @Before
-    @Override
     public void setUp()
     {
         // client action handlers
         getMinutesHandler = mock(GetMinutesHandler.class);
         getRunningActivityHandler = mock(GetRunningActivityHandler.class);
-        // new ImmutableMap.Builder<Action, AbstractClientActionHandler>();
-        //
-        // put(GetMinutesAction.class,
-        // getMinutesHandler).put(GetRunningActivityAction.class,
-        // getRunningActivityHandler).bu
-        // Injector injector = setUpClientHandlersHandlers(null);
+        ImmutableMap<Class<?>, ClientActionHandler<?, ?>> actionHandlerMappings = new ImmutableMap.Builder<Class<?>, ClientActionHandler<?, ?>>()
+                .put(GetMinutesAction.class, getMinutesHandler)
+                .put(GetRunningActivityAction.class, getRunningActivityHandler).build();
 
-        Injector injector = Guice.createInjector(new MockHandlerModule()
-        {
-            @Override
-            protected void configure()
-            {
-                bindMockClientActionHandler(GetMinutesAction.class, getMinutesHandler);
-                bindMockClientActionHandler(GetRunningActivityAction.class, getRunningActivityHandler);
-            }
-
-
-            @Override
-            protected void configureMockHandlers()
-            {
-            }
-        });
-
-        // static mocks
-        mockStatic(GWT.class);
-        mockStatic(URL.class);
-        when(GWT.getHostPageBaseURL()).thenReturn("http://localhost");
-        when(URL.encode(Mockito.anyString())).thenAnswer(new Answer<String>()
-        {
-            @Override
-            public String answer(InvocationOnMock invocation) throws Throwable
-            {
-                return String.valueOf(invocation.getArguments()[0]);
-            }
-        });
-
-        // actual setup
-        td = new TestData();
-        events = new Stack<Event<?>>();
-        eventBus = new CountingEventBus();
-        eventBus.addHandler(ShowMessageEvent.getType(), this);
-        eventBus.addHandler(ActivityActionEvent.getType(), this);
-        eventBus.addHandler(RunningActivityLoadedEvent.getType(), this);
-        view = mock(MyView.class);
-        dispatch = mock(Dispatch.class);
-        dispatcher = new TestDispatchAsync(new TestDispatchService(dispatch), injector);
-        scheduler = new StubScheduler();
-        cut = new CockpitPresenter(eventBus, view, dispatcher, scheduler);
-    }
-
-
-    @After
-    public void tearDown()
-    {
-        events.clear();
+        // class under test
+        addEvents(this, ShowMessageEvent.getType(), ActivityActionEvent.getType(), RunningActivityLoadedEvent.getType());
+        view = mock(CockpitPresenter.MyView.class);
+        cut = new CockpitPresenter(eventBus, view, newDispatcher(actionHandlerMappings), scheduler);
     }
 
 
@@ -155,7 +97,8 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
     public void onStartStopNoCurrentActivity()
     {
         cut.onStartStop();
-        Message message = ((ShowMessageEvent) events.pop()).getMessage();
+        ShowMessageEvent event = (ShowMessageEvent) popEvent();
+        Message message = event.getMessage();
         assertEquals(WARNING, message.getLevel());
         assertTrue(message.isAutoHide());
     }
@@ -166,7 +109,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
     {
         cut.currentActivity = td.newActivity();
         cut.onStartStop();
-        ActivityActionEvent event = (ActivityActionEvent) events.pop();
+        ActivityActionEvent event = (ActivityActionEvent) popEvent();
         assertEquals(START_STOP, event.getAction());
         assertSame(cut.currentActivity, event.getActivity());
     }
@@ -269,9 +212,10 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
                 any(AsyncCallback.class), any(ExecuteCommand.class));
 
         cut.getRunningActivityCommand.execute();
+
         assertSame(activity, cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
-        RunningActivityLoadedEvent event = (RunningActivityLoadedEvent) events.pop();
+        RunningActivityLoadedEvent event = (RunningActivityLoadedEvent) popEvent();
         assertSame(activity, event.getActivity());
     }
 
@@ -301,6 +245,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
                 any(ExecuteCommand.class));
 
         cut.getMinutesCommand.execute();
+
         verify(view).updateMonth(0);
         verify(view).updateWeek(0);
         verify(view).updateToday(0);
@@ -348,20 +293,20 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
     @Override
     public void onShowMessage(ShowMessageEvent event)
     {
-        events.push(event);
+        pushEvent(event);
     }
 
 
     @Override
     public void onActivityAction(ActivityActionEvent event)
     {
-        events.push(event);
+        pushEvent(event);
     }
 
 
     @Override
     public void onRunningActivityLoaded(RunningActivityLoadedEvent event)
     {
-        events.push(event);
+        pushEvent(event);
     }
 }
