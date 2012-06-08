@@ -113,9 +113,10 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     final EditActivityPresenter editActivityPresenter;
     final SelectYearAndMonthOrWeekPresenter selectMonthPresenter;
     final SelectYearAndMonthOrWeekPresenter selectWeekPresenter;
-    final TickCommand tickCommand;
-    final StartAndResumeCallback startCallback;
-    final StartAndResumeCallback resumeCallback;
+
+    TickCommand tickCommand;
+    StartAndResumeCallback startCallback;
+    StartAndResumeCallback resumeCallback;
 
     /**
      * The currently running actvity. Null if no activity is running.

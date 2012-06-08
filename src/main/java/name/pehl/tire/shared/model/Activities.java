@@ -319,7 +319,7 @@ public class Activities
                     match = start.getYear() == year && start.getMonth() == month;
                     break;
                 case WEEK:
-                    match = start.getWeek() == week;
+                    match = start.getYear() == year && start.getWeek() == week;
                     break;
                 case DAY:
                     match = start.getYear() == year && start.getMonth() == month && start.getDay() == day;
