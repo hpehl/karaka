@@ -1,9 +1,15 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.NameTokens.dashboard;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.*;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.Date;
 import java.util.logging.Logger;
 
-import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.dispatch.ActivitiesRequest;
 import name.pehl.tire.client.activity.dispatch.DeleteActivityAction;
 import name.pehl.tire.client.activity.dispatch.DeleteActivityResult;
@@ -45,16 +51,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 /**
  * <p>
  * The main presenter in Tire. This presenter is responsible to start, resume
@@ -92,7 +88,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     // ---------------------------------------------------------- inner classes
 
     @ProxyStandard
-    @NameToken(NameTokens.dashboard)
+    @NameToken(dashboard)
     public interface MyProxy extends ProxyPlace<DashboardPresenter>
     {
     }
@@ -246,7 +242,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     @Override
     public void onCurrentWeek()
     {
-        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("current", WEEK.name().toLowerCase());
+        PlaceRequest placeRequest = new PlaceRequest(dashboard).with("current", WEEK.name().toLowerCase());
         placeManager.revealPlace(placeRequest);
     }
 
@@ -254,7 +250,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     @Override
     public void onCurrentMonth()
     {
-        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("current", MONTH.name().toLowerCase());
+        PlaceRequest placeRequest = new PlaceRequest(dashboard).with("current", MONTH.name().toLowerCase());
         placeManager.revealPlace(placeRequest);
     }
 
@@ -291,7 +287,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 newMonth = 12;
                 newYear--;
             }
-            placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(newYear)).with("month",
+            placeRequest = new PlaceRequest(dashboard).with("year", String.valueOf(newYear)).with("month",
                     String.valueOf(newMonth));
         }
         else if (activities.getUnit() == WEEK)
@@ -303,7 +299,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 newWeek = 52;
                 newYear--;
             }
-            placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(newYear)).with("week",
+            placeRequest = new PlaceRequest(dashboard).with("year", String.valueOf(newYear)).with("week",
                     String.valueOf(newWeek));
         }
         if (placeRequest != null)
@@ -327,7 +323,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 newMonth = 1;
                 newYear++;
             }
-            placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(newYear)).with("month",
+            placeRequest = new PlaceRequest(dashboard).with("year", String.valueOf(newYear)).with("month",
                     String.valueOf(newMonth));
         }
         else if (activities.getUnit() == WEEK)
@@ -339,7 +335,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 newWeek = 1;
                 newYear++;
             }
-            placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", String.valueOf(newYear)).with("week",
+            placeRequest = new PlaceRequest(dashboard).with("year", String.valueOf(newYear)).with("week",
                     String.valueOf(newWeek));
         }
         if (placeRequest != null)
@@ -351,7 +347,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     // ------------------------------------------------------- business methods
 
-    private void activityAction(Activity activity, Action action)
+    void activityAction(Activity activity, Action action)
     {
         switch (action)
         {
@@ -380,7 +376,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     }
 
 
-    private void edit(Activity activity)
+    void edit(Activity activity)
     {
         logger.fine("Open " + activity + " for edit");
         editActivityPresenter.getView().setActivity(activity);
@@ -389,7 +385,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     }
 
 
-    private void copy(Activity activity)
+    void copy(Activity activity)
     {
         logger.fine("About to copy " + activity);
         Activity plusOneDay = activity.plus(ONE_DAY_IN_MILLIS);
@@ -408,7 +404,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     }
 
 
-    private void start(final Activity activity)
+    void start(final Activity activity)
     {
         logger.info("About to start " + activity);
         if (activity.isStopped())
@@ -458,7 +454,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     }
 
 
-    private void stop(Activity activity)
+    void stop(Activity activity)
     {
         logger.info("About to stop " + runningActivity);
         if (activity.isRunning())
@@ -486,7 +482,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     }
 
 
-    private void delete(final Activity activity)
+    void delete(final Activity activity)
     {
         logger.info("About to delete activity " + activity);
         if (activity.isRunning())
@@ -510,7 +506,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     }
 
 
-    private void update(Activity activity)
+    void update(Activity activity)
     {
         activities.update(activity);
         if (activities.matchingRange(activity))

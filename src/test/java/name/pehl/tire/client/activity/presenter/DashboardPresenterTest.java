@@ -1,5 +1,16 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static java.util.logging.Level.*;
+import static name.pehl.tire.client.NameTokens.dashboard;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
+
+import java.util.Date;
+
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.PresenterTest;
 import name.pehl.tire.client.activity.dispatch.ActivitiesRequest;
@@ -27,27 +38,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtplatform.dispatch.client.actionhandler.ClientActionHandler;
 import com.gwtplatform.dispatch.client.actionhandler.ExecuteCommand;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
-
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.SEVERE;
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
 
 public class DashboardPresenterTest extends PresenterTest implements ShowMessageHandler, ActivitiesLoadedHandler
 {
@@ -217,6 +207,134 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
             cut.onTick(event);
             verifyUpdateActivity(activity, combination[0], combination[1]);
         }
+    }
+
+
+    @Test
+    public void onSelectDate()
+    {
+        Date date = new Date();
+        cut.onSelectDate(date);
+        assertSame(date, cut.activityDate);
+    }
+
+
+    @Test
+    public void onCurrentWeek()
+    {
+        cut.onCurrentWeek();
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("current", "week"));
+    }
+
+
+    @Test
+    public void onCurrentMonth()
+    {
+        cut.onCurrentMonth();
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("current", "month"));
+    }
+
+
+    @Test
+    public void onSelectWeekAndMonth()
+    {
+        SelectYearAndMonthOrWeekPresenter.MyView selectView = mock(SelectYearAndMonthOrWeekPresenter.MyView.class);
+        when(selectYearAndMonthOrWeekPresenter.getView()).thenReturn(selectView);
+        cut.onSelectWeek(100, 200);
+        verify(selectView).setPosition(100, 200);
+
+        reset(selectView);
+        cut.onSelectMonth(300, 400);
+        verify(selectView).setPosition(300, 400);
+    }
+
+
+    @Test
+    public void onPrevious()
+    {
+        // decrease month, keep year
+        Activities activities = td.newActivities(MONTH);
+        activities.setMonth(9);
+        activities.setYear(2000);
+        cut.activities = activities;
+        cut.onPrevious();
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("year", "2000").with("month", "8"));
+
+        // decrease month and year
+        reset(placeManager);
+        activities = td.newActivities(MONTH);
+        activities.setMonth(1);
+        activities.setYear(2000);
+        cut.activities = activities;
+        cut.onPrevious();
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("year", "1999").with("month", "12"));
+
+        // decrease week, keep year
+        activities = td.newActivities(WEEK);
+        activities.setWeek(11);
+        activities.setYear(2000);
+        cut.activities = activities;
+        cut.onPrevious();
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("year", "2000").with("week", "10"));
+
+        // decrease week and year
+        reset(placeManager);
+        activities = td.newActivities(WEEK);
+        activities.setWeek(1);
+        activities.setYear(2000);
+        cut.activities = activities;
+        cut.onPrevious();
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("year", "1999").with("week", "52"));
+    }
+
+
+    @Test
+    public void onNext()
+    {
+        // increase month, keep year
+        Activities activities = td.newActivities(MONTH);
+        activities.setMonth(9);
+        activities.setYear(2000);
+        cut.activities = activities;
+        cut.onNext();
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("year", "2000").with("month", "10"));
+
+        // increase month and year
+        reset(placeManager);
+        activities = td.newActivities(MONTH);
+        activities.setMonth(12);
+        activities.setYear(2000);
+        cut.activities = activities;
+        cut.onNext();
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("year", "2001").with("month", "1"));
+
+        // increase week, keep year
+        activities = td.newActivities(WEEK);
+        activities.setWeek(11);
+        activities.setYear(2000);
+        cut.activities = activities;
+        cut.onNext();
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("year", "2000").with("week", "12"));
+
+        // increase week and year
+        reset(placeManager);
+        activities = td.newActivities(WEEK);
+        activities.setWeek(52);
+        activities.setYear(2000);
+        cut.activities = activities;
+        cut.onNext();
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("year", "2001").with("week", "1"));
+    }
+
+
+    @Test
+    public void onEdit()
+    {
+        EditActivityPresenter.MyView editView = mock(EditActivityPresenter.MyView.class);
+        when(editActivityPresenter.getView()).thenReturn(editView);
+        Activity activity = td.newActivity();
+        cut.edit(activity);
+        verify(editView).setActivity(activity);
     }
 
 
