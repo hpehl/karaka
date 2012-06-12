@@ -339,7 +339,7 @@ public class ActivitiesResource
     public Minutes minutesForCurrentMonthWeekAndDay()
     {
         DateMidnight now = now(settings.getTimeZone());
-        long currentMonth = minutes(forYearMonthDay(now));
+        long currentMonth = minutes(forYearMonth(now));
         long currentWeek = minutes(forYearWeek(now));
         long today = minutes(forYearMonthDay(now));
         return new Minutes(currentMonth, currentWeek, today);
