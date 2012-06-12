@@ -20,6 +20,9 @@
     <!-- RestyGWT -->
     <inherits name="org.fusesource.restygwt.RestyGWT" />
     
+    <!-- Highcharts -->
+    <inherits name="org.moxieapps.gwt.highcharts.Highcharts"/>
+    
     <!-- name.pehl -->
     <inherits name="name.pehl.piriti.json.JSON" />
 
@@ -29,10 +32,6 @@
         <exclude name="**/*Test.java" />
     </source>
     <source path="shared" />
-
-    <script src="raphael-min.js" />
-    <script src="g.raphael.js" />
-    <script src="g.bar.js" />
 
     <!-- Logging -->
     <set-property name="gwt.logging.logLevel" value="INFO" />

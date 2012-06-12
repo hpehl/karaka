@@ -3,10 +3,14 @@ package name.pehl.tire.client.activity.view;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
+import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
 
+import org.moxieapps.gwt.highcharts.client.Chart;
+import org.moxieapps.gwt.highcharts.client.Legend;
+
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -22,27 +26,32 @@ import com.gwtplatform.mvp.client.ViewImpl;
  */
 public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyView
 {
-    public interface Binder extends UiBinder<Widget, QuickChartView>
+    public interface Binder extends UiBinder<SimplePanel, QuickChartView>
     {
     }
 
-    private final Widget widget;
-    @UiField WeekChartWidget weekChart;
-    @UiField MonthChartWidget monthChart;
+    private static final String COLOR = "#3d3d3d";
+    private static final String BACKGROUND_COLOR = "#eaeaea";
+
+    private final SimplePanel simplePanel;
+    private final Chart weekChart;
+    private final Chart monthChart;
 
 
     @Inject
     public QuickChartView(final Binder binder)
     {
-        this.widget = binder.createAndBindUi(this);
-        this.monthChart.setVisible(false);
+        this.simplePanel = binder.createAndBindUi(this);
+        this.weekChart = new Chart().setLegend(new Legend().setEnabled(false));
+        this.weekChart.getXAxis().setCategories("Mo", "Tu", "We", "Th", "Fr", "Sa", "Su");
+        this.monthChart = new Chart().setLegend(new Legend().setEnabled(false));
     }
 
 
     @Override
     public Widget asWidget()
     {
-        return widget;
+        return simplePanel;
     }
 
 
@@ -53,13 +62,29 @@ public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyVi
         {
             monthChart.setVisible(false);
             weekChart.setVisible(true);
-            weekChart.updateActivities(activities);
+            updateWeekChart(activities);
         }
         else if (activities.getUnit() == MONTH)
         {
             weekChart.setVisible(false);
             monthChart.setVisible(true);
-            monthChart.updateActivities(activities);
+            updateMonthChart(activities);
         }
+    }
+
+
+    private void updateWeekChart(Activities activities)
+    {
+        StringBuilder title = new StringBuilder().append(activities).append(" - ")
+                .append(FormatUtils.hours(activities.getMinutes()));
+        weekChart.setChartTitleText(title.toString());
+        StringBuilder subtitle = new StringBuilder().append(FormatUtils.dateDuration(activities.getStart(),
+                activities.getEnd()));
+        weekChart.setChartSubtitleText(subtitle.toString());
+    }
+
+
+    private void updateMonthChart(Activities activities)
+    {
     }
 }

@@ -2,10 +2,10 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
     xmlns:tac="urn:import:name.pehl.tire.client.activity.view">
 
-    <g:HTMLPanel>
+    <g:SimplePanel>
         <tac:WeekChartWidget ui:field="weekChart" width="200" height="200"
             legendTitles="Mo, Tue, Wed, Thu, Fr, Sat, Sun" />
         <tac:MonthChartWidget ui:field="monthChart" width="200" height="200" legendTitles="CW, CW, CW, CW" />
-    </g:HTMLPanel>
+    </g:SimplePanel>
 
 </ui:UiBinder> 
