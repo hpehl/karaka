@@ -31,7 +31,7 @@ public class WeekChartWidget extends QuickChartWidget
     // ----------------------------------------------------------------- update
 
     @Override
-    public void update(Activities activities)
+    public void updateActivities(Activities activities)
     {
         if (initialized && activities != null && activities.getDays() != null && !activities.getDays().isEmpty())
         {
@@ -39,8 +39,7 @@ public class WeekChartWidget extends QuickChartWidget
 
             // update title
             StringBuilder title = new StringBuilder();
-            title.append("CW ").append(activities.getWeek()).append(" / ").append(activities.getYear()).append(" - ")
-                    .append(FormatUtils.hours(activities.getMinutes())).append("\n")
+            title.append(activities).append(" - ").append(FormatUtils.hours(activities.getMinutes())).append("\n")
                     .append(FormatUtils.dateDuration(activities.getStart(), activities.getEnd()));
             updateTitle(title.toString());
 

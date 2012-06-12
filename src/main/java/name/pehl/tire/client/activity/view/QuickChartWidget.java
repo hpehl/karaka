@@ -132,7 +132,7 @@ public abstract class QuickChartWidget extends Widget
 
     // ----------------------------------------------------------------- update
 
-    public abstract void update(Activities activities);
+    public abstract void updateActivities(Activities activities);
 
 
     protected native void updateTitle(String newTitle) /*-{

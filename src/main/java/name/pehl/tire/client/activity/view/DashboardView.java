@@ -8,10 +8,11 @@ import name.pehl.tire.client.activity.presenter.DashboardUiHandlers;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
-import name.pehl.tire.client.ui.SvgPath;
+import name.pehl.tire.client.ui.InlineHTMLWithContextMenu;
 import name.pehl.tire.shared.model.Activities;
 
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -48,12 +49,10 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @UiField Anchor today;
     @UiField CalendarLink calendar;
     @UiField InlineLabel header;
-    @UiField SvgPath previous;
-    @UiField SvgPath next;
-    @UiField SvgPath selectMonth;
-    @UiField SvgPath selectWeek;
-    @UiField SvgPath currentMonth;
-    @UiField SvgPath currentWeek;
+    @UiField InlineHTMLWithContextMenu previous;
+    @UiField InlineHTMLWithContextMenu next;
+    @UiField InlineHTMLWithContextMenu month;
+    @UiField InlineHTMLWithContextMenu week;
     @UiField(provided = true) ActivitiesTable activitiesTable;
 
 
@@ -193,8 +192,8 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     }
 
 
-    @UiHandler("currentMonth")
-    public void onCurrentMonthClicked(ClickEvent event)
+    @UiHandler("month")
+    public void onMonthClicked(ClickEvent event)
     {
         if (getUiHandlers() != null)
         {
@@ -203,8 +202,19 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     }
 
 
-    @UiHandler("currentWeek")
-    public void onCurrentWeekClicked(ClickEvent event)
+    @UiHandler("month")
+    public void onMonthContextMenu(ContextMenuEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            event.preventDefault();
+            getUiHandlers().onSelectMonth(event.getNativeEvent().getClientX(), event.getNativeEvent().getClientY());
+        }
+    }
+
+
+    @UiHandler("week")
+    public void onWeekClicked(ClickEvent event)
     {
         if (getUiHandlers() != null)
         {
@@ -213,22 +223,13 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     }
 
 
-    @UiHandler("selectMonth")
-    public void onSelectMonthClicked(ClickEvent event)
+    @UiHandler("week")
+    public void onWeekContextMenu(ContextMenuEvent event)
     {
         if (getUiHandlers() != null)
         {
-            getUiHandlers().onSelectMonth(event.getClientX(), event.getClientY());
-        }
-    }
-
-
-    @UiHandler("selectWeek")
-    public void onSelectWeekClicked(ClickEvent event)
-    {
-        if (getUiHandlers() != null)
-        {
-            getUiHandlers().onSelectWeek(event.getClientX(), event.getClientY());
+            event.preventDefault();
+            getUiHandlers().onSelectWeek(event.getNativeEvent().getClientX(), event.getNativeEvent().getClientY());
         }
     }
 

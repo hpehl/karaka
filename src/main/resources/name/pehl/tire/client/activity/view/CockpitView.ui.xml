@@ -5,7 +5,7 @@
     
     <ui:style>
         div.startStopContainer {
-            padding: 20px 68px 0px 68px;
+            padding: 20px 73px 0px 73px;
         }
         
         .startStopImg {

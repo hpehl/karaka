@@ -8,7 +8,7 @@
         @sprite header {
 			color: white;
 			gwt-image: "header";
-			padding: 0px 30px;
+			padding: 0px 20px;
 		}
 		
 		header nav a,header nav a:visited {

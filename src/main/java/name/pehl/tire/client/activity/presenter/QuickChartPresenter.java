@@ -24,6 +24,9 @@ import com.gwtplatform.mvp.client.View;
  * <li>When unit == week and clicking on a day, switch / animate to this day.
  * <li>Provide links to the parent level
  * <li>Provide previous / next links to go to the previous / next day / week
+ * <li>SVG drawn title popups
+ * <li>Different shades of gray for the different activities of a day / week
+ * <li>Draw an X axis
  * </ul>
  * <h3>Events</h3>
  * <ol>

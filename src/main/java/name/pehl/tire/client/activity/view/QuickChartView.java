@@ -53,13 +53,13 @@ public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyVi
         {
             monthChart.setVisible(false);
             weekChart.setVisible(true);
-            weekChart.update(activities);
+            weekChart.updateActivities(activities);
         }
         else if (activities.getUnit() == MONTH)
         {
             weekChart.setVisible(false);
             monthChart.setVisible(true);
-            monthChart.update(activities);
+            monthChart.updateActivities(activities);
         }
     }
 }

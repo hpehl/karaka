@@ -32,7 +32,7 @@ public class MonthChartWidget extends QuickChartWidget
     // ----------------------------------------------------------------- update
 
     @Override
-    public void update(Activities activities)
+    public void updateActivities(Activities activities)
     {
         if (initialized && activities != null && activities.getWeeks() != null && !activities.getWeeks().isEmpty())
         {
