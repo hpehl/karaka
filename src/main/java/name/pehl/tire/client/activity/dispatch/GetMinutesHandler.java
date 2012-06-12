@@ -1,18 +1,20 @@
 package name.pehl.tire.client.activity.dispatch;
 
+import name.pehl.piriti.json.client.JsonReader;
+import name.pehl.tire.client.activity.model.MinutesReader;
 import name.pehl.tire.client.dispatch.TireActionHandler;
+import name.pehl.tire.client.dispatch.TireJsonCallback;
+import name.pehl.tire.client.rest.UrlBuilder;
+import name.pehl.tire.shared.model.Minutes;
 
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.Resource;
-import org.fusesource.restygwt.client.TextCallback;
 
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
-
-import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_TEXT;
-import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
 
 /**
  * @author $Author:$
@@ -20,53 +22,34 @@ import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
  */
 public class GetMinutesHandler extends TireActionHandler<GetMinutesAction, GetMinutesResult>
 {
+    private final MinutesReader minutesReader;
+
+
     @Inject
-    protected GetMinutesHandler(@SecurityCookie String securityCookieName, SecurityCookieAccessor securityCookieAccessor)
+    protected GetMinutesHandler(@SecurityCookie String securityCookieName,
+            SecurityCookieAccessor securityCookieAccessor, MinutesReader minutesReader)
     {
         super(GetMinutesAction.class, securityCookieName, securityCookieAccessor);
+        this.minutesReader = minutesReader;
     }
 
 
     @Override
     protected Resource resourceFor(GetMinutesAction action)
     {
-        return new Resource(action.getUrl());
-    }
-
-
-    @Override
-    protected Method methodFor(GetMinutesAction action, Resource resource)
-    {
-        return new Method(resource, HttpMethod.GET.name()).header(HEADER_CONTENT_TYPE, CONTENT_TYPE_TEXT);
+        return new Resource(new UrlBuilder().module("rest").path("activities", "currentMWD", "minutes").toUrl());
     }
 
 
     @Override
     protected void executeMethod(final Method method, final AsyncCallback<GetMinutesResult> resultCallback)
     {
-        method.send(new TextCallback()
+        method.send(new TireJsonCallback<Minutes, GetMinutesResult>(minutesReader, resultCallback)
         {
             @Override
-            public void onSuccess(Method method, String response)
+            protected GetMinutesResult extractResult(JsonReader<Minutes> reader, JSONObject json)
             {
-                long minutes = 0;
-                try
-                {
-                    minutes = Long.parseLong(response);
-                    resultCallback.onSuccess(new GetMinutesResult(minutes));
-                }
-                catch (NumberFormatException e)
-                {
-                    // TODO: handle exception
-                }
-            }
-
-
-            @Override
-            public void onFailure(Method method, Throwable exception)
-            {
-                resultCallback.onFailure(exception);
-
+                return new GetMinutesResult(reader.read(json));
             }
         });
     }

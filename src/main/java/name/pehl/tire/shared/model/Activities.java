@@ -134,13 +134,13 @@ public class Activities
         switch (unit)
         {
             case MONTH:
-                builder.append(month).append("/");
+                builder.append(month).append(" / ");
                 break;
             case WEEK:
-                builder.append("cw").append(week).append("/");
+                builder.append("CW ").append(week).append(" / ");
                 break;
             case DAY:
-                builder.append(day).append(".").append(month);
+                builder.append(day).append(".").append(month).append(".");
                 break;
             default:
                 break;

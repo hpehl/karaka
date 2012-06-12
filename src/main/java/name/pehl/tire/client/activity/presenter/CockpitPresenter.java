@@ -16,8 +16,8 @@ import name.pehl.tire.client.activity.event.TickEvent.TickHandler;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireCallback;
-import name.pehl.tire.client.rest.UrlBuilder;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Minutes;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -65,13 +65,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
 {
     public interface MyView extends View, HasUiHandlers<CockpitUiHandlers>
     {
-        void updateMonth(long minutes);
-
-
-        void updateWeek(long minutes);
-
-
-        void updateToday(long minutes);
+        void updateMinutes(Minutes minutes);
 
 
         void updateStatus(Activity activity);
@@ -166,63 +160,22 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         @Override
         public void execute()
         {
-            dispatcher.execute(
-                    new GetMinutesAction(new UrlBuilder().module("rest").path("activities", "currentMonth", "minutes")
-                            .toUrl()), new TireCallback<GetMinutesResult>(getEventBus())
-                    {
-                        @Override
-                        public void onSuccess(GetMinutesResult result)
-                        {
-                            getView().updateMonth(result.getMinutes());
-                        }
+            dispatcher.execute(new GetMinutesAction(), new TireCallback<GetMinutesResult>(getEventBus())
+            {
+                @Override
+                public void onSuccess(GetMinutesResult result)
+                {
+                    getView().updateMinutes(result.getMinutes());
+                }
 
 
-                        @Override
-                        public void onFailure(Throwable caught)
-                        {
-                            logger.warning("Cannot load minutes for current month");
-                            getView().updateMonth(0);
-                        }
-                    });
-
-            dispatcher.execute(
-                    new GetMinutesAction(new UrlBuilder().module("rest").path("activities", "currentWeek", "minutes")
-                            .toUrl()), new TireCallback<GetMinutesResult>(getEventBus())
-                    {
-                        @Override
-                        public void onSuccess(GetMinutesResult result)
-                        {
-                            getView().updateWeek(result.getMinutes());
-                        }
-
-
-                        @Override
-                        public void onFailure(Throwable caught)
-                        {
-                            logger.warning("Cannot load minutes for current week");
-                            getView().updateWeek(0);
-                        }
-                    });
-
-            dispatcher
-                    .execute(new GetMinutesAction(new UrlBuilder().module("rest")
-                            .path("activities", "today", "minutes").toUrl()), new TireCallback<GetMinutesResult>(
-                            getEventBus())
-                    {
-                        @Override
-                        public void onSuccess(GetMinutesResult result)
-                        {
-                            getView().updateToday(result.getMinutes());
-                        }
-
-
-                        @Override
-                        public void onFailure(Throwable caught)
-                        {
-                            logger.warning("Cannot load activities for today");
-                            getView().updateToday(0);
-                        }
-                    });
+                @Override
+                public void onFailure(Throwable caught)
+                {
+                    logger.warning("Cannot load minutes for current month, week and/or day");
+                    getView().updateMinutes(new Minutes());
+                }
+            });
         }
     }
 

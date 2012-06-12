@@ -20,6 +20,7 @@ import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Minutes;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +47,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -234,21 +234,12 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
                 return null;
             }
         };
-        doAnswer(getMinutesAnswer).when(getMinutesHandler).execute(
-                eq(new GetMinutesAction("http://localhost/rest/activities/currentMonth/minutes/")),
+        doAnswer(getMinutesAnswer).when(getMinutesHandler).execute(any(GetMinutesAction.class),
                 any(AsyncCallback.class), any(ExecuteCommand.class));
-        doAnswer(getMinutesAnswer).when(getMinutesHandler).execute(
-                eq(new GetMinutesAction("http://localhost/rest/activities/currentWeek/minutes/")),
-                any(AsyncCallback.class), any(ExecuteCommand.class));
-        doAnswer(getMinutesAnswer).when(getMinutesHandler).execute(
-                eq(new GetMinutesAction("http://localhost/rest/activities/today/minutes/")), any(AsyncCallback.class),
-                any(ExecuteCommand.class));
 
         cut.getMinutesCommand.execute();
 
-        verify(view).updateMonth(0);
-        verify(view).updateWeek(0);
-        verify(view).updateToday(0);
+        verify(view).updateMinutes(new Minutes());
     }
 
 
@@ -257,7 +248,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
     @SuppressWarnings("unchecked")
     void prepareGetMinutes()
     {
-        final GetMinutesResult getMinutesResult = new GetMinutesResult(42);
+        final GetMinutesResult getMinutesResult = new GetMinutesResult(new Minutes(1, 2, 3));
         Answer<Object> getMinutesAnswer = new Answer<Object>()
         {
             @Override
@@ -268,23 +259,14 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
                 return null;
             }
         };
-        doAnswer(getMinutesAnswer).when(getMinutesHandler).execute(
-                eq(new GetMinutesAction("http://localhost/rest/activities/currentMonth/minutes/")),
+        doAnswer(getMinutesAnswer).when(getMinutesHandler).execute(any(GetMinutesAction.class),
                 any(AsyncCallback.class), any(ExecuteCommand.class));
-        doAnswer(getMinutesAnswer).when(getMinutesHandler).execute(
-                eq(new GetMinutesAction("http://localhost/rest/activities/currentWeek/minutes/")),
-                any(AsyncCallback.class), any(ExecuteCommand.class));
-        doAnswer(getMinutesAnswer).when(getMinutesHandler).execute(
-                eq(new GetMinutesAction("http://localhost/rest/activities/today/minutes/")), any(AsyncCallback.class),
-                any(ExecuteCommand.class));
     }
 
 
     void verifyGetMinutes()
     {
-        verify(view).updateMonth(42);
-        verify(view).updateWeek(42);
-        verify(view).updateToday(42);
+        verify(view).updateMinutes(new Minutes(1, 2, 3));
     }
 
 

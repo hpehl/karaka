@@ -24,6 +24,7 @@ import name.pehl.tire.server.paging.entity.PageResult;
 import name.pehl.tire.server.settings.control.CurrentSettings;
 import name.pehl.tire.server.settings.entity.Settings;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Minutes;
 import name.pehl.tire.shared.model.Year;
 import name.pehl.tire.shared.model.Years;
 
@@ -68,6 +69,8 @@ import static org.joda.time.Weeks.weeks;
  * <li>GET /activities/today: Find activities
  * <li>GET /activities/today/minutes: Get the minutes of the specified
  * activities
+ * <li>GET /activities/currentMWD/minutes: Get the minutes of the current
+ * <strong>m</strong>onth, <strong>w</strong>eek and <strong>d</strong>ay
  * <li>GET /activities/running: Find the running activity
  * <li>GET /activities/years: Returns the years, months and weeks in which
  * activities are stored
@@ -137,7 +140,7 @@ public class ActivitiesResource
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/minutes")
-    public int minutesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
+    public long minutesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
     {
         return minutes(forYearMonth(new DateMidnight(year, month, 1, settings.getTimeZone())));
     }
@@ -155,7 +158,7 @@ public class ActivitiesResource
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/relative/{month:[+-]?\\d+}/minutes")
-    public int minutesForRelativeMonth(@PathParam("month") int month)
+    public long minutesForRelativeMonth(@PathParam("month") int month)
     {
         return minutes(forYearMonth(absoluteMonth(month)));
     }
@@ -173,7 +176,7 @@ public class ActivitiesResource
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/currentMonth/minutes")
-    public int minutesForCurrentMonth()
+    public long minutesForCurrentMonth()
     {
         return minutes(forYearMonth(now(settings.getTimeZone())));
     }
@@ -213,7 +216,7 @@ public class ActivitiesResource
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}/minutes")
-    public int minutesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
+    public long minutesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
     {
         DateMidnight yearWeek = new MutableDateTime(settings.getTimeZone()).year().set(year).weekOfWeekyear().set(week)
                 .toDateTime().toDateMidnight();
@@ -233,7 +236,7 @@ public class ActivitiesResource
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/relative/cw{week:[+-]?\\d+}/minutes")
-    public int minutesForRelativeWeek(@PathParam("week") int week)
+    public long minutesForRelativeWeek(@PathParam("week") int week)
     {
         return minutes(forYearWeek(absoluteWeek(week)));
     }
@@ -251,7 +254,7 @@ public class ActivitiesResource
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/currentWeek/minutes")
-    public int minutesForCurrentWeek()
+    public long minutesForCurrentWeek()
     {
         return minutes(forYearWeek(now(settings.getTimeZone())));
     }
@@ -291,7 +294,7 @@ public class ActivitiesResource
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/{day:\\d{1,2}}/minutes")
-    public int minutesForYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
+    public long minutesForYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
             @PathParam("day") int day)
     {
         return minutes(forYearMonthDay(new DateMidnight(year, month, day, settings.getTimeZone())));
@@ -310,7 +313,7 @@ public class ActivitiesResource
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/today/minutes")
-    public int minutesForToday()
+    public long minutesForToday()
     {
         return minutes(forYearMonthDay(now(settings.getTimeZone())));
     }
@@ -326,6 +329,20 @@ public class ActivitiesResource
                     .monthOfYear().get(), date.year().get()));
         }
         return activities;
+    }
+
+
+    // --------------------------------- minutes of current month, week and day
+
+    @GET
+    @Path("/currentMWD/minutes")
+    public Minutes minutesForCurrentMonthWeekAndDay()
+    {
+        DateMidnight now = now(settings.getTimeZone());
+        long currentMonth = minutes(forYearMonthDay(now));
+        long currentWeek = minutes(forYearWeek(now));
+        long today = minutes(forYearMonthDay(now));
+        return new Minutes(currentMonth, currentWeek, today);
     }
 
 
@@ -386,9 +403,9 @@ public class ActivitiesResource
     }
 
 
-    private int minutes(List<Activity> activities)
+    private long minutes(List<Activity> activities)
     {
-        int minutes = 0;
+        long minutes = 0;
         for (Activity activity : activities)
         {
             minutes += activity.getMinutes();

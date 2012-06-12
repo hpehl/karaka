@@ -5,6 +5,7 @@ import name.pehl.tire.client.activity.presenter.CockpitUiHandlers;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Minutes;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -54,23 +55,11 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
 
 
     @Override
-    public void updateMonth(long minutes)
+    public void updateMinutes(Minutes minutes)
     {
-        month.setText(FormatUtils.hours(minutes));
-    }
-
-
-    @Override
-    public void updateWeek(long minutes)
-    {
-        week.setText(FormatUtils.hours(minutes));
-    }
-
-
-    @Override
-    public void updateToday(long minutes)
-    {
-        today.setText(FormatUtils.hours(minutes));
+        month.setText(FormatUtils.hours(minutes.getMonth()));
+        week.setText(FormatUtils.hours(minutes.getWeek()));
+        today.setText(FormatUtils.hours(minutes.getDay()));
     }
 
 

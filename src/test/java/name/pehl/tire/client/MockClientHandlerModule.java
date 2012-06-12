@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.inject.internal.UniqueAnnotations;
-import com.gwtplatform.dispatch.client.actionhandler.AbstractClientActionHandler;
 import com.gwtplatform.dispatch.client.actionhandler.ClientActionHandler;
 import com.gwtplatform.dispatch.shared.Action;
 import com.gwtplatform.dispatch.shared.Result;
@@ -59,11 +58,12 @@ public class MockClientHandlerModule extends MockHandlerModule
 
 
     @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
     protected void configure()
     {
         for (Entry<Class<?>, ClientActionHandler<?, ?>> entry : actionHandlerMappings.entrySet())
         {
-            internalBind(entry.getKey(), entry.getValue());
+            this.<Action, Result, ClientActionHandler> internalBind(entry.getKey(), entry.getValue());
         }
     }
 
@@ -74,7 +74,7 @@ public class MockClientHandlerModule extends MockHandlerModule
     }
 
 
-    private <A extends Action<R>, R extends Result, H extends AbstractClientActionHandler<A, R>> void internalBind(
+    private <A extends Action<R>, R extends Result, H extends ClientActionHandler<A, R>> void internalBind(
             Class<?> actionClass, ClientActionHandler<?, ?> handler)
     {
         bind(MockClientActionHandlerMap.class).annotatedWith(UniqueAnnotations.create()).toInstance(
