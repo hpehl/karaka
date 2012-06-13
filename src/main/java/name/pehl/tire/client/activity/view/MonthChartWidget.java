@@ -1,16 +1,16 @@
 package name.pehl.tire.client.activity.view;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.SortedSet;
+import java.util.List;
 
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Week;
 
-import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.uibinder.client.UiConstructor;
+import org.moxieapps.gwt.highcharts.client.Point;
 
-import static java.lang.Math.max;
+import com.google.gwt.json.client.JSONString;
 
 /**
  * @author $Author: harald.pehl $
@@ -19,65 +19,35 @@ import static java.lang.Math.max;
  */
 public class MonthChartWidget extends QuickChartWidget
 {
+    final static String[] WEEKS = new String[] {"n/a", "n/a", "n/a", "n/a"};
 
-    // ----------------------------------------------------------- constructors
 
-    @UiConstructor
-    public MonthChartWidget(int width, int height, String legendTitles)
+    public MonthChartWidget()
     {
-        super(width, height, legendTitles);
+        super(WEEKS);
     }
 
-
-    // ----------------------------------------------------------------- update
 
     @Override
     public void updateActivities(Activities activities)
     {
-        if (initialized && activities != null && activities.getWeeks() != null && !activities.getWeeks().isEmpty())
+        List<String> categories = new ArrayList<String>();
+        Iterator<Week> iter = activities.getWeeks().iterator();
+        for (Point point : series.getPoints())
         {
-            SortedSet<Week> weeks = activities.getWeeks();
-
-            // update title
-            String month = NumberFormat.getFormat("00").format(activities.getMonth());
-            StringBuilder title = new StringBuilder();
-            title.append(month).append(" ").append(activities.getYear()).append(" - ")
-                    .append(FormatUtils.hours(activities.getMinutes())).append("\n")
-                    .append(FormatUtils.dateDuration(activities.getStart(), activities.getEnd()));
-            updateTitle(title.toString());
-
-            // update max
-            max = 0;
-            for (Week week : weeks)
+            double hours = 0;
+            String category = "n/a";
+            if (iter.hasNext())
             {
-                max = max(max, week.getMinutes());
+                Week week = iter.next();
+                hours = week.getMinutes() / 60.0;
+                category = String.valueOf(week.getWeek());
+                String tooltip = "CW " + week.getWeek() + ": " + FormatUtils.hours(week.getMinutes());
+                point.getUserData().put("tooltip", new JSONString(tooltip));
             }
-            max += max * .05;
-            oneMinute = (double) usableHeight / max;
-
-            // update columns
-            Iterator<Week> iter = weeks.iterator();
-            for (int index = 0; index < columns.length; index++)
-            {
-                String path;
-                String cw = "";
-                String tooltip = "";
-                if (iter.hasNext())
-                {
-                    Week week = iter.next();
-                    path = path(index, week.getMinutes());
-                    cw = "CW " + week.getWeek();
-                    tooltip = cw + ": " + FormatUtils.hours(week.getMinutes());
-
-                }
-                else
-                {
-                    path = path(index, 0);
-                    cw = "n/a";
-                }
-                animateColumn(columns[index], path, tooltip);
-                updateLegend(legends[index], cw);
-            }
+            point.update(hours);
+            categories.add(category);
         }
+        chart.getXAxis().setCategories(categories.toArray(new String[] {}));
     }
 }

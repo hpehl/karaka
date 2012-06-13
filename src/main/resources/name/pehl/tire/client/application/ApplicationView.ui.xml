@@ -66,7 +66,8 @@
 				<aside>
 					<g:FlowPanel ui:field="cockpitPanel"
 						addStyleNames="{style.cockpitPanel} {style.roundedWhiteBox}"></g:FlowPanel>
-					<g:FlowPanel ui:field="quickChartPanel" addStyleNames="{style.quickChartPanel}"></g:FlowPanel>
+					<g:FlowPanel ui:field="quickChartPanel"
+						addStyleNames="{style.quickChartPanel}"></g:FlowPanel>
 				</aside>
 			</g:HTMLPanel>
 		</g:east>

@@ -1,15 +1,14 @@
 package name.pehl.tire.client.activity.view;
 
 import java.util.Iterator;
-import java.util.SortedSet;
 
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Day;
 
-import com.google.gwt.uibinder.client.UiConstructor;
+import org.moxieapps.gwt.highcharts.client.Point;
 
-import static java.lang.Math.max;
+import com.google.gwt.json.client.JSONString;
 
 /**
  * @author $Author: harald.pehl $
@@ -18,59 +17,33 @@ import static java.lang.Math.max;
  */
 public class WeekChartWidget extends QuickChartWidget
 {
+    final static String[] DAYS = new String[] {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
 
-    // ----------------------------------------------------------- constructors
 
-    @UiConstructor
-    public WeekChartWidget(int width, int height, String legendTitles)
+    public WeekChartWidget()
     {
-        super(width, height, legendTitles);
+        super(DAYS);
     }
 
-
-    // ----------------------------------------------------------------- update
 
     @Override
     public void updateActivities(Activities activities)
     {
-        if (initialized && activities != null && activities.getDays() != null && !activities.getDays().isEmpty())
+        Iterator<Day> iter = activities.getDays().iterator();
+        for (Point point : series.getPoints())
         {
-            SortedSet<Day> days = activities.getDays();
-
-            // update title
-            StringBuilder title = new StringBuilder();
-            title.append(activities).append(" - ").append(FormatUtils.hours(activities.getMinutes())).append("\n")
-                    .append(FormatUtils.dateDuration(activities.getStart(), activities.getEnd()));
-            updateTitle(title.toString());
-
-            // update max
-            max = 0;
-            for (Day day : days)
+            double hours = 0;
+            if (iter.hasNext())
             {
-                max = max(max, day.getMinutes());
+                Day day = iter.next();
+                hours = day.getMinutes() / 60.0;
+                String tooltip = FormatUtils.date(day.activities().first().getStart()) + ": "
+                        + FormatUtils.hours(day.getMinutes());
+                point.getUserData().put("tooltip", new JSONString(tooltip));
             }
-            max += max * .05;
-            oneMinute = (double) usableHeight / max;
-
-            // update columns
-            Iterator<Day> iter = days.iterator();
-            for (int index = 0; index < columns.length; index++)
-            {
-                String path;
-                String tooltip = "";
-                if (iter.hasNext())
-                {
-                    Day day = iter.next();
-                    path = path(index, day.getMinutes());
-                    tooltip = FormatUtils.date(day.getStart()) + ": " + FormatUtils.hours(day.getMinutes());
-
-                }
-                else
-                {
-                    path = path(index, 0);
-                }
-                animateColumn(columns[index], path, tooltip);
-            }
+            point.update(hours);
         }
+        // necessary to fix the alignment of the categories
+        chart.getXAxis().setCategories("Mo", "Tu", "We", "Th", "Fr", "Sa", "Su");
     }
 }
