@@ -96,7 +96,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
     @Override
     public int compareTo(Week that)
     {
-        return ComparisonChain.start().compare(this.year, that.year).compare(this.week, that.week).result();
+        return ComparisonChain.start().compare(this.weight(), that.weight()).result();
     }
 
 

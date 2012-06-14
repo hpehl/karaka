@@ -1,16 +1,17 @@
 package name.pehl.tire.client.activity.view;
 
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Day;
+import name.pehl.tire.shared.model.Week;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
-
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * View for the quick chart showing the activites by week / month.
@@ -64,5 +65,19 @@ public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyVi
             monthChart.asWidget().setVisible(true);
             monthChart.updateActivities(activities);
         }
+    }
+
+
+    @Override
+    public void updateWeek(Week week)
+    {
+        monthChart.updateWeek(week);
+    }
+
+
+    @Override
+    public void updateDay(Day day)
+    {
+        weekChart.updateDay(day);
     }
 }

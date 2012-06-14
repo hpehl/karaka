@@ -1,5 +1,7 @@
 package name.pehl.tire.shared.model;
 
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -9,8 +11,6 @@ import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * Main model class for managing activities. Weeks and days are sorted
@@ -75,7 +75,7 @@ public class Activities
         int result = 1;
         result = prime * result + day;
         result = prime * result + month;
-        result = prime * result + ((unit == null) ? 0 : unit.hashCode());
+        result = prime * result + (unit == null ? 0 : unit.hashCode());
         result = prime * result + week;
         result = prime * result + year;
         return result;
@@ -260,6 +260,58 @@ public class Activities
             }
         }
         return result;
+    }
+
+
+    /**
+     * Returns week the specified activity belongs to, <code>null</code>
+     * otherwise.
+     * 
+     * @param activity
+     * @return
+     */
+    public Week weekOf(Activity activity)
+    {
+        Week match = null;
+        if (activity != null)
+        {
+            // find the week this activity belongs to
+            for (Iterator<Week> iter = weeks.iterator(); iter.hasNext() && match == null;)
+            {
+                Week w = iter.next();
+                if (w.contains(activity))
+                {
+                    match = w;
+                }
+            }
+        }
+        return match;
+    }
+
+
+    /**
+     * Returns the day the specified activity belongs to, <code>null</code>
+     * otherwise.
+     * 
+     * @param activity
+     * @return
+     */
+    public Day dayOf(Activity activity)
+    {
+        Day match = null;
+        if (activity != null)
+        {
+            // find the day this activity belongs to
+            for (Iterator<Day> iter = days.iterator(); iter.hasNext() && match == null;)
+            {
+                Day d = iter.next();
+                if (d.contains(activity))
+                {
+                    match = d;
+                }
+            }
+        }
+        return match;
     }
 
 

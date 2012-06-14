@@ -1,5 +1,8 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.activity.event.ActivityChangedEvent;
@@ -7,6 +10,9 @@ import name.pehl.tire.client.activity.event.ActivityChangedEvent.ActivityChanged
 import name.pehl.tire.client.activity.event.TickEvent;
 import name.pehl.tire.client.activity.event.TickEvent.TickHandler;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Day;
+import name.pehl.tire.shared.model.Week;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -56,6 +62,12 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     public interface MyView extends View
     {
         void updateActivities(Activities activities);
+
+
+        void updateWeek(Week week);
+
+
+        void updateDay(Day day);
     }
 
     Activities activities;
@@ -82,13 +94,41 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     @Override
     public void onActivityChanged(ActivityChangedEvent event)
     {
-        getView().updateActivities(activities);
+        if (event.getAction() == DELETE)
+        {
+            getView().updateActivities(activities);
+        }
+        else
+        {
+            updateActivity(event.getActivity());
+        }
     }
 
 
     @Override
     public void onTick(TickEvent event)
     {
-        getView().updateActivities(activities);
+        updateActivity(event.getActivity());
+    }
+
+
+    void updateActivity(Activity activity)
+    {
+        if (activities.getUnit() == MONTH)
+        {
+            Week week = activities.weekOf(activity);
+            if (week != null)
+            {
+                getView().updateWeek(week);
+            }
+        }
+        else if (activities.getUnit() == WEEK)
+        {
+            Day day = activities.dayOf(activity);
+            if (day != null)
+            {
+                getView().updateDay(day);
+            }
+        }
     }
 }

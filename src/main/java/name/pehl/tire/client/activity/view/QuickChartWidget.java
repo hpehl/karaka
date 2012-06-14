@@ -1,5 +1,6 @@
 package name.pehl.tire.client.activity.view;
 
+import static org.moxieapps.gwt.highcharts.client.Series.Type.COLUMN;
 import name.pehl.tire.shared.model.Activities;
 
 import org.moxieapps.gwt.highcharts.client.Chart;
@@ -16,20 +17,19 @@ import org.moxieapps.gwt.highcharts.client.labels.DataLabels;
 import org.moxieapps.gwt.highcharts.client.plotOptions.ColumnPlotOptions;
 import org.moxieapps.gwt.highcharts.client.plotOptions.SeriesPlotOptions;
 
+import com.google.gwt.json.client.JSONNull;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
-
-import static org.moxieapps.gwt.highcharts.client.Series.Type.COLUMN;
 
 /**
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-17 21:37:43 +0100 (Fr, 17 Dez 2010) $ $Revision: 102
  *          $
  */
-public abstract class QuickChartWidget implements IsWidget, RequiresResize
+public abstract class QuickChartWidget implements IsWidget
 {
     // -------------------------------------------------------------- constants
 
@@ -61,7 +61,7 @@ public abstract class QuickChartWidget implements IsWidget, RequiresResize
                                         new DataLabels().setStyle(new Style()
                                                 .setFont("normal 10px Verdana, sans-serif"))))
                 .setColumnPlotOptions(
-                        new ColumnPlotOptions().setBorderWidth(0).setMinPointLength(1).setPointPadding(.0001))
+                        new ColumnPlotOptions().setBorderWidth(0).setMinPointLength(1).setPointPadding(.001))
                 .setToolTip(
                         new ToolTip().setBorderColor(COLOR).setBorderWidth(1)
                                 .setStyle(new Style().setFont("normal 10px Verdana, sans-serif"))
@@ -84,9 +84,6 @@ public abstract class QuickChartWidget implements IsWidget, RequiresResize
                                     }
                                 }));
 
-        this.chart.getXAxis().setMin(0);
-        this.chart.getYAxis().setAxisTitleText(null).setMin(0);
-
         this.series = this.chart.createSeries();
         Point[] points = new Point[categories.length];
         for (int i = 0; i < categories.length; i++)
@@ -97,6 +94,11 @@ public abstract class QuickChartWidget implements IsWidget, RequiresResize
         }
         this.series.setPoints(points);
         this.chart.addSeries(series);
+
+        this.chart.getXAxis().setMin(0);
+        this.chart.getYAxis().setAxisTitleText(null).setMin(0);
+        this.chart.setSize("212px", "250px");
+        this.chart.setVisible(false);
     }
 
 
@@ -105,18 +107,26 @@ public abstract class QuickChartWidget implements IsWidget, RequiresResize
     public abstract void updateActivities(Activities activities);
 
 
+    void updatePoint(Point point, double hours, String tooltip)
+    {
+        JSONObject userData = point.getUserData();
+        if (tooltip != null)
+        {
+            userData.put("tooltip", new JSONString(tooltip));
+        }
+        else
+        {
+            userData.put("tooltip", JSONNull.getInstance());
+        }
+        point.update(hours);
+    }
+
+
     // --------------------------------------------------------- widget methods
 
     @Override
     public Widget asWidget()
     {
         return chart;
-    }
-
-
-    @Override
-    public void onResize()
-    {
-        chart.setSizeToMatchContainer();
     }
 }

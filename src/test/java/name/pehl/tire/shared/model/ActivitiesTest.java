@@ -1,18 +1,15 @@
 package name.pehl.tire.shared.model;
 
+import static name.pehl.tire.shared.model.TimeUnit.DAY;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+import static org.junit.Assert.*;
 import name.pehl.tire.TestData;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import com.google.common.testing.EqualsTester;
 
 /**
  * TODO Replace current date/times with fixed ones? TODO Move common code to
@@ -36,6 +33,19 @@ public class ActivitiesTest
 
 
     // ------------------------------------------------------------------ tests
+
+    @Test
+    public void equalsAndHashcode()
+    {
+        new EqualsTester().addEqualityGroup(td.month(), td.month()).addEqualityGroup(td.week(), td.week())
+                .addEqualityGroup(td.day(), td.day())
+                .addEqualityGroup(new Activities(1, 1, 1, 1, DAY), new Activities(1, 1, 1, 1, DAY))
+                .addEqualityGroup(new Activities(2, 1, 1, 1, DAY), new Activities(2, 1, 1, 1, DAY))
+                .addEqualityGroup(new Activities(1, 2, 1, 1, DAY), new Activities(1, 2, 1, 1, DAY))
+                .addEqualityGroup(new Activities(1, 1, 2, 1, DAY), new Activities(1, 1, 2, 1, DAY))
+                .addEqualityGroup(new Activities(1, 1, 1, 2, DAY), new Activities(1, 1, 1, 2, DAY)).testEquals();
+    }
+
 
     @Test
     public void add()
@@ -144,6 +154,64 @@ public class ActivitiesTest
         cut.add(anotherActivity);
         assertTrue(cut.contains(activity));
         assertTrue(cut.contains(anotherActivity));
+    }
+
+
+    @Test
+    public void weekOf()
+    {
+        Activity activity = td.newActivity();
+
+        // null
+        Activities cut = td.newActivities(WEEK);
+        assertNull(cut.weekOf(null));
+
+        // month
+        cut = td.month();
+        assertNull(cut.weekOf(activity));
+        cut.add(activity);
+        assertNotNull(cut.weekOf(activity));
+
+        // week
+        cut = td.week();
+        assertNull(cut.weekOf(activity));
+        cut.add(activity);
+        assertNull(cut.weekOf(activity));
+
+        // day
+        cut = td.day();
+        assertNull(cut.weekOf(activity));
+        cut.add(activity);
+        assertNull(cut.weekOf(activity));
+    }
+
+
+    @Test
+    public void dayOf()
+    {
+        Activity activity = td.newActivity();
+
+        // null
+        Activities cut = td.newActivities(WEEK);
+        assertNull(cut.dayOf(null));
+
+        // month
+        cut = td.month();
+        assertNull(cut.dayOf(activity));
+        cut.add(activity);
+        assertNull(cut.dayOf(activity));
+
+        // week
+        cut = td.week();
+        assertNull(cut.dayOf(activity));
+        cut.add(activity);
+        assertNotNull(cut.dayOf(activity));
+
+        // day
+        cut = td.day();
+        assertNull(cut.dayOf(activity));
+        cut.add(activity);
+        assertNull(cut.dayOf(activity));
     }
 
 

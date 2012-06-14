@@ -1,16 +1,16 @@
 package name.pehl.tire.client.activity.view;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Week;
 
 import org.moxieapps.gwt.highcharts.client.Point;
-
-import com.google.gwt.json.client.JSONString;
 
 /**
  * @author $Author: harald.pehl $
@@ -20,34 +20,60 @@ import com.google.gwt.json.client.JSONString;
 public class MonthChartWidget extends QuickChartWidget
 {
     final static String[] WEEKS = new String[] {"n/a", "n/a", "n/a", "n/a"};
+    final Map<Week, Point> weekToPoint;
 
 
     public MonthChartWidget()
     {
         super(WEEKS);
+        this.weekToPoint = new HashMap<Week, Point>();
     }
 
 
     @Override
     public void updateActivities(Activities activities)
     {
+        weekToPoint.clear();
         List<String> categories = new ArrayList<String>();
         Iterator<Week> iter = activities.getWeeks().iterator();
         for (Point point : series.getPoints())
         {
             double hours = 0;
+            String tooltip = null;
             String category = "n/a";
             if (iter.hasNext())
             {
                 Week week = iter.next();
-                hours = week.getMinutes() / 60.0;
+                weekToPoint.put(week, point);
+                hours = hours(week);
+                tooltip = tooltip(week);
                 category = String.valueOf(week.getWeek());
-                String tooltip = "CW " + week.getWeek() + ": " + FormatUtils.hours(week.getMinutes());
-                point.getUserData().put("tooltip", new JSONString(tooltip));
             }
-            point.update(hours);
             categories.add(category);
+            updatePoint(point, hours, tooltip);
         }
         chart.getXAxis().setCategories(categories.toArray(new String[] {}));
+    }
+
+
+    public void updateWeek(Week week)
+    {
+        Point point = weekToPoint.get(week);
+        if (point != null)
+        {
+            updatePoint(point, hours(week), tooltip(week));
+        }
+    }
+
+
+    double hours(Week week)
+    {
+        return week.getMinutes() / 60.0;
+    }
+
+
+    String tooltip(Week week)
+    {
+        return "CW " + week.getWeek() + ": " + FormatUtils.hours(week.getMinutes());
     }
 }
