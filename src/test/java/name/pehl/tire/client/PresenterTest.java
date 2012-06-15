@@ -7,17 +7,9 @@ import name.pehl.tire.TestData;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.testing.StubScheduler;
 import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.http.client.URL;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.web.bindery.event.shared.Event;
@@ -31,12 +23,8 @@ import com.gwtplatform.tester.TestDispatchAsync;
 import com.gwtplatform.tester.TestDispatchService;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({GWT.class, URL.class})
-public abstract class PresenterTest
+public abstract class PresenterTest extends GwtTest
 {
     protected TestData td;
     protected Stack<Event<?>> events;
@@ -48,18 +36,6 @@ public abstract class PresenterTest
     @Before
     public void presenterTestSetUp()
     {
-        mockStatic(GWT.class);
-        mockStatic(URL.class);
-        when(GWT.getHostPageBaseURL()).thenReturn("http://localhost");
-        when(URL.encode(Mockito.anyString())).thenAnswer(new Answer<String>()
-        {
-            @Override
-            public String answer(InvocationOnMock invocation) throws Throwable
-            {
-                return String.valueOf(invocation.getArguments()[0]);
-            }
-        });
-
         td = new TestData();
         events = new Stack<Event<?>>();
         eventBus = new CountingEventBus();

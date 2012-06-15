@@ -23,10 +23,10 @@ public class ActivitiesRequest
     public static final String PARAM_MONTH = "month";
     public static final String PARAM_WEEK = "week";
 
-    private static final Logger logger = Logger.getLogger(ActivitiesRequest.class.getName());
+    static final Logger logger = Logger.getLogger(ActivitiesRequest.class.getName());
 
-    private final String url;
-    private final String text;
+    final String url;
+    final String text;
 
 
     public ActivitiesRequest(String url)
@@ -111,7 +111,7 @@ public class ActivitiesRequest
             {
                 result = TimeUnit.valueOf(value.toUpperCase());
             }
-            catch (NumberFormatException e)
+            catch (IllegalArgumentException e)
             {
                 logger.log(Level.WARNING, "Cannot parse \"" + value + "\" as time unit");
             }
