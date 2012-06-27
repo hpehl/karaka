@@ -17,6 +17,9 @@ public class EditActivityPresenter extends PresenterWidget<EditActivityPresenter
     public interface MyView extends PopupView
     {
         void setActivity(Activity activity);
+
+
+        void save();
     }
 
 

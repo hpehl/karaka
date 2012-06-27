@@ -1,5 +1,6 @@
 package name.pehl.tire.client.ui;
 
+import name.pehl.tire.client.Defaults;
 import name.pehl.tire.shared.model.Time;
 
 import com.google.gwt.editor.client.IsEditor;
@@ -8,7 +9,6 @@ import com.google.gwt.editor.client.adapters.TakesValueEditor;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasValue;
 
@@ -19,15 +19,13 @@ import com.google.gwt.user.client.ui.HasValue;
 public class TimeTextBox extends Composite implements HasValue<Time>, IsEditor<LeafValueEditor<Time>>
 {
     private Time currentTime;
-    private final DateTimeFormat format;
-    private final PlaceholderTextBox textBox;
+    private final Html5TextBox textBox;
 
 
     public TimeTextBox()
     {
         currentTime = new Time();
-        format = DateTimeFormat.getFormat("HH:mm");
-        textBox = new PlaceholderTextBox();
+        textBox = new Html5TextBox();
         initWidget(textBox);
     }
 
@@ -67,12 +65,18 @@ public class TimeTextBox extends Composite implements HasValue<Time>, IsEditor<L
     }
 
 
+    public void setPlaceholder(String placeholder)
+    {
+        textBox.setPlaceholder(placeholder);
+    }
+
+
     private void setValue(Time oldTime, Time time, boolean fireEvents)
     {
         currentTime = time;
         if (time != null)
         {
-            textBox.setText(format.format(time.getDate()));
+            textBox.setText(Defaults.TIME_FORMAT.format(time.getDate()));
         }
     }
 }

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link
+	href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,400italic,500italic"
+	rel="stylesheet" type="text/css" />
+<link href="../../resources/name/pehl/tire/client/resources/tire.css"
+	rel="stylesheet" type="text/css" />
+<style type="text/css">
+.popup {
+	margin: 50px 25%;
+	padding: 10px;
+	border: #93cb2b solid 2px;
+	background-color: white;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	box-shadow: 2px 2px 2px #3d3d3d;
+	-moz-box-shadow: 2px 2px 2px #3d3d3d;
+	-webkit-box-shadow: 2px 2px 2px #3d3d3d;
+}
+
+.popup input,.popup textarea {
+	width: 100%;
+}
+
+ul.columns li {
+	float: left;
+	width: 25%;
+	padding-left: 5px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+ul.columns li:first-child {
+	padding-left: 0;
+}
+
+div.controls {
+	margin-top: 2em;
+}
+
+div.controls button {
+    margin-left: 5px;
+	float: right;
+	width: 8em;
+}
+
+.spacebelow {
+	margin-bottom: 8px;
+}
+</style>
+</head>
+<body>
+	<div class="popup">
+		<div class="spacebelow">
+			<input type="text" id="name" name="name" title="Name"
+				placeholder="Name" autofocus="autofocus" />
+		</div>
+		<div class="spacebelow">
+			<textarea id="description" name="description" title="Description"
+				placeholder="Description" rows="3"></textarea>
+		</div>
+		<ul class="columns spacebelow">
+			<li><input type="text" id="start" name="start" title="Start"
+				placeholder="Start" /></li>
+			<li><input type="text" id="end" name="end" title="End"
+				placeholder="End" /></li>
+			<li><input type="text" id="pause" name="pause" title="Pause"
+				placeholder="Pause" /></li>
+			<li><input type="text" id="duration" name="duration"
+				title="Duration" placeholder="Duration" class="spacebelow" /></li>
+		</ul>
+		<div class="spacebelow">
+			<input type="text" id="tags" name="tags" title="Tags"
+				placeholder="Tags" />
+		</div>
+		<div>
+			<input type="text" id="project" name="project" title="Project"
+				placeholder="Project" />
+		</div>
+		<div class="controls">
+			<button>Cancel</button>
+			<button>Save</button>
+		</div>
+		<div style="clear: right;"></div>
+	</div>
+</body>
+</html>

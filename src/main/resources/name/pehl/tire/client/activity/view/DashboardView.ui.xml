@@ -124,15 +124,15 @@
 					</ul>
 					<div class="{style.input}">
 						<span class="{style.descriptionHolder}">
-							<tui:PlaceholderTextBox ui:field="description"
+							<tui:Html5TextBox ui:field="description"
 								placeholder="Description" title="Create or select a description" />
 						</span>
 						<span class="{style.projectHolder}">
-							<tui:PlaceholderTextBox ui:field="project"
+							<tui:Html5TextBox ui:field="project"
 								placeholder="Project" title="Create or select a project" />
 						</span>
 						<span class="{style.timeHolder}">
-							<tui:PlaceholderTextBox ui:field="time"
+							<tui:Html5TextBox ui:field="time"
 								placeholder="Time" title="Leave empty to start a new activity" />
 						</span>
 					</div>

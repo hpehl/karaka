@@ -1,21 +1,23 @@
 package name.pehl.tire.client.activity.view;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
 import name.pehl.tire.client.ui.EscapablePopupPanel;
-import name.pehl.tire.client.ui.PlaceholderTextBox;
+import name.pehl.tire.client.ui.Html5TextArea;
+import name.pehl.tire.client.ui.Html5TextBox;
 import name.pehl.tire.client.ui.TimeTextBox;
 import name.pehl.tire.shared.model.Activity;
 
 import com.google.gwt.editor.client.Editor;
+import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.mvp.client.PopupViewCloseHandler;
 import com.gwtplatform.mvp.client.PopupViewImpl;
 
 /**
@@ -37,10 +39,14 @@ public class EditActivityView extends PopupViewImpl implements EditActivityPrese
     private final EscapablePopupPanel popupPanel;
     private final Driver driver;
     private Activity activityToEdit;
-    @UiField PlaceholderTextBox name;
-    @UiField PlaceholderTextBox description;
+    @UiField Html5TextBox name;
+    @UiField Html5TextArea description;
     @UiField TimeTextBox start;
     @UiField TimeTextBox end;
+    @UiField Html5TextBox pause;
+    @UiField Html5TextBox duration;
+    @UiField Html5TextBox tags;
+    @UiField Html5TextBox project;
 
 
     @Inject
@@ -50,14 +56,6 @@ public class EditActivityView extends PopupViewImpl implements EditActivityPrese
         this.popupPanel = binder.createAndBindUi(this);
         this.driver = driver;
         setAutoHideOnNavigationEventEnabled(true);
-        setCloseHandler(new PopupViewCloseHandler()
-        {
-            @Override
-            public void onClose()
-            {
-                logger.fine("Closing edit View");
-            }
-        });
     }
 
 
@@ -81,5 +79,21 @@ public class EditActivityView extends PopupViewImpl implements EditActivityPrese
     public void setActivity(Activity activity)
     {
         this.activityToEdit = activity;
+    }
+
+
+    @Override
+    public void save()
+    {
+        Activity changedActivity = driver.flush();
+        if (driver.hasErrors())
+        {
+            List<EditorError> errors = driver.getErrors();
+            logger.warning("There are errors: " + errors);
+        }
+        else if (driver.isDirty())
+        {
+            // TODO Save changes to the activity
+        }
     }
 }
