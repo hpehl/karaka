@@ -4,7 +4,6 @@
 
 	<ui:style>
 		.popup {
-			margin: 50px 25%;
 			padding: 10px;
 			border: #93cb2b solid 2px;
 			background-color: white;
@@ -58,7 +57,7 @@
 			</div>
 			<div class="{style.spacebelow}">
 				<tui:Html5TextArea ui:field="description"
-					placeholder="Description" title="Description" rows="3"></tui:Html5TextArea>
+					placeholder="Description" title="Description" visibleLines="3"></tui:Html5TextArea>
 			</div>
 			<ul class="{style.columns} {style.spacebelow}">
 				<li>
@@ -70,21 +69,26 @@
 						title="End" />
 				</li>
 				<li>
-					<tui:Html5TextBox ui:field="pause" placeholder="Pause"
-						title="Pause" />
+					<!-- <tui:Html5TextBox ui:field="pause" placeholder="Pause" -->
+					<!-- title="Pause" /> -->
+					<input type="text" name="pause" placeholder="Pause" title="Pause" />
 				</li>
 				<li>
-					<tui:Html5TextBox ui:field="duration" title="Duration"
-						placeholder="Duration" title="Duration" class="spacebelow" />
+					<!-- <tui:Html5TextBox ui:field="duration" placeholder="Duration" -->
+					<!-- title="Duration" addStyleNames="{style.spacebelow}" /> -->
+					<input type="text" name="duration" placeholder="Duration"
+						title="Duration" class="{style.spacebelow}" />
 				</li>
 			</ul>
 			<div class="{style.spacebelow}">
-				<tui:Html5TextBox ui:field="tags" placeholder="Tags"
-					title="Tags" />
+				<!-- <tui:Html5TextBox ui:field="tags" placeholder="Tags" -->
+				<!-- title="Tags" /> -->
+				<input type="text" name="tags" placeholder="Tags" title="Tags" />
 			</div>
 			<div>
-				<tui:Html5TextBox ui:field="project" placeholder="Project"
-					title="Project" />
+				<!-- <tui:Html5TextBox ui:field="project" placeholder="Project" -->
+				<!-- title="Project" /> -->
+				<input type="text" name="project" placeholder="Project" title="Project" />
 			</div>
 			<div class="{style.controls}">
 				<button>Cancel</button>

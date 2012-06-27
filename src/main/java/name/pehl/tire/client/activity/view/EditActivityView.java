@@ -43,11 +43,12 @@ public class EditActivityView extends PopupViewImpl implements EditActivityPrese
     @UiField Html5TextArea description;
     @UiField TimeTextBox start;
     @UiField TimeTextBox end;
-    @UiField Html5TextBox pause;
-    @UiField Html5TextBox duration;
-    @UiField Html5TextBox tags;
-    @UiField Html5TextBox project;
 
+
+    // @UiField Html5TextBox pause;
+    // @UiField Html5TextBox duration;
+    // @UiField Html5TextBox tags;
+    // @UiField Html5TextBox project;
 
     @Inject
     public EditActivityView(final EventBus eventBus, final Binder binder, final Driver driver)
