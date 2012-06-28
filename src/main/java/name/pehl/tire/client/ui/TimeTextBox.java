@@ -16,16 +16,20 @@ import com.google.gwt.user.client.ui.HasValue;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class TimeTextBox extends Composite implements HasValue<Time>, IsEditor<LeafValueEditor<Time>>
+public class TimeTextBox extends Composite implements HasValue<Time>, IsEditor<LeafValueEditor<Time>>,
+        ValueChangeHandler<String>
 {
     private Time currentTime;
     private final Html5TextBox textBox;
+    private final HourMinuteParser hourMinuteParser;
 
 
     public TimeTextBox()
     {
-        currentTime = new Time();
-        textBox = new Html5TextBox();
+        this.currentTime = new Time();
+        this.textBox = new Html5TextBox();
+        this.textBox.addValueChangeHandler(this);
+        this.hourMinuteParser = new HourMinuteParser();
         initWidget(textBox);
     }
 
@@ -77,6 +81,23 @@ public class TimeTextBox extends Composite implements HasValue<Time>, IsEditor<L
         if (time != null)
         {
             textBox.setText(Defaults.TIME_FORMAT.format(time.getDate()));
+        }
+    }
+
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void onValueChange(ValueChangeEvent<String> event)
+    {
+        try
+        {
+            int[] hm = hourMinuteParser.parse(event.getValue());
+            currentTime.getDate().setHours(hm[0]);
+            currentTime.getDate().setMinutes(hm[1]);
+        }
+        catch (IllegalArgumentException e)
+        {
+            // TODO Error handling
         }
     }
 }
