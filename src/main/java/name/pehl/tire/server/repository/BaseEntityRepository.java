@@ -1,6 +1,5 @@
 package name.pehl.tire.server.repository;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +12,6 @@ import name.pehl.tire.server.normalizer.Normalizer;
 import name.pehl.tire.server.paging.entity.PageInfo;
 import name.pehl.tire.server.paging.entity.PageResult;
 import name.pehl.tire.server.project.entity.Project;
-import name.pehl.tire.server.search.entity.IndexEntry;
-import name.pehl.tire.server.search.entity.Searchable;
 import name.pehl.tire.server.settings.entity.Settings;
 import name.pehl.tire.server.tag.entity.Tag;
 
@@ -46,7 +43,6 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
         // Register all entity classes here
         ObjectifyService.register(Activity.class);
         ObjectifyService.register(Client.class);
-        ObjectifyService.register(IndexEntry.class);
         ObjectifyService.register(Project.class);
         ObjectifyService.register(Settings.class);
         ObjectifyService.register(Tag.class);
@@ -75,7 +71,6 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
     public Key<T> put(T entity)
     {
         Key<T> key = ofy().put(entity);
-        index(key, entity);
         return key;
     }
 
@@ -83,7 +78,6 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
     public Map<Key<T>, T> putAll(Iterable<T> entities)
     {
         Map<Key<T>, T> keysAndEntities = ofy().put(entities);
-        index(keysAndEntities);
         return keysAndEntities;
     }
 
@@ -93,14 +87,12 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
     public void delete(T entity)
     {
         ofy().delete(entity);
-        unIndex(new Key<T>(clazz, entity.getId()));
     }
 
 
     public void deleteKey(Key<T> key)
     {
         ofy().delete(key);
-        unIndex(key);
     }
 
 
@@ -112,14 +104,12 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
         {
             keys.add(new Key<T>(clazz, entity.getId()));
         }
-        unIndex(keys);
     }
 
 
     public void deleteKeys(Iterable<Key<T>> keys)
     {
         ofy().delete(keys);
-        unIndex(keys);
     }
 
 
@@ -173,74 +163,6 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
     public PageResult<T> findByProperty(String propName, Object propValue, PageInfo pageInfo)
     {
         return pageResultFor(query().filter(propName, propValue), pageInfo);
-    }
-
-
-    // ---------------------------------------------------------- index methods
-
-    private IndexEntry createIndexEntry(Key<T> key, T entity)
-    {
-        IndexEntry indexEntry = null;
-        if (entity instanceof Searchable)
-        {
-            String normalized = normalizer.normalize(((Searchable) entity).getSearchData());
-            if (normalized != null)
-            {
-                indexEntry = new IndexEntry(key, normalized);
-            }
-        }
-        return indexEntry;
-    }
-
-
-    private List<IndexEntry> createIndexEntries(Map<Key<T>, T> keysAndEntities)
-    {
-        List<IndexEntry> indexEntries = new ArrayList<IndexEntry>();
-        for (Map.Entry<Key<T>, T> entry : keysAndEntities.entrySet())
-        {
-            IndexEntry indexEntry = createIndexEntry(entry.getKey(), entry.getValue());
-            if (indexEntry != null)
-            {
-                indexEntries.add(indexEntry);
-            }
-        }
-        return indexEntries;
-    }
-
-
-    private void index(Key<T> key, T entity)
-    {
-        unIndex(key);
-        IndexEntry indexEntry = createIndexEntry(key, entity);
-        if (indexEntry != null)
-        {
-            ofy().put(indexEntry);
-        }
-    }
-
-
-    private void index(Map<Key<T>, T> keysAndEntities)
-    {
-        unIndex(keysAndEntities.keySet());
-        List<IndexEntry> indexEntries = createIndexEntries(keysAndEntities);
-        if (!indexEntries.isEmpty())
-        {
-            ofy().put(indexEntries);
-        }
-    }
-
-
-    private void unIndex(Key<T> key)
-    {
-        List<Key<IndexEntry>> indexEntryKeys = ofy().query(IndexEntry.class).filter("key", key).listKeys();
-        ofy().delete(indexEntryKeys);
-    }
-
-
-    private void unIndex(Iterable<Key<T>> keys)
-    {
-        List<Key<IndexEntry>> indexEntryKeys = ofy().query(IndexEntry.class).filter("key IN", keys).listKeys();
-        ofy().delete(indexEntryKeys);
     }
 
 

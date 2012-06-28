@@ -1,7 +1,5 @@
 package name.pehl.tire.server.entity;
 
-import name.pehl.tire.server.search.entity.Searchable;
-
 import com.googlecode.objectify.annotation.Unindexed;
 
 /**
@@ -9,7 +7,7 @@ import com.googlecode.objectify.annotation.Unindexed;
  * @version $LastChangedRevision: 41 $
  */
 @SuppressWarnings("serial")
-public abstract class NamedEntity extends BaseEntity implements Searchable
+public abstract class NamedEntity extends BaseEntity
 {
     @Unindexed private String name;
 
@@ -44,18 +42,5 @@ public abstract class NamedEntity extends BaseEntity implements Searchable
     public void setName(String name)
     {
         this.name = name;
-    }
-
-
-    /**
-     * Returns the name
-     * 
-     * @return the name
-     * @see name.pehl.tire.server.search.entity.Searchable#getSearchData()
-     */
-    @Override
-    public String getSearchData()
-    {
-        return name;
     }
 }
