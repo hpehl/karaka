@@ -14,7 +14,8 @@ public class ActivityAction
 {
     public static enum Action
     {
-        EDIT,
+        DETAILS,
+        SAVE,
         COPY,
         START_STOP,
         DELETE

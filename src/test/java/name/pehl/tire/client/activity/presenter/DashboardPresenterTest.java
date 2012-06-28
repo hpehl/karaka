@@ -364,12 +364,12 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
 
 
     @Test
-    public void edit()
+    public void details()
     {
         EditActivityPresenter.MyView editView = mock(EditActivityPresenter.MyView.class);
         when(editActivityPresenter.getView()).thenReturn(editView);
         Activity activity = td.newActivity();
-        cut.edit(activity);
+        cut.details(activity);
         verify(editView).setActivity(activity);
     }
 

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
+import name.pehl.tire.client.activity.presenter.EditAvtivityUiHandlers;
 import name.pehl.tire.client.ui.EscapablePopupPanel;
 import name.pehl.tire.client.ui.Html5TextArea;
 import name.pehl.tire.client.ui.Html5TextBox;
@@ -13,18 +14,22 @@ import name.pehl.tire.shared.model.Activity;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.mvp.client.PopupViewImpl;
+import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class EditActivityView extends PopupViewImpl implements EditActivityPresenter.MyView, Editor<Activity>
+public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHandlers> implements
+        EditActivityPresenter.MyView, Editor<Activity>
 {
     public interface Driver extends SimpleBeanEditorDriver<Activity, EditActivityView>
     {
@@ -48,6 +53,8 @@ public class EditActivityView extends PopupViewImpl implements EditActivityPrese
     @UiField @Ignore Html5TextBox duration;
     @UiField @Ignore Html5TextBox tags;
     @UiField @Ignore Html5TextBox project;
+    @UiField Button cancel;
+    @UiField Button save;
 
 
     @Inject
@@ -77,15 +84,15 @@ public class EditActivityView extends PopupViewImpl implements EditActivityPrese
     }
 
 
-    @Override
-    public void setActivity(Activity activity)
+    @UiHandler("cancel")
+    void onCancelClicked(ClickEvent event)
     {
-        this.activityToEdit = activity;
+        hide();
     }
 
 
-    @Override
-    public void save()
+    @UiHandler("save")
+    void onSaveClicked(ClickEvent event)
     {
         Activity changedActivity = driver.flush();
         if (driver.hasErrors())
@@ -95,7 +102,18 @@ public class EditActivityView extends PopupViewImpl implements EditActivityPrese
         }
         else if (driver.isDirty())
         {
-            // TODO Save changes to the activity
+            hide();
+            if (getUiHandlers() != null)
+            {
+                getUiHandlers().onSave(changedActivity);
+            }
         }
+    }
+
+
+    @Override
+    public void setActivity(Activity activity)
+    {
+        this.activityToEdit = activity;
     }
 }

@@ -47,6 +47,7 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 import static name.pehl.tire.client.NameTokens.dashboard;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.CHANGED;
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
@@ -355,8 +356,11 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     {
         switch (action)
         {
-            case EDIT:
-                edit(activity);
+            case DETAILS:
+                details(activity);
+                break;
+            case SAVE:
+                save(activity);
                 break;
             case COPY:
                 copy(activity);
@@ -380,12 +384,30 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     }
 
 
-    void edit(Activity activity)
+    void details(Activity activity)
     {
         logger.fine("Open " + activity + " for edit");
         editActivityPresenter.getView().setActivity(activity);
         addToPopupSlot(null);
         addToPopupSlot(editActivityPresenter);
+    }
+
+
+    void save(Activity activity)
+    {
+        logger.fine("About to save " + activity);
+        dispatcher.execute(new SaveActivityAction(activity), new TireCallback<SaveActivityResult>(getEventBus())
+        {
+            @Override
+            public void onSuccess(SaveActivityResult result)
+            {
+                Activity storedActivity = result.getStoredActivity();
+                update(storedActivity);
+                ActivityChangedEvent.fire(DashboardPresenter.this, storedActivity, CHANGED);
+                ShowMessageEvent.fire(DashboardPresenter.this,
+                        new Message(INFO, "Activity \"" + storedActivity.getName() + "\" changed", true));
+            }
+        });
     }
 
 

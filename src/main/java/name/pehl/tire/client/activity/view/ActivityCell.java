@@ -11,7 +11,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.SafeHtmlRenderer;
 
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.EDIT;
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.DETAILS;
 
 /**
  * @author $LastChangedBy:$
@@ -40,7 +40,7 @@ public class ActivityCell extends AbstractSafeHtmlCell<Activity>
         if ("click".equals(event.getType()))
         {
             actionCell.hideActions(parent);
-            activitiesTable.onActivityAction(value, EDIT);
+            activitiesTable.onActivityAction(value, DETAILS);
         }
         else if ("mouseover".equals(event.getType()))
         {
