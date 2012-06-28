@@ -54,41 +54,50 @@
 			<div class="{style.spacebelow}">
 				<tui:Html5TextBox ui:field="name" placeholder="Name"
 					title="Name" autofocus="autofocus" />
+				<!-- <input type="text" name="name" placeholder="Name" title="Name" -->
+				<!-- autofocus="autofocus" /> -->
 			</div>
 			<div class="{style.spacebelow}">
 				<tui:Html5TextArea ui:field="description"
 					placeholder="Description" title="Description" visibleLines="3"></tui:Html5TextArea>
+				<!-- <textArea name="description" placeholder="Description" -->
+				<!-- title="Description" visibleLines="3"></textArea> -->
 			</div>
-			<ul class="{style.columns} {style.spacebelow}">
+			<ul class="{style.columns}">
 				<li>
 					<tui:TimeTextBox ui:field="start" placeholder="Start"
 						title="Start" />
+					<!-- <input type="text" name="start" placeholder="Start" title="Start" 
+						/> -->
 				</li>
 				<li>
 					<tui:TimeTextBox ui:field="end" placeholder="End"
 						title="End" />
+					<!-- <input type="text" name="end" placeholder="End" title="End" /> -->
 				</li>
 				<li>
-					<!-- <tui:Html5TextBox ui:field="pause" placeholder="Pause" -->
-					<!-- title="Pause" /> -->
-					<input type="text" name="pause" placeholder="Pause" title="Pause" />
+					<tui:Html5TextBox ui:field="pause" placeholder="Pause"
+						title="Pause" />
+					<!-- <input type="text" name="pause" placeholder="Pause" title="Pause" 
+						/> -->
 				</li>
-				<li>
-					<!-- <tui:Html5TextBox ui:field="duration" placeholder="Duration" -->
-					<!-- title="Duration" addStyleNames="{style.spacebelow}" /> -->
-					<input type="text" name="duration" placeholder="Duration"
-						title="Duration" class="{style.spacebelow}" />
+				<li style="float: right;">
+					<tui:Html5TextBox ui:field="duration" placeholder="Duration"
+						title="Duration" addStyleNames="{style.spacebelow}" />
+					<!-- <input type="text" name="duration" placeholder="Duration" -->
+					<!-- title="Duration" class="{style.spacebelow}" /> -->
 				</li>
 			</ul>
 			<div class="{style.spacebelow}">
-				<!-- <tui:Html5TextBox ui:field="tags" placeholder="Tags" -->
-				<!-- title="Tags" /> -->
-				<input type="text" name="tags" placeholder="Tags" title="Tags" />
+				<tui:Html5TextBox ui:field="tags" placeholder="Tags"
+					title="Tags" />
+				<!-- <input type="text" name="tags" placeholder="Tags" title="Tags" /> -->
 			</div>
 			<div>
-				<!-- <tui:Html5TextBox ui:field="project" placeholder="Project" -->
-				<!-- title="Project" /> -->
-				<input type="text" name="project" placeholder="Project" title="Project" />
+				<tui:Html5TextBox ui:field="project" placeholder="Project"
+					title="Project" />
+				<!-- <input type="text" name="project" placeholder="Project" title="Project" 
+					/> -->
 			</div>
 			<div class="{style.controls}">
 				<button>Cancel</button>

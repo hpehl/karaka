@@ -39,22 +39,23 @@ public class EditActivityView extends PopupViewImpl implements EditActivityPrese
     private final EscapablePopupPanel popupPanel;
     private final Driver driver;
     private Activity activityToEdit;
+
     @UiField Html5TextBox name;
     @UiField Html5TextArea description;
     @UiField TimeTextBox start;
     @UiField TimeTextBox end;
+    @UiField @Ignore Html5TextBox pause;
+    @UiField @Ignore Html5TextBox duration;
+    @UiField @Ignore Html5TextBox tags;
+    @UiField @Ignore Html5TextBox project;
 
-
-    // @UiField Html5TextBox pause;
-    // @UiField Html5TextBox duration;
-    // @UiField Html5TextBox tags;
-    // @UiField Html5TextBox project;
 
     @Inject
     public EditActivityView(final EventBus eventBus, final Binder binder, final Driver driver)
     {
         super(eventBus);
         this.popupPanel = binder.createAndBindUi(this);
+        this.popupPanel.setWidth("600px");
         this.driver = driver;
         setAutoHideOnNavigationEventEnabled(true);
     }
