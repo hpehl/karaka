@@ -1,5 +1,15 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static java.util.logging.Level.*;
+import static name.pehl.tire.client.NameTokens.dashboard;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.*;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
+
 import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -7,6 +17,9 @@ import java.util.TreeSet;
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.PresenterTest;
 import name.pehl.tire.client.activity.dispatch.ActivitiesRequest;
+import name.pehl.tire.client.activity.dispatch.DeleteActivityAction;
+import name.pehl.tire.client.activity.dispatch.DeleteActivityHandler;
+import name.pehl.tire.client.activity.dispatch.DeleteActivityResult;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesAction;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesResult;
@@ -24,6 +37,7 @@ import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.ActivityComparator;
 
 import org.fusesource.restygwt.client.FailedStatusCodeException;
 import org.joda.time.DateTime;
@@ -38,33 +52,6 @@ import com.gwtplatform.dispatch.client.actionhandler.ClientActionHandler;
 import com.gwtplatform.dispatch.client.actionhandler.ExecuteCommand;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
-import static java.util.Arrays.asList;
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.SEVERE;
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.NameTokens.dashboard;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
-
 public class DashboardPresenterTest extends PresenterTest implements ShowMessageHandler, ActivitiesLoadedHandler,
         ActivityChangedHandler
 {
@@ -75,6 +62,7 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
 
     GetActivitiesHandler getActivitiesHandler;
     SaveActivityHandler saveActivityHandler;
+    DeleteActivityHandler deleteActivityHandler;
     DashboardPresenter.MyView view;
     DashboardPresenter.MyProxy proxy;
     EditActivityPresenter editActivityPresenter;
@@ -89,9 +77,11 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
         // client action handlers
         getActivitiesHandler = mock(GetActivitiesHandler.class);
         saveActivityHandler = mock(SaveActivityHandler.class);
+        deleteActivityHandler = mock(DeleteActivityHandler.class);
         ImmutableMap<Class<?>, ClientActionHandler<?, ?>> actionHandlerMappings = new ImmutableMap.Builder<Class<?>, ClientActionHandler<?, ?>>()
                 .put(GetActivitiesAction.class, getActivitiesHandler)
-                .put(SaveActivityAction.class, saveActivityHandler).build();
+                .put(SaveActivityAction.class, saveActivityHandler)
+                .put(DeleteActivityAction.class, deleteActivityHandler).build();
 
         // class under test
         addEvents(this, ShowMessageEvent.getType(), ActivitiesLoadedEvent.getType(), ActivityChangedEvent.getType());
@@ -419,7 +409,8 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
     {
         Activity activity = td.newActivity();
         activity.setName("Foo");
-        SortedSet<Activity> activities = new TreeSet<Activity>(asList(activity));
+        SortedSet<Activity> activities = new TreeSet<Activity>(new ActivityComparator());
+        activities.add(activity);
         SaveActivityAction saveActivityAction = new SaveActivityAction(activity);
         final SaveActivityResult saveActivityResult = new SaveActivityResult(activity);
         Answer<Object> saveActivityAnswer = new Answer<Object>()
@@ -465,7 +456,8 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
     {
         Activity activity = td.newActivity(DateTime.now().minusDays(1).minusHours(1), DateTime.now().minusDays(1));
         activity.setName("Foo");
-        SortedSet<Activity> activities = new TreeSet<Activity>(asList(activity));
+        SortedSet<Activity> activities = new TreeSet<Activity>(new ActivityComparator());
+        activities.add(activity);
         final SaveActivityResult saveActivityResult = new SaveActivityResult(activity);
         Answer<Object> saveActivityAnswer = new Answer<Object>()
         {
@@ -507,11 +499,84 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
     @SuppressWarnings("unchecked")
     public void resumeActivityOtherActivityRunning()
     {
-        cut.runningActivity = td.newActivity();
+        Activity activity = td.newActivity();
+        activity.setName("Foo");
+        SortedSet<Activity> activities = new TreeSet<Activity>(new ActivityComparator());
+        activities.add(activity);
+        Activity runningActivity = td.newActivity();
+        cut.runningActivity = runningActivity;
         cut.runningActivity.start();
 
-        SaveActivityAction saveActivityAction = new SaveActivityAction(cut.runningActivity);
-        final SaveActivityResult saveActivityResult = new SaveActivityResult(cut.runningActivity);
+        // save running activity
+        SaveActivityAction saveRunningActivityAction = new SaveActivityAction(runningActivity);
+        final SaveActivityResult saveRunningActivityResult = new SaveActivityResult(runningActivity);
+        Answer<Object> saveRunningActivityAnswer = new Answer<Object>()
+        {
+            @Override
+            public Object answer(InvocationOnMock invocation)
+            {
+                AsyncCallback<SaveActivityResult> callback = (AsyncCallback<SaveActivityResult>) invocation
+                        .getArguments()[1];
+                callback.onSuccess(saveRunningActivityResult);
+                return null;
+            }
+        };
+        doAnswer(saveRunningActivityAnswer).when(saveActivityHandler).execute(eq(saveRunningActivityAction),
+                any(AsyncCallback.class), any(ExecuteCommand.class));
+
+        // save actual activity
+        SaveActivityAction saveActualActivityAction = new SaveActivityAction(activity);
+        final SaveActivityResult saveActualActivityResult = new SaveActivityResult(activity);
+        Answer<Object> saveActualActivityAnswer = new Answer<Object>()
+        {
+            @Override
+            public Object answer(InvocationOnMock invocation)
+            {
+                AsyncCallback<SaveActivityResult> callback = (AsyncCallback<SaveActivityResult>) invocation
+                        .getArguments()[1];
+                callback.onSuccess(saveActualActivityResult);
+                return null;
+            }
+        };
+        doAnswer(saveActualActivityAnswer).when(saveActivityHandler).execute(eq(saveActualActivityAction),
+                any(AsyncCallback.class), any(ExecuteCommand.class));
+
+        // One combination is enough
+        cut.activities = mock(Activities.class);
+        when(cut.activities.matchingRange(any(Activity.class))).thenReturn(false);
+        when(cut.activities.contains(any(Activity.class))).thenReturn(false);
+        when(cut.activities.activities()).thenReturn(activities);
+
+        cut.start(activity);
+
+        // stop running activity
+        verify(tickCommand).stop();
+        verify(cut.activities).update(runningActivity);
+
+        // start actual activity
+        assertTrue(activity.isRunning());
+        assertSame(cut.runningActivity, activity);
+        verify(cut.activities).update(runningActivity);
+        ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
+        Message message = showMessageEvent.getMessage();
+        assertEquals(INFO, message.getLevel());
+        assertEquals("Activity \"Foo\" resumed", message.getText());
+        assertTrue(message.isAutoHide());
+        ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
+        assertEquals(activityChangedEvent.getAction(), RESUMED);
+        assertSame(activityChangedEvent.getActivity(), activity);
+        verify(tickCommand).start(activity);
+    }
+
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void stop()
+    {
+        Activity activity = td.newActivity();
+        activity.setName("Foo");
+        SaveActivityAction saveActivityAction = new SaveActivityAction(activity);
+        final SaveActivityResult saveActivityResult = new SaveActivityResult(activity);
         Answer<Object> saveActivityAnswer = new Answer<Object>()
         {
             @Override
@@ -526,7 +591,104 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
         doAnswer(saveActivityAnswer).when(saveActivityHandler).execute(eq(saveActivityAction),
                 any(AsyncCallback.class), any(ExecuteCommand.class));
 
-        // TODO How to test stop and then start action?
+        for (boolean[] combination : UPDATE_ACTIVITY_COMBINATIONS)
+        {
+            reset(tickCommand);
+            activity.start();
+            cut.runningActivity = activity;
+            prepareUpdateActivity(activity, combination[0], combination[1]);
+            cut.stop(activity);
+            verify(tickCommand).stop();
+            assertTrue(activity.isStopped());
+            assertNull(cut.runningActivity);
+            verifyUpdateActivity(activity, combination[0], combination[1]);
+            ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
+            Message message = showMessageEvent.getMessage();
+            assertEquals(INFO, message.getLevel());
+            assertEquals("Activity \"Foo\" stopped", message.getText());
+            assertTrue(message.isAutoHide());
+            ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
+            assertEquals(activityChangedEvent.getAction(), STOPPED);
+            assertSame(activityChangedEvent.getActivity(), activity);
+        }
+    }
+
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void delete()
+    {
+        Activity activity = td.newActivity();
+        activity.setName("Foo");
+        DeleteActivityAction deleteActivityAction = new DeleteActivityAction(activity);
+        final DeleteActivityResult deleteActivityResult = new DeleteActivityResult();
+        Answer<Object> deleteActivityAnswer = new Answer<Object>()
+        {
+            @Override
+            public Object answer(InvocationOnMock invocation)
+            {
+                AsyncCallback<DeleteActivityResult> callback = (AsyncCallback<DeleteActivityResult>) invocation
+                        .getArguments()[1];
+                callback.onSuccess(deleteActivityResult);
+                return null;
+            }
+        };
+        doAnswer(deleteActivityAnswer).when(deleteActivityHandler).execute(eq(deleteActivityAction),
+                any(AsyncCallback.class), any(ExecuteCommand.class));
+        cut.activities = mock(Activities.class);
+
+        cut.delete(activity);
+        verify(cut.activities).remove(activity);
+        verify(view).updateActivities(cut.activities);
+        ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
+        Message message = showMessageEvent.getMessage();
+        assertEquals(INFO, message.getLevel());
+        assertEquals("Activity \"Foo\" deleted", message.getText());
+        assertTrue(message.isAutoHide());
+        ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
+        assertEquals(activityChangedEvent.getAction(), DELETE);
+        assertSame(activityChangedEvent.getActivity(), activity);
+    }
+
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void deleteRunningActivity()
+    {
+        Activity activity = td.newActivity();
+        activity.setName("Foo");
+        activity.start();
+        cut.runningActivity = activity;
+        DeleteActivityAction deleteActivityAction = new DeleteActivityAction(activity);
+        final DeleteActivityResult deleteActivityResult = new DeleteActivityResult();
+        Answer<Object> deleteActivityAnswer = new Answer<Object>()
+        {
+            @Override
+            public Object answer(InvocationOnMock invocation)
+            {
+                AsyncCallback<DeleteActivityResult> callback = (AsyncCallback<DeleteActivityResult>) invocation
+                        .getArguments()[1];
+                callback.onSuccess(deleteActivityResult);
+                return null;
+            }
+        };
+        doAnswer(deleteActivityAnswer).when(deleteActivityHandler).execute(eq(deleteActivityAction),
+                any(AsyncCallback.class), any(ExecuteCommand.class));
+        cut.activities = mock(Activities.class);
+
+        cut.delete(activity);
+        assertNull(cut.runningActivity);
+        verify(tickCommand).stop();
+        verify(cut.activities).remove(activity);
+        verify(view).updateActivities(cut.activities);
+        ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
+        Message message = showMessageEvent.getMessage();
+        assertEquals(INFO, message.getLevel());
+        assertEquals("Activity \"Foo\" deleted", message.getText());
+        assertTrue(message.isAutoHide());
+        ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
+        assertEquals(activityChangedEvent.getAction(), DELETE);
+        assertSame(activityChangedEvent.getActivity(), activity);
     }
 
 
