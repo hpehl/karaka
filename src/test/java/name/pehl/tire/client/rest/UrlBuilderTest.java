@@ -72,6 +72,62 @@ public class UrlBuilderTest
     }
 
 
+    @Test(expected = IllegalArgumentException.class)
+    public void invalidHostInDefaultUrl()
+    {
+        new UrlBuilder()
+        {
+            @Override
+            protected String defaultUrl()
+            {
+                return "http://h:o:s:t";
+            }
+        };
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void invalidPortInDefaultUrl()
+    {
+        new UrlBuilder()
+        {
+            @Override
+            protected String defaultUrl()
+            {
+                return "http://host:4a5";
+            }
+        };
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void invalidHostInDefaultUrlWithContext()
+    {
+        new UrlBuilder()
+        {
+            @Override
+            protected String defaultUrl()
+            {
+                return "http://h:o:s:t/context";
+            }
+        };
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void invalidPortInDefaultUrlWithContext()
+    {
+        new UrlBuilder()
+        {
+            @Override
+            protected String defaultUrl()
+            {
+                return "http://host:4a5/context";
+            }
+        };
+    }
+
+
     // ----------------------------------------------------- new instance tests
 
     @Test(expected = IllegalStateException.class)
