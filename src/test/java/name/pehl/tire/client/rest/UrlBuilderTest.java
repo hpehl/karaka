@@ -1,11 +1,11 @@
 package name.pehl.tire.client.rest;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 /**
  * @author $Author: lfstad-pehl $
@@ -17,7 +17,7 @@ public class UrlBuilderTest
     // ------------------------------------------------------ default url tests
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNullDefaultUrl()
+    public void nullDefaultUrl()
     {
         new UrlBuilder()
         {
@@ -31,7 +31,7 @@ public class UrlBuilderTest
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void testEmptyDefaultUrl()
+    public void emptyDefaultUrl()
     {
         new UrlBuilder()
         {
@@ -45,7 +45,7 @@ public class UrlBuilderTest
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInvalidDefaultUrl()
+    public void invalidDefaultUrl()
     {
         new UrlBuilder()
         {
@@ -53,6 +53,20 @@ public class UrlBuilderTest
             protected String defaultUrl()
             {
                 return "h://w";
+            }
+        };
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void noProtocolHostSeparatorInDefaultUrl()
+    {
+        new UrlBuilder()
+        {
+            @Override
+            protected String defaultUrl()
+            {
+                return "noprotocolhostseparator";
             }
         };
     }

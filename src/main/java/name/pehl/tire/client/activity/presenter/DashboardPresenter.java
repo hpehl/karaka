@@ -1,5 +1,17 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.NameTokens.dashboard;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.CHANGED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -43,18 +55,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
-
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.NameTokens.dashboard;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.CHANGED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * <p>
@@ -401,11 +401,11 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             @Override
             public void onSuccess(SaveActivityResult result)
             {
-                Activity storedActivity = result.getStoredActivity();
-                update(storedActivity);
-                ActivityChangedEvent.fire(DashboardPresenter.this, storedActivity, CHANGED);
+                Activity savedActivity = result.getStoredActivity();
+                update(savedActivity);
+                ActivityChangedEvent.fire(DashboardPresenter.this, savedActivity, CHANGED);
                 ShowMessageEvent.fire(DashboardPresenter.this,
-                        new Message(INFO, "Activity \"" + storedActivity.getName() + "\" changed", true));
+                        new Message(INFO, "Activity \"" + savedActivity.getName() + "\" saved", true));
             }
         });
     }

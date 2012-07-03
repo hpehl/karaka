@@ -17,12 +17,14 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 
 public class TickCommand implements HasHandlers, RepeatingCommand
 {
-    private static final Logger logger = Logger.getLogger(TickCommand.class.getName());
-    private boolean running;
-    private Activity activity;
-    private final EventBus eventBus;
-    private final Scheduler scheduler;
-    private final DispatchAsync dispatcher;
+    static final int ONE_MINUTE = 60000;
+    static final Logger logger = Logger.getLogger(TickCommand.class.getName());
+
+    boolean running;
+    Activity activity;
+    final EventBus eventBus;
+    final Scheduler scheduler;
+    final DispatchAsync dispatcher;
 
 
     public TickCommand(final EventBus eventBus, final Scheduler scheduler, final DispatchAsync dispatcher)
@@ -45,7 +47,7 @@ public class TickCommand implements HasHandlers, RepeatingCommand
         this.running = true;
         this.activity = activity;
         this.execute();
-        this.scheduler.scheduleFixedPeriod(this, 60000);
+        this.scheduler.scheduleFixedPeriod(this, ONE_MINUTE);
     }
 
 
