@@ -7,6 +7,7 @@ import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.about.AboutView;
 import name.pehl.tire.client.activity.dispatch.DeleteActivityHandler;
+import name.pehl.tire.client.activity.dispatch.FindActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
@@ -87,6 +88,7 @@ public class TireModule extends AbstractPresenterModule
         bind(ActivitiesTableResources.class).in(Singleton.class);
 
         // Rest Action Handlers
+        bind(FindActivitiesHandler.class);
         bind(GetActivitiesHandler.class);
         bind(GetMinutesHandler.class);
         bind(GetRunningActivityHandler.class);
