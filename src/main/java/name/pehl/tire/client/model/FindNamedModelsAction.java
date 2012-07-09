@@ -6,7 +6,6 @@ import com.gwtplatform.dispatch.shared.Action;
 
 public class FindNamedModelsAction<T extends NamedModel> implements Action<FindNamedModelsResult<T>>
 {
-    String resource;
     String query;
 
 
@@ -16,9 +15,8 @@ public class FindNamedModelsAction<T extends NamedModel> implements Action<FindN
     }
 
 
-    public FindNamedModelsAction(String resource, String query)
+    public FindNamedModelsAction(String query)
     {
-        this.resource = resource;
         this.query = query;
     }
 
@@ -34,12 +32,6 @@ public class FindNamedModelsAction<T extends NamedModel> implements Action<FindN
     public boolean isSecured()
     {
         return true;
-    }
-
-
-    public java.lang.String getResource()
-    {
-        return resource;
     }
 
 
@@ -66,17 +58,6 @@ public class FindNamedModelsAction<T extends NamedModel> implements Action<FindN
             return false;
         }
         FindNamedModelsAction<T> other = (FindNamedModelsAction<T>) obj;
-        if (resource == null)
-        {
-            if (other.resource != null)
-            {
-                return false;
-            }
-        }
-        else if (!resource.equals(other.resource))
-        {
-            return false;
-        }
         if (query == null)
         {
             if (other.query != null)
@@ -96,7 +77,6 @@ public class FindNamedModelsAction<T extends NamedModel> implements Action<FindN
     public int hashCode()
     {
         int hashCode = 23;
-        hashCode = hashCode * 37 + (resource == null ? 1 : resource.hashCode());
         hashCode = hashCode * 37 + (query == null ? 1 : query.hashCode());
         return hashCode;
     }
@@ -105,6 +85,6 @@ public class FindNamedModelsAction<T extends NamedModel> implements Action<FindN
     @Override
     public String toString()
     {
-        return "GetNamedModelsAction[" + resource + "," + query + "]";
+        return "GetNamedModelsAction[" + query + "]";
     }
 }

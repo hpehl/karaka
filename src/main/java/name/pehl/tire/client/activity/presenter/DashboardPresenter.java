@@ -103,7 +103,12 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         void updateActivities(Activities activities);
     }
 
-    // ---------------------------------------------------------- private stuff
+    // ------------------------------------------------------- (static) members
+
+    /**
+     * Constant for the find activities presenter widget.
+     */
+    public static final Object SLOT_Find_Activities = new Object();
 
     static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
@@ -111,9 +116,10 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
     final PlaceManager placeManager;
-    final EditActivityPresenter editActivityPresenter;
+    final FindActivitiesPresenterWidget findActivitiesPresenter;
     final SelectYearAndMonthOrWeekPresenter selectMonthPresenter;
     final SelectYearAndMonthOrWeekPresenter selectWeekPresenter;
+    final EditActivityPresenter editActivityPresenter;
 
     TickCommand tickCommand;
     StartAndResumeCallback startCallback;
@@ -139,17 +145,19 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     @Inject
     public DashboardPresenter(EventBus eventBus, MyView view, MyProxy proxy,
-            final EditActivityPresenter editActivityPresenter,
+            final FindActivitiesPresenterWidget findActivitiesPresenter,
             final SelectYearAndMonthOrWeekPresenter selectMonthPresenter,
-            final SelectYearAndMonthOrWeekPresenter selectWeekPresenter, final DispatchAsync dispatcher,
+            final SelectYearAndMonthOrWeekPresenter selectWeekPresenter,
+            final EditActivityPresenter editActivityPresenter, final DispatchAsync dispatcher,
             final PlaceManager placeManager, final Scheduler scheduler)
     {
         super(eventBus, view, proxy);
-        this.editActivityPresenter = editActivityPresenter;
+        this.findActivitiesPresenter = findActivitiesPresenter;
         this.selectMonthPresenter = selectMonthPresenter;
         this.selectMonthPresenter.setUnit(MONTH);
         this.selectWeekPresenter = selectWeekPresenter;
         this.selectWeekPresenter.setUnit(WEEK);
+        this.editActivityPresenter = editActivityPresenter;
         this.dispatcher = dispatcher;
         this.placeManager = placeManager;
         this.scheduler = scheduler;
@@ -170,6 +178,22 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     protected void revealInParent()
     {
         RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
+    }
+
+
+    @Override
+    protected void onReveal()
+    {
+        super.onReveal();
+        setInSlot(SLOT_Find_Activities, findActivitiesPresenter);
+    }
+
+
+    @Override
+    protected void onHide()
+    {
+        super.onHide();
+        removeFromSlot(SLOT_Find_Activities, findActivitiesPresenter);
     }
 
 

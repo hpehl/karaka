@@ -1,5 +1,13 @@
 package name.pehl.tire.server.activity.boundary;
 
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static name.pehl.tire.shared.model.TimeUnit.DAY;
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+import static org.joda.time.Months.months;
+import static org.joda.time.Weeks.weeks;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +21,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -34,13 +43,6 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 
 import com.googlecode.objectify.Key;
-
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static name.pehl.tire.shared.model.TimeUnit.DAY;
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-import static org.joda.time.Months.months;
-import static org.joda.time.Weeks.weeks;
 
 /**
  * Supported methods:
@@ -69,6 +71,8 @@ import static org.joda.time.Weeks.weeks;
  * <li>GET /activities/today: Find activities
  * <li>GET /activities/today/minutes: Get the minutes of the specified
  * activities
+ * <li>GET /activities/?q=&lt;name&gt;: Fid the activities with the specified
+ * name
  * <li>GET /activities/currentMWD/minutes: Get the minutes of the current
  * <strong>m</strong>onth, <strong>w</strong>eek and <strong>d</strong>ay
  * <li>GET /activities/running: Find the running activity
@@ -329,6 +333,21 @@ public class ActivitiesResource
                     .monthOfYear().get(), date.year().get()));
         }
         return activities;
+    }
+
+
+    // ------------------------------------------------ find activities by name
+
+    @GET
+    public List<name.pehl.tire.shared.model.Activity> findByName(@QueryParam("q") String query)
+    {
+        List<name.pehl.tire.shared.model.Activity> result = new ArrayList<name.pehl.tire.shared.model.Activity>();
+        List<Activity> activities = forYearWeek(now(settings.getTimeZone()));
+        for (Activity activity : activities)
+        {
+            result.add(activityConverter.toModel(activity));
+        }
+        return result;
     }
 
 

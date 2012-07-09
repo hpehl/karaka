@@ -1,27 +1,26 @@
 package name.pehl.tire.client.model;
 
+import name.pehl.tire.client.ui.Html5TextBox;
 import name.pehl.tire.shared.model.NamedModel;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
-public class FindNamedModelsView<T extends NamedModel> extends ViewWithUiHandlers<FindNamedModelsUiHandlers> implements
-        FindNamedModelsPresenterWidget.MyView<T>
+public abstract class FindNamedModelsView<T extends NamedModel> extends ViewWithUiHandlers<FindNamedModelsUiHandlers>
+        implements FindNamedModelsPresenterWidget.MyView<T>
 {
     final SuggestOracle suggestOracle;
-    final TextBox textBox;
+    final Html5TextBox textBox;
     final SuggestBox suggestBox;
 
 
     public FindNamedModelsView()
     {
         this.suggestOracle = new NamedModelSuggestOracle();
-        ;
-        this.textBox = new TextBox();
+        this.textBox = new Html5TextBox();
         this.suggestBox = new SuggestBox(suggestOracle, textBox);
     }
 
@@ -30,6 +29,13 @@ public class FindNamedModelsView<T extends NamedModel> extends ViewWithUiHandler
     public Widget asWidget()
     {
         return suggestBox;
+    }
+
+
+    @Override
+    public void setPlaceholder(String placeholder)
+    {
+        textBox.setPlaceholder(placeholder);
     }
 
     class NamedModelSuggestOracle extends SuggestOracle

@@ -26,26 +26,26 @@ public abstract class FindNamedModelsPresenterWidget<T extends NamedModel> exten
 {
     public interface MyView<T> extends View, HasUiHandlers<FindNamedModelsUiHandlers>
     {
+        void setPlaceholder(String placeholder);
     }
 
     final DispatchAsync dispatcher;
     final TireActionHandler<FindNamedModelsAction<T>, FindNamedModelsResult<T>> actionHandler;
-    final String resource;
     final boolean multivalued;
 
 
     public FindNamedModelsPresenterWidget(final EventBus eventBus, final MyView<T> view,
             final DispatchAsync dispatcher,
             final TireActionHandler<FindNamedModelsAction<T>, FindNamedModelsResult<T>> actionHandler,
-            final String resource, final boolean multivalued)
+            final String placeHolder, final boolean multivalued)
     {
         super(eventBus, view);
         this.dispatcher = dispatcher;
         this.actionHandler = actionHandler;
-        this.resource = resource;
         this.multivalued = multivalued;
 
         getView().setUiHandlers(this);
+        getView().setPlaceholder(placeHolder);
     }
 
 
@@ -55,42 +55,42 @@ public abstract class FindNamedModelsPresenterWidget<T extends NamedModel> exten
         // TODO caching
         if (query.length() > 0)
         {
-            dispatcher.execute(new FindNamedModelsAction<T>(resource, query),
-                    new TireCallback<FindNamedModelsResult<T>>(getEventBus())
+            dispatcher.execute(new FindNamedModelsAction<T>(query), new TireCallback<FindNamedModelsResult<T>>(
+                    getEventBus())
+            {
+                @Override
+                public void onSuccess(FindNamedModelsResult<T> result)
+                {
+                    List<T> models = result.getModels();
+                    List<NamedModelSuggestion<T>> suggestions = new ArrayList<NamedModelSuggestion<T>>();
+                    if (models.isEmpty())
                     {
-                        @Override
-                        public void onSuccess(FindNamedModelsResult<T> result)
+                        // TODO Handle empty result
+                    }
+                    else if (models.size() == 1)
+                    {
+                        // TODO It's an exact match, so do not bother
+                        // with showing suggestions
+                        suggestions.add(new NamedModelSuggestion<T>(models.get(0)));
+                    }
+                    else
+                    {
+                        for (T model : models)
                         {
-                            List<T> models = result.getModels();
-                            List<NamedModelSuggestion<T>> suggestions = new ArrayList<NamedModelSuggestion<T>>();
-                            if (models.isEmpty())
-                            {
-                                // TODO Handle empty result
-                            }
-                            else if (models.size() == 1)
-                            {
-                                // TODO It's an exact match, so do not bother
-                                // with showing suggestions
-                                suggestions.add(new NamedModelSuggestion<T>(models.get(0)));
-                            }
-                            else
-                            {
-                                for (T model : models)
-                                {
-                                    suggestions.add(new NamedModelSuggestion<T>(model));
-                                }
-                            }
-                            Response response = new Response(suggestions);
-                            callback.onSuggestionsReady(request, response);
+                            suggestions.add(new NamedModelSuggestion<T>(model));
                         }
+                    }
+                    Response response = new Response(suggestions);
+                    callback.onSuggestionsReady(request, response);
+                }
 
 
-                        @Override
-                        public void onFailure(Throwable caught)
-                        {
-                            // TODO Error handling
-                        }
-                    });
+                @Override
+                public void onFailure(Throwable caught)
+                {
+                    // TODO Error handling
+                }
+            });
         }
     }
 

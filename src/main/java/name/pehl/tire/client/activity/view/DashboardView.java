@@ -1,5 +1,8 @@
 package name.pehl.tire.client.activity.view;
 
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.Date;
 
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
@@ -20,12 +23,10 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> implements DashboardPresenter.MyView
 {
@@ -48,6 +49,7 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @UiField Anchor yesterday;
     @UiField Anchor today;
     @UiField CalendarLink calendar;
+    @UiField SimplePanel findActivitiesHolder;
     @UiField InlineLabel header;
     @UiField InlineHTMLWithContextMenu previous;
     @UiField InlineHTMLWithContextMenu next;
@@ -77,6 +79,20 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     public Widget asWidget()
     {
         return widget;
+    }
+
+
+    @Override
+    public void setInSlot(Object slot, Widget widget)
+    {
+        if (slot == DashboardPresenter.SLOT_Find_Activities)
+        {
+            findActivitiesHolder.setWidget(widget);
+        }
+        else
+        {
+            super.setInSlot(slot, widget);
+        }
     }
 
 

@@ -20,14 +20,16 @@ import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 public abstract class FindNamedModelsHandler<T extends NamedModel> extends
         TireActionHandler<FindNamedModelsAction<T>, FindNamedModelsResult<T>>
 {
+    private final String resource;
     private final JsonReader<T> reader;
 
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected FindNamedModelsHandler(String securityCookieName, SecurityCookieAccessor securityCookieAccessor,
-            JsonReader<T> reader)
+            String resource, JsonReader<T> reader)
     {
         super((Class) FindNamedModelsAction.class, securityCookieName, securityCookieAccessor);
+        this.resource = resource;
         this.reader = reader;
     }
 
@@ -35,8 +37,7 @@ public abstract class FindNamedModelsHandler<T extends NamedModel> extends
     @Override
     protected Resource resourceFor(FindNamedModelsAction<T> action)
     {
-        return new Resource(new UrlBuilder().module("rest").path(action.getResource()).query("q", action.getQuery())
-                .toUrl());
+        return new Resource(new UrlBuilder().module("rest").path(resource).query("q", action.getQuery()).toUrl());
     }
 
 

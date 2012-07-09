@@ -63,7 +63,8 @@
 			line-height: 16px;
 		}
 		
-		div.input span.descriptionHolder {
+		div.input div.descriptionHolder {
+	        display: inline;
 			float: left;
 			width: 60%;
 		}
@@ -123,13 +124,10 @@
 						</li>
 					</ul>
 					<div class="{style.input}">
-						<span class="{style.descriptionHolder}">
-							<tui:Html5TextBox ui:field="description"
-								placeholder="Description" title="Create or select a description" />
-						</span>
+					    <g:SimplePanel ui:field="findActivitiesHolder" addStyleNames="{style.descriptionHolder}"></g:SimplePanel>
 						<span class="{style.projectHolder}">
 							<tui:Html5TextBox ui:field="project"
-								placeholder="Project" title="Create or select a project" />
+								placeholder="Project" title="Select a project" />
 						</span>
 						<span class="{style.timeHolder}">
 							<tui:Html5TextBox ui:field="time"

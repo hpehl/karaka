@@ -14,6 +14,6 @@ public class FindActivitiesHandler extends FindNamedModelsHandler<Activity>
     public FindActivitiesHandler(@SecurityCookie String securityCookieName,
             SecurityCookieAccessor securityCookieAccessor, ActivityReader reader)
     {
-        super(securityCookieName, securityCookieAccessor, reader);
+        super(securityCookieName, securityCookieAccessor, "activities", reader);
     }
 }
