@@ -28,10 +28,18 @@ public abstract class TireJsonCallback<T, R extends Result> implements JsonCallb
     @Override
     public void onSuccess(final Method method, final JSONValue response)
     {
-        JSONObject jsonObject = response.isObject();
-        if (jsonObject != null)
+        if (response.isObject() != null)
         {
-            resultCallback.onSuccess(extractResult(reader, jsonObject));
+            resultCallback.onSuccess(extractResult(reader, response.isObject()));
+        }
+        else if (response.isArray() != null)
+        {
+            // Arrays are supported as return values. To have one single
+            // extractResult method build a helper JSONObject which contains
+            // the array.
+            JSONObject root = new JSONObject();
+            root.put("list", response.isArray());
+            resultCallback.onSuccess(extractResult(reader, root));
         }
         else
         {

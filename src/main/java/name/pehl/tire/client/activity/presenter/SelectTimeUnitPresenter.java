@@ -1,12 +1,12 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static name.pehl.tire.client.NameTokens.dashboard;
 import name.pehl.tire.client.activity.dispatch.GetYearsAction;
 import name.pehl.tire.client.activity.dispatch.GetYearsResult;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.TimeUnit;
 import name.pehl.tire.shared.model.Years;
 
-import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
@@ -15,17 +15,15 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
-import static name.pehl.tire.client.NameTokens.dashboard;
-
-public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYearAndMonthOrWeekPresenter.MyView>
-        implements SelectYearAndMonthOrWeekUiHandlers
+public abstract class SelectTimeUnitPresenter extends PresenterWidget<SelectTimeUnitPresenter.MyView> implements
+        SelectTimeUnitUiHandlers
 {
-    public interface MyView extends PopupView, HasUiHandlers<SelectYearAndMonthOrWeekUiHandlers>
+    public interface MyView extends PopupView, HasUiHandlers<SelectTimeUnitUiHandlers>
     {
-        void setUnit(TimeUnit unit);
-
-
         void updateYears(Years years);
+
+
+        void setUnit(TimeUnit unit);
     }
 
     final DispatchAsync dispatcher;
@@ -33,14 +31,15 @@ public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYea
     Years years;
 
 
-    @Inject
-    public SelectYearAndMonthOrWeekPresenter(final EventBus eventBus, final MyView view,
-            final DispatchAsync dispatcher, final PlaceManager placeManager)
+    protected SelectTimeUnitPresenter(final EventBus eventBus, final MyView view, final DispatchAsync dispatcher,
+            final PlaceManager placeManager, final TimeUnit unit)
     {
         super(eventBus, view);
         this.dispatcher = dispatcher;
         this.placeManager = placeManager;
+
         getView().setUiHandlers(this);
+        getView().setUnit(unit);
     }
 
 
@@ -58,12 +57,6 @@ public class SelectYearAndMonthOrWeekPresenter extends PresenterWidget<SelectYea
                 getView().updateYears(years);
             }
         });
-    }
-
-
-    public void setUnit(TimeUnit unit)
-    {
-        getView().setUnit(unit);
     }
 
 

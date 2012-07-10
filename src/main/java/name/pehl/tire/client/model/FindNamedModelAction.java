@@ -4,18 +4,18 @@ import name.pehl.tire.shared.model.NamedModel;
 
 import com.gwtplatform.dispatch.shared.Action;
 
-public class FindNamedModelsAction<T extends NamedModel> implements Action<FindNamedModelsResult<T>>
+public class FindNamedModelAction<T extends NamedModel> implements Action<FindNamedModelResult<T>>
 {
     String query;
 
 
-    protected FindNamedModelsAction()
+    protected FindNamedModelAction()
     {
         // Possibly for serialization.
     }
 
 
-    public FindNamedModelsAction(String query)
+    public FindNamedModelAction(String query)
     {
         this.query = query;
     }
@@ -57,7 +57,7 @@ public class FindNamedModelsAction<T extends NamedModel> implements Action<FindN
         {
             return false;
         }
-        FindNamedModelsAction<T> other = (FindNamedModelsAction<T>) obj;
+        FindNamedModelAction<T> other = (FindNamedModelAction<T>) obj;
         if (query == null)
         {
             if (other.query != null)

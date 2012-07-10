@@ -342,8 +342,8 @@ public class ActivitiesResource
     public List<name.pehl.tire.shared.model.Activity> findByName(@QueryParam("q") String query)
     {
         List<name.pehl.tire.shared.model.Activity> result = new ArrayList<name.pehl.tire.shared.model.Activity>();
-        List<Activity> activities = forYearWeek(now(settings.getTimeZone()));
-        for (Activity activity : activities)
+        PageResult<Activity> pageResult = repository.findByName(query);
+        for (Activity activity : pageResult)
         {
             result.add(activityConverter.toModel(activity));
         }

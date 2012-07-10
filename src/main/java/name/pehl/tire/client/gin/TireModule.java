@@ -26,16 +26,17 @@ import name.pehl.tire.client.activity.model.YearsReader;
 import name.pehl.tire.client.activity.presenter.CockpitPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
-import name.pehl.tire.client.activity.presenter.FindActivitiesPresenterWidget;
+import name.pehl.tire.client.activity.presenter.FindActivityPresenterWidget;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
-import name.pehl.tire.client.activity.presenter.SelectYearAndMonthOrWeekPresenter;
+import name.pehl.tire.client.activity.presenter.SelectMonthPresenter;
+import name.pehl.tire.client.activity.presenter.SelectTimeUnitPresenter;
+import name.pehl.tire.client.activity.presenter.SelectWeekPresenter;
 import name.pehl.tire.client.activity.view.ActivitiesTableResources;
 import name.pehl.tire.client.activity.view.CockpitView;
 import name.pehl.tire.client.activity.view.DashboardView;
 import name.pehl.tire.client.activity.view.EditActivityView;
-import name.pehl.tire.client.activity.view.FindActivitiesView;
 import name.pehl.tire.client.activity.view.QuickChartView;
-import name.pehl.tire.client.activity.view.SelectYearAndMonthOrWeekView;
+import name.pehl.tire.client.activity.view.SelectTimeUnitView;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
 import name.pehl.tire.client.application.MessagePresenter;
@@ -46,6 +47,8 @@ import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.client.ClientView;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
+import name.pehl.tire.client.model.FindNamedModelPresenterWidget;
+import name.pehl.tire.client.model.FindNamedModelView;
 import name.pehl.tire.client.project.ProjectPresenter;
 import name.pehl.tire.client.project.ProjectReader;
 import name.pehl.tire.client.project.ProjectView;
@@ -126,13 +129,16 @@ public class TireModule extends AbstractPresenterModule
         // PresenterWidgets (a-z)
         bindPresenterWidget(CockpitPresenter.class, CockpitPresenter.MyView.class, CockpitView.class);
         bindPresenterWidget(EditActivityPresenter.class, EditActivityPresenter.MyView.class, EditActivityView.class);
-        bindPresenterWidget(FindActivitiesPresenterWidget.class, FindActivitiesPresenterWidget.MyView.class,
-                FindActivitiesView.class);
         bindPresenterWidget(MessagePresenter.class, MessagePresenter.MyView.class, MessageView.class);
         bindPresenterWidget(NavigationPresenter.class, NavigationPresenter.MyView.class, NavigationView.class);
         bindPresenterWidget(QuickChartPresenter.class, QuickChartPresenter.MyView.class, QuickChartView.class);
-        bindPresenterWidget(SelectYearAndMonthOrWeekPresenter.class, SelectYearAndMonthOrWeekPresenter.MyView.class,
-                SelectYearAndMonthOrWeekView.class);
+
+        // PresenterWidgets with shared views (a-z)
+        bind(FindActivityPresenterWidget.class);
+        bind(FindNamedModelPresenterWidget.MyView.class).to(FindNamedModelView.class);
+        bind(SelectMonthPresenter.class);
+        bind(SelectWeekPresenter.class);
+        bind(SelectTimeUnitPresenter.MyView.class).to(SelectTimeUnitView.class);
 
         // Presenters (a-z)
         bindPresenter(AboutPresenter.class, AboutPresenter.MyView.class, AboutView.class, AboutPresenter.MyProxy.class);

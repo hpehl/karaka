@@ -6,7 +6,7 @@ import com.gwtplatform.mvp.client.UiHandlers;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public interface SelectYearAndMonthOrWeekUiHandlers extends UiHandlers
+public interface SelectTimeUnitUiHandlers extends UiHandlers
 {
     void onSelectYearAndMonth(int year, int month);
 

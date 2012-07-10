@@ -48,7 +48,8 @@
 			height: 40px;
 		}
 		
-		div.input span {
+		div.input span, div.input div {
+            display: inline;
 			padding: 5px;
 			margin: 0;
 			overflow: hidden;
@@ -63,8 +64,7 @@
 			line-height: 16px;
 		}
 		
-		div.input div.descriptionHolder {
-	        display: inline;
+		div.input div.findActivityHolder {
 			float: left;
 			width: 60%;
 		}
@@ -124,7 +124,7 @@
 						</li>
 					</ul>
 					<div class="{style.input}">
-					    <g:SimplePanel ui:field="findActivitiesHolder" addStyleNames="{style.descriptionHolder}"></g:SimplePanel>
+					    <g:SimplePanel ui:field="findActivityHolder" addStyleNames="{style.findActivityHolder}"></g:SimplePanel>
 						<span class="{style.projectHolder}">
 							<tui:Html5TextBox ui:field="project"
 								placeholder="Project" title="Select a project" />

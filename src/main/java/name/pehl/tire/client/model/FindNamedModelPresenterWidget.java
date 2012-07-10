@@ -21,22 +21,22 @@ import com.gwtplatform.mvp.client.View;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public abstract class FindNamedModelsPresenterWidget<T extends NamedModel> extends
-        PresenterWidget<FindNamedModelsPresenterWidget.MyView<T>> implements FindNamedModelsUiHandlers
+public abstract class FindNamedModelPresenterWidget<T extends NamedModel> extends
+        PresenterWidget<FindNamedModelPresenterWidget.MyView> implements FindNamedModelUiHandlers
 {
-    public interface MyView<T> extends View, HasUiHandlers<FindNamedModelsUiHandlers>
+    public interface MyView extends View, HasUiHandlers<FindNamedModelUiHandlers>
     {
         void setPlaceholder(String placeholder);
     }
 
     final DispatchAsync dispatcher;
-    final TireActionHandler<FindNamedModelsAction<T>, FindNamedModelsResult<T>> actionHandler;
+    final TireActionHandler<FindNamedModelAction<T>, FindNamedModelResult<T>> actionHandler;
     final boolean multivalued;
 
 
-    public FindNamedModelsPresenterWidget(final EventBus eventBus, final MyView<T> view,
+    public FindNamedModelPresenterWidget(final EventBus eventBus, final FindNamedModelPresenterWidget.MyView view,
             final DispatchAsync dispatcher,
-            final TireActionHandler<FindNamedModelsAction<T>, FindNamedModelsResult<T>> actionHandler,
+            final TireActionHandler<FindNamedModelAction<T>, FindNamedModelResult<T>> actionHandler,
             final String placeHolder, final boolean multivalued)
     {
         super(eventBus, view);
@@ -55,11 +55,11 @@ public abstract class FindNamedModelsPresenterWidget<T extends NamedModel> exten
         // TODO caching
         if (query.length() > 0)
         {
-            dispatcher.execute(new FindNamedModelsAction<T>(query), new TireCallback<FindNamedModelsResult<T>>(
+            dispatcher.execute(new FindNamedModelAction<T>(query), new TireCallback<FindNamedModelResult<T>>(
                     getEventBus())
             {
                 @Override
-                public void onSuccess(FindNamedModelsResult<T> result)
+                public void onSuccess(FindNamedModelResult<T> result)
                 {
                     List<T> models = result.getModels();
                     List<NamedModelSuggestion<T>> suggestions = new ArrayList<NamedModelSuggestion<T>>();

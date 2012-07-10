@@ -116,9 +116,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
     final PlaceManager placeManager;
-    final FindActivitiesPresenterWidget findActivitiesPresenter;
-    final SelectYearAndMonthOrWeekPresenter selectMonthPresenter;
-    final SelectYearAndMonthOrWeekPresenter selectWeekPresenter;
+    final FindActivityPresenterWidget findActivitiesPresenter;
+    final SelectMonthPresenter selectMonthPresenter;
+    final SelectWeekPresenter selectWeekPresenter;
     final EditActivityPresenter editActivityPresenter;
 
     TickCommand tickCommand;
@@ -145,18 +145,15 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     @Inject
     public DashboardPresenter(EventBus eventBus, MyView view, MyProxy proxy,
-            final FindActivitiesPresenterWidget findActivitiesPresenter,
-            final SelectYearAndMonthOrWeekPresenter selectMonthPresenter,
-            final SelectYearAndMonthOrWeekPresenter selectWeekPresenter,
+            final FindActivityPresenterWidget findActivitiesPresenter,
+            final SelectMonthPresenter selectMonthPresenter, final SelectWeekPresenter selectWeekPresenter,
             final EditActivityPresenter editActivityPresenter, final DispatchAsync dispatcher,
             final PlaceManager placeManager, final Scheduler scheduler)
     {
         super(eventBus, view, proxy);
         this.findActivitiesPresenter = findActivitiesPresenter;
         this.selectMonthPresenter = selectMonthPresenter;
-        this.selectMonthPresenter.setUnit(MONTH);
         this.selectWeekPresenter = selectWeekPresenter;
-        this.selectWeekPresenter.setUnit(WEEK);
         this.editActivityPresenter = editActivityPresenter;
         this.dispatcher = dispatcher;
         this.placeManager = placeManager;

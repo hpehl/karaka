@@ -82,8 +82,9 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
     DeleteActivityHandler deleteActivityHandler;
     DashboardPresenter.MyView view;
     DashboardPresenter.MyProxy proxy;
-    FindActivitiesPresenterWidget findActivitiesPresenter;
-    SelectYearAndMonthOrWeekPresenter selectYearAndMonthOrWeekPresenter;
+    FindActivityPresenterWidget findActivitiesPresenter;
+    SelectMonthPresenter selectMonthPresenter;
+    SelectWeekPresenter selectWeekPresenter;
     EditActivityPresenter editActivityPresenter;
     TickCommand tickCommand;
     DashboardPresenter cut;
@@ -105,13 +106,14 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
         addEvents(this, ShowMessageEvent.getType(), ActivitiesLoadedEvent.getType(), ActivityChangedEvent.getType());
         view = mock(DashboardPresenter.MyView.class);
         proxy = mock(DashboardPresenter.MyProxy.class);
-        findActivitiesPresenter = mock(FindActivitiesPresenterWidget.class);
-        selectYearAndMonthOrWeekPresenter = mock(SelectYearAndMonthOrWeekPresenter.class);
+        findActivitiesPresenter = mock(FindActivityPresenterWidget.class);
+        selectMonthPresenter = mock(SelectMonthPresenter.class);
+        selectWeekPresenter = mock(SelectWeekPresenter.class);
         editActivityPresenter = mock(EditActivityPresenter.class);
         tickCommand = mock(TickCommand.class);
-        cut = new DashboardPresenter(eventBus, view, proxy, findActivitiesPresenter, selectYearAndMonthOrWeekPresenter,
-                selectYearAndMonthOrWeekPresenter, editActivityPresenter, newDispatcher(actionHandlerMappings),
-                placeManager, scheduler);
+        cut = new DashboardPresenter(eventBus, view, proxy, findActivitiesPresenter, selectMonthPresenter,
+                selectWeekPresenter, editActivityPresenter, newDispatcher(actionHandlerMappings), placeManager,
+                scheduler);
         cut.tickCommand = tickCommand;
     }
 
@@ -282,16 +284,22 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
 
 
     @Test
-    public void onSelectWeekAndMonth()
+    public void onSelectMonth()
     {
-        SelectYearAndMonthOrWeekPresenter.MyView selectView = mock(SelectYearAndMonthOrWeekPresenter.MyView.class);
-        when(selectYearAndMonthOrWeekPresenter.getView()).thenReturn(selectView);
+        SelectTimeUnitPresenter.MyView selectView = mock(SelectTimeUnitPresenter.MyView.class);
+        when(selectMonthPresenter.getView()).thenReturn(selectView);
+        cut.onSelectMonth(100, 200);
+        verify(selectView).setPosition(100, 200);
+    }
+
+
+    @Test
+    public void onSelectWeek()
+    {
+        SelectTimeUnitPresenter.MyView selectView = mock(SelectTimeUnitPresenter.MyView.class);
+        when(selectWeekPresenter.getView()).thenReturn(selectView);
         cut.onSelectWeek(100, 200);
         verify(selectView).setPosition(100, 200);
-
-        reset(selectView);
-        cut.onSelectMonth(300, 400);
-        verify(selectView).setPosition(300, 400);
     }
 
 

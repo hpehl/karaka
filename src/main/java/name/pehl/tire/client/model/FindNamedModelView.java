@@ -1,7 +1,6 @@
 package name.pehl.tire.client.model;
 
 import name.pehl.tire.client.ui.Html5TextBox;
-import name.pehl.tire.shared.model.NamedModel;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -9,15 +8,15 @@ import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
-public abstract class FindNamedModelsView<T extends NamedModel> extends ViewWithUiHandlers<FindNamedModelsUiHandlers>
-        implements FindNamedModelsPresenterWidget.MyView<T>
+public class FindNamedModelView extends ViewWithUiHandlers<FindNamedModelUiHandlers> implements
+        FindNamedModelPresenterWidget.MyView
 {
     final SuggestOracle suggestOracle;
     final Html5TextBox textBox;
     final SuggestBox suggestBox;
 
 
-    public FindNamedModelsView()
+    public FindNamedModelView()
     {
         this.suggestOracle = new NamedModelSuggestOracle();
         this.textBox = new Html5TextBox();

@@ -6,18 +6,18 @@ import name.pehl.tire.shared.model.NamedModel;
 
 import com.gwtplatform.dispatch.shared.Result;
 
-public class FindNamedModelsResult<T extends NamedModel> implements Result
+public class FindNamedModelResult<T extends NamedModel> implements Result
 {
     List<T> models;
 
 
-    protected FindNamedModelsResult()
+    protected FindNamedModelResult()
     {
         // Possibly for serialization.
     }
 
 
-    public FindNamedModelsResult(List<T> models)
+    public FindNamedModelResult(List<T> models)
     {
         this.models = models;
     }
@@ -45,7 +45,7 @@ public class FindNamedModelsResult<T extends NamedModel> implements Result
         {
             return false;
         }
-        FindNamedModelsResult<T> other = (FindNamedModelsResult<T>) obj;
+        FindNamedModelResult<T> other = (FindNamedModelResult<T>) obj;
         if (models == null)
         {
             if (other.models != null)

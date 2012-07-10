@@ -7,8 +7,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
-import name.pehl.tire.client.activity.presenter.SelectYearAndMonthOrWeekPresenter;
-import name.pehl.tire.client.activity.presenter.SelectYearAndMonthOrWeekUiHandlers;
+import name.pehl.tire.client.activity.presenter.SelectTimeUnitPresenter;
+import name.pehl.tire.client.activity.presenter.SelectTimeUnitUiHandlers;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.ui.EscapablePopupPanel;
 import name.pehl.tire.shared.model.TimeUnit;
@@ -34,14 +34,14 @@ import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
 
-public class SelectYearAndMonthOrWeekView extends PopupViewWithUiHandlers<SelectYearAndMonthOrWeekUiHandlers> implements
-        SelectYearAndMonthOrWeekPresenter.MyView
+public class SelectTimeUnitView extends PopupViewWithUiHandlers<SelectTimeUnitUiHandlers> implements
+        SelectTimeUnitPresenter.MyView
 {
-    public interface Binder extends UiBinder<EscapablePopupPanel, SelectYearAndMonthOrWeekView>
+    public interface Binder extends UiBinder<EscapablePopupPanel, SelectTimeUnitView>
     {
     }
 
-    private static final Logger logger = Logger.getLogger(SelectYearAndMonthOrWeekView.class.getName());
+    private static final Logger logger = Logger.getLogger(SelectTimeUnitView.class.getName());
 
     private final EscapablePopupPanel popupPanel;
     private final I18n i18n;
@@ -50,7 +50,7 @@ public class SelectYearAndMonthOrWeekView extends PopupViewWithUiHandlers<Select
 
 
     @Inject
-    public SelectYearAndMonthOrWeekView(final EventBus eventBus, final Binder binder, final I18n i18n)
+    public SelectTimeUnitView(final EventBus eventBus, final Binder binder, final I18n i18n)
     {
         super(eventBus);
         this.popupPanel = binder.createAndBindUi(this);
