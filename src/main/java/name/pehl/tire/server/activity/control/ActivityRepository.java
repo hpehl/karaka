@@ -2,11 +2,7 @@ package name.pehl.tire.server.activity.control;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import name.pehl.tire.server.activity.entity.Activity;
-import name.pehl.tire.server.normalizer.Normalizer;
-import name.pehl.tire.server.normalizer.TireNormalizer;
 import name.pehl.tire.server.repository.NamedEntityRepository;
 import name.pehl.tire.shared.model.Status;
 
@@ -20,10 +16,9 @@ import com.googlecode.objectify.Key;
  */
 public class ActivityRepository extends NamedEntityRepository<Activity>
 {
-    @Inject
-    public ActivityRepository(@TireNormalizer Normalizer normalizer)
+    public ActivityRepository()
     {
-        super(Activity.class, normalizer);
+        super(Activity.class);
     }
 
 
