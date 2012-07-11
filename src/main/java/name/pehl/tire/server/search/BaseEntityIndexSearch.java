@@ -19,6 +19,9 @@ import com.google.appengine.api.search.ScoredDocument;
  */
 public abstract class BaseEntityIndexSearch<T extends BaseEntity> implements IndexSearch<T>
 {
+    static final int RESULT_LIMIT = 15;
+
+
     @Override
     public AddResponse index(T... entities)
     {
@@ -103,7 +106,7 @@ public abstract class BaseEntityIndexSearch<T extends BaseEntity> implements Ind
 
     protected QueryOptions.Builder queryOptionsBuilder()
     {
-        QueryOptions.Builder builder = QueryOptions.newBuilder();
+        QueryOptions.Builder builder = QueryOptions.newBuilder().setLimit(RESULT_LIMIT);
         return builder;
     }
 
