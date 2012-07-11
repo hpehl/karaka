@@ -1,10 +1,6 @@
 package name.pehl.tire.server.client.control;
 
-import javax.inject.Inject;
-
 import name.pehl.tire.server.client.entity.Client;
-import name.pehl.tire.server.normalizer.Normalizer;
-import name.pehl.tire.server.normalizer.TireNormalizer;
 import name.pehl.tire.server.repository.NamedEntityRepository;
 
 /**
@@ -14,9 +10,8 @@ import name.pehl.tire.server.repository.NamedEntityRepository;
  */
 public class ClientRepository extends NamedEntityRepository<Client>
 {
-    @Inject
-    public ClientRepository(@TireNormalizer Normalizer normalizer)
+    public ClientRepository()
     {
-        super(Client.class, normalizer);
+        super(Client.class);
     }
 }
