@@ -2,6 +2,8 @@ package name.pehl.tire.server.activity.control;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.repository.NamedEntityRepository;
 import name.pehl.tire.shared.model.Status;
@@ -16,9 +18,10 @@ import com.googlecode.objectify.Key;
  */
 public class ActivityRepository extends NamedEntityRepository<Activity>
 {
-    public ActivityRepository()
+    @Inject
+    public ActivityRepository(ActivityIndexSearch indexSearch)
     {
-        super(Activity.class);
+        super(Activity.class, indexSearch);
     }
 
 

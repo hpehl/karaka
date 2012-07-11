@@ -1,6 +1,7 @@
 package name.pehl.tire.server.activity.boundary;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static name.pehl.tire.shared.model.TimeUnit.DAY;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
@@ -27,6 +28,7 @@ import javax.ws.rs.core.Response;
 
 import name.pehl.tire.server.activity.control.ActivitiesConverter;
 import name.pehl.tire.server.activity.control.ActivityConverter;
+import name.pehl.tire.server.activity.control.ActivityIndexSearch;
 import name.pehl.tire.server.activity.control.ActivityRepository;
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.paging.entity.PageResult;
@@ -42,6 +44,8 @@ import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 
+import com.google.appengine.api.search.Results;
+import com.google.appengine.api.search.ScoredDocument;
 import com.googlecode.objectify.Key;
 
 /**
@@ -96,6 +100,7 @@ public class ActivitiesResource
 {
     @Inject @CurrentSettings Settings settings;
     @Inject ActivityRepository repository;
+    @Inject ActivityIndexSearch indexSearch;
     @Inject ActivitiesConverter activitiesConverter;
     @Inject ActivityConverter activityConverter;
 
@@ -342,10 +347,15 @@ public class ActivitiesResource
     public List<name.pehl.tire.shared.model.Activity> findByName(@QueryParam("q") String query)
     {
         List<name.pehl.tire.shared.model.Activity> result = new ArrayList<name.pehl.tire.shared.model.Activity>();
-        PageResult<Activity> pageResult = repository.findByName(query);
-        for (Activity activity : pageResult)
+        Results<ScoredDocument> results = indexSearch.search(query);
+        for (ScoredDocument scoredDocument : results)
         {
-            result.add(activityConverter.toModel(activity));
+            Long id = Long.valueOf(scoredDocument.getId());
+            Activity activity = repository.get(id);
+            if (activity != null)
+            {
+                result.add(activityConverter.toModel(activity));
+            }
         }
         return result;
     }
@@ -409,8 +419,14 @@ public class ActivitiesResource
     @Path("{id}")
     public Response deleteExistingActivity(@PathParam("id") String id)
     {
-        repository.deleteKey(Key.<Activity> create(id));
-        return Response.noContent().build();
+        Key<Activity> key = Key.<Activity> create(id);
+        Activity activity = repository.get(key);
+        if (activity != null)
+        {
+            repository.delete(activity);
+            return Response.noContent().build();
+        }
+        return Response.status(NOT_FOUND).build();
     }
 
 

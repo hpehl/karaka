@@ -1,5 +1,7 @@
 package name.pehl.tire.server.tag.control;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.server.repository.NamedEntityRepository;
 import name.pehl.tire.server.tag.entity.Tag;
 
@@ -10,8 +12,9 @@ import name.pehl.tire.server.tag.entity.Tag;
  */
 public class TagRepository extends NamedEntityRepository<Tag>
 {
-    public TagRepository()
+    @Inject
+    public TagRepository(TagIndexSearch indexer)
     {
-        super(Tag.class);
+        super(Tag.class, indexer);
     }
 }

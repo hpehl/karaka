@@ -1,5 +1,7 @@
 package name.pehl.tire.server.project.control;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.server.project.entity.Project;
 import name.pehl.tire.server.repository.NamedEntityRepository;
 
@@ -10,8 +12,9 @@ import name.pehl.tire.server.repository.NamedEntityRepository;
  */
 public class ProjectRepository extends NamedEntityRepository<Project>
 {
-    public ProjectRepository()
+    @Inject
+    public ProjectRepository(ProjectIndexSearch indexer)
     {
-        super(Project.class);
+        super(Project.class, indexer);
     }
 }

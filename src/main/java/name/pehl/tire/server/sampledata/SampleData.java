@@ -94,40 +94,40 @@ class SampleData
         PageResult<Activity> activities = activityRepository.list();
         if (!activities.isEmpty())
         {
-            logger.info("Removed {} activities", activities.size());
             activityRepository.deleteAll(activities);
+            logger.info("Removed {} activities", activities.size());
         }
 
         // Tags
         PageResult<Tag> tags = tagRepository.list();
         if (!tags.isEmpty())
         {
-            logger.info("Removed {} tags", tags.size());
             tagRepository.deleteAll(tags);
+            logger.info("Removed {} tags", tags.size());
         }
 
         // Projects
         PageResult<Project> projects = projectRepository.list();
         if (!projects.isEmpty())
         {
-            logger.info("Removed {} projects", projects.size());
             projectRepository.deleteAll(projects);
+            logger.info("Removed {} projects", projects.size());
         }
 
         // Clients
         PageResult<Client> clients = clientRepository.list();
         if (!clients.isEmpty())
         {
-            logger.info("Removed {} clients", clients.size());
             clientRepository.deleteAll(clients);
+            logger.info("Removed {} clients", clients.size());
         }
 
         // Settings
         PageResult<Settings> settings = settingsRepository.list();
         if (!settings.isEmpty())
         {
-            logger.info("Removed settings");
             settingsRepository.deleteAll(settings);
+            logger.info("Removed settings");
         }
     }
 }

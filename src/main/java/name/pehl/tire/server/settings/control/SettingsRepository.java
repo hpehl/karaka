@@ -24,7 +24,7 @@ public class SettingsRepository extends BaseEntityRepository<Settings>
 
     public SettingsRepository()
     {
-        super(Settings.class);
+        super(Settings.class, null);
     }
 
 

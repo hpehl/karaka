@@ -2,6 +2,7 @@ package name.pehl.tire.server.repository;
 
 import name.pehl.tire.server.entity.NamedEntity;
 import name.pehl.tire.server.paging.entity.PageResult;
+import name.pehl.tire.server.search.IndexSearch;
 
 /**
  * @author $Author: harald.pehl $
@@ -10,9 +11,9 @@ import name.pehl.tire.server.paging.entity.PageResult;
  */
 public abstract class NamedEntityRepository<T extends NamedEntity> extends BaseEntityRepository<T>
 {
-    protected NamedEntityRepository(Class<T> clazz)
+    protected NamedEntityRepository(Class<T> clazz, IndexSearch<T> indexSearch)
     {
-        super(clazz);
+        super(clazz, indexSearch);
     }
 
 

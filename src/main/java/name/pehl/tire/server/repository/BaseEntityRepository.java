@@ -1,9 +1,7 @@
 package name.pehl.tire.server.repository;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.client.entity.Client;
@@ -11,6 +9,7 @@ import name.pehl.tire.server.entity.BaseEntity;
 import name.pehl.tire.server.paging.entity.PageInfo;
 import name.pehl.tire.server.paging.entity.PageResult;
 import name.pehl.tire.server.project.entity.Project;
+import name.pehl.tire.server.search.IndexSearch;
 import name.pehl.tire.server.settings.entity.Settings;
 import name.pehl.tire.server.tag.entity.Tag;
 
@@ -23,18 +22,13 @@ import com.googlecode.objectify.Query;
 import com.googlecode.objectify.util.DAOBase;
 
 /**
- * Base class for all entites used in TiRe. There's also support for the
- * following interfaces
- * <ul>
- * <li> {@link Searchable}
- * </ul>
+ * Base class for all entites used in TiRe.
  * 
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
+public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase implements Repository<T>
 {
-
     // ------------------------------------------------------ register entities
 
     static
@@ -51,115 +45,141 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
 
     protected final Logger logger;
     protected final Class<T> clazz;
+    protected final IndexSearch<T> indexSearch;
 
 
     // ----------------------------------------------------------- constructors
 
-    protected BaseEntityRepository(Class<T> clazz)
+    protected BaseEntityRepository(Class<T> clazz, IndexSearch<T> indexSearch)
     {
         super();
         this.logger = LoggerFactory.getLogger(getClass());
         this.clazz = clazz;
+        this.indexSearch = indexSearch;
     }
 
 
     // ------------------------------------------------------------ put methods
 
+    @Override
+    @SuppressWarnings("unchecked")
     public Key<T> put(T entity)
     {
         Key<T> key = ofy().put(entity);
+        index(entity);
         return key;
     }
 
 
+    @Override
     public Map<Key<T>, T> putAll(Iterable<T> entities)
     {
         Map<Key<T>, T> keysAndEntities = ofy().put(entities);
+        index(entities);
         return keysAndEntities;
     }
 
 
     // --------------------------------------------------------- delete methods
 
+    @Override
+    @SuppressWarnings("unchecked")
     public void delete(T entity)
     {
         ofy().delete(entity);
+        unIndex(entity);
     }
 
 
-    public void deleteKey(Key<T> key)
-    {
-        ofy().delete(key);
-    }
-
-
+    @Override
     public void deleteAll(Iterable<T> entities)
     {
         ofy().delete(entities);
-        Set<Key<T>> keys = new HashSet<Key<T>>();
-        for (T entity : entities)
-        {
-            keys.add(new Key<T>(clazz, entity.getId()));
-        }
-    }
-
-
-    public void deleteKeys(Iterable<Key<T>> keys)
-    {
-        ofy().delete(keys);
+        unIndex(entities);
     }
 
 
     // ------------------------------------------------------------- get entity
 
+    @Override
     public T get(Long id)
     {
         return ofy().get(clazz, id);
     }
 
 
+    @Override
     public T get(Key<T> key)
     {
         return ofy().get(key);
     }
 
 
-    /**
-     * Convenience method to get all objects matching a single property
-     * 
-     * @param propName
-     * @param propValue
-     * @return T matching Object
-     */
-    public T getByProperty(String propName, Object propValue)
-    {
-        return query().filter(propName, propValue).get();
-    }
-
-
     // ---------------------------------------------------------- find entities
 
+    @Override
     public PageResult<T> list()
     {
         return list(null);
     }
 
 
+    @Override
     public PageResult<T> list(PageInfo pageInfo)
     {
         return pageResultFor(query(), pageInfo);
     }
 
 
+    @Override
     public PageResult<T> findByProperty(String propName, Object propValue)
     {
         return findByProperty(propName, propValue, null);
     }
 
 
+    @Override
     public PageResult<T> findByProperty(String propName, Object propValue, PageInfo pageInfo)
     {
         return pageResultFor(query().filter(propName, propValue), pageInfo);
+    }
+
+
+    // ---------------------------------------------------------- index methods
+
+    protected void index(T... entities)
+    {
+        if (indexSearch != null)
+        {
+            indexSearch.index(entities);
+        }
+    }
+
+
+    protected void index(Iterable<T> entities)
+    {
+        if (indexSearch != null)
+        {
+            indexSearch.index(entities);
+        }
+    }
+
+
+    protected void unIndex(T... entities)
+    {
+        if (indexSearch != null)
+        {
+            indexSearch.unIndex(entities);
+        }
+    }
+
+
+    protected void unIndex(Iterable<T> entities)
+    {
+        if (indexSearch != null)
+        {
+            indexSearch.unIndex(entities);
+        }
     }
 
 

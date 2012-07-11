@@ -1,5 +1,7 @@
 package name.pehl.tire.server.client.control;
 
+import javax.inject.Inject;
+
 import name.pehl.tire.server.client.entity.Client;
 import name.pehl.tire.server.repository.NamedEntityRepository;
 
@@ -10,8 +12,9 @@ import name.pehl.tire.server.repository.NamedEntityRepository;
  */
 public class ClientRepository extends NamedEntityRepository<Client>
 {
-    public ClientRepository()
+    @Inject
+    public ClientRepository(ClientIndexSearch indexer)
     {
-        super(Client.class);
+        super(Client.class, indexer);
     }
 }
