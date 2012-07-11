@@ -1,7 +1,6 @@
 package name.pehl.tire.server.repository;
 
 import name.pehl.tire.server.entity.NamedEntity;
-import name.pehl.tire.server.normalizer.Normalizer;
 import name.pehl.tire.server.paging.entity.PageResult;
 
 /**
@@ -11,9 +10,9 @@ import name.pehl.tire.server.paging.entity.PageResult;
  */
 public abstract class NamedEntityRepository<T extends NamedEntity> extends BaseEntityRepository<T>
 {
-    protected NamedEntityRepository(Class<T> clazz, Normalizer normalizer)
+    protected NamedEntityRepository(Class<T> clazz)
     {
-        super(clazz, normalizer);
+        super(clazz);
     }
 
 

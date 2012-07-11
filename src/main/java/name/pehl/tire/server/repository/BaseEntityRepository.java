@@ -8,7 +8,6 @@ import java.util.Set;
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.client.entity.Client;
 import name.pehl.tire.server.entity.BaseEntity;
-import name.pehl.tire.server.normalizer.Normalizer;
 import name.pehl.tire.server.paging.entity.PageInfo;
 import name.pehl.tire.server.paging.entity.PageResult;
 import name.pehl.tire.server.project.entity.Project;
@@ -52,17 +51,15 @@ public abstract class BaseEntityRepository<T extends BaseEntity> extends DAOBase
 
     protected final Logger logger;
     protected final Class<T> clazz;
-    protected final Normalizer normalizer;
 
 
     // ----------------------------------------------------------- constructors
 
-    protected BaseEntityRepository(Class<T> clazz, Normalizer normalizer)
+    protected BaseEntityRepository(Class<T> clazz)
     {
         super();
         this.logger = LoggerFactory.getLogger(getClass());
         this.clazz = clazz;
-        this.normalizer = normalizer;
     }
 
 

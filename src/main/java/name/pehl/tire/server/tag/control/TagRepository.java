@@ -1,9 +1,5 @@
 package name.pehl.tire.server.tag.control;
 
-import javax.inject.Inject;
-
-import name.pehl.tire.server.normalizer.Normalizer;
-import name.pehl.tire.server.normalizer.TireNormalizer;
 import name.pehl.tire.server.repository.NamedEntityRepository;
 import name.pehl.tire.server.tag.entity.Tag;
 
@@ -14,9 +10,8 @@ import name.pehl.tire.server.tag.entity.Tag;
  */
 public class TagRepository extends NamedEntityRepository<Tag>
 {
-    @Inject
-    public TagRepository(@TireNormalizer Normalizer normalizer)
+    public TagRepository()
     {
-        super(Tag.class, normalizer);
+        super(Tag.class);
     }
 }

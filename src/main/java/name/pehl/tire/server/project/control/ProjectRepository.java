@@ -1,9 +1,5 @@
 package name.pehl.tire.server.project.control;
 
-import javax.inject.Inject;
-
-import name.pehl.tire.server.normalizer.Normalizer;
-import name.pehl.tire.server.normalizer.TireNormalizer;
 import name.pehl.tire.server.project.entity.Project;
 import name.pehl.tire.server.repository.NamedEntityRepository;
 
@@ -14,9 +10,8 @@ import name.pehl.tire.server.repository.NamedEntityRepository;
  */
 public class ProjectRepository extends NamedEntityRepository<Project>
 {
-    @Inject
-    public ProjectRepository(@TireNormalizer Normalizer normalizer)
+    public ProjectRepository()
     {
-        super(Project.class, normalizer);
+        super(Project.class);
     }
 }
