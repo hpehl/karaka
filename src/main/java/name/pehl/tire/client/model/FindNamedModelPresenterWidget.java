@@ -2,7 +2,10 @@ package name.pehl.tire.client.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
+import name.pehl.tire.client.application.Message;
+import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireActionHandler;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.NamedModel;
@@ -55,6 +58,7 @@ public abstract class FindNamedModelPresenterWidget<T extends NamedModel> extend
         // TODO caching
         if (query.length() > 0)
         {
+            ShowMessageEvent.fire(this, new Message(Level.INFO, "Looking for activities...", false));
             dispatcher.execute(new FindNamedModelAction<T>(query), new TireCallback<FindNamedModelResult<T>>(
                     getEventBus())
             {
@@ -66,22 +70,29 @@ public abstract class FindNamedModelPresenterWidget<T extends NamedModel> extend
                     if (models.isEmpty())
                     {
                         // TODO Handle empty result
-                    }
-                    else if (models.size() == 1)
-                    {
-                        // TODO It's an exact match, so do not bother
-                        // with showing suggestions
-                        suggestions.add(new NamedModelSuggestion<T>(models.get(0)));
+                        ShowMessageEvent.fire(FindNamedModelPresenterWidget.this, new Message(Level.INFO,
+                                "No activities found.", true));
                     }
                     else
                     {
-                        for (T model : models)
+                        ShowMessageEvent.fire(FindNamedModelPresenterWidget.this, new Message(Level.INFO, "Found "
+                                + models.size() + " activities.", true));
+                        if (models.size() == 1)
                         {
-                            suggestions.add(new NamedModelSuggestion<T>(model));
+                            // TODO It's an exact match, so do not bother
+                            // with showing suggestions
+                            suggestions.add(new NamedModelSuggestion<T>(models.get(0)));
                         }
+                        else
+                        {
+                            for (T model : models)
+                            {
+                                suggestions.add(new NamedModelSuggestion<T>(model));
+                            }
+                        }
+                        Response response = new Response(suggestions);
+                        callback.onSuggestionsReady(request, response);
                     }
-                    Response response = new Response(suggestions);
-                    callback.onSuggestionsReady(request, response);
                 }
 
 

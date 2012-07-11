@@ -1,4 +1,4 @@
-@external tire-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton, gwt-PopupPanelGlass;
+@external tire-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton, gwt-PopupPanelGlass, suggestPopupMiddleCenterInner, item, item-selected;
 .tire-calendarPopup {
 	box-shadow: #666 0px 4px 10px;
 	-moz-box-shadow: #666 0 px 4 px 10 px;
@@ -99,4 +99,28 @@ td.datePickerMonth {
 	-moz-opacity: 0.5;
 	-khtml-opacity: 0.5;
 	opacity: 0.5;
+}
+
+.suggestPopupMiddleCenterInner {
+	background-color: white;
+	border: 1px solid #3d3d3d;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	box-shadow: 2px 2px 2px #62635e;
+	-moz-box-shadow: 2px 2px 2px #62635e;
+	-webkit-box-shadow: 2px 2px 2px #62635e;
+}
+
+.suggestPopupMiddleCenterInner .item {
+	cursor: pointer;
+	padding: 5px;
+	color: #3d3d3d;
+	font-size: 12px;
+	border-bottom: 1px solid #3d3d3d;
+}
+
+.suggestPopupMiddleCenterInner .item-selected {
+	background-color: #3d3d3d;
+	color: white;
 }
