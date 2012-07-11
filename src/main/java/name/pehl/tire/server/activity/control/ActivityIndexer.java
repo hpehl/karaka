@@ -3,8 +3,8 @@ package name.pehl.tire.server.activity.control;
 import javax.inject.Inject;
 
 import name.pehl.tire.server.activity.entity.Activity;
-import name.pehl.tire.server.searching.IndexName;
-import name.pehl.tire.server.searching.Indexer;
+import name.pehl.tire.server.search.IndexName;
+import name.pehl.tire.server.search.Indexer;
 
 import com.google.appengine.api.search.AddResponse;
 import com.google.appengine.api.search.Document;
