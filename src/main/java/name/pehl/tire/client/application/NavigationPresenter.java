@@ -1,9 +1,13 @@
 package name.pehl.tire.client.application;
 
+import static name.pehl.tire.shared.model.TimeUnit.MONTH;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.settings.CurrentSettings;
+import name.pehl.tire.client.settings.SettingsChangedEvent;
+import name.pehl.tire.client.settings.SettingsChangedEvent.SettingsChangedHandler;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.User;
 
@@ -14,15 +18,33 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
-import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-
 /**
+ * <p>
+ * Presenter for the top level navigation
+ * </p>
+ * <h3>Events</h3>
+ * <ol>
+ * <li>IN</li>
+ * <ul>
+ * <li>{@linkplain ActivitiesLoadedEvent}</li>
+ * <li>{@linkplain SettingsChangedEvent}</li>
+ * </ul>
+ * <li>OUT</li>
+ * <ul>
+ * <li>none</li>
+ * </ul>
+ * </ol>
+ * <h3>Dispatcher actions</h3>
+ * <ul>
+ * <li>none</li>
+ * </ul>
+ * 
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-06 17:48:50 +0100 (Mo, 06. Dez 2010) $ $Revision: 95
  *          $
  */
-public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyView> implements ActivitiesLoadedHandler
+public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyView> implements
+        ActivitiesLoadedHandler, SettingsChangedHandler
 {
     public interface MyView extends View
     {
@@ -51,7 +73,9 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
         super(eventBus, view);
         this.placeManager = placeManager;
         this.messagePresenter = messagePresenter;
+
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
+        getEventBus().addHandler(SettingsChangedEvent.getType(), this);
     }
 
 
@@ -110,5 +134,12 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
         }
         String token = placeManager.buildHistoryToken(placeRequest);
         getView().setDashboardToken(token);
+    }
+
+
+    @Override
+    public void onSettingsChanged(SettingsChangedEvent event)
+    {
+        getView().updateUser(event.getSettings().getUser());
     }
 }

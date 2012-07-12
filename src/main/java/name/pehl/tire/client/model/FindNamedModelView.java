@@ -87,5 +87,12 @@ public class FindNamedModelView extends ViewWithUiHandlers<FindNamedModelUiHandl
             timer.cancel();
             timer.schedule(DELAY);
         }
+
+
+        @Override
+        public boolean isDisplayStringHTML()
+        {
+            return true;
+        }
     }
 }

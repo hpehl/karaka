@@ -1,8 +1,10 @@
 package name.pehl.tire.client.model;
 
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.SEVERE;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
@@ -10,7 +12,6 @@ import name.pehl.tire.client.dispatch.TireActionHandler;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.NamedModel;
 
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle.MultiWordSuggestion;
 import com.google.gwt.user.client.ui.SuggestOracle.Callback;
 import com.google.gwt.user.client.ui.SuggestOracle.Request;
 import com.google.gwt.user.client.ui.SuggestOracle.Response;
@@ -58,7 +59,8 @@ public abstract class FindNamedModelPresenterWidget<T extends NamedModel> extend
         // TODO caching
         if (query.length() > 0)
         {
-            ShowMessageEvent.fire(this, new Message(Level.INFO, "Looking for activities...", false));
+            final DisplayStringFormatter formatter = new DisplayStringFormatter(query);
+            ShowMessageEvent.fire(this, new Message(INFO, "Looking for \"" + query + "\"...", false));
             dispatcher.execute(new FindNamedModelAction<T>(query), new TireCallback<FindNamedModelResult<T>>(
                     getEventBus())
             {
@@ -70,24 +72,24 @@ public abstract class FindNamedModelPresenterWidget<T extends NamedModel> extend
                     if (models.isEmpty())
                     {
                         // TODO Handle empty result
-                        ShowMessageEvent.fire(FindNamedModelPresenterWidget.this, new Message(Level.INFO,
+                        ShowMessageEvent.fire(FindNamedModelPresenterWidget.this, new Message(INFO,
                                 "No activities found.", true));
                     }
                     else
                     {
-                        ShowMessageEvent.fire(FindNamedModelPresenterWidget.this, new Message(Level.INFO, "Found "
-                                + models.size() + " activities.", true));
+                        ShowMessageEvent.fire(FindNamedModelPresenterWidget.this,
+                                new Message(INFO, "Found " + models.size() + " results.", true));
                         if (models.size() == 1)
                         {
                             // TODO It's an exact match, so do not bother
                             // with showing suggestions
-                            suggestions.add(new NamedModelSuggestion<T>(models.get(0)));
+                            suggestions.add(newSuggestionFor(models.get(0), formatter));
                         }
                         else
                         {
                             for (T model : models)
                             {
-                                suggestions.add(new NamedModelSuggestion<T>(model));
+                                suggestions.add(newSuggestionFor(model, formatter));
                             }
                         }
                         Response response = new Response(suggestions);
@@ -100,26 +102,16 @@ public abstract class FindNamedModelPresenterWidget<T extends NamedModel> extend
                 public void onFailure(Throwable caught)
                 {
                     // TODO Error handling
+                    ShowMessageEvent.fire(FindNamedModelPresenterWidget.this, new Message(SEVERE, "Cannot lookup \""
+                            + query + "\".", true));
                 }
             });
         }
     }
 
-    static class NamedModelSuggestion<T extends NamedModel> extends MultiWordSuggestion
+
+    protected NamedModelSuggestion<T> newSuggestionFor(T model, DisplayStringFormatter formatter)
     {
-        final T model;
-
-
-        public NamedModelSuggestion(T model)
-        {
-            super(model.getName(), model.getName());
-            this.model = model;
-        }
-
-
-        public T getModel()
-        {
-            return model;
-        }
+        return new NamedModelSuggestion<T>(model.getName(), formatter.format(model.getName()), model);
     }
 }

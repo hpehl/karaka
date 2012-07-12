@@ -27,7 +27,7 @@ public class CurrentSettings
         defaultUser.setSurname("n/a");
         defaultUser.setEmail("n/a");
         defaults.setUser(defaultUser);
-        return null;
+        return defaults;
     }
 
 

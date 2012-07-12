@@ -5,6 +5,8 @@ import name.pehl.tire.client.gin.TireGinjector;
 import name.pehl.tire.client.settings.CurrentSettings;
 import name.pehl.tire.client.settings.GetSettingsAction;
 import name.pehl.tire.client.settings.GetSettingsResult;
+import name.pehl.tire.client.settings.SettingsChangedEvent;
+import name.pehl.tire.shared.model.Settings;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -29,7 +31,9 @@ public class Tire implements EntryPoint
                     @Override
                     public void onSuccess(GetSettingsResult result)
                     {
-                        CurrentSettings.set(result.getSettings());
+                        Settings settings = result.getSettings();
+                        CurrentSettings.set(settings);
+                        SettingsChangedEvent.fire(ginjector.getPlaceManager(), settings);
                     }
                 });
         ginjector.getPlaceManager().revealCurrentPlace();
