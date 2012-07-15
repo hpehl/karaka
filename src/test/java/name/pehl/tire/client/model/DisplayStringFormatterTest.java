@@ -72,9 +72,13 @@ public class DisplayStringFormatterTest
     @Test
     public void mixedCase()
     {
-        String result = cut.format("Foo and foo but also FOO, foobar, FooBar and FOOBAR");
-        assertEquals(
-                "<strong>Foo</strong> and <strong>foo</strong> but also <strong>FOO</strong>, <strong>foo</strong>bar, <strong>Foo</strong>Bar and <strong>FOO</strong>BAR",
-                result);
+        String input = "Foo and foo but also FOO, foobar, FooBar and FOOBAR";
+        String result = cut.format(input);
+        String expected = "<strong>Foo</strong> and <strong>foo</strong> but also <strong>FOO</strong>, <strong>foo</strong>bar, <strong>Foo</strong>Bar and <strong>FOO</strong>BAR";
+        assertEquals(expected, result);
+
+        cut = new DisplayStringFormatter("Foo");
+        result = cut.format(input);
+        assertEquals(expected, result);
     }
 }

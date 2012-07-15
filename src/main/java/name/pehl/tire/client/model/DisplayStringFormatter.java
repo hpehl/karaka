@@ -24,7 +24,15 @@ public class DisplayStringFormatter
             this.queries.add(query);
             if (query.length() > 1)
             {
-                this.queries.add(query.substring(0, 1).toUpperCase() + query.substring(1));
+                char firstLetter = query.charAt(0);
+                if (Character.isLowerCase(firstLetter))
+                {
+                    this.queries.add(Character.toUpperCase(firstLetter) + query.substring(1));
+                }
+                else
+                {
+                    this.queries.add(Character.toLowerCase(firstLetter) + query.substring(1));
+                }
             }
             this.queries.add(query.toUpperCase());
         }
