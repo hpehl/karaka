@@ -35,18 +35,20 @@ public abstract class FindNamedModelPresenterWidget<T extends NamedModel> extend
 
     final DispatchAsync dispatcher;
     final TireActionHandler<FindNamedModelAction<T>, FindNamedModelResult<T>> actionHandler;
-    final boolean multivalued;
+    final boolean listAllAndCache;
+    final List<T> cache;
 
 
     public FindNamedModelPresenterWidget(final EventBus eventBus, final FindNamedModelPresenterWidget.MyView view,
             final DispatchAsync dispatcher,
             final TireActionHandler<FindNamedModelAction<T>, FindNamedModelResult<T>> actionHandler,
-            final String placeHolder, final boolean multivalued)
+            final String placeHolder, final boolean listAllAndCache)
     {
         super(eventBus, view);
         this.dispatcher = dispatcher;
         this.actionHandler = actionHandler;
-        this.multivalued = multivalued;
+        this.listAllAndCache = listAllAndCache;
+        this.cache = new ArrayList<T>();
 
         getView().setUiHandlers(this);
         getView().setPlaceholder(placeHolder);

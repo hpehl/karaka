@@ -24,7 +24,7 @@ public class FindNamedModelAction<T extends NamedModel> implements Action<FindNa
     @Override
     public String getServiceName()
     {
-        return Action.DEFAULT_SERVICE_NAME + "GetNamedModels";
+        return Action.DEFAULT_SERVICE_NAME + "FindNamedModels";
     }
 
 
@@ -85,6 +85,6 @@ public class FindNamedModelAction<T extends NamedModel> implements Action<FindNa
     @Override
     public String toString()
     {
-        return "GetNamedModelsAction[" + query + "]";
+        return "FindNamedModelsAction[" + query + "]";
     }
 }
