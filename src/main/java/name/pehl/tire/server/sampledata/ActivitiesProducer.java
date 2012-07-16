@@ -27,6 +27,7 @@ class ActivitiesProducer
 {
     static final int ACTIVITIES_PER_DAY = 2;
     static final int TAGS_PER_ACTIVITY = 3;
+    static final int MONTHS_TO_GO_BACK = 3;
 
     @Inject Logger logger;
     @Inject Random random;
@@ -37,7 +38,7 @@ class ActivitiesProducer
             DateTimeZone timeZone)
     {
         DateMidnight end = DateMidnight.now().plusDays(1);
-        DateMidnight start = end.minus(Months.months(8));
+        DateMidnight start = end.minus(Months.months(MONTHS_TO_GO_BACK));
         List<Activity> activities = new ArrayList<Activity>();
         MutableDateTime mdt = new MutableDateTime(start);
         while (mdt.isBefore(end))

@@ -3,6 +3,7 @@ package name.pehl.tire.client.model;
 import name.pehl.tire.client.ui.Html5TextBox;
 
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.Widget;
@@ -37,7 +38,7 @@ public class FindNamedModelView extends ViewWithUiHandlers<FindNamedModelUiHandl
         textBox.setPlaceholder(placeholder);
     }
 
-    class NamedModelSuggestOracle extends SuggestOracle
+    class NamedModelSuggestOracle extends MultiWordSuggestOracle
     {
         static final int DELAY = 1000;
 
