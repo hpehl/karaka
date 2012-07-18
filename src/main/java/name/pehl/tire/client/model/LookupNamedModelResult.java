@@ -6,18 +6,18 @@ import name.pehl.tire.shared.model.NamedModel;
 
 import com.gwtplatform.dispatch.shared.Result;
 
-public class FindNamedModelResult<T extends NamedModel> implements Result
+public class LookupNamedModelResult<T extends NamedModel> implements Result
 {
     List<T> models;
 
 
-    protected FindNamedModelResult()
+    protected LookupNamedModelResult()
     {
         // Possibly for serialization.
     }
 
 
-    public FindNamedModelResult(List<T> models)
+    public LookupNamedModelResult(List<T> models)
     {
         this.models = models;
     }
@@ -45,7 +45,7 @@ public class FindNamedModelResult<T extends NamedModel> implements Result
         {
             return false;
         }
-        FindNamedModelResult<T> other = (FindNamedModelResult<T>) obj;
+        LookupNamedModelResult<T> other = (LookupNamedModelResult<T>) obj;
         if (models == null)
         {
             if (other.models != null)
@@ -65,7 +65,7 @@ public class FindNamedModelResult<T extends NamedModel> implements Result
     public int hashCode()
     {
         int hashCode = 23;
-        hashCode = (hashCode * 37) + (models == null ? 1 : models.hashCode());
+        hashCode = hashCode * 37 + (models == null ? 1 : models.hashCode());
         return hashCode;
     }
 
@@ -73,6 +73,6 @@ public class FindNamedModelResult<T extends NamedModel> implements Result
     @Override
     public String toString()
     {
-        return "GetNamedModelsResult[" + models + "]";
+        return "LookupNamedModelsResult[" + models + "]";
     }
 }

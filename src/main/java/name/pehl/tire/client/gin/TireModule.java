@@ -47,8 +47,8 @@ import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.client.ClientView;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
-import name.pehl.tire.client.model.FindNamedModelPresenterWidget;
-import name.pehl.tire.client.model.FindNamedModelView;
+import name.pehl.tire.client.model.LookupNamedModelPresenterWidget;
+import name.pehl.tire.client.model.LookupNamedModelView;
 import name.pehl.tire.client.project.ProjectPresenter;
 import name.pehl.tire.client.project.ProjectReader;
 import name.pehl.tire.client.project.ProjectView;
@@ -135,7 +135,7 @@ public class TireModule extends AbstractPresenterModule
 
         // PresenterWidgets with shared views (a-z)
         bind(FindActivityPresenterWidget.class);
-        bind(FindNamedModelPresenterWidget.MyView.class).to(FindNamedModelView.class);
+        bind(LookupNamedModelPresenterWidget.MyView.class).to(LookupNamedModelView.class);
         bind(SelectMonthPresenter.class);
         bind(SelectWeekPresenter.class);
         bind(SelectTimeUnitPresenter.MyView.class).to(SelectTimeUnitView.class);

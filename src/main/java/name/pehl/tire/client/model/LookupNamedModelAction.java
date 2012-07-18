@@ -4,18 +4,18 @@ import name.pehl.tire.shared.model.NamedModel;
 
 import com.gwtplatform.dispatch.shared.Action;
 
-public class FindNamedModelAction<T extends NamedModel> implements Action<FindNamedModelResult<T>>
+public class LookupNamedModelAction<T extends NamedModel> implements Action<LookupNamedModelResult<T>>
 {
     String query;
 
 
-    protected FindNamedModelAction()
+    public LookupNamedModelAction()
     {
-        // Possibly for serialization.
+        this(null);
     }
 
 
-    public FindNamedModelAction(String query)
+    public LookupNamedModelAction(String query)
     {
         this.query = query;
     }
@@ -24,7 +24,7 @@ public class FindNamedModelAction<T extends NamedModel> implements Action<FindNa
     @Override
     public String getServiceName()
     {
-        return Action.DEFAULT_SERVICE_NAME + "FindNamedModels";
+        return Action.DEFAULT_SERVICE_NAME + "LookupNamedModels";
     }
 
 
@@ -57,7 +57,7 @@ public class FindNamedModelAction<T extends NamedModel> implements Action<FindNa
         {
             return false;
         }
-        FindNamedModelAction<T> other = (FindNamedModelAction<T>) obj;
+        LookupNamedModelAction<T> other = (LookupNamedModelAction<T>) obj;
         if (query == null)
         {
             if (other.query != null)
@@ -85,6 +85,6 @@ public class FindNamedModelAction<T extends NamedModel> implements Action<FindNa
     @Override
     public String toString()
     {
-        return "FindNamedModelsAction[" + query + "]";
+        return "LookupNamedModelsAction[" + query + "]";
     }
 }

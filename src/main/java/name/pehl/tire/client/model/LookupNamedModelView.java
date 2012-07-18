@@ -9,15 +9,15 @@ import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
-public class FindNamedModelView extends ViewWithUiHandlers<FindNamedModelUiHandlers> implements
-        FindNamedModelPresenterWidget.MyView
+public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiHandlers> implements
+        LookupNamedModelPresenterWidget.MyView
 {
     final SuggestOracle suggestOracle;
     final Html5TextBox textBox;
     final SuggestBox suggestBox;
 
 
-    public FindNamedModelView()
+    public LookupNamedModelView()
     {
         this.suggestOracle = new NamedModelSuggestOracle();
         this.textBox = new Html5TextBox();

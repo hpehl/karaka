@@ -17,30 +17,28 @@ import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public abstract class FindNamedModelHandler<T extends NamedModel> extends
-        TireActionHandler<FindNamedModelAction<T>, FindNamedModelResult<T>>
+public abstract class LookupNamedModelHandler<T extends NamedModel> extends
+        TireActionHandler<LookupNamedModelAction<T>, LookupNamedModelResult<T>>
 {
-    public static final String FIND_ALL = "*";
-
     final String resource;
     final JsonReader<T> reader;
 
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    protected FindNamedModelHandler(String securityCookieName, SecurityCookieAccessor securityCookieAccessor,
+    protected LookupNamedModelHandler(String securityCookieName, SecurityCookieAccessor securityCookieAccessor,
             String resource, JsonReader<T> reader)
     {
-        super((Class) FindNamedModelAction.class, securityCookieName, securityCookieAccessor);
+        super((Class) LookupNamedModelAction.class, securityCookieName, securityCookieAccessor);
         this.resource = resource;
         this.reader = reader;
     }
 
 
     @Override
-    protected Resource resourceFor(FindNamedModelAction<T> action)
+    protected Resource resourceFor(LookupNamedModelAction<T> action)
     {
         UrlBuilder urlBuilder = new UrlBuilder().module("rest").path(resource);
-        if (action.getQuery() != null && !action.getQuery().equals(FIND_ALL))
+        if (action.getQuery() != null)
         {
             urlBuilder = urlBuilder.query("q", action.getQuery());
         }
@@ -49,14 +47,14 @@ public abstract class FindNamedModelHandler<T extends NamedModel> extends
 
 
     @Override
-    protected void executeMethod(final Method method, final AsyncCallback<FindNamedModelResult<T>> resultCallback)
+    protected void executeMethod(final Method method, final AsyncCallback<LookupNamedModelResult<T>> resultCallback)
     {
-        method.send(new TireJsonCallback<T, FindNamedModelResult<T>>(reader, resultCallback)
+        method.send(new TireJsonCallback<T, LookupNamedModelResult<T>>(reader, resultCallback)
         {
             @Override
-            protected FindNamedModelResult<T> extractResult(JsonReader<T> reader, JSONObject json)
+            protected LookupNamedModelResult<T> extractResult(JsonReader<T> reader, JSONObject json)
             {
-                return new FindNamedModelResult<T>(reader.readList(json));
+                return new LookupNamedModelResult<T>(reader.readList(json));
             }
         });
     }

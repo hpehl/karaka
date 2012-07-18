@@ -25,23 +25,23 @@ import com.gwtplatform.mvp.client.View;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public abstract class FindNamedModelPresenterWidget<T extends NamedModel> extends
-        PresenterWidget<FindNamedModelPresenterWidget.MyView> implements FindNamedModelUiHandlers
+public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> extends
+        PresenterWidget<LookupNamedModelPresenterWidget.MyView> implements LookupNamedModelUiHandlers
 {
-    public interface MyView extends View, HasUiHandlers<FindNamedModelUiHandlers>
+    public interface MyView extends View, HasUiHandlers<LookupNamedModelUiHandlers>
     {
         void setPlaceholder(String placeholder);
     }
 
     final DispatchAsync dispatcher;
-    final TireActionHandler<FindNamedModelAction<T>, FindNamedModelResult<T>> actionHandler;
+    final TireActionHandler<LookupNamedModelAction<T>, LookupNamedModelResult<T>> actionHandler;
     final boolean listAllAndCache;
     final List<T> cache;
 
 
-    public FindNamedModelPresenterWidget(final EventBus eventBus, final FindNamedModelPresenterWidget.MyView view,
+    public LookupNamedModelPresenterWidget(final EventBus eventBus, final LookupNamedModelPresenterWidget.MyView view,
             final DispatchAsync dispatcher,
-            final TireActionHandler<FindNamedModelAction<T>, FindNamedModelResult<T>> actionHandler,
+            final TireActionHandler<LookupNamedModelAction<T>, LookupNamedModelResult<T>> actionHandler,
             final String placeHolder, final boolean listAllAndCache)
     {
         super(eventBus, view);
@@ -63,23 +63,23 @@ public abstract class FindNamedModelPresenterWidget<T extends NamedModel> extend
         {
             final DisplayStringFormatter formatter = new DisplayStringFormatter(query);
             ShowMessageEvent.fire(this, new Message(INFO, "Looking for \"" + query + "\"...", false));
-            dispatcher.execute(new FindNamedModelAction<T>(query), new TireCallback<FindNamedModelResult<T>>(
+            dispatcher.execute(new LookupNamedModelAction<T>(query), new TireCallback<LookupNamedModelResult<T>>(
                     getEventBus())
             {
                 @Override
-                public void onSuccess(FindNamedModelResult<T> result)
+                public void onSuccess(LookupNamedModelResult<T> result)
                 {
                     List<T> models = result.getModels();
                     List<NamedModelSuggestion<T>> suggestions = new ArrayList<NamedModelSuggestion<T>>();
                     if (models.isEmpty())
                     {
                         // TODO Handle empty result
-                        ShowMessageEvent.fire(FindNamedModelPresenterWidget.this, new Message(INFO,
+                        ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(INFO,
                                 "No activities found.", true));
                     }
                     else
                     {
-                        ShowMessageEvent.fire(FindNamedModelPresenterWidget.this,
+                        ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this,
                                 new Message(INFO, "Found " + models.size() + " results.", true));
                         if (models.size() == 1)
                         {
@@ -104,7 +104,7 @@ public abstract class FindNamedModelPresenterWidget<T extends NamedModel> extend
                 public void onFailure(Throwable caught)
                 {
                     // TODO Error handling
-                    ShowMessageEvent.fire(FindNamedModelPresenterWidget.this, new Message(SEVERE, "Cannot lookup \""
+                    ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(SEVERE, "Cannot lookup \""
                             + query + "\".", true));
                 }
             });
