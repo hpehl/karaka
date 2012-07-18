@@ -9,7 +9,7 @@ public class NamedModelSuggestion<T extends NamedModel> extends MultiWordSuggest
     final T model;
 
 
-    public NamedModelSuggestion(String replacementString, String displayString, T model)
+    public NamedModelSuggestion(T model, String replacementString, String displayString)
     {
         super(replacementString, displayString);
         this.model = model;

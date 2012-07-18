@@ -36,7 +36,7 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
     final DispatchAsync dispatcher;
     final TireActionHandler<LookupNamedModelAction<T>, LookupNamedModelResult<T>> actionHandler;
     final boolean listAllAndCache;
-    final List<T> cache;
+    final List<NamedModelSuggestion<T>> cache;
 
 
     public LookupNamedModelPresenterWidget(final EventBus eventBus, final LookupNamedModelPresenterWidget.MyView view,
@@ -48,7 +48,7 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
         this.dispatcher = dispatcher;
         this.actionHandler = actionHandler;
         this.listAllAndCache = listAllAndCache;
-        this.cache = new ArrayList<T>();
+        this.cache = new ArrayList<NamedModelSuggestion<T>>();
 
         getView().setUiHandlers(this);
         getView().setPlaceholder(placeHolder);
@@ -56,64 +56,101 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
 
 
     @Override
-    public void onRequestSuggestions(final String query, final Request request, final Callback callback)
+    public void onRequestSuggestions(final Request request, final Callback callback)
     {
-        // TODO caching
-        if (query.length() > 0)
+        if (listAllAndCache)
         {
-            final DisplayStringFormatter formatter = new DisplayStringFormatter(query);
-            ShowMessageEvent.fire(this, new Message(INFO, "Looking for \"" + query + "\"...", false));
-            dispatcher.execute(new LookupNamedModelAction<T>(query), new TireCallback<LookupNamedModelResult<T>>(
-                    getEventBus())
+            if (cache.isEmpty())
             {
-                @Override
-                public void onSuccess(LookupNamedModelResult<T> result)
+                dispatcher.execute(new LookupNamedModelAction<T>(request.getQuery()), new LookupNamedModelCallback(
+                        request, callback)
                 {
-                    List<T> models = result.getModels();
-                    List<NamedModelSuggestion<T>> suggestions = new ArrayList<NamedModelSuggestion<T>>();
-                    if (models.isEmpty())
+                    @Override
+                    void onSuggestions(List<NamedModelSuggestion<T>> suggestions)
                     {
-                        // TODO Handle empty result
-                        ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(INFO,
-                                "No activities found.", true));
+                        super.onSuggestions(suggestions);
+                        LookupNamedModelPresenterWidget.this.cache.addAll(suggestions);
                     }
-                    else
-                    {
-                        ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this,
-                                new Message(INFO, "Found " + models.size() + " results.", true));
-                        if (models.size() == 1)
-                        {
-                            // TODO It's an exact match, so do not bother
-                            // with showing suggestions
-                            suggestions.add(newSuggestionFor(models.get(0), formatter));
-                        }
-                        else
-                        {
-                            for (T model : models)
-                            {
-                                suggestions.add(newSuggestionFor(model, formatter));
-                            }
-                        }
-                        Response response = new Response(suggestions);
-                        callback.onSuggestionsReady(request, response);
-                    }
-                }
-
-
-                @Override
-                public void onFailure(Throwable caught)
-                {
-                    // TODO Error handling
-                    ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(SEVERE, "Cannot lookup \""
-                            + query + "\".", true));
-                }
-            });
+                });
+            }
+            else
+            {
+                // TODO use cache
+            }
+        }
+        else
+        {
+            ShowMessageEvent.fire(this, new Message(INFO, "Looking for \"" + request.getQuery() + "\"...", false));
+            dispatcher.execute(new LookupNamedModelAction<T>(request.getQuery()), new LookupNamedModelCallback(request,
+                    callback));
         }
     }
 
 
     protected NamedModelSuggestion<T> newSuggestionFor(T model, DisplayStringFormatter formatter)
     {
-        return new NamedModelSuggestion<T>(model.getName(), formatter.format(model.getName()), model);
+        return new NamedModelSuggestion<T>(model, model.getName(), formatter.format(model.getName()));
+    }
+
+    class LookupNamedModelCallback extends TireCallback<LookupNamedModelResult<T>>
+    {
+        final Request request;
+        final Callback callback;
+        final DisplayStringFormatter displayStringFormatter;
+
+
+        LookupNamedModelCallback(Request request, Callback callback)
+        {
+            super(getEventBus());
+            this.request = request;
+            this.callback = callback;
+            this.displayStringFormatter = new DisplayStringFormatter(request.getQuery());
+        }
+
+
+        @Override
+        public void onSuccess(LookupNamedModelResult<T> result)
+        {
+            List<T> models = result.getModels();
+            if (models.isEmpty())
+            {
+                ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(INFO, "Nothing found for \""
+                        + request.getQuery() + "\".", true));
+            }
+            else
+            {
+                ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(INFO, "Found " + models.size()
+                        + " results.", true));
+                List<NamedModelSuggestion<T>> suggestions = new ArrayList<NamedModelSuggestion<T>>();
+                for (T model : models)
+                {
+                    suggestions.add(newSuggestionFor(model, displayStringFormatter));
+                }
+            }
+        }
+
+
+        void onSuggestions(List<NamedModelSuggestion<T>> suggestions)
+        {
+            if (suggestions.size() == 1)
+            {
+                // TODO It's an exact match, so do not bother
+                // with showing suggestions
+            }
+            else
+            {
+                Response response = new Response(suggestions);
+                callback.onSuggestionsReady(request, response);
+            }
+        }
+
+
+        @Override
+        public void onFailure(Throwable caught)
+        {
+            // TODO Error handling
+            ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(SEVERE, "Cannot lookup \""
+                    + request.getQuery() + "\".", true));
+        }
     }
 }

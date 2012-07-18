@@ -6,5 +6,5 @@ import com.gwtplatform.mvp.client.UiHandlers;
 
 public interface LookupNamedModelUiHandlers extends UiHandlers
 {
-    void onRequestSuggestions(String query, Request request, Callback callback);
+    void onRequestSuggestions(Request request, Callback callback);
 }

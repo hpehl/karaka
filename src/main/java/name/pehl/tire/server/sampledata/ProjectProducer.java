@@ -10,7 +10,7 @@ import name.pehl.tire.server.project.entity.Project;
 
 class ProjectProducer
 {
-    static String[] names = new String[] {"TiRe", "Piriti", "Totoe", "Guano"};
+    static String[] names = new String[] {"TiRe", "Piriti", "Totoe", "Guano", "Foo Bar"};
     @Inject LoremIpsum loremIpsum;
 
 

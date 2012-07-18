@@ -3,7 +3,6 @@ package name.pehl.tire.client.model;
 import name.pehl.tire.client.ui.Html5TextBox;
 
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,7 +37,7 @@ public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiH
         textBox.setPlaceholder(placeholder);
     }
 
-    class NamedModelSuggestOracle extends MultiWordSuggestOracle
+    class NamedModelSuggestOracle extends SuggestOracle
     {
         static final int DELAY = 1000;
 
@@ -67,7 +66,7 @@ public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiH
                         String query = suggestBox.getText().trim();
                         if (query != null && query.length() != 0)
                         {
-                            getUiHandlers().onRequestSuggestions(query, currentRequest, currentCallback);
+                            getUiHandlers().onRequestSuggestions(currentRequest, currentCallback);
                         }
                     }
                 }

@@ -1,7 +1,7 @@
 package name.pehl.tire.client.dispatch;
 
 import name.pehl.tire.client.activity.dispatch.DeleteActivityHandler;
-import name.pehl.tire.client.activity.dispatch.FindActivitiesHandler;
+import name.pehl.tire.client.activity.dispatch.LookupActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
@@ -15,7 +15,7 @@ import com.gwtplatform.dispatch.client.actionhandler.DefaultClientActionHandlerR
 public class TireActionHandlerRegistry extends DefaultClientActionHandlerRegistry
 {
     @Inject
-    public TireActionHandlerRegistry(final FindActivitiesHandler findActivitiesHandler,
+    public TireActionHandlerRegistry(final LookupActivitiesHandler findActivitiesHandler,
             final GetActivitiesHandler getActivitiesHandler, final GetMinutesHandler getMinutesHandler,
             final GetRunningActivityHandler getRunningActivityHandler, final GetSettingsHandler getSettingsHandler,
             final GetYearsHandler getYearsHandler, final DeleteActivityHandler deleteActivityHandler,

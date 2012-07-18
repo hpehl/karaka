@@ -8,10 +8,10 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-public class FindActivitiesHandler extends LookupNamedModelHandler<Activity>
+public class LookupActivitiesHandler extends LookupNamedModelHandler<Activity>
 {
     @Inject
-    public FindActivitiesHandler(@SecurityCookie String securityCookieName,
+    public LookupActivitiesHandler(@SecurityCookie String securityCookieName,
             SecurityCookieAccessor securityCookieAccessor, ActivityReader reader)
     {
         super(securityCookieName, securityCookieAccessor, "activities", reader);

@@ -116,7 +116,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
     final PlaceManager placeManager;
-    final FindActivityPresenterWidget findActivitiesPresenter;
+    final LookupActivityPresenterWidget findActivitiesPresenter;
     final SelectMonthPresenter selectMonthPresenter;
     final SelectWeekPresenter selectWeekPresenter;
     final EditActivityPresenter editActivityPresenter;
@@ -145,7 +145,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     @Inject
     public DashboardPresenter(EventBus eventBus, MyView view, MyProxy proxy,
-            final FindActivityPresenterWidget findActivitiesPresenter,
+            final LookupActivityPresenterWidget findActivitiesPresenter,
             final SelectMonthPresenter selectMonthPresenter, final SelectWeekPresenter selectWeekPresenter,
             final EditActivityPresenter editActivityPresenter, final DispatchAsync dispatcher,
             final PlaceManager placeManager, final Scheduler scheduler)

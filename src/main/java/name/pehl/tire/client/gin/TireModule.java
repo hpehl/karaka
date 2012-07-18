@@ -7,11 +7,11 @@ import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.about.AboutView;
 import name.pehl.tire.client.activity.dispatch.DeleteActivityHandler;
-import name.pehl.tire.client.activity.dispatch.FindActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetYearsHandler;
+import name.pehl.tire.client.activity.dispatch.LookupActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.SaveActivityHandler;
 import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.activity.model.ActivityReader;
@@ -26,7 +26,7 @@ import name.pehl.tire.client.activity.model.YearsReader;
 import name.pehl.tire.client.activity.presenter.CockpitPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
-import name.pehl.tire.client.activity.presenter.FindActivityPresenterWidget;
+import name.pehl.tire.client.activity.presenter.LookupActivityPresenterWidget;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
 import name.pehl.tire.client.activity.presenter.SelectMonthPresenter;
 import name.pehl.tire.client.activity.presenter.SelectTimeUnitPresenter;
@@ -49,6 +49,7 @@ import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
 import name.pehl.tire.client.model.LookupNamedModelPresenterWidget;
 import name.pehl.tire.client.model.LookupNamedModelView;
+import name.pehl.tire.client.project.LookupProjectPresenterWidget;
 import name.pehl.tire.client.project.ProjectPresenter;
 import name.pehl.tire.client.project.ProjectReader;
 import name.pehl.tire.client.project.ProjectView;
@@ -93,7 +94,7 @@ public class TireModule extends AbstractPresenterModule
         bind(ActivitiesTableResources.class).in(Singleton.class);
 
         // Rest Action Handlers
-        bind(FindActivitiesHandler.class);
+        bind(LookupActivitiesHandler.class);
         bind(GetActivitiesHandler.class);
         bind(GetMinutesHandler.class);
         bind(GetRunningActivityHandler.class);
@@ -134,7 +135,8 @@ public class TireModule extends AbstractPresenterModule
         bindPresenterWidget(QuickChartPresenter.class, QuickChartPresenter.MyView.class, QuickChartView.class);
 
         // PresenterWidgets with shared views (a-z)
-        bind(FindActivityPresenterWidget.class);
+        bind(LookupActivityPresenterWidget.class);
+        bind(LookupProjectPresenterWidget.class);
         bind(LookupNamedModelPresenterWidget.MyView.class).to(LookupNamedModelView.class);
         bind(SelectMonthPresenter.class);
         bind(SelectWeekPresenter.class);

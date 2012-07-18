@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity.presenter;
 
-import name.pehl.tire.client.activity.dispatch.FindActivitiesHandler;
+import name.pehl.tire.client.activity.dispatch.LookupActivitiesHandler;
 import name.pehl.tire.client.model.DisplayStringFormatter;
 import name.pehl.tire.client.model.LookupNamedModelPresenterWidget;
 import name.pehl.tire.client.model.NamedModelSuggestion;
@@ -10,13 +10,13 @@ import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 
-public class FindActivityPresenterWidget extends LookupNamedModelPresenterWidget<Activity>
+public class LookupActivityPresenterWidget extends LookupNamedModelPresenterWidget<Activity>
 {
     @Inject
-    public FindActivityPresenterWidget(EventBus eventBus, LookupNamedModelPresenterWidget.MyView view,
-            DispatchAsync dispatcher, FindActivitiesHandler findActivitiesHandler)
+    public LookupActivityPresenterWidget(EventBus eventBus, LookupNamedModelPresenterWidget.MyView view,
+            DispatchAsync dispatcher, LookupActivitiesHandler lookupActivitiesHandler)
     {
-        super(eventBus, view, dispatcher, findActivitiesHandler, "Select an activity", false);
+        super(eventBus, view, dispatcher, lookupActivitiesHandler, "Select an activity", false);
     }
 
 
@@ -29,7 +29,7 @@ public class FindActivityPresenterWidget extends LookupNamedModelPresenterWidget
         {
             displayString.append(": ").append(activity.getDescription());
         }
-        return new NamedModelSuggestion<Activity>(activity.getName(), formatter.format(displayString.toString()),
-                activity);
+        return new NamedModelSuggestion<Activity>(activity, activity.getName(),
+                formatter.format(displayString.toString()));
     }
 }
