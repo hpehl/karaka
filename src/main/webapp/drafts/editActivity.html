@@ -43,13 +43,20 @@ div.controls {
 }
 
 div.controls button {
-    margin-left: 5px;
+	margin-left: 5px;
 	float: right;
 	width: 8em;
 }
 
 .spacebelow {
 	margin-bottom: 8px;
+}
+
+.loading {
+	background:
+		url("../../resources/name/pehl/tire/client/resources/loading16.gif")
+		no-repeat right center;
+	padding-right: 24px !important;
 }
 </style>
 </head>
@@ -79,7 +86,7 @@ div.controls button {
 		</div>
 		<div>
 			<input type="text" id="project" name="project" title="Project"
-				placeholder="Project" />
+				placeholder="Project" class="loading" />
 		</div>
 		<div class="controls">
 			<button>Cancel</button>

@@ -1,12 +1,12 @@
 package name.pehl.tire.client.model;
 
 import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.SEVERE;
 import static name.pehl.tire.client.model.LookupNamedModelPresenterWidget.SearchMode.CLIENT_SIDE_SEARCH;
 import static name.pehl.tire.client.model.LookupNamedModelPresenterWidget.SearchMode.SERVER_SIDE_SEARCH;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
@@ -42,7 +42,15 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
 
 
         void setUseLocalCache(boolean useLocalCache);
+
+
+        void showLoading();
+
+
+        void hideLoading();
     }
+
+    static final Logger logger = Logger.getLogger(LookupNamedModelPresenterWidget.class.getName());
 
     final DispatchAsync dispatcher;
     final TireActionHandler<LookupNamedModelAction<T>, LookupNamedModelResult<T>> actionHandler;
@@ -74,7 +82,7 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
         {
             if (cache.isEmpty())
             {
-                ShowMessageEvent.fire(this, new Message(INFO, "Looking for \"" + request.getQuery() + "\"...", false));
+                getView().showLoading();
                 dispatcher.execute(new LookupNamedModelAction<T>(request.getQuery()), new LookupNamedModelCallback(
                         request, callback)
                 {
@@ -100,15 +108,13 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
         }
         else if (searchMode == SERVER_SIDE_SEARCH)
         {
-            ShowMessageEvent.fire(this, new Message(INFO, "Looking for \"" + request.getQuery() + "\"...", false));
+            getView().showLoading();
             dispatcher.execute(new LookupNamedModelAction<T>(request.getQuery()), new LookupNamedModelCallback(request,
                     callback)
             {
                 @Override
                 void onSuccess(List<T> models)
                 {
-                    ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this,
-                            new Message(INFO, "Found " + models.size() + " results.", true));
                     List<NamedModelSuggestion<T>> suggestions = new ArrayList<NamedModelSuggestion<T>>();
                     for (T model : models)
                     {
@@ -161,11 +167,12 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
             List<T> models = result.getModels();
             if (models.isEmpty())
             {
-                ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(INFO, "Nothing found for \""
-                        + request.getQuery() + "\".", true));
+                getView().hideLoading();
+                logger.warning("Nothing found for \"" + request.getQuery() + "\".");
             }
             else
             {
+                getView().hideLoading();
                 onSuccess(models);
             }
         }
@@ -177,9 +184,8 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
         @Override
         public void onFailure(Throwable caught)
         {
-            // TODO Error handling
-            ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(SEVERE, "Cannot lookup \""
-                    + request.getQuery() + "\".", true));
+            getView().hideLoading();
+            logger.severe("Cannot lookup \"" + request.getQuery() + "\".");
         }
     }
 }

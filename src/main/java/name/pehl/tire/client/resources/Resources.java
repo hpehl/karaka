@@ -14,8 +14,7 @@ public interface Resources extends ClientBundle
     // ----------------------------------------------------------------- images
 
     // @formatter:off
-    ImageResource loading24();
-    ImageResource loading48();
+    ImageResource loading16();
     ImageResource recordOn();
     ImageResource recordOff();
     ImageResource selectedNavigation();
@@ -43,19 +42,15 @@ public interface Resources extends ClientBundle
     @Source("widgets.css")
     CssResource widgets();
 
-    public interface Navigation extends CssResource
+    public interface Loading extends CssResource
     {
-        @ClassName("selectedNavigationEntry")
-        String selectedNavigationEntry();
-
-
-        @ClassName("selectedDate")
-        String selectedDate();
+        @ClassName("indicator")
+        String indicator();
     }
 
 
-    @Source("navigation.css")
-    Navigation navigation();
+    @Source("loading.css")
+    Loading loading();
 
     public interface Message extends CssResource
     {
@@ -70,4 +65,18 @@ public interface Resources extends ClientBundle
 
     @Source("message.css")
     Message message();
+
+    public interface Navigation extends CssResource
+    {
+        @ClassName("selectedNavigationEntry")
+        String selectedNavigationEntry();
+
+
+        @ClassName("selectedDate")
+        String selectedDate();
+    }
+
+
+    @Source("navigation.css")
+    Navigation navigation();
 }
