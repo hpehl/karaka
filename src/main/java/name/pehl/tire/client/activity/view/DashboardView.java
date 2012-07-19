@@ -49,7 +49,8 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @UiField Anchor yesterday;
     @UiField Anchor today;
     @UiField CalendarLink calendar;
-    @UiField SimplePanel findActivityHolder;
+    @UiField SimplePanel lookupActivityHolder;
+    @UiField SimplePanel lookupProjectHolder;
     @UiField InlineLabel header;
     @UiField InlineHTMLWithContextMenu previous;
     @UiField InlineHTMLWithContextMenu next;
@@ -85,9 +86,13 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @Override
     public void setInSlot(Object slot, Widget widget)
     {
-        if (slot == DashboardPresenter.SLOT_Find_Activities)
+        if (slot == DashboardPresenter.SLOT_Lookup_Activity)
         {
-            findActivityHolder.setWidget(widget);
+            lookupActivityHolder.setWidget(widget);
+        }
+        else if (slot == DashboardPresenter.SLOT_Lookup_Project)
+        {
+            lookupProjectHolder.setWidget(widget);
         }
         else
         {

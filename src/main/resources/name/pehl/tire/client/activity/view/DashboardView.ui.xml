@@ -64,12 +64,12 @@
 			line-height: 16px;
 		}
 		
-		div.input div.findActivityHolder {
+		div.input div.lookupActivityHolder {
 			float: left;
 			width: 60%;
 		}
 		
-		div.input span.projectHolder {
+		div.input div.lookupProjectHolder {
 			float: left;
 			width: 25%;
 		}
@@ -124,11 +124,8 @@
 						</li>
 					</ul>
 					<div class="{style.input}">
-					    <g:SimplePanel ui:field="findActivityHolder" addStyleNames="{style.findActivityHolder}"></g:SimplePanel>
-						<span class="{style.projectHolder}">
-							<tui:Html5TextBox ui:field="project"
-								placeholder="Project" title="Select a project" />
-						</span>
+					    <g:SimplePanel ui:field="lookupActivityHolder" addStyleNames="{style.lookupActivityHolder}"></g:SimplePanel>
+					    <g:SimplePanel ui:field="lookupProjectHolder" addStyleNames="{style.lookupProjectHolder}"></g:SimplePanel>
 						<span class="{style.timeHolder}">
 							<tui:Html5TextBox ui:field="time"
 								placeholder="Time" title="Leave empty to start a new activity" />

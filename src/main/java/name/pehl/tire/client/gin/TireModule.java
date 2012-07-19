@@ -50,6 +50,7 @@ import name.pehl.tire.client.help.HelpView;
 import name.pehl.tire.client.model.LookupNamedModelPresenterWidget;
 import name.pehl.tire.client.model.LookupNamedModelView;
 import name.pehl.tire.client.project.LookupProjectPresenterWidget;
+import name.pehl.tire.client.project.LookupProjectsHandler;
 import name.pehl.tire.client.project.ProjectPresenter;
 import name.pehl.tire.client.project.ProjectReader;
 import name.pehl.tire.client.project.ProjectView;
@@ -94,13 +95,14 @@ public class TireModule extends AbstractPresenterModule
         bind(ActivitiesTableResources.class).in(Singleton.class);
 
         // Rest Action Handlers
-        bind(LookupActivitiesHandler.class);
         bind(GetActivitiesHandler.class);
+        bind(DeleteActivityHandler.class);
         bind(GetMinutesHandler.class);
         bind(GetRunningActivityHandler.class);
         bind(GetSettingsHandler.class);
         bind(GetYearsHandler.class);
-        bind(DeleteActivityHandler.class);
+        bind(LookupActivitiesHandler.class);
+        bind(LookupProjectsHandler.class);
         bind(SaveActivityHandler.class);
 
         // JsonReader / Writer

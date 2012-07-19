@@ -2,6 +2,8 @@ package name.pehl.tire.client.model;
 
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.SEVERE;
+import static name.pehl.tire.client.model.LookupNamedModelPresenterWidget.SearchMode.CLIENT_SIDE_SEARCH;
+import static name.pehl.tire.client.model.LookupNamedModelPresenterWidget.SearchMode.SERVER_SIDE_SEARCH;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,12 @@ import com.gwtplatform.mvp.client.View;
 public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> extends
         PresenterWidget<LookupNamedModelPresenterWidget.MyView> implements LookupNamedModelUiHandlers
 {
+    public enum SearchMode
+    {
+        CLIENT_SIDE_SEARCH,
+        SERVER_SIDE_SEARCH;
+    }
+
     public interface MyView extends View, HasUiHandlers<LookupNamedModelUiHandlers>
     {
         void setPlaceholder(String placeholder);
@@ -35,20 +43,20 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
 
     final DispatchAsync dispatcher;
     final TireActionHandler<LookupNamedModelAction<T>, LookupNamedModelResult<T>> actionHandler;
-    final boolean listAllAndCache;
-    final List<NamedModelSuggestion<T>> cache;
+    final SearchMode searchMode;
+    final List<T> cache;
 
 
     public LookupNamedModelPresenterWidget(final EventBus eventBus, final LookupNamedModelPresenterWidget.MyView view,
             final DispatchAsync dispatcher,
             final TireActionHandler<LookupNamedModelAction<T>, LookupNamedModelResult<T>> actionHandler,
-            final String placeHolder, final boolean listAllAndCache)
+            final String placeHolder, final SearchMode searchMode)
     {
         super(eventBus, view);
         this.dispatcher = dispatcher;
         this.actionHandler = actionHandler;
-        this.listAllAndCache = listAllAndCache;
-        this.cache = new ArrayList<NamedModelSuggestion<T>>();
+        this.searchMode = searchMode;
+        this.cache = new ArrayList<T>();
 
         getView().setUiHandlers(this);
         getView().setPlaceholder(placeHolder);
@@ -58,45 +66,81 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
     @Override
     public void onRequestSuggestions(final Request request, final Callback callback)
     {
-        if (listAllAndCache)
+        final DisplayStringFormatter displayStringFormatter = new DisplayStringFormatter(request.getQuery());
+        if (searchMode == CLIENT_SIDE_SEARCH)
         {
             if (cache.isEmpty())
             {
+                ShowMessageEvent.fire(this, new Message(INFO, "Looking for \"" + request.getQuery() + "\"...", false));
                 dispatcher.execute(new LookupNamedModelAction<T>(request.getQuery()), new LookupNamedModelCallback(
                         request, callback)
                 {
                     @Override
-                    void onSuggestions(List<NamedModelSuggestion<T>> suggestions)
+                    void onSuccess(List<T> models)
                     {
-                        super.onSuggestions(suggestions);
-                        LookupNamedModelPresenterWidget.this.cache.addAll(suggestions);
+                        LookupNamedModelPresenterWidget.this.cache.addAll(models);
+                        List<NamedModelSuggestion<T>> suggestions = filter(request.getQuery(), models,
+                                displayStringFormatter);
+                        ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(INFO, "Found "
+                                + suggestions.size() + " results.", true));
+                        callback.onSuggestionsReady(request, new Response(suggestions));
                     }
                 });
             }
             else
             {
-                // TODO use cache
+                List<NamedModelSuggestion<T>> suggestions = filter(request.getQuery(),
+                        LookupNamedModelPresenterWidget.this.cache, displayStringFormatter);
+                callback.onSuggestionsReady(request, new Response(suggestions));
             }
         }
-        else
+        else if (searchMode == SERVER_SIDE_SEARCH)
         {
             ShowMessageEvent.fire(this, new Message(INFO, "Looking for \"" + request.getQuery() + "\"...", false));
             dispatcher.execute(new LookupNamedModelAction<T>(request.getQuery()), new LookupNamedModelCallback(request,
-                    callback));
+                    callback)
+            {
+                @Override
+                void onSuccess(List<T> models)
+                {
+                    ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this,
+                            new Message(INFO, "Found " + models.size() + " results.", true));
+                    List<NamedModelSuggestion<T>> suggestions = new ArrayList<NamedModelSuggestion<T>>();
+                    for (T model : models)
+                    {
+                        suggestions.add(newSuggestionFor(model, displayStringFormatter));
+                    }
+                    callback.onSuggestionsReady(request, new Response(suggestions));
+                }
+            });
         }
     }
 
 
-    protected NamedModelSuggestion<T> newSuggestionFor(T model, DisplayStringFormatter formatter)
+    protected List<NamedModelSuggestion<T>> filter(String query, List<T> models,
+            DisplayStringFormatter displayStringFormatter)
     {
-        return new NamedModelSuggestion<T>(model, model.getName(), formatter.format(model.getName()));
+        List<NamedModelSuggestion<T>> suggestions = new ArrayList<NamedModelSuggestion<T>>();
+        for (T model : models)
+        {
+            if (model.getName().contains(query))
+            {
+                suggestions.add(newSuggestionFor(model, displayStringFormatter));
+            }
+        }
+        return suggestions;
     }
 
-    class LookupNamedModelCallback extends TireCallback<LookupNamedModelResult<T>>
+
+    protected NamedModelSuggestion<T> newSuggestionFor(T model, DisplayStringFormatter displayStringFormatter)
+    {
+        return new NamedModelSuggestion<T>(model, model.getName(), displayStringFormatter.format(model.getName()));
+    }
+
+    abstract class LookupNamedModelCallback extends TireCallback<LookupNamedModelResult<T>>
     {
         final Request request;
         final Callback callback;
-        final DisplayStringFormatter displayStringFormatter;
 
 
         LookupNamedModelCallback(Request request, Callback callback)
@@ -104,7 +148,6 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
             super(getEventBus());
             this.request = request;
             this.callback = callback;
-            this.displayStringFormatter = new DisplayStringFormatter(request.getQuery());
         }
 
 
@@ -119,30 +162,12 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
             }
             else
             {
-                ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(INFO, "Found " + models.size()
-                        + " results.", true));
-                List<NamedModelSuggestion<T>> suggestions = new ArrayList<NamedModelSuggestion<T>>();
-                for (T model : models)
-                {
-                    suggestions.add(newSuggestionFor(model, displayStringFormatter));
-                }
+                onSuccess(models);
             }
         }
 
 
-        void onSuggestions(List<NamedModelSuggestion<T>> suggestions)
-        {
-            if (suggestions.size() == 1)
-            {
-                // TODO It's an exact match, so do not bother
-                // with showing suggestions
-            }
-            else
-            {
-                Response response = new Response(suggestions);
-                callback.onSuggestionsReady(request, response);
-            }
-        }
+        abstract void onSuccess(List<T> models);
 
 
         @Override

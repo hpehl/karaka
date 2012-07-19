@@ -1,5 +1,6 @@
 package name.pehl.tire.client.project;
 
+import static name.pehl.tire.client.model.LookupNamedModelPresenterWidget.SearchMode.CLIENT_SIDE_SEARCH;
 import name.pehl.tire.client.model.LookupNamedModelPresenterWidget;
 import name.pehl.tire.shared.model.Project;
 
@@ -13,6 +14,6 @@ public class LookupProjectPresenterWidget extends LookupNamedModelPresenterWidge
     public LookupProjectPresenterWidget(EventBus eventBus, LookupNamedModelPresenterWidget.MyView view,
             DispatchAsync dispatcher, LookupProjectsHandler lookupProjectsHandler)
     {
-        super(eventBus, view, dispatcher, lookupProjectsHandler, "Select a project", true);
+        super(eventBus, view, dispatcher, lookupProjectsHandler, "Select a project", CLIENT_SIDE_SEARCH);
     }
 }

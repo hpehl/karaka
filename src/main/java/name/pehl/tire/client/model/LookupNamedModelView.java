@@ -39,7 +39,7 @@ public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiH
 
     class NamedModelSuggestOracle extends SuggestOracle
     {
-        static final int DELAY = 1000;
+        static final int DELAY = 500;
 
         final Timer timer;
         Request currentRequest;

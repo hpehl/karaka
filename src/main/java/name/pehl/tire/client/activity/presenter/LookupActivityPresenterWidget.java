@@ -1,5 +1,6 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static name.pehl.tire.client.model.LookupNamedModelPresenterWidget.SearchMode.SERVER_SIDE_SEARCH;
 import name.pehl.tire.client.activity.dispatch.LookupActivitiesHandler;
 import name.pehl.tire.client.model.DisplayStringFormatter;
 import name.pehl.tire.client.model.LookupNamedModelPresenterWidget;
@@ -16,12 +17,13 @@ public class LookupActivityPresenterWidget extends LookupNamedModelPresenterWidg
     public LookupActivityPresenterWidget(EventBus eventBus, LookupNamedModelPresenterWidget.MyView view,
             DispatchAsync dispatcher, LookupActivitiesHandler lookupActivitiesHandler)
     {
-        super(eventBus, view, dispatcher, lookupActivitiesHandler, "Select an activity", false);
+        super(eventBus, view, dispatcher, lookupActivitiesHandler, "Select an activity", SERVER_SIDE_SEARCH);
     }
 
 
     @Override
-    protected NamedModelSuggestion<Activity> newSuggestionFor(Activity activity, DisplayStringFormatter formatter)
+    protected NamedModelSuggestion<Activity> newSuggestionFor(Activity activity,
+            DisplayStringFormatter displayStringFormatter)
     {
         StringBuilder displayString = new StringBuilder();
         displayString.append(activity.getName());
@@ -30,6 +32,6 @@ public class LookupActivityPresenterWidget extends LookupNamedModelPresenterWidg
             displayString.append(": ").append(activity.getDescription());
         }
         return new NamedModelSuggestion<Activity>(activity, activity.getName(),
-                formatter.format(displayString.toString()));
+                displayStringFormatter.format(displayString.toString()));
     }
 }
