@@ -1,6 +1,5 @@
 package name.pehl.tire.client.model;
 
-import static java.util.logging.Level.INFO;
 import static name.pehl.tire.client.model.LookupNamedModelPresenterWidget.SearchMode.CLIENT_SIDE_SEARCH;
 import static name.pehl.tire.client.model.LookupNamedModelPresenterWidget.SearchMode.SERVER_SIDE_SEARCH;
 
@@ -8,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import name.pehl.tire.client.application.Message;
-import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireActionHandler;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.NamedModel;
@@ -42,12 +39,6 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
 
 
         void setUseLocalCache(boolean useLocalCache);
-
-
-        void showLoading();
-
-
-        void hideLoading();
     }
 
     static final Logger logger = Logger.getLogger(LookupNamedModelPresenterWidget.class.getName());
@@ -82,9 +73,7 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
         {
             if (cache.isEmpty())
             {
-                getView().showLoading();
-                dispatcher.execute(new LookupNamedModelAction<T>(request.getQuery()), new LookupNamedModelCallback(
-                        request, callback)
+                dispatcher.execute(newAction(request.getQuery()), new LookupNamedModelCallback(request, callback)
                 {
                     @Override
                     void onSuccess(List<T> models)
@@ -92,8 +81,6 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
                         LookupNamedModelPresenterWidget.this.cache.addAll(models);
                         List<NamedModelSuggestion<T>> suggestions = filter(request.getQuery(), models,
                                 displayStringFormatter);
-                        ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(INFO, "Found "
-                                + suggestions.size() + " results.", true));
                         callback.onSuggestionsReady(request, new Response(suggestions));
                         getView().setUseLocalCache(true);
                     }
@@ -108,9 +95,7 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
         }
         else if (searchMode == SERVER_SIDE_SEARCH)
         {
-            getView().showLoading();
-            dispatcher.execute(new LookupNamedModelAction<T>(request.getQuery()), new LookupNamedModelCallback(request,
-                    callback)
+            dispatcher.execute(newAction(request.getQuery()), new LookupNamedModelCallback(request, callback)
             {
                 @Override
                 void onSuccess(List<T> models)
@@ -142,6 +127,9 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
     }
 
 
+    protected abstract LookupNamedModelAction<T> newAction(String query);
+
+
     protected NamedModelSuggestion<T> newSuggestionFor(T model, DisplayStringFormatter displayStringFormatter)
     {
         return new NamedModelSuggestion<T>(model, model.getName(), displayStringFormatter.format(model.getName()));
@@ -167,12 +155,10 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
             List<T> models = result.getModels();
             if (models.isEmpty())
             {
-                getView().hideLoading();
                 logger.warning("Nothing found for \"" + request.getQuery() + "\".");
             }
             else
             {
-                getView().hideLoading();
                 onSuccess(models);
             }
         }
@@ -184,7 +170,6 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
         @Override
         public void onFailure(Throwable caught)
         {
-            getView().hideLoading();
             logger.severe("Cannot lookup \"" + request.getQuery() + "\".");
         }
     }

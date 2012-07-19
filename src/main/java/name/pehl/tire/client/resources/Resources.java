@@ -14,7 +14,6 @@ public interface Resources extends ClientBundle
     // ----------------------------------------------------------------- images
 
     // @formatter:off
-    ImageResource loading16();
     ImageResource recordOn();
     ImageResource recordOff();
     ImageResource selectedNavigation();
@@ -41,16 +40,6 @@ public interface Resources extends ClientBundle
      */
     @Source("widgets.css")
     CssResource widgets();
-
-    public interface Loading extends CssResource
-    {
-        @ClassName("indicator")
-        String indicator();
-    }
-
-
-    @Source("loading.css")
-    Loading loading();
 
     public interface Message extends CssResource
     {

@@ -24,11 +24,12 @@ public abstract class LookupNamedModelHandler<T extends NamedModel> extends
     final JsonReader<T> reader;
 
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    protected LookupNamedModelHandler(String securityCookieName, SecurityCookieAccessor securityCookieAccessor,
-            String resource, JsonReader<T> reader)
+    @SuppressWarnings("unchecked")
+    protected LookupNamedModelHandler(Class<? extends LookupNamedModelAction<T>> actionClass,
+            String securityCookieName, SecurityCookieAccessor securityCookieAccessor, String resource,
+            JsonReader<T> reader)
     {
-        super((Class) LookupNamedModelAction.class, securityCookieName, securityCookieAccessor);
+        super((Class<LookupNamedModelAction<T>>) actionClass, securityCookieName, securityCookieAccessor);
         this.resource = resource;
         this.reader = reader;
     }

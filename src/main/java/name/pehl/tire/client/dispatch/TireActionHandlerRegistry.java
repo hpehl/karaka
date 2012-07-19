@@ -5,9 +5,9 @@ import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetYearsHandler;
-import name.pehl.tire.client.activity.dispatch.LookupActivitiesHandler;
+import name.pehl.tire.client.activity.dispatch.LookupActivityHandler;
 import name.pehl.tire.client.activity.dispatch.SaveActivityHandler;
-import name.pehl.tire.client.project.LookupProjectsHandler;
+import name.pehl.tire.client.project.LookupProjectHandler;
 import name.pehl.tire.client.settings.GetSettingsHandler;
 
 import com.google.inject.Inject;
@@ -19,8 +19,8 @@ public class TireActionHandlerRegistry extends DefaultClientActionHandlerRegistr
     public TireActionHandlerRegistry(final DeleteActivityHandler deleteActivityHandler,
             final GetActivitiesHandler getActivitiesHandler, final GetMinutesHandler getMinutesHandler,
             final GetRunningActivityHandler getRunningActivityHandler, final GetSettingsHandler getSettingsHandler,
-            final GetYearsHandler getYearsHandler, final LookupActivitiesHandler lookupActivitiesHandler,
-            final LookupProjectsHandler lookupProjectsHandler, final SaveActivityHandler saveActivityHandler)
+            final GetYearsHandler getYearsHandler, final LookupActivityHandler lookupActivityHandler,
+            final LookupProjectHandler lookupProjectHandler, final SaveActivityHandler saveActivityHandler)
     {
         register(deleteActivityHandler);
         register(getActivitiesHandler);
@@ -28,8 +28,8 @@ public class TireActionHandlerRegistry extends DefaultClientActionHandlerRegistr
         register(getRunningActivityHandler);
         register(getSettingsHandler);
         register(getYearsHandler);
-        register(lookupActivitiesHandler);
-        register(lookupProjectsHandler);
+        register(lookupActivityHandler);
+        register(lookupProjectHandler);
         register(saveActivityHandler);
     }
 }

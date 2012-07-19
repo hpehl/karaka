@@ -1,8 +1,10 @@
 package name.pehl.tire.client.activity.presenter;
 
 import static name.pehl.tire.client.model.LookupNamedModelPresenterWidget.SearchMode.SERVER_SIDE_SEARCH;
-import name.pehl.tire.client.activity.dispatch.LookupActivitiesHandler;
+import name.pehl.tire.client.activity.dispatch.LookupActivityAction;
+import name.pehl.tire.client.activity.dispatch.LookupActivityHandler;
 import name.pehl.tire.client.model.DisplayStringFormatter;
+import name.pehl.tire.client.model.LookupNamedModelAction;
 import name.pehl.tire.client.model.LookupNamedModelPresenterWidget;
 import name.pehl.tire.client.model.NamedModelSuggestion;
 import name.pehl.tire.shared.model.Activity;
@@ -15,9 +17,16 @@ public class LookupActivityPresenterWidget extends LookupNamedModelPresenterWidg
 {
     @Inject
     public LookupActivityPresenterWidget(EventBus eventBus, LookupNamedModelPresenterWidget.MyView view,
-            DispatchAsync dispatcher, LookupActivitiesHandler lookupActivitiesHandler)
+            DispatchAsync dispatcher, LookupActivityHandler lookupActivityHandler)
     {
-        super(eventBus, view, dispatcher, lookupActivitiesHandler, "Select an activity", SERVER_SIDE_SEARCH);
+        super(eventBus, view, dispatcher, lookupActivityHandler, "Select an activity", SERVER_SIDE_SEARCH);
+    }
+
+
+    @Override
+    protected LookupNamedModelAction<Activity> newAction(String query)
+    {
+        return new LookupActivityAction(query);
     }
 
 

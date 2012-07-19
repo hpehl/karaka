@@ -4,6 +4,13 @@ import name.pehl.tire.shared.model.NamedModel;
 
 import com.gwtplatform.dispatch.shared.Action;
 
+/**
+ * Please note: Subclasses for each kind of lookup are necessary to get the
+ * action handler registration stuff right!
+ * 
+ * @author $LastChangedBy:$
+ * @version $LastChangedRevision:$
+ */
 public class LookupNamedModelAction<T extends NamedModel> implements Action<LookupNamedModelResult<T>>
 {
     String query;

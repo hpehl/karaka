@@ -7,12 +7,12 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-public class LookupProjectsHandler extends LookupNamedModelHandler<Project>
+public class LookupProjectHandler extends LookupNamedModelHandler<Project>
 {
     @Inject
-    public LookupProjectsHandler(@SecurityCookie String securityCookieName,
+    public LookupProjectHandler(@SecurityCookie String securityCookieName,
             SecurityCookieAccessor securityCookieAccessor, ProjectReader reader)
     {
-        super(securityCookieName, securityCookieAccessor, "projects", reader);
+        super(LookupProjectAction.class, securityCookieName, securityCookieAccessor, "projects", reader);
     }
 }

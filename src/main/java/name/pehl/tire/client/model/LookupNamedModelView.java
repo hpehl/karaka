@@ -1,13 +1,11 @@
 package name.pehl.tire.client.model;
 
-import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.Html5TextBox;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiHandlers> implements
@@ -16,18 +14,14 @@ public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiH
     final SuggestOracle suggestOracle;
     final Html5TextBox textBox;
     final SuggestBox suggestBox;
-    final Resources resources;
     boolean useLocalCache;
 
 
-    @Inject
-    public LookupNamedModelView(Resources resources)
+    public LookupNamedModelView()
     {
         this.suggestOracle = new NamedModelSuggestOracle();
         this.textBox = new Html5TextBox();
         this.suggestBox = new SuggestBox(suggestOracle, textBox);
-        this.resources = resources;
-        this.resources.loading().ensureInjected();
     }
 
 
@@ -42,20 +36,6 @@ public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiH
     public void setPlaceholder(String placeholder)
     {
         textBox.setPlaceholder(placeholder);
-    }
-
-
-    @Override
-    public void showLoading()
-    {
-        textBox.addStyleName(resources.loading().indicator());
-    }
-
-
-    @Override
-    public void hideLoading()
-    {
-        textBox.removeStyleName(resources.loading().indicator());
     }
 
 

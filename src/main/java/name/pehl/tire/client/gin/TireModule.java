@@ -11,7 +11,7 @@ import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetYearsHandler;
-import name.pehl.tire.client.activity.dispatch.LookupActivitiesHandler;
+import name.pehl.tire.client.activity.dispatch.LookupActivityHandler;
 import name.pehl.tire.client.activity.dispatch.SaveActivityHandler;
 import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.activity.model.ActivityReader;
@@ -50,7 +50,7 @@ import name.pehl.tire.client.help.HelpView;
 import name.pehl.tire.client.model.LookupNamedModelPresenterWidget;
 import name.pehl.tire.client.model.LookupNamedModelView;
 import name.pehl.tire.client.project.LookupProjectPresenterWidget;
-import name.pehl.tire.client.project.LookupProjectsHandler;
+import name.pehl.tire.client.project.LookupProjectHandler;
 import name.pehl.tire.client.project.ProjectPresenter;
 import name.pehl.tire.client.project.ProjectReader;
 import name.pehl.tire.client.project.ProjectView;
@@ -101,8 +101,8 @@ public class TireModule extends AbstractPresenterModule
         bind(GetRunningActivityHandler.class);
         bind(GetSettingsHandler.class);
         bind(GetYearsHandler.class);
-        bind(LookupActivitiesHandler.class);
-        bind(LookupProjectsHandler.class);
+        bind(LookupActivityHandler.class);
+        bind(LookupProjectHandler.class);
         bind(SaveActivityHandler.class);
 
         // JsonReader / Writer
