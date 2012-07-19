@@ -14,6 +14,7 @@ public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiH
     final SuggestOracle suggestOracle;
     final Html5TextBox textBox;
     final SuggestBox suggestBox;
+    boolean useLocalCache;
 
 
     public LookupNamedModelView()
@@ -37,6 +38,13 @@ public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiH
         textBox.setPlaceholder(placeholder);
     }
 
+
+    @Override
+    public void setUseLocalCache(boolean useLocalCache)
+    {
+        this.useLocalCache = useLocalCache;
+    }
+
     class NamedModelSuggestOracle extends SuggestOracle
     {
         static final int DELAY = 500;
@@ -48,29 +56,7 @@ public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiH
 
         NamedModelSuggestOracle()
         {
-            this.timer = new Timer()
-            {
-                @Override
-                public void run()
-                {
-                    /*
-                     * The reason we check for empty string is found at
-                     * http://development.lombardi.com/?p=39 -- paraphrased, if
-                     * you backspace quickly the contents of the field are
-                     * emptied but a query for a single character is still
-                     * executed. Workaround for this is to check for an empty
-                     * string field here.
-                     */
-                    if (getUiHandlers() != null)
-                    {
-                        String query = suggestBox.getText().trim();
-                        if (query != null && query.length() != 0)
-                        {
-                            getUiHandlers().onRequestSuggestions(currentRequest, currentCallback);
-                        }
-                    }
-                }
-            };
+            this.timer = new QueryTimer();
         }
 
 
@@ -79,13 +65,28 @@ public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiH
         {
             // This is the method that gets called by the SuggestBox whenever
             // some types into the text field
-            currentRequest = request;
-            currentCallback = callback;
+            if (useLocalCache)
+            {
+                timer.cancel();
+                if (getUiHandlers() != null)
+                {
+                    String query = suggestBox.getText().trim();
+                    if (query != null && query.length() != 0)
+                    {
+                        getUiHandlers().onRequestSuggestions(request, callback);
+                    }
+                }
+            }
+            else
+            {
+                currentRequest = request;
+                currentCallback = callback;
 
-            // If the user keeps triggering this event (e.g., keeps typing),
-            // cancel and restart the timer
-            timer.cancel();
-            timer.schedule(DELAY);
+                // If the user keeps triggering this event (e.g., keeps typing),
+                // cancel and restart the timer
+                timer.cancel();
+                timer.schedule(DELAY);
+            }
         }
 
 
@@ -93,6 +94,29 @@ public class LookupNamedModelView extends ViewWithUiHandlers<LookupNamedModelUiH
         public boolean isDisplayStringHTML()
         {
             return true;
+        }
+
+        class QueryTimer extends Timer
+        {
+            @Override
+            public void run()
+            {
+                /*
+                 * The reason we check for empty string is found at
+                 * http://development.lombardi.com/?p=39 -- paraphrased, if you
+                 * backspace quickly the contents of the field are emptied but a
+                 * query for a single character is still executed. Workaround
+                 * for this is to check for an empty string field here.
+                 */
+                if (getUiHandlers() != null)
+                {
+                    String query = suggestBox.getText().trim();
+                    if (query != null && query.length() != 0)
+                    {
+                        getUiHandlers().onRequestSuggestions(currentRequest, currentCallback);
+                    }
+                }
+            }
         }
     }
 }

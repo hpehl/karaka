@@ -39,6 +39,9 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
     public interface MyView extends View, HasUiHandlers<LookupNamedModelUiHandlers>
     {
         void setPlaceholder(String placeholder);
+
+
+        void setUseLocalCache(boolean useLocalCache);
     }
 
     final DispatchAsync dispatcher;
@@ -84,6 +87,7 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
                         ShowMessageEvent.fire(LookupNamedModelPresenterWidget.this, new Message(INFO, "Found "
                                 + suggestions.size() + " results.", true));
                         callback.onSuggestionsReady(request, new Response(suggestions));
+                        getView().setUseLocalCache(true);
                     }
                 });
             }
@@ -123,7 +127,7 @@ public abstract class LookupNamedModelPresenterWidget<T extends NamedModel> exte
         List<NamedModelSuggestion<T>> suggestions = new ArrayList<NamedModelSuggestion<T>>();
         for (T model : models)
         {
-            if (model.getName().contains(query))
+            if (model.getName().toLowerCase().contains(query.toLowerCase()))
             {
                 suggestions.add(newSuggestionFor(model, displayStringFormatter));
             }
