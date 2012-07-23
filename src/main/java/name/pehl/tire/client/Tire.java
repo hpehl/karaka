@@ -25,6 +25,10 @@ public class Tire implements EntryPoint
     public void onModuleLoad()
     {
         DelayedBindRegistry.bind(ginjector);
+        ginjector.getPlaceManager().revealCurrentPlace();
+
+        // TODO Collect actions needed at startup and execute them as deferred
+        // commands
         ginjector.getDispathcer().execute(new GetSettingsAction(),
                 new TireCallback<GetSettingsResult>(ginjector.getEventBus())
                 {
@@ -36,6 +40,5 @@ public class Tire implements EntryPoint
                         SettingsChangedEvent.fire(ginjector.getPlaceManager(), settings);
                     }
                 });
-        ginjector.getPlaceManager().revealCurrentPlace();
     }
 }
