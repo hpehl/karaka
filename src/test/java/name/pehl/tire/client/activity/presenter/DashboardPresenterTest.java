@@ -52,7 +52,6 @@ import name.pehl.tire.client.activity.event.TickEvent;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
-import name.pehl.tire.client.project.LookupProjectPresenterWidget;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.ActivityComparator;
@@ -83,8 +82,6 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
     DeleteActivityHandler deleteActivityHandler;
     DashboardPresenter.MyView view;
     DashboardPresenter.MyProxy proxy;
-    LookupActivityPresenterWidget lookupActivityPresenter;
-    LookupProjectPresenterWidget lookupProjectPresenter;
     SelectMonthPresenter selectMonthPresenter;
     SelectWeekPresenter selectWeekPresenter;
     EditActivityPresenter editActivityPresenter;
@@ -108,15 +105,12 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
         addEvents(this, ShowMessageEvent.getType(), ActivitiesLoadedEvent.getType(), ActivityChangedEvent.getType());
         view = mock(DashboardPresenter.MyView.class);
         proxy = mock(DashboardPresenter.MyProxy.class);
-        lookupActivityPresenter = mock(LookupActivityPresenterWidget.class);
-        lookupProjectPresenter = mock(LookupProjectPresenterWidget.class);
         selectMonthPresenter = mock(SelectMonthPresenter.class);
         selectWeekPresenter = mock(SelectWeekPresenter.class);
         editActivityPresenter = mock(EditActivityPresenter.class);
         tickCommand = mock(TickCommand.class);
-        cut = new DashboardPresenter(eventBus, view, proxy, lookupActivityPresenter, lookupProjectPresenter,
-                selectMonthPresenter, selectWeekPresenter, editActivityPresenter, newDispatcher(actionHandlerMappings),
-                placeManager, scheduler);
+        cut = new DashboardPresenter(eventBus, view, proxy, selectMonthPresenter, selectWeekPresenter,
+                editActivityPresenter, newDispatcher(actionHandlerMappings), placeManager, scheduler);
         cut.tickCommand = tickCommand;
     }
 

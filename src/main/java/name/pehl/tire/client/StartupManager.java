@@ -55,7 +55,7 @@ public class StartupManager implements HasHandlers
     {
         for (ScheduledCommand command : startupCommands)
         {
-            command.execute();
+            scheduler.scheduleDeferred(command);
         }
     }
 

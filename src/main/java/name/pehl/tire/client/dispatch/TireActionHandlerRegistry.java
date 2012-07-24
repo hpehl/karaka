@@ -1,14 +1,13 @@
 package name.pehl.tire.client.dispatch;
 
 import name.pehl.tire.client.activity.dispatch.DeleteActivityHandler;
+import name.pehl.tire.client.activity.dispatch.FindActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetYearsHandler;
-import name.pehl.tire.client.activity.dispatch.LookupActivityHandler;
 import name.pehl.tire.client.activity.dispatch.SaveActivityHandler;
 import name.pehl.tire.client.project.GetProjectsHandler;
-import name.pehl.tire.client.project.LookupProjectHandler;
 import name.pehl.tire.client.settings.GetSettingsHandler;
 import name.pehl.tire.client.tag.GetTagsHandler;
 
@@ -19,13 +18,14 @@ public class TireActionHandlerRegistry extends DefaultClientActionHandlerRegistr
 {
     @Inject
     public TireActionHandlerRegistry(final DeleteActivityHandler deleteActivityHandler,
-            final GetActivitiesHandler getActivitiesHandler, final GetMinutesHandler getMinutesHandler,
-            final GetProjectsHandler getProjectsHandler, final GetRunningActivityHandler getRunningActivityHandler,
-            final GetSettingsHandler getSettingsHandler, final GetTagsHandler getTagsHandler,
-            final GetYearsHandler getYearsHandler, final LookupActivityHandler lookupActivityHandler,
-            final LookupProjectHandler lookupProjectHandler, final SaveActivityHandler saveActivityHandler)
+            final FindActivityHandler findActivityHandler, final GetActivitiesHandler getActivitiesHandler,
+            final GetMinutesHandler getMinutesHandler, final GetProjectsHandler getProjectsHandler,
+            final GetRunningActivityHandler getRunningActivityHandler, final GetSettingsHandler getSettingsHandler,
+            final GetTagsHandler getTagsHandler, final GetYearsHandler getYearsHandler,
+            final SaveActivityHandler saveActivityHandler)
     {
         register(deleteActivityHandler);
+        register(findActivityHandler);
         register(getActivitiesHandler);
         register(getMinutesHandler);
         register(getProjectsHandler);
@@ -33,8 +33,6 @@ public class TireActionHandlerRegistry extends DefaultClientActionHandlerRegistr
         register(getSettingsHandler);
         register(getTagsHandler);
         register(getYearsHandler);
-        register(lookupActivityHandler);
-        register(lookupProjectHandler);
         register(saveActivityHandler);
     }
 }

@@ -8,11 +8,15 @@ import java.util.Date;
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardUiHandlers;
+import name.pehl.tire.client.project.ProjectsCache;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
+import name.pehl.tire.client.ui.Html5TextBox;
 import name.pehl.tire.client.ui.InlineHTMLWithContextMenu;
+import name.pehl.tire.client.ui.NamedModelSuggestOracle;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Project;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
@@ -23,9 +27,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.InlineLabel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> implements DashboardPresenter.MyView
@@ -49,8 +55,9 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @UiField Anchor yesterday;
     @UiField Anchor today;
     @UiField CalendarLink calendar;
-    @UiField SimplePanel lookupActivityHolder;
-    @UiField SimplePanel lookupProjectHolder;
+    @UiField(provided = true) SuggestBox activity;
+    @UiField(provided = true) SuggestBox project;
+    @UiField Html5TextBox time;
     @UiField InlineLabel header;
     @UiField InlineHTMLWithContextMenu previous;
     @UiField InlineHTMLWithContextMenu next;
@@ -63,12 +70,24 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
 
     @Inject
     public DashboardView(final Binder binder, final I18n i18n, final Resources resources,
-            final ActivitiesTableResources atr)
+            final ActivitiesTableResources atr, final ProjectsCache projectsCache, final EventBus eventBus,
+            final DispatchAsync dispatcher)
     {
         this.i18n = i18n;
         this.resources = resources;
         this.resources.navigation().ensureInjected();
         this.activitiesTable = new ActivitiesTable(atr);
+
+        ActivitySuggestOracle activityOracle = new ActivitySuggestOracle(eventBus, dispatcher);
+        Html5TextBox activityTextBox = new Html5TextBox();
+        activityTextBox.setPlaceholder("Select an  activity");
+        this.activity = new SuggestBox(activityOracle, activityTextBox);
+
+        NamedModelSuggestOracle<Project> projectOracle = new NamedModelSuggestOracle<Project>(projectsCache);
+        Html5TextBox projectTextBox = new Html5TextBox();
+        projectTextBox.setPlaceholder("Select a project");
+        this.project = new SuggestBox(projectOracle, projectTextBox);
+
         this.widget = binder.createAndBindUi(this);
         this.today.addStyleName(resources.navigation().selectedDate());
         this.yesterday.setText(DATE_FORMAT.format(new Date(System.currentTimeMillis() - ONE_DAY)));
@@ -80,24 +99,6 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     public Widget asWidget()
     {
         return widget;
-    }
-
-
-    @Override
-    public void setInSlot(Object slot, Widget widget)
-    {
-        if (slot == DashboardPresenter.SLOT_Lookup_Activity)
-        {
-            lookupActivityHolder.setWidget(widget);
-        }
-        else if (slot == DashboardPresenter.SLOT_Lookup_Project)
-        {
-            lookupProjectHolder.setWidget(widget);
-        }
-        else
-        {
-            super.setInSlot(slot, widget);
-        }
     }
 
 

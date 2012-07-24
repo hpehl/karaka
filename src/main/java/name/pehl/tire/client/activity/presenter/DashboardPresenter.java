@@ -36,7 +36,6 @@ import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireCallback;
-import name.pehl.tire.client.project.LookupProjectPresenterWidget;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 
@@ -106,24 +105,12 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     // ------------------------------------------------------- (static) members
 
-    /**
-     * Constant for the lookup activity presenter widget.
-     */
-    public static final Object SLOT_Lookup_Activity = new Object();
-
-    /**
-     * Constant for the lookup project presenter widget.
-     */
-    public static final Object SLOT_Lookup_Project = new Object();
-
     static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
     final PlaceManager placeManager;
-    final LookupActivityPresenterWidget lookupActivityPresenter;
-    final LookupProjectPresenterWidget lookupProjectPresenter;
     final SelectMonthPresenter selectMonthPresenter;
     final SelectWeekPresenter selectWeekPresenter;
     final EditActivityPresenter editActivityPresenter;
@@ -152,14 +139,11 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     @Inject
     public DashboardPresenter(EventBus eventBus, MyView view, MyProxy proxy,
-            final LookupActivityPresenterWidget lookupActivitiesPresenter,
-            final LookupProjectPresenterWidget lookupProjectPresenter, final SelectMonthPresenter selectMonthPresenter,
-            final SelectWeekPresenter selectWeekPresenter, final EditActivityPresenter editActivityPresenter,
-            final DispatchAsync dispatcher, final PlaceManager placeManager, final Scheduler scheduler)
+            final SelectMonthPresenter selectMonthPresenter, final SelectWeekPresenter selectWeekPresenter,
+            final EditActivityPresenter editActivityPresenter, final DispatchAsync dispatcher,
+            final PlaceManager placeManager, final Scheduler scheduler)
     {
         super(eventBus, view, proxy);
-        this.lookupActivityPresenter = lookupActivitiesPresenter;
-        this.lookupProjectPresenter = lookupProjectPresenter;
         this.selectMonthPresenter = selectMonthPresenter;
         this.selectWeekPresenter = selectWeekPresenter;
         this.editActivityPresenter = editActivityPresenter;
@@ -183,24 +167,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     protected void revealInParent()
     {
         RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
-    }
-
-
-    @Override
-    protected void onReveal()
-    {
-        super.onReveal();
-        setInSlot(SLOT_Lookup_Activity, lookupActivityPresenter);
-        setInSlot(SLOT_Lookup_Project, lookupProjectPresenter);
-    }
-
-
-    @Override
-    protected void onHide()
-    {
-        super.onHide();
-        removeFromSlot(SLOT_Lookup_Activity, lookupActivityPresenter);
-        removeFromSlot(SLOT_Lookup_Project, lookupProjectPresenter);
     }
 
 

@@ -1,5 +1,6 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.SAVE;
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.shared.model.Activity;
 
@@ -8,8 +9,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
-
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.SAVE;
 
 /**
  * <p>
@@ -30,6 +29,8 @@ import static name.pehl.tire.client.activity.event.ActivityAction.Action.SAVE;
  * <ul>
  * <li>none
  * </ul>
+ * TODO: Replace the popup based version with an inplace editor which is
+ * expanded: http://showcase2.jlabanca-testing.appspot.com/#!CwCustomDataGrid
  * 
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$

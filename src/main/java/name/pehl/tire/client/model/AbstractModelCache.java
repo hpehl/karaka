@@ -1,6 +1,7 @@
 package name.pehl.tire.client.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -45,5 +46,18 @@ public abstract class AbstractModelCache<T extends BaseModel> implements ModelCa
     public List<T> list()
     {
         return models;
+    }
+
+
+    @Override
+    public Iterator<T> iterator()
+    {
+        return models.iterator();
+    }
+
+
+    public boolean isEmpty()
+    {
+        return models.isEmpty();
     }
 }

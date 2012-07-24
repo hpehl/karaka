@@ -1,27 +1,29 @@
-package name.pehl.tire.client.model;
+package name.pehl.tire.client.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import name.pehl.tire.client.ui.Highlighter;
+
 import org.junit.Before;
 import org.junit.Test;
 
-public class DisplayStringFormatterTest
+public class HighlighterTest
 {
-    DisplayStringFormatter cut;
+    Highlighter cut;
 
 
     @Before
     public void setUp()
     {
-        cut = new DisplayStringFormatter("foo");
+        cut = new Highlighter("foo");
     }
 
 
     @Test
     public void nullString()
     {
-        String result = cut.format(null);
+        String result = cut.highlight(null);
         assertNull(result);
     }
 
@@ -29,7 +31,7 @@ public class DisplayStringFormatterTest
     @Test
     public void emptyString()
     {
-        String result = cut.format("");
+        String result = cut.highlight("");
         assertNull(result);
     }
 
@@ -37,7 +39,7 @@ public class DisplayStringFormatterTest
     @Test
     public void blankString()
     {
-        String result = cut.format("     ");
+        String result = cut.highlight("     ");
         assertEquals("     ", result);
     }
 
@@ -45,7 +47,7 @@ public class DisplayStringFormatterTest
     @Test
     public void noFoo()
     {
-        String result = cut.format("bar");
+        String result = cut.highlight("bar");
         assertEquals("bar", result);
     }
 
@@ -53,7 +55,7 @@ public class DisplayStringFormatterTest
     @Test
     public void justFoo()
     {
-        String result = cut.format("foo");
+        String result = cut.highlight("foo");
         assertEquals("<strong>foo</strong>", result);
     }
 
@@ -61,10 +63,10 @@ public class DisplayStringFormatterTest
     @Test
     public void containigFoo()
     {
-        String result = cut.format("foo bar meep");
+        String result = cut.highlight("foo bar meep");
         assertEquals("<strong>foo</strong> bar meep", result);
 
-        result = cut.format("foo bar foobar");
+        result = cut.highlight("foo bar foobar");
         assertEquals("<strong>foo</strong> bar <strong>foo</strong>bar", result);
     }
 
@@ -73,12 +75,12 @@ public class DisplayStringFormatterTest
     public void mixedCase()
     {
         String input = "Foo and foo but also FOO, foobar, FooBar and FOOBAR";
-        String result = cut.format(input);
+        String result = cut.highlight(input);
         String expected = "<strong>Foo</strong> and <strong>foo</strong> but also <strong>FOO</strong>, <strong>foo</strong>bar, <strong>Foo</strong>Bar and <strong>FOO</strong>BAR";
         assertEquals(expected, result);
 
-        cut = new DisplayStringFormatter("Foo");
-        result = cut.format(input);
+        cut = new Highlighter("Foo");
+        result = cut.highlight(input);
         assertEquals(expected, result);
     }
 }

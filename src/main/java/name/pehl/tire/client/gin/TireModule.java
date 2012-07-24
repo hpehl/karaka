@@ -8,11 +8,11 @@ import name.pehl.tire.client.TirePlaceManager;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.about.AboutView;
 import name.pehl.tire.client.activity.dispatch.DeleteActivityHandler;
+import name.pehl.tire.client.activity.dispatch.FindActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetMinutesHandler;
 import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetYearsHandler;
-import name.pehl.tire.client.activity.dispatch.LookupActivityHandler;
 import name.pehl.tire.client.activity.dispatch.SaveActivityHandler;
 import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.activity.model.ActivityReader;
@@ -27,7 +27,6 @@ import name.pehl.tire.client.activity.model.YearsReader;
 import name.pehl.tire.client.activity.presenter.CockpitPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
-import name.pehl.tire.client.activity.presenter.LookupActivityPresenterWidget;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
 import name.pehl.tire.client.activity.presenter.SelectMonthPresenter;
 import name.pehl.tire.client.activity.presenter.SelectTimeUnitPresenter;
@@ -48,11 +47,7 @@ import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.client.ClientView;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
-import name.pehl.tire.client.model.LookupNamedModelPresenterWidget;
-import name.pehl.tire.client.model.LookupNamedModelView;
 import name.pehl.tire.client.project.GetProjectsHandler;
-import name.pehl.tire.client.project.LookupProjectHandler;
-import name.pehl.tire.client.project.LookupProjectPresenterWidget;
 import name.pehl.tire.client.project.ProjectPresenter;
 import name.pehl.tire.client.project.ProjectReader;
 import name.pehl.tire.client.project.ProjectView;
@@ -102,6 +97,7 @@ public class TireModule extends AbstractPresenterModule
 
         // Rest Action Handlers
         bind(DeleteActivityHandler.class);
+        bind(FindActivityHandler.class);
         bind(GetActivitiesHandler.class);
         bind(GetMinutesHandler.class);
         bind(GetProjectsHandler.class);
@@ -109,8 +105,6 @@ public class TireModule extends AbstractPresenterModule
         bind(GetSettingsHandler.class);
         bind(GetTagsHandler.class);
         bind(GetYearsHandler.class);
-        bind(LookupActivityHandler.class);
-        bind(LookupProjectHandler.class);
         bind(SaveActivityHandler.class);
 
         // JsonReader / Writer
@@ -145,9 +139,6 @@ public class TireModule extends AbstractPresenterModule
         bindPresenterWidget(QuickChartPresenter.class, QuickChartPresenter.MyView.class, QuickChartView.class);
 
         // PresenterWidgets with shared views (a-z)
-        bind(LookupActivityPresenterWidget.class);
-        bind(LookupProjectPresenterWidget.class);
-        bind(LookupNamedModelPresenterWidget.MyView.class).to(LookupNamedModelView.class);
         bind(SelectMonthPresenter.class);
         bind(SelectWeekPresenter.class);
         bind(SelectTimeUnitPresenter.MyView.class).to(SelectTimeUnitView.class);
