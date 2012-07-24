@@ -8,13 +8,13 @@ import java.util.Date;
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardUiHandlers;
+import name.pehl.tire.client.model.NamedModelSuggestOracle;
 import name.pehl.tire.client.project.ProjectsCache;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.client.ui.Html5TextBox;
 import name.pehl.tire.client.ui.InlineHTMLWithContextMenu;
-import name.pehl.tire.client.ui.NamedModelSuggestOracle;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Project;
 
