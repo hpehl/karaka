@@ -1,15 +1,17 @@
 package name.pehl.tire.client;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
-import name.pehl.tire.client.dispatch.TireCallback;
-import name.pehl.tire.client.settings.CurrentSettings;
-import name.pehl.tire.client.settings.GetSettingsAction;
-import name.pehl.tire.client.settings.GetSettingsResult;
-import name.pehl.tire.client.settings.SettingsChangedEvent;
+import name.pehl.tire.client.model.ModelCache;
+import name.pehl.tire.client.project.ProjectsCache;
+import name.pehl.tire.client.settings.SettingsCache;
+import name.pehl.tire.client.tag.TagsCache;
+import name.pehl.tire.shared.model.BaseModel;
+import name.pehl.tire.shared.model.Project;
 import name.pehl.tire.shared.model.Settings;
-
-import org.mortbay.log.Log;
+import name.pehl.tire.shared.model.Tag;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -25,14 +27,20 @@ public class StartupManager implements HasHandlers
     final EventBus eventBus;
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
+    final List<ScheduledCommand> startupCommands;
 
 
     @Inject
-    public StartupManager(final EventBus eventBus, final Scheduler scheduler, final DispatchAsync dispatcher)
+    public StartupManager(final EventBus eventBus, final Scheduler scheduler, final DispatchAsync dispatcher,
+            final SettingsCache settingsCache, final ProjectsCache projectsCache, final TagsCache tagsCache)
     {
         this.eventBus = eventBus;
         this.scheduler = scheduler;
         this.dispatcher = dispatcher;
+        this.startupCommands = new ArrayList<ScheduledCommand>();
+        this.startupCommands.add(new InitCacheCommand<Settings>(settingsCache));
+        this.startupCommands.add(new InitCacheCommand<Project>(projectsCache));
+        this.startupCommands.add(new InitCacheCommand<Tag>(tagsCache));
     }
 
 
@@ -45,55 +53,27 @@ public class StartupManager implements HasHandlers
 
     public void startup()
     {
-        // Get settings
-        scheduler.scheduleDeferred(new ScheduledCommand()
+        for (ScheduledCommand command : startupCommands)
         {
-            @Override
-            public void execute()
-            {
-                Log.info("Startup info: Settings...");
-                dispatcher.execute(new GetSettingsAction(), new TireCallback<GetSettingsResult>(eventBus)
-                {
-                    @Override
-                    public void onSuccess(GetSettingsResult result)
-                    {
-                        Settings settings = result.getSettings();
-                        CurrentSettings.set(settings);
-                        SettingsChangedEvent.fire(StartupManager.this, settings);
-                        Log.info("Startup info: Settings DONE");
-                    }
-                });
-            }
-        });
+            command.execute();
+        }
+    }
 
-        // Get projects
-        scheduler.scheduleDeferred(new ScheduledCommand()
-        {
-            @Override
-            public void execute()
-            {
-                Log.info("Startup info: Projects...");
-            }
-        });
+    static class InitCacheCommand<T extends BaseModel> implements ScheduledCommand
+    {
+        final ModelCache<T> modelCache;
 
-        // Get tags
-        scheduler.scheduleDeferred(new ScheduledCommand()
-        {
-            @Override
-            public void execute()
-            {
-                Log.info("Startup info: Tags...");
-            }
-        });
 
-        // Get clients
-        scheduler.scheduleDeferred(new ScheduledCommand()
+        public InitCacheCommand(ModelCache<T> modelCache)
         {
-            @Override
-            public void execute()
-            {
-                Log.info("Startup info: Clients...");
-            }
-        });
+            this.modelCache = modelCache;
+        }
+
+
+        @Override
+        public void execute()
+        {
+            modelCache.refresh();
+        }
     }
 }

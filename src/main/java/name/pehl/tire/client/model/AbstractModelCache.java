@@ -2,6 +2,7 @@ package name.pehl.tire.client.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import name.pehl.tire.shared.model.BaseModel;
 
@@ -11,10 +12,11 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 
 public abstract class AbstractModelCache<T extends BaseModel> implements ModelCache<T>
 {
-    final EventBus eventBus;
-    final Scheduler scheduler;
-    final DispatchAsync dispatcher;
-    final List<T> models;
+    protected final Logger logger;
+    protected final EventBus eventBus;
+    protected final Scheduler scheduler;
+    protected final DispatchAsync dispatcher;
+    protected final List<T> models;
 
 
     public AbstractModelCache(EventBus eventBus, Scheduler scheduler, DispatchAsync dispatcher)
@@ -24,6 +26,7 @@ public abstract class AbstractModelCache<T extends BaseModel> implements ModelCa
         this.scheduler = scheduler;
         this.dispatcher = dispatcher;
         this.models = new ArrayList<T>();
+        this.logger = Logger.getLogger(getClass().getName());
     }
 
 

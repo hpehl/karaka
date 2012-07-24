@@ -1,5 +1,6 @@
 package name.pehl.tire.client.gin;
 
+import name.pehl.tire.client.StartupManager;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.application.ApplicationPresenter;
@@ -33,6 +34,7 @@ public interface TireGinjector extends Ginjector
     EventBus getEventBus();
     PlaceManager getPlaceManager();
     DispatchAsync getDispathcer();
+    StartupManager getStartupManager();
 
     // ------------------------------------------------------- presenters (a-z)
 

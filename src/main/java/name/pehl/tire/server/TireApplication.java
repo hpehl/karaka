@@ -8,6 +8,7 @@ import javax.ws.rs.core.Application;
 import name.pehl.tire.server.activity.boundary.ActivitiesResource;
 import name.pehl.tire.server.project.boundary.ProjectsResource;
 import name.pehl.tire.server.settings.boundary.SettingsResource;
+import name.pehl.tire.server.tag.boundary.TagsResource;
 
 public class TireApplication extends Application
 {
@@ -20,6 +21,7 @@ public class TireApplication extends Application
         this.classes.add(ActivitiesResource.class);
         this.classes.add(ProjectsResource.class);
         this.classes.add(SettingsResource.class);
+        this.classes.add(TagsResource.class);
     }
 
 

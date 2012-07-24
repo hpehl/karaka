@@ -22,7 +22,7 @@ import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
  */
 public class GetYearsHandler extends TireActionHandler<GetYearsAction, GetYearsResult>
 {
-    private final YearsReader yearsReader;
+    final YearsReader yearsReader;
 
 
     @Inject

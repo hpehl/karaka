@@ -7,8 +7,10 @@ import name.pehl.tire.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.tire.client.activity.dispatch.GetYearsHandler;
 import name.pehl.tire.client.activity.dispatch.LookupActivityHandler;
 import name.pehl.tire.client.activity.dispatch.SaveActivityHandler;
+import name.pehl.tire.client.project.GetProjectsHandler;
 import name.pehl.tire.client.project.LookupProjectHandler;
 import name.pehl.tire.client.settings.GetSettingsHandler;
+import name.pehl.tire.client.tag.GetTagsHandler;
 
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.client.actionhandler.DefaultClientActionHandlerRegistry;
@@ -18,15 +20,18 @@ public class TireActionHandlerRegistry extends DefaultClientActionHandlerRegistr
     @Inject
     public TireActionHandlerRegistry(final DeleteActivityHandler deleteActivityHandler,
             final GetActivitiesHandler getActivitiesHandler, final GetMinutesHandler getMinutesHandler,
-            final GetRunningActivityHandler getRunningActivityHandler, final GetSettingsHandler getSettingsHandler,
+            final GetProjectsHandler getProjectsHandler, final GetRunningActivityHandler getRunningActivityHandler,
+            final GetSettingsHandler getSettingsHandler, final GetTagsHandler getTagsHandler,
             final GetYearsHandler getYearsHandler, final LookupActivityHandler lookupActivityHandler,
             final LookupProjectHandler lookupProjectHandler, final SaveActivityHandler saveActivityHandler)
     {
         register(deleteActivityHandler);
         register(getActivitiesHandler);
         register(getMinutesHandler);
+        register(getProjectsHandler);
         register(getRunningActivityHandler);
         register(getSettingsHandler);
+        register(getTagsHandler);
         register(getYearsHandler);
         register(lookupActivityHandler);
         register(lookupProjectHandler);

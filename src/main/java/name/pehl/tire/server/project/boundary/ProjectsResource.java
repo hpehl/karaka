@@ -19,7 +19,7 @@ import org.jboss.resteasy.spi.NotFoundException;
 /**
  * Supported methods:
  * <ul>
- * <li>GET /projects/: List all projects activities are stored
+ * <li>GET /projects/: List all projects
  * <li>POST: Create a new project
  * <li>PUT /projects/{id}: Update an existing project
  * <li>DELETE /projects/{id}: Delete an existing project

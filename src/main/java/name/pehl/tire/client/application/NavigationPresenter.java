@@ -5,7 +5,7 @@ import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import name.pehl.tire.client.NameTokens;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
-import name.pehl.tire.client.settings.CurrentSettings;
+import name.pehl.tire.client.settings.SettingsCache;
 import name.pehl.tire.client.settings.SettingsChangedEvent;
 import name.pehl.tire.client.settings.SettingsChangedEvent.SettingsChangedHandler;
 import name.pehl.tire.shared.model.Activities;
@@ -62,17 +62,19 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
      */
     public static final Object SLOT_Message = new Object();
 
-    private final PlaceManager placeManager;
-    private final MessagePresenter messagePresenter;
+    final PlaceManager placeManager;
+    final MessagePresenter messagePresenter;
+    final SettingsCache settingsCache;
 
 
     @Inject
     public NavigationPresenter(final EventBus eventBus, final MyView view, final PlaceManager placeManager,
-            final MessagePresenter messagePresenter)
+            final MessagePresenter messagePresenter, final SettingsCache settingsCache)
     {
         super(eventBus, view);
         this.placeManager = placeManager;
         this.messagePresenter = messagePresenter;
+        this.settingsCache = settingsCache;
 
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
         getEventBus().addHandler(SettingsChangedEvent.getType(), this);
@@ -88,7 +90,7 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
     protected void onReveal()
     {
         super.onReveal();
-        getView().updateUser(CurrentSettings.get().settings().getUser());
+        getView().updateUser(settingsCache.single().getUser());
         setInSlot(SLOT_Message, messagePresenter);
     }
 

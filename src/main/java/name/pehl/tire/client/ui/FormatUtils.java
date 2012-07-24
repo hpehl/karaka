@@ -1,7 +1,7 @@
 package name.pehl.tire.client.ui;
 
 import name.pehl.tire.client.Defaults;
-import name.pehl.tire.client.settings.CurrentSettings;
+import name.pehl.tire.client.settings.SettingsCache;
 import name.pehl.tire.shared.model.Time;
 
 /**
@@ -18,7 +18,7 @@ public final class FormatUtils
 
     public static String hours(long minutes)
     {
-        if (CurrentSettings.get().settings().isFormatHoursAsFloatingPointNumber())
+        if (SettingsCache.currentSettings().isFormatHoursAsFloatingPointNumber())
         {
             if (minutes > 0)
             {
