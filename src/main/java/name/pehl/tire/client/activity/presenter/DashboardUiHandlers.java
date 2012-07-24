@@ -5,6 +5,8 @@ import java.util.Date;
 import name.pehl.tire.client.activity.event.ActivityAction.Action;
 import name.pehl.tire.shared.model.Activity;
 
+import com.google.gwt.user.client.ui.SuggestOracle.Callback;
+import com.google.gwt.user.client.ui.SuggestOracle.Request;
 import com.gwtplatform.mvp.client.UiHandlers;
 
 /**
@@ -15,6 +17,9 @@ import com.gwtplatform.mvp.client.UiHandlers;
 public interface DashboardUiHandlers extends UiHandlers
 {
     void onSelectDate(Date date);
+
+
+    void onFindActivity(Request request, Callback callback);
 
 
     void onCurrentWeek();

@@ -3,21 +3,20 @@ package name.pehl.tire.client.activity.presenter;
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 import static name.pehl.tire.client.NameTokens.dashboard;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.CHANGED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.*;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.dispatch.ActivitiesRequest;
 import name.pehl.tire.client.activity.dispatch.DeleteActivityAction;
 import name.pehl.tire.client.activity.dispatch.DeleteActivityResult;
+import name.pehl.tire.client.activity.dispatch.FindActivityAction;
+import name.pehl.tire.client.activity.dispatch.FindActivityResult;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesAction;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesResult;
 import name.pehl.tire.client.activity.dispatch.SaveActivityAction;
@@ -36,6 +35,8 @@ import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireCallback;
+import name.pehl.tire.client.model.NamedModelSuggestion;
+import name.pehl.tire.client.ui.Highlighter;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 
@@ -43,6 +44,9 @@ import org.fusesource.restygwt.client.FailedStatusCodeException;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.user.client.ui.SuggestOracle.Callback;
+import com.google.gwt.user.client.ui.SuggestOracle.Request;
+import com.google.gwt.user.client.ui.SuggestOracle.Response;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
@@ -238,6 +242,39 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     {
         this.activityDate = date;
         logger.info("Selected date " + activityDate);
+    }
+
+
+    @Override
+    public void onFindActivity(final Request request, final Callback callback)
+    {
+        final String query = request.getQuery();
+        final Highlighter highlighter = new Highlighter(query);
+        dispatcher.execute(new FindActivityAction(query), new TireCallback<FindActivityResult>(getEventBus())
+        {
+            @Override
+            public void onSuccess(FindActivityResult result)
+            {
+                List<Activity> activities = result.getActivities();
+                if (!activities.isEmpty())
+                {
+                    List<NamedModelSuggestion<Activity>> suggestions = new ArrayList<NamedModelSuggestion<Activity>>();
+                    for (Activity activity : activities)
+                    {
+                        StringBuilder displayString = new StringBuilder();
+                        displayString.append(activity.getName());
+                        if (activity.getDescription() != null)
+                        {
+                            displayString.append(": ").append(activity.getDescription());
+                        }
+                        NamedModelSuggestion<Activity> suggestion = new NamedModelSuggestion<Activity>(activity,
+                                activity.getName(), highlighter.highlight(displayString.toString()));
+                        suggestions.add(suggestion);
+                    }
+                    callback.onSuggestionsReady(request, new Response(suggestions));
+                }
+            }
+        });
     }
 
 

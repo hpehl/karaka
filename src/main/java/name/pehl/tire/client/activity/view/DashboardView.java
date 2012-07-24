@@ -30,8 +30,6 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> implements DashboardPresenter.MyView
@@ -70,15 +68,14 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
 
     @Inject
     public DashboardView(final Binder binder, final I18n i18n, final Resources resources,
-            final ActivitiesTableResources atr, final ProjectsCache projectsCache, final EventBus eventBus,
-            final DispatchAsync dispatcher)
+            final ActivitiesTableResources atr, final ProjectsCache projectsCache)
     {
         this.i18n = i18n;
         this.resources = resources;
         this.resources.navigation().ensureInjected();
         this.activitiesTable = new ActivitiesTable(atr);
 
-        ActivitySuggestOracle activityOracle = new ActivitySuggestOracle(eventBus, dispatcher);
+        ActivitySuggestOracle activityOracle = new ActivitySuggestOracle(getUiHandlers());
         Html5TextBox activityTextBox = new Html5TextBox();
         activityTextBox.setPlaceholder("Select an  activity");
         this.activity = new SuggestBox(activityOracle, activityTextBox);

@@ -1,38 +1,25 @@
 package name.pehl.tire.client.activity.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import name.pehl.tire.client.activity.dispatch.FindActivityAction;
-import name.pehl.tire.client.activity.dispatch.FindActivityResult;
-import name.pehl.tire.client.dispatch.TireCallback;
-import name.pehl.tire.client.model.NamedModelSuggestion;
-import name.pehl.tire.client.ui.Highlighter;
-import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.client.activity.presenter.DashboardUiHandlers;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.SuggestOracle;
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
 
 public class ActivitySuggestOracle extends SuggestOracle
 {
-    static final int DELAY = 500;
+    static final int DELAY = 300;
 
     final Timer timer;
-    final EventBus eventBus;
-    final DispatchAsync dispatcher;
-
+    final DashboardUiHandlers uiHandlers;
     Request currentRequest;
     Callback currentCallback;
 
 
-    public ActivitySuggestOracle(EventBus eventBus, DispatchAsync dispatcher)
+    public ActivitySuggestOracle(DashboardUiHandlers uiHandlers)
     {
         super();
-        this.eventBus = eventBus;
-        this.dispatcher = dispatcher;
         this.timer = new QueryTimer();
+        this.uiHandlers = uiHandlers;
     }
 
 
@@ -67,38 +54,12 @@ public class ActivitySuggestOracle extends SuggestOracle
              * query for a single character is still executed. Workaround for
              * this is to check for an empty string field here.
              */
-            if (currentRequest != null && currentCallback != null)
+            if (currentRequest != null && currentCallback != null && uiHandlers != null)
             {
                 String query = currentRequest.getQuery().trim();
                 if (query != null && query.length() != 0)
                 {
-                    final Highlighter highlighter = new Highlighter(query);
-                    dispatcher.execute(new FindActivityAction(query), new TireCallback<FindActivityResult>(eventBus)
-                    {
-                        @Override
-                        public void onSuccess(FindActivityResult result)
-                        {
-                            List<Activity> activities = result.getActivities();
-                            if (!activities.isEmpty())
-                            {
-                                List<NamedModelSuggestion<Activity>> suggestions = new ArrayList<NamedModelSuggestion<Activity>>();
-                                for (Activity activity : activities)
-                                {
-                                    StringBuilder displayString = new StringBuilder();
-                                    displayString.append(activity.getName());
-                                    if (activity.getDescription() != null)
-                                    {
-                                        displayString.append(": ").append(activity.getDescription());
-                                    }
-                                    NamedModelSuggestion<Activity> suggestion = new NamedModelSuggestion<Activity>(
-                                            activity, activity.getName(), highlighter.highlight(displayString
-                                                    .toString()));
-                                    suggestions.add(suggestion);
-                                }
-                                currentCallback.onSuggestionsReady(currentRequest, new Response(suggestions));
-                            }
-                        }
-                    });
+                    uiHandlers.onFindActivity(currentRequest, currentCallback);
                 }
             }
         }
