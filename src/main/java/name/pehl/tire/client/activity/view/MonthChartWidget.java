@@ -11,6 +11,10 @@ import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Week;
 
 import org.moxieapps.gwt.highcharts.client.Point;
+import org.moxieapps.gwt.highcharts.client.events.PointClickEvent;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.json.client.JSONObject;
 
 /**
  * @author $Author: harald.pehl $
@@ -74,6 +78,20 @@ public class MonthChartWidget extends QuickChartWidget
 
     String tooltip(Week week)
     {
-        return "CW " + week.getWeek() + ": " + FormatUtils.hours(week.getMinutes());
+        return "CW " + week.getWeek() + ": " + FormatUtils.hours(week.getMinutes()) + "<br/>"
+                + FormatUtils.dateDuration(week.getStart(), week.getEnd());
+    }
+
+
+    @Override
+    public boolean onClick(PointClickEvent pointClickEvent)
+    {
+        Point point = pointClickEvent.getPoint();
+        JSONObject userData = point.getUserData();
+        if (userData != null)
+        {
+            GWT.log("Point clicked: " + userData);
+        }
+        return false;
     }
 }

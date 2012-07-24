@@ -13,6 +13,8 @@ import org.moxieapps.gwt.highcharts.client.Style;
 import org.moxieapps.gwt.highcharts.client.ToolTip;
 import org.moxieapps.gwt.highcharts.client.ToolTipData;
 import org.moxieapps.gwt.highcharts.client.ToolTipFormatter;
+import org.moxieapps.gwt.highcharts.client.events.PointClickEvent;
+import org.moxieapps.gwt.highcharts.client.events.PointClickEventHandler;
 import org.moxieapps.gwt.highcharts.client.labels.DataLabels;
 import org.moxieapps.gwt.highcharts.client.plotOptions.ColumnPlotOptions;
 import org.moxieapps.gwt.highcharts.client.plotOptions.SeriesPlotOptions;
@@ -29,11 +31,12 @@ import com.google.gwt.user.client.ui.Widget;
  * @version $Date: 2010-12-17 21:37:43 +0100 (Fr, 17 Dez 2010) $ $Revision: 102
  *          $
  */
-public abstract class QuickChartWidget implements IsWidget
+public abstract class QuickChartWidget implements IsWidget, PointClickEventHandler
 {
     // -------------------------------------------------------------- constants
 
     static final String COLOR = "#3d3d3d";
+    static final String HOVER_COLOR = "#1b92a8";
     static final String BACKGROUND_COLOR = "#eaeaea";
 
     // -------------------------------------------------------- private members
@@ -59,7 +62,8 @@ public abstract class QuickChartWidget implements IsWidget
                                 .setColor(COLOR)
                                 .setDataLabels(
                                         new DataLabels().setStyle(new Style()
-                                                .setFont("normal 10px Verdana, sans-serif"))))
+                                                .setFont("normal 10px Verdana, sans-serif")))
+                                .setPointClickEventHandler(this))
                 .setColumnPlotOptions(
                         new ColumnPlotOptions().setBorderWidth(0).setMinPointLength(1).setPointPadding(.001))
                 .setToolTip(
@@ -119,6 +123,15 @@ public abstract class QuickChartWidget implements IsWidget
             userData.put("tooltip", JSONNull.getInstance());
         }
         point.update(hours);
+    }
+
+
+    // --------------------------------------------------------- event handlers
+
+    @Override
+    public boolean onClick(PointClickEvent pointClickEvent)
+    {
+        return false;
     }
 
 
