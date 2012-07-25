@@ -36,6 +36,7 @@ import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent;
 import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent.RunningActivityLoadedHandler;
 import name.pehl.tire.client.activity.event.TickEvent;
 import name.pehl.tire.client.activity.event.TickEvent.TickHandler;
+import name.pehl.tire.client.activity.presenter.TimeParser.Duration;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
@@ -356,6 +357,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onNewActivity()
     {
         Activity activity = null;
@@ -379,9 +381,30 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         }
         activity.setProject(project);
 
-        activity.setStart(new Time(selectedDate));
-        // TODO Parse time value
-        // TODO Save activity
+        Duration duration = new TimeParser().parse(enteredTime);
+        if (duration.getTotalInMinutes() > 0)
+        {
+            // selectedDate must not be changed!
+            Date now = new Date();
+            Date start = selectedDate;
+            if (start == null)
+            {
+                start = now;
+            }
+            else
+            {
+                start.setHours(now.getHours());
+                start.setMinutes(now.getMinutes());
+                start.setSeconds(now.getSeconds());
+            }
+            activity.setStart(new Time(start));
+            // TODO add minutes to start and set end of activity
+            save(activity);
+        }
+        else
+        {
+            start(activity);
+        }
     }
 
 
@@ -607,7 +630,19 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 }
                 else
                 {
-                    Activity newActivity = activity.copy();
+                    Activity newActivity = null;
+                    if (activity.isTransient())
+                    {
+                        // The parameter is the new transient activity we want
+                        // to start.
+                        newActivity = activity;
+                    }
+                    else
+                    {
+                        // The parameter is an existing activity. We have to
+                        // copy this activity.
+                        newActivity = activity.copy();
+                    }
                     newActivity.start();
                     logger.info("Copy " + activity + " and start as a new " + newActivity);
                     dispatcher.execute(new SaveActivityAction(newActivity), startCallback);
