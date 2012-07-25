@@ -4,6 +4,7 @@ import java.util.Date;
 
 import name.pehl.tire.client.activity.event.ActivityAction.Action;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Project;
 
 import com.google.gwt.user.client.ui.SuggestOracle.Callback;
 import com.google.gwt.user.client.ui.SuggestOracle.Request;
@@ -20,6 +21,24 @@ public interface DashboardUiHandlers extends UiHandlers
 
 
     void onFindActivity(Request request, Callback callback);
+
+
+    void onActivitySelected(Activity activity);
+
+
+    void onActivityEntered(String name);
+
+
+    void onProjectSelected(Project project);
+
+
+    void onProjectEntered(String name);
+
+
+    void onTimeEntered(String time);
+
+
+    void onNewActivity();
 
 
     void onCurrentWeek();

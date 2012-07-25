@@ -3,7 +3,12 @@ package name.pehl.tire.client.activity.presenter;
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 import static name.pehl.tire.client.NameTokens.dashboard;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.*;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.CHANGED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
@@ -39,6 +44,8 @@ import name.pehl.tire.client.model.NamedModelSuggestion;
 import name.pehl.tire.client.ui.Highlighter;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Project;
+import name.pehl.tire.shared.model.Time;
 
 import org.fusesource.restygwt.client.FailedStatusCodeException;
 
@@ -105,6 +112,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     public interface MyView extends View, HasUiHandlers<DashboardUiHandlers>
     {
         void updateActivities(Activities activities);
+
+
+        void setProject(Project project);
     }
 
     // ------------------------------------------------------- (static) members
@@ -129,14 +139,39 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     Activity runningActivity;
 
     /**
-     * The selected date
-     */
-    Date activityDate;
-
-    /**
      * The currently displayed activities
      */
     Activities activities;
+
+    /**
+     * The selected date
+     */
+    Date selectedDate;
+
+    /**
+     * The selected activity in the suggestbox
+     */
+    Activity selectedActivity;
+
+    /**
+     * The entered activity name in the suggestbox
+     */
+    String enteredActivity;
+
+    /**
+     * The selected project in the suggestbox
+     */
+    Project selectedProject;
+
+    /**
+     * The entered project name in the suggestbox
+     */
+    String enteredProject;
+
+    /**
+     * The time entered in the textbox
+     */
+    String enteredTime;
 
 
     // ------------------------------------------------------------------ setup
@@ -240,8 +275,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     @Override
     public void onSelectDate(Date date)
     {
-        this.activityDate = date;
-        logger.info("Selected date " + activityDate);
+        this.selectedDate = date;
     }
 
 
@@ -275,6 +309,79 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 }
             }
         });
+    }
+
+
+    @Override
+    public void onActivitySelected(Activity activity)
+    {
+        enteredActivity = null;
+        selectedActivity = activity;
+        if (activity.getProject() != null)
+        {
+            getView().setProject(activity.getProject());
+        }
+    }
+
+
+    @Override
+    public void onActivityEntered(String name)
+    {
+        selectedActivity = null;
+        enteredActivity = name;
+    }
+
+
+    @Override
+    public void onProjectSelected(Project project)
+    {
+        enteredProject = null;
+        selectedProject = project;
+    }
+
+
+    @Override
+    public void onProjectEntered(String name)
+    {
+        selectedProject = null;
+        enteredProject = name;
+    }
+
+
+    @Override
+    public void onTimeEntered(String time)
+    {
+        enteredTime = time;
+    }
+
+
+    @Override
+    public void onNewActivity()
+    {
+        Activity activity = null;
+        if (enteredActivity != null)
+        {
+            activity = new Activity(enteredActivity);
+        }
+        else if (selectedActivity != null)
+        {
+            activity = selectedActivity;
+        }
+
+        Project project = null;
+        if (enteredProject != null)
+        {
+            project = new Project(enteredProject);
+        }
+        else if (selectedProject != null)
+        {
+            project = selectedProject;
+        }
+        activity.setProject(project);
+
+        activity.setStart(new Time(selectedDate));
+        // TODO Parse time value
+        // TODO Save activity
     }
 
 

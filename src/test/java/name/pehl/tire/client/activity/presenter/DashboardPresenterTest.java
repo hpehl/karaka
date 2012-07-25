@@ -260,7 +260,7 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
     {
         Date date = new Date();
         cut.onSelectDate(date);
-        assertSame(date, cut.activityDate);
+        assertSame(date, cut.selectedDate);
     }
 
 

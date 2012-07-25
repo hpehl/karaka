@@ -9,6 +9,7 @@ import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardUiHandlers;
 import name.pehl.tire.client.model.NamedModelSuggestOracle;
+import name.pehl.tire.client.model.NamedModelSuggestion;
 import name.pehl.tire.client.project.ProjectsCache;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
@@ -16,10 +17,14 @@ import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.client.ui.Html5TextBox;
 import name.pehl.tire.client.ui.InlineHTMLWithContextMenu;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Project;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -28,6 +33,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
@@ -151,6 +157,17 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     }
 
 
+    @Override
+    public void setProject(Project project)
+    {
+        this.project.setValue(project.getName());
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().onProjectSelected(project);
+        }
+    }
+
+
     // ------------------------------------------------------------ ui handlers
 
     @UiHandler("theDayBeforeYesterday")
@@ -216,6 +233,85 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
         if (getUiHandlers() != null)
         {
             getUiHandlers().onSelectDate(event.getValue());
+        }
+    }
+
+
+    @UiHandler("activity")
+    @SuppressWarnings("unchecked")
+    void onActivitySelected(SelectionEvent<Suggestion> event)
+    {
+        NamedModelSuggestion<Activity> suggestion = (NamedModelSuggestion<Activity>) event.getSelectedItem();
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().onActivitySelected(suggestion.getModel());
+        }
+    }
+
+
+    @UiHandler("activity")
+    void onActivityEntered(ValueChangeEvent<String> event)
+    {
+        String value = event.getValue();
+        if (value != null && value.length() != 0)
+        {
+            if (getUiHandlers() != null)
+            {
+                getUiHandlers().onActivityEntered(value);
+            }
+        }
+    }
+
+
+    @UiHandler("project")
+    @SuppressWarnings("unchecked")
+    void onProjectSelected(SelectionEvent<Suggestion> event)
+    {
+        NamedModelSuggestion<Project> suggestion = (NamedModelSuggestion<Project>) event.getSelectedItem();
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().onProjectSelected(suggestion.getModel());
+        }
+    }
+
+
+    @UiHandler("project")
+    void onProjectEntered(ValueChangeEvent<String> event)
+    {
+        String value = event.getValue();
+        if (value != null && value.length() != 0)
+        {
+            if (getUiHandlers() != null)
+            {
+                getUiHandlers().onProjectEntered(value);
+            }
+        }
+    }
+
+
+    @UiHandler("time")
+    void onTimeEntered(ValueChangeEvent<String> event)
+    {
+        String value = event.getValue();
+        if (value != null && value.length() != 0)
+        {
+            if (getUiHandlers() != null)
+            {
+                getUiHandlers().onTimeEntered(value);
+            }
+        }
+    }
+
+
+    @UiHandler("time")
+    void onReturnOnTime(KeyUpEvent event)
+    {
+        if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)
+        {
+            if (getUiHandlers() != null)
+            {
+                getUiHandlers().onNewActivity();
+            }
         }
     }
 
