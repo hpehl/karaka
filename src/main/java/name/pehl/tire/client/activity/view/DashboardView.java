@@ -45,9 +45,10 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     private static final long ONE_DAY = 86400000l;
     private static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat("dd. MMM");
 
-    private final I18n i18n;
-    private final Widget widget;
-    private final Resources resources;
+    final I18n i18n;
+    final Widget widget;
+    final Resources resources;
+    final ActivitySuggestOracle activityOracle;
 
     @UiField Anchor theDayBeforeYesterday;
     @UiField Anchor yesterday;
@@ -75,7 +76,7 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
         this.resources.navigation().ensureInjected();
         this.activitiesTable = new ActivitiesTable(atr);
 
-        ActivitySuggestOracle activityOracle = new ActivitySuggestOracle(getUiHandlers());
+        this.activityOracle = new ActivitySuggestOracle();
         Html5TextBox activityTextBox = new Html5TextBox();
         activityTextBox.setPlaceholder("Select an  activity");
         this.activity = new SuggestBox(activityOracle, activityTextBox);
@@ -96,6 +97,14 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     public Widget asWidget()
     {
         return widget;
+    }
+
+
+    @Override
+    public void setUiHandlers(DashboardUiHandlers uiHandlers)
+    {
+        super.setUiHandlers(uiHandlers);
+        activityOracle.setUiHandlers(uiHandlers);
     }
 
 

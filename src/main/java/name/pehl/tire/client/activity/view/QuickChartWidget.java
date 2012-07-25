@@ -17,6 +17,7 @@ import org.moxieapps.gwt.highcharts.client.events.PointClickEvent;
 import org.moxieapps.gwt.highcharts.client.events.PointClickEventHandler;
 import org.moxieapps.gwt.highcharts.client.labels.DataLabels;
 import org.moxieapps.gwt.highcharts.client.plotOptions.ColumnPlotOptions;
+import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions.Cursor;
 import org.moxieapps.gwt.highcharts.client.plotOptions.SeriesPlotOptions;
 
 import com.google.gwt.json.client.JSONNull;
@@ -49,6 +50,12 @@ public abstract class QuickChartWidget implements IsWidget, PointClickEventHandl
 
     protected QuickChartWidget(String[] categories)
     {
+        this(categories, Cursor.NONE);
+    }
+
+
+    protected QuickChartWidget(String[] categories, Cursor cursor)
+    {
         this.chart = new Chart()
                 .setType(COLUMN)
                 .setChartTitleText(null)
@@ -60,6 +67,7 @@ public abstract class QuickChartWidget implements IsWidget, PointClickEventHandl
                         new SeriesPlotOptions()
                                 .setShadow(false)
                                 .setColor(COLOR)
+                                .setCursor(cursor)
                                 .setDataLabels(
                                         new DataLabels().setStyle(new Style()
                                                 .setFont("normal 10px Verdana, sans-serif")))

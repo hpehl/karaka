@@ -6,7 +6,10 @@ import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import name.pehl.tire.client.PresenterTest;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivityChangedEvent;
@@ -30,7 +33,7 @@ public class QuickChartPresenterTest extends PresenterTest
     public void setUp()
     {
         view = mock(QuickChartPresenter.MyView.class);
-        cut = new QuickChartPresenter(eventBus, view);
+        cut = new QuickChartPresenter(eventBus, view, placeManager);
     }
 
 

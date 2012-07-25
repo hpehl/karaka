@@ -1,5 +1,6 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static name.pehl.tire.client.NameTokens.dashboard;
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
@@ -16,8 +17,11 @@ import name.pehl.tire.shared.model.Week;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
 /**
  * <p>
@@ -56,10 +60,10 @@ import com.gwtplatform.mvp.client.View;
  * @version $Date: 2010-12-22 16:43:49 +0100 (Mi, 22. Dez 2010) $ $Revision: 102
  *          $
  */
-public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyView> implements
+public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyView> implements QuickChartUiHandlers,
         ActivitiesLoadedHandler, ActivityChangedHandler, TickHandler
 {
-    public interface MyView extends View
+    public interface MyView extends View, HasUiHandlers<QuickChartUiHandlers>
     {
         void updateActivities(Activities activities);
 
@@ -71,12 +75,17 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     }
 
     Activities activities;
+    final PlaceManager placeManager;
 
 
     @Inject
-    public QuickChartPresenter(final EventBus eventBus, final QuickChartPresenter.MyView view)
+    public QuickChartPresenter(final EventBus eventBus, final QuickChartPresenter.MyView view,
+            final PlaceManager placeManager)
     {
         super(eventBus, view);
+        this.placeManager = placeManager;
+
+        getView().setUiHandlers(this);
         getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
         getEventBus().addHandler(ActivityChangedEvent.getType(), this);
         getEventBus().addHandler(TickEvent.getType(), this);
@@ -109,6 +118,15 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     public void onTick(TickEvent event)
     {
         updateActivity(event.getActivity());
+    }
+
+
+    @Override
+    public void onCalendarWeekClicked(Week week)
+    {
+        PlaceRequest placeRequest = new PlaceRequest(dashboard).with("year", String.valueOf(week.getYear())).with(
+                "week", String.valueOf(week.getWeek()));
+        placeManager.revealPlace(placeRequest);
     }
 
 

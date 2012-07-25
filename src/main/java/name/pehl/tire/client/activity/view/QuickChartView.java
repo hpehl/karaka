@@ -3,6 +3,8 @@ package name.pehl.tire.client.activity.view;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
+import name.pehl.tire.client.activity.presenter.QuickChartUiHandlers;
+import name.pehl.tire.client.activity.view.WeekClickedEvent.WeekClickedHandler;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Day;
 import name.pehl.tire.shared.model.Week;
@@ -11,7 +13,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.ViewImpl;
+import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 /**
  * View for the quick chart showing the activites by week / month.
@@ -20,7 +22,8 @@ import com.gwtplatform.mvp.client.ViewImpl;
  * @version $Date: 2010-12-22 16:43:49 +0100 (Mi, 22. Dez 2010) $ $Revision: 102
  *          $
  */
-public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyView
+public class QuickChartView extends ViewWithUiHandlers<QuickChartUiHandlers> implements QuickChartPresenter.MyView,
+        WeekClickedHandler
 {
     public interface Binder extends UiBinder<Panel, QuickChartView>
     {
@@ -36,6 +39,7 @@ public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyVi
     {
         this.weekChart = new WeekChartWidget();
         this.monthChart = new MonthChartWidget();
+        this.monthChart.addWeekClickedHandler(this);
         this.panel = binder.createAndBindUi(this);
         this.panel.add(weekChart);
         this.panel.add(monthChart);
@@ -79,5 +83,15 @@ public class QuickChartView extends ViewImpl implements QuickChartPresenter.MyVi
     public void updateDay(Day day)
     {
         weekChart.updateDay(day);
+    }
+
+
+    @Override
+    public void onWeekClicked(WeekClickedEvent event)
+    {
+        if (getUiHandlers() != null)
+        {
+            getUiHandlers().onCalendarWeekClicked(event.getWeek());
+        }
     }
 }

@@ -10,15 +10,20 @@ public class ActivitySuggestOracle extends SuggestOracle
     static final int DELAY = 300;
 
     final Timer timer;
-    final DashboardUiHandlers uiHandlers;
+    DashboardUiHandlers uiHandlers;
     Request currentRequest;
     Callback currentCallback;
 
 
-    public ActivitySuggestOracle(DashboardUiHandlers uiHandlers)
+    public ActivitySuggestOracle()
     {
         super();
         this.timer = new QueryTimer();
+    }
+
+
+    public void setUiHandlers(DashboardUiHandlers uiHandlers)
+    {
         this.uiHandlers = uiHandlers;
     }
 
