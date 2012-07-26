@@ -57,20 +57,6 @@ public class TimeParserTest
 
 
     @Test(expected = ParseException.class)
-    public void invalidSeperator() throws ParseException
-    {
-        cut.parse("3;3");
-    }
-
-
-    @Test(expected = ParseException.class)
-    public void invalidUnit() throws ParseException
-    {
-        cut.parse("3u");
-    }
-
-
-    @Test(expected = ParseException.class)
     public void negativeHours() throws ParseException
     {
         cut.parse("-12");

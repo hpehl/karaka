@@ -20,6 +20,7 @@ import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Project;
 
+import com.google.common.base.Strings;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -292,13 +293,10 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @UiHandler("time")
     void onTimeEntered(ValueChangeEvent<String> event)
     {
-        String value = event.getValue();
-        if (value != null && value.length() != 0)
+        String value = Strings.emptyToNull(event.getValue());
+        if (getUiHandlers() != null)
         {
-            if (getUiHandlers() != null)
-            {
-                getUiHandlers().onTimeEntered(value);
-            }
+            getUiHandlers().onTimeEntered(value);
         }
     }
 
