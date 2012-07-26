@@ -6,12 +6,12 @@ import static name.pehl.tire.client.activity.presenter.TimeParser.Seperator.DOT;
 import static name.pehl.tire.client.activity.presenter.TimeParser.Unit.HOURS;
 import static name.pehl.tire.client.activity.presenter.TimeParser.Unit.MINUTES;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 
 public class TimeParser
 {
-    static final Pattern REGEX = Pattern.compile("([0-9]+)([,.:]?)([0-9]*)([hm]?)");
+    static final RegExp REGEXP = RegExp.compile("([0-9]+)([,.:]?)([0-9]*)([hm]?)");
 
 
     public Duration parse(String time) throws ParseException
@@ -19,13 +19,13 @@ public class TimeParser
         Duration result = Duration.EMPTY;
         if (time != null && time.trim().length() != 0)
         {
-            Matcher matcher = REGEX.matcher(time);
-            if (matcher.matches())
+            if (REGEXP.test(time))
             {
-                long hours = asLong(matcher.group(1));
-                Seperator seperator = asSeperator(matcher.group(2));
-                long minutes = asLong(matcher.group(3));
-                Unit unit = asUnit(matcher.group(4));
+                MatchResult match = REGEXP.exec(time);
+                long hours = asLong(match.getGroup(1));
+                Seperator seperator = asSeperator(match.getGroup(2));
+                long minutes = asLong(match.getGroup(3));
+                Unit unit = asUnit(match.getGroup(4));
 
                 if (seperator == COLUMN)
                 {
