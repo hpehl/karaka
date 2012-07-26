@@ -86,6 +86,18 @@ import com.googlecode.objectify.Key;
  * <li>PUT /activities/{id}: Update an existing activity
  * <li>DELETE /activities/{id}: Delete an existing activity
  * </ul>
+ * <p>
+ * Normally for POST and PUT the start and end time is taken from the JSON input
+ * and the minutes are calculated. There's one exception to this behaviour: If
+ * </p>
+ * <ul>
+ * <li>the activity is stopped
+ * <li>the start time is present
+ * <li>the end time is not present and
+ * <li>the minutes are specified
+ * </ul>
+ * <p>
+ * then the end time is calculated.
  * 
  * @todo Add hyperlinks to current, previous and next activities. If there are
  *       no previous / next activities omit the links

@@ -15,6 +15,7 @@ import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.dispatch.ActivitiesRequest;
@@ -37,6 +38,7 @@ import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent.RunningAc
 import name.pehl.tire.client.activity.event.TickEvent;
 import name.pehl.tire.client.activity.event.TickEvent.TickHandler;
 import name.pehl.tire.client.activity.presenter.TimeParser.Duration;
+import name.pehl.tire.client.activity.presenter.TimeParser.ParseException;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
@@ -381,29 +383,47 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         }
         activity.setProject(project);
 
-        Duration duration = new TimeParser().parse(enteredTime);
-        if (duration.getTotalInMinutes() > 0)
+        try
         {
-            // selectedDate must not be changed!
-            Date now = new Date();
-            Date start = selectedDate;
-            if (start == null)
+            Duration duration = new TimeParser().parse(enteredTime);
+            if (duration.isEmpty())
             {
-                start = now;
+                start(activity);
             }
             else
             {
-                start.setHours(now.getHours());
-                start.setMinutes(now.getMinutes());
-                start.setSeconds(now.getSeconds());
+                if (!activity.isTransient())
+                {
+                    activity = activity.copy();
+                    activity.setProject(project);
+                }
+                // selectedDate must not be changed!
+                Date now = new Date();
+                Date start = selectedDate;
+                if (start == null)
+                {
+                    start = now;
+                }
+                else
+                {
+                    start.setHours(now.getHours());
+                    start.setMinutes(now.getMinutes());
+                    start.setSeconds(now.getSeconds());
+                }
+                // This is the only exception to call Activity.setMinutes(long)
+                // directly. On the server side it is recognized that the
+                // activity is stopped and that there's a start time, a value
+                // for minutes but no end time. In this case the end time is
+                // calculated on the server
+                activity.setStart(new Time(start));
+                activity.setEnd(null);
+                activity.setMinutes(duration.getTotalMinutes());
+                save(activity);
             }
-            activity.setStart(new Time(start));
-            // TODO add minutes to start and set end of activity
-            save(activity);
         }
-        else
+        catch (ParseException e)
         {
-            start(activity);
+            ShowMessageEvent.fire(this, new Message(Level.SEVERE, e.getMessage(), true));
         }
     }
 

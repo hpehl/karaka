@@ -1,14 +1,14 @@
 package name.pehl.tire.shared.model;
 
+import static name.pehl.tire.shared.model.Status.RUNNING;
+import static name.pehl.tire.shared.model.Status.STOPPED;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-
-import static name.pehl.tire.shared.model.Status.RUNNING;
-import static name.pehl.tire.shared.model.Status.STOPPED;
 
 /**
  * <h3>Design by contract</h3>
@@ -187,6 +187,10 @@ public class Activity extends DescriptiveModel
         if (end != null)
         {
             minutes = diffInMinutes(start.getDate(), end.getDate()) - pause;
+        }
+        else
+        {
+            minutes = 0;
         }
     }
 

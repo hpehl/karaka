@@ -17,6 +17,8 @@ import name.pehl.tire.server.tag.control.TagConverter;
 import name.pehl.tire.server.tag.control.TagRepository;
 import name.pehl.tire.shared.model.Activity;
 
+import org.joda.time.DateTime;
+
 import com.googlecode.objectify.Key;
 
 /**
@@ -93,6 +95,22 @@ public class ActivityConverter extends
     }
 
 
+    /**
+     * Transforms the client side activity into a server side activity. Normally
+     * the start and end time is taken from the client side activity and the
+     * minutes are calculated. There's one exception to this behaviour: If </p>
+     * <ul>
+     * <li>the activity is stopped
+     * <li>the start time is present
+     * <li>the end time is not present and
+     * <li>the minutes are specified
+     * </ul>
+     * <p>
+     * then the end time is calculated.
+     * 
+     * @param model
+     * @param entity
+     */
     private void internalModelToEntity(Activity model, name.pehl.tire.server.activity.entity.Activity entity)
     {
         // basic properties
@@ -113,7 +131,16 @@ public class ActivityConverter extends
         }
         else
         {
-            entity.setEnd(new name.pehl.tire.server.activity.entity.Time(new Date(), settings.getTimeZone()));
+            if (model.isStopped() && model.getStart() != null && model.getMinutes() > 0)
+            {
+                DateTime start = entity.getStart().getDateTime();
+                DateTime end = start.plusMinutes((int) model.getMinutes());
+                entity.setEnd(new name.pehl.tire.server.activity.entity.Time(end.toDate(), settings.getTimeZone()));
+            }
+            else
+            {
+                entity.setEnd(new name.pehl.tire.server.activity.entity.Time(new Date(), settings.getTimeZone()));
+            }
         }
         entity.setPause(model.getPause());
         entity.setBillable(model.isBillable());
