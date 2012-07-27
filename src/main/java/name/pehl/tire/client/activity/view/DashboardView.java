@@ -39,6 +39,14 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
+/**
+ * Ideas:
+ * <ul>
+ * <li>Place buttons / clickable labels with the current tags next to the
+ * header. Clicking the labels will filter the activities. See
+ * http://meteor.com/examples/todos
+ * </ul>
+ */
 public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> implements DashboardPresenter.MyView
 {
     // ---------------------------------------------------------- inner classes
@@ -85,12 +93,12 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
 
         this.activityOracle = new ActivitySuggestOracle();
         Html5TextBox activityTextBox = new Html5TextBox();
-        activityTextBox.setPlaceholder("Select an  activity");
+        activityTextBox.setPlaceholder("Select or enter a new activity");
         this.activity = new SuggestBox(activityOracle, activityTextBox);
 
         NamedModelSuggestOracle<Project> projectOracle = new NamedModelSuggestOracle<Project>(projectsCache);
         Html5TextBox projectTextBox = new Html5TextBox();
-        projectTextBox.setPlaceholder("Select a project");
+        projectTextBox.setPlaceholder("Select or enter a new project");
         this.project = new SuggestBox(projectOracle, projectTextBox);
 
         this.widget = binder.createAndBindUi(this);

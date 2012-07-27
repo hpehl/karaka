@@ -410,11 +410,11 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                     start.setMinutes(now.getMinutes());
                     start.setSeconds(now.getSeconds());
                 }
-                // This is the only exception to call Activity.setMinutes(long)
-                // directly. On the server side it is recognized that the
-                // activity is stopped and that there's a start time, a value
-                // for minutes but no end time. In this case the end time is
-                // calculated on the server
+                // This is the only valid use case to call
+                // Activity.setMinutes(long) directly. On the server side it is
+                // recognized that the activity is stopped and that there's a
+                // start time, a value for minutes but no end time. In this case
+                // the end time is calculated on the server
                 activity.setStart(new Time(start));
                 activity.setEnd(null);
                 activity.setMinutes(duration.getTotalMinutes());
@@ -577,7 +577,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     }
 
 
-    void save(Activity activity)
+    void save(final Activity activity)
     {
         logger.fine("About to save " + activity);
         dispatcher.execute(new SaveActivityAction(activity), new TireCallback<SaveActivityResult>(getEventBus())
@@ -590,6 +590,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 ActivityChangedEvent.fire(DashboardPresenter.this, savedActivity, CHANGED);
                 ShowMessageEvent.fire(DashboardPresenter.this,
                         new Message(INFO, "Activity \"" + savedActivity.getName() + "\" saved", true));
+                checkAndrefreshProjectsAndTags(activity);
             }
         });
     }
@@ -662,9 +663,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                         // The parameter is an existing activity. We have to
                         // copy this activity.
                         newActivity = activity.copy();
+                        logger.info("Copy " + activity + " and start as a new " + newActivity);
                     }
                     newActivity.start();
-                    logger.info("Copy " + activity + " and start as a new " + newActivity);
                     dispatcher.execute(new SaveActivityAction(newActivity), startCallback);
                 }
             }
@@ -741,6 +742,18 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         }
     }
 
+
+    /**
+     * Called after saving an activity. If the saved activity contained
+     * transient project or tags, we have to refresh our local caches!
+     * 
+     * @param activity
+     */
+    void checkAndrefreshProjectsAndTags(Activity activity)
+    {
+        // TODO Implement me!
+    }
+
     // --------------------------------------------------- commands & callbacks
 
     class GetActivitiesCommand implements ScheduledCommand
@@ -814,6 +827,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Activity \"" + runningActivity.getName()
                     + "\" " + action.name().toLowerCase(), true));
             tickCommand.start(runningActivity);
+            // TODO call checkAndrefreshProjectsAndTags(activity);
         }
     }
 }

@@ -78,12 +78,11 @@
 				</li>
 			</ul>
 			<div class="{style.spacebelow}">
-				<tui:Html5TextBox ui:field="tags" placeholder="Tags"
-					title="Tags" />
+				<g:SuggestBox ui:field="project" />
 			</div>
 			<div>
-				<tui:Html5TextBox ui:field="project" placeholder="Project"
-					title="Project" />
+				<tui:Html5TextBox ui:field="tags" placeholder="Tags"
+					title="Tags" />
 			</div>
 			<div class="{style.controls}">
 				<g:Button ui:field="cancel">Cancel</g:Button>
