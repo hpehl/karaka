@@ -1,4 +1,6 @@
-package name.pehl.tire.client.ui;
+package name.pehl.tire.client.activity.view;
+
+import name.pehl.tire.client.activity.view.HourMinuteParser;
 
 import org.junit.Before;
 import org.junit.Test;

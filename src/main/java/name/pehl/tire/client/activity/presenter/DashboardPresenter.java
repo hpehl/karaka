@@ -37,16 +37,16 @@ import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent;
 import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent.RunningActivityLoadedHandler;
 import name.pehl.tire.client.activity.event.TickEvent;
 import name.pehl.tire.client.activity.event.TickEvent.TickHandler;
-import name.pehl.tire.client.activity.presenter.TimeParser.Duration;
 import name.pehl.tire.client.activity.presenter.TimeParser.ParseException;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireCallback;
+import name.pehl.tire.client.model.Highlighter;
 import name.pehl.tire.client.model.NamedModelSuggestion;
-import name.pehl.tire.client.ui.Highlighter;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Duration;
 import name.pehl.tire.shared.model.Project;
 import name.pehl.tire.shared.model.Time;
 

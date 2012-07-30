@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tui="urn:import:name.pehl.tire.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:act="urn:import:name.pehl.tire.client.activity.view"
+	xmlns:tui="urn:import:name.pehl.tire.client.ui">
 
 	<ui:style>
 		.popup {
@@ -61,11 +62,11 @@
 			</div>
 			<ul class="{style.columns}">
 				<li>
-					<tui:TimeTextBox ui:field="start" placeholder="Start"
+					<act:TimeTextBox ui:field="start" placeholder="Start"
 						title="Start" />
 				</li>
 				<li>
-					<tui:TimeTextBox ui:field="end" placeholder="End"
+					<act:TimeTextBox ui:field="end" placeholder="End"
 						title="End" />
 				</li>
 				<li>

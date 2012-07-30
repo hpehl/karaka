@@ -3,6 +3,7 @@ package name.pehl.tire.client.activity.presenter;
 import static name.pehl.tire.client.activity.presenter.TimeParser.Seperator.*;
 import static name.pehl.tire.client.activity.presenter.TimeParser.Unit.HOURS;
 import static name.pehl.tire.client.activity.presenter.TimeParser.Unit.MINUTES;
+import name.pehl.tire.shared.model.Duration;
 
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
@@ -148,92 +149,6 @@ public class TimeParser
         NONE,
         HOURS,
         MINUTES;
-    }
-
-    public static class Duration
-    {
-        public static final Duration EMPTY = new Duration(0, 0);
-
-        private final long hours;
-        private final long minutes;
-
-
-        public Duration(long hours, long minutes)
-        {
-            super();
-            this.hours = hours;
-            this.minutes = minutes;
-        }
-
-
-        @Override
-        public int hashCode()
-        {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + (int) (hours ^ hours >>> 32);
-            result = prime * result + (int) (minutes ^ minutes >>> 32);
-            return result;
-        }
-
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (this == obj)
-            {
-                return true;
-            }
-            if (obj == null)
-            {
-                return false;
-            }
-            if (!(obj instanceof Duration))
-            {
-                return false;
-            }
-            Duration other = (Duration) obj;
-            if (hours != other.hours)
-            {
-                return false;
-            }
-            if (minutes != other.minutes)
-            {
-                return false;
-            }
-            return true;
-        }
-
-
-        @Override
-        public String toString()
-        {
-            return hours + "h " + minutes + "m";
-        }
-
-
-        public long getHours()
-        {
-            return hours;
-        }
-
-
-        public long getMinutes()
-        {
-            return minutes;
-        }
-
-
-        public long getTotalMinutes()
-        {
-            return hours * 60 + minutes;
-        }
-
-
-        public boolean isEmpty()
-        {
-            return this.equals(EMPTY);
-        }
     }
 
     public static class ParseException extends Exception

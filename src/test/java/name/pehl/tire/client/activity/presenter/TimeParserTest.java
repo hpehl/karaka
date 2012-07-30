@@ -1,8 +1,8 @@
 package name.pehl.tire.client.activity.presenter;
 
 import static org.junit.Assert.assertEquals;
-import name.pehl.tire.client.activity.presenter.TimeParser.Duration;
 import name.pehl.tire.client.activity.presenter.TimeParser.ParseException;
+import name.pehl.tire.shared.model.Duration;
 
 import org.junit.Before;
 import org.junit.Test;

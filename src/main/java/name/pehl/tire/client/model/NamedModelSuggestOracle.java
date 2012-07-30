@@ -3,7 +3,6 @@ package name.pehl.tire.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import name.pehl.tire.client.ui.Highlighter;
 import name.pehl.tire.shared.model.NamedModel;
 
 import com.google.gwt.user.client.ui.SuggestOracle;

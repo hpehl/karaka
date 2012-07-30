@@ -13,9 +13,20 @@ import javax.xml.bind.annotation.XmlAccessorType;
 /**
  * <h3>Design by contract</h3>
  * <ul>
- * <li>Invariants: {@link #getStart()} is never <code>null</code>. Calling
+ * <li>Invariants:
+ * <ul>
+ * <li> {@link #getPause()} is never <code>null</code>. An undefined / empty
+ * pause value must be expressed using {@link Duration#EMPTY}. Calling
+ * {@link #setPause(Duration)} with <code>null</code> will throw an
+ * {@link IllegalArgumentException}.
+ * <li> {@link #getMinutes()} is never <code>null</code>. An undefined / empty
+ * minutes value must be expressed using {@link Duration#EMPTY}. Calling
+ * {@link #setMinutes(Duration)} with <code>null</code> will throw an
+ * {@link IllegalArgumentException}.
+ * <li>{@link #getStart()} is never <code>null</code>. Calling
  * {@link #setStart(Time)} with <code>null</code> will throw an
  * {@link IllegalArgumentException}.
+ * </ul>
  * </ul>
  * 
  * @author $LastChangedBy:$
@@ -28,8 +39,8 @@ public class Activity extends DescriptiveModel
 
     Time start;
     Time end;
-    long pause;
-    long minutes;
+    Duration pause;
+    Duration minutes;
     boolean billable;
     Status status;
     Project project;
@@ -53,6 +64,8 @@ public class Activity extends DescriptiveModel
     public Activity(String id, String name)
     {
         super(id, name);
+        this.pause = Duration.EMPTY;
+        this.minutes = Duration.EMPTY;
         this.status = STOPPED;
         this.tags = new ArrayList<Tag>();
         ensureStart();
@@ -140,7 +153,7 @@ public class Activity extends DescriptiveModel
         {
             end = new Time();
         }
-        pause += diffInMinutes(end.getDate(), now);
+        pause = pause.plus(new Duration(end.getDate(), now));
         end.setDate(now);
         status = RUNNING;
     }
@@ -186,23 +199,12 @@ public class Activity extends DescriptiveModel
     {
         if (end != null)
         {
-            minutes = diffInMinutes(start.getDate(), end.getDate()) - pause;
+            minutes = new Duration(start.getDate(), end.getDate()).minus(pause);
         }
         else
         {
-            minutes = 0;
+            minutes = Duration.EMPTY;
         }
-    }
-
-
-    private long diffInMinutes(Date from, Date to)
-    {
-        long minutes = to.getTime() - from.getTime();
-        if (minutes > 0)
-        {
-            minutes /= 60000;
-        }
-        return minutes;
     }
 
 
@@ -282,7 +284,7 @@ public class Activity extends DescriptiveModel
     }
 
 
-    public long getPause()
+    public Duration getPause()
     {
         return pause;
     }
@@ -293,14 +295,14 @@ public class Activity extends DescriptiveModel
      * 
      * @param pause
      */
-    public void setPause(long pause)
+    public void setPause(Duration pause)
     {
         this.pause = pause;
         calculateMinutes();
     }
 
 
-    public long getMinutes()
+    public Duration getMinutes()
     {
         return minutes;
     }
@@ -314,7 +316,7 @@ public class Activity extends DescriptiveModel
      * 
      * @param minutes
      */
-    public void setMinutes(long minutes)
+    public void setMinutes(Duration minutes)
     {
         this.minutes = minutes;
     }

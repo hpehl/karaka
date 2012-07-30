@@ -1,9 +1,9 @@
-package name.pehl.tire.client.ui;
+package name.pehl.tire.client.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import name.pehl.tire.client.ui.Highlighter;
+import name.pehl.tire.client.model.Highlighter;
 
 import org.junit.Before;
 import org.junit.Test;

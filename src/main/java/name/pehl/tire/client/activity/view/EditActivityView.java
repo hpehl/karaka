@@ -10,7 +10,6 @@ import name.pehl.tire.client.project.ProjectsCache;
 import name.pehl.tire.client.ui.EscapablePopupPanel;
 import name.pehl.tire.client.ui.Html5TextArea;
 import name.pehl.tire.client.ui.Html5TextBox;
-import name.pehl.tire.client.ui.TimeTextBox;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Project;
 

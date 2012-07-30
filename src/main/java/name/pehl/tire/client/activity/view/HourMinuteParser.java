@@ -1,4 +1,4 @@
-package name.pehl.tire.client.ui;
+package name.pehl.tire.client.activity.view;
 
 public class HourMinuteParser
 {

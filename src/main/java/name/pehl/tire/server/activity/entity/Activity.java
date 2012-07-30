@@ -1,5 +1,7 @@
 package name.pehl.tire.server.activity.entity;
 
+import static java.util.Collections.unmodifiableList;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,8 +23,6 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.Unindexed;
-
-import static java.util.Collections.unmodifiableList;
 
 /**
  * Represent an activity of an user. An Activity has a specific state:
@@ -48,7 +48,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     @Embedded @Unindexed private Time end;
     @Unindexed private String timeZoneId;
     @Transient private DateTimeZone timeZone;
-    @Unindexed private long pause;
+    @Embedded @Unindexed private Duration pause;
     @Unindexed private boolean billable;
     @Indexed(IfRunning.class) private Status status;
     private List<Key<Tag>> tags;
@@ -164,15 +164,15 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
 
-    public long getMinutes()
+    public Duration getMinutes()
     {
         long minutes = 0;
         if (start != null && end != null && start.getDateTime().isBefore(end.getDateTime()))
         {
             Minutes m = Minutes.minutesBetween(start.getDateTime(), end.getDateTime());
-            minutes = m.getMinutes() - pause;
+            minutes = m.getMinutes() - pause.getMinutes();
         }
-        return minutes;
+        return new Duration(minutes);
     }
 
 
@@ -200,13 +200,13 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
 
-    public long getPause()
+    public Duration getPause()
     {
         return pause;
     }
 
 
-    public void setPause(long pause)
+    public void setPause(Duration pause)
     {
         this.pause = pause;
     }

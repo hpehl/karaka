@@ -1,6 +1,7 @@
-package name.pehl.tire.client.ui;
+package name.pehl.tire.client.activity.view;
 
 import name.pehl.tire.client.Defaults;
+import name.pehl.tire.client.ui.Html5TextBox;
 import name.pehl.tire.shared.model.Time;
 
 import com.google.gwt.editor.client.IsEditor;
@@ -13,6 +14,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasValue;
 
 /**
+ * TODO Handle several formats: hh:mm, hh,mm and hh.mm
+ * 
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */

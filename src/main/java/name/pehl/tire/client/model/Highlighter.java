@@ -1,4 +1,4 @@
-package name.pehl.tire.client.ui;
+package name.pehl.tire.client.model;
 
 import java.util.ArrayList;
 import java.util.List;
