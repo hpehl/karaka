@@ -46,7 +46,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
 
     @Embedded private Time start;
     @Embedded @Unindexed private Time end;
-    @Unindexed private String timeZoneId;
+    @Unindexed private final String timeZoneId;
     @Transient private DateTimeZone timeZone;
     @Embedded @Unindexed private Duration pause;
     @Unindexed private boolean billable;
@@ -87,6 +87,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     public Activity(String name, String description, DateTimeZone timeZone)
     {
         super(name, description);
+        this.pause = new Duration();
         this.status = Status.STOPPED;
         this.tags = new ArrayList<Key<Tag>>();
         if (timeZone == null)
