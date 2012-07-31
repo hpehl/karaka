@@ -6,7 +6,7 @@ import name.pehl.piriti.json.client.JsonWriter;
 import name.pehl.tire.shared.model.Activity;
 
 @Mappings({@Mapping(value = "pause", convert = DurationConverter.class),
-        @Mapping(value = "minutes", convert = DurationConverter.class)})
+        @Mapping(value = "duration", convert = DurationConverter.class)})
 public interface ActivityWriter extends JsonWriter<Activity>
 {
 }

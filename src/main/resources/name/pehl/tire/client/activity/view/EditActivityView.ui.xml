@@ -70,12 +70,12 @@
 						title="End" />
 				</li>
 				<li>
-					<tui:Html5TextBox ui:field="pause" placeholder="Pause"
-						title="Pause" />
+					<act:DurationTextBox ui:field="pause"
+						placeholder="Pause" title="Pause" />
 				</li>
 				<li style="float: right;">
-					<tui:Html5TextBox ui:field="duration" placeholder="Duration"
-						title="Duration" addStyleNames="{style.spacebelow}" />
+					<act:DurationTextBox ui:field="duration"
+						placeholder="Duration" title="Duration" addStyleNames="{style.spacebelow}" />
 				</li>
 			</ul>
 			<div class="{style.spacebelow}">

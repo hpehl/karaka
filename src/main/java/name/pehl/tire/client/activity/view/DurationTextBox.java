@@ -8,6 +8,8 @@ import name.pehl.tire.shared.model.Duration;
 import com.google.gwt.editor.client.IsEditor;
 import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.editor.client.adapters.TakesValueEditor;
+import com.google.gwt.event.dom.client.HasKeyUpHandlers;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -15,7 +17,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasValue;
 
 public class DurationTextBox extends Composite implements HasValue<Duration>, IsEditor<LeafValueEditor<Duration>>,
-        ValueChangeHandler<String>
+        ValueChangeHandler<String>, HasKeyUpHandlers
 {
     private Duration currentValue;
     private final Html5TextBox textBox;
@@ -36,6 +38,13 @@ public class DurationTextBox extends Composite implements HasValue<Duration>, Is
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Duration> handler)
     {
         return addHandler(handler, ValueChangeEvent.getType());
+    }
+
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler)
+    {
+        return textBox.addKeyUpHandler(handler);
     }
 
 
