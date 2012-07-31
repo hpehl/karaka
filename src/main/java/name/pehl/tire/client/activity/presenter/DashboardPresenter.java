@@ -15,7 +15,6 @@ import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.dispatch.ActivitiesRequest;
@@ -37,7 +36,6 @@ import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent;
 import name.pehl.tire.client.activity.event.RunningActivityLoadedEvent.RunningActivityLoadedHandler;
 import name.pehl.tire.client.activity.event.TickEvent;
 import name.pehl.tire.client.activity.event.TickEvent.TickHandler;
-import name.pehl.tire.client.activity.presenter.TimeParser.ParseException;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
@@ -172,9 +170,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     String enteredProject;
 
     /**
-     * The time entered in the textbox
+     * The duration entered in the textbox
      */
-    String enteredTime;
+    Duration enteredDuration;
 
 
     // ------------------------------------------------------------------ setup
@@ -352,9 +350,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
 
     @Override
-    public void onTimeEntered(String time)
+    public void onDurationEntered(Duration duration)
     {
-        enteredTime = time;
+        enteredDuration = duration;
     }
 
 
@@ -362,6 +360,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     @SuppressWarnings("deprecation")
     public void onNewActivity()
     {
+        // 1. Activity
         Activity activity = null;
         if (enteredActivity != null)
         {
@@ -372,6 +371,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             activity = selectedActivity;
         }
 
+        // 2. Project
         Project project = null;
         if (enteredProject != null)
         {
@@ -383,47 +383,40 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         }
         activity.setProject(project);
 
-        try
+        // 3. Duration
+        if (enteredDuration.isEmpty())
         {
-            Duration duration = new TimeParser().parse(enteredTime);
-            if (duration.isEmpty())
+            start(activity);
+        }
+        else
+        {
+            if (!activity.isTransient())
             {
-                start(activity);
+                activity = activity.copy();
+                activity.setProject(project);
+            }
+            // selectedDate must not be changed!
+            Date now = new Date();
+            Date start = selectedDate;
+            if (start == null)
+            {
+                start = now;
             }
             else
             {
-                if (!activity.isTransient())
-                {
-                    activity = activity.copy();
-                    activity.setProject(project);
-                }
-                // selectedDate must not be changed!
-                Date now = new Date();
-                Date start = selectedDate;
-                if (start == null)
-                {
-                    start = now;
-                }
-                else
-                {
-                    start.setHours(now.getHours());
-                    start.setMinutes(now.getMinutes());
-                    start.setSeconds(now.getSeconds());
-                }
-                // This is the only valid use case to call
-                // Activity.setMinutes(long) directly. On the server side it is
-                // recognized that the activity is stopped and that there's a
-                // start time, a value for minutes but no end time. In this case
-                // the end time is calculated on the server
-                activity.setStart(new Time(start));
-                activity.setEnd(null);
-                activity.setMinutes(duration.getTotalMinutes());
-                save(activity);
+                start.setHours(now.getHours());
+                start.setMinutes(now.getMinutes());
+                start.setSeconds(now.getSeconds());
             }
-        }
-        catch (ParseException e)
-        {
-            ShowMessageEvent.fire(this, new Message(Level.SEVERE, e.getMessage(), true));
+            // This is the only valid use case to call
+            // Activity.setMinutes(long) directly. On the server side it is
+            // recognized that the activity is stopped and that there's a
+            // start time, a value for minutes but no end time. In this case
+            // the end time is calculated on the server
+            activity.setStart(new Time(start));
+            activity.setEnd(null);
+            activity.setMinutes(enteredDuration);
+            save(activity);
         }
     }
 

@@ -48,7 +48,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     @Embedded @Unindexed private Time end;
     @Unindexed private final String timeZoneId;
     @Transient private DateTimeZone timeZone;
-    @Embedded @Unindexed private Duration pause;
+    @Unindexed private long pause;
     @Unindexed private boolean billable;
     @Indexed(IfRunning.class) private Status status;
     private List<Key<Tag>> tags;
@@ -87,7 +87,6 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     public Activity(String name, String description, DateTimeZone timeZone)
     {
         super(name, description);
-        this.pause = new Duration();
         this.status = Status.STOPPED;
         this.tags = new ArrayList<Key<Tag>>();
         if (timeZone == null)
@@ -165,15 +164,15 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
 
-    public Duration getMinutes()
+    public long getMinutes()
     {
         long minutes = 0;
         if (start != null && end != null && start.getDateTime().isBefore(end.getDateTime()))
         {
             Minutes m = Minutes.minutesBetween(start.getDateTime(), end.getDateTime());
-            minutes = m.getMinutes() - pause.getMinutes();
+            minutes = m.getMinutes() - pause;
         }
-        return new Duration(minutes);
+        return minutes;
     }
 
 
@@ -201,13 +200,13 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
 
-    public Duration getPause()
+    public long getPause()
     {
         return pause;
     }
 
 
-    public void setPause(Duration pause)
+    public void setPause(long pause)
     {
         this.pause = pause;
     }

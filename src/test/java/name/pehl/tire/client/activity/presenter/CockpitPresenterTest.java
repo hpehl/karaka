@@ -1,5 +1,22 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+
 import java.util.List;
 
 import name.pehl.tire.client.PresenterTest;
@@ -20,6 +37,7 @@ import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Duration;
 import name.pehl.tire.shared.model.Minutes;
 
 import org.junit.Before;
@@ -32,25 +50,6 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtplatform.dispatch.client.actionhandler.ClientActionHandler;
 import com.gwtplatform.dispatch.client.actionhandler.ExecuteCommand;
-
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
 
 public class CockpitPresenterTest extends PresenterTest implements ShowMessageHandler, ActivityActionHandler,
         RunningActivityLoadedHandler
@@ -248,7 +247,8 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
     @SuppressWarnings("unchecked")
     void prepareGetMinutes()
     {
-        final GetMinutesResult getMinutesResult = new GetMinutesResult(new Minutes(1, 2, 3));
+        final GetMinutesResult getMinutesResult = new GetMinutesResult(new Minutes(new Duration(1), new Duration(2),
+                new Duration(3)));
         Answer<Object> getMinutesAnswer = new Answer<Object>()
         {
             @Override
@@ -266,7 +266,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
 
     void verifyGetMinutes()
     {
-        verify(view).updateMinutes(new Minutes(1, 2, 3));
+        verify(view).updateMinutes(new Minutes(new Duration(1), new Duration(2), new Duration(3)));
     }
 
 

@@ -2,6 +2,7 @@ package name.pehl.tire.client.ui;
 
 import name.pehl.tire.client.Defaults;
 import name.pehl.tire.client.settings.SettingsCache;
+import name.pehl.tire.shared.model.Duration;
 import name.pehl.tire.shared.model.Time;
 
 /**
@@ -16,30 +17,29 @@ public final class FormatUtils
     }
 
 
-    public static String hours(long minutes)
+    public static String duration(Duration duration)
     {
         if (SettingsCache.currentSettings().isFormatHoursAsFloatingPointNumber())
         {
-            if (minutes > 0)
+            if (duration.isEmpty())
             {
-                return Defaults.NUMBER_FORMAT.format(minutes / 60.0) + "h";
+                return "0h";
             }
             else
             {
-                return "0h";
+                return Defaults.NUMBER_FORMAT.format(duration.getTotalHours()) + "h";
             }
         }
         else
         {
-            if (minutes > 0)
+            if (duration.isEmpty())
             {
-                long h = minutes / 60;
-                long m = minutes % 60;
-                return Defaults.HOUR_MINUTE_FORMAT.format(h) + ":" + Defaults.HOUR_MINUTE_FORMAT.format(m);
+                return "00:00";
             }
             else
             {
-                return "00:00";
+                return Defaults.HOUR_MINUTE_FORMAT.format(duration.getHours()) + ":"
+                        + Defaults.HOUR_MINUTE_FORMAT.format(duration.getMinutes());
             }
         }
     }

@@ -16,6 +16,7 @@ import name.pehl.tire.server.settings.entity.Settings;
 import name.pehl.tire.server.tag.control.TagConverter;
 import name.pehl.tire.server.tag.control.TagRepository;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Duration;
 
 import org.joda.time.DateTime;
 
@@ -54,8 +55,8 @@ public class ActivityConverter extends
                 .getYear(), entity.getStart().getMonth(), entity.getStart().getWeek(), entity.getStart().getDay()));
         model.setEnd(new name.pehl.tire.shared.model.Time(entity.getEnd().getDateTime().toDate(), entity.getEnd()
                 .getYear(), entity.getEnd().getMonth(), entity.getEnd().getWeek(), entity.getEnd().getDay()));
-        model.setPause(entity.getPause());
-        model.setMinutes(entity.getMinutes());
+        model.setPause(new Duration(entity.getPause()));
+        model.setMinutes(new Duration(entity.getMinutes()));
         model.setBillable(entity.isBillable());
         model.setStatus(entity.getStatus());
 
@@ -131,10 +132,10 @@ public class ActivityConverter extends
         }
         else
         {
-            if (model.isStopped() && model.getStart() != null && model.getMinutes() > 0)
+            if (model.isStopped() && model.getStart() != null && !model.getMinutes().isEmpty())
             {
                 DateTime start = entity.getStart().getDateTime();
-                DateTime end = start.plusMinutes((int) model.getMinutes());
+                DateTime end = start.plusMinutes((int) model.getMinutes().getTotalMinutes());
                 entity.setEnd(new name.pehl.tire.server.activity.entity.Time(end.toDate(), settings.getTimeZone()));
             }
             else
@@ -142,7 +143,7 @@ public class ActivityConverter extends
                 entity.setEnd(new name.pehl.tire.server.activity.entity.Time(new Date(), settings.getTimeZone()));
             }
         }
-        entity.setPause(model.getPause());
+        entity.setPause(model.getPause().getTotalMinutes());
         entity.setBillable(model.isBillable());
         entity.setStatus(model.getStatus());
 

@@ -1,5 +1,7 @@
 package name.pehl.tire.client.activity.view;
 
+import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +21,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.TextHeader;
-
-import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
 
 /**
  * @author $LastChangedBy:$
@@ -111,15 +111,15 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
             @Override
             public SafeHtml render(Activity activity)
             {
-                String duration = FormatUtils.hours(activity.getMinutes());
-                if (activity.getPause() > 0)
+                String duration = FormatUtils.duration(activity.getMinutes());
+                if (activity.getPause().isEmpty())
                 {
-                    String pause = FormatUtils.hours(activity.getPause());
-                    return ActivityTemplates.INSTANCE.duration(duration, pause);
+                    return toSafeHtml(duration);
                 }
                 else
                 {
-                    return toSafeHtml(duration);
+                    String pause = FormatUtils.duration(activity.getPause());
+                    return ActivityTemplates.INSTANCE.duration(duration, pause);
                 }
             }
 
@@ -133,7 +133,7 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
             {
                 if (currentActivities != null)
                 {
-                    return FormatUtils.hours(currentActivities.getMinutes());
+                    return FormatUtils.duration(currentActivities.getMinutes());
                 }
                 return null;
             }

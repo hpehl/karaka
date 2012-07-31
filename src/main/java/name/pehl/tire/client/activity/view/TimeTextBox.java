@@ -14,7 +14,12 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasValue;
 
 /**
- * TODO Handle several formats: hh:mm, hh,mm and hh.mm
+ * TODO
+ * <ul>
+ * <li>Use &lt;input type="time"/&gt; as underlying input element.
+ * <li>Handle am/pm
+ * <li>Use a picker like in http://jonthornton.github.com/jquery-timepicker/
+ * </ul>
  * 
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
@@ -22,17 +27,17 @@ import com.google.gwt.user.client.ui.HasValue;
 public class TimeTextBox extends Composite implements HasValue<Time>, IsEditor<LeafValueEditor<Time>>,
         ValueChangeHandler<String>
 {
-    private Time currentTime;
+    private Time currentValue;
     private final Html5TextBox textBox;
-    private final HourMinuteParser hourMinuteParser;
+    private final TimeParser timeParser;
 
 
     public TimeTextBox()
     {
-        this.currentTime = new Time();
+        this.currentValue = new Time();
         this.textBox = new Html5TextBox();
         this.textBox.addValueChangeHandler(this);
-        this.hourMinuteParser = new HourMinuteParser();
+        this.timeParser = new TimeParser();
         initWidget(textBox);
     }
 
@@ -54,7 +59,7 @@ public class TimeTextBox extends Composite implements HasValue<Time>, IsEditor<L
     @Override
     public Time getValue()
     {
-        return currentTime;
+        return currentValue;
     }
 
 
@@ -78,12 +83,12 @@ public class TimeTextBox extends Composite implements HasValue<Time>, IsEditor<L
     }
 
 
-    private void setValue(Time oldTime, Time time, boolean fireEvents)
+    private void setValue(Time oldValue, Time value, boolean fireEvents)
     {
-        currentTime = time;
-        if (time != null)
+        currentValue = value;
+        if (value != null)
         {
-            textBox.setText(Defaults.TIME_FORMAT.format(time.getDate()));
+            textBox.setText(Defaults.TIME_FORMAT.format(value.getDate()));
         }
     }
 
@@ -94,9 +99,9 @@ public class TimeTextBox extends Composite implements HasValue<Time>, IsEditor<L
     {
         try
         {
-            int[] hm = hourMinuteParser.parse(event.getValue());
-            currentTime.getDate().setHours(hm[0]);
-            currentTime.getDate().setMinutes(hm[1]);
+            int[] hm = timeParser.parse(event.getValue());
+            currentValue.getDate().setHours(hm[0]);
+            currentValue.getDate().setMinutes(hm[1]);
         }
         catch (IllegalArgumentException e)
         {

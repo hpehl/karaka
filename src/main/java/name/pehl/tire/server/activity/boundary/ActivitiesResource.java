@@ -35,6 +35,7 @@ import name.pehl.tire.server.paging.entity.PageResult;
 import name.pehl.tire.server.settings.control.CurrentSettings;
 import name.pehl.tire.server.settings.entity.Settings;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Duration;
 import name.pehl.tire.shared.model.Minutes;
 import name.pehl.tire.shared.model.Year;
 import name.pehl.tire.shared.model.Years;
@@ -383,7 +384,7 @@ public class ActivitiesResource
         long currentMonth = minutes(forYearMonth(now));
         long currentWeek = minutes(forYearWeek(now));
         long today = minutes(forYearMonthDay(now));
-        return new Minutes(currentMonth, currentWeek, today);
+        return new Minutes(new Duration(currentMonth), new Duration(currentWeek), new Duration(today));
     }
 
 

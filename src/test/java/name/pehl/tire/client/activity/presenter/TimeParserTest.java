@@ -1,7 +1,8 @@
 package name.pehl.tire.client.activity.presenter;
 
 import static org.junit.Assert.assertEquals;
-import name.pehl.tire.client.activity.presenter.TimeParser.ParseException;
+import name.pehl.tire.client.activity.view.DurationParser;
+import name.pehl.tire.client.activity.view.DurationParser.ParseException;
 import name.pehl.tire.shared.model.Duration;
 
 import org.junit.Before;
@@ -11,13 +12,13 @@ public class TimeParserTest
 {
     // ------------------------------------------------------------------ setup
 
-    TimeParser cut;
+    DurationParser cut;
 
 
     @Before
     public void setUp()
     {
-        this.cut = new TimeParser();
+        this.cut = new DurationParser();
     }
 
 

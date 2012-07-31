@@ -4,6 +4,7 @@ import java.util.Date;
 
 import name.pehl.tire.client.activity.event.ActivityAction.Action;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Duration;
 import name.pehl.tire.shared.model.Project;
 
 import com.google.gwt.user.client.ui.SuggestOracle.Callback;
@@ -35,7 +36,7 @@ public interface DashboardUiHandlers extends UiHandlers
     void onProjectEntered(String name);
 
 
-    void onTimeEntered(String time);
+    void onDurationEntered(Duration duration);
 
 
     void onNewActivity();

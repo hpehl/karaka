@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity.view;
 
-public class HourMinuteParser
+public class TimeParser
 {
     public int[] parse(String time) throws IllegalArgumentException
     {

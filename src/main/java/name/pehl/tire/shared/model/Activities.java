@@ -461,7 +461,7 @@ public class Activities
     }
 
 
-    public long getMinutes()
+    public Duration getMinutes()
     {
         long minutes = 0;
         switch (unit)
@@ -469,25 +469,25 @@ public class Activities
             case MONTH:
                 for (Week week : weeks)
                 {
-                    minutes += week.getMinutes();
+                    minutes += week.getMinutes().getTotalMinutes();
                 }
                 break;
             case WEEK:
                 for (Day day : days)
                 {
-                    minutes += day.getMinutes();
+                    minutes += day.getMinutes().getTotalMinutes();
                 }
                 break;
             case DAY:
                 for (Activity activity : activities())
                 {
-                    minutes += activity.getMinutes();
+                    minutes += activity.getMinutes().getTotalMinutes();
                 }
                 break;
             default:
                 break;
         }
-        return minutes;
+        return new Duration(minutes);
     }
 
 

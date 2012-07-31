@@ -6,6 +6,8 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import name.pehl.tire.client.activity.model.DurationConverter;
+
 /**
  * Value class for a duration.
  * 
@@ -148,6 +150,12 @@ public class Duration
     public long getMinutes()
     {
         return minutes;
+    }
+
+
+    public double getTotalHours()
+    {
+        return (hours * 60 + minutes) / 60.0;
     }
 
 

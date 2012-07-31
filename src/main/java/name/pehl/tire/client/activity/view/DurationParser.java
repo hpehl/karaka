@@ -1,14 +1,14 @@
-package name.pehl.tire.client.activity.presenter;
+package name.pehl.tire.client.activity.view;
 
-import static name.pehl.tire.client.activity.presenter.TimeParser.Seperator.*;
-import static name.pehl.tire.client.activity.presenter.TimeParser.Unit.HOURS;
-import static name.pehl.tire.client.activity.presenter.TimeParser.Unit.MINUTES;
+import static name.pehl.tire.client.activity.view.DurationParser.Seperator.*;
+import static name.pehl.tire.client.activity.view.DurationParser.Unit.HOURS;
+import static name.pehl.tire.client.activity.view.DurationParser.Unit.MINUTES;
 import name.pehl.tire.shared.model.Duration;
 
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
 
-public class TimeParser
+public class DurationParser
 {
     static final RegExp REGEXP = RegExp.compile("([0-9]+)([.,:]?)([0-9]*)([hm]?)");
 

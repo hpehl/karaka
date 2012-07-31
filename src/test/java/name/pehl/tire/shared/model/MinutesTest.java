@@ -9,10 +9,12 @@ public class MinutesTest
     @Test
     public void equalsAndHashcode()
     {
+        Duration d1 = new Duration(1);
+        Duration d2 = new Duration(2);
         new EqualsTester().addEqualityGroup(new Minutes(), new Minutes())
-                .addEqualityGroup(new Minutes(1, 1, 1), new Minutes(1, 1, 1))
-                .addEqualityGroup(new Minutes(1, 1, 2), new Minutes(1, 1, 2))
-                .addEqualityGroup(new Minutes(1, 2, 1), new Minutes(1, 2, 1))
-                .addEqualityGroup(new Minutes(2, 1, 1), new Minutes(2, 1, 1)).testEquals();
+                .addEqualityGroup(new Minutes(d1, d1, d1), new Minutes(d1, d1, d1))
+                .addEqualityGroup(new Minutes(d1, d1, d2), new Minutes(d1, d1, d2))
+                .addEqualityGroup(new Minutes(d1, d2, d1), new Minutes(d1, d2, d1))
+                .addEqualityGroup(new Minutes(d2, d1, d1), new Minutes(d2, d1, d1)).testEquals();
     }
 }

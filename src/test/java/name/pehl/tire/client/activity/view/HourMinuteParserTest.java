@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity.view;
 
-import name.pehl.tire.client.activity.view.HourMinuteParser;
+import name.pehl.tire.client.activity.view.TimeParser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,13 +9,13 @@ import static org.junit.Assert.assertEquals;
 
 public class HourMinuteParserTest
 {
-    HourMinuteParser cut;
+    TimeParser cut;
 
 
     @Before
     public void setUp()
     {
-        cut = new HourMinuteParser();
+        cut = new TimeParser();
     }
 
 

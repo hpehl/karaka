@@ -80,13 +80,13 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
 
     double hours(Week week)
     {
-        return week.getMinutes() / 60.0;
+        return week.getMinutes().getTotalHours();
     }
 
 
     String tooltip(Week week)
     {
-        return "CW " + week.getWeek() + ": " + FormatUtils.hours(week.getMinutes()) + "<br/>"
+        return "CW " + week.getWeek() + ": " + FormatUtils.duration(week.getMinutes()) + "<br/>"
                 + FormatUtils.dateDuration(week.getStart(), week.getEnd());
     }
 

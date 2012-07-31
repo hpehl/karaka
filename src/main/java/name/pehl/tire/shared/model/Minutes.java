@@ -8,18 +8,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Minutes
 {
-    long month;
-    long week;
-    long day;
+    Duration month;
+    Duration week;
+    Duration day;
 
 
     public Minutes()
     {
-        this(0, 0, 0);
+        this(Duration.EMPTY, Duration.EMPTY, Duration.EMPTY);
     }
 
 
-    public Minutes(long month, long week, long day)
+    public Minutes(Duration month, Duration week, Duration day)
     {
         super();
         this.month = month;
@@ -33,9 +33,9 @@ public class Minutes
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (day ^ (day >>> 32));
-        result = prime * result + (int) (month ^ (month >>> 32));
-        result = prime * result + (int) (week ^ (week >>> 32));
+        result = prime * result + (day == null ? 0 : day.hashCode());
+        result = prime * result + (month == null ? 0 : month.hashCode());
+        result = prime * result + (week == null ? 0 : week.hashCode());
         return result;
     }
 
@@ -56,15 +56,36 @@ public class Minutes
             return false;
         }
         Minutes other = (Minutes) obj;
-        if (day != other.day)
+        if (day == null)
+        {
+            if (other.day != null)
+            {
+                return false;
+            }
+        }
+        else if (!day.equals(other.day))
         {
             return false;
         }
-        if (month != other.month)
+        if (month == null)
+        {
+            if (other.month != null)
+            {
+                return false;
+            }
+        }
+        else if (!month.equals(other.month))
         {
             return false;
         }
-        if (week != other.week)
+        if (week == null)
+        {
+            if (other.week != null)
+            {
+                return false;
+            }
+        }
+        else if (!week.equals(other.week))
         {
             return false;
         }
@@ -79,37 +100,37 @@ public class Minutes
     }
 
 
-    public long getMonth()
+    public Duration getMonth()
     {
         return month;
     }
 
 
-    public void setMonth(long month)
+    public void setMonth(Duration month)
     {
         this.month = month;
     }
 
 
-    public long getWeek()
+    public Duration getWeek()
     {
         return week;
     }
 
 
-    public void setWeek(long week)
+    public void setWeek(Duration week)
     {
         this.week = week;
     }
 
 
-    public long getDay()
+    public Duration getDay()
     {
         return day;
     }
 
 
-    public void setDay(long day)
+    public void setDay(Duration day)
     {
         this.day = day;
     }

@@ -18,9 +18,9 @@ import name.pehl.tire.client.ui.Html5TextBox;
 import name.pehl.tire.client.ui.InlineHTMLWithContextMenu;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Duration;
 import name.pehl.tire.shared.model.Project;
 
-import com.google.common.base.Strings;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -71,7 +71,7 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @UiField CalendarLink calendar;
     @UiField(provided = true) SuggestBox activity;
     @UiField(provided = true) SuggestBox project;
-    @UiField Html5TextBox time;
+    @UiField DurationTextBox duration;
     @UiField InlineLabel header;
     @UiField InlineHTMLWithContextMenu previous;
     @UiField InlineHTMLWithContextMenu next;
@@ -144,7 +144,7 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
             text.append(month);
             title.append(month);
         }
-        title.append(" - ").append(FormatUtils.hours(activities.getMinutes())).append(" - ")
+        title.append(" - ").append(FormatUtils.duration(activities.getMinutes())).append(" - ")
                 .append(FormatUtils.dateDuration(activities.getStart(), activities.getEnd()));
         header.setText(text.toString());
         header.setTitle(title.toString());
@@ -298,18 +298,17 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     }
 
 
-    @UiHandler("time")
-    void onTimeEntered(ValueChangeEvent<String> event)
+    @UiHandler("duration")
+    void onDurationEntered(ValueChangeEvent<Duration> event)
     {
-        String value = Strings.emptyToNull(event.getValue());
         if (getUiHandlers() != null)
         {
-            getUiHandlers().onTimeEntered(value);
+            getUiHandlers().onDurationEntered(event.getValue());
         }
     }
 
 
-    @UiHandler("time")
+    @UiHandler("duration")
     void onReturnOnTime(KeyUpEvent event)
     {
         if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)

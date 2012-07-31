@@ -193,14 +193,14 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
-    public long getMinutes()
+    public Duration getMinutes()
     {
         long minutes = 0;
         for (Activity activity : this)
         {
-            minutes += activity.getMinutes();
+            minutes += activity.getMinutes().getTotalMinutes();
         }
-        return minutes;
+        return new Duration(minutes);
     }
 
 

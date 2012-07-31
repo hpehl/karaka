@@ -1,6 +1,7 @@
-package name.pehl.tire.shared.model;
+package name.pehl.tire.client.activity.model;
 
 import name.pehl.piriti.converter.client.AbstractConverter;
+import name.pehl.tire.shared.model.Duration;
 
 public class DurationConverter extends AbstractConverter<Duration>
 {
