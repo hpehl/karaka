@@ -1,19 +1,17 @@
 package name.pehl.tire.shared.model;
 
-import name.pehl.tire.TestData;
-
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.google.common.testing.EqualsTester;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import name.pehl.tire.TestData;
+
+import org.joda.time.DateTime;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.google.common.testing.EqualsTester;
 
 /**
  * TODO Replace current date/times with fixed ones?
@@ -47,8 +45,8 @@ public class ActivityTest
         assertEquals("0815", cut.getId());
         assertNotNull(cut.getStart());
         assertNull(cut.getEnd());
-        assertEquals(0, cut.getMinutes());
-        assertEquals(0, cut.getPause());
+        assertEquals(Duration.ZERO, cut.getDuration());
+        assertEquals(Duration.ZERO, cut.getPause());
         assertTrue(cut.isStopped());
         assertFalse(cut.isRunning());
         assertNull(cut.getProject());
@@ -87,13 +85,13 @@ public class ActivityTest
         DateTime now = new DateTime();
         DateTime m1 = now.plusMinutes(1);
         Time plusOneMinute = td.newTime(m1);
-        long oneMinuteInMillis = Duration.standardMinutes(1).getMillis();
+        long oneMinuteInMillis = org.joda.time.Duration.standardMinutes(1).getMillis();
 
         Activity blank = td.newActivity(now, null);
         Activity cut = blank.plus(oneMinuteInMillis);
         assertEquals(plusOneMinute, cut.getStart());
         assertNotNull(cut.getEnd());
-        assertEquals(0, cut.getPause());
+        assertEquals(Duration.ZERO, cut.getPause());
         assertTrue(cut.isStopped());
         assertFalse(cut.isRunning());
         assertNull(cut.getProject());
@@ -107,7 +105,7 @@ public class ActivityTest
     {
         Activity blank = td.newActivity();
         assertTrue(blank.isToday());
-        assertFalse(blank.plus(Duration.standardDays(1).getMillis()).isToday());
+        assertFalse(blank.plus(org.joda.time.Duration.standardDays(1).getMillis()).isToday());
     }
 
 
@@ -120,7 +118,7 @@ public class ActivityTest
         assertTrue(cut.isRunning());
         assertNotNull(cut.getStart());
         assertNotNull(cut.getEnd());
-        assertEquals(0, cut.getPause());
+        assertEquals(Duration.ZERO, cut.getPause());
     }
 
 
@@ -133,7 +131,7 @@ public class ActivityTest
         assertFalse(cut.isRunning());
         assertNotNull(cut.getStart());
         assertNotNull(cut.getEnd());
-        assertEquals(0, cut.getPause());
+        assertEquals(Duration.ZERO, cut.getPause());
     }
 
 
@@ -146,7 +144,7 @@ public class ActivityTest
         assertTrue(cut.isRunning());
         assertNotNull(cut.getStart());
         assertNotNull(cut.getEnd());
-        assertEquals(0, cut.getPause());
+        assertEquals(Duration.ZERO, cut.getPause());
 
         cut = td.newActivity();
         Time plusOneMinute = td.newTime(new DateTime().plusMinutes(1));
@@ -157,7 +155,7 @@ public class ActivityTest
         assertTrue(cut.isRunning());
         assertNotNull(cut.getStart());
         assertNotNull(cut.getEnd());
-        assertEquals(0, cut.getPause());
+        assertEquals(Duration.ZERO, cut.getPause());
 
         // TODO Test resume with pause
     }
@@ -173,7 +171,7 @@ public class ActivityTest
         assertTrue(cut.isRunning());
         assertNotNull(cut.getStart());
         assertNotNull(cut.getEnd());
-        assertEquals(0, cut.getPause());
+        assertEquals(Duration.ZERO, cut.getPause());
 
         cut = td.newActivity();
         cut.tick();
@@ -194,8 +192,8 @@ public class ActivityTest
     {
         assertNotNull(activity.getStart());
         assertNull(activity.getEnd());
-        assertEquals(0, activity.getMinutes());
-        assertEquals(0, activity.getPause());
+        assertEquals(Duration.ZERO, activity.getDuration());
+        assertEquals(Duration.ZERO, activity.getPause());
         assertTrue(activity.isStopped());
         assertFalse(activity.isRunning());
         assertFalse(activity.isBillable());

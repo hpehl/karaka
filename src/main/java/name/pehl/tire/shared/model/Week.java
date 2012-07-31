@@ -217,7 +217,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
         long minutes = 0;
         for (Day day : this)
         {
-            minutes += day.getMinutes().getTotalMinutes();
+            minutes += day.getDuration().getTotalMinutes();
         }
         return new Duration(minutes);
     }

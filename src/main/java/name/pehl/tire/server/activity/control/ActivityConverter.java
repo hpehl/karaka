@@ -56,7 +56,7 @@ public class ActivityConverter extends
         model.setEnd(new name.pehl.tire.shared.model.Time(entity.getEnd().getDateTime().toDate(), entity.getEnd()
                 .getYear(), entity.getEnd().getMonth(), entity.getEnd().getWeek(), entity.getEnd().getDay()));
         model.setPause(new Duration(entity.getPause()));
-        model.setMinutes(new Duration(entity.getMinutes()));
+        model.setDuration(new Duration(entity.getMinutes()));
         model.setBillable(entity.isBillable());
         model.setStatus(entity.getStatus());
 
@@ -132,10 +132,10 @@ public class ActivityConverter extends
         }
         else
         {
-            if (model.isStopped() && model.getStart() != null && !model.getMinutes().isEmpty())
+            if (model.isStopped() && model.getStart() != null && !model.getDuration().isZero())
             {
                 DateTime start = entity.getStart().getDateTime();
-                DateTime end = start.plusMinutes((int) model.getMinutes().getTotalMinutes());
+                DateTime end = start.plusMinutes((int) model.getDuration().getTotalMinutes());
                 entity.setEnd(new name.pehl.tire.server.activity.entity.Time(end.toDate(), settings.getTimeZone()));
             }
             else

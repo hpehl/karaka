@@ -1,5 +1,9 @@
 package name.pehl.tire.shared.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import name.pehl.tire.TestData;
 
 import org.joda.time.DateTime;
@@ -7,11 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.testing.EqualsTester;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class DayTest
 {
@@ -127,6 +126,6 @@ public class DayTest
         cut.add(end);
         assertEquals(start.getStart(), cut.getStart());
         assertEquals(end.getEnd(), cut.getEnd());
-        assertEquals(120, cut.getMinutes());
+        assertEquals(new Duration(120), cut.getDuration());
     }
 }

@@ -11,10 +11,10 @@ public class MinutesTest
     {
         Duration d1 = new Duration(1);
         Duration d2 = new Duration(2);
-        new EqualsTester().addEqualityGroup(new Minutes(), new Minutes())
-                .addEqualityGroup(new Minutes(d1, d1, d1), new Minutes(d1, d1, d1))
-                .addEqualityGroup(new Minutes(d1, d1, d2), new Minutes(d1, d1, d2))
-                .addEqualityGroup(new Minutes(d1, d2, d1), new Minutes(d1, d2, d1))
-                .addEqualityGroup(new Minutes(d2, d1, d1), new Minutes(d2, d1, d1)).testEquals();
+        new EqualsTester().addEqualityGroup(new Durations(), new Durations())
+                .addEqualityGroup(new Durations(d1, d1, d1), new Durations(d1, d1, d1))
+                .addEqualityGroup(new Durations(d1, d1, d2), new Durations(d1, d1, d2))
+                .addEqualityGroup(new Durations(d1, d2, d1), new Durations(d1, d2, d1))
+                .addEqualityGroup(new Durations(d2, d1, d1), new Durations(d2, d1, d1)).testEquals();
     }
 }

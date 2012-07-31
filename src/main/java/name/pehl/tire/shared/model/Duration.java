@@ -17,7 +17,7 @@ import name.pehl.tire.client.activity.model.DurationConverter;
 @XmlJavaTypeAdapter(DurationAdapter.class)
 public class Duration
 {
-    public static final Duration EMPTY = new Duration(0);
+    public static final Duration ZERO = new Duration(0);
 
     private final long hours;
     private final long minutes;
@@ -113,9 +113,9 @@ public class Duration
     }
 
 
-    public boolean isEmpty()
+    public boolean isZero()
     {
-        return this.equals(EMPTY);
+        return this.equals(ZERO);
     }
 
 
@@ -155,7 +155,7 @@ public class Duration
 
     public double getTotalHours()
     {
-        return (hours * 60 + minutes) / 60.0;
+        return getTotalMinutes() / 60.0;
     }
 
 

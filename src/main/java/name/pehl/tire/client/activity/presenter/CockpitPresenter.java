@@ -17,7 +17,7 @@ import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.shared.model.Activity;
-import name.pehl.tire.shared.model.Minutes;
+import name.pehl.tire.shared.model.Durations;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -65,7 +65,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
 {
     public interface MyView extends View, HasUiHandlers<CockpitUiHandlers>
     {
-        void updateMinutes(Minutes minutes);
+        void updateMinutes(Durations minutes);
 
 
         void updateStatus(Activity activity);
@@ -173,7 +173,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                 public void onFailure(Throwable caught)
                 {
                     logger.warning("Cannot load minutes for current month, week and/or day");
-                    getView().updateMinutes(new Minutes());
+                    getView().updateMinutes(new Durations());
                 }
             });
         }

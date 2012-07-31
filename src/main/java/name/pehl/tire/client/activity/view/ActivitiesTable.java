@@ -111,8 +111,8 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
             @Override
             public SafeHtml render(Activity activity)
             {
-                String duration = FormatUtils.duration(activity.getMinutes());
-                if (activity.getPause().isEmpty())
+                String duration = FormatUtils.duration(activity.getDuration());
+                if (activity.getPause().isZero())
                 {
                     return toSafeHtml(duration);
                 }
@@ -133,7 +133,7 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
             {
                 if (currentActivities != null)
                 {
-                    return FormatUtils.duration(currentActivities.getMinutes());
+                    return FormatUtils.duration(currentActivities.getDuration());
                 }
                 return null;
             }

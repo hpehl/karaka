@@ -21,7 +21,7 @@ public final class FormatUtils
     {
         if (SettingsCache.currentSettings().isFormatHoursAsFloatingPointNumber())
         {
-            if (duration.isEmpty())
+            if (duration.isZero())
             {
                 return "0h";
             }
@@ -32,7 +32,7 @@ public final class FormatUtils
         }
         else
         {
-            if (duration.isEmpty())
+            if (duration.isZero())
             {
                 return "00:00";
             }

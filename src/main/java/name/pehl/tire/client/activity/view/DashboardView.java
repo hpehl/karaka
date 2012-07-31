@@ -144,7 +144,7 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
             text.append(month);
             title.append(month);
         }
-        title.append(" - ").append(FormatUtils.duration(activities.getMinutes())).append(" - ")
+        title.append(" - ").append(FormatUtils.duration(activities.getDuration())).append(" - ")
                 .append(FormatUtils.dateDuration(activities.getStart(), activities.getEnd()));
         header.setText(text.toString());
         header.setTitle(title.toString());

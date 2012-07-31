@@ -63,12 +63,12 @@ public class WeekChartWidget extends QuickChartWidget
 
     double hours(Day day)
     {
-        return day.getMinutes().getTotalHours();
+        return day.getDuration().getTotalHours();
     }
 
 
     String tooltip(Day day)
     {
-        return FormatUtils.date(day.activities().first().getStart()) + ": " + FormatUtils.duration(day.getMinutes());
+        return FormatUtils.date(day.activities().first().getStart()) + ": " + FormatUtils.duration(day.getDuration());
     }
 }

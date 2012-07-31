@@ -19,6 +19,6 @@ public class DurationConverter extends AbstractConverter<Duration>
             {
             }
         }
-        return Duration.EMPTY;
+        return Duration.ZERO;
     }
 }

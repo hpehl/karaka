@@ -6,20 +6,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Minutes
+public class Durations
 {
     Duration month;
     Duration week;
     Duration day;
 
 
-    public Minutes()
+    public Durations()
     {
-        this(Duration.EMPTY, Duration.EMPTY, Duration.EMPTY);
+        this(Duration.ZERO, Duration.ZERO, Duration.ZERO);
     }
 
 
-    public Minutes(Duration month, Duration week, Duration day)
+    public Durations(Duration month, Duration week, Duration day)
     {
         super();
         this.month = month;
@@ -51,11 +51,11 @@ public class Minutes
         {
             return false;
         }
-        if (!(obj instanceof Minutes))
+        if (!(obj instanceof Durations))
         {
             return false;
         }
-        Minutes other = (Minutes) obj;
+        Durations other = (Durations) obj;
         if (day == null)
         {
             if (other.day != null)

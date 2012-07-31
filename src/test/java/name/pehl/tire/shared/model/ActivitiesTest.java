@@ -2,7 +2,11 @@ package name.pehl.tire.shared.model;
 
 import static name.pehl.tire.shared.model.TimeUnit.DAY;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import name.pehl.tire.TestData;
 
 import org.joda.time.DateTime;
@@ -375,12 +379,12 @@ public class ActivitiesTest
     {
         // empty
         Activities cut = td.newActivities(WEEK);
-        assertEquals(0, cut.getMinutes());
+        assertEquals(Duration.ZERO, cut.getDuration());
 
         // month, week and day
-        assertEquals(10 * 60, td.month(10).getMinutes());
-        assertEquals(10 * 60, td.week(10).getMinutes());
-        assertEquals(10 * 60, td.day(10).getMinutes());
+        assertEquals(new Duration(10 * 60), td.month(10).getDuration());
+        assertEquals(new Duration(10 * 60), td.week(10).getDuration());
+        assertEquals(new Duration(10 * 60), td.day(10).getDuration());
     }
 
 

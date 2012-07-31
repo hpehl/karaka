@@ -1,6 +1,10 @@
 package name.pehl.tire.shared.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
@@ -38,30 +42,30 @@ public class DurationTest
     public void negativeValues()
     {
         Duration cut = new Duration(-1);
-        assertEquals(Duration.EMPTY, cut);
+        assertEquals(Duration.ZERO, cut);
 
         cut = new Duration(-1, -2);
-        assertEquals(Duration.EMPTY, cut);
+        assertEquals(Duration.ZERO, cut);
     }
 
 
     @Test
-    public void empty()
+    public void zero()
     {
         Duration cut = new Duration(0);
-        assertEquals(Duration.EMPTY, cut);
+        assertEquals(Duration.ZERO, cut);
 
         cut = new Duration(0, 0);
-        assertEquals(Duration.EMPTY, cut);
+        assertEquals(Duration.ZERO, cut);
 
         cut = new Duration(null, null);
-        assertEquals(Duration.EMPTY, cut);
+        assertEquals(Duration.ZERO, cut);
 
         cut = new Duration(new Date(), null);
-        assertEquals(Duration.EMPTY, cut);
+        assertEquals(Duration.ZERO, cut);
 
         cut = new Duration(null, new Date());
-        assertEquals(Duration.EMPTY, cut);
+        assertEquals(Duration.ZERO, cut);
     }
 
 
@@ -93,12 +97,13 @@ public class DurationTest
     void assert222(Duration cut)
     {
         assertNotNull(cut);
-        assertFalse(cut.isEmpty());
-        assertFalse(cut.equals(Duration.EMPTY));
+        assertFalse(cut.isZero());
+        assertFalse(cut.equals(Duration.ZERO));
 
         assertEquals(3, cut.getHours());
         assertEquals(42, cut.getMinutes());
         assertEquals(222, cut.getTotalMinutes());
+        assertEquals(3.7, cut.getTotalHours(), .01);
     }
 
 
@@ -115,11 +120,13 @@ public class DurationTest
         assertEquals(0, cut.getHours());
         assertEquals(44, cut.getMinutes());
         assertEquals(44, cut.getTotalMinutes());
+        assertEquals(0.73, cut.getTotalHours(), .01);
 
         cut = cut.plus(twentytwo);
         assertEquals(1, cut.getHours());
         assertEquals(6, cut.getMinutes());
         assertEquals(66, cut.getTotalMinutes());
+        assertEquals(1.1, cut.getTotalHours(), .01);
     }
 
 
@@ -138,9 +145,10 @@ public class DurationTest
         assertEquals(20, cut.getTotalMinutes());
 
         cut = cut.minus(twentyfour);
-        assertTrue(cut.isEmpty());
+        assertTrue(cut.isZero());
         assertEquals(0, cut.getHours());
         assertEquals(0, cut.getMinutes());
         assertEquals(0, cut.getTotalMinutes());
+        assertEquals(0, cut.getTotalHours(), .01);
     }
 }

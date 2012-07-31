@@ -384,7 +384,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         activity.setProject(project);
 
         // 3. Duration
-        if (enteredDuration.isEmpty())
+        if (enteredDuration.isZero())
         {
             start(activity);
         }
@@ -415,7 +415,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             // the end time is calculated on the server
             activity.setStart(new Time(start));
             activity.setEnd(null);
-            activity.setMinutes(enteredDuration);
+            activity.setDuration(enteredDuration);
             save(activity);
         }
     }

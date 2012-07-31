@@ -16,12 +16,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
  * <li>Invariants:
  * <ul>
  * <li> {@link #getPause()} is never <code>null</code>. An undefined / empty
- * pause value must be expressed using {@link Duration#EMPTY}. Calling
+ * pause value must be expressed using {@link Duration#ZERO}. Calling
  * {@link #setPause(Duration)} with <code>null</code> will throw an
  * {@link IllegalArgumentException}.
- * <li> {@link #getMinutes()} is never <code>null</code>. An undefined / empty
- * minutes value must be expressed using {@link Duration#EMPTY}. Calling
- * {@link #setMinutes(Duration)} with <code>null</code> will throw an
+ * <li> {@link #getDuration()} is never <code>null</code>. An undefined / empty
+ * duration value must be expressed using {@link Duration#ZERO}. Calling
+ * {@link #setDuration(Duration)} with <code>null</code> will throw an
  * {@link IllegalArgumentException}.
  * <li>{@link #getStart()} is never <code>null</code>. Calling
  * {@link #setStart(Time)} with <code>null</code> will throw an
@@ -40,7 +40,7 @@ public class Activity extends DescriptiveModel
     Time start;
     Time end;
     Duration pause;
-    Duration minutes;
+    Duration duration;
     boolean billable;
     Status status;
     Project project;
@@ -64,8 +64,8 @@ public class Activity extends DescriptiveModel
     public Activity(String id, String name)
     {
         super(id, name);
-        this.pause = Duration.EMPTY;
-        this.minutes = Duration.EMPTY;
+        this.pause = Duration.ZERO;
+        this.duration = Duration.ZERO;
         this.status = STOPPED;
         this.tags = new ArrayList<Tag>();
         ensureStart();
@@ -80,7 +80,7 @@ public class Activity extends DescriptiveModel
      * <ul>
      * <li>Id is <code>null</code> i.e. the copy is a transient activity
      * <li>Start is the current time, and end is <code>null</code>
-     * <li>pause and minutes are 0.
+     * <li>pause and duration are 0.
      * <li>status is {@link Status#STOPPED}
      * </ul>
      * 
@@ -195,15 +195,15 @@ public class Activity extends DescriptiveModel
     }
 
 
-    private void calculateMinutes()
+    private void calculateDuration()
     {
         if (end != null)
         {
-            minutes = new Duration(start.getDate(), end.getDate()).minus(pause);
+            duration = new Duration(start.getDate(), end.getDate()).minus(pause);
         }
         else
         {
-            minutes = Duration.EMPTY;
+            duration = Duration.ZERO;
         }
     }
 
@@ -248,7 +248,7 @@ public class Activity extends DescriptiveModel
 
 
     /**
-     * Calls {@link #calculateMinutes()} after assignement.
+     * Calls {@link #calculateDuration()} after assignement.
      * 
      * @param start
      *            must not be null
@@ -262,7 +262,7 @@ public class Activity extends DescriptiveModel
             throw new IllegalArgumentException("Start must not be null!");
         }
         this.start = start;
-        calculateMinutes();
+        calculateDuration();
     }
 
 
@@ -273,14 +273,14 @@ public class Activity extends DescriptiveModel
 
 
     /**
-     * Calls {@link #calculateMinutes()} after assignement.
+     * Calls {@link #calculateDuration()} after assignement.
      * 
      * @param end
      */
     public void setEnd(Time end)
     {
         this.end = end;
-        calculateMinutes();
+        calculateDuration();
     }
 
 
@@ -291,34 +291,34 @@ public class Activity extends DescriptiveModel
 
 
     /**
-     * Calls {@link #calculateMinutes()} after assignement.
+     * Calls {@link #calculateDuration()} after assignement.
      * 
      * @param pause
      */
     public void setPause(Duration pause)
     {
         this.pause = pause;
-        calculateMinutes();
+        calculateDuration();
     }
 
 
-    public Duration getMinutes()
+    public Duration getDuration()
     {
-        return minutes;
+        return duration;
     }
 
 
     /**
-     * Required for JSON (de)serialization - please don't call directly. Minutes
-     * are calculated when calling {@link #setStart(Time)},
+     * Required for JSON (de)serialization - please don't call directly. The
+     * duration are calculated when calling {@link #setStart(Time)},
      * {@link #setEnd(Time)}, {@link #setPause(long)}, {@link #start()},
      * {@link #stop()}, {@link #resume()} and {@link #tick()}.
      * 
-     * @param minutes
+     * @param duration
      */
-    public void setMinutes(Duration minutes)
+    public void setDuration(Duration duration)
     {
-        this.minutes = minutes;
+        this.duration = duration;
     }
 
 

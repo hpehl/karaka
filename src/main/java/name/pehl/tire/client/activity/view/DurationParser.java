@@ -15,7 +15,7 @@ public class DurationParser
 
     public Duration parse(String time) throws ParseException
     {
-        Duration result = Duration.EMPTY;
+        Duration result = Duration.ZERO;
         if (time != null && time.trim().length() != 0)
         {
             if (!REGEXP.test(time))

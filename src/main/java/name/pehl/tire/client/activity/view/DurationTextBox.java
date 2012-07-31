@@ -24,7 +24,7 @@ public class DurationTextBox extends Composite implements HasValue<Duration>, Is
 
     public DurationTextBox()
     {
-        this.currentValue = Duration.EMPTY;
+        this.currentValue = Duration.ZERO;
         this.textBox = new Html5TextBox();
         this.textBox.addValueChangeHandler(this);
         this.durationParser = new DurationParser();

@@ -28,7 +28,7 @@ public class TimeParserTest
     public void nil() throws ParseException
     {
         Duration duration = cut.parse(null);
-        assertEquals(Duration.EMPTY, duration);
+        assertEquals(Duration.ZERO, duration);
     }
 
 
@@ -36,7 +36,7 @@ public class TimeParserTest
     public void empty() throws ParseException
     {
         Duration duration = cut.parse("");
-        assertEquals(Duration.EMPTY, duration);
+        assertEquals(Duration.ZERO, duration);
     }
 
 
@@ -44,7 +44,7 @@ public class TimeParserTest
     public void blank() throws ParseException
     {
         Duration duration = cut.parse("    ");
-        assertEquals(Duration.EMPTY, duration);
+        assertEquals(Duration.ZERO, duration);
     }
 
 

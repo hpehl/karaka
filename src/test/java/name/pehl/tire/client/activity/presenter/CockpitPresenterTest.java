@@ -38,7 +38,7 @@ import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Duration;
-import name.pehl.tire.shared.model.Minutes;
+import name.pehl.tire.shared.model.Durations;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -238,7 +238,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
 
         cut.getMinutesCommand.execute();
 
-        verify(view).updateMinutes(new Minutes());
+        verify(view).updateMinutes(new Durations());
     }
 
 
@@ -247,7 +247,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
     @SuppressWarnings("unchecked")
     void prepareGetMinutes()
     {
-        final GetMinutesResult getMinutesResult = new GetMinutesResult(new Minutes(new Duration(1), new Duration(2),
+        final GetMinutesResult getMinutesResult = new GetMinutesResult(new Durations(new Duration(1), new Duration(2),
                 new Duration(3)));
         Answer<Object> getMinutesAnswer = new Answer<Object>()
         {
@@ -266,7 +266,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
 
     void verifyGetMinutes()
     {
-        verify(view).updateMinutes(new Minutes(new Duration(1), new Duration(2), new Duration(3)));
+        verify(view).updateMinutes(new Durations(new Duration(1), new Duration(2), new Duration(3)));
     }
 
 
