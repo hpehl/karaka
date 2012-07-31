@@ -111,6 +111,34 @@ public class Duration
     }
 
 
+    public boolean isEmpty()
+    {
+        return this.equals(EMPTY);
+    }
+
+
+    public Duration plus(Duration duration)
+    {
+        if (duration != null)
+        {
+            long m = getTotalMinutes() + duration.getTotalMinutes();
+            return new Duration(m);
+        }
+        return this;
+    }
+
+
+    public Duration minus(Duration duration)
+    {
+        if (duration != null)
+        {
+            long m = getTotalMinutes() - duration.getTotalMinutes();
+            return new Duration(m);
+        }
+        return this;
+    }
+
+
     public long getHours()
     {
         return hours;
@@ -126,11 +154,5 @@ public class Duration
     public long getTotalMinutes()
     {
         return hours * 60 + minutes;
-    }
-
-
-    public boolean isEmpty()
-    {
-        return this.equals(EMPTY);
     }
 }
