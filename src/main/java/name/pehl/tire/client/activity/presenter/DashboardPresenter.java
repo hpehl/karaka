@@ -3,12 +3,7 @@ package name.pehl.tire.client.activity.presenter;
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 import static name.pehl.tire.client.NameTokens.dashboard;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.CHANGED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.*;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
@@ -384,7 +379,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         activity.setProject(project);
 
         // 3. Duration
-        if (enteredDuration.isZero())
+        if (enteredDuration == null || enteredDuration.isZero())
         {
             start(activity);
         }
@@ -635,6 +630,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             }
             else
             {
+                // TODO Change logic for latestActivity. It is not the last
+                // activity from activities, but rather the last started
+                // activity!
                 Activity latestActivity = activities != null ? activities.activities().first() : null;
                 if (activity.isToday() && activity.equals(latestActivity))
                 {

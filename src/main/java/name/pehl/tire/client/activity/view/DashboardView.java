@@ -309,7 +309,7 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
 
 
     @UiHandler("duration")
-    void onReturnOnTime(KeyUpEvent event)
+    void onReturnOnDuration(KeyUpEvent event)
     {
         if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)
         {
