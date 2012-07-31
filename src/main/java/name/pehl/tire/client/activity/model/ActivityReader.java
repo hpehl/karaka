@@ -7,7 +7,7 @@ import name.pehl.tire.shared.model.Activity;
 
 @Mappings({@Mapping(value = "start", setter = ActivityStartSetter.class),
         @Mapping(value = "pause", convert = DurationConverter.class),
-        @Mapping(value = "minutes", convert = DurationConverter.class)})
+        @Mapping(value = "duration", convert = DurationConverter.class)})
 public interface ActivityReader extends JsonReader<Activity>
 {
 }

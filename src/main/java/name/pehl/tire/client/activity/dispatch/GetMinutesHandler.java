@@ -1,7 +1,7 @@
 package name.pehl.tire.client.activity.dispatch;
 
 import name.pehl.piriti.json.client.JsonReader;
-import name.pehl.tire.client.activity.model.MinutesReader;
+import name.pehl.tire.client.activity.model.DurationsReader;
 import name.pehl.tire.client.dispatch.TireActionHandler;
 import name.pehl.tire.client.dispatch.TireJsonCallback;
 import name.pehl.tire.client.rest.UrlBuilder;
@@ -22,12 +22,12 @@ import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
  */
 public class GetMinutesHandler extends TireActionHandler<GetMinutesAction, GetMinutesResult>
 {
-    private final MinutesReader minutesReader;
+    private final DurationsReader minutesReader;
 
 
     @Inject
     protected GetMinutesHandler(@SecurityCookie String securityCookieName,
-            SecurityCookieAccessor securityCookieAccessor, MinutesReader minutesReader)
+            SecurityCookieAccessor securityCookieAccessor, DurationsReader minutesReader)
     {
         super(GetMinutesAction.class, securityCookieName, securityCookieAccessor);
         this.minutesReader = minutesReader;

@@ -8,6 +8,6 @@ import name.pehl.tire.shared.model.Durations;
 @Mappings({@Mapping(value = "month", convert = DurationConverter.class),
         @Mapping(value = "week", convert = DurationConverter.class),
         @Mapping(value = "day", convert = DurationConverter.class)})
-public interface MinutesReader extends JsonReader<Durations>
+public interface DurationsReader extends JsonReader<Durations>
 {
 }

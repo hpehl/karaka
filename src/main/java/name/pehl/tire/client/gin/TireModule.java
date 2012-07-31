@@ -18,7 +18,7 @@ import name.pehl.tire.client.activity.model.ActivitiesReader;
 import name.pehl.tire.client.activity.model.ActivityReader;
 import name.pehl.tire.client.activity.model.ActivityWriter;
 import name.pehl.tire.client.activity.model.DayReader;
-import name.pehl.tire.client.activity.model.MinutesReader;
+import name.pehl.tire.client.activity.model.DurationsReader;
 import name.pehl.tire.client.activity.model.TimeReader;
 import name.pehl.tire.client.activity.model.TimeWriter;
 import name.pehl.tire.client.activity.model.WeekReader;
@@ -114,7 +114,7 @@ public class TireModule extends AbstractPresenterModule
         bind(ActivityReader.class).asEagerSingleton();
         bind(ActivityWriter.class).asEagerSingleton();
         bind(DayReader.class).asEagerSingleton();
-        bind(MinutesReader.class).asEagerSingleton();
+        bind(DurationsReader.class).asEagerSingleton();
         bind(ProjectReader.class).asEagerSingleton();
         bind(ProjectWriter.class).asEagerSingleton();
         bind(SettingsReader.class).asEagerSingleton();
