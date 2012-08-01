@@ -79,13 +79,7 @@
 			width: 15%;
 		}
 		
-		h1.noBorder {
-			line-height: 32px;
-			margin-bottom: 3px;
-			border-bottom: none !important;
-		}
-		
-		h1.noBorder>span {
+		h1>span {
 			cursor: help;
 		}
 		
@@ -140,7 +134,7 @@
 		</g:north>
 		<g:north size="52">
 			<g:HTMLPanel>
-				<h1 class="{style.noBorder}">
+				<h1>
 					<g:InlineLabel ui:field="header">No Activities</g:InlineLabel>
 					<div class="{style.navigation}">
 						<tui:InlineHTMLWithContextMenu

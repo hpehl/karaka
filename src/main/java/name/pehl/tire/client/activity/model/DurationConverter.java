@@ -8,7 +8,7 @@ public class DurationConverter extends AbstractConverter<Duration>
     @Override
     public Duration convert(String value)
     {
-        if (value != null && value.length() != 0)
+        if (isValid(value))
         {
             try
             {
@@ -17,6 +17,7 @@ public class DurationConverter extends AbstractConverter<Duration>
             }
             catch (NumberFormatException e)
             {
+                return Duration.ZERO;
             }
         }
         return Duration.ZERO;
