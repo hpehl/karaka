@@ -1,9 +1,15 @@
 package name.pehl.tire.client.activity.presenter;
 
 import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Level.WARNING;
 import static name.pehl.tire.client.NameTokens.dashboard;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.*;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.CHANGED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
@@ -89,6 +95,15 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
  * <li>{@linkplain SaveActivityAction}
  * <li>{@linkplain DeleteActivityAction}
  * </ul>
+ * <p>
+ * TODO: Refactor: Split this mega-presenter into several nested presenters:
+ * <ul>
+ * <li>NewActivityPresenter
+ * <li>ActivityNavigationPresenter
+ * <li>ActivityListPresenter
+ * </ul>
+ * Plus one controller-POJO which listens to events and controls the lifecycle
+ * of the activities
  * 
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-23 13:52:44 +0100 (Do, 23. Dez 2010) $ $Revision: 192
@@ -364,6 +379,11 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         else if (selectedActivity != null)
         {
             activity = selectedActivity;
+        }
+        else
+        {
+            ShowMessageEvent.fire(this, new Message(SEVERE, "Please specify a name for the activity", true));
+            return;
         }
 
         // 2. Project

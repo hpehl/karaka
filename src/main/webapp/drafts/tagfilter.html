@@ -19,12 +19,8 @@ div.main {
 	-webkit-box-shadow: 2px 2px 2px #62635e;
 }
 
-.header {
-	float: left;
-}
-
-h1.header {
-    margin-bottom: 10px;
+div.main h1 {
+    float: left;
 }
 
 .tagfilter {
@@ -36,14 +32,14 @@ h1.header {
 	border-bottom-left-radius: 40px;
 	border: 1px #d1c24f solid;
 	background-color: #fff8ba;
-	margin: 7px 5px;
+	margin: 8px 5px;
 	padding: 4px 4px 4px 8px;
 	cursor: pointer;
 	font-weight: 500;
-	
+    float: left;
 }
 
-.tagfilter:hover {
+.selected, .tagfilter:hover {
 	border-color: #3cc5de;
 	background-color: #b8f5ff;
 }
@@ -57,17 +53,20 @@ p.withTag {
 <body>
 	<div class="main">
 		<div>
-			<h1 class="header">CW 31 / 2012</h1>
-			<div class="header tagfilter">
+			<h1>CW 31 / 2012</h1>
+            <div class="tagfilter">
+                all
+            </div>
+			<div class="tagfilter">
 				resarch <span class="count">(3)</span>
 			</div>
-			<div class="header tagfilter">
+			<div class="tagfilter selected">
 				qa <span class="count">(1)</span>
 			</div>
-			<div class="header tagfilter">
+			<div class="tagfilter">
 				bugfixing <span class="count">(2)</span>
 			</div>
-			<div class="header tagfilter">
+			<div class="tagfilter">
 				test <span class="count">(5)</span>
 			</div>
 		</div>
