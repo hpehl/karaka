@@ -80,6 +80,7 @@
 		}
 		
 		.header {
+            float: left;
 			font-size: 133%;
 			font-style: italic;
 			font-weight: 500;
