@@ -82,6 +82,7 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
     DeleteActivityHandler deleteActivityHandler;
     DashboardPresenter.MyView view;
     DashboardPresenter.MyProxy proxy;
+    TagFilterPresenter tagFilterPresenter;
     SelectMonthPresenter selectMonthPresenter;
     SelectWeekPresenter selectWeekPresenter;
     EditActivityPresenter editActivityPresenter;
@@ -105,12 +106,14 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
         addEvents(this, ShowMessageEvent.getType(), ActivitiesLoadedEvent.getType(), ActivityChangedEvent.getType());
         view = mock(DashboardPresenter.MyView.class);
         proxy = mock(DashboardPresenter.MyProxy.class);
+        tagFilterPresenter = mock(TagFilterPresenter.class);
         selectMonthPresenter = mock(SelectMonthPresenter.class);
         selectWeekPresenter = mock(SelectWeekPresenter.class);
         editActivityPresenter = mock(EditActivityPresenter.class);
         tickCommand = mock(TickCommand.class);
-        cut = new DashboardPresenter(eventBus, view, proxy, selectMonthPresenter, selectWeekPresenter,
-                editActivityPresenter, newDispatcher(actionHandlerMappings), placeManager, scheduler);
+        cut = new DashboardPresenter(eventBus, view, proxy, tagFilterPresenter, selectMonthPresenter,
+                selectWeekPresenter, editActivityPresenter, newDispatcher(actionHandlerMappings), placeManager,
+                scheduler);
         cut.tickCommand = tickCommand;
     }
 

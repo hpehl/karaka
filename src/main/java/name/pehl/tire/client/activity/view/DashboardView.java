@@ -16,6 +16,7 @@ import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.client.ui.Html5TextBox;
 import name.pehl.tire.client.ui.InlineHTMLWithContextMenu;
+import name.pehl.tire.client.ui.UiUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Duration;
@@ -32,6 +33,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
@@ -73,6 +75,7 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     @UiField(provided = true) SuggestBox project;
     @UiField DurationTextBox duration;
     @UiField InlineLabel header;
+    @UiField HasOneWidget tagFilterPanel;
     @UiField InlineHTMLWithContextMenu previous;
     @UiField InlineHTMLWithContextMenu next;
     @UiField InlineHTMLWithContextMenu month;
@@ -120,6 +123,20 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     {
         super.setUiHandlers(uiHandlers);
         activityOracle.setUiHandlers(uiHandlers);
+    }
+
+
+    @Override
+    public void setInSlot(Object slot, Widget content)
+    {
+        if (slot == DashboardPresenter.SLOT_TagFilter)
+        {
+            UiUtils.setContent(tagFilterPanel, content);
+        }
+        else
+        {
+            super.setInSlot(slot, content);
+        }
     }
 
 

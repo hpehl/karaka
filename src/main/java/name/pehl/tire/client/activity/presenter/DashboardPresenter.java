@@ -100,10 +100,14 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
  * <ul>
  * <li>NewActivityPresenter
  * <li>ActivityNavigationPresenter
+ * <ul>
+ * <li>TagfilterPresenter
+ * </ul>
  * <li>ActivityListPresenter
  * </ul>
- * Plus one controller-POJO which listens to events and controls the lifecycle
- * of the activities
+ * <p>
+ * Plus one POJO which listens to all the events, controls the lifecycle of the
+ * activities and reports about changes with other events.
  * 
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-23 13:52:44 +0100 (Do, 23. Dez 2010) $ $Revision: 192
@@ -133,9 +137,15 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
+    /**
+     * Constant for the static tagfilter slot.
+     */
+    public static final Object SLOT_TagFilter = new Object();
+
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
     final PlaceManager placeManager;
+    final TagFilterPresenter tagFilterPresenter;
     final SelectMonthPresenter selectMonthPresenter;
     final SelectWeekPresenter selectWeekPresenter;
     final EditActivityPresenter editActivityPresenter;
@@ -189,11 +199,12 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     @Inject
     public DashboardPresenter(EventBus eventBus, MyView view, MyProxy proxy,
-            final SelectMonthPresenter selectMonthPresenter, final SelectWeekPresenter selectWeekPresenter,
-            final EditActivityPresenter editActivityPresenter, final DispatchAsync dispatcher,
-            final PlaceManager placeManager, final Scheduler scheduler)
+            final TagFilterPresenter tagFilterPresenter, final SelectMonthPresenter selectMonthPresenter,
+            final SelectWeekPresenter selectWeekPresenter, final EditActivityPresenter editActivityPresenter,
+            final DispatchAsync dispatcher, final PlaceManager placeManager, final Scheduler scheduler)
     {
         super(eventBus, view, proxy);
+        this.tagFilterPresenter = tagFilterPresenter;
         this.selectMonthPresenter = selectMonthPresenter;
         this.selectWeekPresenter = selectWeekPresenter;
         this.editActivityPresenter = editActivityPresenter;
@@ -213,13 +224,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     // ---------------------------------------------------- presenter lifecycle
 
-    @Override
-    protected void revealInParent()
-    {
-        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
-    }
-
-
     /**
      * Turns the parameters in the place request into an
      * {@link ActivitiesRequest} instance and calls {@link GetActivitiesAction}.
@@ -236,6 +240,29 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         logger.fine(message);
         ShowMessageEvent.fire(this, new Message(INFO, message, false));
         scheduler.scheduleDeferred(new GetActivitiesCommand(activitiesRequest));
+    }
+
+
+    @Override
+    protected void revealInParent()
+    {
+        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
+    }
+
+
+    @Override
+    protected void onReveal()
+    {
+        super.onReveal();
+        setInSlot(SLOT_TagFilter, tagFilterPresenter);
+    }
+
+
+    @Override
+    protected void onHide()
+    {
+        super.onHide();
+        removeFromSlot(SLOT_TagFilter, tagFilterPresenter);
     }
 
 

@@ -12,9 +12,9 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.InlineHyperlink;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -42,7 +42,7 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
     @UiField InlineHyperlink settings;
     @UiField Anchor logout;
     @UiField SpanElement username;
-    @UiField SimplePanel messagePanel;
+    @UiField HasOneWidget messagePanel;
 
 
     @Inject
@@ -70,6 +70,10 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
         if (slot == NavigationPresenter.SLOT_Message)
         {
             UiUtils.setContent(messagePanel, content);
+        }
+        else
+        {
+            super.setInSlot(slot, content);
         }
     }
 

@@ -63,9 +63,9 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
      */
     public static final Object SLOT_QuickChart = new Object();
 
-    private final NavigationPresenter navigationPresenter;
-    private final CockpitPresenter cockpitPresenter;
-    private final QuickChartPresenter quickChartPresenter;
+    final NavigationPresenter navigationPresenter;
+    final CockpitPresenter cockpitPresenter;
+    final QuickChartPresenter quickChartPresenter;
 
 
     @Inject

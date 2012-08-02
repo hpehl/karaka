@@ -1,5 +1,6 @@
 package name.pehl.tire.client.ui;
 
+import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
@@ -32,6 +33,15 @@ public final class UiUtils
             {
                 container.add(content);
             }
+        }
+    }
+
+
+    public static void setContent(HasOneWidget container, Widget content)
+    {
+        if (container != null && content != null)
+        {
+            container.setWidget(content);
         }
     }
 
