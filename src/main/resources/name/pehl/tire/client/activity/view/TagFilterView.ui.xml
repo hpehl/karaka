@@ -2,45 +2,37 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
-	<ui:style>
-		.tagfilter {
-			-webkit-border-top-left-radius: 40px;
-			-webkit-border-bottom-left-radius: 40px;
-			-moz-border-radius-topleft: 40px;
-			-moz-border-radius-bottomleft: 40px;
-			border-top-left-radius: 40px;
-			border-bottom-left-radius: 40px;
-			border: 1px #d1c24f solid;
-			background-color: #fff8ba;
-			margin: 0 5px;
-			padding: 4px 4px 4px 8px;
-			cursor: pointer;
-			font-size: 11pt;
-			font-weight: 500;
-			float: left;
-			opacity: .5;
-		}
-		
-		.selected,.tagfilter:hover {
-	       opacity: 1;
-		}
-	</ui:style>
+	<ui:style
+		type="name.pehl.tire.client.activity.view.TagFilterView.TagFilterStyle">
+			ul.tagfilter {
+				display: inline;
+				float: left;
+			}
+			
+			ul.tagfilter li {
+				-webkit-border-top-left-radius: 40px;
+				-webkit-border-bottom-left-radius: 40px;
+				-moz-border-radius-topleft: 40px;
+				-moz-border-radius-bottomleft: 40px;
+				border-top-left-radius: 40px;
+				border-bottom-left-radius: 40px;
+				border: 1px #d1c24f solid;
+				background-color: #fff8ba;
+				margin: 0 5px;
+				padding: 4px 4px 4px 8px;
+				cursor: pointer;
+				font-size: 11pt;
+				font-weight: 500;
+				float: left;
+				opacity: .5;
+			}
+			
+			ul.tagfilter li:hover,.selected {
+				opacity: 1;
+			}
+		</ui:style>
 
 	<g:HTMLPanel>
-		<div class="{style.tagfilter}">
-			all
-		</div>
-		<div class="{style.tagfilter}">
-			resarch (3)
-		</div>
-		<div class="{style.tagfilter} {style.selected}">
-			qa (1)
-		</div>
-		<div class="{style.tagfilter}">
-			bugfixing (2)
-		</div>
-		<div class="{style.tagfilter}">
-			test (5)
-		</div>
+		<ul class="{style.tagfilter}" ui:field="list" />
 	</g:HTMLPanel>
 </ui:UiBinder> 

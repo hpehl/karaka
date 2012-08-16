@@ -19,11 +19,23 @@ div.main {
 	-webkit-box-shadow: 2px 2px 2px #62635e;
 }
 
-div.main h1 {
-    float: left;
+.header {
+	float: left;
+	font-size: 133%;
+	font-style: italic;
+	font-weight: 500;
+	text-transform: capitalize;
+	margin: 15px 10px;
+	cursor: help;
 }
 
-.tagfilter {
+ul {
+	display: inline;
+	float: left;
+	margin: 14px 10px;
+}
+
+li {
 	-webkit-border-top-left-radius: 40px;
 	-webkit-border-bottom-left-radius: 40px;
 	-moz-border-radius-topleft: 40px;
@@ -32,16 +44,17 @@ div.main h1 {
 	border-bottom-left-radius: 40px;
 	border: 1px #d1c24f solid;
 	background-color: #fff8ba;
-	margin: 8px 5px;
+	margin: 0 5px;
 	padding: 4px 4px 4px 8px;
 	cursor: pointer;
+	font-size: 11pt;
 	font-weight: 500;
-    float: left;
+	float: left;
+	opacity: .5;
 }
 
-.selected, .tagfilter:hover {
-	border-color: #3cc5de;
-	background-color: #b8f5ff;
+li:hover, li.selected {
+	opacity: 1;
 }
 
 p.withTag {
@@ -53,22 +66,14 @@ p.withTag {
 <body>
 	<div class="main">
 		<div>
-			<h1>CW 31 / 2012</h1>
-            <div class="tagfilter">
-                all
-            </div>
-			<div class="tagfilter">
-				resarch <span class="count">(3)</span>
-			</div>
-			<div class="tagfilter selected">
-				qa <span class="count">(1)</span>
-			</div>
-			<div class="tagfilter">
-				bugfixing <span class="count">(2)</span>
-			</div>
-			<div class="tagfilter">
-				test <span class="count">(5)</span>
-			</div>
+			<span class="header">CW 31 / 2012</span>
+			<ul>
+				<li>all</li>
+				<li>resarch (3)</li>
+				<li class="selected">qa (1)</li>
+				<li>bugfixing (2)</li>
+				<li>test (5)</li>
+			</ul>
 		</div>
 		<p class="withTag">
 			Lorem ipsum dolor sit

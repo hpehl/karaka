@@ -41,7 +41,7 @@
     <properties>
         <gae.version>1.7.0</gae.version>
         <gin.version>1.5.0</gin.version>
-        <guava.version>12.0</guava.version>
+        <guava.version>13.0</guava.version>
         <gwt.version>2.4.0</gwt.version>
         <gwt.plugin.version>2.4.0</gwt.plugin.version>
         <gwtp.version>0.7</gwtp.version>

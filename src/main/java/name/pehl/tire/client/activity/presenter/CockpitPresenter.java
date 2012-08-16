@@ -1,5 +1,8 @@
 package name.pehl.tire.client.activity.presenter;
 
+import static java.util.logging.Level.WARNING;
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
+
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.dispatch.GetMinutesAction;
@@ -27,9 +30,6 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
-
-import static java.util.logging.Level.WARNING;
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
 
 /**
  * <p>
@@ -116,6 +116,9 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         }
         else
         {
+            // TODO Refactoring: The currentActivity might be chnaged in
+            // EditActivityPresenter. When sending this.currentActivity these
+            // changes will be overwritten!
             ActivityActionEvent.fire(this, currentActivity, START_STOP);
         }
     }
