@@ -137,15 +137,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
-    /**
-     * Constant for the static tagfilter slot.
-     */
-    public static final Object SLOT_TagFilter = new Object();
-
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
     final PlaceManager placeManager;
-    final TagFilterPresenter tagFilterPresenter;
     final SelectMonthPresenter selectMonthPresenter;
     final SelectWeekPresenter selectWeekPresenter;
     final EditActivityPresenter editActivityPresenter;
@@ -199,12 +193,11 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     @Inject
     public DashboardPresenter(EventBus eventBus, MyView view, MyProxy proxy,
-            final TagFilterPresenter tagFilterPresenter, final SelectMonthPresenter selectMonthPresenter,
-            final SelectWeekPresenter selectWeekPresenter, final EditActivityPresenter editActivityPresenter,
-            final DispatchAsync dispatcher, final PlaceManager placeManager, final Scheduler scheduler)
+            final SelectMonthPresenter selectMonthPresenter, final SelectWeekPresenter selectWeekPresenter,
+            final EditActivityPresenter editActivityPresenter, final DispatchAsync dispatcher,
+            final PlaceManager placeManager, final Scheduler scheduler)
     {
         super(eventBus, view, proxy);
-        this.tagFilterPresenter = tagFilterPresenter;
         this.selectMonthPresenter = selectMonthPresenter;
         this.selectWeekPresenter = selectWeekPresenter;
         this.editActivityPresenter = editActivityPresenter;
@@ -247,22 +240,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     protected void revealInParent()
     {
         RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
-    }
-
-
-    @Override
-    protected void onReveal()
-    {
-        super.onReveal();
-        setInSlot(SLOT_TagFilter, tagFilterPresenter);
-    }
-
-
-    @Override
-    protected void onHide()
-    {
-        super.onHide();
-        removeFromSlot(SLOT_TagFilter, tagFilterPresenter);
     }
 
 

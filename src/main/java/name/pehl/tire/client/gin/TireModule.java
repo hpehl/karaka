@@ -31,14 +31,12 @@ import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
 import name.pehl.tire.client.activity.presenter.SelectMonthPresenter;
 import name.pehl.tire.client.activity.presenter.SelectTimeUnitPresenter;
 import name.pehl.tire.client.activity.presenter.SelectWeekPresenter;
-import name.pehl.tire.client.activity.presenter.TagFilterPresenter;
 import name.pehl.tire.client.activity.view.ActivitiesTableResources;
 import name.pehl.tire.client.activity.view.CockpitView;
 import name.pehl.tire.client.activity.view.DashboardView;
 import name.pehl.tire.client.activity.view.EditActivityView;
 import name.pehl.tire.client.activity.view.QuickChartView;
 import name.pehl.tire.client.activity.view.SelectTimeUnitView;
-import name.pehl.tire.client.activity.view.TagFilterView;
 import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.application.ApplicationView;
 import name.pehl.tire.client.application.MessagePresenter;
@@ -139,7 +137,6 @@ public class TireModule extends AbstractPresenterModule
         bindPresenterWidget(MessagePresenter.class, MessagePresenter.MyView.class, MessageView.class);
         bindPresenterWidget(NavigationPresenter.class, NavigationPresenter.MyView.class, NavigationView.class);
         bindPresenterWidget(QuickChartPresenter.class, QuickChartPresenter.MyView.class, QuickChartView.class);
-        bindPresenterWidget(TagFilterPresenter.class, TagFilterPresenter.MyView.class, TagFilterView.class);
 
         // PresenterWidgets with shared views (a-z)
         bind(SelectMonthPresenter.class);

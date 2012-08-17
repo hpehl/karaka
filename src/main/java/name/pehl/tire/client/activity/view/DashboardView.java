@@ -16,7 +16,6 @@ import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.client.ui.Html5TextBox;
 import name.pehl.tire.client.ui.InlineHTMLWithContextMenu;
-import name.pehl.tire.client.ui.UiUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Duration;
@@ -123,20 +122,6 @@ public class DashboardView extends ViewWithUiHandlers<DashboardUiHandlers> imple
     {
         super.setUiHandlers(uiHandlers);
         activityOracle.setUiHandlers(uiHandlers);
-    }
-
-
-    @Override
-    public void setInSlot(Object slot, Widget content)
-    {
-        if (slot == DashboardPresenter.SLOT_TagFilter)
-        {
-            UiUtils.setContent(tagFilterPanel, content);
-        }
-        else
-        {
-            super.setInSlot(slot, content);
-        }
     }
 
 

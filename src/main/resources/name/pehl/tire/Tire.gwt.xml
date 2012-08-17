@@ -19,10 +19,10 @@
 
     <!-- RestyGWT -->
     <inherits name="org.fusesource.restygwt.RestyGWT" />
-    
+
     <!-- Highcharts -->
-    <inherits name="org.moxieapps.gwt.highcharts.Highcharts"/>
-    
+    <inherits name="org.moxieapps.gwt.highcharts.Highcharts" />
+
     <!-- name.pehl -->
     <inherits name="name.pehl.piriti.json.JSON" />
 
@@ -32,6 +32,11 @@
         <exclude name="**/*Test.java" />
     </source>
     <source path="shared" />
+
+    <!-- Super Dev Mode -->
+    <add-linker name="xsiframe" />
+    <set-configuration-property name="devModeRedirectEnabled" value="true" />
+    <set-configuration-property name='xsiframe.failIfScriptTag' value="false"/>
 
     <!-- Logging -->
     <set-property name="gwt.logging.logLevel" value="INFO" />

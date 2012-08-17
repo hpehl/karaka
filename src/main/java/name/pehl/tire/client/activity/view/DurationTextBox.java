@@ -99,6 +99,7 @@ public class DurationTextBox extends Composite implements HasValue<Duration>, Is
         {
             Duration d = durationParser.parse(event.getValue());
             currentValue = d;
+            ValueChangeEvent.fire(this, currentValue);
         }
         catch (ParseException e)
         {
