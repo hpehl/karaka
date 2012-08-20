@@ -7,7 +7,7 @@
     <parent>
         <groupId>name.pehl</groupId>
         <artifactId>superpom</artifactId>
-        <version>19</version>
+        <version>20</version>
     </parent>
 
 
@@ -40,6 +40,7 @@
 
     <properties>
         <gae.version>1.7.0</gae.version>
+        <gae.plugin.version>0.9.4</gae.plugin.version>
         <gin.version>1.5.0</gin.version>
         <guava.version>13.0</guava.version>
         <gwt.version>2.5.0-rc1</gwt.version>
@@ -51,7 +52,6 @@
         <objectify.version>3.1</objectify.version>
         <piriti.version>0.9-SNAPSHOT</piriti.version>
         <powermock.version>1.4.12</powermock.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <resteasy.version>2.3.4.Final</resteasy.version>
         <slf4j.version>1.6.4</slf4j.version>
         <totoe.version>0.5-SNAPSHOT</totoe.version>
@@ -315,52 +315,12 @@
                 <plugin>
                     <groupId>net.kindleit</groupId>
                     <artifactId>maven-gae-plugin</artifactId>
-                    <version>0.9.4</version>
+                    <version>${gae.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.bsc.maven</groupId>
                     <artifactId>maven-processor-plugin</artifactId>
                     <version>2.0.5</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.codehaus.mojo</groupId>
-                                        <artifactId>gwt-maven-plugin</artifactId>
-                                        <versionRange>[2.4.0,)</versionRange>
-                                        <goals>
-                                            <goal>resources</goal>
-                                            <goal>compile</goal>
-                                            <goal>i18n</goal>
-                                            <goal>generateAsync</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute />
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-war-plugin</artifactId>
-                                        <versionRange>[2.1.1,)</versionRange>
-                                        <goals>
-                                            <goal>exploded</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -372,7 +332,6 @@
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
                     <compilerArgument>-proc:none</compilerArgument>
                 </configuration>
             </plugin>
@@ -431,13 +390,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
