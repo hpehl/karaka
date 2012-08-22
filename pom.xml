@@ -3,7 +3,6 @@
     <!-- $LastChangedBy: harald.pehl $LastChangedRevision: 1418 $ -->
 
 
-    <!-- The super pom contains most of the configuration -->
     <parent>
         <groupId>name.pehl</groupId>
         <artifactId>superpom</artifactId>
@@ -46,7 +45,6 @@
         <gwt.version>2.5.0-rc1</gwt.version>
         <gwt.plugin.version>2.5.0-rc1</gwt.plugin.version>
         <gwtp.version>0.7</gwtp.version>
-        <logback.version>1.0.0</logback.version>
         <objectify.version>3.1</objectify.version>
         <piriti.version>0.9-SNAPSHOT</piriti.version>
         <powermock.version>1.4.12</powermock.version>
@@ -261,11 +259,6 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
 
         <!-- Test -->
         <dependency>
@@ -363,6 +356,7 @@
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
                     <module>name.pehl.tire.Tire</module>
                     <logLevel>INFO</logLevel>
+                    <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
                     <i18nConstantsBundles>
                         <i18nConstantsBundle>
                             name.pehl.tire.client.resources.Constants
