@@ -24,6 +24,7 @@ import name.pehl.tire.client.activity.model.TimeWriter;
 import name.pehl.tire.client.activity.model.WeekReader;
 import name.pehl.tire.client.activity.model.YearReader;
 import name.pehl.tire.client.activity.model.YearsReader;
+import name.pehl.tire.client.activity.presenter.ActivityController;
 import name.pehl.tire.client.activity.presenter.CockpitPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
@@ -162,10 +163,11 @@ public class TireModule extends AbstractPresenterModule
         bindPresenter(TermsPresenter.class, TermsPresenter.MyView.class, TermsView.class, TermsPresenter.MyProxy.class);
 
         // Application specific
+        bind(ActivityController.class).in(Singleton.class);
         bind(ProjectsCache.class).in(Singleton.class);
         bind(SettingsCache.class).in(Singleton.class);
-        bind(TagsCache.class).in(Singleton.class);
         bind(StartupManager.class).in(Singleton.class);
+        bind(TagsCache.class).in(Singleton.class);
     }
 
 

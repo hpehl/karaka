@@ -606,7 +606,7 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
 
         // One combination is enough
         cut.activities = mock(Activities.class);
-        when(cut.activities.matchingRange(any(Activity.class))).thenReturn(false);
+        // when(cut.activities.matchingRange(any(Activity.class))).thenReturn(false);
         when(cut.activities.contains(any(Activity.class))).thenReturn(false);
         when(cut.activities.activities()).thenReturn(activities);
 
@@ -783,7 +783,7 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
     void prepareUpdateActivity(Activity activity, boolean matchingRange, boolean contains)
     {
         cut.activities = mock(Activities.class);
-        when(cut.activities.matchingRange(activity)).thenReturn(matchingRange);
+        // when(cut.activities.matchingRange(activity)).thenReturn(matchingRange);
         when(cut.activities.contains(activity)).thenReturn(contains);
     }
 

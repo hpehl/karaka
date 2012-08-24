@@ -599,7 +599,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             {
                 Activity savedActivity = result.getStoredActivity();
                 update(savedActivity);
-                ActivityChangedEvent.fire(DashboardPresenter.this, savedActivity, CHANGED);
+                ActivityChangedEvent.fire(DashboardPresenter.this, CHANGED, savedActivity, activities);
                 ShowMessageEvent.fire(DashboardPresenter.this,
                         new Message(INFO, "Activity \"" + savedActivity.getName() + "\" saved", true));
                 checkAndrefreshProjectsAndTags(activity);
@@ -619,7 +619,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             {
                 Activity newActivity = result.getStoredActivity();
                 update(newActivity);
-                ActivityChangedEvent.fire(DashboardPresenter.this, newActivity, NEW);
+                ActivityChangedEvent.fire(DashboardPresenter.this, NEW, newActivity, activities);
                 ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Activity \"" + newActivity.getName()
                         + "\" added", true));
             }
@@ -707,7 +707,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                     runningActivity = null;
                     Activity stoppedActivity = result.getStoredActivity();
                     update(stoppedActivity);
-                    ActivityChangedEvent.fire(DashboardPresenter.this, stoppedActivity, STOPPED);
+                    ActivityChangedEvent.fire(DashboardPresenter.this, STOPPED, stoppedActivity, activities);
                     ShowMessageEvent.fire(DashboardPresenter.this,
                             new Message(INFO, "Activity \"" + stoppedActivity.getName() + "\" stopped", true));
                 }
@@ -736,7 +736,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             {
                 activities.remove(activity);
                 getView().updateActivities(activities);
-                ActivityChangedEvent.fire(DashboardPresenter.this, activity, DELETE);
+                ActivityChangedEvent.fire(DashboardPresenter.this, DELETE, activity, activities);
                 ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Activity \"" + activity.getName()
                         + "\" deleted", true));
             }
@@ -746,11 +746,11 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     void update(Activity activity)
     {
-        activities.update(activity);
-        if (activities.matchingRange(activity))
-        {
-            activities.add(activity);
-        }
+        // activities.update(activity);
+        // if (activities.matchingRange(activity))
+        // {
+        // activities.add(activity);
+        // }
         if (activities.contains(activity))
         {
             getView().updateActivities(activities);
@@ -838,7 +838,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         {
             runningActivity = result.getStoredActivity();
             update(runningActivity);
-            ActivityChangedEvent.fire(DashboardPresenter.this, runningActivity, action);
+            ActivityChangedEvent.fire(DashboardPresenter.this, action, runningActivity, activities);
             ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Activity \"" + runningActivity.getName()
                     + "\" " + action.name().toLowerCase(), true));
             tickCommand.start(runningActivity);

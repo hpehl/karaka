@@ -21,6 +21,6 @@ public class ActivityAction
         DELETE
     }
 
-    @Order(1) Activity activity;
-    @Order(2) Action action;
+    @Order(1) Action action;
+    @Order(2) Activity activity;
 }

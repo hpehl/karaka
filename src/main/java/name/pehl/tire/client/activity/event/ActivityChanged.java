@@ -1,5 +1,6 @@
 package name.pehl.tire.client.activity.event;
 
+import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 
 import com.gwtplatform.dispatch.annotation.GenEvent;
@@ -18,6 +19,7 @@ public class ActivityChanged
         DELETE
     }
 
-    @Order(1) Activity activity;
-    @Order(2) ChangeAction action;
+    @Order(1) ChangeAction action;
+    @Order(2) Activity activity;
+    @Order(3) Activities activities;
 }

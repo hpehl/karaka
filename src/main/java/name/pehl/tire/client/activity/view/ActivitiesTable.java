@@ -222,6 +222,6 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
 
     public void onActivityAction(Activity activity, Action action)
     {
-        ActivityActionEvent.fire(this, activity, action);
+        ActivityActionEvent.fire(this, action, activity);
     }
 }

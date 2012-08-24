@@ -56,6 +56,6 @@ public class EditActivityPresenter extends PresenterWidget<EditActivityPresenter
     @Override
     public void onSave(Activity activity)
     {
-        ActivityActionEvent.fire(this, new ActivityActionEvent(activity, SAVE));
+        ActivityActionEvent.fire(this, new ActivityActionEvent(SAVE, activity));
     }
 }

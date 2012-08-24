@@ -119,7 +119,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
             // TODO Refactoring: The currentActivity might be chnaged in
             // EditActivityPresenter. When sending this.currentActivity these
             // changes will be overwritten!
-            ActivityActionEvent.fire(this, currentActivity, START_STOP);
+            ActivityActionEvent.fire(this, START_STOP, currentActivity);
         }
     }
 

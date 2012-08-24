@@ -16,7 +16,7 @@ public class TagsCache extends AbstractModelCache<Tag> implements ModelCache<Tag
     @Inject
     public TagsCache(EventBus eventBus, Scheduler scheduler, DispatchAsync dispatcher)
     {
-        super(eventBus, scheduler, dispatcher);
+        super(eventBus, dispatcher);
     }
 
 

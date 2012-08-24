@@ -20,7 +20,7 @@ public class SettingsCache extends AbstractModelCache<Settings> implements Model
     @Inject
     public SettingsCache(EventBus eventBus, Scheduler scheduler, DispatchAsync dispatcher)
     {
-        super(eventBus, scheduler, dispatcher);
+        super(eventBus, dispatcher);
         models.add(currentSettings);
     }
 

@@ -16,7 +16,7 @@ public class ProjectsCache extends AbstractModelCache<Project> implements ModelC
     @Inject
     public ProjectsCache(EventBus eventBus, Scheduler scheduler, DispatchAsync dispatcher)
     {
-        super(eventBus, scheduler, dispatcher);
+        super(eventBus, dispatcher);
     }
 
 

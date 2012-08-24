@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import name.pehl.tire.shared.model.BaseModel;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 
@@ -15,16 +14,14 @@ public abstract class AbstractModelCache<T extends BaseModel> implements ModelCa
 {
     protected final Logger logger;
     protected final EventBus eventBus;
-    protected final Scheduler scheduler;
     protected final DispatchAsync dispatcher;
     protected final List<T> models;
 
 
-    public AbstractModelCache(EventBus eventBus, Scheduler scheduler, DispatchAsync dispatcher)
+    public AbstractModelCache(EventBus eventBus, DispatchAsync dispatcher)
     {
         super();
         this.eventBus = eventBus;
-        this.scheduler = scheduler;
         this.dispatcher = dispatcher;
         this.models = new ArrayList<T>();
         this.logger = Logger.getLogger(getClass().getName());
@@ -56,6 +53,7 @@ public abstract class AbstractModelCache<T extends BaseModel> implements ModelCa
     }
 
 
+    @Override
     public boolean isEmpty()
     {
         return models.isEmpty();
