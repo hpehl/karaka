@@ -158,7 +158,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
 
 
     @Override
-    public void onActivityEntered(String name)
+    public void onActivityChanged(String name)
     {
         selectedActivity = null;
         enteredActivity = name;
@@ -174,7 +174,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
 
 
     @Override
-    public void onProjectEntered(String name)
+    public void onProjectChanged(String name)
     {
         selectedProject = null;
         enteredProject = name;
@@ -182,7 +182,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
 
 
     @Override
-    public void onDurationEntered(Duration duration)
+    public void onDurationChanged(Duration duration)
     {
         enteredDuration = duration;
     }

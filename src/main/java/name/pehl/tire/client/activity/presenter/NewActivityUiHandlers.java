@@ -26,16 +26,16 @@ public interface NewActivityUiHandlers extends UiHandlers
     void onActivitySelected(Activity activity);
 
 
-    void onActivityEntered(String name);
+    void onActivityChanged(String name);
 
 
     void onProjectSelected(Project project);
 
 
-    void onProjectEntered(String name);
+    void onProjectChanged(String name);
 
 
-    void onDurationEntered(Duration duration);
+    void onDurationChanged(Duration duration);
 
 
     void onNewActivity();

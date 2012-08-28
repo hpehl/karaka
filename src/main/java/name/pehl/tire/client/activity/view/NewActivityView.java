@@ -191,14 +191,14 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
 
     @UiHandler("activity")
-    void onActivityEntered(ValueChangeEvent<String> event)
+    void onActivityChanged(ValueChangeEvent<String> event)
     {
         String value = event.getValue();
         if (value != null && value.length() != 0)
         {
             if (getUiHandlers() != null)
             {
-                getUiHandlers().onActivityEntered(value);
+                getUiHandlers().onActivityChanged(value);
             }
         }
     }
@@ -217,25 +217,25 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
 
     @UiHandler("project")
-    void onProjectEntered(ValueChangeEvent<String> event)
+    void onProjectChanged(ValueChangeEvent<String> event)
     {
         String value = event.getValue();
         if (value != null && value.length() != 0)
         {
             if (getUiHandlers() != null)
             {
-                getUiHandlers().onProjectEntered(value);
+                getUiHandlers().onProjectChanged(value);
             }
         }
     }
 
 
     @UiHandler("duration")
-    void onDurationEntered(ValueChangeEvent<Duration> event)
+    void onDurationChanged(ValueChangeEvent<Duration> event)
     {
         if (getUiHandlers() != null)
         {
-            getUiHandlers().onDurationEntered(event.getValue());
+            getUiHandlers().onDurationChanged(event.getValue());
         }
     }
 

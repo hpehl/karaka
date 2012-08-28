@@ -290,7 +290,7 @@
     <build>
         <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
 
-        
+
         <pluginManagement>
             <plugins>
                 <plugin>
