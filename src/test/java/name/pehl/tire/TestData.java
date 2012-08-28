@@ -126,18 +126,24 @@ public class TestData
 
     public ActivityChangedEvent newActivityChangedEvent(ChangeAction action)
     {
-        return newActivityChangedEvent(action, newActivity());
+        return newActivityChangedEvent(action, newActivity(), newActivities(WEEK));
     }
 
 
-    public ActivityChangedEvent newActivityChangedEvent(ChangeAction action, Activity activity)
+    public ActivityChangedEvent newActivityChangedEvent(ChangeAction action, Activity activity, Activities activities)
     {
-        return new ActivityChangedEvent(action, activity, null);
+        return new ActivityChangedEvent(action, activity, activities);
     }
 
 
     public TickEvent newTickEvent()
     {
-        return new TickEvent(newActivity());
+        return newTickEvent(newActivity(), newActivities(WEEK));
+    }
+
+
+    public TickEvent newTickEvent(Activity activity, Activities activities)
+    {
+        return new TickEvent(activity, activities);
     }
 }

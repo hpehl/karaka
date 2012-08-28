@@ -10,6 +10,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
+import com.google.common.collect.ComparisonChain;
+
 /**
  * <h3>Design by contract</h3>
  * <ul>
@@ -33,7 +35,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
  * @version $LastChangedRevision:$
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Activity extends DescriptiveModel
+public class Activity extends DescriptiveModel implements Comparable<Activity>
 {
     // ------------------------------------------------------- member variables
 
@@ -229,6 +231,14 @@ public class Activity extends DescriptiveModel
 
 
     // --------------------------------------------------------- object methods
+
+    @Override
+    public int compareTo(Activity right)
+    {
+        Activity left = this;
+        return ComparisonChain.start().compare(right.start, left.start).compare(right.id, left.id).result();
+    }
+
 
     @Override
     public String toString()

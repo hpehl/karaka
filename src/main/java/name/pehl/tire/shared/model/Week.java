@@ -181,7 +181,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
      */
     public SortedSet<Activity> activities()
     {
-        SortedSet<Activity> ordered = new TreeSet<Activity>(new ActivityComparator());
+        SortedSet<Activity> ordered = new TreeSet<Activity>();
         for (Day day : days)
         {
             ordered.addAll(day.getActivities());

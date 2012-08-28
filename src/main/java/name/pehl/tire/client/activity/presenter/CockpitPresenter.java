@@ -148,6 +148,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                 break;
         }
         getView().updateStatus(currentActivity);
+        // TODO Use the activities from the event to update minutes
         getMinutesCommand.execute();
     }
 
@@ -155,6 +156,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     @Override
     public void onTick(TickEvent event)
     {
+        // TODO Use the activities from the event to update minutes
         getMinutesCommand.execute();
     }
 

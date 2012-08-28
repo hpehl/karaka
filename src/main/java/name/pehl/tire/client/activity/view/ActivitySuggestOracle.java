@@ -1,6 +1,6 @@
 package name.pehl.tire.client.activity.view;
 
-import name.pehl.tire.client.activity.presenter.DashboardUiHandlers;
+import name.pehl.tire.client.activity.presenter.NewActivityUiHandlers;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.SuggestOracle;
@@ -10,7 +10,7 @@ public class ActivitySuggestOracle extends SuggestOracle
     static final int DELAY = 300;
 
     final Timer timer;
-    DashboardUiHandlers uiHandlers;
+    NewActivityUiHandlers uiHandlers;
     Request currentRequest;
     Callback currentCallback;
 
@@ -22,7 +22,7 @@ public class ActivitySuggestOracle extends SuggestOracle
     }
 
 
-    public void setUiHandlers(DashboardUiHandlers uiHandlers)
+    public void setUiHandlers(NewActivityUiHandlers uiHandlers)
     {
         this.uiHandlers = uiHandlers;
     }

@@ -1,5 +1,7 @@
 package name.pehl.tire.client;
 
+import static org.mockito.Mockito.mock;
+
 import java.util.Map;
 import java.util.Stack;
 
@@ -21,8 +23,6 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.tester.TestDispatchAsync;
 import com.gwtplatform.tester.TestDispatchService;
-
-import static org.mockito.Mockito.mock;
 
 public abstract class PresenterTest extends GwtTest
 {
@@ -61,6 +61,12 @@ public abstract class PresenterTest extends GwtTest
     }
 
 
+    /**
+     * Method to add events <em>fired</em> by the class under test
+     * 
+     * @param handler
+     * @param types
+     */
     @SuppressWarnings("unchecked")
     protected void addEvents(EventHandler handler, Type<?>... types)
     {

@@ -163,7 +163,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
      */
     public SortedSet<Activity> activities()
     {
-        TreeSet<Activity> ordered = new TreeSet<Activity>(new ActivityComparator());
+        TreeSet<Activity> ordered = new TreeSet<Activity>();
         ordered.addAll(activities);
         return ordered;
     }

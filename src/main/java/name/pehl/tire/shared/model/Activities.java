@@ -315,26 +315,13 @@ public class Activities
     }
 
 
-    public void update(Activity activity)
-    {
-        if (contains(activity))
-        {
-            // Since Activity.hashCode() and Activity.equals() are id based,
-            // removing and re-adding asures that the data of the activity is
-            // up to date.
-            remove(activity);
-            add(activity);
-        }
-    }
-
-
     /**
      * @return a sorted set (ascending) of all activities managed by this
      *         instance.
      */
     public SortedSet<Activity> activities()
     {
-        SortedSet<Activity> ordered = new TreeSet<Activity>(new ActivityComparator());
+        SortedSet<Activity> ordered = new TreeSet<Activity>();
         switch (unit)
         {
             case MONTH:

@@ -7,6 +7,7 @@ import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -36,6 +37,7 @@ import name.pehl.tire.client.activity.presenter.CockpitPresenter.GetRunningActiv
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.application.ShowMessageEvent.ShowMessageHandler;
+import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Duration;
 import name.pehl.tire.shared.model.Durations;
@@ -160,8 +162,9 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
     {
         prepareGetMinutes();
         Activity activity = td.newActivity();
+        Activities activities = td.newActivities(WEEK);
         cut.currentActivity = activity;
-        cut.onActivityChanged(td.newActivityChangedEvent(DELETE, activity));
+        cut.onActivityChanged(td.newActivityChangedEvent(DELETE, activity, activities));
         assertNull(cut.currentActivity);
         verify(view).updateStatus(null);
         verifyGetMinutes();

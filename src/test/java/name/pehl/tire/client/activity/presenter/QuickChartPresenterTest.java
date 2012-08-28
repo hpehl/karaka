@@ -4,17 +4,14 @@ import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import name.pehl.tire.client.PresenterTest;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
-import name.pehl.tire.client.activity.event.ActivityChangedEvent;
-import name.pehl.tire.client.activity.event.TickEvent;
 import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Day;
 import name.pehl.tire.shared.model.Week;
 
@@ -44,7 +41,6 @@ public class QuickChartPresenterTest extends PresenterTest
     {
         Activities activities = td.newActivities(WEEK);
         cut.onActivitiesLoaded(new ActivitiesLoadedEvent(activities));
-        assertSame(cut.activities, activities);
         verify(view).updateActivities(activities);
     }
 
@@ -52,20 +48,18 @@ public class QuickChartPresenterTest extends PresenterTest
     @Test
     public void onActivityChanged()
     {
-        Week week = new Week();
-        ActivityChangedEvent changedEvent = td.newActivityChangedEvent(CHANGED);
-        cut.activities = mock(Activities.class);
-        when(cut.activities.getUnit()).thenReturn(MONTH);
-        when(cut.activities.weekOf(changedEvent.getActivity())).thenReturn(week);
-        cut.onActivityChanged(changedEvent);
+        Activity activity = td.newActivity();
+        Activities activities = td.newActivities(MONTH);
+        activities.add(activity);
+        Week week = activities.weekOf(activity);
+        cut.onActivityChanged(td.newActivityChangedEvent(CHANGED, activity, activities));
         verify(view).updateWeek(week);
 
         reset(view);
-        Day day = new Day();
-        cut.activities = mock(Activities.class);
-        when(cut.activities.getUnit()).thenReturn(WEEK);
-        when(cut.activities.dayOf(changedEvent.getActivity())).thenReturn(day);
-        cut.onActivityChanged(changedEvent);
+        activities = td.newActivities(WEEK);
+        activities.add(activity);
+        Day day = activities.dayOf(activity);
+        cut.onActivityChanged(td.newActivityChangedEvent(CHANGED, activity, activities));
         verify(view).updateDay(day);
 
         reset(view);
@@ -77,20 +71,18 @@ public class QuickChartPresenterTest extends PresenterTest
     @Test
     public void onTick()
     {
-        Week week = new Week();
-        TickEvent tickEvent = td.newTickEvent();
-        cut.activities = mock(Activities.class);
-        when(cut.activities.getUnit()).thenReturn(MONTH);
-        when(cut.activities.weekOf(tickEvent.getActivity())).thenReturn(week);
-        cut.onTick(tickEvent);
+        Activity activity = td.newActivity();
+        Activities activities = td.newActivities(MONTH);
+        activities.add(activity);
+        Week week = activities.weekOf(activity);
+        cut.onTick(td.newTickEvent(activity, activities));
         verify(view).updateWeek(week);
 
         reset(view);
-        Day day = new Day();
-        cut.activities = mock(Activities.class);
-        when(cut.activities.getUnit()).thenReturn(WEEK);
-        when(cut.activities.dayOf(tickEvent.getActivity())).thenReturn(day);
-        cut.onTick(tickEvent);
+        activities = td.newActivities(WEEK);
+        activities.add(activity);
+        Day day = activities.dayOf(activity);
+        cut.onTick(td.newTickEvent(activity, activities));
         verify(view).updateDay(day);
     }
 }

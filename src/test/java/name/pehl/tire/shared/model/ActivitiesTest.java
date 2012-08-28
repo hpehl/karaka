@@ -220,48 +220,6 @@ public class ActivitiesTest
 
 
     @Test
-    public void update()
-    {
-        DateTime now = new DateTime();
-        Activity activity = td.newActivity(now, now.plusHours(1));
-        activity.setName("A");
-
-        Activity sameIdOtherData = new Activity(activity.getId(), activity.getName());
-        sameIdOtherData.setName("A'");
-        DateTime later = now.plusHours(2);
-        Time newEnd = new Time(later.toDate(), later.year().get(), later.monthOfYear().get(), later.weekOfWeekyear()
-                .get(), later.dayOfMonth().get());
-        sameIdOtherData.setEnd(newEnd);
-
-        // null
-        Activities cut = td.newActivities(WEEK);
-        cut.update(null);
-        assertEquals(0, cut.activities().size());
-        assertFalse(cut.contains(activity));
-        assertFalse(cut.contains(sameIdOtherData));
-
-        // month, week and day
-        internalUpdate(td.month(), activity, sameIdOtherData, newEnd);
-        internalUpdate(td.week(), activity, sameIdOtherData, newEnd);
-        internalUpdate(td.day(), activity, sameIdOtherData, newEnd);
-    }
-
-
-    void internalUpdate(Activities cut, Activity activity, Activity sameIdOtherData, Time newEnd)
-    {
-        cut.add(activity);
-        assertEquals(1, cut.activities().size());
-        assertTrue(cut.contains(activity));
-        assertEquals("A", cut.activities().first().getName());
-        cut.update(sameIdOtherData);
-        assertEquals(1, cut.activities().size());
-        assertTrue(cut.contains(sameIdOtherData));
-        assertEquals("A'", cut.activities().first().getName());
-        assertEquals(newEnd, cut.activities().first().getEnd());
-    }
-
-
-    @Test
     public void activities()
     {
         // empty

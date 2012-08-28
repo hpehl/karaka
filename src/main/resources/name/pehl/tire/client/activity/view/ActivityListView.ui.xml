@@ -1,0 +1,14 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
+    xmlns:c="urn:import:com.google.gwt.user.cellview.client" xmlns:tui="urn:import:name.pehl.tire.client.ui" xmlns:tac="urn:import:name.pehl.tire.client.activity.view">
+
+    <ui:style>
+        .table {
+        	width: 100%;
+        }
+    </ui:style>
+
+    <g:ScrollPanel>
+        <tac:ActivitiesTable ui:field="activitiesTable" addStyleNames="{style.table}" />
+    </g:ScrollPanel>
+</ui:UiBinder> 

@@ -74,7 +74,6 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
         void updateDay(Day day);
     }
 
-    Activities activities;
     final PlaceManager placeManager;
 
 
@@ -95,7 +94,6 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     @Override
     public final void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
-        activities = event.getActivities();
         getView().updateActivities(event.getActivities());
     }
 
@@ -105,11 +103,11 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     {
         if (event.getAction() == DELETE)
         {
-            getView().updateActivities(activities);
+            update(event.getActivities());
         }
         else
         {
-            updateActivity(event.getActivity());
+            update(event.getActivity(), event.getActivities());
         }
     }
 
@@ -117,7 +115,7 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     @Override
     public void onTick(TickEvent event)
     {
-        updateActivity(event.getActivity());
+        update(event.getActivity(), event.getActivities());
     }
 
 
@@ -130,7 +128,13 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
     }
 
 
-    void updateActivity(Activity activity)
+    void update(Activities activities)
+    {
+        getView().updateActivities(activities);
+    }
+
+
+    void update(Activity activity, Activities activities)
     {
         if (activities.getUnit() == MONTH)
         {

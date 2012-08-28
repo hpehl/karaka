@@ -9,7 +9,10 @@ import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.
 import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
 
 import java.util.List;
+import java.util.SortedSet;
 import java.util.logging.Logger;
+
+import javax.annotation.Nullable;
 
 import name.pehl.tire.client.activity.dispatch.DeleteActivityAction;
 import name.pehl.tire.client.activity.dispatch.DeleteActivityResult;
@@ -32,6 +35,8 @@ import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Project;
 import name.pehl.tire.shared.model.Tag;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Sets;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.event.shared.GwtEvent;
@@ -65,7 +70,8 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
  * </ol>
  * <h3>Dispatcher actions</h3>
  * <ul>
- * <li>tbd</li>
+ * <li>{@linkplain SaveActivityAction}</li>
+ * <li>{@linkplain DeleteActivityAction}</li>
  * </ul>
  * 
  * @author $Author: harald.pehl $
@@ -77,7 +83,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 {
     // ------------------------------------------------------- (static) members
 
-    static final long ONE_MINUTE_IN_MILLIS = 60 * 1000;
+    static final int ONE_MINUTE_IN_MILLIS = 60 * 1000;
     static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     static final Logger logger = Logger.getLogger(ActivityController.class.getName());
 
@@ -116,14 +122,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 
     // --------------------------------------------------------- event handling
 
-    @Override
-    public void fireEvent(GwtEvent<?> event)
-    {
-        eventBus.fireEventFromSource(event, this);
-    }
-
-
-    void registerEventListeners()
+    private void registerEventListeners()
     {
         eventBus.addHandler(RunningActivityLoadedEvent.getType(), this);
         eventBus.addHandler(ActivitiesLoadedEvent.getType(), this);
@@ -132,9 +131,17 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 
 
     @Override
+    public void fireEvent(GwtEvent<?> event)
+    {
+        eventBus.fireEventFromSource(event, this);
+    }
+
+
+    @Override
     public void onRunningActivityLoaded(RunningActivityLoadedEvent event)
     {
         runningActivity = event.getActivity();
+        startTicking();
     }
 
 
@@ -226,33 +233,42 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
             if (runningActivity != null && runningActivity.isRunning() && !runningActivity.equals(activityToStart))
             {
                 logger.info("Stopping currently running " + runningActivity);
-                ticking = false;
-                runningActivity.stop();
-                dispatcher.execute(new SaveActivityAction(runningActivity), new TireCallback<SaveActivityResult>(
+                Activity runningActivityBackup = runningActivity;
+                stopTicking();
+                dispatcher.execute(new SaveActivityAction(runningActivityBackup), new TireCallback<SaveActivityResult>(
                         eventBus)
                 {
                     @Override
                     public void onSuccess(SaveActivityResult result)
                     {
-                        runningActivity = null;
                         Activity stoppedActivity = result.getStoredActivity();
                         logger.info("Successfully stopped " + stoppedActivity);
-                        activities.remove(activityToStart);
-                        // activities.insert(stoppedActivity);
                         start(activityToStart);
                     }
                 });
             }
             else
             {
-                // TODO Change logic for latestActivity. It is not the last
-                // activity from activities, but rather the last started
-                // activity!
-                Activity latestActivity = activities != null ? activities.activities().first() : null;
-                if (activityToStart.isToday() && activityToStart.equals(latestActivity))
+                // Is there an activity to resume?
+                boolean resume = false;
+                if (activityToStart.isToday())
                 {
-                    activityToStart.resume();
+                    // Get the activities for today
+                    SortedSet<Activity> activitiesOfToday = Sets.filter(activities.activities(),
+                            new Predicate<Activity>()
+                            {
+                                @Override
+                                public boolean apply(@Nullable Activity input)
+                                {
+                                    return input != null && input.isToday();
+                                }
+                            });
+                    resume = activitiesOfToday.contains(activityToStart);
+                }
+                if (resume)
+                {
                     logger.info("Resuming " + activityToStart);
+                    activityToStart.resume();
                     dispatcher.execute(new SaveActivityAction(activityToStart), new TireCallback<SaveActivityResult>(
                             eventBus)
                     {
@@ -260,31 +276,21 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                         public void onSuccess(SaveActivityResult result)
                         {
                             runningActivity = result.getStoredActivity();
-                            // update(runningActivity);
+                            updateActivities(activityToStart, runningActivity);
                             ActivityChangedEvent.fire(ActivityController.this, RESUMED, runningActivity, activities);
                             ShowMessageEvent.fire(ActivityController.this, new Message(INFO, "Activity \""
                                     + runningActivity.getName() + "\" resumed", true));
-                            // tickCommand.start(runningActivity);
                             checkAndrefreshProjectsAndTags(activityToStart);
+                            startTicking();
                         }
                     });
                 }
                 else
                 {
-                    Activity newActivity = null;
-                    if (activityToStart.isTransient())
-                    {
-                        // The parameter is the new transient activity we want
-                        // to start.
-                        newActivity = activityToStart;
-                    }
-                    else
-                    {
-                        // The parameter is an existing activity. We have to
-                        // copy this activity.
-                        newActivity = activityToStart.copy();
-                        logger.info("Copy " + activityToStart + " and start as new " + newActivity);
-                    }
+                    // If the parameter is an existing activity. We have to copy
+                    // this activity.
+                    final Activity newActivity = activityToStart.isTransient() ? activityToStart : activityToStart
+                            .copy();
                     newActivity.start();
                     logger.info("Starting " + newActivity);
                     dispatcher.execute(new SaveActivityAction(newActivity), new TireCallback<SaveActivityResult>(
@@ -294,12 +300,12 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                         public void onSuccess(SaveActivityResult result)
                         {
                             runningActivity = result.getStoredActivity();
-                            // update(runningActivity);
+                            updateActivities(newActivity, runningActivity);
                             ActivityChangedEvent.fire(ActivityController.this, STARTED, runningActivity, activities);
                             ShowMessageEvent.fire(ActivityController.this, new Message(INFO, "Activity \""
                                     + runningActivity.getName() + "\" started", true));
-                            // tickCommand.start(runningActivity);
                             checkAndrefreshProjectsAndTags(activityToStart);
+                            startTicking();
                         }
                     });
                 }
@@ -312,28 +318,24 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
     }
 
 
-    void stop(final Activity activity)
+    void stop(final Activity activityToStop)
     {
-        logger.info("About to stop " + activity);
-        if (activity != runningActivity)
+        logger.info("About to stop " + activityToStop);
+        if (activityToStop.isRunning())
         {
-            throw new IllegalStateException(
-                    "Trying to stop activity which is not the same as the internal running activity: "
-                            + runningActivity + "!");
-        }
-        if (runningActivity.isRunning())
-        {
-            ticking = false;
-            runningActivity.stop();
-            dispatcher.execute(new SaveActivityAction(activity), new TireCallback<SaveActivityResult>(eventBus)
+            if (!activityToStop.equals(runningActivity))
+            {
+                throw new IllegalStateException("Trying to stop " + activityToStop
+                        + " which is not the same as the internal running " + runningActivity + "!");
+            }
+            stopTicking();
+            dispatcher.execute(new SaveActivityAction(activityToStop), new TireCallback<SaveActivityResult>(eventBus)
             {
                 @Override
                 public void onSuccess(SaveActivityResult result)
                 {
-                    runningActivity = null;
                     Activity stoppedActivity = result.getStoredActivity();
-                    activities.remove(activity);
-                    // activities.insert(stoppedActivity);
+                    updateActivities(activityToStop, stoppedActivity);
                     ActivityChangedEvent.fire(ActivityController.this, STOPPED, stoppedActivity, activities);
                     ShowMessageEvent.fire(ActivityController.this,
                             new Message(INFO, "Activity \"" + stoppedActivity.getName() + "\" stopped", true));
@@ -342,30 +344,32 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         }
         else
         {
-            logger.info(runningActivity + " already stopped");
+            logger.info(activityToStop + " already stopped");
         }
     }
 
 
-    void delete(final Activity activity)
+    void delete(final Activity activityToDelete)
     {
-        logger.info("About to delete activity " + activity);
-        if (activity.isRunning())
+        logger.info("About to delete " + activityToDelete);
+        if (activityToDelete.isRunning())
         {
-            runningActivity = null;
-            // tickCommand.stop();
-            activity.stop();
+            if (!activityToDelete.equals(runningActivity))
+            {
+                throw new IllegalStateException("Trying to delete running " + activityToDelete
+                        + " which is not the same as the internal running " + runningActivity + "!");
+            }
+            stopTicking();
         }
-        dispatcher.execute(new DeleteActivityAction(activity), new TireCallback<DeleteActivityResult>(eventBus)
+        dispatcher.execute(new DeleteActivityAction(activityToDelete), new TireCallback<DeleteActivityResult>(eventBus)
         {
             @Override
             public void onSuccess(DeleteActivityResult result)
             {
-                activities.remove(activity);
-                // getView().updateActivities(activities);
-                ActivityChangedEvent.fire(ActivityController.this, DELETE, activity, activities);
-                ShowMessageEvent.fire(ActivityController.this, new Message(INFO, "Activity \"" + activity.getName()
-                        + "\" deleted", true));
+                updateActivities(activityToDelete, null);
+                ActivityChangedEvent.fire(ActivityController.this, DELETE, activityToDelete, activities);
+                ShowMessageEvent.fire(ActivityController.this,
+                        new Message(INFO, "Activity \"" + activityToDelete.getName() + "\" deleted", true));
             }
         });
     }
@@ -412,6 +416,24 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 
     // ------------------------------------------------------------------- tick
 
+    private void startTicking()
+    {
+        ticking = true;
+        scheduler.scheduleFixedPeriod(ActivityController.this, ONE_MINUTE_IN_MILLIS);
+    }
+
+
+    /**
+     * Stops the {@code runningActivity} and sets it to <code>null</code>.
+     */
+    private void stopTicking()
+    {
+        ticking = false;
+        runningActivity.stop();
+        runningActivity = null;
+    }
+
+
     @Override
     public boolean execute()
     {
@@ -425,7 +447,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                 public void onSuccess(SaveActivityResult result)
                 {
                     runningActivity = result.getStoredActivity();
-                    TickEvent.fire(ActivityController.this, runningActivity);
+                    TickEvent.fire(ActivityController.this, runningActivity, activities);
                 }
             });
         }

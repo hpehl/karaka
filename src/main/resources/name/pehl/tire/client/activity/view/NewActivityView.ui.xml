@@ -1,0 +1,112 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
+    xmlns:c="urn:import:com.google.gwt.user.cellview.client" xmlns:tui="urn:import:name.pehl.tire.client.ui" xmlns:tac="urn:import:name.pehl.tire.client.activity.view">
+
+    <ui:style>
+        div.newActivity {
+        	font-size: 18px;
+        	color: white;
+        	padding-bottom: 20px;
+        	background-color: #3cc5de;
+        	-webkit-border-top-left-radius: 5px;
+        	-webkit-border-top-right-radius: 5px;
+        	-moz-border-radius-topleft: 5px;
+        	-moz-border-radius-topright: 5px;
+        	border-top-left-radius: 5px;
+        	border-top-right-radius: 5px;
+        }
+        
+        div.newActivity ul {
+        	padding: 20px 10px 0px 10px;
+        }
+        
+        div.newActivity ul li a {
+        	float: left;
+        	cursor: pointer;
+        	padding: 5px;
+        	margin-right: 5px;
+        	text-transform: uppercase;
+        	background-color: #1b92a8;
+        	border-top-left-radius: 5px;
+        	border-top-right-radius: 5px;
+        	-webkit-border-top-left-radius: 5px;
+        	-webkit-border-top-right-radius: 5px;
+        	-moz-border-radius-topleft: 5px;
+        	-moz-border-radius-topright: 5px;
+        }
+        
+        div.newActivity ul li a:hover {
+        	color: #68d6ea;
+        	background-color: white;
+        }
+        
+        div.input {
+        	clear: left;
+        	padding: 5px;
+        	background-color: #68d6ea;
+        	height: 40px;
+        }
+        
+        div.input span {
+        	display: inline;
+        	padding: 5px;
+        	margin: 0;
+        	overflow: hidden;
+        	box-sizing: border-box;
+        	-webkit-box-sizing: border-box;
+        	-moz-box-sizing: border-box;
+        }
+        
+        div.input input[type=text] {
+        	width: 100%;
+        	font-size: 16px;
+        	line-height: 16px;
+        }
+        
+        div.input span.activityHolder {
+        	float: left;
+        	width: 60%;
+        }
+        
+        div.input span.projectHolder {
+        	float: left;
+        	width: 25%;
+        }
+        
+        div.input span.timeHolder {
+        	float: left;
+        	width: 15%;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <div class="{style.newActivity}">
+            <ul>
+                <li>
+                    <g:Anchor ui:field="theDayBeforeYesterday" />
+                </li>
+                <li>
+                    <g:Anchor ui:field="yesterday" />
+                </li>
+                <li>
+                    <g:Anchor ui:field="today">today</g:Anchor>
+                </li>
+                <li>
+                    <tac:CalendarLink ui:field="calendar">calendar</tac:CalendarLink>
+                </li>
+            </ul>
+            <div class="{style.input}">
+                <span class="{style.activityHolder}">
+                    <g:SuggestBox ui:field="activity" />
+                </span>
+                <span class="{style.projectHolder}">
+                    <g:SuggestBox ui:field="project" />
+                </span>
+                <span class="{style.timeHolder}">
+                    <tac:DurationTextBox ui:field="duration" placeholder="Duration"
+                        title="Leave empty to start a new activity" />
+                </span>
+            </div>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder> 
