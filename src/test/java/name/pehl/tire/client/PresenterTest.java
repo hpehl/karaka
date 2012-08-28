@@ -24,7 +24,7 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.tester.TestDispatchAsync;
 import com.gwtplatform.tester.TestDispatchService;
 
-public abstract class PresenterTest extends GwtTest
+public abstract class PresenterTest
 {
     protected TestData td;
     protected Stack<Event<?>> events;
