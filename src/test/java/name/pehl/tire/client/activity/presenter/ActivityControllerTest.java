@@ -2,12 +2,25 @@ package name.pehl.tire.client.activity.presenter;
 
 import static java.util.Arrays.asList;
 import static java.util.logging.Level.INFO;
-import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.*;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.CHANGED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.DELETE;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.NEW;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STARTED;
+import static name.pehl.tire.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.TreeSet;
 
@@ -68,6 +81,7 @@ public class ActivityControllerTest extends PresenterTest implements TickHandler
         // class under test
         addEvents(this, TickEvent.getType(), ActivityChangedEvent.getType(), ShowMessageEvent.getType());
         cut = new ActivityController(eventBus, scheduler, newDispatcher(actionHandlerMappings));
+        cut.start();
     }
 
 

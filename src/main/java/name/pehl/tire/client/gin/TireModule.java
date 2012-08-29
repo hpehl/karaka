@@ -25,17 +25,23 @@ import name.pehl.tire.client.activity.model.WeekReader;
 import name.pehl.tire.client.activity.model.YearReader;
 import name.pehl.tire.client.activity.model.YearsReader;
 import name.pehl.tire.client.activity.presenter.ActivityController;
+import name.pehl.tire.client.activity.presenter.ActivityListPresenter;
+import name.pehl.tire.client.activity.presenter.ActivityNavigationPresenter;
 import name.pehl.tire.client.activity.presenter.CockpitPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
+import name.pehl.tire.client.activity.presenter.NewActivityPresenter;
 import name.pehl.tire.client.activity.presenter.QuickChartPresenter;
 import name.pehl.tire.client.activity.presenter.SelectMonthPresenter;
 import name.pehl.tire.client.activity.presenter.SelectTimeUnitPresenter;
 import name.pehl.tire.client.activity.presenter.SelectWeekPresenter;
 import name.pehl.tire.client.activity.view.ActivitiesTableResources;
+import name.pehl.tire.client.activity.view.ActivityListView;
+import name.pehl.tire.client.activity.view.ActivityNavigationView;
 import name.pehl.tire.client.activity.view.CockpitView;
 import name.pehl.tire.client.activity.view.DashboardView;
 import name.pehl.tire.client.activity.view.EditActivityView;
+import name.pehl.tire.client.activity.view.NewActivityView;
 import name.pehl.tire.client.activity.view.QuickChartView;
 import name.pehl.tire.client.activity.view.SelectTimeUnitView;
 import name.pehl.tire.client.application.ApplicationPresenter;
@@ -133,6 +139,10 @@ public class TireModule extends AbstractPresenterModule
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
         // PresenterWidgets (a-z)
+        bindPresenterWidget(ActivityListPresenter.class, ActivityListPresenter.MyView.class, ActivityListView.class);
+        bindPresenterWidget(ActivityNavigationPresenter.class, ActivityNavigationPresenter.MyView.class,
+                ActivityNavigationView.class);
+        bindPresenterWidget(NewActivityPresenter.class, NewActivityPresenter.MyView.class, NewActivityView.class);
         bindPresenterWidget(CockpitPresenter.class, CockpitPresenter.MyView.class, CockpitView.class);
         bindPresenterWidget(EditActivityPresenter.class, EditActivityPresenter.MyView.class, EditActivityView.class);
         bindPresenterWidget(MessagePresenter.class, MessagePresenter.MyView.class, MessageView.class);

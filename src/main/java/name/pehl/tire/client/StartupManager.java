@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import name.pehl.tire.client.activity.presenter.ActivityController;
 import name.pehl.tire.client.model.ModelCache;
 import name.pehl.tire.client.project.ProjectsCache;
 import name.pehl.tire.client.settings.SettingsCache;
@@ -27,16 +28,19 @@ public class StartupManager implements HasHandlers
     final EventBus eventBus;
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
+    final ActivityController activityController;
     final List<ScheduledCommand> startupCommands;
 
 
     @Inject
     public StartupManager(final EventBus eventBus, final Scheduler scheduler, final DispatchAsync dispatcher,
-            final SettingsCache settingsCache, final ProjectsCache projectsCache, final TagsCache tagsCache)
+            final ActivityController activityController, final SettingsCache settingsCache,
+            final ProjectsCache projectsCache, final TagsCache tagsCache)
     {
         this.eventBus = eventBus;
         this.scheduler = scheduler;
         this.dispatcher = dispatcher;
+        this.activityController = activityController;
         this.startupCommands = new ArrayList<ScheduledCommand>();
         this.startupCommands.add(new InitCacheCommand<Settings>(settingsCache));
         this.startupCommands.add(new InitCacheCommand<Project>(projectsCache));
@@ -53,6 +57,7 @@ public class StartupManager implements HasHandlers
 
     public void startup()
     {
+        activityController.start();
         for (ScheduledCommand command : startupCommands)
         {
             scheduler.scheduleDeferred(command);

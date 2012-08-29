@@ -116,19 +116,18 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         this.eventBus = eventBus;
         this.scheduler = scheduler;
         this.dispatcher = dispatcher;
-        registerEventListeners();
     }
 
 
-    // --------------------------------------------------------- event handling
-
-    private void registerEventListeners()
+    public void start()
     {
         eventBus.addHandler(RunningActivityLoadedEvent.getType(), this);
         eventBus.addHandler(ActivitiesLoadedEvent.getType(), this);
         eventBus.addHandler(ActivityActionEvent.getType(), this);
     }
 
+
+    // --------------------------------------------------------- event handling
 
     @Override
     public void fireEvent(GwtEvent<?> event)
