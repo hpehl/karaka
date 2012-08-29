@@ -1,5 +1,7 @@
 package name.pehl.tire.client.activity.dispatch;
 
+import static name.pehl.tire.shared.model.TimeUnit.WEEK;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -7,8 +9,6 @@ import name.pehl.tire.client.rest.UrlBuilder;
 import name.pehl.tire.shared.model.TimeUnit;
 
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
-
-import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
 /**
  * TODO Tests, tests, tests
@@ -38,8 +38,19 @@ public class ActivitiesRequest
 
     public ActivitiesRequest(PlaceRequest placeRequest)
     {
+        this(placeRequest, new UrlBuilder().module("rest").path("activities"));
+    }
+
+
+    /**
+     * Extra constructor to make it testable outside GWT
+     * 
+     * @param placeRequest
+     * @param urlBuilder
+     */
+    protected ActivitiesRequest(PlaceRequest placeRequest, UrlBuilder urlBuilder)
+    {
         String text = "n/a";
-        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities");
         if (hasParameter(placeRequest, PARAM_CURRENT))
         {
             TimeUnit unit = parseTimeUnit(placeRequest.getParameter(PARAM_CURRENT, null));
@@ -130,7 +141,7 @@ public class ActivitiesRequest
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((url == null) ? 0 : url.hashCode());
+        result = prime * result + (url == null ? 0 : url.hashCode());
         return result;
     }
 

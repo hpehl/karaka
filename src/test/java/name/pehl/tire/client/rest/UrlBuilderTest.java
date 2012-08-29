@@ -133,7 +133,7 @@ public class UrlBuilderTest
     @Test(expected = IllegalStateException.class)
     public void testBuildUrlWithNoData()
     {
-        new StandaloneUrlBuilder().toUrl();
+        new TestableUrlBuilder().toUrl();
     }
 
 
@@ -142,7 +142,7 @@ public class UrlBuilderTest
     @Test
     public void testSetProtocol()
     {
-        UrlBuilder underTest = new StandaloneUrlBuilder().protocol("http");
+        UrlBuilder underTest = new TestableUrlBuilder().protocol("http");
         assertEquals("http", underTest.protocol);
 
         underTest.protocol("http://");
@@ -159,21 +159,21 @@ public class UrlBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testSetNullProtocol()
     {
-        new StandaloneUrlBuilder().protocol(null);
+        new TestableUrlBuilder().protocol(null);
     }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testSetEmptyProtocol()
     {
-        new StandaloneUrlBuilder().protocol("");
+        new TestableUrlBuilder().protocol("");
     }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testSetInvalidProtocol()
     {
-        new StandaloneUrlBuilder().protocol("so:nicht");
+        new TestableUrlBuilder().protocol("so:nicht");
     }
 
 
@@ -182,7 +182,7 @@ public class UrlBuilderTest
     @Test
     public void testSetHost()
     {
-        UrlBuilder underTest = new StandaloneUrlBuilder().host("www.foo.com");
+        UrlBuilder underTest = new TestableUrlBuilder().host("www.foo.com");
         assertEquals("www.foo.com", underTest.host);
 
         underTest.host("www.foo.com:8080");
@@ -194,14 +194,14 @@ public class UrlBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testSetNullHost()
     {
-        new StandaloneUrlBuilder().host(null);
+        new TestableUrlBuilder().host(null);
     }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testSetEmptyHost()
     {
-        new StandaloneUrlBuilder().host("");
+        new TestableUrlBuilder().host("");
     }
 
 
@@ -210,7 +210,7 @@ public class UrlBuilderTest
     @Test
     public void testSetPort()
     {
-        UrlBuilder underTest = new StandaloneUrlBuilder();
+        UrlBuilder underTest = new TestableUrlBuilder();
         assertEquals(UrlBuilder.PORT_UNSPECIFIED, underTest.port);
 
         underTest.port(0);
@@ -224,14 +224,14 @@ public class UrlBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testSetInvalidPortMin()
     {
-        new StandaloneUrlBuilder().port(-12);
+        new TestableUrlBuilder().port(-12);
     }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testSetInvalidPortMax()
     {
-        new StandaloneUrlBuilder().port(UrlBuilder.MAX_PORT + 1);
+        new TestableUrlBuilder().port(UrlBuilder.MAX_PORT + 1);
     }
 
 
@@ -240,7 +240,7 @@ public class UrlBuilderTest
     @Test
     public void testSetContext()
     {
-        UrlBuilder underTest = new StandaloneUrlBuilder();
+        UrlBuilder underTest = new TestableUrlBuilder();
         assertEquals("/", underTest.context);
 
         underTest.context("/");
@@ -257,14 +257,14 @@ public class UrlBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testSetNullContext()
     {
-        new StandaloneUrlBuilder().context(null);
+        new TestableUrlBuilder().context(null);
     }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testSetEmptyContext()
     {
-        new StandaloneUrlBuilder().context("");
+        new TestableUrlBuilder().context("");
     }
 
 
@@ -273,7 +273,7 @@ public class UrlBuilderTest
     @Test
     public void testSetModule()
     {
-        UrlBuilder underTest = new StandaloneUrlBuilder();
+        UrlBuilder underTest = new TestableUrlBuilder();
         assertNull(underTest.module);
 
         underTest.module("foo");
@@ -287,21 +287,21 @@ public class UrlBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testSetNullModule()
     {
-        new StandaloneUrlBuilder().module(null);
+        new TestableUrlBuilder().module(null);
     }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testSetEmptyModule()
     {
-        new StandaloneUrlBuilder().module("");
+        new TestableUrlBuilder().module("");
     }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testSetSlashModule()
     {
-        new StandaloneUrlBuilder().module("/");
+        new TestableUrlBuilder().module("/");
     }
 
 
@@ -310,7 +310,7 @@ public class UrlBuilderTest
     @Test
     public void testAddPath()
     {
-        UrlBuilder underTest = new StandaloneUrlBuilder();
+        UrlBuilder underTest = new TestableUrlBuilder();
         assertTrue(underTest.paths.isEmpty());
 
         underTest.path("eins", "/", null, "/zwei");
@@ -325,14 +325,14 @@ public class UrlBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testAddNullPath()
     {
-        new StandaloneUrlBuilder().path((String[]) null);
+        new TestableUrlBuilder().path((String[]) null);
     }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddEmptyPath()
     {
-        new StandaloneUrlBuilder().path(new String[0]);
+        new TestableUrlBuilder().path(new String[0]);
     }
 
 
@@ -341,7 +341,7 @@ public class UrlBuilderTest
     @Test
     public void testAddQueryParameter()
     {
-        UrlBuilder underTest = new StandaloneUrlBuilder();
+        UrlBuilder underTest = new TestableUrlBuilder();
         assertTrue(underTest.query.isEmpty());
 
         underTest.query("nachname", "pehl").query("vorname", "harald", "willi");
@@ -354,6 +354,6 @@ public class UrlBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testAddQueryParameterWithNullKey()
     {
-        new StandaloneUrlBuilder().query(null, "egal");
+        new TestableUrlBuilder().query(null, "egal");
     }
 }

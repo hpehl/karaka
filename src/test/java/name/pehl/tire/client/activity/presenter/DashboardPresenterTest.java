@@ -1,8 +1,12 @@
 package name.pehl.tire.client.activity.presenter;
 
-import static java.util.logging.Level.*;
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
@@ -13,6 +17,7 @@ import name.pehl.tire.client.activity.dispatch.ActivitiesRequest;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesAction;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.tire.client.activity.dispatch.GetActivitiesResult;
+import name.pehl.tire.client.activity.dispatch.TestableActivitiesRequest;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.tire.client.application.Message;
@@ -22,7 +27,6 @@ import name.pehl.tire.shared.model.Activities;
 
 import org.fusesource.restygwt.client.FailedStatusCodeException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -33,9 +37,6 @@ import com.gwtplatform.dispatch.client.actionhandler.ClientActionHandler;
 import com.gwtplatform.dispatch.client.actionhandler.ExecuteCommand;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
-@Ignore
-// TODO: Mock GWT calls caused by
-// name.pehl.tire.client.rest.UrlBuilder.defaultUrl()
 public class DashboardPresenterTest extends PresenterTest implements ShowMessageHandler, ActivitiesLoadedHandler
 {
     // ------------------------------------------------------------------ setup
@@ -64,7 +65,7 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
         newActivityPresenter = mock(NewActivityPresenter.class);
         activityNavigationPresenter = mock(ActivityNavigationPresenter.class);
         activityListPresenter = mock(ActivityListPresenter.class);
-        cut = new DashboardPresenter(eventBus, view, proxy, scheduler, newDispatcher(actionHandlerMappings),
+        cut = new TestableDashboardPresenter(eventBus, view, proxy, scheduler, newDispatcher(actionHandlerMappings),
                 newActivityPresenter, activityNavigationPresenter, activityListPresenter);
     }
 
@@ -93,7 +94,7 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
         // GetActivitiesCommand - success
         Activities activities = td.newActivities(MONTH);
         PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", "2000").with("month", "1");
-        ActivitiesRequest activitiesRequest = new ActivitiesRequest(placeRequest);
+        ActivitiesRequest activitiesRequest = new TestableActivitiesRequest(placeRequest);
         GetActivitiesAction getActivitiesAction = new GetActivitiesAction(activitiesRequest);
         final GetActivitiesResult getActivitiesResult = new GetActivitiesResult(activities);
         Answer<Object> getActivitiesAnswerSuccess = new Answer<Object>()

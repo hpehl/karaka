@@ -6,10 +6,10 @@ package name.pehl.tire.client.rest;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class StandaloneUrlBuilder extends UrlBuilder
+public class TestableUrlBuilder extends UrlBuilder
 {
     static final String PROTOCOL = "http";
-    static final String HOST = "www.acme.com";
+    static final String HOST = "localhost";
     static final String DEFAULT_URL = PROTOCOL + PROTOCOL_HOSTNAME_SEPARATOR + HOST;
 
 
@@ -21,5 +21,12 @@ public class StandaloneUrlBuilder extends UrlBuilder
     protected String defaultUrl()
     {
         return DEFAULT_URL;
+    }
+
+
+    @Override
+    protected String encode(String url)
+    {
+        return url;
     }
 }

@@ -252,7 +252,19 @@ public class UrlBuilder
                 }
             }
         }
-        return URL.encode(url.toString());
+        return encode(url.toString());
+    }
+
+
+    /**
+     * Extra method to make it testable outside GWT
+     * 
+     * @param url
+     * @return
+     */
+    protected String encode(String url)
+    {
+        return URL.encode(url);
     }
 
 
