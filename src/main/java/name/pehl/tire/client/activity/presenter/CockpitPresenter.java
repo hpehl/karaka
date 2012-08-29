@@ -65,7 +65,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
 {
     public interface MyView extends View, HasUiHandlers<CockpitUiHandlers>
     {
-        void updateMinutes(Durations minutes);
+        void updateDurations(Durations minutes);
 
 
         void updateStatus(Activity activity);
@@ -116,9 +116,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         }
         else
         {
-            // TODO Refactoring: The currentActivity might be chnaged in
-            // EditActivityPresenter. When sending this.currentActivity these
-            // changes will be overwritten!
             ActivityActionEvent.fire(this, START_STOP, currentActivity);
         }
     }
@@ -148,7 +145,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                 break;
         }
         getView().updateStatus(currentActivity);
-        // TODO Use the activities from the event to update minutes
         getMinutesCommand.execute();
     }
 
@@ -156,7 +152,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     @Override
     public void onTick(TickEvent event)
     {
-        // TODO Use the activities from the event to update minutes
         getMinutesCommand.execute();
     }
 
@@ -170,7 +165,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                 @Override
                 public void onSuccess(GetMinutesResult result)
                 {
-                    getView().updateMinutes(result.getMinutes());
+                    getView().updateDurations(result.getMinutes());
                 }
 
 
@@ -178,7 +173,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                 public void onFailure(Throwable caught)
                 {
                     logger.warning("Cannot load minutes for current month, week and/or day");
-                    getView().updateMinutes(new Durations());
+                    getView().updateDurations(new Durations());
                 }
             });
         }

@@ -241,7 +241,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
 
         cut.getMinutesCommand.execute();
 
-        verify(view).updateMinutes(new Durations());
+        verify(view).updateDurations(new Durations());
     }
 
 
@@ -269,7 +269,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
 
     void verifyGetMinutes()
     {
-        verify(view).updateMinutes(new Durations(new Duration(1), new Duration(2), new Duration(3)));
+        verify(view).updateDurations(new Durations(new Duration(1), new Duration(2), new Duration(3)));
     }
 
 
