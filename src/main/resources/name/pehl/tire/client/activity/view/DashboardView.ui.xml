@@ -9,7 +9,7 @@
             <g:SimplePanel ui:field="activityNavigationPanel" />
         </g:north>
         <g:center>
-            <g:SimplePanel ui:field="activityListPanel" />
+            <g:LayoutPanel ui:field="activityListPanel" />
         </g:center>
     </g:DockLayoutPanel>
 </ui:UiBinder> 

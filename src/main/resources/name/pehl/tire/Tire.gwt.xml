@@ -35,6 +35,7 @@
 
     <!-- Super Dev Mode -->
     <add-linker name="xsiframe" />
+    <set-property name="compiler.useSourceMaps" value="true" />
     <set-configuration-property name="devModeRedirectEnabled" value="true" />
     <set-configuration-property name='xsiframe.failIfScriptTag' value="false"/>
 

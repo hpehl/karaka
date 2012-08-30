@@ -5,7 +5,7 @@ import name.pehl.tire.client.ui.UiUtils;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.HasOneWidget;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -29,9 +29,9 @@ public class DashboardView extends ViewImpl implements DashboardPresenter.MyView
     // ---------------------------------------------------------- private stuff
 
     final Widget widget;
-    @UiField HasOneWidget newActivityPanel;
-    @UiField HasOneWidget activityNavigationPanel;
-    @UiField HasOneWidget activityListPanel;
+    @UiField HasWidgets newActivityPanel;
+    @UiField HasWidgets activityNavigationPanel;
+    @UiField HasWidgets activityListPanel;
 
 
     // ------------------------------------------------------------------ setup
