@@ -328,6 +328,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                         + " which is not the same as the internal running " + runningActivity + "!");
             }
             stopTicking();
+            activityToStop.stop();
             dispatcher.execute(new SaveActivityAction(activityToStop), new TireCallback<SaveActivityResult>(eventBus)
             {
                 @Override
@@ -446,6 +447,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                 public void onSuccess(SaveActivityResult result)
                 {
                     runningActivity = result.getStoredActivity();
+                    updateActivities(runningActivity, runningActivity);
                     TickEvent.fire(ActivityController.this, runningActivity, activities);
                 }
             });

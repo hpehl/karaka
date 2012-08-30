@@ -2,9 +2,7 @@ package name.pehl.tire.shared.model;
 
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -33,7 +31,7 @@ public class Activities
     TimeUnit unit;
     SortedSet<Week> weeks;
     SortedSet<Day> days;
-    Set<Activity> activities;
+    SortedSet<Activity> activities;
 
 
     // ------------------------------------------------------------ constructor
@@ -57,7 +55,7 @@ public class Activities
         this.unit = unit;
         this.weeks = new TreeSet<Week>();
         this.days = new TreeSet<Day>();
-        this.activities = new HashSet<Activity>();
+        this.activities = new TreeSet<Activity>();
     }
 
 
@@ -152,8 +150,9 @@ public class Activities
 
     // ------------------------------------------------------- business methods
 
-    public void add(Activity activity)
+    public boolean add(Activity activity)
     {
+        boolean added = false;
         if (activity != null)
         {
             Time start = activity.getStart();
@@ -164,7 +163,7 @@ public class Activities
                     if (matchingWeek == null)
                     {
                         matchingWeek = new Week(start.getYear(), start.getWeek());
-                        weeks.add(matchingWeek);
+                        added = weeks.add(matchingWeek);
                     }
                     matchingWeek.add(activity);
                     break;
@@ -173,22 +172,24 @@ public class Activities
                     if (matchinDay == null)
                     {
                         matchinDay = new Day(start.getYear(), start.getMonth(), start.getDay());
-                        days.add(matchinDay);
+                        added = days.add(matchinDay);
                     }
                     matchinDay.add(activity);
                     break;
                 case DAY:
-                    activities.add(activity);
+                    added = activities.add(activity);
                     break;
                 default:
                     break;
             }
         }
+        return added;
     }
 
 
-    public void remove(Activity activity)
+    public boolean remove(Activity activity)
     {
+        boolean removed = false;
         if (activity != null)
         {
             switch (unit)
@@ -197,7 +198,7 @@ public class Activities
                     for (Iterator<Week> iter = weeks.iterator(); iter.hasNext();)
                     {
                         Week week = iter.next();
-                        week.remove(activity);
+                        removed = week.remove(activity);
                         if (week.isEmpty())
                         {
                             iter.remove();
@@ -208,7 +209,7 @@ public class Activities
                     for (Iterator<Day> iter = days.iterator(); iter.hasNext();)
                     {
                         Day day = iter.next();
-                        day.remove(activity);
+                        removed = day.remove(activity);
                         if (day.isEmpty())
                         {
                             iter.remove();
@@ -216,12 +217,13 @@ public class Activities
                     }
                     break;
                 case DAY:
-                    activities.remove(activity);
+                    removed = activities.remove(activity);
                     break;
                 default:
                     break;
             }
         }
+        return removed;
     }
 
 
@@ -327,13 +329,13 @@ public class Activities
             case MONTH:
                 for (Week week : weeks)
                 {
-                    ordered.addAll(week.activities());
+                    ordered.addAll(week.getActivities());
                 }
                 break;
             case WEEK:
                 for (Day day : days)
                 {
-                    ordered.addAll(day.activities());
+                    ordered.addAll(day.getActivities());
                 }
                 break;
             case DAY:
@@ -594,7 +596,7 @@ public class Activities
      * 
      * @return
      */
-    public Set<Activity> getActivities()
+    public SortedSet<Activity> getActivities()
     {
         return activities;
     }
@@ -606,7 +608,7 @@ public class Activities
      * 
      * @param activities
      */
-    public void setActivities(Set<Activity> activities)
+    public void setActivities(SortedSet<Activity> activities)
     {
         this.activities = activities;
     }

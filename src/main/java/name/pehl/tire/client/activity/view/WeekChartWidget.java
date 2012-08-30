@@ -69,6 +69,6 @@ public class WeekChartWidget extends QuickChartWidget
 
     String tooltip(Day day)
     {
-        return FormatUtils.date(day.activities().first().getStart()) + ": " + FormatUtils.duration(day.getDuration());
+        return FormatUtils.date(day.getActivities().first().getStart()) + ": " + FormatUtils.duration(day.getDuration());
     }
 }

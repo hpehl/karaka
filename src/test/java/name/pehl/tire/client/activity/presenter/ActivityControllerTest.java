@@ -392,10 +392,13 @@ public class ActivityControllerTest extends PresenterTest implements TickHandler
     @SuppressWarnings("unchecked")
     public void onExecuteTick()
     {
+        Activities activities = td.newActivities(WEEK);
         Activity activity = td.newActivity();
         activity.start();
+        activities.add(activity);
         cut.ticking = true;
         cut.runningActivity = activity;
+        cut.activities = activities;
 
         SaveActivityAction saveActivityAction = new SaveActivityAction(activity);
         final SaveActivityResult saveActivityResult = new SaveActivityResult(activity);

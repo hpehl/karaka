@@ -1,8 +1,6 @@
 package name.pehl.tire.shared.model;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -23,7 +21,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     int year;
     int month;
     int day;
-    Set<Activity> activities;
+    SortedSet<Activity> activities;
 
 
     // ------------------------------------------------------------ constructor
@@ -42,7 +40,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
         this.year = year;
         this.month = month;
         this.day = day;
-        this.activities = new HashSet<Activity>();
+        this.activities = new TreeSet<Activity>();
     }
 
 
@@ -116,21 +114,23 @@ public class Day implements Comparable<Day>, Iterable<Activity>
 
     // ------------------------------------------------------- business methods
 
-    public void add(Activity activity)
+    public boolean add(Activity activity)
     {
         if (activity != null)
         {
-            activities.add(activity);
+            return activities.add(activity);
         }
+        return false;
     }
 
 
-    public void remove(Activity activity)
+    public boolean remove(Activity activity)
     {
         if (activity != null)
         {
-            activities.remove(activity);
+            return activities.remove(activity);
         }
+        return false;
     }
 
 
@@ -147,7 +147,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     @Override
     public Iterator<Activity> iterator()
     {
-        return activities().iterator();
+        return activities.iterator();
     }
 
 
@@ -157,25 +157,13 @@ public class Day implements Comparable<Day>, Iterable<Activity>
     }
 
 
-    /**
-     * @return a sorted set (ascending) of all activities managed by this
-     *         instance.
-     */
-    public SortedSet<Activity> activities()
-    {
-        TreeSet<Activity> ordered = new TreeSet<Activity>();
-        ordered.addAll(activities);
-        return ordered;
-    }
-
-
     public Time getStart()
     {
         Time start = null;
         if (!activities.isEmpty())
         {
             // Activities are sorted descending!
-            return activities().last().getStart();
+            return activities.last().getStart();
         }
         return start;
     }
@@ -187,7 +175,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
         if (!activities.isEmpty())
         {
             // Activities are sorted descending!
-            return activities().first().getEnd();
+            return activities.first().getEnd();
         }
         return end;
     }
@@ -206,13 +194,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
 
     // ------------------------------------------------------------- properties
 
-    /**
-     * Required for JSON (de)serialization - please don't call directly. Use
-     * {@link #activities()} instead.
-     * 
-     * @return
-     */
-    public Set<Activity> getActivities()
+    public SortedSet<Activity> getActivities()
     {
         return activities;
     }
@@ -224,7 +206,7 @@ public class Day implements Comparable<Day>, Iterable<Activity>
      * 
      * @param activities
      */
-    public void setActivities(Set<Activity> activities)
+    public void setActivities(SortedSet<Activity> activities)
     {
         this.activities = activities;
     }

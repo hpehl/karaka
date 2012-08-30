@@ -111,8 +111,9 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
     // ------------------------------------------------------- business methods
 
-    public void add(Activity activity)
+    public boolean add(Activity activity)
     {
+        boolean added = false;
         if (activity != null)
         {
             Time start = activity.getStart();
@@ -120,27 +121,30 @@ public class Week implements Comparable<Week>, Iterable<Day>
             if (matchinDay == null)
             {
                 matchinDay = new Day(start.getYear(), start.getMonth(), start.getDay());
-                days.add(matchinDay);
+                added = days.add(matchinDay);
             }
             matchinDay.add(activity);
         }
+        return added;
     }
 
 
-    public void remove(Activity activity)
+    public boolean remove(Activity activity)
     {
+        boolean removed = false;
         if (activity != null)
         {
             for (Iterator<Day> iter = days.iterator(); iter.hasNext();)
             {
                 Day day = iter.next();
-                day.remove(activity);
+                removed = day.remove(activity);
                 if (day.isEmpty())
                 {
                     iter.remove();
                 }
             }
         }
+        return removed;
     }
 
 
@@ -179,7 +183,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
      * @return a sorted set (ascending) of all activities managed by this
      *         instance.
      */
-    public SortedSet<Activity> activities()
+    public SortedSet<Activity> getActivities()
     {
         SortedSet<Activity> ordered = new TreeSet<Activity>();
         for (Day day : days)
