@@ -38,11 +38,43 @@ ul.columns li:first-child {
 	padding-left: 0;
 }
 
+div.tags mark {
+	cursor: pointer;
+}
+
+div.tags mark.existing {
+    float: left;
+	margin-right: .5em;
+	margin-bottom: 4px;
+}
+
+div.tags mark.existing:hover {
+	text-decoration: line-through;
+	opacity: .5;
+}
+
+div.tags mark.new {
+	float: right;
+	clear: left;
+}
+
+div.tags mark.new:hover {
+	background-color: #e5dc8a;
+}
+
+div.tags input#newtag {
+	float: right; width : 10em;
+	display: none;
+	margin-left: 8px;
+	width: 10em;
+}
+
 div.controls {
-	margin-top: 2em;
+    clear: both;
 }
 
 div.controls button {
+    margin-top: 2em;
 	margin-left: 5px;
 	float: right;
 	width: 8em;
@@ -64,7 +96,7 @@ div.controls button {
 	<div class="popup">
 		<div class="spacebelow">
 			<input type="text" id="name" name="name" title="Name"
-				placeholder="Name" autofocus="autofocus" />
+				placeholder="Name" />
 		</div>
 		<div class="spacebelow">
 			<textarea id="description" name="description" title="Description"
@@ -81,12 +113,20 @@ div.controls button {
 				title="Duration" placeholder="Duration" class="spacebelow" /></li>
 		</ul>
 		<div class="spacebelow">
-			<input type="text" id="tags" name="tags" title="Tags"
-				placeholder="Tags" />
-		</div>
-		<div>
 			<input type="text" id="project" name="project" title="Project"
 				placeholder="Project" class="loading" />
+		</div>
+		<div class="tags">
+            <span class="new">
+	            <input type="text" id="newtag" name="newtag" />
+				<mark class="new" title="Click to enter new tag">New Tag</mark>
+            </span>
+            <span class="existing">
+				<mark class="existing" title="Click to remove tag">bugfixing</mark>
+				<mark class="existing" title="Click to remove tag">test</mark>
+				<mark class="existing" title="Click to remove tag">qa</mark>
+				<mark class="existing" title="Click to remove tag">research</mark>
+            </span>
 		</div>
 		<div class="controls">
 			<button>Cancel</button>
@@ -94,5 +134,34 @@ div.controls button {
 		</div>
 		<div style="clear: right;"></div>
 	</div>
+
+	<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+	<script>
+        $(document).ready(
+                function() {
+                    $("mark.existing").live("click", function(event) {
+                        $(this).remove();
+                    });
+                    $("mark.new").click(function(event) {
+                        $(this).hide();
+                        $("#newtag").val("");
+                        $("#newtag").show();
+                        $("#newtag").focus();
+                    });
+                    $("#newtag").keydown(function(event) {
+                        if (event.which == 13) {
+                            if ($(this).val() != "") {
+                                $("span.existing").append('<mark class="existing" title="Click to remove tag">' + $(this).val() + '</mark>');
+                            }
+                            $(this).hide();
+                            $("mark.new").show();
+                        }
+                        else if (event.which == 27) {
+                            $(this).hide();
+                            $("mark.new").show();
+                        }
+                    });
+                });
+    </script>
 </body>
 </html>
