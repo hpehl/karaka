@@ -53,20 +53,20 @@ div.tags mark.existing:hover {
 	opacity: .5;
 }
 
-div.tags mark.new {
-	float: right;
-	clear: left;
-}
-
-div.tags mark.new:hover {
-	background-color: #e5dc8a;
-}
-
 div.tags input#newtag {
-	float: right; width : 10em;
-	display: none;
-	margin-left: 8px;
-	width: 10em;
+    float: right; 
+    width : 9em;
+    margin-left: 8px;
+    -webkit-border-top-left-radius: 40px;
+    -webkit-border-bottom-left-radius: 40px;
+    -moz-border-radius-topleft: 40px;
+    -moz-border-radius-bottomleft: 40px;
+    border-top-left-radius: 40px;
+    border-bottom-left-radius: 40px;
+    border: 1px #d1c24f solid;
+    background-color: #fff8ba;
+    padding: 2px 2px 2px 5px;
+    text-align: center;
 }
 
 div.controls {
@@ -117,16 +117,18 @@ div.controls button {
 				placeholder="Project" class="loading" />
 		</div>
 		<div class="tags">
-            <span class="new">
-	            <input type="text" id="newtag" name="newtag" />
-				<mark class="new" title="Click to enter new tag">New Tag</mark>
-            </span>
             <span class="existing">
-				<mark class="existing" title="Click to remove tag">bugfixing</mark>
-				<mark class="existing" title="Click to remove tag">test</mark>
-				<mark class="existing" title="Click to remove tag">qa</mark>
-				<mark class="existing" title="Click to remove tag">research</mark>
+	            <mark class="existing" title="Click to remove tag">bugfixing</mark>
+	            <mark class="existing" title="Click to remove tag">test</mark>
+	            <mark class="existing" title="Click to remove tag">qa</mark>
+	            <mark class="existing" title="Click to remove tag">research</mark>
+	            <mark class="existing" title="Click to remove tag">123</mark>
+	            <mark class="existing" title="Click to remove tag">1</mark>
+	            <mark class="existing" title="Click to remove tag">2</mark>
+	            <mark class="existing" title="Click to remove tag">3</mark>
+	            <mark class="existing" title="Click to remove tag">456</mark>
             </span>
+            <input type="text" id="newtag" name="newtag" placeholder="New Tag" />
 		</div>
 		<div class="controls">
 			<button>Cancel</button>
@@ -142,23 +144,12 @@ div.controls button {
                     $("mark.existing").live("click", function(event) {
                         $(this).remove();
                     });
-                    $("mark.new").click(function(event) {
-                        $(this).hide();
-                        $("#newtag").val("");
-                        $("#newtag").show();
-                        $("#newtag").focus();
-                    });
                     $("#newtag").keydown(function(event) {
                         if (event.which == 13) {
                             if ($(this).val() != "") {
                                 $("span.existing").append('<mark class="existing" title="Click to remove tag">' + $(this).val() + '</mark>');
+                                $(this).val("");
                             }
-                            $(this).hide();
-                            $("mark.new").show();
-                        }
-                        else if (event.which == 27) {
-                            $(this).hide();
-                            $("mark.new").show();
                         }
                     });
                 });
