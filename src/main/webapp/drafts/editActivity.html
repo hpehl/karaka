@@ -140,19 +140,19 @@ div.controls button {
 	<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
 	<script>
         $(document).ready(
-                function() {
-                    $("mark.existing").live("click", function(event) {
-                        $(this).remove();
-                    });
-                    $("#newtag").keydown(function(event) {
-                        if (event.which == 13) {
-                            if ($(this).val() != "") {
-                                $("span.existing").append('<mark class="existing" title="Click to remove tag">' + $(this).val() + '</mark>');
-                                $(this).val("");
-                            }
-                        }
-                    });
+            function() {
+                $("mark.existing").live("click", function(event) {
+                    $(this).remove();
                 });
+                $("#newtag").keydown(function(event) {
+                    if (event.which == 13) {
+                        if ($(this).val() != "") {
+                            $("span.existing").append('<mark class="existing" title="Click to remove tag">' + $(this).val() + '</mark>');
+                            $(this).val("");
+                        }
+                    }
+                });
+            });
     </script>
 </body>
 </html>
