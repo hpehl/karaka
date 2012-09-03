@@ -57,7 +57,7 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
     @UiField TimeTextBox end;
     @UiField DurationTextBox pause;
     @UiField DurationTextBox duration;
-    @UiField @Ignore Html5TextBox tags;
+    @UiField @Ignore TagsEditorWidget tags;
     @UiField(provided = true) @Ignore SuggestBox project;
     @UiField Button cancel;
     @UiField Button save;

@@ -1,95 +1,88 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:act="urn:import:name.pehl.tire.client.activity.view"
-	xmlns:tui="urn:import:name.pehl.tire.client.ui">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
+    xmlns:act="urn:import:name.pehl.tire.client.activity.view" xmlns:tui="urn:import:name.pehl.tire.client.ui">
 
-	<ui:style>
-		.popup {
-			padding: 10px;
-			border: #93cb2b solid 2px;
-			background-color: white;
-			-webkit-border-radius: 5px;
-			-moz-border-radius: 5px;
-			border-radius: 5px;
-			box-shadow: 2px 2px 2px #3d3d3d;
-			-moz-box-shadow: 2px 2px 2px #3d3d3d;
-			-webkit-box-shadow: 2px 2px 2px #3d3d3d;
-		}
-		
-		.popup input,.popup textarea {
-			width: 100%;
-		}
-		
-		ul.columns li {
-			float: left;
-			width: 25%;
-			padding-left: 5px;
-			-webkit-box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			box-sizing: border-box;
-			-webkit-box-sizing: border-box;
-		}
-		
-		ul.columns li:first-child {
-			padding-left: 0;
-		}
-		
-		div.controls {
-			margin-top: 2em;
-		}
-		
-		div.controls button {
-			margin-left: 5px;
-			float: right;
-			width: 8em;
-		}
-		
-		.spacebelow {
-			margin-bottom: 8px;
-		}
-	</ui:style>
+    <ui:style>
+        .popup {
+            padding: 10px;
+            border: #93cb2b solid 2px;
+            background-color: white;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 2px #3d3d3d;
+            -moz-box-shadow: 2px 2px 2px #3d3d3d;
+            -webkit-box-shadow: 2px 2px 2px #3d3d3d;
+        }
+        
+        .popup input,.popup textarea {
+            width: 100%;
+        }
+        
+        ul.columns li {
+            float: left;
+            width: 25%;
+            padding-left: 5px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+        
+        ul.columns li:first-child {
+            padding-left: 0;
+        }
+        
+        div.controls {
+            clear: both;
+        }
+        
+        div.controls button {
+            margin-top: 2em;
+            margin-left: 5px;
+            float: right;
+            width: 8em;
+        }
+        
+        .spacebelow {
+            margin-bottom: 8px;
+        }
+    </ui:style>
 
-	<tui:EscapablePopupPanel animationEnabled="false"
-		autoHideEnabled="true" modal="true" glassEnabled="true" addStyleNames="{style.popup}">
-		<g:HTMLPanel>
-			<div class="{style.spacebelow}">
-				<tui:Html5TextBox ui:field="name" placeholder="Name"
-					title="Name" autofocus="autofocus" />
-			</div>
-			<div class="{style.spacebelow}">
-				<tui:Html5TextArea ui:field="description"
-					placeholder="Description" title="Description" visibleLines="3"></tui:Html5TextArea>
-			</div>
-			<ul class="{style.columns}">
-				<li>
-					<act:TimeTextBox ui:field="start" placeholder="Start"
-						title="Start" />
-				</li>
-				<li>
-					<act:TimeTextBox ui:field="end" placeholder="End"
-						title="End" />
-				</li>
-				<li>
-					<act:DurationTextBox ui:field="pause"
-						placeholder="Pause" title="Pause" />
-				</li>
-				<li style="float: right;">
-					<act:DurationTextBox ui:field="duration"
-						placeholder="Duration" title="Duration" addStyleNames="{style.spacebelow}" />
-				</li>
-			</ul>
-			<div class="{style.spacebelow}">
-				<g:SuggestBox ui:field="project" />
-			</div>
-			<div>
-				<tui:Html5TextBox ui:field="tags" placeholder="Tags"
-					title="Tags" />
-			</div>
-			<div class="{style.controls}">
-				<g:Button ui:field="cancel">Cancel</g:Button>
-				<g:Button ui:field="save">Save</g:Button>
-			</div>
-			<div style="clear: right;"></div>
-		</g:HTMLPanel>
-	</tui:EscapablePopupPanel>
+    <tui:EscapablePopupPanel animationEnabled="false" autoHideEnabled="true" modal="true"
+        glassEnabled="true" addStyleNames="{style.popup}">
+        <g:HTMLPanel>
+            <div class="{style.spacebelow}">
+                <tui:Html5TextBox ui:field="name" placeholder="Name" title="Name" autofocus="autofocus" />
+            </div>
+            <div class="{style.spacebelow}">
+                <tui:Html5TextArea ui:field="description" placeholder="Description" title="Description"
+                    visibleLines="3"></tui:Html5TextArea>
+            </div>
+            <ul class="{style.columns}">
+                <li>
+                    <act:TimeTextBox ui:field="start" placeholder="Start" title="Start" />
+                </li>
+                <li>
+                    <act:TimeTextBox ui:field="end" placeholder="End" title="End" />
+                </li>
+                <li>
+                    <act:DurationTextBox ui:field="pause" placeholder="Pause" title="Pause" />
+                </li>
+                <li style="float: right;">
+                    <act:DurationTextBox ui:field="duration" placeholder="Duration" title="Duration"
+                        addStyleNames="{style.spacebelow}" />
+                </li>
+            </ul>
+            <div class="{style.spacebelow}">
+                <g:SuggestBox ui:field="project" />
+            </div>
+            <act:TagsEditorWidget ui:field="tags" />
+            <div class="{style.controls}">
+                <g:Button ui:field="cancel">Cancel</g:Button>
+                <g:Button ui:field="save">Save</g:Button>
+            </div>
+            <div style="clear: right;"></div>
+        </g:HTMLPanel>
+    </tui:EscapablePopupPanel>
 </ui:UiBinder> 

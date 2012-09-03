@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.HasValue;
  * <li>Use &lt;input type="time"/&gt; as underlying input element.
  * <li>Handle am/pm
  * <li>Use a picker like in http://jonthornton.github.com/jquery-timepicker/
+ * <li>Better: https://github.com/ctasada/GWT-Eureka
  * </ul>
  * 
  * @author $LastChangedBy:$
