@@ -86,6 +86,7 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
     {
         driver.initialize(this);
         driver.edit(activityToEdit);
+        tags.setTags(activityToEdit.getTags());
         super.show();
     }
 
