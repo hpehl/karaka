@@ -2,7 +2,6 @@ package name.pehl.tire.server.tag.control;
 
 import name.pehl.tire.server.converter.AbstractEntityConverter;
 import name.pehl.tire.server.converter.EntityConverter;
-import name.pehl.tire.shared.model.Tag;
 
 public class TagConverter extends
         AbstractEntityConverter<name.pehl.tire.server.tag.entity.Tag, name.pehl.tire.shared.model.Tag> implements
@@ -21,13 +20,16 @@ public class TagConverter extends
     @Override
     public name.pehl.tire.server.tag.entity.Tag fromModel(name.pehl.tire.shared.model.Tag model)
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        assertModel(model);
+        name.pehl.tire.server.tag.entity.Tag entity = new name.pehl.tire.server.tag.entity.Tag(model.getName());
+        return entity;
     }
 
 
     @Override
-    public void merge(Tag model, name.pehl.tire.server.tag.entity.Tag entity)
+    public void merge(name.pehl.tire.shared.model.Tag model, name.pehl.tire.server.tag.entity.Tag entity)
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        assertNonTransientModel(model);
+        entity.setName(model.getName());
     }
 }

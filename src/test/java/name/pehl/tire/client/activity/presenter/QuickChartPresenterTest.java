@@ -12,8 +12,6 @@ import name.pehl.tire.client.PresenterTest;
 import name.pehl.tire.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
-import name.pehl.tire.shared.model.Day;
-import name.pehl.tire.shared.model.Week;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -51,16 +49,14 @@ public class QuickChartPresenterTest extends PresenterTest
         Activity activity = td.newActivity();
         Activities activities = td.newActivities(MONTH);
         activities.add(activity);
-        Week week = activities.weekOf(activity);
         cut.onActivityChanged(td.newActivityChangedEvent(CHANGED, activity, activities));
-        verify(view).updateWeek(week);
+        verify(view).updateActivities(activities);
 
         reset(view);
         activities = td.newActivities(WEEK);
         activities.add(activity);
-        Day day = activities.dayOf(activity);
         cut.onActivityChanged(td.newActivityChangedEvent(CHANGED, activity, activities));
-        verify(view).updateDay(day);
+        verify(view).updateActivities(activities);
 
         reset(view);
         cut.onActivityChanged(td.newActivityChangedEvent(DELETE));
@@ -74,15 +70,13 @@ public class QuickChartPresenterTest extends PresenterTest
         Activity activity = td.newActivity();
         Activities activities = td.newActivities(MONTH);
         activities.add(activity);
-        Week week = activities.weekOf(activity);
         cut.onTick(td.newTickEvent(activity, activities));
-        verify(view).updateWeek(week);
+        verify(view).updateActivities(activities);
 
         reset(view);
         activities = td.newActivities(WEEK);
         activities.add(activity);
-        Day day = activities.dayOf(activity);
         cut.onTick(td.newTickEvent(activity, activities));
-        verify(view).updateDay(day);
+        verify(view).updateActivities(activities);
     }
 }

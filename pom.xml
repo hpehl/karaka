@@ -40,7 +40,7 @@
         <gae.version>1.7.0</gae.version>
         <gae.plugin.version>0.9.4</gae.plugin.version>
         <gin.version>1.5.0</gin.version>
-        <guava.version>13.0</guava.version>
+        <guava.version>13.0.1</guava.version>
         <gwt.version>2.5.0-rc1</gwt.version>
         <gwt.plugin.version>2.5.0-rc1</gwt.plugin.version>
         <gwtp.version>0.7</gwtp.version>
@@ -344,6 +344,7 @@
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
                     <module>name.pehl.tire.Tire</module>
                     <logLevel>INFO</logLevel>
+                    <strict>true</strict>
                     <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
                     <i18nConstantsBundles>
                         <i18nConstantsBundle>
