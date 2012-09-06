@@ -30,6 +30,8 @@ import name.pehl.tire.client.activity.event.TickEvent;
 import name.pehl.tire.client.application.Message;
 import name.pehl.tire.client.application.ShowMessageEvent;
 import name.pehl.tire.client.dispatch.TireCallback;
+import name.pehl.tire.client.project.RefreshProjectsEvent;
+import name.pehl.tire.client.tag.RefreshTagsEvent;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Project;
@@ -66,6 +68,8 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
  * <li>{@linkplain TickEvent}</li>
  * <li>{@linkplain ActivityChangedEvent}</li>
  * <li>{@linkplain ShowMessageEvent}</li>
+ * <li>{@linkplain RefreshProjectsEvent}</li>
+ * <li>{@linkplain RefreshTagsEvent}</li>
  * </ul>
  * </ol>
  * <h3>Dispatcher actions</h3>
@@ -400,14 +404,14 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         Project project = activity.getProject();
         if (project != null && project.isTransient())
         {
-            // TODO Refresh projects cache
+            RefreshProjectsEvent.fire(this);
         }
         List<Tag> tags = activity.getTags();
         for (Tag tag : tags)
         {
             if (tag.isTransient())
             {
-                // TODO Refresh tags cache
+                RefreshTagsEvent.fire(this);
                 break;
             }
         }

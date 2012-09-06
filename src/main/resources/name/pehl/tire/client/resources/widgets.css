@@ -1,4 +1,4 @@
-@external tire-tagsEditor, tire-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton, gwt-PopupPanelGlass, suggestPopupMiddleCenterInner, item, item-selected;
+@external tire-tagsEditor, existing, tire-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton, gwt-PopupPanelGlass, suggestPopupMiddleCenterInner, item, item-selected;
 .tire-tagsEditor mark {
     cursor: pointer;
 }
@@ -138,9 +138,9 @@ td.datePickerMonth {
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	box-shadow: 2px 2px 2px #62635e;
-	-moz-box-shadow: 2px 2px 2px #62635e;
-	-webkit-box-shadow: 2px 2px 2px #62635e;
+	box-shadow: 2px 2px 2px #d1c24f;
+	-moz-box-shadow: 2px 2px 2px #d1c24f;
+	-webkit-box-shadow: 2px 2px 2px #d1c24f;
 }
 
 .suggestPopupMiddleCenterInner .item {

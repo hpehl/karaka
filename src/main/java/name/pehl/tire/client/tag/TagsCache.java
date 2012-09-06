@@ -4,6 +4,7 @@ import static java.util.logging.Level.INFO;
 import name.pehl.tire.client.dispatch.TireCallback;
 import name.pehl.tire.client.model.AbstractModelCache;
 import name.pehl.tire.client.model.ModelCache;
+import name.pehl.tire.client.tag.RefreshTagsEvent.RefreshTagsHandler;
 import name.pehl.tire.shared.model.Tag;
 
 import com.google.gwt.core.client.Scheduler;
@@ -11,12 +12,13 @@ import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 
-public class TagsCache extends AbstractModelCache<Tag> implements ModelCache<Tag>
+public class TagsCache extends AbstractModelCache<Tag> implements ModelCache<Tag>, RefreshTagsHandler
 {
     @Inject
     public TagsCache(EventBus eventBus, Scheduler scheduler, DispatchAsync dispatcher)
     {
         super(eventBus, dispatcher);
+        eventBus.addHandler(RefreshTagsEvent.getType(), this);
     }
 
 
@@ -34,5 +36,12 @@ public class TagsCache extends AbstractModelCache<Tag> implements ModelCache<Tag
                 logger.log(INFO, "Tags refreshed.");
             }
         });
+    }
+
+
+    @Override
+    public void onRefreshTags(RefreshTagsEvent event)
+    {
+        refresh();
     }
 }

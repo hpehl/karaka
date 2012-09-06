@@ -15,7 +15,6 @@ import name.pehl.tire.server.settings.control.CurrentSettings;
 import name.pehl.tire.server.settings.entity.Settings;
 import name.pehl.tire.server.tag.control.TagConverter;
 import name.pehl.tire.server.tag.control.TagRepository;
-import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Duration;
 
 import org.joda.time.DateTime;
@@ -112,7 +111,8 @@ public class ActivityConverter extends
      * @param model
      * @param entity
      */
-    private void internalModelToEntity(Activity model, name.pehl.tire.server.activity.entity.Activity entity)
+    private void internalModelToEntity(name.pehl.tire.shared.model.Activity model,
+            name.pehl.tire.server.activity.entity.Activity entity)
     {
         // basic properties
         entity.setDescription(model.getDescription());
@@ -153,9 +153,14 @@ public class ActivityConverter extends
         {
             if (model.getProject().isTransient())
             {
-                // TODO Store new project
+                name.pehl.tire.server.project.entity.Project newProjectEntity = projectConverter.fromModel(model
+                        .getProject());
+                projectKey = projectRepository.put(newProjectEntity);
             }
-            projectKey = Key.create(model.getProject().getId());
+            else
+            {
+                projectKey = Key.<name.pehl.tire.server.project.entity.Project> create(model.getProject().getId());
+            }
         }
         entity.setProject(projectKey);
         List<Key<name.pehl.tire.server.tag.entity.Tag>> tags = new ArrayList<Key<name.pehl.tire.server.tag.entity.Tag>>();
@@ -163,7 +168,15 @@ public class ActivityConverter extends
         {
             for (name.pehl.tire.shared.model.Tag tag : model.getTags())
             {
-                tags.add(Key.<name.pehl.tire.server.tag.entity.Tag> create(tag.getId()));
+                if (tag.isTransient())
+                {
+                    name.pehl.tire.server.tag.entity.Tag newTagEntity = tagConverter.fromModel(tag);
+                    tags.add(tagRepository.put(newTagEntity));
+                }
+                else
+                {
+                    tags.add(Key.<name.pehl.tire.server.tag.entity.Tag> create(tag.getId()));
+                }
             }
         }
         entity.setTags(tags);

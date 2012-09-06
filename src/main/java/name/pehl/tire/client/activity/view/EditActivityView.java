@@ -6,7 +6,9 @@ import java.util.logging.Logger;
 import name.pehl.tire.client.activity.presenter.EditActivityPresenter;
 import name.pehl.tire.client.activity.presenter.EditAvtivityUiHandlers;
 import name.pehl.tire.client.model.NamedModelSuggestOracle;
+import name.pehl.tire.client.model.NamedModelSuggestion;
 import name.pehl.tire.client.project.ProjectsCache;
+import name.pehl.tire.client.tag.TagsCache;
 import name.pehl.tire.client.ui.EscapablePopupPanel;
 import name.pehl.tire.client.ui.Html5TextArea;
 import name.pehl.tire.client.ui.Html5TextBox;
@@ -17,11 +19,14 @@ import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -50,6 +55,7 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
     private final EscapablePopupPanel popupPanel;
     private final Driver driver;
     private Activity activityToEdit;
+    private Project currentProject;
 
     @UiField Html5TextBox name;
     @UiField Html5TextArea description;
@@ -57,15 +63,15 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
     @UiField TimeTextBox end;
     @UiField DurationTextBox pause;
     @UiField DurationTextBox duration;
-    @UiField @Ignore TagsEditorWidget tags;
     @UiField(provided = true) @Ignore SuggestBox project;
+    @UiField(provided = true) TagsEditorWidget tags;
     @UiField Button cancel;
     @UiField Button save;
 
 
     @Inject
     public EditActivityView(final EventBus eventBus, final Binder binder, final Driver driver,
-            final ProjectsCache projectsCache)
+            final ProjectsCache projectsCache, final TagsCache tagsCache)
     {
         super(eventBus);
 
@@ -73,6 +79,8 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
         Html5TextBox projectTextBox = new Html5TextBox();
         projectTextBox.setPlaceholder("Select or enter a new project");
         this.project = new SuggestBox(projectOracle, projectTextBox);
+
+        this.tags = new TagsEditorWidget(tagsCache);
 
         this.popupPanel = binder.createAndBindUi(this);
         this.popupPanel.setWidth("600px");
@@ -86,7 +94,16 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
     {
         driver.initialize(this);
         driver.edit(activityToEdit);
-        tags.setTags(activityToEdit.getTags());
+        if (activityToEdit.getProject() != null)
+        {
+            currentProject = activityToEdit.getProject();
+            project.setValue(activityToEdit.getProject().getName());
+        }
+        else
+        {
+            currentProject = null;
+            project.setValue("");
+        }
         super.show();
     }
 
@@ -119,6 +136,7 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
             hide();
             if (getUiHandlers() != null)
             {
+                changedActivity.setProject(currentProject);
                 getUiHandlers().onSave(changedActivity);
             }
         }
@@ -129,5 +147,25 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
     public void setActivity(Activity activity)
     {
         this.activityToEdit = activity;
+    }
+
+
+    @UiHandler("project")
+    @SuppressWarnings("unchecked")
+    void onProjectSelected(SelectionEvent<Suggestion> event)
+    {
+        NamedModelSuggestion<Project> suggestion = (NamedModelSuggestion<Project>) event.getSelectedItem();
+        currentProject = suggestion.getModel();
+    }
+
+
+    @UiHandler("project")
+    void onProjectChanged(ValueChangeEvent<String> event)
+    {
+        String value = event.getValue();
+        if (value != null && value.length() != 0)
+        {
+            currentProject = new Project(value);
+        }
     }
 }

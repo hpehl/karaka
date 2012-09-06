@@ -1,106 +1,187 @@
 package name.pehl.tire.client.activity.view;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import name.pehl.tire.client.model.NamedModelSuggestOracle;
+import name.pehl.tire.client.model.NamedModelSuggestion;
+import name.pehl.tire.client.tag.TagsCache;
+import name.pehl.tire.client.ui.Html5TextBox;
 import name.pehl.tire.shared.model.Tag;
 
 import com.google.common.base.Strings;
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.EventTarget;
-import com.google.gwt.dom.client.InputElement;
-import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventListener;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.IsEditor;
+import com.google.gwt.editor.client.LeafValueEditor;
+import com.google.gwt.editor.client.adapters.TakesValueEditor;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.InlineHTML;
+import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class TagsEditorWidget extends Widget
+public class TagsEditorWidget extends Composite implements HasValue<List<Tag>>, IsEditor<LeafValueEditor<List<Tag>>>,
+        ValueChangeHandler<String>, SelectionHandler<Suggestion>, ClickHandler
 {
-    private final DivElement root;
-    private final InputElement newTag;
-    private final NewTagListener newTagListener;
-    private final SpanElement existingTags;
-    private final ExistingTagListener existingTagListener;
+    // -------------------------------------------------------------- templates
+
+    public interface TagTemplate extends SafeHtmlTemplates
+    {
+        @Template("<mark id=\"{0}\" class=\"existing\" title=\"Click to remove tag\">{1}</mark>")
+        SafeHtml tag(String id, String name);
+    }
+
+    private static final TagTemplate TAG_TEMPLATE = GWT.create(TagTemplate.class);
+
+    // ------------------------------------------------------- member variables
+
+    private final FlowPanel rootPanel;
+    private final FlowPanel tagsPanel;
+    private final SuggestBox newTag;
+    private final Map<String, Tag> tags;
 
 
-    public TagsEditorWidget()
+    // ------------------------------------------------------------ constructor
+    public TagsEditorWidget(final TagsCache tagsCache)
     {
         super();
-        root = Document.get().createDivElement();
-        newTag = Document.get().createTextInputElement();
-        newTagListener = new NewTagListener();
-        existingTags = Document.get().createSpanElement();
-        existingTagListener = new ExistingTagListener();
+        this.rootPanel = new FlowPanel();
+        this.tagsPanel = new FlowPanel();
+        this.tags = new HashMap<String, Tag>();
 
-        root.appendChild(existingTags);
-        root.appendChild(newTag);
-        setElement(root);
+        NamedModelSuggestOracle<Tag> tagOracle = new NamedModelSuggestOracle<Tag>(tagsCache);
+        Html5TextBox newTagTextBox = new Html5TextBox();
+        newTagTextBox.setPlaceholder("New Tag");
+        this.newTag = new SuggestBox(tagOracle, newTagTextBox);
+        this.newTag.addValueChangeHandler(this);
+        this.newTag.addSelectionHandler(this);
+
+        rootPanel.add(tagsPanel);
+        rootPanel.add(newTag);
+        initWidget(rootPanel);
         setStyleName("tire-tagsEditor");
-
-        Element element = (Element) Element.as(newTag);
-        DOM.sinkEvents(element, Event.ONKEYDOWN);
-        DOM.setEventListener(element, newTagListener);
     }
 
 
-    public void setTags(List<Tag> tags)
+    // ----------------------------------------------------------- editor stuff
+
+    @Override
+    public List<Tag> getValue()
     {
-        NodeList<Node> childNodes = existingTags.getChildNodes();
-        for (int i = 0; i < childNodes.getLength(); i++)
+        return new ArrayList<Tag>(tags.values());
+    }
+
+
+    @Override
+    public void setValue(List<Tag> value)
+    {
+        refresh(value);
+    }
+
+
+    @Override
+    public void setValue(List<Tag> value, boolean fireEvents)
+    {
+        refresh(value);
+    }
+
+
+    @Override
+    public LeafValueEditor<List<Tag>> asEditor()
+    {
+        return TakesValueEditor.of(this);
+    }
+
+
+    @Override
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<List<Tag>> handler)
+    {
+        return addHandler(handler, ValueChangeEvent.getType());
+    }
+
+
+    // --------------------------------------------------------- event handlers
+
+    @Override
+    public void onValueChange(ValueChangeEvent<String> event)
+    {
+        String value = event.getValue();
+        if (Strings.emptyToNull(value) != null)
         {
-            childNodes.getItem(i).removeFromParent();
+            Tag tag = new Tag(value);
+            addTag(tag);
+            newTag.setText("");
         }
+    }
+
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void onSelection(SelectionEvent<Suggestion> event)
+    {
+        NamedModelSuggestion<Tag> suggestion = (NamedModelSuggestion<Tag>) event.getSelectedItem();
+        Tag tag = suggestion.getModel();
+        if (tag != null)
+        {
+            addTag(tag);
+            newTag.setText("");
+        }
+    }
+
+
+    @Override
+    public void onClick(ClickEvent event)
+    {
+        InlineHTML tagWidget = (InlineHTML) event.getSource();
+        removeTag(tagWidget);
+    }
+
+
+    // ------------------------------------------------------------ tag methods
+
+    private void refresh(List<Tag> tags)
+    {
+        this.tags.clear();
+        this.tagsPanel.clear();
         for (Tag tag : tags)
         {
-            addTag(tag.getName());
+            addTag(tag);
         }
     }
 
 
-    private void addTag(String tag)
+    private void addTag(Tag tag)
     {
-        com.google.gwt.dom.client.Element markElement = Document.get().createElement("mark");
-        markElement.setInnerText(tag);
-        markElement.setClassName("existing");
-        markElement.setTitle("Click to remove tag");
-
-        Element element = (Element) Element.as(markElement);
-        DOM.sinkEvents(element, Event.ONCLICK);
-        DOM.setEventListener(element, existingTagListener);
-    }
-
-    class ExistingTagListener implements EventListener
-    {
-        @Override
-        public void onBrowserEvent(Event event)
+        if (!tags.containsKey(tag.getId()))
         {
-            EventTarget target = event.getEventTarget();
-            Element.as(target).removeFromParent();
+            InlineHTML tagWidget = new InlineHTML(TAG_TEMPLATE.tag(tag.getId(), tag.getName()));
+            tagWidget.addClickHandler(this);
+            tags.put(tag.getId(), tag);
+            tagsPanel.add(tagWidget);
         }
     }
 
-    class NewTagListener implements EventListener
+
+    private void removeTag(InlineHTML tagWidget)
     {
-        @Override
-        public void onBrowserEvent(Event event)
-        {
-            if (event.getKeyCode() == 13)
-            {
-                String tag = newTag.getValue();
-                if (Strings.emptyToNull(tag) != null)
-                {
-                    addTag(tag);
-                    newTag.setValue("");
-                }
-            }
-        }
+        String id = tagWidget.getElement().getAttribute("id");
+        tags.remove(id);
+        tagsPanel.remove(tagWidget);
     }
 }
