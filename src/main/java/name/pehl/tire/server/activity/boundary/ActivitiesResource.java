@@ -165,7 +165,25 @@ public class ActivitiesResource
         DateMidnight nextMonth = yearMonth.plusMonths(1);
 
         List<Activity> requestedActivities = forYearMonth(yearMonth);
-        return activitiesConverter.toModel(yearMonth, MONTH, requestedActivities);
+        Activities activities = activitiesConverter.toModel(yearMonth, MONTH, requestedActivities);
+        activities.addLink(HasLinks.SELF, uriInfo.getAbsolutePath().toASCIIString());
+        boolean hasPrev = repository.hasActivitiesByYearMonth(prevMonth.year().get(), prevMonth.monthOfYear().get());
+        boolean hasNext = repository.hasActivitiesByYearMonth(nextMonth.year().get(), nextMonth.monthOfYear().get());
+        if (hasPrev)
+        {
+            String prev = uriInfo.getBaseUriBuilder()
+                    .segment(String.valueOf(prevMonth.monthOfYear().get()), String.valueOf(prevMonth.year().get()))
+                    .build().toASCIIString();
+            activities.addLink(HasLinks.PREV, prev);
+        }
+        if (hasNext)
+        {
+            String next = uriInfo.getBaseUriBuilder()
+                    .segment(String.valueOf(nextMonth.monthOfYear().get()), String.valueOf(nextMonth.year().get()))
+                    .build().toASCIIString();
+            activities.addLink(HasLinks.NEXT, next);
+        }
+        return activities;
     }
 
 
