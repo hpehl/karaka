@@ -23,8 +23,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import name.pehl.tire.server.activity.control.ActivitiesConverter;
 import name.pehl.tire.server.activity.control.ActivityConverter;
@@ -37,6 +39,7 @@ import name.pehl.tire.server.settings.entity.Settings;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Duration;
 import name.pehl.tire.shared.model.Durations;
+import name.pehl.tire.shared.model.HasLinks;
 import name.pehl.tire.shared.model.Year;
 import name.pehl.tire.shared.model.Years;
 
@@ -111,6 +114,7 @@ import com.googlecode.objectify.Key;
 @Produces(MediaType.APPLICATION_JSON)
 public class ActivitiesResource
 {
+    @Context UriInfo uriInfo;
     @Inject @CurrentSettings Settings settings;
     @Inject ActivityRepository repository;
     @Inject ActivityIndexSearch indexSearch;
@@ -144,7 +148,9 @@ public class ActivitiesResource
             year.addMonth(m);
             year.addWeek(w);
         }
-        return new Years(new TreeSet<Year>(lookup.values()));
+        Years years = new Years(new TreeSet<Year>(lookup.values()));
+        years.addLink(HasLinks.SELF, uriInfo.getAbsolutePath().toASCIIString());
+        return years;
     }
 
 
@@ -155,7 +161,11 @@ public class ActivitiesResource
     public Activities activitiesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
     {
         DateMidnight yearMonth = new DateMidnight(year, month, 1, settings.getTimeZone());
-        return activitiesConverter.toModel(yearMonth, MONTH, forYearMonth(yearMonth));
+        DateMidnight prevMonth = yearMonth.minusMonths(1);
+        DateMidnight nextMonth = yearMonth.plusMonths(1);
+
+        List<Activity> requestedActivities = forYearMonth(yearMonth);
+        return activitiesConverter.toModel(yearMonth, MONTH, requestedActivities);
     }
 
 

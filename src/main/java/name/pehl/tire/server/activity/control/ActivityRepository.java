@@ -31,9 +31,21 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
     }
 
 
+    public boolean hasActivitiesByYear(int year)
+    {
+        return query().filter("start.year =", year).count() > 0;
+    }
+
+
     public List<Activity> findByYearMonth(int year, int month)
     {
         return query().filter("start.year =", year).filter("start.month =", month).list();
+    }
+
+
+    public boolean hasActivitiesByYearMonth(int year, int month)
+    {
+        return query().filter("start.year =", year).filter("start.month =", month).count() > 0;
     }
 
 
@@ -43,9 +55,21 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
     }
 
 
+    public boolean hasActivitiesByYearWeek(int year, int week)
+    {
+        return query().filter("start.year =", year).filter("start.week =", week).count() > 0;
+    }
+
+
     public List<Activity> findByYearMonthDay(int year, int month, int day)
     {
         return query().filter("start.year =", year).filter("start.month =", month).filter("start.day =", day).list();
+    }
+
+
+    public boolean hasActivitiesByYearMonthDay(int year, int month, int day)
+    {
+        return query().filter("start.year =", year).filter("start.month =", month).filter("start.day =", day).count() > 0;
     }
 
 

@@ -1,7 +1,5 @@
 package name.pehl.tire.shared.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,7 +26,6 @@ public abstract class BaseModel
     // ------------------------------------------------------- member variables
 
     String id;
-    List<Link> links;
 
 
     // ------------------------------------------------------------ constructor
@@ -47,12 +44,12 @@ public abstract class BaseModel
      */
     BaseModel(String id)
     {
+        super();
         if (id == null)
         {
             throw new IllegalArgumentException("Id must not be null!");
         }
         this.id = id;
-        this.links = new ArrayList<Link>();
     }
 
 
@@ -152,37 +149,11 @@ public abstract class BaseModel
             throw new IllegalArgumentException("Id must not be null!");
         }
         this.id = id;
-        this.id = id;
     }
 
 
     public boolean isTransient()
     {
         return this.id.startsWith(TRANSIENT_ID_PREFIX);
-    }
-
-
-    public List<Link> getLinks()
-    {
-        return links;
-    }
-
-
-    public void addLink(String rel, String url)
-    {
-        if (rel != null && url != null)
-        {
-            Link link = new Link(rel, url);
-            if (!this.links.contains(link))
-            {
-                this.links.add(link);
-            }
-        }
-    }
-
-
-    public void setLinks(List<Link> links)
-    {
-        this.links = links;
     }
 }
