@@ -161,28 +161,8 @@ public class ActivitiesResource
     public Activities activitiesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
     {
         DateMidnight yearMonth = new DateMidnight(year, month, 1, settings.getTimeZone());
-        DateMidnight prevMonth = yearMonth.minusMonths(1);
-        DateMidnight nextMonth = yearMonth.plusMonths(1);
-
-        List<Activity> requestedActivities = forYearMonth(yearMonth);
-        Activities activities = activitiesConverter.toModel(yearMonth, MONTH, requestedActivities);
-        activities.addLink(HasLinks.SELF, uriInfo.getAbsolutePath().toASCIIString());
-        boolean hasPrev = repository.hasActivitiesByYearMonth(prevMonth.year().get(), prevMonth.monthOfYear().get());
-        boolean hasNext = repository.hasActivitiesByYearMonth(nextMonth.year().get(), nextMonth.monthOfYear().get());
-        if (hasPrev)
-        {
-            String prev = uriInfo.getBaseUriBuilder()
-                    .segment(String.valueOf(prevMonth.monthOfYear().get()), String.valueOf(prevMonth.year().get()))
-                    .build().toASCIIString();
-            activities.addLink(HasLinks.PREV, prev);
-        }
-        if (hasNext)
-        {
-            String next = uriInfo.getBaseUriBuilder()
-                    .segment(String.valueOf(nextMonth.monthOfYear().get()), String.valueOf(nextMonth.year().get()))
-                    .build().toASCIIString();
-            activities.addLink(HasLinks.NEXT, next);
-        }
+        Activities activities = activitiesConverter.toModel(yearMonth, MONTH, forYearMonth(yearMonth));
+        addLinksForYearMonth(activities, yearMonth);
         return activities;
     }
 
@@ -248,6 +228,31 @@ public class ActivitiesResource
     {
         DateMidnight now = now(settings.getTimeZone());
         return now.plus(months(month));
+    }
+
+
+    private void addLinksForYearMonth(Activities activities, DateMidnight yearMonth)
+    {
+        activities.addLink(HasLinks.SELF, uriInfo.getAbsolutePath().toASCIIString());
+
+        DateMidnight prevMonth = yearMonth.minusMonths(1);
+        DateMidnight nextMonth = yearMonth.plusMonths(1);
+        boolean hasPrev = repository.hasActivitiesByYearMonth(prevMonth.year().get(), prevMonth.monthOfYear().get());
+        boolean hasNext = repository.hasActivitiesByYearMonth(nextMonth.year().get(), nextMonth.monthOfYear().get());
+        if (hasPrev)
+        {
+            String prev = uriInfo.getBaseUriBuilder()
+                    .segment(String.valueOf(prevMonth.year().get()), String.valueOf(prevMonth.monthOfYear().get()))
+                    .build().toASCIIString();
+            activities.addLink(HasLinks.PREV, prev);
+        }
+        if (hasNext)
+        {
+            String next = uriInfo.getBaseUriBuilder()
+                    .segment(String.valueOf(nextMonth.year().get()), String.valueOf(nextMonth.monthOfYear().get()))
+                    .build().toASCIIString();
+            activities.addLink(HasLinks.NEXT, next);
+        }
     }
 
 
