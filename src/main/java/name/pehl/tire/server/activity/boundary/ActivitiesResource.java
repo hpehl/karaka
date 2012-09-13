@@ -2,6 +2,7 @@ package name.pehl.tire.server.activity.boundary;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static name.pehl.tire.shared.model.HasLinks.SELF;
 import static name.pehl.tire.shared.model.TimeUnit.DAY;
 import static name.pehl.tire.shared.model.TimeUnit.MONTH;
 import static name.pehl.tire.shared.model.TimeUnit.WEEK;
@@ -149,7 +150,7 @@ public class ActivitiesResource
             year.addWeek(w);
         }
         Years years = new Years(new TreeSet<Year>(lookup.values()));
-        years.addLink(HasLinks.SELF, uriInfo.getAbsolutePath().toASCIIString());
+        years.addLink(SELF, uriInfo.getAbsolutePath().toASCIIString());
         return years;
     }
 
@@ -181,7 +182,9 @@ public class ActivitiesResource
     public Activities activitiesForRelativeMonth(@PathParam("month") int month)
     {
         DateMidnight absolute = absoluteMonth(month);
-        return activitiesConverter.toModel(absolute, MONTH, forYearMonth(absolute));
+        Activities activities = activitiesConverter.toModel(absolute, MONTH, forYearMonth(absolute));
+        addLinksForYearMonth(activities, absolute);
+        return activities;
     }
 
 
@@ -199,7 +202,9 @@ public class ActivitiesResource
     public Activities activitiesForCurrentMonth()
     {
         DateMidnight now = now(settings.getTimeZone());
-        return activitiesConverter.toModel(now, MONTH, forYearMonth(now));
+        Activities activities = activitiesConverter.toModel(now, MONTH, forYearMonth(now));
+        addLinksForYearMonth(activities, now);
+        return activities;
     }
 
 
@@ -233,7 +238,7 @@ public class ActivitiesResource
 
     private void addLinksForYearMonth(Activities activities, DateMidnight yearMonth)
     {
-        activities.addLink(HasLinks.SELF, uriInfo.getAbsolutePath().toASCIIString());
+        activities.addLink(SELF, uriInfo.getAbsolutePath().toASCIIString());
 
         DateMidnight prevMonth = yearMonth.minusMonths(1);
         DateMidnight nextMonth = yearMonth.plusMonths(1);
@@ -465,7 +470,7 @@ public class ActivitiesResource
     @Path("{id}")
     public Response deleteExistingActivity(@PathParam("id") String id)
     {
-        Key<Activity> key = Key.<Activity> create(id);
+        Key<Activity> key = Key.create(id);
         Activity activity = repository.get(key);
         if (activity != null)
         {
