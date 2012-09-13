@@ -44,6 +44,7 @@ import name.pehl.tire.shared.model.HasLinks;
 import name.pehl.tire.shared.model.Year;
 import name.pehl.tire.shared.model.Years;
 
+import org.jboss.resteasy.annotations.cache.Cache;
 import org.jboss.resteasy.spi.NotFoundException;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
@@ -111,6 +112,7 @@ import com.googlecode.objectify.Key;
  * @version $Date: 2011-05-16 12:54:26 +0200 (Mo, 16. Mai 2011) $ $Revision: 110
  *          $
  */
+@Cache
 @Path("/activities")
 @Produces(MediaType.APPLICATION_JSON)
 public class ActivitiesResource

@@ -210,6 +210,11 @@
             <artifactId>resteasy-jackson-provider</artifactId>
             <version>${resteasy.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-cache-core</artifactId>
+            <version>${resteasy.version}</version>
+        </dependency>
 
         <!-- Misc -->
         <dependency>
