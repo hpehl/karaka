@@ -54,6 +54,7 @@ import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.client.ClientView;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
+import name.pehl.tire.client.model.LinkReader;
 import name.pehl.tire.client.project.GetProjectsHandler;
 import name.pehl.tire.client.project.ProjectPresenter;
 import name.pehl.tire.client.project.ProjectReader;
@@ -122,6 +123,7 @@ public class TireModule extends AbstractPresenterModule
         bind(ActivityWriter.class).asEagerSingleton();
         bind(DayReader.class).asEagerSingleton();
         bind(DurationsReader.class).asEagerSingleton();
+        bind(LinkReader.class).asEagerSingleton();
         bind(ProjectReader.class).asEagerSingleton();
         bind(ProjectWriter.class).asEagerSingleton();
         bind(SettingsReader.class).asEagerSingleton();

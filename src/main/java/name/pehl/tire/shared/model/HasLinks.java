@@ -45,4 +45,51 @@ public abstract class HasLinks
     {
         this.links = links;
     }
+
+
+    public boolean hasPrev()
+    {
+        return findRel(PREV) != null;
+    }
+
+
+    public String getPrev()
+    {
+        Link prev = findRel(PREV);
+        if (prev != null)
+        {
+            return prev.getUrl();
+        }
+        return null;
+    }
+
+
+    public boolean hasNext()
+    {
+        return findRel(NEXT) != null;
+    }
+
+
+    public String getNext()
+    {
+        Link next = findRel(NEXT);
+        if (next != null)
+        {
+            return next.getUrl();
+        }
+        return null;
+    }
+
+
+    private Link findRel(String rel)
+    {
+        for (Link link : links)
+        {
+            if (rel.equals(link.getRel()))
+            {
+                return link;
+            }
+        }
+        return null;
+    }
 }

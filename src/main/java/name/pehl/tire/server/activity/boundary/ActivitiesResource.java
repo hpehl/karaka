@@ -246,14 +246,14 @@ public class ActivitiesResource
         boolean hasNext = repository.hasActivitiesByYearMonth(nextMonth.year().get(), nextMonth.monthOfYear().get());
         if (hasPrev)
         {
-            String prev = uriInfo.getBaseUriBuilder()
+            String prev = uriInfo.getBaseUriBuilder().path("activities")
                     .segment(String.valueOf(prevMonth.year().get()), String.valueOf(prevMonth.monthOfYear().get()))
                     .build().toASCIIString();
             activities.addLink(HasLinks.PREV, prev);
         }
         if (hasNext)
         {
-            String next = uriInfo.getBaseUriBuilder()
+            String next = uriInfo.getBaseUriBuilder().path("activities")
                     .segment(String.valueOf(nextMonth.year().get()), String.valueOf(nextMonth.monthOfYear().get()))
                     .build().toASCIIString();
             activities.addLink(HasLinks.NEXT, next);
@@ -269,7 +269,9 @@ public class ActivitiesResource
     {
         DateMidnight yearWeek = new MutableDateTime(settings.getTimeZone()).year().set(year).weekOfWeekyear().set(week)
                 .toDateTime().toDateMidnight();
-        return activitiesConverter.toModel(yearWeek, WEEK, forYearWeek(yearWeek));
+        Activities activities = activitiesConverter.toModel(yearWeek, WEEK, forYearWeek(yearWeek));
+        addLinksForYearWeek(activities, yearWeek);
+        return activities;
     }
 
 
@@ -289,7 +291,9 @@ public class ActivitiesResource
     public Activities activitiesForRelativeWeek(@PathParam("week") int week)
     {
         DateMidnight absolute = absoluteWeek(week);
-        return activitiesConverter.toModel(absolute, WEEK, forYearWeek(absolute));
+        Activities activities = activitiesConverter.toModel(absolute, WEEK, forYearWeek(absolute));
+        addLinksForYearWeek(activities, absolute);
+        return activities;
     }
 
 
@@ -307,7 +311,9 @@ public class ActivitiesResource
     public Activities activitiesForCurrentWeek()
     {
         DateMidnight now = now(settings.getTimeZone());
-        return activitiesConverter.toModel(now, WEEK, forYearWeek(now));
+        Activities activities = activitiesConverter.toModel(now, WEEK, forYearWeek(now));
+        addLinksForYearWeek(activities, now);
+        return activities;
     }
 
 
@@ -339,6 +345,35 @@ public class ActivitiesResource
     }
 
 
+    private void addLinksForYearWeek(Activities activities, DateMidnight yearWeek)
+    {
+        activities.addLink(SELF, uriInfo.getAbsolutePath().toASCIIString());
+
+        DateMidnight prevWeek = yearWeek.minusWeeks(1);
+        DateMidnight nextWeek = yearWeek.plusWeeks(1);
+        boolean hasPrev = repository.hasActivitiesByYearWeek(prevWeek.year().get(), prevWeek.weekOfWeekyear().get());
+        boolean hasNext = repository.hasActivitiesByYearWeek(nextWeek.year().get(), nextWeek.weekOfWeekyear().get());
+        if (hasPrev)
+        {
+            String prev = uriInfo
+                    .getBaseUriBuilder()
+                    .path("activities")
+                    .segment(String.valueOf(prevWeek.year().get()),
+                            "cw" + String.valueOf(prevWeek.weekOfWeekyear().get())).build().toASCIIString();
+            activities.addLink(HasLinks.PREV, prev);
+        }
+        if (hasNext)
+        {
+            String next = uriInfo
+                    .getBaseUriBuilder()
+                    .path("activities")
+                    .segment(String.valueOf(nextWeek.year().get()),
+                            "cw" + String.valueOf(nextWeek.weekOfWeekyear().get())).build().toASCIIString();
+            activities.addLink(HasLinks.NEXT, next);
+        }
+    }
+
+
     // ----------------------------------------------------------------- by day
 
     @GET
@@ -347,7 +382,9 @@ public class ActivitiesResource
             @PathParam("day") int day)
     {
         DateMidnight yearMonthDay = new DateMidnight(year, month, day, settings.getTimeZone());
-        return activitiesConverter.toModel(yearMonthDay, DAY, forYearMonthDay(yearMonthDay));
+        Activities activities = activitiesConverter.toModel(yearMonthDay, DAY, forYearMonthDay(yearMonthDay));
+        addLinksForYearMonthDay(activities, yearMonthDay);
+        return activities;
     }
 
 
@@ -366,7 +403,9 @@ public class ActivitiesResource
     public Activities activitiesForToday()
     {
         DateMidnight now = now(settings.getTimeZone());
-        return activitiesConverter.toModel(now, DAY, forYearMonthDay(now));
+        Activities activities = activitiesConverter.toModel(now, DAY, forYearMonthDay(now));
+        addLinksForYearMonthDay(activities, now);
+        return activities;
     }
 
 
@@ -389,6 +428,37 @@ public class ActivitiesResource
                     .monthOfYear().get(), date.year().get()));
         }
         return activities;
+    }
+
+
+    private void addLinksForYearMonthDay(Activities activities, DateMidnight yearMonthDay)
+    {
+        activities.addLink(SELF, uriInfo.getAbsolutePath().toASCIIString());
+
+        DateMidnight prevDay = yearMonthDay.minusDays(1);
+        DateMidnight nextDay = yearMonthDay.plusDays(1);
+        boolean hasPrev = repository.hasActivitiesByYearMonthDay(prevDay.year().get(), prevDay.monthOfYear().get(),
+                prevDay.dayOfMonth().get());
+        boolean hasNext = repository.hasActivitiesByYearMonthDay(nextDay.year().get(), nextDay.monthOfYear().get(),
+                nextDay.dayOfMonth().get());
+        if (hasPrev)
+        {
+            String prev = uriInfo
+                    .getBaseUriBuilder()
+                    .path("activities")
+                    .segment(String.valueOf(prevDay.year().get()), String.valueOf(prevDay.monthOfYear().get()),
+                            String.valueOf(prevDay.dayOfMonth().get())).build().toASCIIString();
+            activities.addLink(HasLinks.PREV, prev);
+        }
+        if (hasNext)
+        {
+            String next = uriInfo
+                    .getBaseUriBuilder()
+                    .path("activities")
+                    .segment(String.valueOf(nextDay.year().get()), String.valueOf(nextDay.monthOfYear().get()),
+                            String.valueOf(nextDay.dayOfMonth().get())).build().toASCIIString();
+            activities.addLink(HasLinks.NEXT, next);
+        }
     }
 
 
@@ -422,7 +492,9 @@ public class ActivitiesResource
         Duration currentMonth = minutes(forYearMonth(now));
         Duration currentWeek = minutes(forYearWeek(now));
         Duration today = minutes(forYearMonthDay(now));
-        return new Durations(currentMonth, currentWeek, today);
+        Durations durations = new Durations(currentMonth, currentWeek, today);
+        durations.addLink(SELF, uriInfo.getAbsolutePath().toASCIIString());
+        return durations;
     }
 
 

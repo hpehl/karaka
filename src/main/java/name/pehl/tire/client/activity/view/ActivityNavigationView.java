@@ -99,16 +99,10 @@ public class ActivityNavigationView extends ViewWithUiHandlers<ActivityNavigatio
         header.setTitle(title.toString());
 
         // Update navigation
-        if (activities.getUnit() == WEEK)
-        {
-            previous.setTitle("Previous week");
-            next.setTitle("Next week");
-        }
-        else if (activities.getUnit() == MONTH)
-        {
-            previous.setTitle("Previous month");
-            next.setTitle("Next month");
-        }
+        previous.setVisible(activities.hasPrev());
+        previous.setTitle("Previous " + activities.getUnit().name().toLowerCase());
+        next.setVisible(activities.hasNext());
+        next.setTitle("Next " + activities.getUnit().name().toLowerCase());
     }
 
 
