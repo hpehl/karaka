@@ -1,0 +1,122 @@
+/* ------------------------------------------ Overwritten CellTable classes */
+.cellTableWidget {
+	
+}
+
+.cellTableFirstColumn {
+	
+}
+
+.cellTableLastColumn {
+	
+}
+
+.cellTableHeader {
+	
+}
+
+.cellTableCell,.cellTableFooter {
+	text-align: left;
+	font-size: 11pt;
+	line-height: 2em;
+	padding: 5px 10px;
+	border-top: 1px solid #dedede;
+}
+
+.cellTableCell {
+	cursor: pointer;
+	border-bottom: 1px solid #dedede;
+}
+
+.cellTableFooter {
+	font-weight: bold;
+}
+
+.cellTableFirstColumnFooter {
+	
+}
+
+.cellTableFirstColumnHeader {
+	
+}
+
+.cellTableLastColumnFooter {
+	
+}
+
+.cellTableLastColumnHeader {
+	
+}
+
+.cellTableEvenRow {
+	
+}
+
+.cellTableEvenRowCell {
+	
+}
+
+.cellTableOddRow {
+	
+}
+
+.cellTableOddRowCell {
+	
+}
+
+.cellTableHoveredRow {
+	
+}
+
+.cellTableHoveredRowCell {
+	
+}
+
+.cellTableKeyboardSelectedRow {
+	
+}
+
+.cellTableKeyboardSelectedRowCell {
+	
+}
+
+.cellTableSelectedRow {
+	
+}
+
+.cellTableSelectedRowCell {
+	
+}
+
+.cellTableKeyboardSelectedCell {
+	
+}
+
+.cellTableSortedHeaderDescending {
+	
+}
+
+.cellTableSortedHeaderAscending {
+	
+}
+
+.cellTableSortableHeader {
+	
+}
+
+@sprite .cellTableLoading {
+	gwt-image: 'cellTableLoading';
+	margin: 30px;
+}
+
+/* ----------------------------------------------- Custom CellTable classes */
+.alternativeColor {
+	background-color: #e9ffbf;
+}
+
+.actionsColumn {
+}
+
+.hideActions {
+	visibility: hidden;
+}

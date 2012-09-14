@@ -58,17 +58,10 @@ public class ActivityListView extends ViewWithUiHandlers<ActivityListUiHandlers>
     }
 
 
-    @Override
-    public void setUiHandlers(ActivityListUiHandlers uiHandlers)
-    {
-        super.setUiHandlers(uiHandlers);
-    }
-
-
     // ----------------------------------------------------------- view methods
 
     @Override
-    public void updateActivities(Activities activities)
+    public void updateActivities(final Activities activities)
     {
         activitiesTable.update(activities);
     }
@@ -77,7 +70,7 @@ public class ActivityListView extends ViewWithUiHandlers<ActivityListUiHandlers>
     // ------------------------------------------------------------ ui handlers
 
     @UiHandler("activitiesTable")
-    public void onActivityAction(ActivityActionEvent event)
+    public void onActivityAction(final ActivityActionEvent event)
     {
         if (getUiHandlers() != null)
         {

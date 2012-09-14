@@ -28,7 +28,7 @@ public interface ActivitiesTableResources extends CellTable.Resources
         String projectColumn();
 
 
-        String actionColumn();
+        String actionsColumn();
 
 
         String hideActions();

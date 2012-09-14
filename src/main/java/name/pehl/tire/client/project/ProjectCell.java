@@ -1,6 +1,7 @@
-package name.pehl.tire.client.activity.view;
+package name.pehl.tire.client.project;
 
-import name.pehl.tire.shared.model.Activity;
+import static name.pehl.tire.client.project.ProjectAction.Action.DETAILS;
+import name.pehl.tire.shared.model.Project;
 
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;
 import com.google.gwt.cell.client.Cell;
@@ -11,36 +12,34 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.SafeHtmlRenderer;
 
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.DETAILS;
-
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class ActivityCell extends AbstractSafeHtmlCell<Activity>
+public class ProjectCell extends AbstractSafeHtmlCell<Project>
 {
-    private final ActivitiesTable activitiesTable;
-    private final ActivityActionCell actionCell;
+    private final ProjectsTable projectsTable;
+    private final ProjectActionCell actionCell;
 
 
-    public ActivityCell(ActivitiesTable activitiesTable, ActivityActionCell actionCell,
-            SafeHtmlRenderer<Activity> renderer)
+    public ProjectCell(final ProjectsTable projectsTable, final ProjectActionCell actionCell,
+            final SafeHtmlRenderer<Project> renderer)
     {
         super(renderer, "click", "mouseover", "mouseout");
-        this.activitiesTable = activitiesTable;
+        this.projectsTable = projectsTable;
         this.actionCell = actionCell;
     }
 
 
     @Override
-    public void onBrowserEvent(Cell.Context context, Element parent, Activity value, NativeEvent event,
-            ValueUpdater<Activity> valueUpdater)
+    public void onBrowserEvent(final Cell.Context context, final Element parent, final Project value,
+            final NativeEvent event, final ValueUpdater<Project> valueUpdater)
     {
         super.onBrowserEvent(context, parent, value, event, valueUpdater);
         if ("click".equals(event.getType()))
         {
             actionCell.hideActions(parent);
-            activitiesTable.onActivityAction(DETAILS, value);
+            projectsTable.onProjectAction(DETAILS, value);
         }
         else if ("mouseover".equals(event.getType()))
         {
@@ -54,7 +53,7 @@ public class ActivityCell extends AbstractSafeHtmlCell<Activity>
 
 
     @Override
-    protected void render(Cell.Context context, SafeHtml data, SafeHtmlBuilder sb)
+    protected void render(final Cell.Context context, final SafeHtml data, final SafeHtmlBuilder sb)
     {
         if (data != null)
         {

@@ -56,9 +56,9 @@ import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
 import name.pehl.tire.client.model.LinkReader;
 import name.pehl.tire.client.project.GetProjectsHandler;
-import name.pehl.tire.client.project.ProjectPresenter;
+import name.pehl.tire.client.project.ProjectsPresenter;
 import name.pehl.tire.client.project.ProjectReader;
-import name.pehl.tire.client.project.ProjectView;
+import name.pehl.tire.client.project.ProjectsView;
 import name.pehl.tire.client.project.ProjectWriter;
 import name.pehl.tire.client.project.ProjectsCache;
 import name.pehl.tire.client.report.ReportPresenter;
@@ -165,8 +165,8 @@ public class TireModule extends AbstractPresenterModule
         bindPresenter(DashboardPresenter.class, DashboardPresenter.MyView.class, DashboardView.class,
                 DashboardPresenter.MyProxy.class);
         bindPresenter(HelpPresenter.class, HelpPresenter.MyView.class, HelpView.class, HelpPresenter.MyProxy.class);
-        bindPresenter(ProjectPresenter.class, ProjectPresenter.MyView.class, ProjectView.class,
-                ProjectPresenter.MyProxy.class);
+        bindPresenter(ProjectsPresenter.class, ProjectsPresenter.MyView.class, ProjectsView.class,
+                ProjectsPresenter.MyProxy.class);
         bindPresenter(ReportPresenter.class, ReportPresenter.MyView.class, ReportView.class,
                 ReportPresenter.MyProxy.class);
         bindPresenter(SettingsPresenter.class, SettingsPresenter.MyView.class, SettingsView.class,

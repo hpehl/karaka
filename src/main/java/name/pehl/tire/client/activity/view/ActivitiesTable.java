@@ -9,6 +9,9 @@ import name.pehl.tire.client.activity.event.ActivityAction.Action;
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler;
 import name.pehl.tire.client.activity.event.ActivityActionEvent.HasActivityActionHandlers;
+import name.pehl.tire.client.model.ModelKeyProvider;
+import name.pehl.tire.client.model.ModelRenderer;
+import name.pehl.tire.client.model.ModelTextRenderer;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
@@ -38,7 +41,7 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
 
     public ActivitiesTable(final ActivitiesTableResources atr)
     {
-        super(Integer.MAX_VALUE, atr, new ActivityKeyProvider());
+        super(Integer.MAX_VALUE, atr, new ModelKeyProvider<Activity>());
         this.atr = atr;
 
         setRowCount(0);
@@ -46,7 +49,7 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
         setRowStyles(new RowStyles<Activity>()
         {
             @Override
-            public String getStyleNames(Activity row, int rowIndex)
+            public String getStyleNames(final Activity row, final int rowIndex)
             {
                 if (row.isRunning())
                 {
@@ -71,10 +74,10 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
         ActivityActionCell actionCell = new ActivityActionCell(this, atr);
 
         // Column #0: Start date
-        ActivityColumn startColumn = new ActivityColumn(this, actionCell, new ActivityTextRenderer()
+        ActivityColumn startColumn = new ActivityColumn(this, actionCell, new ModelTextRenderer<Activity>()
         {
             @Override
-            protected String getValue(Activity activity)
+            protected String getValue(final Activity activity)
             {
                 return FormatUtils.date(activity.getStart());
             }
@@ -94,10 +97,10 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
         });
 
         // Column #1: Duration from - to
-        ActivityColumn durationFromToColumn = new ActivityColumn(this, actionCell, new ActivityTextRenderer()
+        ActivityColumn durationFromToColumn = new ActivityColumn(this, actionCell, new ModelTextRenderer<Activity>()
         {
             @Override
-            public String getValue(Activity activity)
+            public String getValue(final Activity activity)
             {
                 return FormatUtils.timeDuration(activity.getStart(), activity.getEnd());
             }
@@ -106,10 +109,10 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
         addColumn(durationFromToColumn);
 
         // Column #2: Duration in hours
-        ActivityColumn durationInHoursColumn = new ActivityColumn(this, actionCell, new ActivityRenderer()
+        ActivityColumn durationInHoursColumn = new ActivityColumn(this, actionCell, new ModelRenderer<Activity>()
         {
             @Override
-            public SafeHtml render(Activity activity)
+            public SafeHtml render(final Activity activity)
             {
                 String duration = FormatUtils.duration(activity.getDuration());
                 if (activity.getPause().isZero())
@@ -122,7 +125,6 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
                     return ActivityTemplates.INSTANCE.duration(duration, pause);
                 }
             }
-
         });
         durationInHoursColumn.setHorizontalAlignment(ActivityColumn.ALIGN_RIGHT);
         addColumnStyleName(2, atr.cellTableStyle().durationInHoursColumn());
@@ -140,10 +142,10 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
         });
 
         // Column #3: Name, Description & Tags
-        ActivityRenderer nameRenderer = new ActivityRenderer()
+        ModelRenderer<Activity> nameRenderer = new ModelRenderer<Activity>()
         {
             @Override
-            public SafeHtml render(Activity activity)
+            public SafeHtml render(final Activity activity)
             {
                 SafeHtml nameDescription = ActivityTemplates.INSTANCE.nameDescription(activity.getName(),
                         Strings.nullToEmpty(activity.getDescription()));
@@ -170,7 +172,7 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
         ActivityColumn nameColumn = new ActivityColumn(this, actionCell, nameRenderer)
         {
             @Override
-            public Activity getValue(Activity activity)
+            public Activity getValue(final Activity activity)
             {
                 return activity;
             }
@@ -179,10 +181,10 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
         addColumn(nameColumn);
 
         // Column #4: Project
-        ActivityColumn projectColumn = new ActivityColumn(this, actionCell, new ActivityTextRenderer()
+        ActivityColumn projectColumn = new ActivityColumn(this, actionCell, new ModelTextRenderer<Activity>()
         {
             @Override
-            public String getValue(Activity activity)
+            public String getValue(final Activity activity)
             {
                 if (activity.getProject() != null)
                 {
@@ -196,14 +198,14 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
 
         // Column #5: Actions
         ActivityColumn actionColumn = new ActivityColumn(actionCell);
-        addColumnStyleName(5, atr.cellTableStyle().actionColumn());
+        addColumnStyleName(5, atr.cellTableStyle().actionsColumn());
         addColumn(actionColumn);
     }
 
 
     // --------------------------------------------------------- public methods
 
-    public void update(Activities activities)
+    public void update(final Activities activities)
     {
         currentActivities = activities;
         setRowData(0, new ArrayList<Activity>(activities.activities()));
@@ -214,13 +216,13 @@ public class ActivitiesTable extends CellTable<Activity> implements HasActivityA
     // --------------------------------------------------------- event handling
 
     @Override
-    public HandlerRegistration addActivityActionHandler(ActivityActionHandler handler)
+    public HandlerRegistration addActivityActionHandler(final ActivityActionHandler handler)
     {
         return addHandler(handler, ActivityActionEvent.getType());
     }
 
 
-    public void onActivityAction(Activity activity, Action action)
+    public void onActivityAction(final Action action, final Activity activity)
     {
         ActivityActionEvent.fire(this, action, activity);
     }

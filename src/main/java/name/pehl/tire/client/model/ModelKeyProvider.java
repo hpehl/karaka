@@ -1,6 +1,6 @@
-package name.pehl.tire.client.activity.view;
+package name.pehl.tire.client.model;
 
-import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.BaseModel;
 
 import com.google.gwt.view.client.ProvidesKey;
 
@@ -9,10 +9,10 @@ import com.google.gwt.view.client.ProvidesKey;
  * @version $LastChangedRevision:$
  */
 
-class ActivityKeyProvider implements ProvidesKey<Activity>
+public class ModelKeyProvider<T extends BaseModel> implements ProvidesKey<T>
 {
     @Override
-    public Object getKey(Activity item)
+    public Object getKey(final T item)
     {
         return item == null ? null : item.getId();
     }

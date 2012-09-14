@@ -7,7 +7,7 @@ import name.pehl.tire.client.application.ApplicationPresenter;
 import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.dispatch.ClientDispatchModule;
 import name.pehl.tire.client.help.HelpPresenter;
-import name.pehl.tire.client.project.ProjectPresenter;
+import name.pehl.tire.client.project.ProjectsPresenter;
 import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.settings.SettingsPresenter;
 import name.pehl.tire.client.tag.TagPresenter;
@@ -43,7 +43,7 @@ public interface TireGinjector extends Ginjector
     AsyncProvider<ClientPresenter> getClientPresenter();
     Provider<DashboardPresenter> getDashboardPresenter();
     AsyncProvider<HelpPresenter> getHelpPresenter();
-    AsyncProvider<ProjectPresenter> getProjectPresenter();
+    AsyncProvider<ProjectsPresenter> getProjectPresenter();
     AsyncProvider<ReportPresenter> getReportPresenter();
     AsyncProvider<TagPresenter> getTagPresenter();
     AsyncProvider<TermsPresenter> getTermsPresenter();

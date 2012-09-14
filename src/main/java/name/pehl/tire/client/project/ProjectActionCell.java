@@ -1,10 +1,8 @@
-package name.pehl.tire.client.activity.view;
+package name.pehl.tire.client.project;
 
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.COPY;
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.DELETE;
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
 import name.pehl.tire.client.model.ModelRenderer;
-import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.client.project.ProjectAction.Action;
+import name.pehl.tire.shared.model.Project;
 
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;
 import com.google.gwt.cell.client.Cell;
@@ -24,23 +22,23 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
+public class ProjectActionCell extends AbstractSafeHtmlCell<Project>
 {
-    private final ActivitiesTable activitiesTable;
-    private final ActivitiesTableResources atr;
+    private final ProjectsTable projectsTable;
+    private final ProjectsTableResources ptr;
 
 
-    public ActivityActionCell(final ActivitiesTable activitiesTable, final ActivitiesTableResources atr)
+    public ProjectActionCell(final ProjectsTable projectsTable, final ProjectsTableResources ptr)
     {
-        super(new ActionRenderer(atr), "click", "mouseover", "mouseout");
-        this.activitiesTable = activitiesTable;
-        this.atr = atr;
+        super(new ActionRenderer(ptr), "click", "mouseover", "mouseout");
+        this.projectsTable = projectsTable;
+        this.ptr = ptr;
     }
 
 
     @Override
-    public void onBrowserEvent(final Cell.Context context, final Element parent, final Activity value,
-            final NativeEvent event, final ValueUpdater<Activity> valueUpdater)
+    public void onBrowserEvent(final Cell.Context context, final Element parent, final Project value,
+            final NativeEvent event, final ValueUpdater<Project> valueUpdater)
     {
         super.onBrowserEvent(context, parent, value, event, valueUpdater);
         if ("click".equals(event.getType()))
@@ -51,20 +49,10 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
                 ImageElement img = eventTarget.cast();
                 if (ImageElement.is(img))
                 {
-                    ImageElement copy = findImage(parent, 0);
-                    ImageElement startStop = findImage(parent, 1);
                     ImageElement delete = findImage(parent, 2);
-                    if (img == copy)
+                    if (img == delete)
                     {
-                        activitiesTable.onActivityAction(COPY, value);
-                    }
-                    else if (img == startStop)
-                    {
-                        activitiesTable.onActivityAction(START_STOP, value);
-                    }
-                    else if (img == delete)
-                    {
-                        activitiesTable.onActivityAction(DELETE, value);
+                        projectsTable.onProjectAction(Action.DELETE, value);
                     }
                 }
             }
@@ -109,7 +97,7 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
     {
         if (actionsDiv != null)
         {
-            actionsDiv.removeClassName(atr.cellTableStyle().hideActions());
+            actionsDiv.removeClassName(ptr.cellTableStyle().hideActions());
         }
     }
 
@@ -131,7 +119,7 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
     {
         if (actionsDiv != null)
         {
-            actionsDiv.addClassName(atr.cellTableStyle().hideActions());
+            actionsDiv.addClassName(ptr.cellTableStyle().hideActions());
         }
     }
 
@@ -208,27 +196,23 @@ public class ActivityActionCell extends AbstractSafeHtmlCell<Activity>
 
     // ---------------------------------------------------------- inner classes
 
-    static class ActionRenderer extends ModelRenderer<Activity>
+    static class ActionRenderer extends ModelRenderer<Project>
     {
-        private final ActivitiesTableResources atr;
+        private final ProjectsTableResources ptr;
 
 
-        ActionRenderer(final ActivitiesTableResources atr)
+        ActionRenderer(final ProjectsTableResources ptr)
         {
-            this.atr = atr;
+            this.ptr = ptr;
         }
 
 
         @Override
-        public SafeHtml render(final Activity object)
+        public SafeHtml render(final Project project)
         {
-            SafeHtml copyHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(atr.copy()).getHTML());
-            SafeHtml startStopHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(atr.startStop())
-                    .getHTML());
             SafeHtml deleteHtml = SafeHtmlUtils
-                    .fromTrustedString(AbstractImagePrototype.create(atr.delete()).getHTML());
-            return ActivityTemplates.INSTANCE.actions(atr.cellTableStyle().hideActions(), copyHtml, startStopHtml,
-                    deleteHtml);
+                    .fromTrustedString(AbstractImagePrototype.create(ptr.delete()).getHTML());
+            return ProjectsTemplates.INSTANCE.actions(ptr.cellTableStyle().hideActions(), deleteHtml);
         }
     }
 }
