@@ -3,7 +3,7 @@ package name.pehl.tire.client.activity.view;
 import static name.pehl.tire.client.activity.event.ActivityAction.Action.COPY;
 import static name.pehl.tire.client.activity.event.ActivityAction.Action.DELETE;
 import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_STOP;
-import name.pehl.tire.client.model.ModelRenderer;
+import name.pehl.tire.client.cell.ModelRenderer;
 import name.pehl.tire.shared.model.Activity;
 
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;

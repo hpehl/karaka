@@ -5,7 +5,6 @@ import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.Key
 import java.util.ArrayList;
 import java.util.List;
 
-import name.pehl.tire.client.model.ModelKeyProvider;
 import name.pehl.tire.shared.model.BaseModel;
 
 import com.google.gwt.user.cellview.client.CellTable;

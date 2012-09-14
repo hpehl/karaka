@@ -1,6 +1,6 @@
 package name.pehl.tire.client.project;
 
-import name.pehl.tire.client.model.ModelRenderer;
+import name.pehl.tire.client.cell.ModelRenderer;
 import name.pehl.tire.client.project.ProjectAction.Action;
 import name.pehl.tire.shared.model.Project;
 

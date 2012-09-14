@@ -1,6 +1,5 @@
 package name.pehl.tire.client.cell;
 
-import name.pehl.tire.client.model.ModelRenderer;
 import name.pehl.tire.shared.model.BaseModel;
 
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;

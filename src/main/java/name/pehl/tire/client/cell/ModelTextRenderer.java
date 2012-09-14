@@ -1,4 +1,4 @@
-package name.pehl.tire.client.model;
+package name.pehl.tire.client.cell;
 
 import name.pehl.tire.shared.model.BaseModel;
 
