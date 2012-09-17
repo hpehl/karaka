@@ -1,15 +1,12 @@
 package name.pehl.tire.client.project;
 
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 
-public interface ProjectsTableResources extends CellTable.Resources
+public interface ProjectsTableResources extends ClientBundle
 {
-    public interface ProjectsTableStyle extends CellTable.Style
+    public interface ProjectsTableStyle extends CssResource
     {
-        String odd();
-
-
         String nameColumn();
 
 
@@ -20,16 +17,9 @@ public interface ProjectsTableResources extends CellTable.Resources
 
 
         String actionsColumn();
-
-
-        String hideActions();
     }
 
 
-    @Override
     @Source("projectsTable.css")
     ProjectsTableStyle cellTableStyle();
-
-
-    ImageResource delete();
 }

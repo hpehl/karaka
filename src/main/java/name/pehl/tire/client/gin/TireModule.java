@@ -50,17 +50,20 @@ import name.pehl.tire.client.application.MessagePresenter;
 import name.pehl.tire.client.application.MessageView;
 import name.pehl.tire.client.application.NavigationPresenter;
 import name.pehl.tire.client.application.NavigationView;
+import name.pehl.tire.client.cell.ModelsTableResources;
 import name.pehl.tire.client.client.ClientPresenter;
 import name.pehl.tire.client.client.ClientView;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
 import name.pehl.tire.client.model.LinkReader;
 import name.pehl.tire.client.project.GetProjectsHandler;
-import name.pehl.tire.client.project.ProjectsPresenter;
 import name.pehl.tire.client.project.ProjectReader;
-import name.pehl.tire.client.project.ProjectsView;
 import name.pehl.tire.client.project.ProjectWriter;
 import name.pehl.tire.client.project.ProjectsCache;
+import name.pehl.tire.client.project.ProjectsPresenter;
+import name.pehl.tire.client.project.ProjectsTableResources;
+import name.pehl.tire.client.project.ProjectsTemplates;
+import name.pehl.tire.client.project.ProjectsView;
 import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.report.ReportView;
 import name.pehl.tire.client.resources.I18n;
@@ -101,7 +104,10 @@ public class TireModule extends AbstractPresenterModule
         // Resources
         bind(I18n.class).in(Singleton.class);
         bind(Resources.class).in(Singleton.class);
+        bind(ModelsTableResources.class).in(Singleton.class);
         bind(ActivitiesTableResources.class).in(Singleton.class);
+        bind(ProjectsTableResources.class).in(Singleton.class);
+        bind(ProjectsTemplates.class).in(Singleton.class);
 
         // Rest Action Handlers
         bind(DeleteActivityHandler.class);

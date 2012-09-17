@@ -18,18 +18,16 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
 {
     // -------------------------------------------------------- private members
 
-    final ModelsTableResources tableResources;
-    final ModelActionCell<T> actionCell;
+    protected final ModelsTableResources tableResources;
+    protected ModelActionCell<T> actionCell;
 
 
     // ----------------------------------------------------------- constructors
 
-    public ModelsTable(final ModelsTableResources tableResources, final ModelActionCell<T> actionCell,
-            final int actionColumnIndex)
+    public ModelsTable(final ModelsTableResources tableResources)
     {
         super(Integer.MAX_VALUE, tableResources, new ModelKeyProvider<T>());
         this.tableResources = tableResources;
-        this.actionCell = actionCell;
 
         setRowCount(0);
         setKeyboardSelectionPolicy(DISABLED);
@@ -45,21 +43,33 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
                 return null;
             }
         });
-        addDataColumns();
-        addActionColumn(actionColumnIndex);
     }
 
 
     // -------------------------------------------------------------- gui setup
 
-    protected abstract void addDataColumns();
+    protected abstract void addColumns();
 
 
-    protected void addActionColumn(final int columnIndex)
+    /**
+     * Please make sure that {@code actionCell} is assigned before this method
+     * is called!
+     * 
+     * @param renderer
+     * @param styleName
+     * @param columnIndex
+     * @throws IllegalStateException
+     *             if {@code actionCell} is {@code null}
+     */
+    protected void addDataColumn(final ModelRenderer<T> renderer, final String styleName, final int columnIndex)
     {
-        ModelColumn<T> actionColumn = new ModelColumn<T>(actionCell);
-        addColumnStyleName(columnIndex, tableResources.cellTableStyle().actionsColumn());
-        addColumn(actionColumn);
+        if (actionCell == null)
+        {
+            throw new IllegalStateException("actionCell is null");
+        }
+        ModelColumn<T> column = new ModelColumn<T>(new ModelDataCell<T>(renderer, actionCell));
+        addColumnStyleName(columnIndex, styleName);
+        addColumn(column);
     }
 
 
@@ -81,7 +91,4 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
         setRowData(0, local);
         setRowCount(local.size());
     }
-
-
-    public abstract void onAction(T model);
 }

@@ -1,12 +1,13 @@
 package name.pehl.tire.client.project;
 
-import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import name.pehl.tire.client.cell.ModelKeyProvider;
+import name.pehl.tire.client.cell.ModelColumn;
+import name.pehl.tire.client.cell.ModelRenderer;
 import name.pehl.tire.client.cell.ModelTextRenderer;
+import name.pehl.tire.client.cell.ModelsTable;
+import name.pehl.tire.client.cell.ModelsTableResources;
 import name.pehl.tire.client.project.ProjectAction.Action;
 import name.pehl.tire.client.project.ProjectActionEvent.HasProjectActionHandlers;
 import name.pehl.tire.client.project.ProjectActionEvent.ProjectActionHandler;
@@ -14,78 +15,72 @@ import name.pehl.tire.shared.model.Client;
 import name.pehl.tire.shared.model.Project;
 
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.RowStyles;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public class ProjectsTable extends CellTable<Project> implements HasProjectActionHandlers
+public class ProjectsTable extends ModelsTable<Project> implements HasProjectActionHandlers
 {
     // -------------------------------------------------------- private members
 
-    private final ProjectsTableResources ptr;
+    final ProjectsTemplates projectTemplates;
+    final ProjectsTableResources projectTableResources;
 
 
     // ----------------------------------------------------------- constructors
 
-    public ProjectsTable(final ProjectsTableResources atr)
+    public ProjectsTable(final ProjectsTemplates projectTemplates, final ProjectsTableResources projectTableResources,
+            final ModelsTableResources commonTableResources)
     {
-        super(Integer.MAX_VALUE, atr, new ModelKeyProvider<Project>());
-        this.ptr = atr;
-
-        setRowCount(0);
-        setKeyboardSelectionPolicy(DISABLED);
-        setRowStyles(new RowStyles<Project>()
-        {
-            @Override
-            public String getStyleNames(final Project row, final int rowIndex)
-            {
-                if (rowIndex % 2 != 0)
-                {
-                    return ptr.cellTableStyle().odd();
-                }
-                return null;
-            }
-        });
-        addColumns();
+        super(commonTableResources);
+        this.projectTemplates = projectTemplates;
+        this.projectTableResources = projectTableResources;
     }
 
 
     // -------------------------------------------------------------- gui setup
 
-    private void addColumns()
+    @Override
+    protected void addColumns()
     {
-        // Action cell is used in all other cells to show / hide the actions
-        ProjectActionCell actionCell = new ProjectActionCell(this, ptr);
+        // Action is the last column in the UI, but the first one to create!
+        this.actionCell = new ProjectActionCell(this, new ModelRenderer<Project>()
+        {
+            @Override
+            public SafeHtml render(final Project object)
+            {
+                SafeHtml deleteHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(
+                        tableResources.delete()).getHTML());
+                return projectTemplates.actions(tableResources.cellTableStyle().hideActions(), deleteHtml);
+            }
+        }, tableResources);
 
         // Column #0: Name
-        ProjectColumn nameColumn = new ProjectColumn(this, actionCell, new ModelTextRenderer<Project>()
+        addDataColumn(new ModelTextRenderer<Project>()
         {
             @Override
             protected String getValue(final Project project)
             {
                 return project.getName();
             }
-        });
-        addColumnStyleName(0, ptr.cellTableStyle().nameColumn());
-        addColumn(nameColumn);
+        }, projectTableResources.cellTableStyle().nameColumn(), 0);
 
         // Column #1: Description
-        ProjectColumn descriptionColumn = new ProjectColumn(this, actionCell, new ModelTextRenderer<Project>()
+        addDataColumn(new ModelTextRenderer<Project>()
         {
             @Override
             public String getValue(final Project project)
             {
                 return project.getDescription();
             }
-        });
-        addColumnStyleName(1, ptr.cellTableStyle().descriptionColumn());
-        addColumn(descriptionColumn);
+        }, projectTableResources.cellTableStyle().descriptionColumn(), 1);
 
         // Column #2: Client
-        ProjectColumn clientColumn = new ProjectColumn(this, actionCell, new ModelTextRenderer<Project>()
+        addDataColumn(new ModelTextRenderer<Project>()
         {
             @Override
             public String getValue(final Project project)
@@ -98,19 +93,18 @@ public class ProjectsTable extends CellTable<Project> implements HasProjectActio
                 }
                 return clientName;
             }
-        });
-        addColumnStyleName(2, ptr.cellTableStyle().clientColumn());
-        addColumn(clientColumn);
+        }, projectTableResources.cellTableStyle().clientColumn(), 2);
 
-        // Column #3: Actions
-        ProjectColumn actionColumn = new ProjectColumn(actionCell);
-        addColumnStyleName(3, ptr.cellTableStyle().actionsColumn());
+        // Column #3: Action
+        ModelColumn<Project> actionColumn = new ModelColumn<Project>(actionCell);
+        addColumnStyleName(3, projectTableResources.cellTableStyle().actionsColumn());
         addColumn(actionColumn);
     }
 
 
     // --------------------------------------------------------- public methods
 
+    @Override
     public void update(final List<Project> projects)
     {
         List<Project> local = projects;

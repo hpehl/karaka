@@ -7,8 +7,5 @@ public interface ModelsTableStyle extends CellTable.Style
     String alternativeColor();
 
 
-    String actionsColumn();
-
-
     String hideActions();
 }

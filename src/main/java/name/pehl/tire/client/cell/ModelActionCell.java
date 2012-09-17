@@ -13,9 +13,13 @@ import com.google.gwt.dom.client.Node;
  */
 public abstract class ModelActionCell<T extends BaseModel> extends ModelCell<T>
 {
-    public ModelActionCell(final ModelsTable<T> table, final ModelRenderer<T> renderer)
+    final ModelsTableResources tableResources;
+
+
+    public ModelActionCell(final ModelRenderer<T> renderer, final ModelsTableResources tableResources)
     {
-        super(table, renderer);
+        super(renderer);
+        this.tableResources = tableResources;
     }
 
 
@@ -54,7 +58,7 @@ public abstract class ModelActionCell<T extends BaseModel> extends ModelCell<T>
     {
         if (actionsDiv != null)
         {
-            actionsDiv.removeClassName(table.tableResources.cellTableStyle().hideActions());
+            actionsDiv.removeClassName(tableResources.cellTableStyle().hideActions());
         }
     }
 
@@ -76,7 +80,7 @@ public abstract class ModelActionCell<T extends BaseModel> extends ModelCell<T>
     {
         if (actionsDiv != null)
         {
-            actionsDiv.addClassName(table.tableResources.cellTableStyle().hideActions());
+            actionsDiv.addClassName(tableResources.cellTableStyle().hideActions());
         }
     }
 
