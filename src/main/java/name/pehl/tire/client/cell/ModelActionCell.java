@@ -16,7 +16,7 @@ public abstract class ModelActionCell<T extends BaseModel> extends ModelCell<T>
     final ModelsTableResources tableResources;
 
 
-    public ModelActionCell(final ModelRenderer<T> renderer, final ModelsTableResources tableResources)
+    public ModelActionCell(final ModelsTableResources tableResources, final ModelRenderer<T> renderer)
     {
         super(renderer);
         this.tableResources = tableResources;

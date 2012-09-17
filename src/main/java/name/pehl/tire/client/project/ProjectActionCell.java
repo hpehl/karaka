@@ -18,10 +18,10 @@ public class ProjectActionCell extends ModelActionCell<Project>
     final ProjectsTable table;
 
 
-    public ProjectActionCell(final ProjectsTable table, final ModelRenderer<Project> renderer,
-            final ModelsTableResources tableResources)
+    public ProjectActionCell(final ProjectsTable table, final ModelsTableResources tableResources,
+            final ModelRenderer<Project> renderer)
     {
-        super(renderer, tableResources);
+        super(tableResources, renderer);
         this.table = table;
     }
 

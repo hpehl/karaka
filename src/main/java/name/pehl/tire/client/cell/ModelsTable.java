@@ -54,20 +54,20 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
     /**
      * Please make sure that {@code actionCell} is assigned before this method
      * is called!
-     * 
-     * @param renderer
      * @param styleName
      * @param columnIndex
+     * @param renderer
+     * 
      * @throws IllegalStateException
      *             if {@code actionCell} is {@code null}
      */
-    protected void addDataColumn(final ModelRenderer<T> renderer, final String styleName, final int columnIndex)
+    protected void addDataColumn(final String styleName, final int columnIndex, final ModelRenderer<T> renderer)
     {
         if (actionCell == null)
         {
             throw new IllegalStateException("actionCell is null");
         }
-        ModelColumn<T> column = new ModelColumn<T>(new ModelDataCell<T>(renderer, actionCell));
+        ModelColumn<T> column = new ModelColumn<T>(new ModelDataCell<T>(actionCell, renderer));
         addColumnStyleName(columnIndex, styleName);
         addColumn(column);
     }

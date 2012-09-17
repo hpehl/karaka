@@ -15,7 +15,7 @@ public class ModelDataCell<T extends BaseModel> extends ModelCell<T>
     final ModelActionCell<T> actionCell;
 
 
-    public ModelDataCell(final ModelRenderer<T> renderer, final ModelActionCell<T> actionCell)
+    public ModelDataCell(final ModelActionCell<T> actionCell, final ModelRenderer<T> renderer)
     {
         super(renderer);
         this.actionCell = actionCell;

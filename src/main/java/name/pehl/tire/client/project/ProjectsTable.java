@@ -1,8 +1,5 @@
 package name.pehl.tire.client.project;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import name.pehl.tire.client.cell.ModelColumn;
 import name.pehl.tire.client.cell.ModelRenderer;
 import name.pehl.tire.client.cell.ModelTextRenderer;
@@ -48,7 +45,7 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
     protected void addColumns()
     {
         // Action is the last column in the UI, but the first one to create!
-        this.actionCell = new ProjectActionCell(this, new ModelRenderer<Project>()
+        this.actionCell = new ProjectActionCell(this, tableResources, new ModelRenderer<Project>()
         {
             @Override
             public SafeHtml render(final Project object)
@@ -57,30 +54,30 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
                         tableResources.delete()).getHTML());
                 return projectTemplates.actions(tableResources.cellTableStyle().hideActions(), deleteHtml);
             }
-        }, tableResources);
+        });
 
         // Column #0: Name
-        addDataColumn(new ModelTextRenderer<Project>()
+        addDataColumn(projectTableResources.cellTableStyle().nameColumn(), 0, new ModelTextRenderer<Project>()
         {
             @Override
             protected String getValue(final Project project)
             {
                 return project.getName();
             }
-        }, projectTableResources.cellTableStyle().nameColumn(), 0);
+        });
 
         // Column #1: Description
-        addDataColumn(new ModelTextRenderer<Project>()
+        addDataColumn(projectTableResources.cellTableStyle().descriptionColumn(), 1, new ModelTextRenderer<Project>()
         {
             @Override
             public String getValue(final Project project)
             {
                 return project.getDescription();
             }
-        }, projectTableResources.cellTableStyle().descriptionColumn(), 1);
+        });
 
         // Column #2: Client
-        addDataColumn(new ModelTextRenderer<Project>()
+        addDataColumn(projectTableResources.cellTableStyle().clientColumn(), 2, new ModelTextRenderer<Project>()
         {
             @Override
             public String getValue(final Project project)
@@ -93,27 +90,12 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
                 }
                 return clientName;
             }
-        }, projectTableResources.cellTableStyle().clientColumn(), 2);
+        });
 
         // Column #3: Action
         ModelColumn<Project> actionColumn = new ModelColumn<Project>(actionCell);
         addColumnStyleName(3, projectTableResources.cellTableStyle().actionsColumn());
         addColumn(actionColumn);
-    }
-
-
-    // --------------------------------------------------------- public methods
-
-    @Override
-    public void update(final List<Project> projects)
-    {
-        List<Project> local = projects;
-        if (local == null)
-        {
-            local = new ArrayList<Project>();
-        }
-        setRowData(0, local);
-        setRowCount(local.size());
     }
 
 
