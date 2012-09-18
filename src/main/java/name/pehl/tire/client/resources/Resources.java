@@ -14,9 +14,12 @@ public interface Resources extends ClientBundle
     // ----------------------------------------------------------------- images
 
     // @formatter:off
+    ImageResource copy();
+    ImageResource delete();
     ImageResource recordOn();
     ImageResource recordOff();
     ImageResource selectedNavigation();
+    ImageResource startStop();
     ImageResource stopwatch32();
     ImageResource stopwatch64();
     ImageResource stopwatch128();
@@ -43,12 +46,10 @@ public interface Resources extends ClientBundle
 
     public interface Message extends CssResource
     {
-        // @ClassName("show")
+        // @formatter:off
         String show();
-
-
-        // @ClassName("hide")
         String hide();
+        // @formatter:on
     }
 
 
@@ -57,12 +58,10 @@ public interface Resources extends ClientBundle
 
     public interface Navigation extends CssResource
     {
-        // @ClassName("selectedNavigationEntry")
+        // @formatter:off
         String selectedNavigationEntry();
-
-
-        // @ClassName("selectedDate")
         String selectedDate();
+        // @formatter:on
     }
 
 
@@ -71,25 +70,15 @@ public interface Resources extends ClientBundle
 
     public interface ActivitiesTableStyle extends CssResource
     {
+        // @formatter:off
         String activeActivity();
-
-
         String startColumn();
-
-
         String durationInHoursColumn();
-
-
         String durationFromToColumn();
-
-
         String nameColumn();
-
-
         String projectColumn();
-
-
         String actionsColumn();
+        // @formatter:on
     }
 
 
@@ -98,16 +87,12 @@ public interface Resources extends ClientBundle
 
     public interface ProjectsTableStyle extends CssResource
     {
+        // @formatter:off
         String nameColumn();
-
-
         String descriptionColumn();
-
-
         String clientColumn();
-
-
         String actionsColumn();
+        // @formatter:on
     }
 
 

@@ -61,8 +61,8 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
             @Override
             public SafeHtml render(final Project project)
             {
-                SafeHtml deleteHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(
-                        tableResources.delete()).getHTML());
+                SafeHtml deleteHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(resources.delete())
+                        .getHTML());
                 return TEMPLATES.actions(tableResources.cellTableStyle().hideActions(), deleteHtml);
             }
         });

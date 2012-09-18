@@ -85,12 +85,12 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
             @Override
             public SafeHtml render(final Activity activity)
             {
-                SafeHtml copyHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype
-                        .create(tableResources.copy()).getHTML());
+                SafeHtml copyHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(resources.copy())
+                        .getHTML());
                 SafeHtml startStopHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(
-                        tableResources.startStop()).getHTML());
-                SafeHtml deleteHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(
-                        tableResources.delete()).getHTML());
+                        resources.startStop()).getHTML());
+                SafeHtml deleteHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(resources.delete())
+                        .getHTML());
                 return TEMPLATES.actions(tableResources.cellTableStyle().hideActions(), copyHtml, startStopHtml,
                         deleteHtml);
             }
