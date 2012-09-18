@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <!-- $LastChangedBy: harald.pehl $LastChangedRevision: 1418 $ -->
 
 
@@ -197,11 +197,6 @@
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-cache-core</artifactId>
-            <version>${resteasy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-cdi</artifactId>
             <version>${resteasy.version}</version>
         </dependency>
@@ -280,7 +275,7 @@
 
 
     <build>
-        <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
+        <!--<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>-->
 
 
         <pluginManagement>
