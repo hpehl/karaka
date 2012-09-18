@@ -43,11 +43,11 @@ public interface Resources extends ClientBundle
 
     public interface Message extends CssResource
     {
-        @ClassName("show")
+        // @ClassName("show")
         String show();
 
 
-        @ClassName("hide")
+        // @ClassName("hide")
         String hide();
     }
 
@@ -57,15 +57,60 @@ public interface Resources extends ClientBundle
 
     public interface Navigation extends CssResource
     {
-        @ClassName("selectedNavigationEntry")
+        // @ClassName("selectedNavigationEntry")
         String selectedNavigationEntry();
 
 
-        @ClassName("selectedDate")
+        // @ClassName("selectedDate")
         String selectedDate();
     }
 
 
     @Source("navigation.css")
     Navigation navigation();
+
+    public interface ActivitiesTableStyle extends CssResource
+    {
+        String activeActivity();
+
+
+        String startColumn();
+
+
+        String durationInHoursColumn();
+
+
+        String durationFromToColumn();
+
+
+        String nameColumn();
+
+
+        String projectColumn();
+
+
+        String actionsColumn();
+    }
+
+
+    @Source("activitiesTable.css")
+    ActivitiesTableStyle activitiesTableStyle();
+
+    public interface ProjectsTableStyle extends CssResource
+    {
+        String nameColumn();
+
+
+        String descriptionColumn();
+
+
+        String clientColumn();
+
+
+        String actionsColumn();
+    }
+
+
+    @Source("projectsTable.css")
+    ProjectsTableStyle projectsTableStyle();
 }

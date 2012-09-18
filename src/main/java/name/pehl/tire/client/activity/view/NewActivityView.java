@@ -58,8 +58,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     // ------------------------------------------------------------------ setup
 
     @Inject
-    public NewActivityView(final Binder binder, final Resources resources, final ActivitiesTableResources atr,
-            final ProjectsCache projectsCache)
+    public NewActivityView(final Binder binder, final Resources resources, final ProjectsCache projectsCache)
     {
         this.resources = resources;
         this.resources.navigation().ensureInjected();
@@ -89,7 +88,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
 
     @Override
-    public void setUiHandlers(NewActivityUiHandlers uiHandlers)
+    public void setUiHandlers(final NewActivityUiHandlers uiHandlers)
     {
         super.setUiHandlers(uiHandlers);
         activityOracle.setUiHandlers(uiHandlers);
@@ -99,7 +98,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     // ----------------------------------------------------------- view methods
 
     @Override
-    public void setProject(Project project)
+    public void setProject(final Project project)
     {
         this.project.setValue(project.getName());
         if (getUiHandlers() != null)
@@ -112,7 +111,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     // ------------------------------------------------------------ ui handlers
 
     @UiHandler("theDayBeforeYesterday")
-    void onTheDayBeforeYesterdayClicked(ClickEvent event)
+    void onTheDayBeforeYesterdayClicked(final ClickEvent event)
     {
         theDayBeforeYesterday.addStyleName(resources.navigation().selectedDate());
         yesterday.removeStyleName(resources.navigation().selectedDate());
@@ -128,7 +127,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
 
     @UiHandler("yesterday")
-    void onYesterdayClicked(ClickEvent event)
+    void onYesterdayClicked(final ClickEvent event)
     {
         theDayBeforeYesterday.removeStyleName(resources.navigation().selectedDate());
         yesterday.addStyleName(resources.navigation().selectedDate());
@@ -144,7 +143,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
 
     @UiHandler("today")
-    void onTodayClicked(ClickEvent event)
+    void onTodayClicked(final ClickEvent event)
     {
         theDayBeforeYesterday.removeStyleName(resources.navigation().selectedDate());
         yesterday.removeStyleName(resources.navigation().selectedDate());
@@ -159,7 +158,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
 
     @UiHandler("calendar")
-    void onCalendarClicked(ClickEvent event)
+    void onCalendarClicked(final ClickEvent event)
     {
         theDayBeforeYesterday.removeStyleName(resources.navigation().selectedDate());
         yesterday.removeStyleName(resources.navigation().selectedDate());
@@ -169,7 +168,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
 
     @UiHandler("calendar")
-    void onCalendarChanged(ValueChangeEvent<Date> event)
+    void onCalendarChanged(final ValueChangeEvent<Date> event)
     {
         if (getUiHandlers() != null)
         {
@@ -180,7 +179,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
     @UiHandler("activity")
     @SuppressWarnings("unchecked")
-    void onActivitySelected(SelectionEvent<Suggestion> event)
+    void onActivitySelected(final SelectionEvent<Suggestion> event)
     {
         NamedModelSuggestion<Activity> suggestion = (NamedModelSuggestion<Activity>) event.getSelectedItem();
         if (getUiHandlers() != null)
@@ -191,7 +190,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
 
     @UiHandler("activity")
-    void onActivityChanged(ValueChangeEvent<String> event)
+    void onActivityChanged(final ValueChangeEvent<String> event)
     {
         String value = event.getValue();
         if (value != null && value.length() != 0)
@@ -206,7 +205,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
     @UiHandler("project")
     @SuppressWarnings("unchecked")
-    void onProjectSelected(SelectionEvent<Suggestion> event)
+    void onProjectSelected(final SelectionEvent<Suggestion> event)
     {
         NamedModelSuggestion<Project> suggestion = (NamedModelSuggestion<Project>) event.getSelectedItem();
         if (getUiHandlers() != null)
@@ -217,7 +216,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
 
     @UiHandler("project")
-    void onProjectChanged(ValueChangeEvent<String> event)
+    void onProjectChanged(final ValueChangeEvent<String> event)
     {
         String value = event.getValue();
         if (value != null && value.length() != 0)
@@ -231,7 +230,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
 
     @UiHandler("duration")
-    void onDurationChanged(ValueChangeEvent<Duration> event)
+    void onDurationChanged(final ValueChangeEvent<Duration> event)
     {
         if (getUiHandlers() != null)
         {
@@ -241,7 +240,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
 
 
     @UiHandler("duration")
-    void onReturnOnDuration(KeyUpEvent event)
+    void onReturnOnDuration(final KeyUpEvent event)
     {
         if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)
         {

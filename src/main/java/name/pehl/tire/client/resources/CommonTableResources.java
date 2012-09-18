@@ -1,12 +1,14 @@
-package name.pehl.tire.client.cell;
+package name.pehl.tire.client.resources;
+
+import name.pehl.tire.client.cell.ModelsTableStyle;
 
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.CellTable;
 
-public interface ModelsTableResources extends CellTable.Resources
+public interface CommonTableResources extends CellTable.Resources
 {
     @Override
-    @Source("modelsTable.css")
+    @Source("cellTable.css")
     ModelsTableStyle cellTableStyle();
 
 

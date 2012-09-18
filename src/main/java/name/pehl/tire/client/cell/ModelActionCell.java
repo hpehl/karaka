@@ -1,10 +1,12 @@
 package name.pehl.tire.client.cell;
 
+import name.pehl.tire.client.resources.CommonTableResources;
 import name.pehl.tire.shared.model.BaseModel;
 
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Node;
 
 /**
@@ -13,10 +15,10 @@ import com.google.gwt.dom.client.Node;
  */
 public abstract class ModelActionCell<T extends BaseModel> extends ModelCell<T>
 {
-    final ModelsTableResources tableResources;
+    final CommonTableResources tableResources;
 
 
-    public ModelActionCell(final ModelsTableResources tableResources, final ModelRenderer<T> renderer)
+    public ModelActionCell(final CommonTableResources tableResources, final ModelRenderer<T> renderer)
     {
         super(renderer);
         this.tableResources = tableResources;
@@ -25,7 +27,7 @@ public abstract class ModelActionCell<T extends BaseModel> extends ModelCell<T>
 
     @Override
     public void onMouseOver(final com.google.gwt.cell.client.Cell.Context context, final Element parent, final T value,
-            final ValueUpdater<T> valueUpdater)
+            final NativeEvent event, final ValueUpdater<T> valueUpdater)
     {
         DivElement actionsDiv = parent.getFirstChildElement().cast();
         showActionsDiv(actionsDiv);
@@ -34,7 +36,7 @@ public abstract class ModelActionCell<T extends BaseModel> extends ModelCell<T>
 
     @Override
     public void onMouseOut(final com.google.gwt.cell.client.Cell.Context context, final Element parent, final T value,
-            final ValueUpdater<T> valueUpdater)
+            final NativeEvent event, final ValueUpdater<T> valueUpdater)
     {
         DivElement actionsDiv = parent.getFirstChildElement().cast();
         hideActionsDiv(actionsDiv);

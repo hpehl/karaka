@@ -5,9 +5,11 @@ import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.Key
 import java.util.ArrayList;
 import java.util.List;
 
+import name.pehl.tire.client.resources.CommonTableResources;
 import name.pehl.tire.shared.model.BaseModel;
 
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Header;
 import com.google.gwt.user.cellview.client.RowStyles;
 
 /**
@@ -18,13 +20,13 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
 {
     // -------------------------------------------------------- private members
 
-    protected final ModelsTableResources tableResources;
+    protected final CommonTableResources tableResources;
     protected ModelActionCell<T> actionCell;
 
 
     // ----------------------------------------------------------- constructors
 
-    public ModelsTable(final ModelsTableResources tableResources)
+    public ModelsTable(final CommonTableResources tableResources)
     {
         super(Integer.MAX_VALUE, tableResources, new ModelKeyProvider<T>());
         this.tableResources = tableResources;
@@ -36,11 +38,7 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
             @Override
             public String getStyleNames(final T model, final int rowIndex)
             {
-                if (alternativeColor(model, rowIndex))
-                {
-                    return tableResources.cellTableStyle().alternativeColor();
-                }
-                return null;
+                return rowStyle(model, rowIndex);
             }
         });
     }
@@ -54,28 +52,30 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
     /**
      * Please make sure that {@code actionCell} is assigned before this method
      * is called!
+     * 
      * @param styleName
      * @param columnIndex
      * @param renderer
-     * 
      * @throws IllegalStateException
      *             if {@code actionCell} is {@code null}
      */
-    protected void addDataColumn(final String styleName, final int columnIndex, final ModelRenderer<T> renderer)
+    protected ModelColumn<T> addDataColumn(final String styleName, final int columnIndex,
+            final ModelRenderer<T> renderer, final Header<?> header, final Header<?> footer)
     {
         if (actionCell == null)
         {
             throw new IllegalStateException("actionCell is null");
         }
         ModelColumn<T> column = new ModelColumn<T>(new ModelDataCell<T>(actionCell, renderer));
+        addColumn(column, header, footer);
         addColumnStyleName(columnIndex, styleName);
-        addColumn(column);
+        return column;
     }
 
 
-    protected boolean alternativeColor(final T model, final int rowIndex)
+    protected String rowStyle(final T model, final int rowIndex)
     {
-        return rowIndex % 2 != 0;
+        return rowIndex % 2 != 0 ? tableResources.cellTableStyle().alternativeColor() : null;
     }
 
 
@@ -88,7 +88,6 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
         {
             local = new ArrayList<T>();
         }
-        setRowData(0, local);
-        setRowCount(local.size());
+        setRowData(local);
     }
 }

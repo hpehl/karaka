@@ -5,6 +5,7 @@ import name.pehl.tire.shared.model.BaseModel;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 
 /**
  * @author $LastChangedBy:$
@@ -23,7 +24,7 @@ public class ModelDataCell<T extends BaseModel> extends ModelCell<T>
 
 
     @Override
-    public void onClick(final Cell.Context context, final Element parent, final T value,
+    public void onClick(final Cell.Context context, final Element parent, final T value, final NativeEvent event,
             final ValueUpdater<T> valueUpdater)
     {
         actionCell.hideActions(parent);
@@ -31,7 +32,7 @@ public class ModelDataCell<T extends BaseModel> extends ModelCell<T>
 
 
     @Override
-    public void onMouseOver(final Cell.Context context, final Element parent, final T value,
+    public void onMouseOver(final Cell.Context context, final Element parent, final T value, final NativeEvent event,
             final ValueUpdater<T> valueUpdater)
     {
         actionCell.showActions(parent);
@@ -39,7 +40,7 @@ public class ModelDataCell<T extends BaseModel> extends ModelCell<T>
 
 
     @Override
-    public void onMouseOut(final Cell.Context context, final Element parent, final T value,
+    public void onMouseOut(final Cell.Context context, final Element parent, final T value, final NativeEvent event,
             final ValueUpdater<T> valueUpdater)
     {
         actionCell.hideActions(parent);

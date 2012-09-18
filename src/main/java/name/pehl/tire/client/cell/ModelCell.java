@@ -29,15 +29,15 @@ public abstract class ModelCell<T extends BaseModel> extends AbstractSafeHtmlCel
         super.onBrowserEvent(context, parent, value, event, valueUpdater);
         if ("click".equals(event.getType()))
         {
-            onClick(context, parent, value, valueUpdater);
+            onClick(context, parent, value, event, valueUpdater);
         }
         else if ("mouseover".equals(event.getType()))
         {
-            onMouseOver(context, parent, value, valueUpdater);
+            onMouseOver(context, parent, value, event, valueUpdater);
         }
         else if ("mouseout".equals(event.getType()))
         {
-            onMouseOut(context, parent, value, valueUpdater);
+            onMouseOut(context, parent, value, event, valueUpdater);
         }
     }
 
@@ -53,13 +53,13 @@ public abstract class ModelCell<T extends BaseModel> extends AbstractSafeHtmlCel
 
 
     public abstract void onClick(final Cell.Context context, final Element parent, final T value,
-            final ValueUpdater<T> valueUpdater);
+            final NativeEvent event, final ValueUpdater<T> valueUpdater);
 
 
     public abstract void onMouseOver(final Cell.Context context, final Element parent, final T value,
-            final ValueUpdater<T> valueUpdater);
+            final NativeEvent event, final ValueUpdater<T> valueUpdater);
 
 
     public abstract void onMouseOut(final Cell.Context context, final Element parent, final T value,
-            final ValueUpdater<T> valueUpdater);
+            final NativeEvent event, final ValueUpdater<T> valueUpdater);
 }

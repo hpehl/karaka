@@ -2,8 +2,9 @@ package name.pehl.tire.client.project;
 
 import java.util.List;
 
-import name.pehl.tire.client.cell.ModelsTableResources;
+import name.pehl.tire.client.resources.CommonTableResources;
 import name.pehl.tire.client.resources.I18n;
+import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.shared.model.Project;
 
 import com.google.gwt.uibinder.client.UiBinder;
@@ -32,11 +33,11 @@ public class ProjectsView extends ViewWithUiHandlers<ProjectsUiHandlers> impleme
     // ------------------------------------------------------------------ setup
 
     @Inject
-    public ProjectsView(final Binder binder, final I18n i18n, final ProjectsTemplates projectTemplates,
-            final ProjectsTableResources projectTableResources, final ModelsTableResources commonTableResources)
+    public ProjectsView(final Binder binder, final I18n i18n, final Resources resources,
+            final CommonTableResources commonTableResources)
     {
         this.i18n = i18n;
-        this.projectsTable = new ProjectsTable(projectTemplates, projectTableResources, commonTableResources);
+        this.projectsTable = new ProjectsTable(resources, commonTableResources);
         this.widget = binder.createAndBindUi(this);
     }
 
