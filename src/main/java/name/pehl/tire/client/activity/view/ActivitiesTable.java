@@ -51,7 +51,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
         SafeHtml tag(String name);
 
 
-        @Template("<div class=\"{0}\"><span style=\"margin-right:4px;\" title=\"Copy and add one day\">{1}</span><span style=\"margin-right:4px;\" title=\"Continue\">{2}</span><span title=\"Delete\">{3}</span></div>")
+        @Template("<div class=\"{0}\" style=\"width: 56px;\"><span style=\"margin-right:4px;\" title=\"Copy and add one day\">{1}</span><span style=\"margin-right:4px;\" title=\"Continue\">{2}</span><span title=\"Delete\">{3}</span></div>")
         SafeHtml actions(String hideActionsClassname, SafeHtml copy, SafeHtml goon, SafeHtml delete);
     }
 
@@ -70,6 +70,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
     {
         super(tableResources);
         this.resources = resources;
+        this.resources.activitiesTableStyle().ensureInjected();
         addColumns();
     }
 

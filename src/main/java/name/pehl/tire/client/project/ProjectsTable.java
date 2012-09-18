@@ -28,7 +28,7 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
 
     interface ActionsTemplates extends SafeHtmlTemplates
     {
-        @Template("<div class=\"{0}\"><span title=\"Delete\">{1}</span></div>")
+        @Template("<div class=\"{0}\" style=\"width: 16px;\"><span title=\"Delete\">{1}</span></div>")
         SafeHtml actions(String hideActionsClassname, SafeHtml delete);
     }
 
@@ -46,6 +46,7 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
     {
         super(tableResources);
         this.resources = resources;
+        this.resources.projectsTableStyle().ensureInjected();
         addColumns();
     }
 
