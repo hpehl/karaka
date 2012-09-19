@@ -29,8 +29,10 @@ public class WeekChartWidget extends QuickChartWidget
 
 
     @Override
-    public void updateActivities(Activities activities)
+    public void updateActivities(final Activities activities)
     {
+        // FIXME When there's a "hole" in the weeks the order of the points is
+        // not correct
         dayToPoint.clear();
         Iterator<Day> iter = activities.getDays().iterator();
         for (Point point : series.getPoints())
@@ -51,7 +53,7 @@ public class WeekChartWidget extends QuickChartWidget
     }
 
 
-    public void updateDay(Day day)
+    public void updateDay(final Day day)
     {
         Point point = dayToPoint.get(day);
         if (point != null)
@@ -61,14 +63,15 @@ public class WeekChartWidget extends QuickChartWidget
     }
 
 
-    double hours(Day day)
+    double hours(final Day day)
     {
         return day.getDuration().getTotalHours();
     }
 
 
-    String tooltip(Day day)
+    String tooltip(final Day day)
     {
-        return FormatUtils.date(day.getActivities().first().getStart()) + ": " + FormatUtils.duration(day.getDuration());
+        return FormatUtils.date(day.getActivities().first().getStart()) + ": "
+                + FormatUtils.duration(day.getDuration());
     }
 }

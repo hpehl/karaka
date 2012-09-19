@@ -42,8 +42,9 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
 
 
     @Override
-    public void updateActivities(Activities activities)
+    public void updateActivities(final Activities activities)
     {
+        // FIXME When there's a "hole" in the weeks the order of the points is not correct
         weekToPoint.clear();
         List<String> categories = new ArrayList<String>();
         Iterator<Week> iter = activities.getWeeks().iterator();
@@ -68,7 +69,7 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
     }
 
 
-    public void updateWeek(Week week)
+    public void updateWeek(final Week week)
     {
         Point point = weekToPoint.get(week);
         if (point != null)
@@ -78,13 +79,13 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
     }
 
 
-    double hours(Week week)
+    double hours(final Week week)
     {
         return week.getMinutes().getTotalHours();
     }
 
 
-    String tooltip(Week week)
+    String tooltip(final Week week)
     {
         return "CW " + week.getWeek() + ": " + FormatUtils.duration(week.getMinutes()) + "<br/>"
                 + FormatUtils.dateDuration(week.getStart(), week.getEnd());
@@ -92,7 +93,7 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
 
 
     @Override
-    public boolean onClick(PointClickEvent pointClickEvent)
+    public boolean onClick(final PointClickEvent pointClickEvent)
     {
         Week week = null;
         Point point = pointClickEvent.getPoint();
@@ -114,14 +115,14 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
 
 
     @Override
-    public void fireEvent(GwtEvent<?> event)
+    public void fireEvent(final GwtEvent<?> event)
     {
         asWidget().fireEvent(event);
     }
 
 
     @Override
-    public HandlerRegistration addWeekClickedHandler(WeekClickedHandler handler)
+    public HandlerRegistration addWeekClickedHandler(final WeekClickedHandler handler)
     {
         return asWidget().addHandler(handler, WeekClickedEvent.getType());
     }
