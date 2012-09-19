@@ -1,5 +1,7 @@
 package name.pehl.tire.server.cache;
 
+import static com.google.appengine.api.memcache.jsr107cache.GCacheFactory.EXPIRATION_DELTA;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +19,6 @@ import org.jboss.resteasy.plugins.cache.server.ServerCacheHitInterceptor;
 import org.jboss.resteasy.plugins.cache.server.ServerCacheInterceptor;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
-import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
-
 public class AppEngineCache implements ServerCache
 {
     public static class CacheEntry implements Entry, Serializable
@@ -32,8 +32,8 @@ public class AppEngineCache implements ServerCache
         private final String mediaSubtype;
 
 
-        private CacheEntry(MultivaluedMap<String, Object> headers, byte[] cached, int expires, String etag,
-                String mediaType, String mediaSubtype)
+        private CacheEntry(final MultivaluedMap<String, Object> headers, final byte[] cached, final int expires,
+                final String etag, final String mediaType, final String mediaSubtype)
         {
             this.cached = cached;
             this.expires = expires;
@@ -97,12 +97,13 @@ public class AppEngineCache implements ServerCache
     ResteasyProviderFactory providerFactory;
 
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void start()
     {
         try
         {
-            Map<String, Object> props = new HashMap<String, Object>();
-            props.put(GCacheFactory.EXPIRATION_DELTA, expiration);
+            Map props = new HashMap();
+            props.put(EXPIRATION_DELTA, expiration);
             CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
             cache = cacheFactory.createCache(props);
         }
@@ -120,8 +121,8 @@ public class AppEngineCache implements ServerCache
 
     @Override
     @SuppressWarnings("unchecked")
-    public Entry add(String uri, MediaType mediaType, CacheControl cc, MultivaluedMap<String, Object> headers,
-            byte[] entity, String etag)
+    public Entry add(final String uri, final MediaType mediaType, final CacheControl cc,
+            final MultivaluedMap<String, Object> headers, final byte[] entity, final String etag)
     {
         CacheEntry cacheEntry = new CacheEntry(headers, entity, cc.getMaxAge(), etag, mediaType.getType(),
                 mediaType.getSubtype());
@@ -134,7 +135,7 @@ public class AppEngineCache implements ServerCache
 
 
     @Override
-    public Entry get(String uri, MediaType accept)
+    public Entry get(final String uri, final MediaType accept)
     {
         CacheEntry entry = (CacheEntry) cache.get(uri);
         if (entry != null)
@@ -150,7 +151,7 @@ public class AppEngineCache implements ServerCache
 
 
     @Override
-    public void remove(String uri)
+    public void remove(final String uri)
     {
         cache.remove(uri);
     }
@@ -163,19 +164,19 @@ public class AppEngineCache implements ServerCache
     }
 
 
-    public void setMaxSize(int maxSize)
+    public void setMaxSize(final int maxSize)
     {
         this.maxSize = maxSize;
     }
 
 
-    public void setExpiration(int expiration)
+    public void setExpiration(final int expiration)
     {
         this.expiration = expiration;
     }
 
 
-    public void setProviderFactory(ResteasyProviderFactory providerFactory)
+    public void setProviderFactory(final ResteasyProviderFactory providerFactory)
     {
         this.providerFactory = providerFactory;
     }
