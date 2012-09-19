@@ -33,7 +33,7 @@ public class ClientsCache extends AbstractModelCache<Client> implements ModelCac
             {
                 models.clear();
                 models.addAll(result.getClients());
-                logger.log(INFO, "Projects refreshed.");
+                logger.log(INFO, "Clients refreshed.");
             }
         });
     }
