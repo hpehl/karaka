@@ -105,7 +105,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
             @Override
             protected String getValue(final Activity activity)
             {
-                return FormatUtils.date(activity.getStart());
+                return FormatUtils.fulldate(activity.getStart());
             }
         }, null, new TextHeader(null)
         {

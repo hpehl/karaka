@@ -17,7 +17,7 @@ public final class FormatUtils
     }
 
 
-    public static String duration(Duration duration)
+    public static String duration(final Duration duration)
     {
         if (SettingsCache.currentSettings().isFormatHoursAsFloatingPointNumber())
         {
@@ -45,7 +45,7 @@ public final class FormatUtils
     }
 
 
-    public static String dateDuration(Time start, Time end)
+    public static String dateDuration(final Time start, final Time end)
     {
         StringBuilder duration = new StringBuilder();
         if (start != null && start.getDate() != null)
@@ -60,7 +60,7 @@ public final class FormatUtils
     }
 
 
-    public static String date(Time time)
+    public static String date(final Time time)
     {
         if (time != null && time.getDate() != null)
         {
@@ -70,7 +70,17 @@ public final class FormatUtils
     }
 
 
-    public static String timeDuration(Time start, Time end)
+    public static String fulldate(final Time time)
+    {
+        if (time != null && time.getDate() != null)
+        {
+            return Defaults.FULL_DATE_FORMAT.format(time.getDate());
+        }
+        return "";
+    }
+
+
+    public static String timeDuration(final Time start, final Time end)
     {
         StringBuilder duration = new StringBuilder();
         if (start != null && start.getDate() != null)
@@ -85,7 +95,7 @@ public final class FormatUtils
     }
 
 
-    public static String time(Time time)
+    public static String time(final Time time)
     {
         if (time != null && time.getDate() != null)
         {

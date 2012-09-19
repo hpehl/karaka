@@ -25,6 +25,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasValue;
@@ -58,6 +59,7 @@ public class TagsEditorWidget extends Composite implements HasValue<List<Tag>>, 
 
 
     // ------------------------------------------------------------ constructor
+
     public TagsEditorWidget(final TagsCache tagsCache)
     {
         super();
@@ -89,14 +91,14 @@ public class TagsEditorWidget extends Composite implements HasValue<List<Tag>>, 
 
 
     @Override
-    public void setValue(List<Tag> value)
+    public void setValue(final List<Tag> value)
     {
         refresh(value);
     }
 
 
     @Override
-    public void setValue(List<Tag> value, boolean fireEvents)
+    public void setValue(final List<Tag> value, final boolean fireEvents)
     {
         refresh(value);
     }
@@ -110,7 +112,7 @@ public class TagsEditorWidget extends Composite implements HasValue<List<Tag>>, 
 
 
     @Override
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<List<Tag>> handler)
+    public HandlerRegistration addValueChangeHandler(final ValueChangeHandler<List<Tag>> handler)
     {
         return addHandler(handler, ValueChangeEvent.getType());
     }
@@ -119,7 +121,7 @@ public class TagsEditorWidget extends Composite implements HasValue<List<Tag>>, 
     // --------------------------------------------------------- event handlers
 
     @Override
-    public void onValueChange(ValueChangeEvent<String> event)
+    public void onValueChange(final ValueChangeEvent<String> event)
     {
         String value = event.getValue();
         if (Strings.emptyToNull(value) != null)
@@ -133,7 +135,7 @@ public class TagsEditorWidget extends Composite implements HasValue<List<Tag>>, 
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onSelection(SelectionEvent<Suggestion> event)
+    public void onSelection(final SelectionEvent<Suggestion> event)
     {
         NamedModelSuggestion<Tag> suggestion = (NamedModelSuggestion<Tag>) event.getSelectedItem();
         Tag tag = suggestion.getModel();
@@ -146,7 +148,7 @@ public class TagsEditorWidget extends Composite implements HasValue<List<Tag>>, 
 
 
     @Override
-    public void onClick(ClickEvent event)
+    public void onClick(final ClickEvent event)
     {
         InlineHTML tagWidget = (InlineHTML) event.getSource();
         removeTag(tagWidget);
@@ -155,7 +157,7 @@ public class TagsEditorWidget extends Composite implements HasValue<List<Tag>>, 
 
     // ------------------------------------------------------------ tag methods
 
-    private void refresh(List<Tag> tags)
+    private void refresh(final List<Tag> tags)
     {
         this.tags.clear();
         this.tagsPanel.clear();
@@ -166,7 +168,7 @@ public class TagsEditorWidget extends Composite implements HasValue<List<Tag>>, 
     }
 
 
-    private void addTag(Tag tag)
+    private void addTag(final Tag tag)
     {
         if (!tags.containsKey(tag.getId()))
         {
@@ -178,10 +180,14 @@ public class TagsEditorWidget extends Composite implements HasValue<List<Tag>>, 
     }
 
 
-    private void removeTag(InlineHTML tagWidget)
+    private void removeTag(final InlineHTML tagWidget)
     {
-        String id = tagWidget.getElement().getAttribute("id");
-        tags.remove(id);
-        tagsPanel.remove(tagWidget);
+        Element markElement = (Element) tagWidget.getElement().getFirstChildElement();
+        if (markElement != null)
+        {
+            String id = markElement.getAttribute("id");
+            tags.remove(id);
+            tagsPanel.remove(tagWidget);
+        }
     }
 }
