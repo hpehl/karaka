@@ -4,13 +4,13 @@ import name.pehl.tire.client.StartupManager;
 import name.pehl.tire.client.about.AboutPresenter;
 import name.pehl.tire.client.activity.presenter.DashboardPresenter;
 import name.pehl.tire.client.application.ApplicationPresenter;
-import name.pehl.tire.client.client.ClientPresenter;
+import name.pehl.tire.client.client.ClientsPresenter;
 import name.pehl.tire.client.dispatch.ClientDispatchModule;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.project.ProjectsPresenter;
 import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.settings.SettingsPresenter;
-import name.pehl.tire.client.tag.TagPresenter;
+import name.pehl.tire.client.tag.TagsPresenter;
 import name.pehl.tire.client.terms.TermsPresenter;
 
 import com.google.gwt.inject.client.AsyncProvider;
@@ -40,12 +40,12 @@ public interface TireGinjector extends Ginjector
 
     AsyncProvider<AboutPresenter> getAboutPresenter();
     Provider<ApplicationPresenter> getApplicationPresenter();
-    AsyncProvider<ClientPresenter> getClientPresenter();
+    AsyncProvider<ClientsPresenter> getClientsPresenter();
     Provider<DashboardPresenter> getDashboardPresenter();
     AsyncProvider<HelpPresenter> getHelpPresenter();
-    AsyncProvider<ProjectsPresenter> getProjectPresenter();
+    AsyncProvider<ProjectsPresenter> getProjectsPresenter();
     AsyncProvider<ReportPresenter> getReportPresenter();
-    AsyncProvider<TagPresenter> getTagPresenter();
+    AsyncProvider<TagsPresenter> getTagsPresenter();
     AsyncProvider<TermsPresenter> getTermsPresenter();
     AsyncProvider<SettingsPresenter> getSettingsPresenter();
 }

@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.presenter.ActivityController;
+import name.pehl.tire.client.client.ClientsCache;
 import name.pehl.tire.client.model.ModelCache;
 import name.pehl.tire.client.project.ProjectsCache;
 import name.pehl.tire.client.settings.SettingsCache;
 import name.pehl.tire.client.tag.TagsCache;
 import name.pehl.tire.shared.model.BaseModel;
+import name.pehl.tire.shared.model.Client;
 import name.pehl.tire.shared.model.Project;
 import name.pehl.tire.shared.model.Settings;
 import name.pehl.tire.shared.model.Tag;
@@ -34,8 +36,8 @@ public class StartupManager implements HasHandlers
 
     @Inject
     public StartupManager(final EventBus eventBus, final Scheduler scheduler, final DispatchAsync dispatcher,
-            final ActivityController activityController, final SettingsCache settingsCache,
-            final ProjectsCache projectsCache, final TagsCache tagsCache)
+            final ActivityController activityController, final SettingsCache settingsCache, final TagsCache tagsCache,
+            final ClientsCache clientsCache, final ProjectsCache projectsCache)
     {
         this.eventBus = eventBus;
         this.scheduler = scheduler;
@@ -43,13 +45,14 @@ public class StartupManager implements HasHandlers
         this.activityController = activityController;
         this.startupCommands = new ArrayList<ScheduledCommand>();
         this.startupCommands.add(new InitCacheCommand<Settings>(settingsCache));
-        this.startupCommands.add(new InitCacheCommand<Project>(projectsCache));
         this.startupCommands.add(new InitCacheCommand<Tag>(tagsCache));
+        this.startupCommands.add(new InitCacheCommand<Client>(clientsCache));
+        this.startupCommands.add(new InitCacheCommand<Project>(projectsCache));
     }
 
 
     @Override
-    public void fireEvent(GwtEvent<?> event)
+    public void fireEvent(final GwtEvent<?> event)
     {
         this.eventBus.fireEventFromSource(event, this);
     }
@@ -69,7 +72,7 @@ public class StartupManager implements HasHandlers
         final ModelCache<T> modelCache;
 
 
-        public InitCacheCommand(ModelCache<T> modelCache)
+        public InitCacheCommand(final ModelCache<T> modelCache)
         {
             this.modelCache = modelCache;
         }

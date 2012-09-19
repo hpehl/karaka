@@ -49,8 +49,9 @@ import name.pehl.tire.client.application.MessagePresenter;
 import name.pehl.tire.client.application.MessageView;
 import name.pehl.tire.client.application.NavigationPresenter;
 import name.pehl.tire.client.application.NavigationView;
-import name.pehl.tire.client.client.ClientPresenter;
-import name.pehl.tire.client.client.ClientView;
+import name.pehl.tire.client.client.ClientsCache;
+import name.pehl.tire.client.client.ClientsPresenter;
+import name.pehl.tire.client.client.ClientsView;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
 import name.pehl.tire.client.model.LinkReader;
@@ -62,9 +63,9 @@ import name.pehl.tire.client.project.ProjectsPresenter;
 import name.pehl.tire.client.project.ProjectsView;
 import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.report.ReportView;
-import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
+import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.client.settings.GetSettingsHandler;
 import name.pehl.tire.client.settings.SettingsCache;
 import name.pehl.tire.client.settings.SettingsPresenter;
@@ -72,11 +73,11 @@ import name.pehl.tire.client.settings.SettingsReader;
 import name.pehl.tire.client.settings.SettingsView;
 import name.pehl.tire.client.settings.UserReader;
 import name.pehl.tire.client.tag.GetTagsHandler;
-import name.pehl.tire.client.tag.TagPresenter;
 import name.pehl.tire.client.tag.TagReader;
-import name.pehl.tire.client.tag.TagView;
 import name.pehl.tire.client.tag.TagWriter;
 import name.pehl.tire.client.tag.TagsCache;
+import name.pehl.tire.client.tag.TagsPresenter;
+import name.pehl.tire.client.tag.TagsView;
 import name.pehl.tire.client.terms.TermsPresenter;
 import name.pehl.tire.client.terms.TermsView;
 
@@ -160,8 +161,8 @@ public class TireModule extends AbstractPresenterModule
         bindPresenter(AboutPresenter.class, AboutPresenter.MyView.class, AboutView.class, AboutPresenter.MyProxy.class);
         bindPresenter(ApplicationPresenter.class, ApplicationPresenter.MyView.class, ApplicationView.class,
                 ApplicationPresenter.MyProxy.class);
-        bindPresenter(ClientPresenter.class, ClientPresenter.MyView.class, ClientView.class,
-                ClientPresenter.MyProxy.class);
+        bindPresenter(ClientsPresenter.class, ClientsPresenter.MyView.class, ClientsView.class,
+                ClientsPresenter.MyProxy.class);
         bindPresenter(DashboardPresenter.class, DashboardPresenter.MyView.class, DashboardView.class,
                 DashboardPresenter.MyProxy.class);
         bindPresenter(HelpPresenter.class, HelpPresenter.MyView.class, HelpView.class, HelpPresenter.MyProxy.class);
@@ -171,11 +172,12 @@ public class TireModule extends AbstractPresenterModule
                 ReportPresenter.MyProxy.class);
         bindPresenter(SettingsPresenter.class, SettingsPresenter.MyView.class, SettingsView.class,
                 SettingsPresenter.MyProxy.class);
-        bindPresenter(TagPresenter.class, TagPresenter.MyView.class, TagView.class, TagPresenter.MyProxy.class);
+        bindPresenter(TagsPresenter.class, TagsPresenter.MyView.class, TagsView.class, TagsPresenter.MyProxy.class);
         bindPresenter(TermsPresenter.class, TermsPresenter.MyView.class, TermsView.class, TermsPresenter.MyProxy.class);
 
         // Application specific
         bind(ActivityController.class).in(Singleton.class);
+        bind(ClientsCache.class).in(Singleton.class);
         bind(ProjectsCache.class).in(Singleton.class);
         bind(SettingsCache.class).in(Singleton.class);
         bind(StartupManager.class).in(Singleton.class);

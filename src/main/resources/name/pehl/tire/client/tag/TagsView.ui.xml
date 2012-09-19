@@ -1,5 +1,5 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tire="urn:import:name.pehl.tire.client.project">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tire="urn:import:name.pehl.tire.client.tag">
 
     <ui:style>
         .table {
@@ -10,12 +10,12 @@
     <g:DockLayoutPanel unit="PX">
         <g:north size="52">
             <g:HTML>
-                <h1>Projects</h1>
+                <h1>Tags</h1>
             </g:HTML>
         </g:north>
         <g:center>
             <g:ScrollPanel>
-                <tire:ProjectsTable ui:field="projectsTable" addStyleNames="{style.table}" />
+                <tire:TagsTable ui:field="tagsTable" addStyleNames="{style.table}" />
             </g:ScrollPanel>
         </g:center>
     </g:DockLayoutPanel>
