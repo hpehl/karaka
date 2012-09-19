@@ -1,6 +1,7 @@
 package name.pehl.tire.client.activity.view;
 
 import static com.google.gwt.user.client.ui.HasHorizontalAlignment.ALIGN_RIGHT;
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.DETAILS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +10,12 @@ import name.pehl.tire.client.activity.event.ActivityAction.Action;
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler;
 import name.pehl.tire.client.activity.event.ActivityActionEvent.HasActivityActionHandlers;
+import name.pehl.tire.client.cell.ModelActionCell;
 import name.pehl.tire.client.cell.ModelColumn;
 import name.pehl.tire.client.cell.ModelRenderer;
 import name.pehl.tire.client.cell.ModelTextRenderer;
 import name.pehl.tire.client.cell.ModelsTable;
-import name.pehl.tire.client.resources.CommonTableResources;
+import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Activity;
@@ -51,7 +53,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
         SafeHtml tag(String name);
 
 
-        @Template("<div class=\"{0}\" style=\"width: 56px;\"><span style=\"margin-right:4px;\" title=\"Copy and add one day\">{1}</span><span style=\"margin-right:4px;\" title=\"Continue\">{2}</span><span title=\"Delete\">{3}</span></div>")
+        @Template("<div class=\"{0}\" style=\"width: 56px;\"><span id=\"copy\" style=\"margin-right:4px;\" title=\"Copy and add one day\">{1}</span><span id=\"start_stop\" style=\"margin-right:4px;\" title=\"Continue\">{2}</span><span id=\"delete\" title=\"Delete\">{3}</span></div>")
         SafeHtml actions(String hideActionsClassname, SafeHtml copy, SafeHtml goon, SafeHtml delete);
     }
 
@@ -66,7 +68,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
     // ----------------------------------------------------------- constructors
 
     public ActivitiesTable(final name.pehl.tire.client.resources.Resources resources,
-            final CommonTableResources tableResources)
+            final TableResources tableResources)
     {
         super(tableResources);
         this.resources = resources;
@@ -81,7 +83,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
     protected void addColumns()
     {
         // Action is the last column in the UI, but the first one to create!
-        this.actionCell = new ActivityActionCell(this, tableResources, new ModelRenderer<Activity>()
+        this.actionCell = new ModelActionCell<Activity>(this, new ModelRenderer<Activity>()
         {
             @Override
             public SafeHtml render(final Activity activity)
@@ -243,8 +245,16 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
     }
 
 
-    public void onActivityAction(final Action action, final Activity activity)
+    @Override
+    protected void onClick(final Activity activity)
     {
-        ActivityActionEvent.fire(this, action, activity);
+        ActivityActionEvent.fire(this, DETAILS, activity);
+    }
+
+
+    @Override
+    protected void onAction(final Activity activity, final String actionId)
+    {
+        ActivityActionEvent.fire(this, Action.valueOf(actionId.toUpperCase()), activity);
     }
 }

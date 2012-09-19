@@ -2,7 +2,7 @@ package name.pehl.tire.client.project;
 
 import java.util.List;
 
-import name.pehl.tire.client.resources.CommonTableResources;
+import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.shared.model.Project;
@@ -34,7 +34,7 @@ public class ProjectsView extends ViewWithUiHandlers<ProjectsUiHandlers> impleme
 
     @Inject
     public ProjectsView(final Binder binder, final I18n i18n, final Resources resources,
-            final CommonTableResources commonTableResources)
+            final TableResources commonTableResources)
     {
         this.i18n = i18n;
         this.projectsTable = new ProjectsTable(resources, commonTableResources);

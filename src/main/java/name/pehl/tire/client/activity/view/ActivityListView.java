@@ -4,7 +4,7 @@ import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.presenter.ActivityListPresenter;
 import name.pehl.tire.client.activity.presenter.ActivityListUiHandlers;
 import name.pehl.tire.client.project.ProjectsCache;
-import name.pehl.tire.client.resources.CommonTableResources;
+import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.shared.model.Activities;
@@ -37,7 +37,7 @@ public class ActivityListView extends ViewWithUiHandlers<ActivityListUiHandlers>
 
     @Inject
     public ActivityListView(final Binder binder, final I18n i18n, final Resources resources,
-            final CommonTableResources commonTableResources, final ProjectsCache projectsCache)
+            final TableResources commonTableResources, final ProjectsCache projectsCache)
     {
         this.i18n = i18n;
         this.activitiesTable = new ActivitiesTable(resources, commonTableResources);

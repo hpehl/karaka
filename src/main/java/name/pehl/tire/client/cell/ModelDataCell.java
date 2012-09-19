@@ -16,9 +16,10 @@ public class ModelDataCell<T extends BaseModel> extends ModelCell<T>
     final ModelActionCell<T> actionCell;
 
 
-    public ModelDataCell(final ModelActionCell<T> actionCell, final ModelRenderer<T> renderer)
+    public ModelDataCell(final ModelsTable<T> table, final ModelActionCell<T> actionCell,
+            final ModelRenderer<T> renderer)
     {
-        super(renderer);
+        super(table, renderer);
         this.actionCell = actionCell;
     }
 
@@ -28,6 +29,8 @@ public class ModelDataCell<T extends BaseModel> extends ModelCell<T>
             final ValueUpdater<T> valueUpdater)
     {
         actionCell.hideActions(parent);
+        table.onClick(value);
+
     }
 
 

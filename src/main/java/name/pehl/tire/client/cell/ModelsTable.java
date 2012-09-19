@@ -5,7 +5,7 @@ import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.Key
 import java.util.ArrayList;
 import java.util.List;
 
-import name.pehl.tire.client.resources.CommonTableResources;
+import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.shared.model.BaseModel;
 
 import com.google.gwt.user.cellview.client.CellTable;
@@ -20,13 +20,13 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
 {
     // -------------------------------------------------------- private members
 
-    protected final CommonTableResources tableResources;
+    protected final TableResources tableResources;
     protected ModelActionCell<T> actionCell;
 
 
     // ----------------------------------------------------------- constructors
 
-    public ModelsTable(final CommonTableResources tableResources)
+    public ModelsTable(final TableResources tableResources)
     {
         super(Integer.MAX_VALUE, tableResources, new ModelKeyProvider<T>());
         this.tableResources = tableResources;
@@ -66,7 +66,7 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
         {
             throw new IllegalStateException("actionCell is null");
         }
-        ModelColumn<T> column = new ModelColumn<T>(new ModelDataCell<T>(actionCell, renderer));
+        ModelColumn<T> column = new ModelColumn<T>(new ModelDataCell<T>(this, actionCell, renderer));
         addColumn(column, header, footer);
         addColumnStyleName(columnIndex, styleName);
         return column;
@@ -90,4 +90,12 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
         }
         setRowData(local);
     }
+
+
+    // --------------------------------------------------------- event handling
+
+    protected abstract void onClick(T value);
+
+
+    protected abstract void onAction(T value, String actionId);
 }

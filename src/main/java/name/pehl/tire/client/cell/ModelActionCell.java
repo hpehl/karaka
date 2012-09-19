@@ -1,11 +1,12 @@
 package name.pehl.tire.client.cell;
 
-import name.pehl.tire.client.resources.CommonTableResources;
 import name.pehl.tire.shared.model.BaseModel;
 
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.EventTarget;
+import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Node;
 
@@ -13,15 +14,31 @@ import com.google.gwt.dom.client.Node;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public abstract class ModelActionCell<T extends BaseModel> extends ModelCell<T>
+public class ModelActionCell<T extends BaseModel> extends ModelCell<T>
 {
-    final CommonTableResources tableResources;
-
-
-    public ModelActionCell(final CommonTableResources tableResources, final ModelRenderer<T> renderer)
+    public ModelActionCell(final ModelsTable<T> table, final ModelRenderer<T> renderer)
     {
-        super(renderer);
-        this.tableResources = tableResources;
+        super(table, renderer);
+    }
+
+
+    @Override
+    public void onClick(final com.google.gwt.cell.client.Cell.Context context, final Element parent, final T value,
+            final NativeEvent event, final ValueUpdater<T> valueUpdater)
+    {
+        EventTarget eventTarget = event.getEventTarget();
+        if (eventTarget != null)
+        {
+            ImageElement img = eventTarget.cast();
+            if (ImageElement.is(img))
+            {
+                Element parentElement = img.getParentElement();
+                if (parentElement != null && parentElement.getId() != null)
+                {
+                    table.onAction(value, parentElement.getId());
+                }
+            }
+        }
     }
 
 
@@ -60,7 +77,7 @@ public abstract class ModelActionCell<T extends BaseModel> extends ModelCell<T>
     {
         if (actionsDiv != null)
         {
-            actionsDiv.removeClassName(tableResources.cellTableStyle().hideActions());
+            actionsDiv.removeClassName(table.tableResources.cellTableStyle().hideActions());
         }
     }
 
@@ -82,7 +99,7 @@ public abstract class ModelActionCell<T extends BaseModel> extends ModelCell<T>
     {
         if (actionsDiv != null)
         {
-            actionsDiv.addClassName(tableResources.cellTableStyle().hideActions());
+            actionsDiv.addClassName(table.tableResources.cellTableStyle().hideActions());
         }
     }
 

@@ -62,7 +62,7 @@ import name.pehl.tire.client.project.ProjectsPresenter;
 import name.pehl.tire.client.project.ProjectsView;
 import name.pehl.tire.client.report.ReportPresenter;
 import name.pehl.tire.client.report.ReportView;
-import name.pehl.tire.client.resources.CommonTableResources;
+import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.client.resources.I18n;
 import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.client.settings.GetSettingsHandler;
@@ -101,7 +101,7 @@ public class TireModule extends AbstractPresenterModule
         // Resources
         bind(I18n.class).in(Singleton.class);
         bind(Resources.class).in(Singleton.class);
-        bind(CommonTableResources.class).in(Singleton.class);
+        bind(TableResources.class).in(Singleton.class);
 
         // Rest Action Handlers
         bind(DeleteActivityHandler.class);

@@ -16,9 +16,13 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
  */
 public abstract class ModelCell<T extends BaseModel> extends AbstractSafeHtmlCell<T>
 {
-    public ModelCell(final ModelRenderer<T> renderer)
+    final ModelsTable<T> table;
+
+
+    public ModelCell(final ModelsTable<T> table, final ModelRenderer<T> renderer)
     {
         super(renderer, "click", "mouseover", "mouseout");
+        this.table = table;
     }
 
 
