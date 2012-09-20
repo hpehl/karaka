@@ -23,8 +23,6 @@ import name.pehl.tire.shared.model.Duration;
 import name.pehl.tire.shared.model.Project;
 import name.pehl.tire.shared.model.Time;
 
-import org.fusesource.restygwt.client.FailedStatusCodeException;
-
 import com.google.gwt.user.client.ui.SuggestOracle.Callback;
 import com.google.gwt.user.client.ui.SuggestOracle.Request;
 import com.google.gwt.user.client.ui.SuggestOracle.Response;
@@ -149,10 +147,10 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
 
 
             @Override
-            public void onNotFound(final FailedStatusCodeException caught)
+            public void onFailure(final Throwable caught)
             {
                 // Just log
-                logger.log(Level.WARNING, "No activities found for " + query);
+                logger.log(Level.WARNING, "No activities found for " + query + ": " + caught.getMessage(), caught);
             }
         });
     }

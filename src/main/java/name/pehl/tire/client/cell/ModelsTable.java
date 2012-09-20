@@ -41,6 +41,8 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
                 return rowStyle(model, rowIndex);
             }
         });
+        // TODO Use RowHoverEvent to show / hide the actions cell!
+        // this.addRowHoverHandler(...);
     }
 
 
