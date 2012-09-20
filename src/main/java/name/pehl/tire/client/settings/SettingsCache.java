@@ -8,17 +8,19 @@ import name.pehl.tire.shared.model.Settings;
 import name.pehl.tire.shared.model.User;
 
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HasHandlers;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 
-public class SettingsCache extends AbstractModelCache<Settings> implements ModelCache<Settings>
+public class SettingsCache extends AbstractModelCache<Settings> implements ModelCache<Settings>, HasHandlers
 {
     private static Settings currentSettings = defaultSettings();
 
 
     @Inject
-    public SettingsCache(EventBus eventBus, Scheduler scheduler, DispatchAsync dispatcher)
+    public SettingsCache(final EventBus eventBus, final Scheduler scheduler, final DispatchAsync dispatcher)
     {
         super(eventBus, dispatcher);
         models.add(currentSettings);
@@ -32,13 +34,18 @@ public class SettingsCache extends AbstractModelCache<Settings> implements Model
         dispatcher.execute(new GetSettingsAction(), new TireCallback<GetSettingsResult>(eventBus)
         {
             @Override
-            public void onSuccess(GetSettingsResult result)
+            public void onSuccess(final GetSettingsResult result)
             {
                 Settings settings = result.getSettings();
+                boolean changed = currentSettings.hasChanged(settings);
                 models.clear();
                 models.add(settings);
                 currentSettings = settings;
                 logger.log(INFO, "Settings refreshed.");
+                if (changed)
+                {
+                    SettingsChangedEvent.fire(SettingsCache.this, settings);
+                }
             }
         });
     }
@@ -68,5 +75,12 @@ public class SettingsCache extends AbstractModelCache<Settings> implements Model
     public static Settings currentSettings()
     {
         return currentSettings;
+    }
+
+
+    @Override
+    public void fireEvent(final GwtEvent<?> event)
+    {
+        eventBus.fireEventFromSource(event, this);
     }
 }

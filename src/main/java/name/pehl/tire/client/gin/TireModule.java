@@ -52,6 +52,7 @@ import name.pehl.tire.client.application.NavigationView;
 import name.pehl.tire.client.client.ClientsCache;
 import name.pehl.tire.client.client.ClientsPresenter;
 import name.pehl.tire.client.client.ClientsView;
+import name.pehl.tire.client.client.GetClientsHandler;
 import name.pehl.tire.client.help.HelpPresenter;
 import name.pehl.tire.client.help.HelpView;
 import name.pehl.tire.client.model.LinkReader;
@@ -108,6 +109,7 @@ public class TireModule extends AbstractPresenterModule
         bind(DeleteActivityHandler.class);
         bind(FindActivityHandler.class);
         bind(GetActivitiesHandler.class);
+        bind(GetClientsHandler.class);
         bind(GetMinutesHandler.class);
         bind(GetProjectsHandler.class);
         bind(GetRunningActivityHandler.class);

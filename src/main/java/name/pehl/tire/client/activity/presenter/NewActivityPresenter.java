@@ -7,6 +7,8 @@ import static name.pehl.tire.client.activity.event.ActivityAction.Action.START_S
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import name.pehl.tire.client.activity.dispatch.FindActivityAction;
 import name.pehl.tire.client.activity.dispatch.FindActivityResult;
@@ -20,6 +22,8 @@ import name.pehl.tire.shared.model.Activity;
 import name.pehl.tire.shared.model.Duration;
 import name.pehl.tire.shared.model.Project;
 import name.pehl.tire.shared.model.Time;
+
+import org.fusesource.restygwt.client.FailedStatusCodeException;
 
 import com.google.gwt.user.client.ui.SuggestOracle.Callback;
 import com.google.gwt.user.client.ui.SuggestOracle.Request;
@@ -59,6 +63,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
 
     // ------------------------------------------------------- (static) members
 
+    static final Logger logger = Logger.getLogger(NewActivityPresenter.class.getName());
     final DispatchAsync dispatcher;
 
     /**
@@ -95,7 +100,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
     // ------------------------------------------------------------------ setup
 
     @Inject
-    public NewActivityPresenter(EventBus eventBus, MyView view, final DispatchAsync dispatcher)
+    public NewActivityPresenter(final EventBus eventBus, final MyView view, final DispatchAsync dispatcher)
     {
         super(eventBus, view);
         this.dispatcher = dispatcher;
@@ -106,7 +111,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
     // ------------------------------------------------------------ ui handlers
 
     @Override
-    public void onSelectDate(Date date)
+    public void onSelectDate(final Date date)
     {
         this.selectedDate = date;
     }
@@ -120,7 +125,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
         dispatcher.execute(new FindActivityAction(query), new TireCallback<FindActivityResult>(getEventBus())
         {
             @Override
-            public void onSuccess(FindActivityResult result)
+            public void onSuccess(final FindActivityResult result)
             {
                 List<Activity> activities = result.getActivities();
                 if (!activities.isEmpty())
@@ -141,12 +146,20 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
                     callback.onSuggestionsReady(request, new Response(suggestions));
                 }
             }
+
+
+            @Override
+            public void onNotFound(final FailedStatusCodeException caught)
+            {
+                // Just log
+                logger.log(Level.WARNING, "No activities found for " + query);
+            }
         });
     }
 
 
     @Override
-    public void onActivitySelected(Activity activity)
+    public void onActivitySelected(final Activity activity)
     {
         enteredActivity = null;
         selectedActivity = activity;
@@ -158,7 +171,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
 
 
     @Override
-    public void onActivityChanged(String name)
+    public void onActivityChanged(final String name)
     {
         selectedActivity = null;
         enteredActivity = name;
@@ -166,7 +179,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
 
 
     @Override
-    public void onProjectSelected(Project project)
+    public void onProjectSelected(final Project project)
     {
         enteredProject = null;
         selectedProject = project;
@@ -174,7 +187,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
 
 
     @Override
-    public void onProjectChanged(String name)
+    public void onProjectChanged(final String name)
     {
         selectedProject = null;
         enteredProject = name;
@@ -182,7 +195,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
 
 
     @Override
-    public void onDurationChanged(Duration duration)
+    public void onDurationChanged(final Duration duration)
     {
         enteredDuration = duration;
     }
