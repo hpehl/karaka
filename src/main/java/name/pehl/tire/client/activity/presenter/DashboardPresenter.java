@@ -88,8 +88,8 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     // ------------------------------------------------------------------ setup
 
     @Inject
-    public DashboardPresenter(EventBus eventBus, MyView view, MyProxy proxy, final Scheduler scheduler,
-            final DispatchAsync dispatcher, final NewActivityPresenter newActivityPresenter,
+    public DashboardPresenter(final EventBus eventBus, final MyView view, final MyProxy proxy,
+            final Scheduler scheduler, final DispatchAsync dispatcher, final NewActivityPresenter newActivityPresenter,
             final ActivityNavigationPresenter activityNavigationPresenter,
             final ActivityListPresenter activityListPresenter)
     {
@@ -112,7 +112,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
      * @see com.gwtplatform.mvp.client.Presenter#prepareFromRequest(com.gwtplatform.mvp.client.proxy.PlaceRequest)
      */
     @Override
-    public void prepareFromRequest(PlaceRequest placeRequest)
+    public void prepareFromRequest(final PlaceRequest placeRequest)
     {
         super.prepareFromRequest(placeRequest);
         final ActivitiesRequest activitiesRequest = new ActivitiesRequest(placeRequest);
@@ -154,7 +154,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         final ActivitiesRequest activitiesRequest;
 
 
-        GetActivitiesCommand(ActivitiesRequest activitiesRequest)
+        GetActivitiesCommand(final ActivitiesRequest activitiesRequest)
         {
             this.activitiesRequest = activitiesRequest;
         }
@@ -167,26 +167,18 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                     getEventBus())
             {
                 @Override
-                public void onSuccess(GetActivitiesResult result)
+                public void onSuccess(final GetActivitiesResult result)
                 {
                     ActivitiesLoadedEvent.fire(DashboardPresenter.this, result.getActivities());
                 }
 
 
                 @Override
-                public void onFailure(Throwable caught)
+                public void onNotFound(final FailedStatusCodeException caught)
                 {
-                    if (caught instanceof FailedStatusCodeException
-                            && ((FailedStatusCodeException) caught).getStatusCode() == 404)
-                    {
-                        String errorMessage = "No activities found for " + activitiesRequest;
-                        ShowMessageEvent.fire(DashboardPresenter.this, new Message(WARNING, errorMessage, true));
-                        logger.warning(errorMessage);
-                    }
-                    else
-                    {
-                        super.onFailure(caught);
-                    }
+                    String errorMessage = "No activities found for " + activitiesRequest;
+                    ShowMessageEvent.fire(DashboardPresenter.this, new Message(WARNING, errorMessage, true));
+                    logger.warning(errorMessage);
                 }
             });
         }
