@@ -47,7 +47,7 @@ public abstract class ClientActionCell extends AbstractCell<Client>
     }
 
 
-    @UiHandler("{deleteSpan}")
+    @UiHandler("deleteSpan")
     void onDeleteClicked(final ClickEvent event, final Element parent, final Client client)
     {
         onDelete(client);

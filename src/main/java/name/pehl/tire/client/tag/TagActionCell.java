@@ -46,7 +46,7 @@ public abstract class TagActionCell extends AbstractCell<Tag>
     }
 
 
-    @UiHandler("{deleteSpan}")
+    @UiHandler("deleteSpan")
     void onDeleteClicked(final ClickEvent event, final Element parent, final Tag tag)
     {
         onDelete(tag);

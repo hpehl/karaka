@@ -47,21 +47,21 @@ public abstract class ActivityActionCell extends AbstractCell<Activity>
     }
 
 
-    @UiHandler("{copySpan}")
+    @UiHandler("copySpan")
     void onCopyClicked(final ClickEvent event, final Element parent, final Activity activity)
     {
         onCopy(activity);
     }
 
 
-    @UiHandler("{startStopSpan}")
+    @UiHandler("startStopSpan")
     void onStartStopClicked(final ClickEvent event, final Element parent, final Activity activity)
     {
         onStartStop(activity);
     }
 
 
-    @UiHandler("{deleteSpan}")
+    @UiHandler("deleteSpan")
     void onDeleteClicked(final ClickEvent event, final Element parent, final Activity activity)
     {
         onDelete(activity);

@@ -47,7 +47,7 @@ public abstract class ProjectActionCell extends AbstractCell<Project>
     }
 
 
-    @UiHandler("{deleteSpan}")
+    @UiHandler("deleteSpan")
     void onDeleteClicked(final ClickEvent event, final Element parent, final Project project)
     {
         onDelete(project);
