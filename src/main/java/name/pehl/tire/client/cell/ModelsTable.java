@@ -9,19 +9,20 @@ import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.shared.model.BaseModel;
 
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Header;
+import com.google.gwt.user.cellview.client.RowHoverEvent;
 import com.google.gwt.user.cellview.client.RowStyles;
+import com.google.gwt.user.client.ui.HasVisibility;
 
 /**
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
+public abstract class ModelsTable<T extends BaseModel> extends CellTable<T> implements RowHoverEvent.Handler
 {
     // -------------------------------------------------------- private members
 
     protected final TableResources tableResources;
-    protected ModelActionCell<T> actionCell;
+    protected HasVisibility actionCell;
 
 
     // ----------------------------------------------------------- constructors
@@ -30,6 +31,7 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
     {
         super(Integer.MAX_VALUE, tableResources, new ModelKeyProvider<T>());
         this.tableResources = tableResources;
+        this.addRowHoverHandler(this);
 
         setRowCount(0);
         setKeyboardSelectionPolicy(DISABLED);
@@ -41,38 +43,13 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
                 return rowStyle(model, rowIndex);
             }
         });
-        // TODO Use RowHoverEvent to show / hide the actions cell!
-        // this.addRowHoverHandler(...);
+        addColumns();
     }
 
 
     // -------------------------------------------------------------- gui setup
 
     protected abstract void addColumns();
-
-
-    /**
-     * Please make sure that {@code actionCell} is assigned before this method
-     * is called!
-     * 
-     * @param styleName
-     * @param columnIndex
-     * @param renderer
-     * @throws IllegalStateException
-     *             if {@code actionCell} is {@code null}
-     */
-    protected ModelColumn<T> addDataColumn(final String styleName, final int columnIndex,
-            final ModelRenderer<T> renderer, final Header<?> header, final Header<?> footer)
-    {
-        if (actionCell == null)
-        {
-            throw new IllegalStateException("actionCell is null");
-        }
-        ModelColumn<T> column = new ModelColumn<T>(new ModelDataCell<T>(this, actionCell, renderer));
-        addColumn(column, header, footer);
-        addColumnStyleName(columnIndex, styleName);
-        return column;
-    }
 
 
     protected String rowStyle(final T model, final int rowIndex)
@@ -96,8 +73,37 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T>
 
     // --------------------------------------------------------- event handling
 
-    protected abstract void onClick(T value);
+    @Override
+    public void onRowHover(final RowHoverEvent event)
+    {
+        if (event.isUnHover())
+        {
+            onUnHover(event);
+        }
+        else
+        {
+            onHover(event);
+        }
+    }
 
 
-    protected abstract void onAction(T value, String actionId);
+    protected void onHover(final RowHoverEvent event)
+    {
+        if (actionCell != null)
+        {
+            actionCell.setVisible(true);
+        }
+    }
+
+
+    protected void onUnHover(final RowHoverEvent event)
+    {
+        if (actionCell != null)
+        {
+            actionCell.setVisible(false);
+        }
+    }
+
+
+    protected abstract void onEdit(T model);
 }

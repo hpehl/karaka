@@ -1,0 +1,26 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with field="res" type="name.pehl.tire.client.resources.Resources" />
+    <ui:style>
+        .actionCell {
+        	width: 56px;
+        }
+        
+        .marginRight {
+        	margin-right: 4px;
+        }
+    </ui:style>
+
+    <div style="{style.actionCell}">
+        <span ui:field="copySpan" title="Copy and add one day" style="{style.marginRight}">
+            <g:Image resource="{res.copy}" />
+        </span>
+        <span ui:field="startStopSpan" title="Continue, start or stop" style="{style.marginRight}">
+            <g:Image resource="{res.startStop}" />
+        </span>
+        <span ui:field="deleteSpan" title="Delete">
+            <g:Image resource="{res.delete}" />
+        </span>
+    </div>
+</ui:UiBinder> 

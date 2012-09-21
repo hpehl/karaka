@@ -85,6 +85,19 @@ public interface Resources extends ClientBundle
     @Source("activitiesTable.css")
     ActivitiesTableStyle activitiesTableStyle();
 
+    public interface ClientsTableStyle extends CssResource
+    {
+        // @formatter:off
+        String nameColumn();
+        String descriptionColumn();
+        String actionsColumn();
+        // @formatter:on
+    }
+
+
+    @Source("clientsTable.css")
+    ClientsTableStyle clientsTableStyle();
+
     public interface ProjectsTableStyle extends CssResource
     {
         // @formatter:off
@@ -98,4 +111,16 @@ public interface Resources extends ClientBundle
 
     @Source("projectsTable.css")
     ProjectsTableStyle projectsTableStyle();
+
+    public interface TagsTableStyle extends CssResource
+    {
+        // @formatter:off
+        String nameColumn();
+        String actionsColumn();
+        // @formatter:on
+    }
+
+
+    @Source("tagsTable.css")
+    TagsTableStyle tagsTableStyle();
 }

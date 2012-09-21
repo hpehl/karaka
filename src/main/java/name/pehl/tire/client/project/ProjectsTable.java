@@ -1,24 +1,18 @@
 package name.pehl.tire.client.project;
 
+import static name.pehl.tire.client.project.ProjectAction.Action.DELETE;
 import static name.pehl.tire.client.project.ProjectAction.Action.DETAILS;
-import name.pehl.tire.client.cell.ModelActionCell;
+import name.pehl.tire.client.cell.ModelCell;
 import name.pehl.tire.client.cell.ModelColumn;
-import name.pehl.tire.client.cell.ModelRenderer;
 import name.pehl.tire.client.cell.ModelTextRenderer;
 import name.pehl.tire.client.cell.ModelsTable;
-import name.pehl.tire.client.project.ProjectAction.Action;
 import name.pehl.tire.client.project.ProjectActionEvent.HasProjectActionHandlers;
 import name.pehl.tire.client.project.ProjectActionEvent.ProjectActionHandler;
 import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.shared.model.Client;
 import name.pehl.tire.shared.model.Project;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.safehtml.client.SafeHtmlTemplates;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
 /**
  * @author $LastChangedBy:$
@@ -26,16 +20,6 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
  */
 public class ProjectsTable extends ModelsTable<Project> implements HasProjectActionHandlers
 {
-    // -------------------------------------------------------------- templates
-
-    interface ActionsTemplates extends SafeHtmlTemplates
-    {
-        @Template("<div class=\"{0}\" style=\"width: 16px;\"><span id=\"delete\" title=\"Delete\">{1}</span></div>")
-        SafeHtml actions(String hideActionsClassname, SafeHtml delete);
-    }
-
-    static final ActionsTemplates TEMPLATES = GWT.create(ActionsTemplates.class);
-
     // ---------------------------------------------------------------- members
 
     final name.pehl.tire.client.resources.Resources resources;
@@ -48,7 +32,7 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
         super(tableResources);
         this.resources = resources;
         this.resources.projectsTableStyle().ensureInjected();
-        addColumns();
+
     }
 
 
@@ -57,40 +41,33 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
     @Override
     protected void addColumns()
     {
-        // Action is the last column in the UI, but the first one to create!
-        this.actionCell = new ModelActionCell<Project>(this, new ModelRenderer<Project>()
-        {
-            @Override
-            public SafeHtml render(final Project project)
-            {
-                SafeHtml deleteHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(resources.delete())
-                        .getHTML());
-                return TEMPLATES.actions(tableResources.cellTableStyle().hideActions(), deleteHtml);
-            }
-        });
-
         // Column #0: Name
-        addDataColumn(resources.projectsTableStyle().nameColumn(), 0, new ModelTextRenderer<Project>()
-        {
-            @Override
-            protected String getValue(final Project project)
-            {
-                return project.getName();
-            }
-        }, null, null);
+        ModelColumn<Project> column = new ModelColumn<Project>(new ModelCell<Project>(this,
+                new ModelTextRenderer<Project>()
+                {
+                    @Override
+                    protected String getValue(final Project project)
+                    {
+                        return project.getName();
+                    }
+                }));
+        addColumn(column);
+        addColumnStyleName(0, resources.projectsTableStyle().nameColumn());
 
         // Column #1: Description
-        addDataColumn(resources.projectsTableStyle().descriptionColumn(), 1, new ModelTextRenderer<Project>()
+        column = new ModelColumn<Project>(new ModelCell<Project>(this, new ModelTextRenderer<Project>()
         {
             @Override
             public String getValue(final Project project)
             {
                 return project.getDescription();
             }
-        }, null, null);
+        }));
+        addColumn(column);
+        addColumnStyleName(1, resources.projectsTableStyle().descriptionColumn());
 
         // Column #2: Client
-        addDataColumn(resources.projectsTableStyle().clientColumn(), 2, new ModelTextRenderer<Project>()
+        column = new ModelColumn<Project>(new ModelCell<Project>(this, new ModelTextRenderer<Project>()
         {
             @Override
             public String getValue(final Project project)
@@ -103,12 +80,21 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
                 }
                 return clientName;
             }
-        }, null, null);
+        }));
+        addColumn(column);
+        addColumnStyleName(2, resources.projectsTableStyle().clientColumn());
 
         // Column #3: Action
-        ModelColumn<Project> actionColumn = new ModelColumn<Project>(actionCell);
+        column = new ModelColumn<Project>(new ProjectActionCell()
+        {
+            @Override
+            protected void onDelete(final Project project)
+            {
+                ProjectActionEvent.fire(ProjectsTable.this, DELETE, project);
+            }
+        });
+        addColumn(column);
         addColumnStyleName(3, resources.projectsTableStyle().actionsColumn());
-        addColumn(actionColumn);
     }
 
 
@@ -122,15 +108,8 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
 
 
     @Override
-    protected void onClick(final Project project)
+    public void onEdit(final Project project)
     {
         ProjectActionEvent.fire(this, DETAILS, project);
-    }
-
-
-    @Override
-    protected void onAction(final Project project, final String actionId)
-    {
-        ProjectActionEvent.fire(this, Action.valueOf(actionId.toUpperCase()), project);
     }
 }

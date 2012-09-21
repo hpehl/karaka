@@ -14,14 +14,14 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$
  */
-public abstract class ModelCell<T extends BaseModel> extends AbstractSafeHtmlCell<T>
+public class ModelCell<T extends BaseModel> extends AbstractSafeHtmlCell<T>
 {
     final ModelsTable<T> table;
 
 
     public ModelCell(final ModelsTable<T> table, final ModelRenderer<T> renderer)
     {
-        super(renderer, "click", "mouseover", "mouseout");
+        super(renderer, "click");
         this.table = table;
     }
 
@@ -34,14 +34,6 @@ public abstract class ModelCell<T extends BaseModel> extends AbstractSafeHtmlCel
         if ("click".equals(event.getType()))
         {
             onClick(context, parent, value, event, valueUpdater);
-        }
-        else if ("mouseover".equals(event.getType()))
-        {
-            onMouseOver(context, parent, value, event, valueUpdater);
-        }
-        else if ("mouseout".equals(event.getType()))
-        {
-            onMouseOut(context, parent, value, event, valueUpdater);
         }
     }
 
@@ -56,14 +48,9 @@ public abstract class ModelCell<T extends BaseModel> extends AbstractSafeHtmlCel
     }
 
 
-    public abstract void onClick(final Cell.Context context, final Element parent, final T value,
-            final NativeEvent event, final ValueUpdater<T> valueUpdater);
-
-
-    public abstract void onMouseOver(final Cell.Context context, final Element parent, final T value,
-            final NativeEvent event, final ValueUpdater<T> valueUpdater);
-
-
-    public abstract void onMouseOut(final Cell.Context context, final Element parent, final T value,
-            final NativeEvent event, final ValueUpdater<T> valueUpdater);
+    protected void onClick(final Cell.Context context, final Element parent, final T value, final NativeEvent event,
+            final ValueUpdater<T> valueUpdater)
+    {
+        table.onEdit(value);
+    }
 }

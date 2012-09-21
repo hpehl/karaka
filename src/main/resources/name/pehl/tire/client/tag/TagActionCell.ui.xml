@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with field="res" type="name.pehl.tire.client.resources.Resources" />
+    <ui:style>
+        .actionCell {
+        	width: 16px;
+        }
+    </ui:style>
+
+    <div style="{style.actionCell}">
+        <span ui:field="deleteSpan" title="Delete">
+            <g:Image resource="{res.delete}" />
+        </span>
+    </div>
+</ui:UiBinder> 

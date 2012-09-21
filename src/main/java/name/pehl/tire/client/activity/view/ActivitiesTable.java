@@ -1,6 +1,5 @@
 package name.pehl.tire.client.activity.view;
 
-import static com.google.gwt.user.client.ui.HasHorizontalAlignment.ALIGN_RIGHT;
 import static name.pehl.tire.client.activity.event.ActivityAction.Action.DETAILS;
 
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import name.pehl.tire.client.activity.event.ActivityAction.Action;
 import name.pehl.tire.client.activity.event.ActivityActionEvent;
 import name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler;
 import name.pehl.tire.client.activity.event.ActivityActionEvent.HasActivityActionHandlers;
-import name.pehl.tire.client.cell.ModelActionCell;
+import name.pehl.tire.client.cell.ModelCell;
 import name.pehl.tire.client.cell.ModelColumn;
 import name.pehl.tire.client.cell.ModelRenderer;
 import name.pehl.tire.client.cell.ModelTextRenderer;
@@ -27,9 +26,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.TextHeader;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
 /**
  * @author $LastChangedBy:$
@@ -50,11 +47,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
 
 
         @Template("<mark>{0}</mark>")
-        SafeHtml tag(String name);
-
-
-        @Template("<div class=\"{0}\" style=\"width: 56px;\"><span id=\"copy\" style=\"margin-right:4px;\" title=\"Copy and add one day\">{1}</span><span id=\"start_stop\" style=\"margin-right:4px;\" title=\"Continue\">{2}</span><span id=\"delete\" title=\"Delete\">{3}</span></div>")
-        SafeHtml actions(String hideActionsClassname, SafeHtml copy, SafeHtml goon, SafeHtml delete);
+        SafeHtml tag(final String name);
     }
 
     static final ActionsTemplates TEMPLATES = GWT.create(ActionsTemplates.class);
@@ -73,7 +66,6 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
         super(tableResources);
         this.resources = resources;
         this.resources.activitiesTableStyle().ensureInjected();
-        addColumns();
     }
 
 
@@ -82,32 +74,17 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
     @Override
     protected void addColumns()
     {
-        // Action is the last column in the UI, but the first one to create!
-        this.actionCell = new ModelActionCell<Activity>(this, new ModelRenderer<Activity>()
-        {
-            @Override
-            public SafeHtml render(final Activity activity)
-            {
-                SafeHtml copyHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(resources.copy())
-                        .getHTML());
-                SafeHtml startStopHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(
-                        resources.startStop()).getHTML());
-                SafeHtml deleteHtml = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(resources.delete())
-                        .getHTML());
-                return TEMPLATES.actions(tableResources.cellTableStyle().hideActions(), copyHtml, startStopHtml,
-                        deleteHtml);
-            }
-        });
-
         // Column #0: Start date
-        addDataColumn(resources.activitiesTableStyle().startColumn(), 0, new ModelTextRenderer<Activity>()
-        {
-            @Override
-            protected String getValue(final Activity activity)
-            {
-                return FormatUtils.fulldate(activity.getStart());
-            }
-        }, null, new TextHeader(null)
+        ModelColumn<Activity> column = new ModelColumn<Activity>(new ModelCell<Activity>(this,
+                new ModelTextRenderer<Activity>()
+                {
+                    @Override
+                    protected String getValue(final Activity activity)
+                    {
+                        return FormatUtils.fulldate(activity.getStart());
+                    }
+                }));
+        addColumn(column, null, new TextHeader(null)
         {
             @Override
             public String getValue()
@@ -119,51 +96,54 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
                 return null;
             }
         });
+        addColumnStyleName(0, resources.projectsTableStyle().nameColumn());
 
         // Column #1: Duration from - to
-        addDataColumn(resources.activitiesTableStyle().durationFromToColumn(), 1, new ModelTextRenderer<Activity>()
+        column = new ModelColumn<Activity>(new ModelCell<Activity>(this, new ModelTextRenderer<Activity>()
         {
             @Override
             public String getValue(final Activity activity)
             {
                 return FormatUtils.timeDuration(activity.getStart(), activity.getEnd());
             }
-        }, null, null);
+        }));
+        addColumn(column);
+        addColumnStyleName(1, resources.activitiesTableStyle().durationFromToColumn());
 
         // Column #2: Duration in hours
-        ModelColumn<Activity> durationColumn = addDataColumn(resources.activitiesTableStyle().durationInHoursColumn(),
-                2, new ModelRenderer<Activity>()
+        column = new ModelColumn<Activity>(new ModelCell<Activity>(this, new ModelRenderer<Activity>()
+        {
+            @Override
+            public SafeHtml render(final Activity activity)
+            {
+                String duration = FormatUtils.duration(activity.getDuration());
+                if (activity.getPause().isZero())
                 {
-                    @Override
-                    public SafeHtml render(final Activity activity)
-                    {
-                        String duration = FormatUtils.duration(activity.getDuration());
-                        if (activity.getPause().isZero())
-                        {
-                            return toSafeHtml(duration);
-                        }
-                        else
-                        {
-                            String pause = FormatUtils.duration(activity.getPause());
-                            return TEMPLATES.duration(duration, pause);
-                        }
-                    }
-                }, null, new TextHeader(null)
+                    return toSafeHtml(duration);
+                }
+                else
                 {
-                    @Override
-                    public String getValue()
-                    {
-                        if (currentActivities != null)
-                        {
-                            return FormatUtils.duration(currentActivities.getDuration());
-                        }
-                        return null;
-                    }
-                });
-        durationColumn.setHorizontalAlignment(ALIGN_RIGHT);
+                    String pause = FormatUtils.duration(activity.getPause());
+                    return TEMPLATES.duration(duration, pause);
+                }
+            }
+        }));
+        addColumn(column, null, new TextHeader(null)
+        {
+            @Override
+            public String getValue()
+            {
+                if (currentActivities != null)
+                {
+                    return FormatUtils.duration(currentActivities.getDuration());
+                }
+                return null;
+            }
+        });
+        addColumnStyleName(2, resources.activitiesTableStyle().durationInHoursColumn());
 
         // Column #3: Name, Description & Tags
-        addDataColumn(resources.activitiesTableStyle().nameColumn(), 3, new ModelRenderer<Activity>()
+        column = new ModelColumn<Activity>(new ModelCell<Activity>(this, new ModelRenderer<Activity>()
         {
             @Override
             public SafeHtml render(final Activity activity)
@@ -189,10 +169,12 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
                     return safeHtmlBuilder.toSafeHtml();
                 }
             }
-        }, null, null);
+        }));
+        addColumn(column);
+        addColumnStyleName(3, resources.activitiesTableStyle().nameColumn());
 
         // Column #4: Project
-        addDataColumn(resources.activitiesTableStyle().projectColumn(), 4, new ModelTextRenderer<Activity>()
+        column = new ModelColumn<Activity>(new ModelCell<Activity>(this, new ModelTextRenderer<Activity>()
         {
             @Override
             public String getValue(final Activity activity)
@@ -203,12 +185,35 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
                 }
                 return null;
             }
-        }, null, null);
+        }));
+        addColumn(column);
+        addColumnStyleName(4, resources.activitiesTableStyle().projectColumn());
 
         // Column #5: Actions
-        ModelColumn<Activity> actionColumn = new ModelColumn<Activity>(actionCell);
+        column = new ModelColumn<Activity>(new ActivityActionCell()
+        {
+            @Override
+            protected void onCopy(final Activity activity)
+            {
+                ActivityActionEvent.fire(ActivitiesTable.this, Action.COPY, activity);
+            }
+
+
+            @Override
+            protected void onStartStop(final Activity activity)
+            {
+                ActivityActionEvent.fire(ActivitiesTable.this, Action.COPY, activity);
+            }
+
+
+            @Override
+            protected void onDelete(final Activity activity)
+            {
+                ActivityActionEvent.fire(ActivitiesTable.this, Action.COPY, activity);
+            }
+        });
+        addColumn(column);
         addColumnStyleName(5, resources.activitiesTableStyle().actionsColumn());
-        addColumn(actionColumn);
     }
 
 
@@ -246,15 +251,8 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
 
 
     @Override
-    protected void onClick(final Activity activity)
+    public void onEdit(final Activity activity)
     {
         ActivityActionEvent.fire(this, DETAILS, activity);
-    }
-
-
-    @Override
-    protected void onAction(final Activity activity, final String actionId)
-    {
-        ActivityActionEvent.fire(this, Action.valueOf(actionId.toUpperCase()), activity);
     }
 }

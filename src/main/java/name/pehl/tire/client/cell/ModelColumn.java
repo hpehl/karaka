@@ -2,6 +2,7 @@ package name.pehl.tire.client.cell;
 
 import name.pehl.tire.shared.model.BaseModel;
 
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.user.cellview.client.Column;
 
 /**
@@ -11,7 +12,7 @@ import com.google.gwt.user.cellview.client.Column;
 
 public class ModelColumn<T extends BaseModel> extends Column<T, T>
 {
-    public ModelColumn(final ModelCell<T> cell)
+    public ModelColumn(final Cell<T> cell)
     {
         super(cell);
     }
