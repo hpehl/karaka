@@ -37,7 +37,7 @@
 
 
     <properties>
-        <gae.version>1.7.1</gae.version>
+        <gae.version>1.7.2</gae.version>
         <gae.plugin.version>0.9.4</gae.plugin.version>
         <gin.version>1.5.0</gin.version>
         <guava.version>13.0.1</guava.version>

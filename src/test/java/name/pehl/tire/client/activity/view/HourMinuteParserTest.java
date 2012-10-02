@@ -1,7 +1,5 @@
 package name.pehl.tire.client.activity.view;
 
-import name.pehl.tire.client.activity.view.TimeParser;
-
 import org.junit.Before;
 import org.junit.Test;
 

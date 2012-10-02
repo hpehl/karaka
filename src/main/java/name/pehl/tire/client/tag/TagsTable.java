@@ -1,17 +1,14 @@
 package name.pehl.tire.client.tag;
 
-import static name.pehl.tire.client.tag.TagAction.Action.DELETE;
-import static name.pehl.tire.client.tag.TagAction.Action.DETAILS;
-import name.pehl.tire.client.cell.ModelCell;
-import name.pehl.tire.client.cell.ModelColumn;
-import name.pehl.tire.client.cell.ModelTextRenderer;
-import name.pehl.tire.client.cell.ModelsTable;
+import com.google.gwt.event.shared.HandlerRegistration;
+import name.pehl.tire.client.cell.*;
 import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.client.tag.TagActionEvent.HasTagActionHandlers;
 import name.pehl.tire.client.tag.TagActionEvent.TagActionHandler;
 import name.pehl.tire.shared.model.Tag;
 
-import com.google.gwt.event.shared.HandlerRegistration;
+import static name.pehl.tire.client.tag.TagAction.Action.DELETE;
+import static name.pehl.tire.client.tag.TagAction.Action.DETAILS;
 
 /**
  * @author $LastChangedBy:$
@@ -31,6 +28,7 @@ public class TagsTable extends ModelsTable<Tag> implements HasTagActionHandlers
         super(tableResources);
         this.resources = resources;
         this.resources.tagsTableStyle().ensureInjected();
+        addColumns();
     }
 
 
@@ -52,16 +50,11 @@ public class TagsTable extends ModelsTable<Tag> implements HasTagActionHandlers
         addColumnStyleName(0, resources.tagsTableStyle().nameColumn());
 
         // Column #1: Action
-        column = new ModelColumn<Tag>(new TagActionCell()
-        {
-            @Override
-            protected void onDelete(final Tag tag)
-            {
-                TagActionEvent.fire(TagsTable.this, DELETE, tag);
-            }
-        });
+        DeleteActionCell<Tag> actionCell = new DeleteActionCell<Tag>(this, resources);
+        column = new ModelColumn<Tag>(actionCell);
         addColumn(column);
         addColumnStyleName(3, resources.tagsTableStyle().actionsColumn());
+        this.actionCell = actionCell;
     }
 
 
@@ -78,5 +71,12 @@ public class TagsTable extends ModelsTable<Tag> implements HasTagActionHandlers
     public void onEdit(final Tag tag)
     {
         TagActionEvent.fire(this, DETAILS, tag);
+    }
+
+
+    @Override
+    public void onAction(final Tag tag, final String id)
+    {
+        TagActionEvent.fire(this, DELETE, tag);
     }
 }

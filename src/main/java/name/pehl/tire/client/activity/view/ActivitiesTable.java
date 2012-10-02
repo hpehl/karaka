@@ -1,25 +1,5 @@
 package name.pehl.tire.client.activity.view;
 
-import static name.pehl.tire.client.activity.event.ActivityAction.Action.DETAILS;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import name.pehl.tire.client.activity.event.ActivityAction.Action;
-import name.pehl.tire.client.activity.event.ActivityActionEvent;
-import name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler;
-import name.pehl.tire.client.activity.event.ActivityActionEvent.HasActivityActionHandlers;
-import name.pehl.tire.client.cell.ModelCell;
-import name.pehl.tire.client.cell.ModelColumn;
-import name.pehl.tire.client.cell.ModelRenderer;
-import name.pehl.tire.client.cell.ModelTextRenderer;
-import name.pehl.tire.client.cell.ModelsTable;
-import name.pehl.tire.client.resources.TableResources;
-import name.pehl.tire.client.ui.FormatUtils;
-import name.pehl.tire.shared.model.Activities;
-import name.pehl.tire.shared.model.Activity;
-import name.pehl.tire.shared.model.Tag;
-
 import com.google.common.base.Strings;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -27,6 +7,20 @@ import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.TextHeader;
+import name.pehl.tire.client.activity.event.ActivityActionEvent;
+import name.pehl.tire.client.activity.event.ActivityActionEvent.ActivityActionHandler;
+import name.pehl.tire.client.activity.event.ActivityActionEvent.HasActivityActionHandlers;
+import name.pehl.tire.client.cell.*;
+import name.pehl.tire.client.resources.TableResources;
+import name.pehl.tire.client.ui.FormatUtils;
+import name.pehl.tire.shared.model.Activities;
+import name.pehl.tire.shared.model.Activity;
+import name.pehl.tire.shared.model.Tag;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static name.pehl.tire.client.activity.event.ActivityAction.Action.DETAILS;
 
 /**
  * @author $LastChangedBy:$
@@ -36,29 +30,25 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
 {
     // -------------------------------------------------------------- templates
 
-    interface ActionsTemplates extends SafeHtmlTemplates
+    interface Template extends SafeHtmlTemplates
     {
         @Template("<span title=\"{1} pause\">{0}<sup>P</sup></span>")
         SafeHtml duration(String duration, String pause);
 
-
         @Template("<span title=\"{1}\">{0}</span>")
         SafeHtml nameDescription(String name, String description);
-
 
         @Template("<mark>{0}</mark>")
         SafeHtml tag(final String name);
     }
 
-    static final ActionsTemplates TEMPLATES = GWT.create(ActionsTemplates.class);
+    static final Template TEMPLATE = GWT.create(Template.class);
 
     // ---------------------------------------------------------------- members
 
-    Activities currentActivities;
     final name.pehl.tire.client.resources.Resources resources;
+    Activities currentActivities;
 
-
-    // ----------------------------------------------------------- constructors
 
     public ActivitiesTable(final name.pehl.tire.client.resources.Resources resources,
             final TableResources tableResources)
@@ -66,10 +56,11 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
         super(tableResources);
         this.resources = resources;
         this.resources.activitiesTableStyle().ensureInjected();
+        addColumns();
     }
 
 
-    // -------------------------------------------------------------- gui setup
+    // ----------------------------------------------------------- constructors
 
     @Override
     protected void addColumns()
@@ -96,7 +87,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
                 return null;
             }
         });
-        addColumnStyleName(0, resources.projectsTableStyle().nameColumn());
+        addColumnStyleName(0, resources.activitiesTableStyle().nameColumn());
 
         // Column #1: Duration from - to
         column = new ModelColumn<Activity>(new ModelCell<Activity>(this, new ModelTextRenderer<Activity>()
@@ -124,7 +115,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
                 else
                 {
                     String pause = FormatUtils.duration(activity.getPause());
-                    return TEMPLATES.duration(duration, pause);
+                    return TEMPLATE.duration(duration, pause);
                 }
             }
         }));
@@ -148,7 +139,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
             @Override
             public SafeHtml render(final Activity activity)
             {
-                SafeHtml nameDescription = TEMPLATES.nameDescription(activity.getName(),
+                SafeHtml nameDescription = TEMPLATE.nameDescription(activity.getName(),
                         Strings.nullToEmpty(activity.getDescription()));
                 List<Tag> tags = activity.getTags();
                 if (tags.isEmpty())
@@ -163,7 +154,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
                     {
                         if (tag.getName() != null)
                         {
-                            safeHtmlBuilder.append(' ').append(TEMPLATES.tag(tag.getName()));
+                            safeHtmlBuilder.append(' ').append(TEMPLATE.tag(tag.getName()));
                         }
                     }
                     return safeHtmlBuilder.toSafeHtml();
@@ -190,32 +181,15 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
         addColumnStyleName(4, resources.activitiesTableStyle().projectColumn());
 
         // Column #5: Actions
-        column = new ModelColumn<Activity>(new ActivityActionCell()
-        {
-            @Override
-            protected void onCopy(final Activity activity)
-            {
-                ActivityActionEvent.fire(ActivitiesTable.this, Action.COPY, activity);
-            }
-
-
-            @Override
-            protected void onStartStop(final Activity activity)
-            {
-                ActivityActionEvent.fire(ActivitiesTable.this, Action.COPY, activity);
-            }
-
-
-            @Override
-            protected void onDelete(final Activity activity)
-            {
-                ActivityActionEvent.fire(ActivitiesTable.this, Action.COPY, activity);
-            }
-        });
+        ActivityActionCell activityActionCell = new ActivityActionCell(this, resources);
+        column = new ModelColumn<Activity>(activityActionCell);
         addColumn(column);
         addColumnStyleName(5, resources.activitiesTableStyle().actionsColumn());
+        this.actionCell = activityActionCell;
     }
 
+
+    // -------------------------------------------------------------- gui setup
 
     @Override
     protected String rowStyle(final Activity model, final int rowIndex)
@@ -231,9 +205,6 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
         return null;
     }
 
-
-    // --------------------------------------------------------- public methods
-
     public void update(final Activities activities)
     {
         currentActivities = activities;
@@ -241,7 +212,7 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
     }
 
 
-    // --------------------------------------------------------- event handling
+    // --------------------------------------------------------- public methods
 
     @Override
     public HandlerRegistration addActivityActionHandler(final ActivityActionHandler handler)
@@ -250,9 +221,16 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
     }
 
 
+    // --------------------------------------------------------- event handling
+
     @Override
     public void onEdit(final Activity activity)
     {
         ActivityActionEvent.fire(this, DETAILS, activity);
+    }
+
+    @Override
+    public void onAction(final Activity value, final String id)
+    {
     }
 }

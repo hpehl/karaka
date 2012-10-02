@@ -1,17 +1,16 @@
 package name.pehl.tire.client.cell;
 
-import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import name.pehl.tire.client.resources.TableResources;
-import name.pehl.tire.shared.model.BaseModel;
-
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.RowHoverEvent;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.client.ui.HasVisibility;
+import name.pehl.tire.client.resources.TableResources;
+import name.pehl.tire.shared.model.BaseModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy.DISABLED;
 
 /**
  * @author $LastChangedBy:$
@@ -43,7 +42,6 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T> impl
                 return rowStyle(model, rowIndex);
             }
         });
-        addColumns();
     }
 
 
@@ -78,16 +76,16 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T> impl
     {
         if (event.isUnHover())
         {
-            onUnHover(event);
+            onUnHover();
         }
         else
         {
-            onHover(event);
+            onHover();
         }
     }
 
 
-    protected void onHover(final RowHoverEvent event)
+    protected void onHover()
     {
         if (actionCell != null)
         {
@@ -96,7 +94,7 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T> impl
     }
 
 
-    protected void onUnHover(final RowHoverEvent event)
+    protected void onUnHover()
     {
         if (actionCell != null)
         {
@@ -105,5 +103,8 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T> impl
     }
 
 
-    protected abstract void onEdit(T model);
+    public abstract void onEdit(T model);
+
+
+    public abstract void onAction(final T value, final String id);
 }

@@ -1,78 +1,45 @@
 package name.pehl.tire.client.activity.view;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import name.pehl.tire.client.cell.ModelActionCell;
+import name.pehl.tire.client.cell.ModelRenderer;
+import name.pehl.tire.client.cell.ModelsTable;
+import name.pehl.tire.client.resources.Resources;
 import name.pehl.tire.shared.model.Activity;
 
-import com.google.gwt.cell.client.AbstractCell;
-import com.google.gwt.cell.client.ValueUpdater;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.uibinder.client.UiRenderer;
+import static com.google.gwt.safehtml.shared.SafeHtmlUtils.fromTrustedString;
+import static com.google.gwt.user.client.ui.AbstractImagePrototype.create;
 
-public abstract class ActivityActionCell extends AbstractCell<Activity>
+public class ActivityActionCell extends ModelActionCell<Activity>
 {
-    interface ActionRenderer extends UiRenderer
+    interface Template extends SafeHtmlTemplates
     {
-        void render(SafeHtmlBuilder sb);
-
-
-        void onBrowserEvent(ActivityActionCell cell, NativeEvent event, Element element, Activity activity);
+        @Template(
+                "<div id=\"actions_container\" style=\"width: 56px;\"><span id=\"copy\" style=\"margin-right:4px;\" " +
+                        "title=\"Copy and add one " +
+                        "day\">{0}</span><span id=\"start_stop\" style=\"margin-right:4px;\" " +
+                        "title=\"Continue\">{1}</span><span id=\"delete\" title=\"Delete\">{2}</span></div>")
+        SafeHtml actions(SafeHtml copy, SafeHtml goon, SafeHtml delete);
     }
 
-    static ActionRenderer renderer = GWT.create(ActionRenderer.class);
+    static final Template TEMPLATE = GWT.create(Template.class);
 
 
-    public ActivityActionCell()
+    public ActivityActionCell(final ModelsTable<Activity> table, final Resources resources)
     {
-        super("click");
+        super("actions_container", table, new ModelRenderer<Activity>()
+        {
+            @Override
+            public SafeHtml render(final Activity object)
+            {
+                return TEMPLATE.actions(fromTrustedString(create(resources.copy())
+                        .getHTML()), fromTrustedString(create(
+                        resources.startStop()).getHTML()),
+                        fromTrustedString(create(resources.delete())
+                                .getHTML()));
+            }
+        });
     }
-
-
-    @Override
-    public void render(final com.google.gwt.cell.client.Cell.Context context, final Activity value,
-            final SafeHtmlBuilder sb)
-    {
-        renderer.render(sb);
-    }
-
-
-    @Override
-    public void onBrowserEvent(final com.google.gwt.cell.client.Cell.Context context, final Element parent,
-            final Activity value, final NativeEvent event, final ValueUpdater<Activity> valueUpdater)
-    {
-        renderer.onBrowserEvent(this, event, parent, value);
-    }
-
-
-    @UiHandler("copySpan")
-    void onCopyClicked(final ClickEvent event, final Element parent, final Activity activity)
-    {
-        onCopy(activity);
-    }
-
-
-    @UiHandler("startStopSpan")
-    void onStartStopClicked(final ClickEvent event, final Element parent, final Activity activity)
-    {
-        onStartStop(activity);
-    }
-
-
-    @UiHandler("deleteSpan")
-    void onDeleteClicked(final ClickEvent event, final Element parent, final Activity activity)
-    {
-        onDelete(activity);
-    }
-
-
-    protected abstract void onCopy(Activity activity);
-
-
-    protected abstract void onStartStop(Activity activity);
-
-
-    protected abstract void onDelete(Activity activity);
 }

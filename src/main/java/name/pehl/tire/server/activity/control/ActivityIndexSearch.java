@@ -1,19 +1,15 @@
 package name.pehl.tire.server.activity.control;
 
-import javax.inject.Inject;
-
+import com.google.appengine.api.search.*;
+import com.google.appengine.api.search.QueryOptions.Builder;
+import com.google.appengine.api.search.SortExpression.SortDirection;
 import name.pehl.tire.server.activity.entity.Activity;
 import name.pehl.tire.server.search.DescriptiveEntityIndexSearch;
 import name.pehl.tire.server.search.IndexName;
 import name.pehl.tire.server.search.IndexSearch;
 
-import com.google.appengine.api.search.Document;
-import com.google.appengine.api.search.Field;
-import com.google.appengine.api.search.Index;
-import com.google.appengine.api.search.QueryOptions.Builder;
-import com.google.appengine.api.search.SortExpression;
-import com.google.appengine.api.search.SortExpression.SortDirection;
-import com.google.appengine.api.search.SortOptions;
+import javax.inject.Inject;
+import java.util.Date;
 
 /**
  * @author $LastChangedBy:$
@@ -32,10 +28,14 @@ public class ActivityIndexSearch extends DescriptiveEntityIndexSearch<Activity> 
 
 
     @Override
+    @SuppressWarnings("deprecation")
     protected Document.Builder documentBuilderFor(Activity entity)
     {
-        return super.documentBuilderFor(entity).addField(
-                Field.newBuilder().setName("start").setDate(Field.date(entity.getStart().getDateTime().toDate())));
+        Date start = entity.getStart().getDateTime().toDate();
+        start.setHours(0);
+        start.setMinutes(0);
+        start.setSeconds(0);
+        return super.documentBuilderFor(entity).addField(Field.newBuilder().setName("start").setDate(start));
     }
 
 

@@ -1,17 +1,14 @@
 package name.pehl.tire.client.client;
 
-import static name.pehl.tire.client.client.ClientAction.Action.DELETE;
-import static name.pehl.tire.client.client.ClientAction.Action.DETAILS;
-import name.pehl.tire.client.cell.ModelCell;
-import name.pehl.tire.client.cell.ModelColumn;
-import name.pehl.tire.client.cell.ModelTextRenderer;
-import name.pehl.tire.client.cell.ModelsTable;
+import com.google.gwt.event.shared.HandlerRegistration;
+import name.pehl.tire.client.cell.*;
 import name.pehl.tire.client.client.ClientActionEvent.ClientActionHandler;
 import name.pehl.tire.client.client.ClientActionEvent.HasClientActionHandlers;
 import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.shared.model.Client;
 
-import com.google.gwt.event.shared.HandlerRegistration;
+import static name.pehl.tire.client.client.ClientAction.Action.DELETE;
+import static name.pehl.tire.client.client.ClientAction.Action.DETAILS;
 
 /**
  * @author $LastChangedBy:$
@@ -31,6 +28,7 @@ public class ClientsTable extends ModelsTable<Client> implements HasClientAction
         super(tableResources);
         this.resources = resources;
         this.resources.clientsTableStyle().ensureInjected();
+        addColumns();
     }
 
 
@@ -65,16 +63,11 @@ public class ClientsTable extends ModelsTable<Client> implements HasClientAction
         addColumnStyleName(1, resources.clientsTableStyle().descriptionColumn());
 
         // Column #2: Action
-        column = new ModelColumn<Client>(new ClientActionCell()
-        {
-            @Override
-            protected void onDelete(final Client client)
-            {
-                ClientActionEvent.fire(ClientsTable.this, DELETE, client);
-            }
-        });
+        DeleteActionCell<Client> actionCell = new DeleteActionCell<Client>(this, resources);
+        column = new ModelColumn<Client>(actionCell);
         addColumn(column);
         addColumnStyleName(3, resources.clientsTableStyle().actionsColumn());
+        this.actionCell = actionCell;
     }
 
 
@@ -91,5 +84,11 @@ public class ClientsTable extends ModelsTable<Client> implements HasClientAction
     public void onEdit(final Client client)
     {
         ClientActionEvent.fire(this, DETAILS, client);
+    }
+
+    @Override
+    public void onAction(final Client client, final String id)
+    {
+        ClientActionEvent.fire(this, DELETE, client);
     }
 }

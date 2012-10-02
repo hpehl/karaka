@@ -1,20 +1,18 @@
 package name.pehl.tire.client.activity.view;
 
-import name.pehl.tire.client.activity.event.ActivityActionEvent;
-import name.pehl.tire.client.activity.presenter.ActivityListPresenter;
-import name.pehl.tire.client.activity.presenter.ActivityListUiHandlers;
-import name.pehl.tire.client.project.ProjectsCache;
-import name.pehl.tire.client.resources.TableResources;
-import name.pehl.tire.client.resources.I18n;
-import name.pehl.tire.client.resources.Resources;
-import name.pehl.tire.shared.model.Activities;
-
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import name.pehl.tire.client.activity.event.ActivityActionEvent;
+import name.pehl.tire.client.activity.presenter.ActivityListPresenter;
+import name.pehl.tire.client.activity.presenter.ActivityListUiHandlers;
+import name.pehl.tire.client.resources.I18n;
+import name.pehl.tire.client.resources.Resources;
+import name.pehl.tire.client.resources.TableResources;
+import name.pehl.tire.shared.model.Activities;
 
 public class ActivityListView extends ViewWithUiHandlers<ActivityListUiHandlers> implements
         ActivityListPresenter.MyView
@@ -37,10 +35,10 @@ public class ActivityListView extends ViewWithUiHandlers<ActivityListUiHandlers>
 
     @Inject
     public ActivityListView(final Binder binder, final I18n i18n, final Resources resources,
-            final TableResources commonTableResources, final ProjectsCache projectsCache)
+            final TableResources tableResources)
     {
         this.i18n = i18n;
-        this.activitiesTable = new ActivitiesTable(resources, commonTableResources);
+        this.activitiesTable = new ActivitiesTable(resources, tableResources);
         this.widget = binder.createAndBindUi(this);
     }
 

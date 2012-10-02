@@ -1,7 +1,5 @@
 package name.pehl.tire.client.cell;
 
-import name.pehl.tire.shared.model.BaseModel;
-
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ValueUpdater;
@@ -9,6 +7,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import name.pehl.tire.shared.model.BaseModel;
 
 /**
  * @author $LastChangedBy:$
@@ -16,7 +15,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
  */
 public class ModelCell<T extends BaseModel> extends AbstractSafeHtmlCell<T>
 {
-    final ModelsTable<T> table;
+    protected final ModelsTable<T> table;
 
 
     public ModelCell(final ModelsTable<T> table, final ModelRenderer<T> renderer)

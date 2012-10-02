@@ -1,25 +1,19 @@
 package name.pehl.tire.client.activity.view;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONValue;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import name.pehl.tire.client.activity.view.WeekClickedEvent.HasWeekClickedHandlers;
 import name.pehl.tire.client.activity.view.WeekClickedEvent.WeekClickedHandler;
 import name.pehl.tire.client.ui.FormatUtils;
 import name.pehl.tire.shared.model.Activities;
 import name.pehl.tire.shared.model.Week;
-
 import org.moxieapps.gwt.highcharts.client.Point;
 import org.moxieapps.gwt.highcharts.client.events.PointClickEvent;
 import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions.Cursor;
 
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONValue;
-import com.google.web.bindery.event.shared.HandlerRegistration;
+import java.util.*;
 
 /**
  * @author $Author: harald.pehl $
@@ -28,7 +22,7 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
  */
 public class MonthChartWidget extends QuickChartWidget implements HasWeekClickedHandlers
 {
-    final static String[] WEEKS = new String[] {"n/a", "n/a", "n/a", "n/a"};
+    final static String[] WEEKS = new String[]{"n/a", "n/a", "n/a", "n/a"};
     final Map<Week, Point> weekToPoint;
     final Map<String, Week> pointToWeek;
 
@@ -65,7 +59,7 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
             categories.add(category);
             updatePoint(point, hours, tooltip);
         }
-        chart.getXAxis().setCategories(categories.toArray(new String[] {}));
+        chart.getXAxis().setCategories(categories.toArray(new String[categories.size()]));
     }
 
 

@@ -1,18 +1,15 @@
 package name.pehl.tire.client.project;
 
-import static name.pehl.tire.client.project.ProjectAction.Action.DELETE;
-import static name.pehl.tire.client.project.ProjectAction.Action.DETAILS;
-import name.pehl.tire.client.cell.ModelCell;
-import name.pehl.tire.client.cell.ModelColumn;
-import name.pehl.tire.client.cell.ModelTextRenderer;
-import name.pehl.tire.client.cell.ModelsTable;
+import com.google.gwt.event.shared.HandlerRegistration;
+import name.pehl.tire.client.cell.*;
 import name.pehl.tire.client.project.ProjectActionEvent.HasProjectActionHandlers;
 import name.pehl.tire.client.project.ProjectActionEvent.ProjectActionHandler;
 import name.pehl.tire.client.resources.TableResources;
 import name.pehl.tire.shared.model.Client;
 import name.pehl.tire.shared.model.Project;
 
-import com.google.gwt.event.shared.HandlerRegistration;
+import static name.pehl.tire.client.project.ProjectAction.Action.DELETE;
+import static name.pehl.tire.client.project.ProjectAction.Action.DETAILS;
 
 /**
  * @author $LastChangedBy:$
@@ -32,7 +29,7 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
         super(tableResources);
         this.resources = resources;
         this.resources.projectsTableStyle().ensureInjected();
-
+        addColumns();
     }
 
 
@@ -85,16 +82,11 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
         addColumnStyleName(2, resources.projectsTableStyle().clientColumn());
 
         // Column #3: Action
-        column = new ModelColumn<Project>(new ProjectActionCell()
-        {
-            @Override
-            protected void onDelete(final Project project)
-            {
-                ProjectActionEvent.fire(ProjectsTable.this, DELETE, project);
-            }
-        });
+        DeleteActionCell<Project> actionCell = new DeleteActionCell<Project>(this, resources);
+        column = new ModelColumn<Project>(actionCell);
         addColumn(column);
         addColumnStyleName(3, resources.projectsTableStyle().actionsColumn());
+        this.actionCell = actionCell;
     }
 
 
@@ -111,5 +103,11 @@ public class ProjectsTable extends ModelsTable<Project> implements HasProjectAct
     public void onEdit(final Project project)
     {
         ProjectActionEvent.fire(this, DETAILS, project);
+    }
+
+    @Override
+    public void onAction(final Project project, final String id)
+    {
+        ProjectActionEvent.fire(this, DELETE, project);
     }
 }
