@@ -14,16 +14,6 @@ import static com.google.gwt.user.client.ui.AbstractImagePrototype.create;
 
 public class ActivityActionCell extends ModelActionCell<Activity>
 {
-    interface Template extends SafeHtmlTemplates
-    {
-        @Template(
-                "<div id=\"actions_container\" style=\"width: 56px;\"><span id=\"copy\" style=\"margin-right:4px;\" " +
-                        "title=\"Copy and add one " +
-                        "day\">{0}</span><span id=\"start_stop\" style=\"margin-right:4px;\" " +
-                        "title=\"Continue\">{1}</span><span id=\"delete\" title=\"Delete\">{2}</span></div>")
-        SafeHtml actions(SafeHtml copy, SafeHtml goon, SafeHtml delete);
-    }
-
     static final Template TEMPLATE = GWT.create(Template.class);
 
 
@@ -41,5 +31,16 @@ public class ActivityActionCell extends ModelActionCell<Activity>
                                 .getHTML()));
             }
         });
+    }
+
+
+    interface Template extends SafeHtmlTemplates
+    {
+        @Template(
+                "<div id=\"actions_container\" style=\"display: none; width: 56px;\"><span id=\"copy\" " +
+                        "style=\"margin-right:4px;\" " +
+                        "title=\"Copy and add one day\">{0}</span><span id=\"start_stop\" style=\"margin-right:4px;\" " +
+                        "title=\"Continue\">{1}</span><span id=\"delete\" title=\"Delete\">{2}</span></div>")
+        SafeHtml actions(SafeHtml copy, SafeHtml goon, SafeHtml delete);
     }
 }

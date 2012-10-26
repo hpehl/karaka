@@ -1,34 +1,37 @@
 package name.pehl.tire.client.cell;
 
 import com.google.gwt.cell.client.ValueUpdater;
-import com.google.gwt.dom.client.*;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.EventTarget;
+import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.ui.HasVisibility;
+import com.google.gwt.user.client.ui.RootPanel;
 import name.pehl.tire.shared.model.BaseModel;
 
 public class ModelActionCell<T extends BaseModel> extends ModelCell<T> implements HasVisibility
 {
-    final DivElement container;
+    final String id;
 
 
     public ModelActionCell(final String id, final ModelsTable<T> table, final ModelRenderer<T> renderer)
     {
         super(table, renderer);
-        this.container = DOM.getElementById(id).cast();
+        this.id = id; 
     }
 
 
     @Override
     public boolean isVisible()
     {
-        return "visible".equals(container.getAttribute("visibility"));
+        return RootPanel.get(id).isVisible();
     }
 
 
     @Override
     public void setVisible(boolean visible)
     {
-        container.setAttribute("visibility", (visible ? "visible" : "hidden"));
+        RootPanel.get(id).setVisible(visible);
     }
 
 

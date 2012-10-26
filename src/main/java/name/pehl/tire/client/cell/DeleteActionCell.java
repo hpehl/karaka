@@ -13,13 +13,6 @@ public class DeleteActionCell<T extends BaseModel> extends ModelActionCell<T>
 {
     // -------------------------------------------------------------- templates
 
-    interface Template extends SafeHtmlTemplates
-    {
-        @Template("<div id=\"delete_container\" style=\"width: 16px;\"><span id=\"delete\" " +
-                "title=\"Delete\">{0}</span></div>")
-        SafeHtml delete(SafeHtml delete);
-    }
-
     static final Template TEMPLATE = GWT.create(Template.class);
 
 
@@ -35,5 +28,13 @@ public class DeleteActionCell<T extends BaseModel> extends ModelActionCell<T>
                                 .getHTML()));
             }
         });
+    }
+
+
+    interface Template extends SafeHtmlTemplates
+    {
+        @Template("<div id=\"delete_container\" style=\"display: none; width: 16px;\"><span id=\"delete\" " +
+                "title=\"Delete\">{0}</span></div>")
+        SafeHtml delete(SafeHtml delete);
     }
 }
