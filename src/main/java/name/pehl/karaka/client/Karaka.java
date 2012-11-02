@@ -1,6 +1,6 @@
 package name.pehl.karaka.client;
 
-import name.pehl.karaka.client.gin.TireGinjector;
+import name.pehl.karaka.client.gin.KarakaGinjector;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -10,9 +10,9 @@ import com.gwtplatform.mvp.client.DelayedBindRegistry;
  * @author $Author: harald.pehl $
  * @version $Revision: 95 $
  */
-public class Tire implements EntryPoint
+public class Karaka implements EntryPoint
 {
-    public final TireGinjector ginjector = GWT.create(TireGinjector.class);
+    public final KarakaGinjector ginjector = GWT.create(KarakaGinjector.class);
 
 
     @Override

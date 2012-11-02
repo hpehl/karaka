@@ -3,7 +3,7 @@ package name.pehl.karaka.client.activity.presenter;
 import static name.pehl.karaka.client.NameTokens.dashboard;
 import name.pehl.karaka.client.activity.dispatch.GetYearsAction;
 import name.pehl.karaka.client.activity.dispatch.GetYearsResult;
-import name.pehl.karaka.client.dispatch.TireCallback;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.shared.model.TimeUnit;
 import name.pehl.karaka.shared.model.Years;
 
@@ -48,7 +48,7 @@ public abstract class SelectTimeUnitPresenter extends PresenterWidget<SelectTime
     {
         super.onReveal();
         // TODO Implement some caching to prevent server roundtrip
-        dispatcher.execute(new GetYearsAction(), new TireCallback<GetYearsResult>(getEventBus())
+        dispatcher.execute(new GetYearsAction(), new KarakaCallback<GetYearsResult>(getEventBus())
         {
             @Override
             public void onSuccess(GetYearsResult result)

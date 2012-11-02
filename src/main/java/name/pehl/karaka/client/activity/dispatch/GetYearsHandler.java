@@ -1,9 +1,9 @@
 package name.pehl.karaka.client.activity.dispatch;
 
+import name.pehl.karaka.client.dispatch.KarakaJsonCallback;
 import name.pehl.piriti.json.client.JsonReader;
 import name.pehl.karaka.client.activity.model.YearsReader;
-import name.pehl.karaka.client.dispatch.TireActionHandler;
-import name.pehl.karaka.client.dispatch.TireJsonCallback;
+import name.pehl.karaka.client.dispatch.KarakaActionHandler;
 import name.pehl.karaka.client.rest.UrlBuilder;
 import name.pehl.karaka.shared.model.Years;
 
@@ -20,7 +20,7 @@ import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class GetYearsHandler extends TireActionHandler<GetYearsAction, GetYearsResult>
+public class GetYearsHandler extends KarakaActionHandler<GetYearsAction, GetYearsResult>
 {
     final YearsReader yearsReader;
 
@@ -44,7 +44,7 @@ public class GetYearsHandler extends TireActionHandler<GetYearsAction, GetYearsR
     @Override
     protected void executeMethod(final Method method, final AsyncCallback<GetYearsResult> resultCallback)
     {
-        method.send(new TireJsonCallback<Years, GetYearsResult>(yearsReader, resultCallback)
+        method.send(new KarakaJsonCallback<Years, GetYearsResult>(yearsReader, resultCallback)
         {
             @Override
             protected GetYearsResult extractResult(JsonReader<Years> reader, JSONObject json)

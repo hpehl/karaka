@@ -1,8 +1,8 @@
 package name.pehl.karaka.client.project;
 
 import name.pehl.piriti.json.client.JsonReader;
-import name.pehl.karaka.client.dispatch.TireActionHandler;
-import name.pehl.karaka.client.dispatch.TireJsonCallback;
+import name.pehl.karaka.client.dispatch.KarakaActionHandler;
+import name.pehl.karaka.client.dispatch.KarakaJsonCallback;
 import name.pehl.karaka.client.rest.UrlBuilder;
 import name.pehl.karaka.shared.model.Project;
 
@@ -15,7 +15,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-public class GetProjectsHandler extends TireActionHandler<GetProjectsAction, GetProjectsResult>
+public class GetProjectsHandler extends KarakaActionHandler<GetProjectsAction, GetProjectsResult>
 {
     final ProjectReader projectReader;
 
@@ -39,7 +39,7 @@ public class GetProjectsHandler extends TireActionHandler<GetProjectsAction, Get
     @Override
     protected void executeMethod(Method method, AsyncCallback<GetProjectsResult> resultCallback)
     {
-        method.send(new TireJsonCallback<Project, GetProjectsResult>(projectReader, resultCallback)
+        method.send(new KarakaJsonCallback<Project, GetProjectsResult>(projectReader, resultCallback)
         {
             @Override
             protected GetProjectsResult extractResult(JsonReader<Project> reader, JSONObject json)

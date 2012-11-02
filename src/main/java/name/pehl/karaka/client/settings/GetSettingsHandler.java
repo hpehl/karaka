@@ -1,8 +1,8 @@
 package name.pehl.karaka.client.settings;
 
+import name.pehl.karaka.client.dispatch.KarakaJsonCallback;
 import name.pehl.piriti.json.client.JsonReader;
-import name.pehl.karaka.client.dispatch.TireActionHandler;
-import name.pehl.karaka.client.dispatch.TireJsonCallback;
+import name.pehl.karaka.client.dispatch.KarakaActionHandler;
 import name.pehl.karaka.client.rest.UrlBuilder;
 import name.pehl.karaka.shared.model.Settings;
 
@@ -19,7 +19,7 @@ import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class GetSettingsHandler extends TireActionHandler<GetSettingsAction, GetSettingsResult>
+public class GetSettingsHandler extends KarakaActionHandler<GetSettingsAction, GetSettingsResult>
 {
     private final SettingsReader settingsReader;
 
@@ -43,7 +43,7 @@ public class GetSettingsHandler extends TireActionHandler<GetSettingsAction, Get
     @Override
     protected void executeMethod(final Method method, final AsyncCallback<GetSettingsResult> resultCallback)
     {
-        method.send(new TireJsonCallback<Settings, GetSettingsResult>(settingsReader, resultCallback)
+        method.send(new KarakaJsonCallback<Settings, GetSettingsResult>(settingsReader, resultCallback)
         {
             @Override
             protected GetSettingsResult extractResult(JsonReader<Settings> reader, JSONObject json)

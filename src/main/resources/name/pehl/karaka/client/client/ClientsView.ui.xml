@@ -1,5 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:tire="urn:import:name.pehl.tire.client.client">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:client="urn:import:name.pehl.karaka.client.client">
 
     <ui:style>
         .table {
@@ -15,7 +17,7 @@
         </g:north>
         <g:center>
             <g:ScrollPanel>
-                <tire:ClientsTable ui:field="clientsTable" addStyleNames="{style.table}" />
+                <client:ClientsTable ui:field="clientsTable" addStyleNames="{style.table}" />
             </g:ScrollPanel>
         </g:center>
     </g:DockLayoutPanel>

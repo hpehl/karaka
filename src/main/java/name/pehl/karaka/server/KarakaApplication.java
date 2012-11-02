@@ -1,22 +1,21 @@
 package name.pehl.karaka.server;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.ws.rs.core.Application;
-
 import name.pehl.karaka.server.activity.boundary.ActivitiesResource;
 import name.pehl.karaka.server.client.boundary.ClientsResource;
 import name.pehl.karaka.server.project.boundary.ProjectsResource;
 import name.pehl.karaka.server.settings.boundary.SettingsResource;
 import name.pehl.karaka.server.tag.boundary.TagsResource;
 
-public class TireApplication extends Application
+import javax.ws.rs.core.Application;
+import java.util.HashSet;
+import java.util.Set;
+
+public class KarakaApplication extends Application
 {
     private final Set<Class<?>> classes;
 
 
-    public TireApplication()
+    public KarakaApplication()
     {
         this.classes = new HashSet<Class<?>>();
         this.classes.add(ActivitiesResource.class);

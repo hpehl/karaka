@@ -345,11 +345,19 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
                 <configuration>
-                    <server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
-                    <port>8888</port>
+                    <module>name.pehl.karaka.Karaka</module>
                     <runTarget>/index.html</runTarget>
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
-                    <module>name.pehl.karaka.Tire</module>
+                    <server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
+                    <extraJvmArgs>-Xmx1024m -DDEBUG -XX:MaxPermSize=256M</extraJvmArgs>
+                    <style>OBF</style>
+                    <localWorkers>4</localWorkers>
+                    <compileReport>false</compileReport>
+                    <disableCastChecking>true</disableCastChecking>
+                    <disableClassMetadata>true</disableClassMetadata>
+                    <enableClosureCompiler>true</enableClosureCompiler>
+                    <fragmentCount>30</fragmentCount>
+                    <port>8888</port>
                     <logLevel>INFO</logLevel>
                     <strict>true</strict>
                     <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>

@@ -1,17 +1,16 @@
 package name.pehl.karaka.server.search;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import name.pehl.karaka.server.entity.BaseEntity;
-
-import com.google.appengine.api.search.AddResponse;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.PutResponse;
 import com.google.appengine.api.search.Query;
 import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.Results;
 import com.google.appengine.api.search.ScoredDocument;
+import name.pehl.karaka.server.entity.BaseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author $LastChangedBy:$
@@ -23,7 +22,7 @@ public abstract class BaseEntityIndexSearch<T extends BaseEntity> implements Ind
 
 
     @Override
-    public AddResponse index(T... entities)
+    public PutResponse index(T... entities)
     {
         if (entities != null && entities.length != 0)
         {
@@ -32,14 +31,14 @@ public abstract class BaseEntityIndexSearch<T extends BaseEntity> implements Ind
             {
                 documents.add(documentBuilderFor(entity).build());
             }
-            return getIndex().add(documents);
+            return getIndex().put(documents);
         }
         return null;
     }
 
 
     @Override
-    public AddResponse index(Iterable<T> entities)
+    public PutResponse index(Iterable<T> entities)
     {
         if (entities != null)
         {
@@ -48,7 +47,7 @@ public abstract class BaseEntityIndexSearch<T extends BaseEntity> implements Ind
             {
                 documents.add(documentBuilderFor(entity).build());
             }
-            return getIndex().add(documents);
+            return getIndex().put(documents);
         }
         return null;
     }

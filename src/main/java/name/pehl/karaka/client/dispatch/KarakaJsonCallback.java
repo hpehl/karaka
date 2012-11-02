@@ -11,13 +11,13 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtplatform.dispatch.shared.Result;
 
-public abstract class TireJsonCallback<T, R extends Result> implements JsonCallback
+public abstract class KarakaJsonCallback<T, R extends Result> implements JsonCallback
 {
     private final JsonReader<T> reader;
     private final AsyncCallback<R> resultCallback;
 
 
-    public TireJsonCallback(JsonReader<T> reader, AsyncCallback<R> resultCallback)
+    public KarakaJsonCallback(JsonReader<T> reader, AsyncCallback<R> resultCallback)
     {
         super();
         this.reader = reader;

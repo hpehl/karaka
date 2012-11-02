@@ -1,7 +1,7 @@
 package name.pehl.karaka.client.settings;
 
 import static java.util.logging.Level.INFO;
-import name.pehl.karaka.client.dispatch.TireCallback;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.client.model.AbstractModelCache;
 import name.pehl.karaka.client.model.ModelCache;
 import name.pehl.karaka.shared.model.Settings;
@@ -31,7 +31,7 @@ public class SettingsCache extends AbstractModelCache<Settings> implements Model
     public void refresh()
     {
         logger.log(INFO, "About to refresh settings...");
-        dispatcher.execute(new GetSettingsAction(), new TireCallback<GetSettingsResult>(eventBus)
+        dispatcher.execute(new GetSettingsAction(), new KarakaCallback<GetSettingsResult>(eventBus)
         {
             @Override
             public void onSuccess(final GetSettingsResult result)

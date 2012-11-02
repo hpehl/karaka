@@ -1,8 +1,8 @@
 package name.pehl.karaka.client.tag;
 
+import name.pehl.karaka.client.dispatch.KarakaJsonCallback;
 import name.pehl.piriti.json.client.JsonReader;
-import name.pehl.karaka.client.dispatch.TireActionHandler;
-import name.pehl.karaka.client.dispatch.TireJsonCallback;
+import name.pehl.karaka.client.dispatch.KarakaActionHandler;
 import name.pehl.karaka.client.rest.UrlBuilder;
 import name.pehl.karaka.shared.model.Tag;
 
@@ -15,7 +15,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-public class GetTagsHandler extends TireActionHandler<GetTagsAction, GetTagsResult>
+public class GetTagsHandler extends KarakaActionHandler<GetTagsAction, GetTagsResult>
 {
     final TagReader tagReader;
 
@@ -39,7 +39,7 @@ public class GetTagsHandler extends TireActionHandler<GetTagsAction, GetTagsResu
     @Override
     protected void executeMethod(Method method, AsyncCallback<GetTagsResult> resultCallback)
     {
-        method.send(new TireJsonCallback<Tag, GetTagsResult>(tagReader, resultCallback)
+        method.send(new KarakaJsonCallback<Tag, GetTagsResult>(tagReader, resultCallback)
         {
             @Override
             protected GetTagsResult extractResult(JsonReader<Tag> reader, JSONObject json)

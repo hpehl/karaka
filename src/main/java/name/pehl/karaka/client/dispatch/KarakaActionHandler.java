@@ -1,6 +1,6 @@
 package name.pehl.karaka.client.dispatch;
 
-import static name.pehl.karaka.client.dispatch.TireActionHandler.HttpMethod.GET;
+import static name.pehl.karaka.client.dispatch.KarakaActionHandler.HttpMethod.GET;
 import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON;
 import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
 
@@ -22,7 +22,7 @@ import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public abstract class TireActionHandler<A extends Action<R>, R extends Result> extends
+public abstract class KarakaActionHandler<A extends Action<R>, R extends Result> extends
         AbstractClientActionHandler<A, R>
 {
     public enum HttpMethod
@@ -39,7 +39,7 @@ public abstract class TireActionHandler<A extends Action<R>, R extends Result> e
     private final SecurityCookieAccessor securityCookieAccessor;
 
 
-    protected TireActionHandler(final Class<A> actionType, final String securityCookieName,
+    protected KarakaActionHandler(final Class<A> actionType, final String securityCookieName,
             final SecurityCookieAccessor securityCookieAccessor)
     {
         super(actionType);

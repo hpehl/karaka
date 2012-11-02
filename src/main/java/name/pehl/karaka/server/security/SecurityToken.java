@@ -7,5 +7,5 @@ package name.pehl.karaka.server.security;
  */
 public interface SecurityToken
 {
-    String TOKEN_NAME = "TST";
+    String TOKEN_NAME = "KST";
 }

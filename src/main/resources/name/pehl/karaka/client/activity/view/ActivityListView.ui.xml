@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
-    xmlns:c="urn:import:com.google.gwt.user.cellview.client" xmlns:tac="urn:import:name.pehl.tire.client.activity.view">
+    xmlns:act="urn:import:name.pehl.karaka.client.activity.view">
 
     <ui:style>
         .table {
@@ -9,6 +9,6 @@
     </ui:style>
 
     <g:ScrollPanel>
-        <tac:ActivitiesTable ui:field="activitiesTable" addStyleNames="{style.table}" />
+        <act:ActivitiesTable ui:field="activitiesTable" addStyleNames="{style.table}" />
     </g:ScrollPanel>
 </ui:UiBinder> 

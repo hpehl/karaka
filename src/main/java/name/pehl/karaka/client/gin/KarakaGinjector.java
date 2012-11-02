@@ -26,8 +26,8 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
  * @version $LastChangedRevision: 173 $
  */
 // @formatter:off
-@GinModules({ClientDispatchModule.class, TireModule.class})
-public interface TireGinjector extends Ginjector
+@GinModules({ClientDispatchModule.class, KarakaModule.class})
+public interface KarakaGinjector extends Ginjector
 {
     // ------------------------------------------------------------- singletons
 

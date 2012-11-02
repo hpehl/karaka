@@ -2,7 +2,7 @@ package name.pehl.karaka.client.client;
 
 import static java.util.logging.Level.INFO;
 import name.pehl.karaka.client.client.RefreshClientsEvent.RefreshClientsHandler;
-import name.pehl.karaka.client.dispatch.TireCallback;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.client.model.AbstractModelCache;
 import name.pehl.karaka.client.model.ModelCache;
 import name.pehl.karaka.shared.model.Client;
@@ -26,7 +26,7 @@ public class ClientsCache extends AbstractModelCache<Client> implements ModelCac
     public void refresh()
     {
         logger.log(INFO, "About to refresh clients...");
-        dispatcher.execute(new GetClientsAction(), new TireCallback<GetClientsResult>(eventBus)
+        dispatcher.execute(new GetClientsAction(), new KarakaCallback<GetClientsResult>(eventBus)
         {
             @Override
             public void onSuccess(final GetClientsResult result)

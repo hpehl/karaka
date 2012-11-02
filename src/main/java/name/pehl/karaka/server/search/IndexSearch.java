@@ -1,6 +1,6 @@
 package name.pehl.karaka.server.search;
 
-import com.google.appengine.api.search.AddResponse;
+import com.google.appengine.api.search.PutResponse;
 import com.google.appengine.api.search.Results;
 import com.google.appengine.api.search.ScoredDocument;
 
@@ -10,10 +10,10 @@ import com.google.appengine.api.search.ScoredDocument;
  */
 public interface IndexSearch<T>
 {
-    AddResponse index(T... entities);
+    PutResponse index(T... entities);
 
 
-    AddResponse index(Iterable<T> entities);
+    PutResponse index(Iterable<T> entities);
 
 
     void unIndex(T... entities);

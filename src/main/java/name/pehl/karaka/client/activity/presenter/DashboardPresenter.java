@@ -13,7 +13,7 @@ import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.karaka.client.application.ApplicationPresenter;
 import name.pehl.karaka.client.application.Message;
 import name.pehl.karaka.client.application.ShowMessageEvent;
-import name.pehl.karaka.client.dispatch.TireCallback;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
 
 import org.fusesource.restygwt.client.FailedStatusCodeException;
 
@@ -32,7 +32,7 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
 /**
  * <p>
- * The main presenter in Tire. This presenter is responsible to start, resume
+ * The main presenter in Karaka. This presenter is responsible to start, resume
  * and stop activities. Other presenters are notified with appropriate events.
  * </p>
  * <h3>Events</h3>
@@ -163,7 +163,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         @Override
         public void execute()
         {
-            dispatcher.execute(new GetActivitiesAction(activitiesRequest), new TireCallback<GetActivitiesResult>(
+            dispatcher.execute(new GetActivitiesAction(activitiesRequest), new KarakaCallback<GetActivitiesResult>(
                     getEventBus())
             {
                 @Override

@@ -8,6 +8,6 @@ public class ClientDispatchModule extends AbstractGinModule
     @Override
     protected void configure()
     {
-        install(new DispatchAsyncModule.Builder().clientActionHandlerRegistry(TireActionHandlerRegistry.class).build());
+        install(new DispatchAsyncModule.Builder().clientActionHandlerRegistry(KarakaActionHandlerRegistry.class).build());
     }
 }

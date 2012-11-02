@@ -1,10 +1,10 @@
 package name.pehl.karaka.client.activity.dispatch;
 
+import name.pehl.karaka.client.dispatch.KarakaActionHandler;
+import name.pehl.karaka.client.dispatch.KarakaJsonCallback;
 import name.pehl.piriti.json.client.JsonReader;
 import name.pehl.karaka.client.activity.model.ActivityReader;
 import name.pehl.karaka.client.activity.model.ActivityWriter;
-import name.pehl.karaka.client.dispatch.TireActionHandler;
-import name.pehl.karaka.client.dispatch.TireJsonCallback;
 import name.pehl.karaka.client.rest.UrlBuilder;
 import name.pehl.karaka.shared.model.Activity;
 
@@ -17,8 +17,8 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-import static name.pehl.karaka.client.dispatch.TireActionHandler.HttpMethod.POST;
-import static name.pehl.karaka.client.dispatch.TireActionHandler.HttpMethod.PUT;
+import static name.pehl.karaka.client.dispatch.KarakaActionHandler.HttpMethod.POST;
+import static name.pehl.karaka.client.dispatch.KarakaActionHandler.HttpMethod.PUT;
 import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON;
 import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
 
@@ -26,7 +26,7 @@ import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class SaveActivityHandler extends TireActionHandler<SaveActivityAction, SaveActivityResult>
+public class SaveActivityHandler extends KarakaActionHandler<SaveActivityAction, SaveActivityResult>
 {
     private final ActivityReader activityReader;
     private final ActivityWriter activityWriter;
@@ -79,7 +79,7 @@ public class SaveActivityHandler extends TireActionHandler<SaveActivityAction, S
     @Override
     protected void executeMethod(final Method method, final AsyncCallback<SaveActivityResult> resultCallback)
     {
-        method.send(new TireJsonCallback<Activity, SaveActivityResult>(activityReader, resultCallback)
+        method.send(new KarakaJsonCallback<Activity, SaveActivityResult>(activityReader, resultCallback)
         {
             @Override
             protected SaveActivityResult extractResult(JsonReader<Activity> reader, JSONObject json)

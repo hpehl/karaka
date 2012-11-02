@@ -1,7 +1,7 @@
 package name.pehl.karaka.client.project;
 
 import static java.util.logging.Level.INFO;
-import name.pehl.karaka.client.dispatch.TireCallback;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.client.model.AbstractModelCache;
 import name.pehl.karaka.client.model.ModelCache;
 import name.pehl.karaka.client.project.RefreshProjectsEvent.RefreshProjectsHandler;
@@ -26,7 +26,7 @@ public class ProjectsCache extends AbstractModelCache<Project> implements ModelC
     public void refresh()
     {
         logger.log(INFO, "About to refresh projects...");
-        dispatcher.execute(new GetProjectsAction(), new TireCallback<GetProjectsResult>(eventBus)
+        dispatcher.execute(new GetProjectsAction(), new KarakaCallback<GetProjectsResult>(eventBus)
         {
             @Override
             public void onSuccess(GetProjectsResult result)

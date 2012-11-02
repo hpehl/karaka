@@ -1,10 +1,13 @@
 package name.pehl.karaka.client.gin;
 
-import javax.inject.Singleton;
-
+import com.google.gwt.core.client.Scheduler;
+import com.google.inject.Provides;
+import com.gwtplatform.dispatch.shared.SecurityCookie;
+import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
+import com.gwtplatform.mvp.client.gin.DefaultModule;
+import name.pehl.karaka.client.KarakaPlaceManager;
 import name.pehl.karaka.client.NameTokens;
 import name.pehl.karaka.client.StartupManager;
-import name.pehl.karaka.client.TirePlaceManager;
 import name.pehl.karaka.client.about.AboutPresenter;
 import name.pehl.karaka.client.about.AboutView;
 import name.pehl.karaka.client.activity.dispatch.DeleteActivityHandler;
@@ -82,23 +85,19 @@ import name.pehl.karaka.client.tag.TagsView;
 import name.pehl.karaka.client.terms.TermsPresenter;
 import name.pehl.karaka.client.terms.TermsView;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.inject.Provides;
-import com.gwtplatform.dispatch.shared.SecurityCookie;
-import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
-import com.gwtplatform.mvp.client.gin.DefaultModule;
+import javax.inject.Singleton;
 
 /**
  * @author $LastChangedBy: harald.pehl $
  * @version $LastChangedRevision: 202 $
  */
-public class TireModule extends AbstractPresenterModule
+public class KarakaModule extends AbstractPresenterModule
 {
     @Override
     protected void configure()
     {
         // GWTP stuff
-        install(new DefaultModule(TirePlaceManager.class));
+        install(new DefaultModule(KarakaPlaceManager.class));
 
         // Resources
         bind(I18n.class).in(Singleton.class);
@@ -140,7 +139,7 @@ public class TireModule extends AbstractPresenterModule
         bind(YearsReader.class).asEagerSingleton();
 
         // Constants
-        bindConstant().annotatedWith(SecurityCookie.class).to("TST");
+        bindConstant().annotatedWith(SecurityCookie.class).to("KST");
         bindConstant().annotatedWith(DefaultPlace.class).to(NameTokens.dashboard);
 
         // PresenterWidgets (a-z)

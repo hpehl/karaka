@@ -5,7 +5,7 @@
 
     <context-param>
         <param-name>javax.ws.rs.Application</param-name>
-        <param-value>name.pehl.karaka.server.TireApplication</param-value>
+        <param-value>name.pehl.karaka.server.KarakaApplication</param-value>
     </context-param>
     <context-param>
         <param-name>resteasy.injector.factory</param-name>
@@ -24,11 +24,11 @@
         <param-value>/rest</param-value>
     </context-param>
     <context-param>
-        <param-name>tire.server.cache.maxsize</param-name>
+        <param-name>karaka.server.cache.maxsize</param-name>
         <param-value>1000</param-value>
     </context-param>
     <context-param>
-        <param-name>tire.server.cache.expiration</param-name>
+        <param-name>karaka.server.cache.expiration</param-name>
         <param-value>36000</param-value> <!-- 10h -->
     </context-param>
 

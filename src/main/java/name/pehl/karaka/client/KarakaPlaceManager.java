@@ -8,13 +8,13 @@ import com.gwtplatform.mvp.client.proxy.PlaceManagerImpl;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
 
-public class TirePlaceManager extends PlaceManagerImpl
+public class KarakaPlaceManager extends PlaceManagerImpl
 {
     private final PlaceRequest defaultPlaceRequest;
 
 
     @Inject
-    public TirePlaceManager(EventBus eventBus, TokenFormatter tokenFormatter, @DefaultPlace String defaultNameToken)
+    public KarakaPlaceManager(EventBus eventBus, TokenFormatter tokenFormatter, @DefaultPlace String defaultNameToken)
     {
         super(eventBus, tokenFormatter);
         this.defaultPlaceRequest = new PlaceRequest(defaultNameToken);

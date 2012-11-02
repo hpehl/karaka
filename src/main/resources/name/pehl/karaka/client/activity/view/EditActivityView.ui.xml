@@ -1,6 +1,8 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
-    xmlns:act="urn:import:name.pehl.tire.client.activity.view" xmlns:tui="urn:import:name.pehl.tire.client.ui">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:act="urn:import:name.pehl.karaka.client.activity.view"
+             xmlns:kui="urn:import:name.pehl.karaka.client.ui">
 
     <ui:style>
         .popup {
@@ -49,15 +51,15 @@
         }
     </ui:style>
 
-    <tui:EscapablePopupPanel animationEnabled="false" autoHideEnabled="true" modal="true"
+    <kui:EscapablePopupPanel animationEnabled="false" autoHideEnabled="true" modal="true"
         glassEnabled="true" addStyleNames="{style.popup}">
         <g:HTMLPanel>
             <div class="{style.spacebelow}">
-                <tui:Html5TextBox ui:field="name" placeholder="Name" title="Name" autofocus="autofocus" />
+                <kui:Html5TextBox ui:field="name" placeholder="Name" title="Name" autofocus="autofocus" />
             </div>
             <div class="{style.spacebelow}">
-                <tui:Html5TextArea ui:field="description" placeholder="Description" title="Description"
-                    visibleLines="3"></tui:Html5TextArea>
+                <kui:Html5TextArea ui:field="description" placeholder="Description" title="Description"
+                    visibleLines="3"></kui:Html5TextArea>
             </div>
             <ul class="{style.columns}">
                 <li>
@@ -84,5 +86,5 @@
             </div>
             <div style="clear: right;"></div>
         </g:HTMLPanel>
-    </tui:EscapablePopupPanel>
+    </kui:EscapablePopupPanel>
 </ui:UiBinder> 

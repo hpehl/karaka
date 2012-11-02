@@ -2,8 +2,8 @@ package name.pehl.karaka.client.activity.dispatch;
 
 import name.pehl.piriti.json.client.JsonReader;
 import name.pehl.karaka.client.activity.model.DurationsReader;
-import name.pehl.karaka.client.dispatch.TireActionHandler;
-import name.pehl.karaka.client.dispatch.TireJsonCallback;
+import name.pehl.karaka.client.dispatch.KarakaActionHandler;
+import name.pehl.karaka.client.dispatch.KarakaJsonCallback;
 import name.pehl.karaka.client.rest.UrlBuilder;
 import name.pehl.karaka.shared.model.Durations;
 
@@ -20,7 +20,7 @@ import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class GetMinutesHandler extends TireActionHandler<GetMinutesAction, GetMinutesResult>
+public class GetMinutesHandler extends KarakaActionHandler<GetMinutesAction, GetMinutesResult>
 {
     private final DurationsReader minutesReader;
 
@@ -44,7 +44,7 @@ public class GetMinutesHandler extends TireActionHandler<GetMinutesAction, GetMi
     @Override
     protected void executeMethod(final Method method, final AsyncCallback<GetMinutesResult> resultCallback)
     {
-        method.send(new TireJsonCallback<Durations, GetMinutesResult>(minutesReader, resultCallback)
+        method.send(new KarakaJsonCallback<Durations, GetMinutesResult>(minutesReader, resultCallback)
         {
             @Override
             protected GetMinutesResult extractResult(JsonReader<Durations> reader, JSONObject json)

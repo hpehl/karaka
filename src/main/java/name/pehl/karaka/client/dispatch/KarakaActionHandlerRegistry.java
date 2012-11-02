@@ -15,10 +15,10 @@ import name.pehl.karaka.client.tag.GetTagsHandler;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.client.actionhandler.DefaultClientActionHandlerRegistry;
 
-public class TireActionHandlerRegistry extends DefaultClientActionHandlerRegistry
+public class KarakaActionHandlerRegistry extends DefaultClientActionHandlerRegistry
 {
     @Inject
-    public TireActionHandlerRegistry(final DeleteActivityHandler deleteActivityHandler,
+    public KarakaActionHandlerRegistry(final DeleteActivityHandler deleteActivityHandler,
             final FindActivityHandler findActivityHandler, final GetActivitiesHandler getActivitiesHandler,
             final GetClientsHandler getClientsHandler, final GetMinutesHandler getMinutesHandler,
             final GetProjectsHandler getProjectsHandler, final GetRunningActivityHandler getRunningActivityHandler,

@@ -1,6 +1,6 @@
 package name.pehl.karaka.client.activity.dispatch;
 
-import name.pehl.karaka.client.dispatch.TireActionHandler;
+import name.pehl.karaka.client.dispatch.KarakaActionHandler;
 import name.pehl.karaka.client.rest.UrlBuilder;
 
 import org.fusesource.restygwt.client.Method;
@@ -15,7 +15,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-import static name.pehl.karaka.client.dispatch.TireActionHandler.HttpMethod.DELETE;
+import static name.pehl.karaka.client.dispatch.KarakaActionHandler.HttpMethod.DELETE;
 import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON;
 import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
 
@@ -23,7 +23,7 @@ import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class DeleteActivityHandler extends TireActionHandler<DeleteActivityAction, DeleteActivityResult>
+public class DeleteActivityHandler extends KarakaActionHandler<DeleteActivityAction, DeleteActivityResult>
 {
     @Inject
     protected DeleteActivityHandler(@SecurityCookie String securityCookieName,

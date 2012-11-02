@@ -2,8 +2,8 @@ package name.pehl.karaka.client.activity.dispatch;
 
 import name.pehl.piriti.json.client.JsonReader;
 import name.pehl.karaka.client.activity.model.ActivityReader;
-import name.pehl.karaka.client.dispatch.TireActionHandler;
-import name.pehl.karaka.client.dispatch.TireJsonCallback;
+import name.pehl.karaka.client.dispatch.KarakaActionHandler;
+import name.pehl.karaka.client.dispatch.KarakaJsonCallback;
 import name.pehl.karaka.client.rest.UrlBuilder;
 import name.pehl.karaka.shared.model.Activity;
 
@@ -16,7 +16,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
 
-public class FindActivityHandler extends TireActionHandler<FindActivityAction, FindActivityResult>
+public class FindActivityHandler extends KarakaActionHandler<FindActivityAction, FindActivityResult>
 {
     final ActivityReader activityReader;
 
@@ -40,7 +40,7 @@ public class FindActivityHandler extends TireActionHandler<FindActivityAction, F
     @Override
     protected void executeMethod(Method method, AsyncCallback<FindActivityResult> resultCallback)
     {
-        method.send(new TireJsonCallback<Activity, FindActivityResult>(activityReader, resultCallback)
+        method.send(new KarakaJsonCallback<Activity, FindActivityResult>(activityReader, resultCallback)
         {
             @Override
             protected FindActivityResult extractResult(JsonReader<Activity> reader, JSONObject json)

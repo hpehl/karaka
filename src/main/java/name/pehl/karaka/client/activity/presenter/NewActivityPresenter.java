@@ -15,7 +15,7 @@ import name.pehl.karaka.client.activity.dispatch.FindActivityResult;
 import name.pehl.karaka.client.activity.event.ActivityActionEvent;
 import name.pehl.karaka.client.application.Message;
 import name.pehl.karaka.client.application.ShowMessageEvent;
-import name.pehl.karaka.client.dispatch.TireCallback;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.client.model.Highlighter;
 import name.pehl.karaka.client.model.NamedModelSuggestion;
 import name.pehl.karaka.shared.model.Activity;
@@ -120,7 +120,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
     {
         final String query = request.getQuery();
         final Highlighter highlighter = new Highlighter(query);
-        dispatcher.execute(new FindActivityAction(query), new TireCallback<FindActivityResult>(getEventBus())
+        dispatcher.execute(new FindActivityAction(query), new KarakaCallback<FindActivityResult>(getEventBus())
         {
             @Override
             public void onSuccess(final FindActivityResult result)

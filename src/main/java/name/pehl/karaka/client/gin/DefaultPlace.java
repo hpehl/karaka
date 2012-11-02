@@ -1,20 +1,16 @@
 package name.pehl.karaka.client.gin;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import com.google.inject.BindingAnnotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import name.pehl.karaka.client.TirePlaceManager;
-
-import com.google.inject.BindingAnnotation;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * This annotation is used in {@link TirePlaceManager} and is bind in
- * {@link TireModule}. It's purpose is to bind the default place to a default
+ * This annotation is used in {@link name.pehl.karaka.client.KarakaPlaceManager} and is bind in
+ * {@link KarakaModule}. It's purpose is to bind the default place to a default
  * presenter.
  * 
  * @author $Author: harald.pehl $

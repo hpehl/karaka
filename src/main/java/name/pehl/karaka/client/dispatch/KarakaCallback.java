@@ -16,13 +16,13 @@ import com.google.web.bindery.event.shared.EventBus;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public abstract class TireCallback<T> implements AsyncCallback<T>
+public abstract class KarakaCallback<T> implements AsyncCallback<T>
 {
-    private static Logger logger = Logger.getLogger(TireCallback.class.getName());
+    private static Logger logger = Logger.getLogger(KarakaCallback.class.getName());
     private final EventBus eventBus;
 
 
-    public TireCallback(final EventBus eventBus)
+    public KarakaCallback(final EventBus eventBus)
     {
         this.eventBus = eventBus;
     }

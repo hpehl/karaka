@@ -18,7 +18,7 @@ import name.pehl.karaka.client.activity.event.TickEvent;
 import name.pehl.karaka.client.activity.event.TickEvent.TickHandler;
 import name.pehl.karaka.client.application.Message;
 import name.pehl.karaka.client.application.ShowMessageEvent;
-import name.pehl.karaka.client.dispatch.TireCallback;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.shared.model.Activity;
 import name.pehl.karaka.shared.model.Durations;
 
@@ -160,7 +160,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         @Override
         public void execute()
         {
-            dispatcher.execute(new GetMinutesAction(), new TireCallback<GetMinutesResult>(getEventBus())
+            dispatcher.execute(new GetMinutesAction(), new KarakaCallback<GetMinutesResult>(getEventBus())
             {
                 @Override
                 public void onSuccess(GetMinutesResult result)
@@ -185,7 +185,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         public void execute()
         {
             dispatcher.execute(new GetRunningActivityAction(),
-                    new TireCallback<GetRunningActivityResult>(getEventBus())
+                    new KarakaCallback<GetRunningActivityResult>(getEventBus())
                     {
                         @Override
                         public void onSuccess(GetRunningActivityResult result)

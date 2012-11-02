@@ -6,7 +6,7 @@ import com.google.gwt.http.client.Request;
 import com.gwtplatform.dispatch.shared.DispatchRequest;
 
 /**
- * Implementation of {@link DispatchRequest} used by {@link TireActionHandler}
+ * Implementation of {@link DispatchRequest} used by {@link KarakaActionHandler}
  * 
  * @author $Author:$
  * @version $Date:$ $Revision:$

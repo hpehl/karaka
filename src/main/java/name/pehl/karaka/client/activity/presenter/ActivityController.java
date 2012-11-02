@@ -29,7 +29,7 @@ import name.pehl.karaka.client.activity.event.RunningActivityLoadedEvent.Running
 import name.pehl.karaka.client.activity.event.TickEvent;
 import name.pehl.karaka.client.application.Message;
 import name.pehl.karaka.client.application.ShowMessageEvent;
-import name.pehl.karaka.client.dispatch.TireCallback;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.client.project.RefreshProjectsEvent;
 import name.pehl.karaka.client.tag.RefreshTagsEvent;
 import name.pehl.karaka.shared.model.Activities;
@@ -192,7 +192,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
     void save(final Activity activityToSave)
     {
         logger.fine("About to save " + activityToSave);
-        dispatcher.execute(new SaveActivityAction(activityToSave), new TireCallback<SaveActivityResult>(eventBus)
+        dispatcher.execute(new SaveActivityAction(activityToSave), new KarakaCallback<SaveActivityResult>(eventBus)
         {
             @Override
             public void onSuccess(SaveActivityResult result)
@@ -212,7 +212,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
     {
         logger.fine("About to copy " + activityToCopy);
         Activity plusOneDay = activityToCopy.plus(ONE_DAY_IN_MILLIS);
-        dispatcher.execute(new SaveActivityAction(plusOneDay), new TireCallback<SaveActivityResult>(eventBus)
+        dispatcher.execute(new SaveActivityAction(plusOneDay), new KarakaCallback<SaveActivityResult>(eventBus)
         {
             @Override
             public void onSuccess(SaveActivityResult result)
@@ -238,7 +238,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                 logger.info("Stopping currently running " + runningActivity);
                 Activity runningActivityBackup = runningActivity;
                 stopTicking();
-                dispatcher.execute(new SaveActivityAction(runningActivityBackup), new TireCallback<SaveActivityResult>(
+                dispatcher.execute(new SaveActivityAction(runningActivityBackup), new KarakaCallback<SaveActivityResult>(
                         eventBus)
                 {
                     @Override
@@ -272,7 +272,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                 {
                     logger.info("Resuming " + activityToStart);
                     activityToStart.resume();
-                    dispatcher.execute(new SaveActivityAction(activityToStart), new TireCallback<SaveActivityResult>(
+                    dispatcher.execute(new SaveActivityAction(activityToStart), new KarakaCallback<SaveActivityResult>(
                             eventBus)
                     {
                         @Override
@@ -296,7 +296,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                             .copy();
                     newActivity.start();
                     logger.info("Starting " + newActivity);
-                    dispatcher.execute(new SaveActivityAction(newActivity), new TireCallback<SaveActivityResult>(
+                    dispatcher.execute(new SaveActivityAction(newActivity), new KarakaCallback<SaveActivityResult>(
                             eventBus)
                     {
                         @Override
@@ -333,7 +333,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
             }
             stopTicking();
             activityToStop.stop();
-            dispatcher.execute(new SaveActivityAction(activityToStop), new TireCallback<SaveActivityResult>(eventBus)
+            dispatcher.execute(new SaveActivityAction(activityToStop), new KarakaCallback<SaveActivityResult>(eventBus)
             {
                 @Override
                 public void onSuccess(SaveActivityResult result)
@@ -365,7 +365,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
             }
             stopTicking();
         }
-        dispatcher.execute(new DeleteActivityAction(activityToDelete), new TireCallback<DeleteActivityResult>(eventBus)
+        dispatcher.execute(new DeleteActivityAction(activityToDelete), new KarakaCallback<DeleteActivityResult>(eventBus)
         {
             @Override
             public void onSuccess(DeleteActivityResult result)
@@ -445,7 +445,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         {
             logger.info("Tick for " + runningActivity);
             runningActivity.tick();
-            dispatcher.execute(new SaveActivityAction(runningActivity), new TireCallback<SaveActivityResult>(eventBus)
+            dispatcher.execute(new SaveActivityAction(runningActivity), new KarakaCallback<SaveActivityResult>(eventBus)
             {
                 @Override
                 public void onSuccess(SaveActivityResult result)

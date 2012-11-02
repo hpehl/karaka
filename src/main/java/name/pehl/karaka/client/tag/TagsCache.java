@@ -1,7 +1,7 @@
 package name.pehl.karaka.client.tag;
 
 import static java.util.logging.Level.INFO;
-import name.pehl.karaka.client.dispatch.TireCallback;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.client.model.AbstractModelCache;
 import name.pehl.karaka.client.model.ModelCache;
 import name.pehl.karaka.client.tag.RefreshTagsEvent.RefreshTagsHandler;
@@ -26,7 +26,7 @@ public class TagsCache extends AbstractModelCache<Tag> implements ModelCache<Tag
     public void refresh()
     {
         logger.log(INFO, "About to refresh tags...");
-        dispatcher.execute(new GetTagsAction(), new TireCallback<GetTagsResult>(eventBus)
+        dispatcher.execute(new GetTagsAction(), new KarakaCallback<GetTagsResult>(eventBus)
         {
             @Override
             public void onSuccess(GetTagsResult result)
