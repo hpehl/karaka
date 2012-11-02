@@ -6,21 +6,21 @@
     <parent>
         <groupId>name.pehl</groupId>
         <artifactId>superpom</artifactId>
-        <version>20</version>
+        <version>21</version>
     </parent>
 
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>tire</artifactId>
+    <artifactId>karaka</artifactId>
     <version>0.3-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>TiRe</name>
+    <name>Karaka</name>
     <description>Time Recording</description>
-    <url>http://code.google.com/p/tire-d8/</url>
+    <url>http://hpehl.github.com/karaka/</url>
     <scm>
-        <connection>scm:svn:http://tire-d8.googlecode.com/svn/trunk/</connection>
-        <developerConnection>scm:svn:https://tire-d8.googlecode.com/svn/trunk/</developerConnection>
-        <url>http://tire-d8.googlecode.com/svn/trunk/</url>
+        <connection>scm:git:git@github.com:hpehl/karaka.git</connection>
+        <developerConnection>scm:git:git@github.com:hpehl/karaka.git</developerConnection>
+        <url>git@github.com:hpehl/karaka.git</url>
     </scm>
     <repositories>
         <repository>
@@ -37,19 +37,19 @@
 
 
     <properties>
-        <gae.version>1.7.2</gae.version>
-        <gae.plugin.version>0.9.4</gae.plugin.version>
-        <gin.version>1.5.0</gin.version>
+        <gae.version>1.7.3</gae.version>
+        <gae.plugin.version>0.9.5</gae.plugin.version>
+        <gin.version>2.0.0</gin.version>
         <guava.version>13.0.1</guava.version>
-        <gwt.version>2.5.0-rc1</gwt.version>
-        <gwt.plugin.version>2.5.0-rc1</gwt.plugin.version>
+        <gwt.version>2.5.0</gwt.version>
+        <gwt.plugin.version>2.5.0-rc2</gwt.plugin.version>
         <gwtp.version>0.7</gwtp.version>
         <objectify.version>3.1</objectify.version>
         <piriti.version>0.9-SNAPSHOT</piriti.version>
-        <resteasy.version>2.3.4.Final</resteasy.version>
-        <slf4j.version>1.6.4</slf4j.version>
+        <resteasy.version>2.3.5.Final</resteasy.version>
+        <slf4j.version>1.7.2</slf4j.version>
         <totoe.version>0.5-SNAPSHOT</totoe.version>
-        <weld.version>1.1.8.Final</weld.version>
+        <weld.version>1.1.10.Final</weld.version>
     </properties>
 
 
@@ -449,57 +449,6 @@
                 <configuration>
                     <serverId>appengine.google.com</serverId>
                     <appDir>${project.build.directory}/${project.artifactId}-${project.version}</appDir>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>true</downloadJavadocs>
-                    <classpathContainers>
-                        <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
-                        <classpathContainer>com.google.gwt.eclipse.core.GWT_CONTAINER</classpathContainer>
-                        <classpathContainer>com.google.appengine.eclipse.core.GAE_CONTAINER</classpathContainer>
-                    </classpathContainers>
-                    <additionalBuildcommands>
-                        <buildCommand>
-                            <name>com.google.gdt.eclipse.core.webAppProjectValidator</name>
-                        </buildCommand>
-                        <buildCommand>
-                            <name>com.google.gwt.eclipse.core.gwtProjectValidator</name>
-                        </buildCommand>
-                        <buildCommand>
-                            <name>com.google.appengine.eclipse.core.projectValidator</name>
-                        </buildCommand>
-                        <buildCommand>
-                            <name>com.google.appengine.eclipse.core.gaeProjectChangeNotifier</name>
-                        </buildCommand>
-                    </additionalBuildcommands>
-                    <additionalProjectnatures>
-                        <projectnature>com.google.gwt.eclipse.core.gwtNature</projectnature>
-                        <projectnature>com.google.appengine.eclipse.core.gaeNature</projectnature>
-                    </additionalProjectnatures>
-                    <excludes>
-                        <!-- libs from GWT_CONTAINER -->
-                        <exclude>com.google.gwt:gwt-dev</exclude>
-                        <exclude>com.google.gwt:gwt-user</exclude>
-                        <!-- libs from GAE_CONTAINER -->
-                        <exclude>javax.el:el-api</exclude>
-                        <exclude>javax.validation:validation-api</exclude>
-                        <exclude>javax.servlet:jsp-api</exclude>
-                        <exclude>javax.servlet:servlet-api</exclude>
-                        <exclude>com.google.appengine:appengine-api-labs</exclude>
-                        <exclude>com.google.appengine:appengine-jsr107cache</exclude>
-                        <exclude>net.sf.jsr107cache:jsr107cache</exclude>
-                        <exclude>com.google.appengine:appengine-api-1.0-sdk</exclude>
-                        <exclude>com.google.appengine.orm:datanucleus-appengine</exclude>
-                        <exclude>org.datanucleus:datanucleus-core</exclude>
-                        <exclude>org.datanucleus:datanucleus-jpa</exclude>
-                        <exclude>org.apache.geronimo.specs:geronimo-jpa_3.0_spec</exclude>
-                        <exclude>org.apache.geronimo.specs:geronimo-jta_1.1_spec</exclude>
-                        <exclude>javax.jdo:jdo2-api</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
