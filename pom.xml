@@ -349,23 +349,23 @@
                     <port>8888</port>
                     <runTarget>/index.html</runTarget>
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
-                    <module>name.pehl.tire.Tire</module>
+                    <module>name.pehl.karaka.Tire</module>
                     <logLevel>INFO</logLevel>
                     <strict>true</strict>
                     <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
                     <i18nConstantsBundles>
                         <i18nConstantsBundle>
-                            name.pehl.tire.client.resources.Constants
+                            name.pehl.karaka.client.resources.Constants
                         </i18nConstantsBundle>
                     </i18nConstantsBundles>
                     <i18nConstantsWithLookupBundles>
                         <i18nConstantsWithLookupBundle>
-                            name.pehl.tire.client.resources.Enums
+                            name.pehl.karaka.client.resources.Enums
                         </i18nConstantsWithLookupBundle>
                     </i18nConstantsWithLookupBundles>
                     <i18nMessagesBundles>
                         <i18nMessagesBundles>
-                            name.pehl.tire.client.resources.Messages
+                            name.pehl.karaka.client.resources.Messages
                         </i18nMessagesBundles>
                     </i18nMessagesBundles>
                 </configuration>

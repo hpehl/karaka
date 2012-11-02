@@ -7,8 +7,6 @@
 	<weld:scan>
 		<!-- Don't scan GWT classes. They also use @Inject used by GIN -->
         <weld:exclude name="com.google.gwt.**" />
-		<weld:exclude name="name.pehl.tire.client.**" />
-		<!-- Due to https://issues.jboss.org/browse/RESTEASY-555 -->
-		<weld:exclude name="name.pehl.tire.server.JacksonConfigurator" />
+		<weld:exclude name="name.pehl.karaka.client.**" />
 	</weld:scan>
 </beans>    

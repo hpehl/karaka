@@ -1,0 +1,79 @@
+    <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+	<ui:with field="nameTokens" type="name.pehl.karaka.client.NameTokens" />
+	<ui:with field="resources" type="name.pehl.karaka.client.resources.Resources" />
+	<ui:style>
+		.roundedWhiteBox {
+			background-color: white;
+			border-radius: 5px;
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			box-shadow: 2px 2px 2px #62635e;
+			-moz-box-shadow: 2px 2px 2px #62635e;
+			-webkit-box-shadow: 2px 2px 2px #62635e;
+		}
+		
+		.mainPanel {
+			margin: 20px 2px 20px 20px;
+		}
+		
+		aside {
+			margin: 20px 20px 20px 0px;
+		}
+		
+		.cockpitPanel,.quickChartPanel {
+			margin-left: 18px;
+		}
+		
+		.quickChartPanel {
+			margin-top: 20px;
+		}
+		
+		footer {
+			padding: 0px 20px;
+		}
+		
+		footer a,footer a:visited {
+			font-size: 10px;
+			float: left;
+			color: #62635e;
+			line-height: 20px;
+			padding: 0px 5px;
+		}
+		
+		footer a:hover {
+			color: #3d3d3d;
+		}
+	</ui:style>
+
+	<g:DockLayoutPanel unit="PX">
+		<g:north size="30">
+			<g:FlowPanel ui:field="navigationPanel" />
+		</g:north>
+		<g:south size="20">
+			<g:HTMLPanel>
+				<footer>
+					<g:InlineHyperlink targetHistoryToken="{nameTokens.about}">About</g:InlineHyperlink>
+					<g:InlineHyperlink targetHistoryToken="{nameTokens.help}">Help</g:InlineHyperlink>
+					<g:InlineHyperlink targetHistoryToken="{nameTokens.terms}">Terms</g:InlineHyperlink>
+				</footer>
+			</g:HTMLPanel>
+		</g:south>
+		<g:east size="250">
+			<g:HTMLPanel>
+				<aside>
+					<g:FlowPanel ui:field="cockpitPanel"
+						addStyleNames="{style.cockpitPanel} {style.roundedWhiteBox}"></g:FlowPanel>
+					<g:FlowPanel ui:field="quickChartPanel"
+						addStyleNames="{style.quickChartPanel}"></g:FlowPanel>
+				</aside>
+			</g:HTMLPanel>
+		</g:east>
+		<g:center>
+			<g:SimpleLayoutPanel ui:field="mainPanel"
+				addStyleNames="{style.mainPanel} {style.roundedWhiteBox}"></g:SimpleLayoutPanel>
+		</g:center>
+	</g:DockLayoutPanel>
+</ui:UiBinder> 

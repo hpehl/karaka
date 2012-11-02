@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.1.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.1.0/distro-source/core/src/gwt-module.dtd">
+<module rename-to="tire">
+
+    <!-- GWT / Google -->
+    <inherits name="com.google.gwt.cell.Cell" />
+    <inherits name="com.google.gwt.editor.Editor" />
+    <inherits name="com.google.gwt.inject.Inject" />
+    <inherits name="com.google.gwt.json.JSON" />
+    <inherits name="com.google.gwt.logging.Logging" />
+    <inherits name="com.google.gwt.uibinder.UiBinder" />
+    <inherits name="com.google.gwt.user.User" />
+    <inherits name="com.google.common.collect.Collect" />
+    <inherits name="com.google.web.bindery.event.Event" />
+
+    <!-- GWTP -->
+    <inherits name="com.gwtplatform.dispatch.Dispatch" />
+    <inherits name="com.gwtplatform.mvp.Mvp" />
+
+    <!-- RestyGWT -->
+    <inherits name="org.fusesource.restygwt.RestyGWT" />
+
+    <!-- Highcharts -->
+    <inherits name="org.moxieapps.gwt.highcharts.Highcharts" />
+
+    <!-- name.pehl -->
+    <inherits name="name.pehl.piriti.json.JSON" />
+
+    <entry-point class="name.pehl.karaka.client.Karaka" />
+    <source path="client">
+        <exclude name="gwttest" />
+        <exclude name="**/*Test.java" />
+    </source>
+    <source path="shared" />
+
+    <!-- Super Dev Mode -->
+    <add-linker name="xsiframe" />
+    <set-property name="compiler.useSourceMaps" value="true" />
+    <set-configuration-property name="devModeRedirectEnabled" value="true" />
+    <set-configuration-property name='xsiframe.failIfScriptTag' value="false"/>
+
+    <!-- Logging -->
+    <set-property name="gwt.logging.logLevel" value="INFO" />
+    <set-property name="gwt.logging.enabled" value="TRUE" />
+    <set-property name="gwt.logging.consoleHandler" value="ENABLED" />
+    <set-property name="gwt.logging.developmentModeHandler" value="ENABLED" />
+    <set-property name="gwt.logging.firebugHandler" value="ENABLED" />
+    <set-property name="gwt.logging.systemHandler" value="ENABLED" />
+    <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED" />
+    <set-property name="gwt.logging.popupHandler" value="DISABLED" />
+
+    <define-configuration-property name="gin.ginjector" is-multi-valued="false" />
+    <set-configuration-property name="gin.ginjector" value="name.pehl.karaka.client.gin.KarakaGinjector" />
+
+</module>

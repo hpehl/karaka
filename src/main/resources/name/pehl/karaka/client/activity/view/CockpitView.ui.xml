@@ -1,0 +1,73 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with field="res" type="name.pehl.karaka.client.resources.Resources"/>
+    
+    <ui:style>
+        div.startStopContainer {
+            padding: 20px 73px 0px 73px;
+        }
+        
+        .startStopImg {
+            -webkit-border-radius: 33px;
+            -moz-border-radius: 33px;
+            border-radius: 33px;
+        }
+        
+        .startStopImg:hover {
+            -moz-box-shadow: 0 0 25px #3cc5de;
+            -webkit-box-shadow: 0 0 25px #3cc5de;
+            box-shadow: 0 0 25px #3cc5de;
+        }
+        
+        div.infoContainer {
+            color: #3d3d3d;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .day {
+            font-size: 24px;
+            font-weight: bold;
+            cursor: help;
+        }
+        
+        .weekAndMonth {
+            font-size: 12px;
+            padding-top: 5px;
+            cursor: help;
+        }
+        
+        .activity {
+            padding-top: 20px;
+        }
+        
+        .project {
+            padding-top: 5px;
+        }
+        
+        .activity,.project {
+            font-size: 12px;
+            line-height: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <div class="{style.startStopContainer}">
+            <div class="{style.startStopImg}">
+                <g:Image ui:field="startStop" resource="{res.recordOff}" />
+            </div>
+        </div>
+        <div class="{style.infoContainer}">
+            <g:Label ui:field="today" title="Today" addStyleNames="{style.day}"></g:Label>
+            <div class="{style.weekAndMonth}">
+                <g:InlineLabel ui:field="week" title="Current week"></g:InlineLabel>&nbsp;&ndash;&nbsp;<g:InlineLabel ui:field="month" title="Current month"></g:InlineLabel>
+            </div>
+            <g:Label ui:field="activity" addStyleNames="{style.activity}">No activity running</g:Label>
+            <g:Label ui:field="project" addStyleNames="{style.project}">No project selected</g:Label>
+        </div>
+    </g:HTMLPanel>
+
+</ui:UiBinder> 

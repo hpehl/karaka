@@ -5,7 +5,7 @@
 
     <context-param>
         <param-name>javax.ws.rs.Application</param-name>
-        <param-value>name.pehl.tire.server.TireApplication</param-value>
+        <param-value>name.pehl.karaka.server.TireApplication</param-value>
     </context-param>
     <context-param>
         <param-name>resteasy.injector.factory</param-name>
@@ -13,7 +13,7 @@
     </context-param>
     <context-param>
         <param-name>resteasy.providers</param-name>
-        <param-value>name.pehl.tire.server.JacksonConfigurator</param-value>
+        <param-value>name.pehl.karaka.server.JacksonConfigurator</param-value>
     </context-param>
     <context-param>
         <param-name>resteasy.scan</param-name>
@@ -40,16 +40,16 @@
         <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
     </listener>
     <listener>
-        <listener-class>name.pehl.tire.server.cache.ServletServerCache</listener-class>
+        <listener-class>name.pehl.karaka.server.cache.ServletServerCache</listener-class>
     </listener>
     <listener>
-        <listener-class>name.pehl.tire.server.sampledata.SampleDataContextListener</listener-class>
+        <listener-class>name.pehl.karaka.server.sampledata.SampleDataContextListener</listener-class>
     </listener>
 
 
     <filter>
         <filter-name>securityToken</filter-name>
-        <filter-class>name.pehl.tire.server.security.SecurityTokenCookieFilter</filter-class>
+        <filter-class>name.pehl.karaka.server.security.SecurityTokenCookieFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>securityToken</filter-name>
@@ -57,7 +57,7 @@
     </filter-mapping>
     <filter>
         <filter-name>namespaceFilter</filter-name>
-        <filter-class>name.pehl.tire.server.namespace.NamespaceFilter</filter-class>
+        <filter-class>name.pehl.karaka.server.namespace.NamespaceFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>namespaceFilter</filter-name>
