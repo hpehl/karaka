@@ -1,6 +1,6 @@
 Karaka ([Maori for "clock"](http://maoridictionary.co.nz/index.cfm?dictionaryKeywords=clock)) is a personal time recording app deployed on Google AppEngine. Besides being useful I wanted to use the latest web techniques / frameworks in a real application. Karaka uses the following stack:
 * [Google App Engine](http://code.google.com/appengine/)
-* [GIN](http://seamframework.org/Weld CDI (Weld)] / [http://code.google.com/p/google-gin/)
+* [CDI (Weld)](http://seamframework.org/Weld) / [GIN](http://code.google.com/p/google-gin/)
 * [Objectify](http://code.google.com/p/objectify-appengine/)
 * [JAX-RS / RESTEasy](http://www.jboss.org/resteasy)
 * [GWT 2.5](http://code.google.com/webtoolkit/) 
