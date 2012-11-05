@@ -17,7 +17,7 @@ One last note: Karaka uses some of the new HTML5 / CSS3 features and therefore r
 
 <a href="http://www.w3.org/html/logo/"><img src="http://www.w3.org/html/logo/badge/html5-badge-h-css3-graphics-semantics.png" width="197" height="64" title="HTML5 Powered with CSS3 / Styling, Graphics, 3D & Effects, and Semantics"/></a>
 
-http://tire-d8.appspot.com/
+http://karaka-d8.appspot.com/
 
 The deployed version is most likely behind the develop branch. Since Karaka uses maven it's easy to run the most recent version locally:
 ```

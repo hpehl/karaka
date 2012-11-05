@@ -3,7 +3,6 @@ package name.pehl.karaka.client.cell;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.RowHoverEvent;
 import com.google.gwt.user.cellview.client.RowStyles;
-import com.google.gwt.user.client.ui.HasVisibility;
 import name.pehl.karaka.client.resources.TableResources;
 import name.pehl.karaka.shared.model.BaseModel;
 
@@ -21,7 +20,7 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T> impl
     // -------------------------------------------------------- private members
 
     protected final TableResources tableResources;
-    protected HasVisibility actionCell;
+    protected ModelActionCell<T> actionCell;
 
 
     // ----------------------------------------------------------- constructors
@@ -76,29 +75,11 @@ public abstract class ModelsTable<T extends BaseModel> extends CellTable<T> impl
     {
         if (event.isUnHover())
         {
-            onUnHover();
+            actionCell.hide(event.getHoveringRow());
         }
         else
         {
-            onHover();
-        }
-    }
-
-
-    protected void onHover()
-    {
-        if (actionCell != null)
-        {
-            actionCell.setVisible(true);
-        }
-    }
-
-
-    protected void onUnHover()
-    {
-        if (actionCell != null)
-        {
-            actionCell.setVisible(false);
+            actionCell.show(event.getHoveringRow());
         }
     }
 

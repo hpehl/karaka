@@ -1,14 +1,13 @@
 package name.pehl.karaka.client.activity.view;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import name.pehl.karaka.client.ui.FormatUtils;
 import name.pehl.karaka.shared.model.Activities;
 import name.pehl.karaka.shared.model.Day;
-
 import org.moxieapps.gwt.highcharts.client.Point;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author $Author: harald.pehl $

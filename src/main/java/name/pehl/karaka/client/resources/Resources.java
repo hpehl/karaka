@@ -32,8 +32,8 @@ public interface Resources extends ClientBundle
      * 
      * @return
      */
-    @Source("tire.css")
-    CssResource tire();
+    @Source("karaka.css")
+    CssResource karaka();
 
 
     /**

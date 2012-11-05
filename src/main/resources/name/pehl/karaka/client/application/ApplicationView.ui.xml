@@ -3,7 +3,6 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
 	<ui:with field="nameTokens" type="name.pehl.karaka.client.NameTokens" />
-	<ui:with field="resources" type="name.pehl.karaka.client.resources.Resources" />
 	<ui:style>
 		.roundedWhiteBox {
 			background-color: white;
@@ -19,7 +18,7 @@
 			margin: 20px 2px 20px 20px;
 		}
 		
-		aside {
+		.aside {
 			margin: 20px 20px 20px 0px;
 		}
 		
@@ -31,11 +30,11 @@
 			margin-top: 20px;
 		}
 		
-		footer {
+		.footer {
 			padding: 0px 20px;
 		}
 		
-		footer a,footer a:visited {
+		.footer a,footer a:visited {
 			font-size: 10px;
 			float: left;
 			color: #62635e;
@@ -43,7 +42,7 @@
 			padding: 0px 5px;
 		}
 		
-		footer a:hover {
+		.footer a:hover {
 			color: #3d3d3d;
 		}
 	</ui:style>
@@ -54,7 +53,7 @@
 		</g:north>
 		<g:south size="20">
 			<g:HTMLPanel>
-				<footer>
+				<footer class="{style.footer}">
 					<g:InlineHyperlink targetHistoryToken="{nameTokens.about}">About</g:InlineHyperlink>
 					<g:InlineHyperlink targetHistoryToken="{nameTokens.help}">Help</g:InlineHyperlink>
 					<g:InlineHyperlink targetHistoryToken="{nameTokens.terms}">Terms</g:InlineHyperlink>
@@ -63,17 +62,14 @@
 		</g:south>
 		<g:east size="250">
 			<g:HTMLPanel>
-				<aside>
-					<g:FlowPanel ui:field="cockpitPanel"
-						addStyleNames="{style.cockpitPanel} {style.roundedWhiteBox}"></g:FlowPanel>
-					<g:FlowPanel ui:field="quickChartPanel"
-						addStyleNames="{style.quickChartPanel}"></g:FlowPanel>
+				<aside class="{style.aside}">
+					<g:FlowPanel ui:field="cockpitPanel" addStyleNames="{style.cockpitPanel} {style.roundedWhiteBox}"/>
+					<g:FlowPanel ui:field="quickChartPanel" addStyleNames="{style.quickChartPanel}"/>
 				</aside>
 			</g:HTMLPanel>
 		</g:east>
 		<g:center>
-			<g:SimpleLayoutPanel ui:field="mainPanel"
-				addStyleNames="{style.mainPanel} {style.roundedWhiteBox}"></g:SimpleLayoutPanel>
+			<g:SimpleLayoutPanel ui:field="mainPanel" addStyleNames="{style.mainPanel} {style.roundedWhiteBox}"/>
 		</g:center>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 

@@ -42,8 +42,8 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
     @Inject
     public CockpitView(final Binder binder, final Resources resources)
     {
-        this.widget = binder.createAndBindUi(this);
         this.resources = resources;
+        this.widget = binder.createAndBindUi(this);
     }
 
 

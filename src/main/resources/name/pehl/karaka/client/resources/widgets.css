@@ -1,20 +1,20 @@
-@external tire-tagsEditor, existing, tire-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton, gwt-PopupPanelGlass, suggestPopupMiddleCenterInner, item, item-selected;
-.tire-tagsEditor mark {
+@external karaka-tagsEditor, existing, karaka-calendarPopup, gwt-DatePicker, datePickerMonthSelector, datePickerDays, datePickerWeekdayLabel, datePickerWeekendLabel, datePickerDayIsToday, datePickerDayIsWeekend, datePickerDayIsFiller, datePickerDayIsValue, datePickerDayIsDisabled, datePickerDayIsHighlighted, datePickerDayIsValueAndHighlighted, datePickerMonthSelector, datePickerMonth, datePickerDay, datePickerPreviousButton, datePickerNextButton, gwt-PopupPanelGlass, suggestPopupMiddleCenterInner, item, item-selected;
+.karaka-tagsEditor mark {
     cursor: pointer;
 }
 
-.tire-tagsEditor mark.existing {
+.karaka-tagsEditor mark.existing {
     float: left;
     margin-right: .5em;
     margin-bottom: 4px;
 }
 
-.tire-tagsEditor mark.existing:hover {
+.karaka-tagsEditor mark.existing:hover {
     text-decoration: line-through;
     opacity: .5;
 }
 
-.tire-tagsEditor input {
+.karaka-tagsEditor input {
     float: right; 
     width : 9em;
     margin-left: 8px;
@@ -30,7 +30,7 @@
     text-align: center;
 }
 
-.tire-calendarPopup {
+.karaka-calendarPopup {
 	box-shadow: #666 0px 4px 10px;
 	-moz-box-shadow: #666 0 px 4 px 10 px;
 	-webkit-box-shadow: #666 0 px 4 px 10 px;

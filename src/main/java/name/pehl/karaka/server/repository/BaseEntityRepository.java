@@ -1,8 +1,9 @@
 package name.pehl.karaka.server.repository;
 
-import java.util.List;
-import java.util.Map;
-
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.Query;
+import com.googlecode.objectify.util.DAOBase;
 import name.pehl.karaka.server.activity.entity.Activity;
 import name.pehl.karaka.server.client.entity.Client;
 import name.pehl.karaka.server.entity.BaseEntity;
@@ -12,17 +13,14 @@ import name.pehl.karaka.server.project.entity.Project;
 import name.pehl.karaka.server.search.IndexSearch;
 import name.pehl.karaka.server.settings.entity.Settings;
 import name.pehl.karaka.server.tag.entity.Tag;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.Query;
-import com.googlecode.objectify.util.DAOBase;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Base class for all entites used in TiRe.
+ * Base class for all entites used in Karaka.
  * 
  * @author $Author:$
  * @version $Date:$ $Revision:$

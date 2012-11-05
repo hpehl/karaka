@@ -17,7 +17,7 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
     }
 
     private final Widget widget;
-    @UiField Resources resources;
+    private final Resources resources;
     @UiField HasWidgets navigationPanel;
     @UiField HasWidgets mainPanel;
     @UiField HasWidgets cockpitPanel;
@@ -25,11 +25,12 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
 
 
     @Inject
-    public ApplicationView(final Binder binder)
+    public ApplicationView(final Binder binder, final Resources resources)
     {
-        this.widget = binder.createAndBindUi(this);
-        this.resources.tire().ensureInjected();
+        this.resources = resources;
+        this.resources.karaka().ensureInjected();
         this.resources.widgets().ensureInjected();
+        this.widget = binder.createAndBindUi(this);
     }
 
 

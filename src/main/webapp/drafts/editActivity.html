@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link
-	href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,400italic,500italic"
-	rel="stylesheet" type="text/css" />
-<link href="../../resources/name/pehl/tire/client/resources/tire.css"
-	rel="stylesheet" type="text/css" />
+<link href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,400italic,500italic" rel="stylesheet" type="text/css" />
+<link href="../../resources/name/pehl/karaka/client/resources/karaka.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 .popup {
 	margin: 50px 25%;
@@ -83,13 +80,6 @@ div.controls button {
 .spacebelow {
 	margin-bottom: 8px;
 }
-
-.loading {
-	background:
-		url("../../resources/name/pehl/tire/client/resources/loading16.gif")
-		no-repeat right center;
-	padding-right: 24px !important;
-}
 </style>
 </head>
 <body>
@@ -114,7 +104,7 @@ div.controls button {
 		</ul>
 		<div class="spacebelow">
 			<input type="text" id="project" name="project" title="Project"
-				placeholder="Project" class="loading" />
+				placeholder="Project" />
 		</div>
 		<div class="tags">
             <span class="existing">
@@ -137,7 +127,7 @@ div.controls button {
 		<div style="clear: right;"></div>
 	</div>
 
-	<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 	<script>
         $(document).ready(
             function() {

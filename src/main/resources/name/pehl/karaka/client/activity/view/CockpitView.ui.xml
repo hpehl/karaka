@@ -5,7 +5,7 @@
     <ui:with field="res" type="name.pehl.karaka.client.resources.Resources"/>
     
     <ui:style>
-        div.startStopContainer {
+        .startStopContainer {
             padding: 20px 73px 0px 73px;
         }
         
@@ -21,7 +21,7 @@
             box-shadow: 0 0 25px #3cc5de;
         }
         
-        div.infoContainer {
+        .infoContainer {
             color: #3d3d3d;
             padding: 20px;
             text-align: center;

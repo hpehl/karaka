@@ -1,6 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <!-- $LastChangedBy: harald.pehl $LastChangedRevision: 1418 $ -->
 
 
     <parent>
@@ -28,12 +27,6 @@
             <url>http://objectify-appengine.googlecode.com/svn/maven</url>
         </repository>
     </repositories>
-    <distributionManagement>
-        <site>
-            <id>s3.site</id>
-            <url>s3://pehl.mvnsite/tire/${project.version}</url>
-        </site>
-    </distributionManagement>
 
 
     <properties>
@@ -117,7 +110,13 @@
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>
             <version>${gwt.version}</version>
-            <scope>test</scope>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-codeserver</artifactId>
+            <version>${gwt.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- GWTP -->
@@ -314,6 +313,20 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>src/main/webapp/karaka</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>src/main/webapp/WEB-INF/deploy</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.6</source>
@@ -386,47 +399,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <configuration>
-                    <reportPlugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-project-info-reports-plugin</artifactId>
-                            <reports>
-                                <report>dependencies</report>
-                                <report>index</report>
-                                <report>license</report>
-                                <report>project-team</report>
-                                <report>scm</report>
-                                <report>summary</report>
-                            </reports>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-jxr-plugin</artifactId>
-                            <version>2.3</version>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>2.8</version>
-                            <configuration>
-                                <doctitle>${project.name} API ${project.version}</doctitle>
-                                <windowtitle>${project.name} API ${project.version}</windowtitle>
-                                <stylesheet>maven</stylesheet>
-                                <links>
-                                    <link>http://docs.oracle.com/javase/6/docs/api/</link>
-                                    <link>http://google-web-toolkit.googlecode.com/svn/javadoc/2.4/</link>
-                                    <link>http://google-guice.googlecode.com/svn/trunk/javadoc/</link>
-                                    <link>http://google-gin.googlecode.com/svn/trunk/javadoc/</link>
-                                </links>
-                            </configuration>
-                        </plugin>
-                    </reportPlugins>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

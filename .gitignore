@@ -1,11 +1,9 @@
 target
 src/main/webapp/WEB-INF/deploy
-src/main/webapp/tire
+src/main/webapp/karaka
 *.class
 *.iml
 .DS_Store
-
-# Package Files #
 *.jar
 *.war
 *.ear

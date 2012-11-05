@@ -10,7 +10,11 @@ import com.google.gwt.user.cellview.client.TextHeader;
 import name.pehl.karaka.client.activity.event.ActivityActionEvent;
 import name.pehl.karaka.client.activity.event.ActivityActionEvent.ActivityActionHandler;
 import name.pehl.karaka.client.activity.event.ActivityActionEvent.HasActivityActionHandlers;
-import name.pehl.karaka.client.cell.*;
+import name.pehl.karaka.client.cell.ModelCell;
+import name.pehl.karaka.client.cell.ModelColumn;
+import name.pehl.karaka.client.cell.ModelRenderer;
+import name.pehl.karaka.client.cell.ModelTextRenderer;
+import name.pehl.karaka.client.cell.ModelsTable;
 import name.pehl.karaka.client.resources.TableResources;
 import name.pehl.karaka.client.ui.FormatUtils;
 import name.pehl.karaka.shared.model.Activities;
@@ -20,6 +24,7 @@ import name.pehl.karaka.shared.model.Tag;
 import java.util.ArrayList;
 import java.util.List;
 
+import static name.pehl.karaka.client.activity.event.ActivityAction.Action;
 import static name.pehl.karaka.client.activity.event.ActivityAction.Action.DETAILS;
 
 /**
@@ -230,7 +235,8 @@ public class ActivitiesTable extends ModelsTable<Activity> implements HasActivit
     }
 
     @Override
-    public void onAction(final Activity value, final String id)
+    public void onAction(final Activity activity, final String acionId)
     {
+        ActivityActionEvent.fire(this, Action.valueOf(acionId), activity);
     }
 }

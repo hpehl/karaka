@@ -33,8 +33,7 @@ public class DeleteActionCell<T extends BaseModel> extends ModelActionCell<T>
 
     interface Template extends SafeHtmlTemplates
     {
-        @Template("<div id=\"delete_container\" style=\"display: none; width: 16px;\"><span id=\"delete\" " +
-                "title=\"Delete\">{0}</span></div>")
+        @Template("<div style=\"visibility: hidden; width: 16px;\"><span id=\"delete\" title=\"Delete\">{0}</span></div>")
         SafeHtml delete(SafeHtml delete);
     }
 }

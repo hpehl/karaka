@@ -1,16 +1,15 @@
 package name.pehl.karaka.server.sampledata;
 
-import java.util.ArrayList;
-import java.util.List;
+import name.pehl.karaka.server.project.entity.Project;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-
-import name.pehl.karaka.server.project.entity.Project;
+import java.util.ArrayList;
+import java.util.List;
 
 class ProjectProducer
 {
-    static String[] names = new String[] {"TiRe", "Piriti", "Totoe", "Guano", "Foo Bar"};
+    static String[] names = new String[] {"Karaka", "Piriti", "Totoe", "Guano", "Foo Bar"};
     @Inject LoremIpsum loremIpsum;
 
 
