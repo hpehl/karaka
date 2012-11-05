@@ -1,18 +1,18 @@
 package name.pehl.karaka.client.settings;
 
-import static java.util.logging.Level.INFO;
-import name.pehl.karaka.client.dispatch.KarakaCallback;
-import name.pehl.karaka.client.model.AbstractModelCache;
-import name.pehl.karaka.client.model.ModelCache;
-import name.pehl.karaka.shared.model.Settings;
-import name.pehl.karaka.shared.model.User;
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
+import name.pehl.karaka.client.model.AbstractModelCache;
+import name.pehl.karaka.client.model.ModelCache;
+import name.pehl.karaka.shared.model.Settings;
+import name.pehl.karaka.shared.model.User;
+
+import static java.util.logging.Level.INFO;
 
 public class SettingsCache extends AbstractModelCache<Settings> implements ModelCache<Settings>, HasHandlers
 {
@@ -55,7 +55,6 @@ public class SettingsCache extends AbstractModelCache<Settings> implements Model
     {
         Settings defaults = new Settings();
         defaults.setFormatHoursAsFloatingPointNumber(false);
-        defaults.setHoursPerMonth(40);
         defaults.setTimeZoneId("UTC");
         User defaultUser = new User();
         defaultUser.setUsername("n/a");

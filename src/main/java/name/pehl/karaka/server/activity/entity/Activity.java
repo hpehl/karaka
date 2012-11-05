@@ -1,38 +1,33 @@
 package name.pehl.karaka.server.activity.entity;
 
-import static java.util.Collections.unmodifiableList;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Embedded;
-import javax.persistence.PostLoad;
-import javax.persistence.Transient;
-
-import name.pehl.karaka.server.entity.DescriptiveEntity;
-import name.pehl.karaka.server.project.entity.Project;
-import name.pehl.karaka.server.tag.entity.Tag;
-import name.pehl.karaka.shared.model.Status;
-
-import org.joda.time.DateTimeZone;
-import org.joda.time.Minutes;
-
 import com.google.common.collect.ComparisonChain;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.Unindexed;
+import name.pehl.karaka.server.entity.DescriptiveEntity;
+import name.pehl.karaka.server.project.entity.Project;
+import name.pehl.karaka.server.tag.entity.Tag;
+import name.pehl.karaka.shared.model.Status;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Minutes;
+
+import javax.persistence.Embedded;
+import javax.persistence.PostLoad;
+import javax.persistence.Transient;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static java.util.Collections.unmodifiableList;
 
 /**
  * Represent an activity of an user. An Activity has a specific state:
  * <ul>
  * <li> {@link Status#RUNNING}
- * <li> {@link Status#PAUSE}
  * <li> {@link Status#STOPPED}
  * </ul>
- * For a given user there must be only one activity with {@link Status#RUNNING}
- * or {@link Status#PAUSE}.
+ * For a given user there must be only one activity with {@link Status#RUNNING}.
  * 
  * @author $Author: harald.pehl $
  * @version $Revision: 41 $

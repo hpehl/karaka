@@ -1,0 +1,132 @@
+/*
+	Simple OpenID Plugin
+	http://code.google.com/p/openid-selector/
+	
+	This code is licensed under the New BSD License.
+*/
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, dialog, figure, footer, header, hgroup, menu, nav, section, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    font-family: 'Ubuntu', sans-serif;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+body {
+    margin: 20px;
+    line-height: 1;
+    background-color: #eaeaea;
+}
+
+h1 {
+    font-size: 133%;
+    font-style: italic;
+    text-transform: capitalize;
+    margin-bottom: 20px;
+}
+
+p {
+    margin-bottom: 5px;
+    line-height: 1.2em;
+}
+
+h1, h2, p, input, textarea, button, td, div {
+    color: #3d3d3d;
+}
+
+img, input {
+    outline: none;
+    vertical-align: middle;
+    margin: 0;
+}
+
+input, .openid_large_btn, .openid_small_btn {
+    font-size: 100%;
+    font-family: 'Ubuntu', sans-serif;
+    padding: 5px;
+    border: 1px solid rgba(61, 61, 61, .4);
+    background-color: white;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+input:focus, .openid_large_btn:hover, .openid_small_btn:hover {
+    border: 1px solid rgba(61, 61, 61, .8);
+    box-shadow: 0 0 5px rgba(61, 61, 61, .8);
+    -webkit-box-shadow: 0 0 5px rgba(61, 61, 61, .8);
+    -moz-box-shadow: 0 0 5px rgba(61, 61, 61, .8);
+}
+
+input[type=submit] {
+    margin-left: 10px;
+    color: white;
+    background-color: #62635e;
+}
+
+input[type=submit]:hover {
+    background-color: #3d3d3d;
+    border: 1px solid rgba(61, 61, 61, .8);
+    box-shadow: 0 0 5px rgba(61, 61, 61, .8);
+    -webkit-box-shadow: 0 0 5px rgba(61, 61, 61, .8);
+    -moz-box-shadow: 0 0 5px rgba(61, 61, 61, .8);
+}
+
+#openid_form {
+    width: 580px;
+}
+
+#openid_choice {
+    display: none;
+}
+
+#openid_input_area {
+    clear: both;
+}
+
+#openid_btns, #openid_btns br {
+    clear: both;
+}
+
+#openid_highlight {
+}
+
+.openid_large_btn {
+    margin-right: 4px;
+    margin-bottom: 4px;
+    float: left;
+    width: 100px;
+    height: 60px;
+    /* fix for IE 6 only: http://en.wikipedia.org/wiki/CSS_filter#Underscore_hack */
+    _width: 104px;
+    _height: 64px;
+}
+
+.openid_small_btn {
+    margin-right: 4px;
+    margin-bottom: 20px;
+    float: left;
+    width: 24px;
+    height: 24px;
+    /* fix for IE 6 only: http://en.wikipedia.org/wiki/CSS_filter#Underscore_hack */
+    _width: 28px;
+    _height: 28px;
+}
+
+a.openid_large_btn:focus {
+    outline: none;
+}
+
+a.openid_large_btn:focus {
+    -moz-outline-style: none;
+}
+
+.openid_selected {
+    border: 2px solid #999;
+}
