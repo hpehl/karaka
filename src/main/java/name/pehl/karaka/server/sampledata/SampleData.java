@@ -1,11 +1,6 @@
 package name.pehl.karaka.server.sampledata;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import javax.inject.Inject;
-
+import com.googlecode.objectify.Key;
 import name.pehl.karaka.server.activity.control.ActivityRepository;
 import name.pehl.karaka.server.activity.entity.Activity;
 import name.pehl.karaka.server.client.control.ClientRepository;
@@ -13,22 +8,22 @@ import name.pehl.karaka.server.client.entity.Client;
 import name.pehl.karaka.server.paging.entity.PageResult;
 import name.pehl.karaka.server.project.control.ProjectRepository;
 import name.pehl.karaka.server.project.entity.Project;
-import name.pehl.karaka.server.settings.control.SettingsRepository;
+import name.pehl.karaka.server.settings.control.DefaultSettings;
 import name.pehl.karaka.server.settings.entity.Settings;
 import name.pehl.karaka.server.tag.control.TagRepository;
 import name.pehl.karaka.server.tag.entity.Tag;
-
 import org.slf4j.Logger;
 
-import com.googlecode.objectify.Key;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 class SampleData
 {
     @Inject Logger logger;
     @Inject Random random;
-
-    @Inject @DefaultSettings Settings defaultSettings;
-    @Inject SettingsRepository settingsRepository;
+    @Inject @DefaultSettings Settings currentSettings;
 
     @Inject List<Client> clients;
     @Inject ClientRepository clientRepository;
@@ -45,10 +40,6 @@ class SampleData
 
     void persit()
     {
-        // Settings
-        settingsRepository.put(defaultSettings);
-        logger.info("Persisted {}", defaultSettings);
-
         // Clients
         List<Key<Client>> clientKeys = new ArrayList<Key<Client>>();
         for (Client client : clients)
@@ -80,7 +71,7 @@ class SampleData
 
         // Activities
         List<Activity> activities = activitiesProducer.produceActivities(projectKeys, tagKeys,
-                defaultSettings.getTimeZone());
+                currentSettings.getTimeZone());
         for (Activity activity : activities)
         {
             activityRepository.put(activity);
@@ -120,14 +111,6 @@ class SampleData
         {
             clientRepository.deleteAll(clients);
             logger.info("Removed {} clients", clients.size());
-        }
-
-        // Settings
-        PageResult<Settings> settings = settingsRepository.list();
-        if (!settings.isEmpty())
-        {
-            settingsRepository.deleteAll(settings);
-            logger.info("Removed settings");
         }
     }
 }

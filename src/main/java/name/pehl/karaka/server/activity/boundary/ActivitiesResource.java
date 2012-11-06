@@ -1,34 +1,8 @@
 package name.pehl.karaka.server.activity.boundary;
 
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static name.pehl.karaka.shared.model.HasLinks.SELF;
-import static name.pehl.karaka.shared.model.TimeUnit.DAY;
-import static name.pehl.karaka.shared.model.TimeUnit.MONTH;
-import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
-import static org.joda.time.Months.months;
-import static org.joda.time.Weeks.weeks;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-
-import javax.inject.Inject;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-
+import com.google.appengine.api.search.Results;
+import com.google.appengine.api.search.ScoredDocument;
+import com.googlecode.objectify.Key;
 import name.pehl.karaka.server.activity.control.ActivitiesConverter;
 import name.pehl.karaka.server.activity.control.ActivityConverter;
 import name.pehl.karaka.server.activity.control.ActivityIndexSearch;
@@ -43,16 +17,38 @@ import name.pehl.karaka.shared.model.Durations;
 import name.pehl.karaka.shared.model.HasLinks;
 import name.pehl.karaka.shared.model.Year;
 import name.pehl.karaka.shared.model.Years;
-
 import org.jboss.resteasy.annotations.cache.Cache;
 import org.jboss.resteasy.spi.NotFoundException;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 
-import com.google.appengine.api.search.Results;
-import com.google.appengine.api.search.ScoredDocument;
-import com.googlecode.objectify.Key;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
+
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static name.pehl.karaka.shared.model.HasLinks.SELF;
+import static name.pehl.karaka.shared.model.TimeUnit.*;
+import static org.joda.time.Months.months;
+import static org.joda.time.Weeks.weeks;
 
 /**
  * Supported methods:
@@ -118,7 +114,7 @@ import com.googlecode.objectify.Key;
 public class ActivitiesResource
 {
     @Context UriInfo uriInfo;
-    @Inject @CurrentSettings Settings settings;
+    @Inject @CurrentSettings Instance<Settings> settings;
     @Inject ActivityRepository repository;
     @Inject ActivityIndexSearch indexSearch;
     @Inject ActivitiesConverter activitiesConverter;
@@ -163,7 +159,7 @@ public class ActivitiesResource
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}")
     public Activities activitiesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
     {
-        DateMidnight yearMonth = new DateMidnight(year, month, 1, settings.getTimeZone());
+        DateMidnight yearMonth = new DateMidnight(year, month, 1, settings.get().getTimeZone());
         Activities activities = activitiesConverter.toModel(yearMonth, MONTH, forYearMonth(yearMonth));
         addLinksForYearMonth(activities, yearMonth);
         return activities;
@@ -175,7 +171,7 @@ public class ActivitiesResource
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/duration")
     public Duration minutesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
     {
-        return minutes(forYearMonth(new DateMidnight(year, month, 1, settings.getTimeZone())));
+        return minutes(forYearMonth(new DateMidnight(year, month, 1, settings.get().getTimeZone())));
     }
 
 
@@ -203,7 +199,7 @@ public class ActivitiesResource
     @Path("/currentMonth")
     public Activities activitiesForCurrentMonth()
     {
-        DateMidnight now = now(settings.getTimeZone());
+        DateMidnight now = now(settings.get().getTimeZone());
         Activities activities = activitiesConverter.toModel(now, MONTH, forYearMonth(now));
         addLinksForYearMonth(activities, now);
         return activities;
@@ -215,7 +211,7 @@ public class ActivitiesResource
     @Path("/currentMonth/duration")
     public Duration minutesForCurrentMonth()
     {
-        return minutes(forYearMonth(now(settings.getTimeZone())));
+        return minutes(forYearMonth(now(settings.get().getTimeZone())));
     }
 
 
@@ -233,7 +229,7 @@ public class ActivitiesResource
 
     private DateMidnight absoluteMonth(int month)
     {
-        DateMidnight now = now(settings.getTimeZone());
+        DateMidnight now = now(settings.get().getTimeZone());
         return now.plus(months(month));
     }
 
@@ -269,7 +265,7 @@ public class ActivitiesResource
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}")
     public Activities activitiesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
     {
-        DateMidnight yearWeek = new MutableDateTime(settings.getTimeZone()).year().set(year).weekOfWeekyear().set(week)
+        DateMidnight yearWeek = new MutableDateTime(settings.get().getTimeZone()).year().set(year).weekOfWeekyear().set(week)
                 .toDateTime().toDateMidnight();
         Activities activities = activitiesConverter.toModel(yearWeek, WEEK, forYearWeek(yearWeek));
         addLinksForYearWeek(activities, yearWeek);
@@ -282,7 +278,7 @@ public class ActivitiesResource
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}/duration")
     public Duration minutesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
     {
-        DateMidnight yearWeek = new MutableDateTime(settings.getTimeZone()).year().set(year).weekOfWeekyear().set(week)
+        DateMidnight yearWeek = new MutableDateTime(settings.get().getTimeZone()).year().set(year).weekOfWeekyear().set(week)
                 .toDateTime().toDateMidnight();
         return minutes(forYearWeek(yearWeek));
     }
@@ -312,7 +308,7 @@ public class ActivitiesResource
     @Path("/currentWeek")
     public Activities activitiesForCurrentWeek()
     {
-        DateMidnight now = now(settings.getTimeZone());
+        DateMidnight now = now(settings.get().getTimeZone());
         Activities activities = activitiesConverter.toModel(now, WEEK, forYearWeek(now));
         addLinksForYearWeek(activities, now);
         return activities;
@@ -324,7 +320,7 @@ public class ActivitiesResource
     @Path("/currentWeek/duration")
     public Duration minutesForCurrentWeek()
     {
-        return minutes(forYearWeek(now(settings.getTimeZone())));
+        return minutes(forYearWeek(now(settings.get().getTimeZone())));
     }
 
 
@@ -342,7 +338,7 @@ public class ActivitiesResource
 
     private DateMidnight absoluteWeek(int week)
     {
-        DateMidnight now = now(settings.getTimeZone());
+        DateMidnight now = now(settings.get().getTimeZone());
         return now.plus(weeks(week));
     }
 
@@ -383,7 +379,7 @@ public class ActivitiesResource
     public Activities activitiesForYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
             @PathParam("day") int day)
     {
-        DateMidnight yearMonthDay = new DateMidnight(year, month, day, settings.getTimeZone());
+        DateMidnight yearMonthDay = new DateMidnight(year, month, day, settings.get().getTimeZone());
         Activities activities = activitiesConverter.toModel(yearMonthDay, DAY, forYearMonthDay(yearMonthDay));
         addLinksForYearMonthDay(activities, yearMonthDay);
         return activities;
@@ -396,7 +392,7 @@ public class ActivitiesResource
     public Duration minutesForYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
             @PathParam("day") int day)
     {
-        return minutes(forYearMonthDay(new DateMidnight(year, month, day, settings.getTimeZone())));
+        return minutes(forYearMonthDay(new DateMidnight(year, month, day, settings.get().getTimeZone())));
     }
 
 
@@ -404,7 +400,7 @@ public class ActivitiesResource
     @Path("/today")
     public Activities activitiesForToday()
     {
-        DateMidnight now = now(settings.getTimeZone());
+        DateMidnight now = now(settings.get().getTimeZone());
         Activities activities = activitiesConverter.toModel(now, DAY, forYearMonthDay(now));
         addLinksForYearMonthDay(activities, now);
         return activities;
@@ -416,7 +412,7 @@ public class ActivitiesResource
     @Path("/today/duration")
     public Duration minutesForToday()
     {
-        return minutes(forYearMonthDay(now(settings.getTimeZone())));
+        return minutes(forYearMonthDay(now(settings.get().getTimeZone())));
     }
 
 
@@ -490,7 +486,7 @@ public class ActivitiesResource
     @Path("/current/durations")
     public Durations minutesForCurrentMonthWeekAndDay()
     {
-        DateMidnight now = now(settings.getTimeZone());
+        DateMidnight now = now(settings.get().getTimeZone());
         Duration currentMonth = minutes(forYearMonth(now));
         Duration currentWeek = minutes(forYearWeek(now));
         Duration today = minutes(forYearMonthDay(now));

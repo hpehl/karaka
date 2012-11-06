@@ -1,14 +1,15 @@
 package name.pehl.karaka.server.settings.boundary;
 
+import name.pehl.karaka.server.settings.control.CurrentSettings;
+import name.pehl.karaka.server.settings.control.SettingsConverter;
+import name.pehl.karaka.server.settings.entity.Settings;
+
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import name.pehl.karaka.server.settings.control.CurrentSettings;
-import name.pehl.karaka.server.settings.control.SettingsConverter;
-import name.pehl.karaka.server.settings.entity.Settings;
 
 /**
  * Supported methods:
@@ -24,13 +25,13 @@ import name.pehl.karaka.server.settings.entity.Settings;
 @Produces(MediaType.APPLICATION_JSON)
 public class SettingsResource
 {
-    @Inject @CurrentSettings Settings settings;
+    @Inject @CurrentSettings Instance<Settings> settings;
     @Inject SettingsConverter settingsConverter;
 
 
     @GET
     public name.pehl.karaka.shared.model.Settings currentSettings()
     {
-        return settingsConverter.toModel(settings);
+        return settingsConverter.toModel(settings.get());
     }
 }

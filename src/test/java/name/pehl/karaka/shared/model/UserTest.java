@@ -11,9 +11,9 @@ public class UserTest
     {
         User cut = new User();
         assertNotNull(cut.getId());
-        cut = new User("foo", "foo@bar.com");
+        cut = new User("fooId", "foo", "foo@bar.com");
         assertNotNull(cut.getId());
-        cut = new User("0815", "foo", "foo@bar.com");
+        cut = new User("0815", "fooId", "foo", "foo@bar.com");
         assertNotNull(cut.getId());
     }
 }

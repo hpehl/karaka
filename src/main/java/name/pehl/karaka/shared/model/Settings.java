@@ -31,7 +31,7 @@ public class Settings extends BaseModel
     public boolean hasChanged(final Settings other)
     {
         boolean changed = ComparisonChain.start()
-                .compare(formatHoursAsFloatingPointNumber, other.formatHoursAsFloatingPointNumber)
+                .compareFalseFirst(formatHoursAsFloatingPointNumber, other.formatHoursAsFloatingPointNumber)
                 .compare(timeZoneId, other.timeZoneId).compare(user.username, other.user.username).result() != 0;
         return changed;
     }

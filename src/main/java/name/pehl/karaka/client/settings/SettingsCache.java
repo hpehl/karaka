@@ -57,6 +57,7 @@ public class SettingsCache extends AbstractModelCache<Settings> implements Model
         defaults.setFormatHoursAsFloatingPointNumber(false);
         defaults.setTimeZoneId("UTC");
         User defaultUser = new User();
+        defaultUser.setUserId("n/a");
         defaultUser.setUsername("n/a");
         defaultUser.setFirstname("n/a");
         defaultUser.setSurname("n/a");

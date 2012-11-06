@@ -1,12 +1,6 @@
 package name.pehl.karaka.server.activity.control;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import com.googlecode.objectify.Key;
 import name.pehl.karaka.server.converter.AbstractEntityConverter;
 import name.pehl.karaka.server.converter.EntityConverter;
 import name.pehl.karaka.server.project.control.ProjectConverter;
@@ -16,10 +10,14 @@ import name.pehl.karaka.server.settings.entity.Settings;
 import name.pehl.karaka.server.tag.control.TagConverter;
 import name.pehl.karaka.server.tag.control.TagRepository;
 import name.pehl.karaka.shared.model.Duration;
-
 import org.joda.time.DateTime;
 
-import com.googlecode.objectify.Key;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author $LastChangedBy:$
@@ -34,8 +32,7 @@ public class ActivityConverter extends
     @Inject ProjectRepository projectRepository;
     @Inject TagRepository tagRepository;
     @Inject TagConverter tagConverter;
-    @Inject @CurrentSettings Settings settings;
-
+    @Inject @CurrentSettings Instance<Settings> settings;
 
     @Override
     public name.pehl.karaka.shared.model.Activity toModel(name.pehl.karaka.server.activity.entity.Activity entity)
@@ -50,8 +47,10 @@ public class ActivityConverter extends
         name.pehl.karaka.shared.model.Activity model = new name.pehl.karaka.shared.model.Activity(websafeKey(
                 name.pehl.karaka.server.activity.entity.Activity.class, entity), entity.getName());
         model.setDescription(entity.getDescription());
-        model.setStart(new name.pehl.karaka.shared.model.Time(entity.getStart().getDateTime().toDate(), entity.getStart()
-                .getYear(), entity.getStart().getMonth(), entity.getStart().getWeek(), entity.getStart().getDay()));
+        model.setStart(
+                new name.pehl.karaka.shared.model.Time(entity.getStart().getDateTime().toDate(), entity.getStart()
+                        .getYear(), entity.getStart().getMonth(), entity.getStart().getWeek(),
+                        entity.getStart().getDay()));
         model.setEnd(new name.pehl.karaka.shared.model.Time(entity.getEnd().getDateTime().toDate(), entity.getEnd()
                 .getYear(), entity.getEnd().getMonth(), entity.getEnd().getWeek(), entity.getEnd().getDay()));
         model.setPause(new Duration(entity.getPause()));
@@ -74,40 +73,33 @@ public class ActivityConverter extends
         return model;
     }
 
-
     @Override
     public name.pehl.karaka.server.activity.entity.Activity fromModel(name.pehl.karaka.shared.model.Activity model)
     {
         assertModel(model);
         name.pehl.karaka.server.activity.entity.Activity entity = new name.pehl.karaka.server.activity.entity.Activity(
-                model.getName(), settings.getTimeZone());
+                model.getName(), settings.get().getTimeZone());
         internalModelToEntity(model, entity);
         return entity;
     }
 
-
     @Override
-    public void merge(name.pehl.karaka.shared.model.Activity model, name.pehl.karaka.server.activity.entity.Activity entity)
+    public void merge(name.pehl.karaka.shared.model.Activity model,
+            name.pehl.karaka.server.activity.entity.Activity entity)
     {
         assertNonTransientModel(model);
         entity.setName(model.getName());
         internalModelToEntity(model, entity);
     }
 
-
     /**
-     * Transforms the client side activity into a server side activity. Normally
-     * the start and end time is taken from the client side activity and the
-     * minutes are calculated. There's one exception to this behaviour: If </p>
-     * <ul>
-     * <li>the activity is stopped
-     * <li>the start time is present
-     * <li>the end time is not present and
-     * <li>the minutes are specified
-     * </ul>
-     * <p>
+     * Transforms the client side activity into a server side activity. Normally the start and end time is taken from
+     * the client side activity and the minutes are calculated. There's one exception to this behaviour: If </p> <ul>
+     * <li>the activity is stopped <li>the start time is present <li>the end time is not present and <li>the minutes are
+     * specified </ul>
+     * <p/>
      * then the end time is calculated.
-     * 
+     *
      * @param model
      * @param entity
      */
@@ -119,16 +111,16 @@ public class ActivityConverter extends
         if (model.getStart() != null)
         {
             entity.setStart(new name.pehl.karaka.server.activity.entity.Time(model.getStart().getDate(), settings
-                    .getTimeZone()));
+                    .get().getTimeZone()));
         }
         else
         {
-            entity.setStart(new name.pehl.karaka.server.activity.entity.Time(new Date(), settings.getTimeZone()));
+            entity.setStart(new name.pehl.karaka.server.activity.entity.Time(new Date(), settings.get().getTimeZone()));
         }
         if (model.getEnd() != null)
         {
             entity.setEnd(new name.pehl.karaka.server.activity.entity.Time(model.getEnd().getDate(), settings
-                    .getTimeZone()));
+                    .get().getTimeZone()));
         }
         else
         {
@@ -136,11 +128,13 @@ public class ActivityConverter extends
             {
                 DateTime start = entity.getStart().getDateTime();
                 DateTime end = start.plusMinutes((int) model.getDuration().getTotalMinutes());
-                entity.setEnd(new name.pehl.karaka.server.activity.entity.Time(end.toDate(), settings.getTimeZone()));
+                entity.setEnd(
+                        new name.pehl.karaka.server.activity.entity.Time(end.toDate(), settings.get().getTimeZone()));
             }
             else
             {
-                entity.setEnd(new name.pehl.karaka.server.activity.entity.Time(new Date(), settings.getTimeZone()));
+                entity.setEnd(
+                        new name.pehl.karaka.server.activity.entity.Time(new Date(), settings.get().getTimeZone()));
             }
         }
         entity.setPause(model.getPause().getTotalMinutes());
@@ -159,7 +153,7 @@ public class ActivityConverter extends
             }
             else
             {
-                projectKey = Key.<name.pehl.karaka.server.project.entity.Project> create(model.getProject().getId());
+                projectKey = Key.<name.pehl.karaka.server.project.entity.Project>create(model.getProject().getId());
             }
         }
         entity.setProject(projectKey);
@@ -175,7 +169,7 @@ public class ActivityConverter extends
                 }
                 else
                 {
-                    tags.add(Key.<name.pehl.karaka.server.tag.entity.Tag> create(tag.getId()));
+                    tags.add(Key.<name.pehl.karaka.server.tag.entity.Tag>create(tag.getId()));
                 }
             }
         }
