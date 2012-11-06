@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link rel="icon" type="image/png" href="stopwatch_32.png">
+    <link rel="icon" type="image/png" href="/stopwatch_32.png">
     <link rel="stylesheet" type="text/css"
           href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,400italic,500italic">
-    <link type="text/css" rel="stylesheet" href="css/openid.css"/>
+    <link type="text/css" rel="stylesheet" href="/login/openid.css"/>
     <title>Karaka Login</title>
 </head>
 <body>
 <h1>Login Required</h1>
-<form action="examples/consumer/try_auth.php" method="get" id="openid_form">
+<form action="/_ah/login_required" method="get" id="openid_form">
     <input type="hidden" name="action" value="verify"/>
     <div id="openid_choice">
         <p>Please click your account provider:</p>
@@ -29,8 +29,8 @@
 </form>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript" src="js/openid-jquery.js"></script>
-<script type="text/javascript" src="js/openid-en.js"></script>
+<script type="text/javascript" src="/login/openid-jquery.js"></script>
+<script type="text/javascript" src="/login/openid-en.js"></script>
 <script>
     $(document).ready(function () {
         openid.init('openid_identifier');

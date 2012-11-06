@@ -22,7 +22,6 @@ public class SettingsConverter extends
         name.pehl.karaka.shared.model.Settings model = new name.pehl.karaka.shared.model.Settings(websafeKey(
                 name.pehl.karaka.server.settings.entity.Settings.class, entity));
         model.setFormatHoursAsFloatingPointNumber(entity.isFormatHoursAsFloatingPointNumber());
-        model.setHoursPerMonth(entity.getHoursPerMonth());
         model.setTimeZoneId(entity.getTimeZone().getID());
         name.pehl.karaka.server.settings.entity.User entityUser = entity.getUser();
         if (entityUser != null)

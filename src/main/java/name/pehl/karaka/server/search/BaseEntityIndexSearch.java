@@ -66,7 +66,7 @@ public abstract class BaseEntityIndexSearch<T extends BaseEntity> implements Ind
                     documentIds.add(String.valueOf(entity.getId()));
                 }
             }
-            getIndex().remove(documentIds);
+            getIndex().delete(documentIds);
         }
     }
 
@@ -84,7 +84,7 @@ public abstract class BaseEntityIndexSearch<T extends BaseEntity> implements Ind
                     documentIds.add(String.valueOf(entity.getId()));
                 }
             }
-            getIndex().remove(documentIds);
+            getIndex().delete(documentIds);
         }
     }
 

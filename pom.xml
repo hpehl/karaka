@@ -367,7 +367,7 @@
                     <localWorkers>4</localWorkers>
                     <compileReport>false</compileReport>
                     <disableCastChecking>true</disableCastChecking>
-                    <disableClassMetadata>true</disableClassMetadata>
+                    <disableClassMetadata>false</disableClassMetadata>
                     <enableClosureCompiler>true</enableClosureCompiler>
                     <fragmentCount>30</fragmentCount>
                     <port>8888</port>

@@ -21,11 +21,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 
-/**
- * @author $LastChangedBy: harald.pehl $
- * @version $LastChangedRevision: 173 $
- */
-// @formatter:off
 @GinModules({ClientDispatchModule.class, KarakaModule.class})
 public interface KarakaGinjector extends Ginjector
 {

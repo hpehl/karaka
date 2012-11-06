@@ -321,8 +321,8 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     /**
      * Required for JSON (de)serialization - please don't call directly. The
      * duration are calculated when calling {@link #setStart(Time)},
-     * {@link #setEnd(Time)}, {@link #setPause(long)}, {@link #start()},
-     * {@link #stop()}, {@link #resume()} and {@link #tick()}.
+     * {@link #setEnd(Time)}, {@link #start()}, {@link #stop()}, {@link #resume()}
+     * and {@link #tick()}.
      * 
      * @param duration
      */
