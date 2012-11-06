@@ -53,7 +53,7 @@ public class OpenIdServlet extends HttpServlet
         }
         else
         {
-            String forward = new StringBuilder().append("/openid.html?=continue").append(cont).toString();
+            String forward = new StringBuilder().append("/login/openid.html?continue=").append(cont).toString();
             RequestDispatcher dispatcher = req.getRequestDispatcher(forward);
             log("OpenIdServlet: Forward to " + forward);
             dispatcher.forward(req, resp);
