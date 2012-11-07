@@ -22,7 +22,7 @@
 
     <div id="sidebar">
         <form action="/_ah/login_required" method="get" id="openid_form">
-            <input type="hidden" name="action" value="verify"/>
+            <input type="hidden" id="continue" name="continue"/>
             <div id="openid_choice">
                 <div id="openid_large_btns"></div>
                 <div id="openid_small_btns"></div>
@@ -43,11 +43,13 @@
 </div>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="purl.js"></script>
 <script type="text/javascript" src="openid-jquery.js"></script>
 <script type="text/javascript" src="openid-en.js"></script>
 <script>
     $(document).ready(function () {
         openid.init('openid_identifier');
+        $('#continue').val($.url().param('continue'));
     });
 </script>
 </body>

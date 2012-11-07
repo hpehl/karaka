@@ -35,9 +35,9 @@ openid = {
 	 */
 	init : function(input_id) {
 		providers = $.extend({}, providers_large, providers_small);
+		this.input_id = input_id;
         var large_btns = $('#openid_large_btns');
         var small_btns = $('#openid_small_btns');
-		this.input_id = input_id;
 		$('#openid_choice').show();
 		$('#openid_input_area').empty();
 		// add box for each provider
