@@ -90,12 +90,11 @@ public abstract class BaseEntityIndexSearch<T extends BaseEntity> implements Ind
 
 
     @Override
-    public Results<ScoredDocument> search(String queryString)
+    public Results<ScoredDocument> search(String query)
     {
-        Query query = Query.newBuilder().setOptions(queryOptionsBuilder()).build(queryString);
-        return getIndex().search(query);
+        Query q = Query.newBuilder().setOptions(queryOptionsBuilder()).build(query);
+        return getIndex().search(q);
     }
-
 
     protected Document.Builder documentBuilderFor(T entity)
     {

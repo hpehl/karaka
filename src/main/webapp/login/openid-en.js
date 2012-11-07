@@ -14,21 +14,21 @@ var providers_large = {
 		name : 'Yahoo',
 		url : 'http://me.yahoo.com/'
 	},
-	aol : {
-		name : 'AOL',
-		label : 'Enter your AOL screenname.',
-		url : 'http://openid.aol.com/{username}'
-	},
 	myopenid : {
 		name : 'MyOpenID',
 		label : 'Enter your MyOpenID username.',
 		url : 'http://{username}.myopenid.com/'
 	},
-	openid : {
+    openid : {
 		name : 'OpenID',
 		label : 'Enter your OpenID.',
 		url : null
 	}
+//    aol : {
+//        name : 'AOL',
+//        label : 'Enter your AOL screenname.',
+//        url : 'http://openid.aol.com/{username}'
+//    }
 };
 
 var providers_small = {

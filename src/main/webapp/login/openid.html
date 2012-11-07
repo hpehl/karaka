@@ -3,33 +3,48 @@
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link rel="icon" type="image/png" href="/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:400,500,400italic,500italic">
-    <link rel="stylesheet" type="text/css" href="/login/openid.css"/>
+    <link rel="icon" type="image/png" href="../favicon.ico">
+    <link rel="stylesheet" type="text/css" href="openid.css"/>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:500">
     <title>Karaka Login</title>
 </head>
+
 <body>
-<h1>Login Required</h1>
-<form action="/_ah/login_required" method="get" id="openid_form">
-    <input type="hidden" name="action" value="verify"/>
-    <div id="openid_choice">
-        <p>Please click your account provider:</p>
-        <div id="openid_btns"></div>
+<div id="container">
+    <div id="header">
+        <h1><img src="images/stopwatch_64.png" title="Karaka"/>Karaka</h1>
     </div>
-    <div id="openid_input_area">
-        <input id="openid_identifier" name="openid_identifier" type="text" value="http://"/>
-        <input id="openid_submit" type="submit" value="Sign-In"/>
+
+    <div id="content">
+        <h2>Time recording made easy</h2>
+        <p>To use Karaka please login using one of the Open ID provider.</p>
     </div>
-    <noscript>
-        <p>OpenID is service that allows you to log-on to many different websites using a single indentity.
-            Find out <a href="http://openid.net/what/">more about OpenID</a> and <a href="http://openid.net/get/">how
-                to get an OpenID enabled account</a>.</p>
-    </noscript>
-</form>
+
+    <div id="sidebar">
+        <form action="/_ah/login_required" method="get" id="openid_form">
+            <input type="hidden" name="action" value="verify"/>
+            <div id="openid_choice">
+                <div id="openid_large_btns"></div>
+                <div id="openid_small_btns"></div>
+            </div>
+            <div id="openid_input_area">
+                <input id="openid_identifier" name="openid_identifier" type="text" value="http://"/>
+                <input id="openid_submit" type="submit" value="Sign-In"/>
+            </div>
+            <noscript>
+                <p>OpenID is service that allows you to log-on to many different websites using a single indentity.
+                    Find out <a href="http://openid.net/what/">more about OpenID</a> and <a href="http://openid.net/get/">how
+                        to get an OpenID enabled account</a>.</p>
+            </noscript>
+        </form>
+    </div>
+
+    <div id="footer">&nbsp;</div>
+</div>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript" src="/login/openid-jquery.js"></script>
-<script type="text/javascript" src="/login/openid-en.js"></script>
+<script type="text/javascript" src="openid-jquery.js"></script>
+<script type="text/javascript" src="openid-en.js"></script>
 <script>
     $(document).ready(function () {
         openid.init('openid_identifier');

@@ -18,7 +18,7 @@ public class IndexProducer
     public Index produceIndex(InjectionPoint ip)
     {
         IndexName indexName = ip.getAnnotated().getAnnotation(IndexName.class);
-        IndexSpec indexSpec = IndexSpec.newBuilder().setName(indexName.value()).build();
+        IndexSpec indexSpec = IndexSpec.newBuilder().setName(indexName.value() + indexName.version()).build();
         return SearchServiceFactory.getSearchService().getIndex(indexSpec);
     }
 }

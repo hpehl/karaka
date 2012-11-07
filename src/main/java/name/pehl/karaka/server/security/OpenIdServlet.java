@@ -21,7 +21,6 @@ package name.pehl.karaka.server.security;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +37,7 @@ public class OpenIdServlet extends HttpServlet
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException
     {
+        String redirect = null;
         String cont = req.getParameter("continue");
         if (cont == null)
         {
@@ -47,16 +47,13 @@ public class OpenIdServlet extends HttpServlet
         if (identifier != null)
         {
             UserService userService = UserServiceFactory.getUserService();
-            String redirect = userService.createLoginURL(cont, null, identifier, null);
-            log("OpenIdServlet: Redirect to " + redirect);
-            resp.sendRedirect(redirect);
+            redirect = userService.createLoginURL(cont, null, identifier, null);
         }
         else
         {
-            String forward = new StringBuilder().append("/login/openid.html?continue=").append(cont).toString();
-            RequestDispatcher dispatcher = req.getRequestDispatcher(forward);
-            log("OpenIdServlet: Forward to " + forward);
-            dispatcher.forward(req, resp);
+            redirect = new StringBuilder().append("/login/openid.html?continue=").append(cont).toString();
         }
+        log("OpenIdServlet: Redirect to " + redirect);
+        resp.sendRedirect(redirect);
     }
 }
