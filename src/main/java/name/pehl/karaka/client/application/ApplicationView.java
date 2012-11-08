@@ -1,14 +1,12 @@
 package name.pehl.karaka.client.application;
 
-import name.pehl.karaka.client.resources.Resources;
-import name.pehl.karaka.client.ui.UiUtils;
-
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import name.pehl.karaka.client.ui.UiUtils;
 
 public class ApplicationView extends ViewImpl implements ApplicationPresenter.MyView
 {
@@ -17,7 +15,6 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
     }
 
     private final Widget widget;
-    private final Resources resources;
     @UiField HasWidgets navigationPanel;
     @UiField HasWidgets mainPanel;
     @UiField HasWidgets cockpitPanel;
@@ -25,11 +22,8 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
 
 
     @Inject
-    public ApplicationView(final Binder binder, final Resources resources)
+    public ApplicationView(final Binder binder)
     {
-        this.resources = resources;
-        this.resources.karaka().ensureInjected();
-        this.resources.widgets().ensureInjected();
         this.widget = binder.createAndBindUi(this);
     }
 

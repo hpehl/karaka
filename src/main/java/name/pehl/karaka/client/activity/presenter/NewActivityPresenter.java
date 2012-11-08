@@ -1,15 +1,14 @@
 package name.pehl.karaka.client.activity.presenter;
 
-import static java.util.logging.Level.SEVERE;
-import static name.pehl.karaka.client.activity.event.ActivityAction.Action.SAVE;
-import static name.pehl.karaka.client.activity.event.ActivityAction.Action.START_STOP;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.google.gwt.user.client.ui.SuggestOracle.Callback;
+import com.google.gwt.user.client.ui.SuggestOracle.Request;
+import com.google.gwt.user.client.ui.SuggestOracle.Response;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.shared.DispatchAsync;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.PresenterWidget;
+import com.gwtplatform.mvp.client.View;
 import name.pehl.karaka.client.activity.dispatch.FindActivityAction;
 import name.pehl.karaka.client.activity.dispatch.FindActivityResult;
 import name.pehl.karaka.client.activity.event.ActivityActionEvent;
@@ -23,15 +22,15 @@ import name.pehl.karaka.shared.model.Duration;
 import name.pehl.karaka.shared.model.Project;
 import name.pehl.karaka.shared.model.Time;
 
-import com.google.gwt.user.client.ui.SuggestOracle.Callback;
-import com.google.gwt.user.client.ui.SuggestOracle.Request;
-import com.google.gwt.user.client.ui.SuggestOracle.Response;
-import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
-import com.gwtplatform.mvp.client.HasUiHandlers;
-import com.gwtplatform.mvp.client.PresenterWidget;
-import com.gwtplatform.mvp.client.View;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static java.util.logging.Level.SEVERE;
+import static name.pehl.karaka.client.activity.event.ActivityAction.Action.SAVE;
+import static name.pehl.karaka.client.activity.event.ActivityAction.Action.START_STOP;
+import static name.pehl.karaka.client.logging.Logger.Category.activity;
+import static name.pehl.karaka.client.logging.Logger.warn;
 
 /**
  * <h3>Events</h3>
@@ -52,16 +51,11 @@ import com.gwtplatform.mvp.client.View;
  */
 public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.MyView> implements NewActivityUiHandlers
 {
-    // ---------------------------------------------------------- inner classes
-
     public interface MyView extends View, HasUiHandlers<NewActivityUiHandlers>
     {
         void setProject(Project project);
     }
 
-    // ------------------------------------------------------- (static) members
-
-    static final Logger logger = Logger.getLogger(NewActivityPresenter.class.getName());
     final DispatchAsync dispatcher;
 
     /**
@@ -150,7 +144,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
             public void onFailure(final Throwable caught)
             {
                 // Just log
-                logger.log(Level.WARNING, "No activities found for " + query + ": " + caught.getMessage(), caught);
+                warn(activity, "No activities found for " + query + ": " + caught.getMessage(), caught);
             }
         });
     }

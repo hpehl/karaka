@@ -11,8 +11,11 @@ import name.pehl.karaka.client.model.AbstractModelCache;
 import name.pehl.karaka.client.model.ModelCache;
 import name.pehl.karaka.shared.model.Settings;
 import name.pehl.karaka.shared.model.User;
+import org.fusesource.restygwt.client.FailedStatusCodeException;
 
-import static java.util.logging.Level.INFO;
+import static name.pehl.karaka.client.logging.Logger.Category.cache;
+import static name.pehl.karaka.client.logging.Logger.info;
+import static name.pehl.karaka.client.logging.Logger.warn;
 
 public class SettingsCache extends AbstractModelCache<Settings> implements ModelCache<Settings>, HasHandlers
 {
@@ -30,7 +33,7 @@ public class SettingsCache extends AbstractModelCache<Settings> implements Model
     @Override
     public void refresh()
     {
-        logger.log(INFO, "About to refresh settings...");
+        info(cache, "About to refresh settings...");
         dispatcher.execute(new GetSettingsAction(), new KarakaCallback<GetSettingsResult>(eventBus)
         {
             @Override
@@ -41,11 +44,17 @@ public class SettingsCache extends AbstractModelCache<Settings> implements Model
                 models.clear();
                 models.add(settings);
                 currentSettings = settings;
-                logger.log(INFO, "Settings refreshed.");
+                info(cache, "Settings refreshed.");
                 if (changed)
                 {
                     SettingsChangedEvent.fire(SettingsCache.this, settings);
                 }
+            }
+
+            @Override
+            public void onNotFound(final FailedStatusCodeException caught)
+            {
+                warn(cache, "No settings found.");
             }
         });
     }

@@ -7,7 +7,6 @@ import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
 import name.pehl.karaka.client.KarakaPlaceManager;
 import name.pehl.karaka.client.NameTokens;
-import name.pehl.karaka.client.StartupManager;
 import name.pehl.karaka.client.about.AboutPresenter;
 import name.pehl.karaka.client.about.AboutView;
 import name.pehl.karaka.client.activity.dispatch.DeleteActivityHandler;
@@ -52,6 +51,12 @@ import name.pehl.karaka.client.application.MessagePresenter;
 import name.pehl.karaka.client.application.MessageView;
 import name.pehl.karaka.client.application.NavigationPresenter;
 import name.pehl.karaka.client.application.NavigationView;
+import name.pehl.karaka.client.bootstrap.BootstrapProcess;
+import name.pehl.karaka.client.bootstrap.LoadClients;
+import name.pehl.karaka.client.bootstrap.LoadMainApp;
+import name.pehl.karaka.client.bootstrap.LoadProjects;
+import name.pehl.karaka.client.bootstrap.LoadSettings;
+import name.pehl.karaka.client.bootstrap.LoadTags;
 import name.pehl.karaka.client.client.ClientsCache;
 import name.pehl.karaka.client.client.ClientsPresenter;
 import name.pehl.karaka.client.client.ClientsView;
@@ -181,8 +186,15 @@ public class KarakaModule extends AbstractPresenterModule
         bind(ClientsCache.class).in(Singleton.class);
         bind(ProjectsCache.class).in(Singleton.class);
         bind(SettingsCache.class).in(Singleton.class);
-        bind(StartupManager.class).in(Singleton.class);
         bind(TagsCache.class).in(Singleton.class);
+
+        // Bootstrap
+        bind(BootstrapProcess.class);
+        bind(LoadClients.class);
+        bind(LoadMainApp.class);
+        bind(LoadProjects.class);
+        bind(LoadSettings.class);
+        bind(LoadTags.class);
     }
 
 

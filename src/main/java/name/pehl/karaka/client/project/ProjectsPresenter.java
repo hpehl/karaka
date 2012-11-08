@@ -1,13 +1,5 @@
 package name.pehl.karaka.client.project;
 
-import java.util.List;
-import java.util.logging.Logger;
-
-import name.pehl.karaka.client.NameTokens;
-import name.pehl.karaka.client.application.ApplicationPresenter;
-import name.pehl.karaka.client.project.ProjectAction.Action;
-import name.pehl.karaka.shared.model.Project;
-
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
@@ -18,6 +10,12 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
+import name.pehl.karaka.client.NameTokens;
+import name.pehl.karaka.client.application.ApplicationPresenter;
+import name.pehl.karaka.client.project.ProjectAction.Action;
+import name.pehl.karaka.shared.model.Project;
+
+import java.util.List;
 
 /**
  * <h3>Events</h3>
@@ -43,8 +41,6 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 public class ProjectsPresenter extends Presenter<ProjectsPresenter.MyView, ProjectsPresenter.MyProxy> implements
         ProjectsUiHandlers
 {
-    // ---------------------------------------------------------- inner classes
-
     @ProxyCodeSplit
     @NameToken(NameTokens.projects)
     public interface MyProxy extends ProxyPlace<ProjectsPresenter>
@@ -55,10 +51,6 @@ public class ProjectsPresenter extends Presenter<ProjectsPresenter.MyView, Proje
     {
         void updateProjects(List<Project> projects);
     }
-
-    // ------------------------------------------------------- (static) members
-
-    static final Logger logger = Logger.getLogger(ProjectsPresenter.class.getName());
 
     final ProjectsCache projectsCache;
 

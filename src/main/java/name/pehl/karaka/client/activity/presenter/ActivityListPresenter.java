@@ -1,7 +1,10 @@
 package name.pehl.karaka.client.activity.presenter;
 
-import java.util.logging.Logger;
-
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.PresenterWidget;
+import com.gwtplatform.mvp.client.View;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.karaka.client.activity.event.ActivityAction.Action;
@@ -13,11 +16,8 @@ import name.pehl.karaka.client.activity.event.TickEvent.TickHandler;
 import name.pehl.karaka.shared.model.Activities;
 import name.pehl.karaka.shared.model.Activity;
 
-import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.mvp.client.HasUiHandlers;
-import com.gwtplatform.mvp.client.PresenterWidget;
-import com.gwtplatform.mvp.client.View;
+import static name.pehl.karaka.client.logging.Logger.Category;
+import static name.pehl.karaka.client.logging.Logger.trace;
 
 /**
  * <h3>Events</h3>
@@ -50,7 +50,6 @@ public class ActivityListPresenter extends PresenterWidget<ActivityListPresenter
 
     // ------------------------------------------------------- (static) members
 
-    static final Logger logger = Logger.getLogger(ActivityListPresenter.class.getName());
     final EditActivityPresenter editActivityPresenter;
 
 
@@ -98,7 +97,7 @@ public class ActivityListPresenter extends PresenterWidget<ActivityListPresenter
     {
         if (action == Action.DETAILS)
         {
-            logger.fine("Open " + activity + " for edit");
+            trace(Category.activity, "Open " + activity + " for edit");
             editActivityPresenter.getView().setActivity(activity);
             addToPopupSlot(null);
             addToPopupSlot(editActivityPresenter);

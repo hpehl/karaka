@@ -1,18 +1,15 @@
 package name.pehl.karaka.client.model;
 
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.shared.DispatchAsync;
+import name.pehl.karaka.shared.model.BaseModel;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
-
-import name.pehl.karaka.shared.model.BaseModel;
-
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
 
 public abstract class AbstractModelCache<T extends BaseModel> implements ModelCache<T>
 {
-    protected final Logger logger;
     protected final EventBus eventBus;
     protected final DispatchAsync dispatcher;
     protected final List<T> models;
@@ -24,7 +21,6 @@ public abstract class AbstractModelCache<T extends BaseModel> implements ModelCa
         this.eventBus = eventBus;
         this.dispatcher = dispatcher;
         this.models = new ArrayList<T>();
-        this.logger = Logger.getLogger(getClass().getName());
     }
 
 

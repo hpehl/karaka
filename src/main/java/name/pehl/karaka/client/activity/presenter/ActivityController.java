@@ -1,19 +1,14 @@
 package name.pehl.karaka.client.activity.presenter;
 
-import static java.util.logging.Level.INFO;
-import static name.pehl.karaka.client.activity.event.ActivityChanged.ChangeAction.CHANGED;
-import static name.pehl.karaka.client.activity.event.ActivityChanged.ChangeAction.DELETE;
-import static name.pehl.karaka.client.activity.event.ActivityChanged.ChangeAction.NEW;
-import static name.pehl.karaka.client.activity.event.ActivityChanged.ChangeAction.RESUMED;
-import static name.pehl.karaka.client.activity.event.ActivityChanged.ChangeAction.STARTED;
-import static name.pehl.karaka.client.activity.event.ActivityChanged.ChangeAction.STOPPED;
-
-import java.util.List;
-import java.util.SortedSet;
-import java.util.logging.Logger;
-
-import javax.annotation.Nullable;
-
+import com.google.common.base.Predicate;
+import com.google.common.collect.Sets;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.RepeatingCommand;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HasHandlers;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.shared.DispatchAsync;
 import name.pehl.karaka.client.activity.dispatch.DeleteActivityAction;
 import name.pehl.karaka.client.activity.dispatch.DeleteActivityResult;
 import name.pehl.karaka.client.activity.dispatch.SaveActivityAction;
@@ -37,15 +32,15 @@ import name.pehl.karaka.shared.model.Activity;
 import name.pehl.karaka.shared.model.Project;
 import name.pehl.karaka.shared.model.Tag;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Sets;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.RepeatingCommand;
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HasHandlers;
-import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.SortedSet;
+
+import static java.util.logging.Level.INFO;
+import static name.pehl.karaka.client.activity.event.ActivityChanged.ChangeAction.*;
+import static name.pehl.karaka.client.logging.Logger.Category.activity;
+import static name.pehl.karaka.client.logging.Logger.info;
+import static name.pehl.karaka.client.logging.Logger.trace;
 
 /**
  * <p>
@@ -89,7 +84,6 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 
     static final int ONE_MINUTE_IN_MILLIS = 60 * 1000;
     static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
-    static final Logger logger = Logger.getLogger(ActivityController.class.getName());
 
     final EventBus eventBus;
     final Scheduler scheduler;
@@ -191,7 +185,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 
     void save(final Activity activityToSave)
     {
-        logger.fine("About to save " + activityToSave);
+        trace(activity, "About to save " + activityToSave);
         dispatcher.execute(new SaveActivityAction(activityToSave), new KarakaCallback<SaveActivityResult>(eventBus)
         {
             @Override
@@ -210,7 +204,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 
     void copy(Activity activityToCopy)
     {
-        logger.fine("About to copy " + activityToCopy);
+        trace(activity, "About to copy " + activityToCopy);
         Activity plusOneDay = activityToCopy.plus(ONE_DAY_IN_MILLIS);
         dispatcher.execute(new SaveActivityAction(plusOneDay), new KarakaCallback<SaveActivityResult>(eventBus)
         {
@@ -229,13 +223,13 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 
     void start(final Activity activityToStart)
     {
-        logger.info("About to start " + activityToStart);
+        info(activity, "About to start " + activityToStart);
         if (activityToStart.isStopped())
         {
             // if there's currently another activity running, stop it.
             if (runningActivity != null && runningActivity.isRunning() && !runningActivity.equals(activityToStart))
             {
-                logger.info("Stopping currently running " + runningActivity);
+                info(activity, "Stopping currently running " + runningActivity);
                 Activity runningActivityBackup = runningActivity;
                 stopTicking();
                 dispatcher.execute(new SaveActivityAction(runningActivityBackup), new KarakaCallback<SaveActivityResult>(
@@ -245,7 +239,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                     public void onSuccess(SaveActivityResult result)
                     {
                         Activity stoppedActivity = result.getStoredActivity();
-                        logger.info("Successfully stopped " + stoppedActivity);
+                        info(activity, "Successfully stopped " + stoppedActivity);
                         start(activityToStart);
                     }
                 });
@@ -270,7 +264,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                 }
                 if (resume)
                 {
-                    logger.info("Resuming " + activityToStart);
+                    info(activity, "Resuming " + activityToStart);
                     activityToStart.resume();
                     dispatcher.execute(new SaveActivityAction(activityToStart), new KarakaCallback<SaveActivityResult>(
                             eventBus)
@@ -295,7 +289,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                     final Activity newActivity = activityToStart.isTransient() ? activityToStart : activityToStart
                             .copy();
                     newActivity.start();
-                    logger.info("Starting " + newActivity);
+                    info(activity, "Starting " + newActivity);
                     dispatcher.execute(new SaveActivityAction(newActivity), new KarakaCallback<SaveActivityResult>(
                             eventBus)
                     {
@@ -316,14 +310,14 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         }
         else
         {
-            logger.info(activityToStart + " already running");
+            info(activity, activityToStart + " already running");
         }
     }
 
 
     void stop(final Activity activityToStop)
     {
-        logger.info("About to stop " + activityToStop);
+        info(activity, "About to stop " + activityToStop);
         if (activityToStop.isRunning())
         {
             if (!activityToStop.equals(runningActivity))
@@ -348,14 +342,14 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         }
         else
         {
-            logger.info(activityToStop + " already stopped");
+            info(activity, activityToStop + " already stopped");
         }
     }
 
 
     void delete(final Activity activityToDelete)
     {
-        logger.info("About to delete " + activityToDelete);
+        info(activity, "About to delete " + activityToDelete);
         if (activityToDelete.isRunning())
         {
             if (!activityToDelete.equals(runningActivity))
@@ -443,7 +437,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
     {
         if (ticking)
         {
-            logger.info("Tick for " + runningActivity);
+            info(activity, "Tick for " + runningActivity);
             runningActivity.tick();
             dispatcher.execute(new SaveActivityAction(runningActivity), new KarakaCallback<SaveActivityResult>(eventBus)
             {

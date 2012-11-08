@@ -1,13 +1,5 @@
 package name.pehl.karaka.client.tag;
 
-import java.util.List;
-import java.util.logging.Logger;
-
-import name.pehl.karaka.client.NameTokens;
-import name.pehl.karaka.client.application.ApplicationPresenter;
-import name.pehl.karaka.client.tag.TagAction.Action;
-import name.pehl.karaka.shared.model.Tag;
-
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
@@ -18,6 +10,12 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
+import name.pehl.karaka.client.NameTokens;
+import name.pehl.karaka.client.application.ApplicationPresenter;
+import name.pehl.karaka.client.tag.TagAction.Action;
+import name.pehl.karaka.shared.model.Tag;
+
+import java.util.List;
 
 /**
  * <h3>Events</h3>
@@ -42,8 +40,6 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
  */
 public class TagsPresenter extends Presenter<TagsPresenter.MyView, TagsPresenter.MyProxy> implements TagsUiHandlers
 {
-    // ---------------------------------------------------------- inner classes
-
     @ProxyCodeSplit
     @NameToken(NameTokens.tags)
     public interface MyProxy extends ProxyPlace<TagsPresenter>
@@ -54,10 +50,6 @@ public class TagsPresenter extends Presenter<TagsPresenter.MyView, TagsPresenter
     {
         void updateTags(List<Tag> tags);
     }
-
-    // ------------------------------------------------------- (static) members
-
-    static final Logger logger = Logger.getLogger(TagsPresenter.class.getName());
 
     final TagsCache tagsCache;
 

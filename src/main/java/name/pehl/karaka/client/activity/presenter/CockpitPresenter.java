@@ -1,10 +1,13 @@
 package name.pehl.karaka.client.activity.presenter;
 
-import static java.util.logging.Level.WARNING;
-import static name.pehl.karaka.client.activity.event.ActivityAction.Action.START_STOP;
-
-import java.util.logging.Logger;
-
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.shared.DispatchAsync;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.PresenterWidget;
+import com.gwtplatform.mvp.client.View;
 import name.pehl.karaka.client.activity.dispatch.GetMinutesAction;
 import name.pehl.karaka.client.activity.dispatch.GetMinutesResult;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityAction;
@@ -22,14 +25,11 @@ import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.shared.model.Activity;
 import name.pehl.karaka.shared.model.Durations;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
-import com.gwtplatform.mvp.client.HasUiHandlers;
-import com.gwtplatform.mvp.client.PresenterWidget;
-import com.gwtplatform.mvp.client.View;
+import static java.util.logging.Level.WARNING;
+import static name.pehl.karaka.client.activity.event.ActivityAction.Action.START_STOP;
+import static name.pehl.karaka.client.logging.Logger.Category.activity;
+import static name.pehl.karaka.client.logging.Logger.info;
+import static name.pehl.karaka.client.logging.Logger.warn;
 
 /**
  * <p>
@@ -55,7 +55,7 @@ import com.gwtplatform.mvp.client.View;
  * <li>{@linkplain GetMinutesAction}
  * <li>{@linkplain GetRunningActivityAction}
  * </ul>
- * 
+ *
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-06 17:48:50 +0100 (Mo, 06. Dez 2010) $ $Revision: 175
  *          $
@@ -71,7 +71,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         void updateStatus(Activity activity);
     }
 
-    static final Logger logger = Logger.getLogger(CockpitPresenter.class.getName());
     /**
      * The currently managed actvity
      */
@@ -172,7 +171,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                 @Override
                 public void onFailure(Throwable caught)
                 {
-                    logger.warning("Cannot load minutes for current month, week and/or day");
+                    warn(activity, "Cannot load minutes for current month, week and/or day");
                     getView().updateDurations(new Durations());
                 }
             });
@@ -199,7 +198,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                         @Override
                         public void onFailure(Throwable caught)
                         {
-                            logger.info("No running activity found.");
+                            info(activity, "No running activity found.");
                         }
                     });
         }

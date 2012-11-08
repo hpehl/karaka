@@ -1,20 +1,5 @@
 package name.pehl.karaka.client.activity.view;
 
-import java.util.List;
-import java.util.logging.Logger;
-
-import name.pehl.karaka.client.activity.presenter.EditActivityPresenter;
-import name.pehl.karaka.client.activity.presenter.EditAvtivityUiHandlers;
-import name.pehl.karaka.client.model.NamedModelSuggestOracle;
-import name.pehl.karaka.client.model.NamedModelSuggestion;
-import name.pehl.karaka.client.project.ProjectsCache;
-import name.pehl.karaka.client.tag.TagsCache;
-import name.pehl.karaka.client.ui.EscapablePopupPanel;
-import name.pehl.karaka.client.ui.Html5TextArea;
-import name.pehl.karaka.client.ui.Html5TextBox;
-import name.pehl.karaka.shared.model.Activity;
-import name.pehl.karaka.shared.model.Project;
-
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
@@ -31,6 +16,22 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
+import name.pehl.karaka.client.activity.presenter.EditActivityPresenter;
+import name.pehl.karaka.client.activity.presenter.EditAvtivityUiHandlers;
+import name.pehl.karaka.client.model.NamedModelSuggestOracle;
+import name.pehl.karaka.client.model.NamedModelSuggestion;
+import name.pehl.karaka.client.project.ProjectsCache;
+import name.pehl.karaka.client.tag.TagsCache;
+import name.pehl.karaka.client.ui.EscapablePopupPanel;
+import name.pehl.karaka.client.ui.Html5TextArea;
+import name.pehl.karaka.client.ui.Html5TextBox;
+import name.pehl.karaka.shared.model.Activity;
+import name.pehl.karaka.shared.model.Project;
+
+import java.util.List;
+
+import static name.pehl.karaka.client.logging.Logger.Category.activity;
+import static name.pehl.karaka.client.logging.Logger.warn;
 
 /**
  * TODO: Replace Tags with custom widgets like in
@@ -49,8 +50,6 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
     public interface Binder extends UiBinder<EscapablePopupPanel, EditActivityView>
     {
     }
-
-    private static Logger logger = Logger.getLogger(EditActivityView.class.getName());
 
     private final EscapablePopupPanel popupPanel;
     private final Driver driver;
@@ -129,7 +128,7 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
         if (driver.hasErrors())
         {
             List<EditorError> errors = driver.getErrors();
-            logger.warning("There are errors: " + errors);
+            warn(activity, "There are errors: " + errors);
         }
         else if (driver.isDirty())
         {

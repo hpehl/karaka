@@ -1,18 +1,16 @@
 package name.pehl.karaka.client.activity.dispatch;
 
-import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import name.pehl.karaka.client.rest.UrlBuilder;
 import name.pehl.karaka.shared.model.TimeUnit;
 
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+import static name.pehl.karaka.client.logging.Logger.Category.activity;
+import static name.pehl.karaka.client.logging.Logger.warn;
+import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
 
 /**
  * TODO Tests, tests, tests
- * 
+ *
  * @author $Author$
  * @version $Revision$
  */
@@ -22,9 +20,6 @@ public class ActivitiesRequest
     public static final String PARAM_YEAR = "year";
     public static final String PARAM_MONTH = "month";
     public static final String PARAM_WEEK = "week";
-
-    static final Logger logger = Logger.getLogger(ActivitiesRequest.class.getName());
-
     final String url;
     final String text;
 
@@ -44,7 +39,7 @@ public class ActivitiesRequest
 
     /**
      * Extra constructor to make it testable outside GWT
-     * 
+     *
      * @param placeRequest
      * @param urlBuilder
      */
@@ -90,8 +85,7 @@ public class ActivitiesRequest
         }
         else
         {
-            logger.log(Level.WARNING, "No valid parameters in " + placeRequest.getParameterNames()
-                    + ". Fall back to current week");
+            warn(activity, "No valid parameters in " + placeRequest.getParameterNames() + ". Fall back to current week");
             urlBuilder = urlBuilder.path("currentWeek");
             text = "current week";
         }
@@ -99,19 +93,18 @@ public class ActivitiesRequest
         this.text = text;
     }
 
-
     /**
      * For better readability
-     * 
+     *
      * @param placeRequest
      * @param parameter
+     *
      * @return
      */
     private boolean hasParameter(PlaceRequest placeRequest, String parameter)
     {
         return placeRequest.getParameter(parameter, null) != null;
     }
-
 
     private TimeUnit parseTimeUnit(String value)
     {
@@ -124,16 +117,15 @@ public class ActivitiesRequest
             }
             catch (IllegalArgumentException e)
             {
-                logger.log(Level.WARNING, "Cannot parse \"" + value + "\" as time unit");
+                warn(activity, "Cannot parse \"" + value + "\" as time unit");
             }
         }
         return result;
     }
 
-
     /**
      * Based on url
-     * 
+     *
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -145,10 +137,9 @@ public class ActivitiesRequest
         return result;
     }
 
-
     /**
      * Based on url
-     * 
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -181,13 +172,11 @@ public class ActivitiesRequest
         return true;
     }
 
-
     @Override
     public String toString()
     {
         return text;
     }
-
 
     public String toUrl()
     {

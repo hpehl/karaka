@@ -1,16 +1,19 @@
 package name.pehl.karaka.client.tag;
 
-import static java.util.logging.Level.INFO;
+import com.google.gwt.core.client.Scheduler;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.shared.DispatchAsync;
 import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.client.model.AbstractModelCache;
 import name.pehl.karaka.client.model.ModelCache;
 import name.pehl.karaka.client.tag.RefreshTagsEvent.RefreshTagsHandler;
 import name.pehl.karaka.shared.model.Tag;
+import org.fusesource.restygwt.client.FailedStatusCodeException;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
+import static name.pehl.karaka.client.logging.Logger.Category.cache;
+import static name.pehl.karaka.client.logging.Logger.info;
+import static name.pehl.karaka.client.logging.Logger.warn;
 
 public class TagsCache extends AbstractModelCache<Tag> implements ModelCache<Tag>, RefreshTagsHandler
 {
@@ -25,7 +28,7 @@ public class TagsCache extends AbstractModelCache<Tag> implements ModelCache<Tag
     @Override
     public void refresh()
     {
-        logger.log(INFO, "About to refresh tags...");
+        info(cache, "About to refresh tags...");
         dispatcher.execute(new GetTagsAction(), new KarakaCallback<GetTagsResult>(eventBus)
         {
             @Override
@@ -33,7 +36,13 @@ public class TagsCache extends AbstractModelCache<Tag> implements ModelCache<Tag
             {
                 models.clear();
                 models.addAll(result.getTags());
-                logger.log(INFO, "Tags refreshed.");
+                info(cache, "Tags refreshed.");
+            }
+
+            @Override
+            public void onNotFound(final FailedStatusCodeException caught)
+            {
+                warn(cache, "No tags found.");
             }
         });
     }

@@ -1,13 +1,5 @@
 package name.pehl.karaka.client.client;
 
-import java.util.List;
-import java.util.logging.Logger;
-
-import name.pehl.karaka.client.NameTokens;
-import name.pehl.karaka.client.application.ApplicationPresenter;
-import name.pehl.karaka.client.client.ClientAction.Action;
-import name.pehl.karaka.shared.model.Client;
-
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
@@ -18,6 +10,12 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
+import name.pehl.karaka.client.NameTokens;
+import name.pehl.karaka.client.application.ApplicationPresenter;
+import name.pehl.karaka.client.client.ClientAction.Action;
+import name.pehl.karaka.shared.model.Client;
+
+import java.util.List;
 
 /**
  * <h3>Events</h3>
@@ -57,8 +55,6 @@ public class ClientsPresenter extends Presenter<ClientsPresenter.MyView, Clients
     }
 
     // ------------------------------------------------------- (static) members
-
-    static final Logger logger = Logger.getLogger(ClientsPresenter.class.getName());
 
     final ClientsCache clientsCache;
 

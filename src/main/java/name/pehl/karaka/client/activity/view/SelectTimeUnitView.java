@@ -1,20 +1,5 @@
 package name.pehl.karaka.client.activity.view;
 
-import static java.util.logging.Level.SEVERE;
-import static name.pehl.karaka.shared.model.TimeUnit.MONTH;
-
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.logging.Logger;
-
-import name.pehl.karaka.client.activity.presenter.SelectTimeUnitPresenter;
-import name.pehl.karaka.client.activity.presenter.SelectTimeUnitUiHandlers;
-import name.pehl.karaka.client.resources.I18n;
-import name.pehl.karaka.client.ui.EscapablePopupPanel;
-import name.pehl.karaka.shared.model.TimeUnit;
-import name.pehl.karaka.shared.model.Year;
-import name.pehl.karaka.shared.model.Years;
-
 import com.google.common.collect.Ordering;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
@@ -33,6 +18,20 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
+import name.pehl.karaka.client.activity.presenter.SelectTimeUnitPresenter;
+import name.pehl.karaka.client.activity.presenter.SelectTimeUnitUiHandlers;
+import name.pehl.karaka.client.resources.I18n;
+import name.pehl.karaka.client.ui.EscapablePopupPanel;
+import name.pehl.karaka.shared.model.TimeUnit;
+import name.pehl.karaka.shared.model.Year;
+import name.pehl.karaka.shared.model.Years;
+
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import static name.pehl.karaka.client.logging.Logger.Category.activity;
+import static name.pehl.karaka.client.logging.Logger.error;
+import static name.pehl.karaka.shared.model.TimeUnit.MONTH;
 
 public class SelectTimeUnitView extends PopupViewWithUiHandlers<SelectTimeUnitUiHandlers> implements
         SelectTimeUnitPresenter.MyView
@@ -40,8 +39,6 @@ public class SelectTimeUnitView extends PopupViewWithUiHandlers<SelectTimeUnitUi
     public interface Binder extends UiBinder<EscapablePopupPanel, SelectTimeUnitView>
     {
     }
-
-    private static final Logger logger = Logger.getLogger(SelectTimeUnitView.class.getName());
 
     private final EscapablePopupPanel popupPanel;
     private final I18n i18n;
@@ -177,8 +174,7 @@ public class SelectTimeUnitView extends PopupViewWithUiHandlers<SelectTimeUnitUi
                 }
                 catch (NumberFormatException e)
                 {
-                    logger.log(SEVERE, "Cannot parse " + yearAndMonthOrWeek
-                            + ": Expected format <yyyy|mm> or <yyyy|cw>.");
+                    error(activity, "Cannot parse " + yearAndMonthOrWeek + ": Expected format <yyyy|mm> or <yyyy|cw>.");
                 }
             }
         }

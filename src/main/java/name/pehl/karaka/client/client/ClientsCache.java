@@ -1,16 +1,19 @@
 package name.pehl.karaka.client.client;
 
-import static java.util.logging.Level.INFO;
+import com.google.gwt.core.client.Scheduler;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.shared.DispatchAsync;
 import name.pehl.karaka.client.client.RefreshClientsEvent.RefreshClientsHandler;
 import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.client.model.AbstractModelCache;
 import name.pehl.karaka.client.model.ModelCache;
 import name.pehl.karaka.shared.model.Client;
+import org.fusesource.restygwt.client.FailedStatusCodeException;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
+import static name.pehl.karaka.client.logging.Logger.Category.cache;
+import static name.pehl.karaka.client.logging.Logger.info;
+import static name.pehl.karaka.client.logging.Logger.warn;
 
 public class ClientsCache extends AbstractModelCache<Client> implements ModelCache<Client>, RefreshClientsHandler
 {
@@ -25,7 +28,7 @@ public class ClientsCache extends AbstractModelCache<Client> implements ModelCac
     @Override
     public void refresh()
     {
-        logger.log(INFO, "About to refresh clients...");
+        info(cache, "About to refresh clients...");
         dispatcher.execute(new GetClientsAction(), new KarakaCallback<GetClientsResult>(eventBus)
         {
             @Override
@@ -33,7 +36,13 @@ public class ClientsCache extends AbstractModelCache<Client> implements ModelCac
             {
                 models.clear();
                 models.addAll(result.getClients());
-                logger.log(INFO, "Clients refreshed.");
+                info(cache, "Clients refreshed.");
+            }
+
+            @Override
+            public void onNotFound(final FailedStatusCodeException caught)
+            {
+                warn(cache, "No clients found.");
             }
         });
     }

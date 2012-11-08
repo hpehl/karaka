@@ -1,16 +1,19 @@
 package name.pehl.karaka.client.project;
 
-import static java.util.logging.Level.INFO;
+import com.google.gwt.core.client.Scheduler;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.shared.DispatchAsync;
 import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.client.model.AbstractModelCache;
 import name.pehl.karaka.client.model.ModelCache;
 import name.pehl.karaka.client.project.RefreshProjectsEvent.RefreshProjectsHandler;
 import name.pehl.karaka.shared.model.Project;
+import org.fusesource.restygwt.client.FailedStatusCodeException;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.shared.DispatchAsync;
+import static name.pehl.karaka.client.logging.Logger.Category.cache;
+import static name.pehl.karaka.client.logging.Logger.info;
+import static name.pehl.karaka.client.logging.Logger.warn;
 
 public class ProjectsCache extends AbstractModelCache<Project> implements ModelCache<Project>, RefreshProjectsHandler
 {
@@ -25,7 +28,7 @@ public class ProjectsCache extends AbstractModelCache<Project> implements ModelC
     @Override
     public void refresh()
     {
-        logger.log(INFO, "About to refresh projects...");
+        info(cache, "About to refresh projects...");
         dispatcher.execute(new GetProjectsAction(), new KarakaCallback<GetProjectsResult>(eventBus)
         {
             @Override
@@ -33,8 +36,15 @@ public class ProjectsCache extends AbstractModelCache<Project> implements ModelC
             {
                 models.clear();
                 models.addAll(result.getProjects());
-                logger.log(INFO, "Projects refreshed.");
+                info(cache, "Projects refreshed.");
             }
+
+            @Override
+            public void onNotFound(final FailedStatusCodeException caught)
+            {
+                warn(cache, "No projects found.");
+            }
+
         });
     }
 

@@ -1,22 +1,5 @@
 package name.pehl.karaka.client.activity.presenter;
 
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
-import static name.pehl.karaka.client.NameTokens.dashboard;
-
-import java.util.logging.Logger;
-
-import name.pehl.karaka.client.activity.dispatch.ActivitiesRequest;
-import name.pehl.karaka.client.activity.dispatch.GetActivitiesAction;
-import name.pehl.karaka.client.activity.dispatch.GetActivitiesResult;
-import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
-import name.pehl.karaka.client.application.ApplicationPresenter;
-import name.pehl.karaka.client.application.Message;
-import name.pehl.karaka.client.application.ShowMessageEvent;
-import name.pehl.karaka.client.dispatch.KarakaCallback;
-
-import org.fusesource.restygwt.client.FailedStatusCodeException;
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.inject.Inject;
@@ -29,6 +12,21 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
+import name.pehl.karaka.client.activity.dispatch.ActivitiesRequest;
+import name.pehl.karaka.client.activity.dispatch.GetActivitiesAction;
+import name.pehl.karaka.client.activity.dispatch.GetActivitiesResult;
+import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
+import name.pehl.karaka.client.application.ApplicationPresenter;
+import name.pehl.karaka.client.application.Message;
+import name.pehl.karaka.client.application.ShowMessageEvent;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
+import org.fusesource.restygwt.client.FailedStatusCodeException;
+
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static name.pehl.karaka.client.NameTokens.dashboard;
+import static name.pehl.karaka.client.logging.Logger.Category.activity;
+import static name.pehl.karaka.client.logging.Logger.warn;
 
 /**
  * <p>
@@ -51,7 +49,7 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
  * <ul>
  * <li>{@linkplain GetActivitiesAction}
  * </ul>
- * 
+ *
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-23 13:52:44 +0100 (Do, 23. Dez 2010) $ $Revision: 192
  *          $
@@ -75,8 +73,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     public static final Object SLOT_NewActivity = new Object();
     public static final Object SLOT_ActivityNavigation = new Object();
     public static final Object SLOT_ActivityList = new Object();
-
-    static final Logger logger = Logger.getLogger(DashboardPresenter.class.getName());
 
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
@@ -107,7 +103,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     /**
      * Turns the parameters in the place request into an
      * {@link ActivitiesRequest} instance and calls {@link GetActivitiesAction}.
-     * 
+     *
      * @param placeRequest
      * @see com.gwtplatform.mvp.client.Presenter#prepareFromRequest(com.gwtplatform.mvp.client.proxy.PlaceRequest)
      */
@@ -178,7 +174,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 {
                     String errorMessage = "No activities found for " + activitiesRequest;
                     ShowMessageEvent.fire(DashboardPresenter.this, new Message(WARNING, errorMessage, true));
-                    logger.warning(errorMessage);
+                    warn(activity, errorMessage);
                 }
             });
         }
