@@ -16,16 +16,16 @@ public class BootstrapProcess
     private final LinkedList<BootstrapCommand> commands;
 
     @Inject
-    public BootstrapProcess(LoadMainApp loadMainApp, LoadSettings loadSettings,
-            LoadTags loadTags, LoadClients loadClients, LoadProjects loadProjects)
+    public BootstrapProcess(LoadClients loadClients, LoadMainApp loadMainApp,
+            LoadProjects loadProjects, LoadSettings loadSettings, LoadTags loadTags)
     {
         // add commands - order is important!
         this.commands = new LinkedList<BootstrapCommand>();
-        this.commands.add(loadMainApp);
         this.commands.add(loadSettings);
         this.commands.add(loadClients);
         this.commands.add(loadProjects);
         this.commands.add(loadTags);
+        this.commands.add(loadMainApp);
     }
 
     public void execute(AsyncCallback<Boolean> outcome)
