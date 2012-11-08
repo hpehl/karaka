@@ -3,7 +3,7 @@ package name.pehl.karaka.client.dispatch;
 import name.pehl.karaka.client.activity.dispatch.DeleteActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.FindActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.GetActivitiesHandler;
-import name.pehl.karaka.client.activity.dispatch.GetMinutesHandler;
+import name.pehl.karaka.client.activity.dispatch.GetDurationsHandler;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.GetYearsHandler;
 import name.pehl.karaka.client.activity.dispatch.SaveActivityHandler;
@@ -20,7 +20,7 @@ public class KarakaActionHandlerRegistry extends DefaultClientActionHandlerRegis
     @Inject
     public KarakaActionHandlerRegistry(final DeleteActivityHandler deleteActivityHandler,
             final FindActivityHandler findActivityHandler, final GetActivitiesHandler getActivitiesHandler,
-            final GetClientsHandler getClientsHandler, final GetMinutesHandler getMinutesHandler,
+            final GetClientsHandler getClientsHandler, final GetDurationsHandler getDurationsHandler,
             final GetProjectsHandler getProjectsHandler, final GetRunningActivityHandler getRunningActivityHandler,
             final GetSettingsHandler getSettingsHandler, final GetTagsHandler getTagsHandler,
             final GetYearsHandler getYearsHandler, final SaveActivityHandler saveActivityHandler)
@@ -29,7 +29,7 @@ public class KarakaActionHandlerRegistry extends DefaultClientActionHandlerRegis
         register(findActivityHandler);
         register(getActivitiesHandler);
         register(getClientsHandler);
-        register(getMinutesHandler);
+        register(getDurationsHandler);
         register(getProjectsHandler);
         register(getRunningActivityHandler);
         register(getSettingsHandler);

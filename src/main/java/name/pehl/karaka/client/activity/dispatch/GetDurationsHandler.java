@@ -20,36 +20,36 @@ import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class GetMinutesHandler extends KarakaActionHandler<GetMinutesAction, GetMinutesResult>
+public class GetDurationsHandler extends KarakaActionHandler<GetDurationsAction, GetDurationsResult>
 {
     private final DurationsReader minutesReader;
 
 
     @Inject
-    protected GetMinutesHandler(@SecurityCookie String securityCookieName,
+    protected GetDurationsHandler(@SecurityCookie String securityCookieName,
             SecurityCookieAccessor securityCookieAccessor, DurationsReader minutesReader)
     {
-        super(GetMinutesAction.class, securityCookieName, securityCookieAccessor);
+        super(GetDurationsAction.class, securityCookieName, securityCookieAccessor);
         this.minutesReader = minutesReader;
     }
 
 
     @Override
-    protected Resource resourceFor(GetMinutesAction action)
+    protected Resource resourceFor(GetDurationsAction action)
     {
         return new Resource(new UrlBuilder().module("rest").path("activities", "current", "durations").toUrl());
     }
 
 
     @Override
-    protected void executeMethod(final Method method, final AsyncCallback<GetMinutesResult> resultCallback)
+    protected void executeMethod(final Method method, final AsyncCallback<GetDurationsResult> resultCallback)
     {
-        method.send(new KarakaJsonCallback<Durations, GetMinutesResult>(minutesReader, resultCallback)
+        method.send(new KarakaJsonCallback<Durations, GetDurationsResult>(minutesReader, resultCallback)
         {
             @Override
-            protected GetMinutesResult extractResult(JsonReader<Durations> reader, JSONObject json)
+            protected GetDurationsResult extractResult(JsonReader<Durations> reader, JSONObject json)
             {
-                return new GetMinutesResult(reader.read(json));
+                return new GetDurationsResult(reader.read(json));
             }
         });
     }

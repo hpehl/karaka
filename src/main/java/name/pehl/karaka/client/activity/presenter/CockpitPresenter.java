@@ -8,8 +8,8 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
-import name.pehl.karaka.client.activity.dispatch.GetMinutesAction;
-import name.pehl.karaka.client.activity.dispatch.GetMinutesResult;
+import name.pehl.karaka.client.activity.dispatch.GetDurationsAction;
+import name.pehl.karaka.client.activity.dispatch.GetDurationsResult;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityAction;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityResult;
 import name.pehl.karaka.client.activity.event.ActivityActionEvent;
@@ -52,7 +52,7 @@ import static name.pehl.karaka.client.logging.Logger.warn;
  * </ol>
  * <h3>Dispatcher actions</h3>
  * <ul>
- * <li>{@linkplain GetMinutesAction}
+ * <li>{@linkplain GetDurationsAction}
  * <li>{@linkplain GetRunningActivityAction}
  * </ul>
  *
@@ -77,7 +77,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     Activity currentActivity;
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
-    final GetMinutesCommand getMinutesCommand;
+    final GetDurationsCommand getDurationsCommand;
     final GetRunningActivityCommand getRunningActivityCommand;
 
 
@@ -88,7 +88,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         super(eventBus, view);
         this.scheduler = scheduler;
         this.dispatcher = dispatcher;
-        this.getMinutesCommand = new GetMinutesCommand();
+        this.getDurationsCommand = new GetDurationsCommand();
         this.getRunningActivityCommand = new GetRunningActivityCommand();
 
         getView().setUiHandlers(this);
@@ -101,7 +101,7 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
     protected void onReveal()
     {
         super.onReveal();
-        scheduler.scheduleDeferred(getMinutesCommand);
+        scheduler.scheduleDeferred(getDurationsCommand);
         scheduler.scheduleDeferred(getRunningActivityCommand);
     }
 
@@ -144,25 +144,25 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                 break;
         }
         getView().updateStatus(currentActivity);
-        getMinutesCommand.execute();
+        getDurationsCommand.execute();
     }
 
 
     @Override
     public void onTick(TickEvent event)
     {
-        getMinutesCommand.execute();
+        getDurationsCommand.execute();
     }
 
-    class GetMinutesCommand implements ScheduledCommand
+    class GetDurationsCommand implements ScheduledCommand
     {
         @Override
         public void execute()
         {
-            dispatcher.execute(new GetMinutesAction(), new KarakaCallback<GetMinutesResult>(getEventBus())
+            dispatcher.execute(new GetDurationsAction(), new KarakaCallback<GetDurationsResult>(getEventBus())
             {
                 @Override
-                public void onSuccess(GetMinutesResult result)
+                public void onSuccess(GetDurationsResult result)
                 {
                     getView().updateDurations(result.getMinutes());
                 }

@@ -21,9 +21,9 @@ import static org.mockito.Mockito.verify;
 import java.util.List;
 
 import name.pehl.karaka.client.PresenterTest;
-import name.pehl.karaka.client.activity.dispatch.GetMinutesAction;
-import name.pehl.karaka.client.activity.dispatch.GetMinutesHandler;
-import name.pehl.karaka.client.activity.dispatch.GetMinutesResult;
+import name.pehl.karaka.client.activity.dispatch.GetDurationsAction;
+import name.pehl.karaka.client.activity.dispatch.GetDurationsHandler;
+import name.pehl.karaka.client.activity.dispatch.GetDurationsResult;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityAction;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityResult;
@@ -32,7 +32,6 @@ import name.pehl.karaka.client.activity.event.ActivityActionEvent.ActivityAction
 import name.pehl.karaka.client.activity.event.ActivityChangedEvent;
 import name.pehl.karaka.client.activity.event.RunningActivityLoadedEvent;
 import name.pehl.karaka.client.activity.event.RunningActivityLoadedEvent.RunningActivityLoadedHandler;
-import name.pehl.karaka.client.activity.presenter.CockpitPresenter.GetMinutesCommand;
 import name.pehl.karaka.client.activity.presenter.CockpitPresenter.GetRunningActivityCommand;
 import name.pehl.karaka.client.application.Message;
 import name.pehl.karaka.client.application.ShowMessageEvent;
@@ -58,7 +57,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
 {
     // ------------------------------------------------------------------ setup
 
-    GetMinutesHandler getMinutesHandler;
+    GetDurationsHandler getDurationsHandler;
     GetRunningActivityHandler getRunningActivityHandler;
     CockpitPresenter.MyView view;
     CockpitPresenter cut;
@@ -68,10 +67,10 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
     public void setUp()
     {
         // client action handlers
-        getMinutesHandler = mock(GetMinutesHandler.class);
+        getDurationsHandler = mock(GetDurationsHandler.class);
         getRunningActivityHandler = mock(GetRunningActivityHandler.class);
         ImmutableMap<Class<?>, ClientActionHandler<?, ?>> actionHandlerMappings = new ImmutableMap.Builder<Class<?>, ClientActionHandler<?, ?>>()
-                .put(GetMinutesAction.class, getMinutesHandler)
+                .put(GetDurationsAction.class, getDurationsHandler)
                 .put(GetRunningActivityAction.class, getRunningActivityHandler).build();
 
         // class under test
@@ -89,7 +88,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
         cut.onReveal();
         List<ScheduledCommand> commands = scheduler.getScheduledCommands();
         assertEquals(2, commands.size());
-        assertTrue(commands.get(0) instanceof GetMinutesCommand);
+        assertTrue(commands.get(0) instanceof CockpitPresenter.GetDurationsCommand);
         assertTrue(commands.get(1) instanceof GetRunningActivityCommand);
     }
 
@@ -125,7 +124,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
         cut.onActivityChanged(td.newActivityChangedEvent(NEW));
         assertSame(activity, cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
-        verifyGetMinutes();
+        verifyGetDurations();
     }
 
 
@@ -137,23 +136,23 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
         cut.onActivityChanged(event);
         assertSame(event.getActivity(), cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
-        verifyGetMinutes();
+        verifyGetDurations();
 
-        reset(view, getMinutesHandler);
+        reset(view, getDurationsHandler);
         prepareGetMinutes();
         event = td.newActivityChangedEvent(STARTED);
         cut.onActivityChanged(event);
         assertSame(event.getActivity(), cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
-        verifyGetMinutes();
+        verifyGetDurations();
 
-        reset(view, getMinutesHandler);
+        reset(view, getDurationsHandler);
         prepareGetMinutes();
         event = td.newActivityChangedEvent(STOPPED);
         cut.onActivityChanged(event);
         assertSame(event.getActivity(), cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
-        verifyGetMinutes();
+        verifyGetDurations();
     }
 
 
@@ -167,7 +166,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
         cut.onActivityChanged(td.newActivityChangedEvent(DELETE, activity, activities));
         assertNull(cut.currentActivity);
         verify(view).updateStatus(null);
-        verifyGetMinutes();
+        verifyGetDurations();
     }
 
 
@@ -180,7 +179,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
         cut.onActivityChanged(td.newActivityChangedEvent(DELETE));
         assertSame(activity, cut.currentActivity);
         verify(view).updateStatus(cut.currentActivity);
-        verifyGetMinutes();
+        verifyGetDurations();
     }
 
 
@@ -189,7 +188,7 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
     {
         prepareGetMinutes();
         cut.onTick(td.newTickEvent());
-        verifyGetMinutes();
+        verifyGetDurations();
     }
 
 
@@ -224,22 +223,22 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
 
     @Test
     @SuppressWarnings("unchecked")
-    public void faultyGetMinutes()
+    public void faultyGetDurations()
     {
-        Answer<Object> getMinutesAnswer = new Answer<Object>()
+        Answer<Object> getDurationsAnswer = new Answer<Object>()
         {
             @Override
             public Object answer(InvocationOnMock invocation)
             {
-                AsyncCallback<GetMinutesResult> callback = (AsyncCallback<GetMinutesResult>) invocation.getArguments()[1];
+                AsyncCallback<GetDurationsResult> callback = (AsyncCallback<GetDurationsResult>) invocation.getArguments()[1];
                 callback.onFailure(null);
                 return null;
             }
         };
-        doAnswer(getMinutesAnswer).when(getMinutesHandler).execute(any(GetMinutesAction.class),
+        doAnswer(getDurationsAnswer).when(getDurationsHandler).execute(any(GetDurationsAction.class),
                 any(AsyncCallback.class), any(ExecuteCommand.class));
 
-        cut.getMinutesCommand.execute();
+        cut.getDurationsCommand.execute();
 
         verify(view).updateDurations(new Durations());
     }
@@ -250,24 +249,24 @@ public class CockpitPresenterTest extends PresenterTest implements ShowMessageHa
     @SuppressWarnings("unchecked")
     void prepareGetMinutes()
     {
-        final GetMinutesResult getMinutesResult = new GetMinutesResult(new Durations(new Duration(1), new Duration(2),
+        final GetDurationsResult getDurationsResult = new GetDurationsResult(new Durations(new Duration(1), new Duration(2),
                 new Duration(3)));
-        Answer<Object> getMinutesAnswer = new Answer<Object>()
+        Answer<Object> getDurationsAnswer = new Answer<Object>()
         {
             @Override
             public Object answer(InvocationOnMock invocation)
             {
-                AsyncCallback<GetMinutesResult> callback = (AsyncCallback<GetMinutesResult>) invocation.getArguments()[1];
-                callback.onSuccess(getMinutesResult);
+                AsyncCallback<GetDurationsResult> callback = (AsyncCallback<GetDurationsResult>) invocation.getArguments()[1];
+                callback.onSuccess(getDurationsResult);
                 return null;
             }
         };
-        doAnswer(getMinutesAnswer).when(getMinutesHandler).execute(any(GetMinutesAction.class),
+        doAnswer(getDurationsAnswer).when(getDurationsHandler).execute(any(GetDurationsAction.class),
                 any(AsyncCallback.class), any(ExecuteCommand.class));
     }
 
 
-    void verifyGetMinutes()
+    void verifyGetDurations()
     {
         verify(view).updateDurations(new Durations(new Duration(1), new Duration(2), new Duration(3)));
     }

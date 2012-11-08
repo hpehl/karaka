@@ -28,7 +28,7 @@ import static java.lang.Boolean.TRUE;
  * @author Harald Pehl
  * @date 11/08/2012
  */
-public class LoadMainApp implements BootstrapCommand<Boolean>
+public class LoadMainApp implements BootstrapCommand
 {
     private final PlaceManager placeManager;
 

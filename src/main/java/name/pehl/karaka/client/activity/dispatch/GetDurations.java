@@ -6,7 +6,7 @@ import com.gwtplatform.dispatch.annotation.GenDispatch;
 import com.gwtplatform.dispatch.annotation.Out;
 
 @GenDispatch
-public class GetMinutes
+public class GetDurations
 {
     @Out(1) Durations minutes;
 }

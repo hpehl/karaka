@@ -10,7 +10,7 @@ import static java.lang.Boolean.TRUE;
  * @author Harald Pehl
  * @date 11/08/2012
  */
-public class LoadClients implements BootstrapCommand<Boolean>
+public class LoadClients implements BootstrapCommand
 {
     private final ClientsCache clientsCache;
 
