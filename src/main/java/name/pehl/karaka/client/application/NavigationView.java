@@ -1,23 +1,22 @@
 package name.pehl.karaka.client.application;
 
-import java.util.Map;
-
-import name.pehl.karaka.client.NameTokens;
-import name.pehl.karaka.client.resources.Resources;
-import name.pehl.karaka.client.ui.UiUtils;
-import name.pehl.karaka.shared.model.User;
-
 import com.google.common.collect.ImmutableMap;
+import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.InlineHyperlink;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import name.pehl.karaka.client.NameTokens;
+import name.pehl.karaka.client.resources.Resources;
+import name.pehl.karaka.client.ui.UiUtils;
+import name.pehl.karaka.shared.model.User;
+
+import java.util.Map;
 
 /**
  * @author $Author: harald.pehl $
@@ -40,7 +39,7 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
     @UiField InlineHyperlink reports;
     @UiField InlineHyperlink help;
     @UiField InlineHyperlink settings;
-    @UiField Anchor logout;
+    @UiField AnchorElement logout;
     @UiField SpanElement username;
     @UiField HasOneWidget messagePanel;
 
@@ -115,6 +114,10 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
     {
         if (user != null)
         {
+            if (user.getLogoutUrl() != null)
+            {
+                logout.setHref(user.getLogoutUrl());
+            }
             username.setInnerText(user.getUsername());
         }
     }

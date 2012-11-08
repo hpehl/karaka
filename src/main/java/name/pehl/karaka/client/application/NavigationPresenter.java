@@ -1,7 +1,11 @@
 package name.pehl.karaka.client.application;
 
-import static name.pehl.karaka.shared.model.TimeUnit.MONTH;
-import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.mvp.client.PresenterWidget;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import name.pehl.karaka.client.NameTokens;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
@@ -11,12 +15,8 @@ import name.pehl.karaka.client.settings.SettingsChangedEvent.SettingsChangedHand
 import name.pehl.karaka.shared.model.Activities;
 import name.pehl.karaka.shared.model.User;
 
-import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.mvp.client.PresenterWidget;
-import com.gwtplatform.mvp.client.View;
-import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+import static name.pehl.karaka.shared.model.TimeUnit.MONTH;
+import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
 
 /**
  * <p>
@@ -49,11 +49,7 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
     public interface MyView extends View
     {
         void highlight(String token);
-
-
         void setDashboardToken(String token);
-
-
         void updateUser(User user);
     }
 

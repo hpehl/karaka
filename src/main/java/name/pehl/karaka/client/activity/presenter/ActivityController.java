@@ -82,7 +82,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 {
     // ------------------------------------------------------- (static) members
 
-    static final int ONE_MINUTE_IN_MILLIS = 60 * 1000;
+    static final int TICK_INTERVAL = 60 * 1000;
     static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
 
     final EventBus eventBus;
@@ -139,6 +139,8 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
     {
         runningActivity = event.getActivity();
         startTicking();
+        // the first 'tick' will happen in TICK_INTERVAL millis, so tick now to update the UI
+        tick();
     }
 
 
@@ -417,7 +419,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
     private void startTicking()
     {
         ticking = true;
-        scheduler.scheduleFixedPeriod(ActivityController.this, ONE_MINUTE_IN_MILLIS);
+        scheduler.scheduleFixedPeriod(ActivityController.this, TICK_INTERVAL);
     }
 
 
@@ -434,6 +436,11 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 
     @Override
     public boolean execute()
+    {
+        return tick();
+    }
+
+    private boolean tick()
     {
         if (ticking)
         {

@@ -11,6 +11,7 @@ public class User extends BaseModel
     String firstname;
     String surname;
     String email;
+    String logoutUrl;
 
 
     public User()
@@ -81,5 +82,15 @@ public class User extends BaseModel
     public void setEmail(String email)
     {
         this.email = email;
+    }
+
+    public String getLogoutUrl()
+    {
+        return logoutUrl;
+    }
+
+    public void setLogoutUrl(final String logoutUrl)
+    {
+        this.logoutUrl = logoutUrl;
     }
 }
