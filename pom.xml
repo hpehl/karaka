@@ -373,7 +373,7 @@
                     <runTarget>/index.html</runTarget>
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
                     <server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
-                    <extraJvmArgs>-Xmx1024m -DDEBUG -XX:MaxPermSize=256M</extraJvmArgs>
+                    <extraJvmArgs>-Xmx1024m -XX:MaxPermSize=256M</extraJvmArgs>
                     <style>OBF</style>
                     <localWorkers>4</localWorkers>
                     <compileReport>false</compileReport>
@@ -384,7 +384,6 @@
                     <port>8888</port>
                     <logLevel>INFO</logLevel>
                     <strict>true</strict>
-                    <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
                     <i18nConstantsBundles>
                         <i18nConstantsBundle>
                             name.pehl.karaka.client.resources.Constants

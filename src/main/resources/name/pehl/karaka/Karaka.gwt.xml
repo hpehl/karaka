@@ -39,7 +39,8 @@
 
     <!-- Logging -->
     <inherits name="com.allen_sauer.gwt.log.gwt-log-ERROR" />
-    <extend-property name="gwt.logging.logLevel" values="INFO,WARN" />
+    <extend-property name="gwt.logging.logLevel" values="DEBUG,INFO,WARN" />
+    <set-property name="gwt.logging.logLevel" value="INFO" />
     <set-property name="log_ConsoleLogger" value="ENABLED" />
     <set-property name="log_FirebugLogger" value="ENABLED" />
     <set-property name="log_GWTLogger" value="ENABLED" />
