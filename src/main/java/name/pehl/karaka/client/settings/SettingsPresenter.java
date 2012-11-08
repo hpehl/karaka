@@ -12,6 +12,9 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 
+/**
+ * Take a look at https://github.com/dosx/timezone-picker fro selecting the time zone.
+ */
 public class SettingsPresenter extends Presenter<SettingsPresenter.MyView, SettingsPresenter.MyProxy>
 {
     @ProxyCodeSplit
