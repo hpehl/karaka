@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import name.pehl.karaka.client.resources.Resources;
 import name.pehl.karaka.client.ui.UiUtils;
 
 public class ApplicationView extends ViewImpl implements ApplicationPresenter.MyView
@@ -22,8 +23,10 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
 
 
     @Inject
-    public ApplicationView(final Binder binder)
+    public ApplicationView(final Binder binder, final Resources resources)
     {
+        resources.karaka().ensureInjected();
+        resources.widgets().ensureInjected();
         this.widget = binder.createAndBindUi(this);
     }
 

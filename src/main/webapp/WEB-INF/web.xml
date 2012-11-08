@@ -99,6 +99,7 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>login</web-resource-name>
+            <url-pattern>/_ah/login</url-pattern>
             <url-pattern>/_ah/login_required</url-pattern>
             <url-pattern>/login/*</url-pattern>
             <url-pattern>/favicon.ico</url-pattern>

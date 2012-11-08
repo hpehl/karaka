@@ -21,11 +21,11 @@ public class BootstrapProcess
     {
         // add commands - order is important!
         this.commands = new LinkedList<BootstrapCommand>();
+        this.commands.add(loadMainApp);
         this.commands.add(loadSettings);
         this.commands.add(loadClients);
         this.commands.add(loadProjects);
         this.commands.add(loadTags);
-        this.commands.add(loadMainApp);
     }
 
     public void execute(AsyncCallback<Boolean> outcome)

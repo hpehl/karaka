@@ -21,6 +21,7 @@ package name.pehl.karaka.client.bootstrap;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import name.pehl.karaka.client.activity.presenter.ActivityController;
 
 import static java.lang.Boolean.TRUE;
 
@@ -31,17 +32,20 @@ import static java.lang.Boolean.TRUE;
 public class LoadMainApp implements BootstrapCommand
 {
     private final PlaceManager placeManager;
+    private final ActivityController activityController;
 
     @Inject
-    public LoadMainApp(final PlaceManager placeManager)
+    public LoadMainApp(final PlaceManager placeManager, final ActivityController activityController)
     {
         this.placeManager = placeManager;
+        this.activityController = activityController;
     }
 
     @Override
     public void execute(final AsyncCallback<Boolean> callback)
     {
         placeManager.revealDefaultPlace();
+        activityController.start();
         callback.onSuccess(TRUE);
     }
 }

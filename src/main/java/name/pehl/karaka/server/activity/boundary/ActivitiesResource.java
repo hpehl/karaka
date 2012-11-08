@@ -18,6 +18,7 @@ import name.pehl.karaka.shared.model.HasLinks;
 import name.pehl.karaka.shared.model.Year;
 import name.pehl.karaka.shared.model.Years;
 import org.jboss.resteasy.annotations.cache.Cache;
+import org.jboss.resteasy.annotations.cache.NoCache;
 import org.jboss.resteasy.spi.NotFoundException;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
@@ -463,6 +464,7 @@ public class ActivitiesResource
     // ------------------------------------------------ find activities by name
 
     @GET
+    @NoCache
     public List<name.pehl.karaka.shared.model.Activity> findByName(@QueryParam("q") String query)
     {
         List<name.pehl.karaka.shared.model.Activity> result = new ArrayList<name.pehl.karaka.shared.model.Activity>();

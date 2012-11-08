@@ -40,9 +40,6 @@ public class Karaka implements EntryPoint
 
     private void onModuleLoad2()
     {
-        ginjector.getResources().karaka().ensureInjected();
-        ginjector.getResources().widgets().ensureInjected();
-
         GWT.runAsync(new RunAsyncCallback()
         {
             @Override
