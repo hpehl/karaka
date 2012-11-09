@@ -30,8 +30,8 @@
 
 
     <properties>
-        <gae.version>1.7.3</gae.version>
         <gae.plugin.version>0.9.5</gae.plugin.version>
+        <gae.version>1.7.3</gae.version>
         <gin.version>2.0.0</gin.version>
         <guava.version>13.0.1</guava.version>
         <gwt.version>2.5.0</gwt.version>
@@ -43,6 +43,7 @@
         <slf4j.version>1.7.2</slf4j.version>
         <totoe.version>0.5-SNAPSHOT</totoe.version>
         <weld.version>1.1.10.Final</weld.version>
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
     </properties>
 
 
@@ -81,6 +82,12 @@
             <artifactId>gae-runtime</artifactId>
             <version>${gae.version}</version>
             <type>pom</type>
+            <exclusions>
+                <exclusion>
+                    <artifactId>appengine-tools-sdk</artifactId>
+                    <groupId>com.google.appengine</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.google.appengine</groupId>
@@ -295,8 +302,17 @@
 
 
     <build>
+        <!-- Generate compiled stuff in the folder used for developing mode -->
+        <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+
+
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>2.5</version>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
@@ -372,6 +388,7 @@
                     <module>name.pehl.karaka.Karaka</module>
                     <runTarget>/index.html</runTarget>
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+                    <appEngineVersion>${gae.version}</appEngineVersion>
                     <server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
                     <extraJvmArgs>-Xmx1024m -XX:MaxPermSize=256M</extraJvmArgs>
                     <style>OBF</style>
@@ -436,10 +453,6 @@
                         <type>pom</type>
                     </dependency>
                 </dependencies>
-                <configuration>
-                    <serverId>appengine.google.com</serverId>
-                    <appDir>${project.build.directory}/${project.artifactId}-${project.version}</appDir>
-                </configuration>
             </plugin>
         </plugins>
 
