@@ -35,7 +35,7 @@
         <gin.version>2.0.0</gin.version>
         <guava.version>13.0.1</guava.version>
         <gwt.version>2.5.0</gwt.version>
-        <gwt.plugin.version>2.5.0-rc2</gwt.plugin.version>
+        <gwt.plugin.version>2.5.0</gwt.plugin.version>
         <gwtp.version>0.7</gwtp.version>
         <objectify.version>3.1</objectify.version>
         <piriti.version>0.9-SNAPSHOT</piriti.version>
