@@ -1,12 +1,5 @@
 package name.pehl.karaka.server.version;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.ext.Provider;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.jboss.resteasy.annotations.interception.HeaderDecoratorPrecedence;
 import org.jboss.resteasy.annotations.interception.ServerInterceptor;
@@ -16,6 +9,12 @@ import org.jboss.resteasy.spi.Failure;
 import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.NotFoundException;
 import org.jboss.resteasy.spi.interception.PreProcessInterceptor;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.ext.Provider;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Provider
 @ServerInterceptor
@@ -71,7 +70,6 @@ public class VersionCheckInterceptor implements PreProcessInterceptor
 
         if (!reqContainsSupportedVersion)
         {
-
             throw new NotFoundException("No supported version found for " + acceptHeaders + " in " + request.getUri()
                     + ". Supported versions are: " + annotation.versions() + ".");
         }
