@@ -1,15 +1,13 @@
 package name.pehl.karaka.server.activity.control;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.googlecode.objectify.Key;
 import name.pehl.karaka.server.activity.entity.Activity;
 import name.pehl.karaka.server.repository.NamedEntityRepository;
 import name.pehl.karaka.shared.model.Status;
 
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.Key;
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  * @author $Author: harald.pehl $
@@ -96,5 +94,15 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
             activity = get(keys.get(0));
         }
         return activity;
+    }
+
+    public void start(final Activity activity)
+    {
+
+    }
+
+    public void stop(final Activity activity)
+    {
+
     }
 }

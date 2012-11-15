@@ -53,61 +53,61 @@ import static org.joda.time.Weeks.weeks;
 
 /**
  * Supported methods:
+ * <p/>
+ * <p>GET Methods:</p>
  * <ul>
- * <li>GET /activities/{year}/{month}: Find activities
- * <li>GET /activities/{year}/{month}/duration: Get the duration in minutes of
- * the specified activities
- * <li>GET /activities/relative/{month}: Find activities
- * <li>GET /activities/relative/{month}/duration: Get the duration in minutes of
- * the specified activities
- * <li>GET /activities/currentMonth: Find activities
- * <li>GET /activities/currentMonth/duration: Get the duration in minutes of the
- * specified activities
- * <li>GET /activities/{year}/cw{week}: Find activities
- * <li>GET /activities/{year}/cw{week}/duration: Get the duration in minutes of
- * the specified activities
- * <li>GET /activities/relative/cw{week}: Find activities
- * <li>GET /activities/relative/cw{week}/duration: Get the duration in minutes
- * of the specified activities
- * <li>GET /activities/currentWeek: Find activities
- * <li>GET /activities/currentWeek/duration: Get the duration in minutes of the
- * specified activities
- * <li>GET /activities/{year}/{month}/{day}: Find activities
- * <li>GET /activities/{year}/{month}/{day}/duration: Get the duration in
- * minutes of the specified activities
- * <li>GET /activities/today: Find activities
- * <li>GET /activities/today/duration: Get the duration in minutes of the
- * specified activities
- * <li>GET /activities/?q=&lt;name&gt;: Fid the activities with the specified
- * name
- * <li>GET /activities/current/durations: Get the durations of the current
- * month, week and day
- * <li>GET /activities/running: Find the running activity
- * <li>GET /activities/years: Returns the years, months and weeks in which
- * activities are stored
- * <li>POST: Create a new activity
- * <li>PUT /activities/{id}: Update an existing activity
- * <li>DELETE /activities/{id}: Delete an existing activity
+ * <li>GET /activities/{year}/{month}: Find activities by year and month</li>
+ * <li>GET /activities/{year}/{month}/duration: Get the duration in minutes of the specified activities</li>
+ * <li>GET /activities/relative/{month}: Find activities by month relative to the current month</li>
+ * <li>GET /activities/relative/{month}/duration: Get the duration in minutes of the specified activities</li>
+ * <li>GET /activities/currentMonth: Find activities of the current month</li>
+ * <li>GET /activities/currentMonth/duration: Get the duration in minutes of the specified activities</li>
+ * <li>GET /activities/{year}/cw{week}: Find activities by year and week</li>
+ * <li>GET /activities/{year}/cw{week}/duration: Get the duration in minutes of the specified activities</li>
+ * <li>GET /activities/relative/cw{week}: Find activities by  week relative to the current week</li>
+ * <li>GET /activities/relative/cw{week}/duration: Get the duration in minutes of the specified activities</li>
+ * <li>GET /activities/currentWeek: Find activities</li>
+ * <li>GET /activities/currentWeek/duration: Get the duration in minutes of the specified activities</li>
+ * <li>GET /activities/{year}/{month}/{day}: Find activities</li>
+ * <li>GET /activities/{year}/{month}/{day}/duration: Get the duration in minutes of the specified activities</li>
+ * <li>GET /activities/today: Find activities</li>
+ * <li>GET /activities/today/duration: Get the duration in minutes of the specified activities</li>
+ * <li>GET /activities/?q=&lt;name&gt;: Fid the activities with the specified name</li>
+ * <li>GET /activities/current/durations: Get the durations of the current month, week and day</li>
+ * <li>GET /activities/running: Find the running activity</li>
+ * <li>GET /activities/years: Returns the years, months and weeks in which activities are stored</li>
+ * </ul>
+ * <p>Other methods:</p>
+ * <ul>
+ * <li>POST: Create a new activity. If the state of the new activity is
+ * {@link name.pehl.karaka.shared.model.Status#RUNNING} and there's another running activity, the other activity is
+ * stopped.</li>
+ * <li>PUT /activities/{id}: Update an existing activity. Please note that changes to the status of an activity are
+ * ignored by this method! The only way to change the state of an activity is to call the relvant method / url pair.
+ * <li>PUT /activities/{id}/start: Start the specified activity. If the activity is already started nothing will
+ * happen. If the activity is stopped a new activity will be started or the current activity will be resumed. If
+ * there's another running activity this activity will be stoped first.</li>
+ * <li>PUT /activities/{id}/stop: Stops the specified activity</li>
+ * <li>DELETE /activities/{id}: Delete an existing activity</li>
  * </ul>
  * <p>
- * Normally for POST and PUT the start and end time is taken from the JSON input
- * and the minutes are calculated. There's one exception to this behaviour: If
+ * Normally for POST and PUT the end time is taken from the JSON input and the duration in minutes is calculated.
+ * There's one exception to this rule: If
  * </p>
  * <ul>
  * <li>the activity is stopped
  * <li>the start time is present
  * <li>the end time is not present and
- * <li>the minutes are specified
+ * <li>the duration in minutes is specified
  * </ul>
- * <p>
  * then the end time is calculated.
- * 
- * @todo Add hyperlinks to current, previous and next activities. If there are
- *       no previous / next activities omit the links
- * @todo implement ETag
+ *
  * @author $Author: harald.pehl $
  * @version $Date: 2011-05-16 12:54:26 +0200 (Mo, 16. Mai 2011) $ $Revision: 110
  *          $
+ * @todo Add hyperlinks to current, previous and next activities. If there are
+ * no previous / next activities omit the links
+ * @todo implement ETag
  */
 @Cache
 @Path("/activities")
@@ -166,7 +166,6 @@ public class ActivitiesResource
         return activities;
     }
 
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/duration")
@@ -174,7 +173,6 @@ public class ActivitiesResource
     {
         return minutes(forYearMonth(new DateMidnight(year, month, 1, settings.get().getTimeZone())));
     }
-
 
     @GET
     @Path("/relative/{month:[+-]?\\d+}")
@@ -186,7 +184,6 @@ public class ActivitiesResource
         return activities;
     }
 
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/relative/{month:[+-]?\\d+}/duration")
@@ -194,7 +191,6 @@ public class ActivitiesResource
     {
         return minutes(forYearMonth(absoluteMonth(month)));
     }
-
 
     @GET
     @Path("/currentMonth")
@@ -206,7 +202,6 @@ public class ActivitiesResource
         return activities;
     }
 
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/currentMonth/duration")
@@ -214,7 +209,6 @@ public class ActivitiesResource
     {
         return minutes(forYearMonth(now(settings.get().getTimeZone())));
     }
-
 
     private List<Activity> forYearMonth(DateMidnight date)
     {
@@ -227,13 +221,11 @@ public class ActivitiesResource
         return activities;
     }
 
-
     private DateMidnight absoluteMonth(int month)
     {
         DateMidnight now = now(settings.get().getTimeZone());
         return now.plus(months(month));
     }
-
 
     private void addLinksForYearMonth(Activities activities, DateMidnight yearMonth)
     {
@@ -266,24 +258,24 @@ public class ActivitiesResource
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}")
     public Activities activitiesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
     {
-        DateMidnight yearWeek = new MutableDateTime(settings.get().getTimeZone()).year().set(year).weekOfWeekyear().set(week)
+        DateMidnight yearWeek = new MutableDateTime(settings.get().getTimeZone()).year().set(year).weekOfWeekyear()
+                .set(week)
                 .toDateTime().toDateMidnight();
         Activities activities = activitiesConverter.toModel(yearWeek, WEEK, forYearWeek(yearWeek));
         addLinksForYearWeek(activities, yearWeek);
         return activities;
     }
 
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}/duration")
     public Duration minutesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
     {
-        DateMidnight yearWeek = new MutableDateTime(settings.get().getTimeZone()).year().set(year).weekOfWeekyear().set(week)
+        DateMidnight yearWeek = new MutableDateTime(settings.get().getTimeZone()).year().set(year).weekOfWeekyear()
+                .set(week)
                 .toDateTime().toDateMidnight();
         return minutes(forYearWeek(yearWeek));
     }
-
 
     @GET
     @Path("/relative/cw{week:[+-]?\\d+}")
@@ -295,7 +287,6 @@ public class ActivitiesResource
         return activities;
     }
 
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/relative/cw{week:[+-]?\\d+}/duration")
@@ -303,7 +294,6 @@ public class ActivitiesResource
     {
         return minutes(forYearWeek(absoluteWeek(week)));
     }
-
 
     @GET
     @Path("/currentWeek")
@@ -315,7 +305,6 @@ public class ActivitiesResource
         return activities;
     }
 
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/currentWeek/duration")
@@ -323,7 +312,6 @@ public class ActivitiesResource
     {
         return minutes(forYearWeek(now(settings.get().getTimeZone())));
     }
-
 
     private List<Activity> forYearWeek(DateMidnight date)
     {
@@ -336,13 +324,11 @@ public class ActivitiesResource
         return activities;
     }
 
-
     private DateMidnight absoluteWeek(int week)
     {
         DateMidnight now = now(settings.get().getTimeZone());
         return now.plus(weeks(week));
     }
-
 
     private void addLinksForYearWeek(Activities activities, DateMidnight yearWeek)
     {
@@ -386,7 +372,6 @@ public class ActivitiesResource
         return activities;
     }
 
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/{day:\\d{1,2}}/duration")
@@ -395,7 +380,6 @@ public class ActivitiesResource
     {
         return minutes(forYearMonthDay(new DateMidnight(year, month, day, settings.get().getTimeZone())));
     }
-
 
     @GET
     @Path("/today")
@@ -407,7 +391,6 @@ public class ActivitiesResource
         return activities;
     }
 
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/today/duration")
@@ -415,7 +398,6 @@ public class ActivitiesResource
     {
         return minutes(forYearMonthDay(now(settings.get().getTimeZone())));
     }
-
 
     private List<Activity> forYearMonthDay(DateMidnight date)
     {
@@ -428,7 +410,6 @@ public class ActivitiesResource
         }
         return activities;
     }
-
 
     private void addLinksForYearMonthDay(Activities activities, DateMidnight yearMonthDay)
     {
@@ -524,32 +505,72 @@ public class ActivitiesResource
         return Response.status(CREATED).entity(createdClientActivity).build();
     }
 
-
     @PUT
     @Path("{id}")
     public Response updateExistingActivity(@PathParam("id") String id,
             name.pehl.karaka.shared.model.Activity modifiedClientActivity)
     {
-        Activity existingServerActivity = repository.get(Key.<Activity> create(id));
-        activityConverter.merge(modifiedClientActivity, existingServerActivity);
-        repository.put(existingServerActivity);
-        name.pehl.karaka.shared.model.Activity updatedClientActivity = activityConverter.toModel(existingServerActivity);
-        return Response.ok(updatedClientActivity).build();
+        try
+        {
+            Activity existingServerActivity = repository.get(Key.<Activity>create(id));
+            activityConverter.merge(modifiedClientActivity, existingServerActivity);
+            repository.put(existingServerActivity);
+            name.pehl.karaka.shared.model.Activity updatedClientActivity = activityConverter
+                    .toModel(existingServerActivity);
+            return Response.ok(updatedClientActivity).build();
+        }
+        catch (com.googlecode.objectify.NotFoundException e)
+        {
+            return Response.status(NOT_FOUND).build();
+        }
     }
 
+    @PUT
+    @Path("{id}/start")
+    public Response startActivity(@PathParam("id") String id)
+    {
+        try
+        {
+            Activity activity = repository.get(Key.<Activity>create(id));
+            repository.start(activity);
+            return Response.ok().build();
+        }
+        catch (com.googlecode.objectify.NotFoundException e)
+        {
+            return Response.status(NOT_FOUND).build();
+        }
+    }
+
+    @PUT
+    @Path("{id}/stop")
+    public Response stopActivity(@PathParam("id") String id)
+    {
+        try
+        {
+            Activity activity = repository.get(Key.<Activity>create(id));
+            repository.stop(activity);
+            return Response.ok().build();
+        }
+        catch (com.googlecode.objectify.NotFoundException e)
+        {
+            return Response.status(NOT_FOUND).build();
+        }
+    }
 
     @DELETE
     @Path("{id}")
     public Response deleteExistingActivity(@PathParam("id") String id)
     {
-        Key<Activity> key = Key.create(id);
-        Activity activity = repository.get(key);
-        if (activity != null)
+        try
         {
+            Activity activity = repository.get(Key.<Activity>create(id));
             repository.delete(activity);
             return Response.noContent().build();
         }
-        return Response.status(NOT_FOUND).build();
+        catch (com.googlecode.objectify.NotFoundException e)
+        {
+            return Response.status(NOT_FOUND).build();
+        }
     }
 
 
@@ -559,7 +580,6 @@ public class ActivitiesResource
     {
         return new DateMidnight(timeZone);
     }
-
 
     private Duration minutes(List<Activity> activities)
     {

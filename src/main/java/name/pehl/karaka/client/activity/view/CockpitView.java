@@ -75,9 +75,11 @@ public class CockpitView extends ViewWithUiHandlers<CockpitUiHandlers> implement
         else
         {
             this.activity.setText(activity.getName());
+            this.activity.setTitle(activity.getName());
             if (activity.getProject() != null)
             {
                 this.project.setText(activity.getProject().getName());
+                this.project.setTitle(activity.getProject().getName());
             }
             else
             {
