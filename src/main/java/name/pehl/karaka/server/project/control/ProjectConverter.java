@@ -1,13 +1,13 @@
 package name.pehl.karaka.server.project.control;
 
-import javax.inject.Inject;
-
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.NotFoundException;
 import name.pehl.karaka.server.client.control.ClientConverter;
 import name.pehl.karaka.server.client.control.ClientRepository;
 import name.pehl.karaka.server.converter.AbstractEntityConverter;
 import name.pehl.karaka.server.converter.EntityConverter;
 
-import com.googlecode.objectify.Key;
+import javax.inject.Inject;
 
 public class ProjectConverter extends
         AbstractEntityConverter<name.pehl.karaka.server.project.entity.Project, name.pehl.karaka.shared.model.Project>
@@ -24,6 +24,17 @@ public class ProjectConverter extends
         name.pehl.karaka.shared.model.Project model = new name.pehl.karaka.shared.model.Project(websafeKey(
                 name.pehl.karaka.server.project.entity.Project.class, entity), entity.getName());
         model.setDescription(entity.getDescription());
+
+        // client relation
+        try
+        {
+            name.pehl.karaka.server.client.entity.Client client = clientRepository.get(entity.getClient());
+            model.setClient(clientConverter.toModel(client));
+        }
+        catch (NotFoundException e)
+        {
+            // not client - no conversion
+        }
         return model;
     }
 

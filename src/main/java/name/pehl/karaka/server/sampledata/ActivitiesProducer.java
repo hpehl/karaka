@@ -1,23 +1,20 @@
 package name.pehl.karaka.server.sampledata;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import javax.inject.Inject;
-
+import com.googlecode.objectify.Key;
 import name.pehl.karaka.server.activity.entity.Activity;
 import name.pehl.karaka.server.activity.entity.Time;
 import name.pehl.karaka.server.project.entity.Project;
 import name.pehl.karaka.server.tag.entity.Tag;
-
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Months;
 import org.joda.time.MutableDateTime;
 import org.slf4j.Logger;
 
-import com.googlecode.objectify.Key;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author $Author:$
@@ -48,10 +45,9 @@ class ActivitiesProducer
             int hours = 2 + random.nextInt(6) / activitiesCount;
             for (int j = 0; j < activitiesCount; j++)
             {
-                Activity activity = new Activity(loremIpsum.randomWords(2), loremIpsum.randomWords(4), timeZone);
-                activity.setStart(new Time(mdt.toDate(), timeZone));
                 int hour = mdt.hourOfDay().get() + hours;
-                activity.setEnd(new Time(mdt.copy().hourOfDay().set(hour).toDate(), timeZone));
+                Activity activity = new Activity(loremIpsum.randomWords(2), loremIpsum.randomWords(4), timeZone);
+                activity.start().tick(new Time(mdt.copy().hourOfDay().set(hour).toDate(), timeZone)).stop();
                 activity.setProject(projectKeys.get(random.nextInt(projectKeys.size())));
                 for (int i = 0; i < TAGS_PER_ACTIVITY; i++)
                 {

@@ -1,8 +1,5 @@
 package name.pehl.karaka.client.application;
 
-import static java.util.logging.Level.SEVERE;
-import name.pehl.karaka.client.resources.Resources;
-
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
@@ -10,6 +7,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import name.pehl.karaka.client.resources.Resources;
+
+import static java.util.logging.Level.SEVERE;
 
 public class MessageView extends ViewImpl implements MessagePresenter.MyView
 {
@@ -50,6 +50,7 @@ public class MessageView extends ViewImpl implements MessagePresenter.MyView
         autoHideTimer.cancel();
         timeoutTimer.cancel();
         messageHolder.setText(message.getText());
+        messageHolder.setTitle(message.getText());
         if (!visible)
         {
             messageHolder.removeStyleName(resources.message().hide());
