@@ -1,19 +1,16 @@
 package name.pehl.karaka.shared.model;
 
-import static name.pehl.karaka.shared.model.TimeUnit.DAY;
-import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import com.google.common.testing.EqualsTester;
 import name.pehl.karaka.TestData;
-
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.testing.EqualsTester;
+import static name.pehl.karaka.shared.model.Status.RUNNING;
+import static name.pehl.karaka.shared.model.Status.STOPPED;
+import static name.pehl.karaka.shared.model.TimeUnit.DAY;
+import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
+import static org.junit.Assert.*;
 
 /**
  * TODO Replace current date/times with fixed ones? TODO Move common code to
@@ -280,9 +277,9 @@ public class ActivitiesTest
         assertNull(cut.getRunningActivity());
         cut.add(activity);
         assertNull(cut.getRunningActivity());
-        activity.start();
+        activity.setStatus(RUNNING);
         assertEquals(activity, cut.getRunningActivity());
-        activity.stop();
+        activity.setStatus(STOPPED);
         assertNull(cut.getRunningActivity());
     }
 

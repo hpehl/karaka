@@ -39,10 +39,24 @@ public abstract class KarakaCallback<T> implements AsyncCallback<T>
         {
             onNotFound((FailedStatusCodeException) caught);
         }
+        else if (caught instanceof FailedStatusCodeException)
+        {
+            onFailedStatus((FailedStatusCodeException) caught);
+        }
         else
         {
             showError(caught);
         }
+    }
+
+    /**
+     * Default implementation delegates to {@link #showError(Throwable)}
+     *
+     * @param caught
+     */
+    public void onFailedStatus(FailedStatusCodeException caught)
+    {
+        showError(caught);
     }
 
     /**

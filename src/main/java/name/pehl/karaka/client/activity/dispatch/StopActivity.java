@@ -1,10 +1,9 @@
 package name.pehl.karaka.client.activity.dispatch;
 
-import name.pehl.karaka.shared.model.Activity;
-
 import com.gwtplatform.dispatch.annotation.GenDispatch;
 import com.gwtplatform.dispatch.annotation.In;
 import com.gwtplatform.dispatch.annotation.Out;
+import name.pehl.karaka.shared.model.Activity;
 
 /**
  * Used to save new and update existing activities.
@@ -13,8 +12,8 @@ import com.gwtplatform.dispatch.annotation.Out;
  * @version $LastChangedRevision:$
  */
 @GenDispatch
-public class SaveActivity
+public class StopActivity
 {
     @In(1) Activity activity;
-    @Out(1) Activity saved;
+    @Out(1) Activity stopped;
 }

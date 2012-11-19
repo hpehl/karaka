@@ -37,7 +37,7 @@ class ActivitiesProducer
         DateMidnight end = DateMidnight.now().plusDays(1);
         DateMidnight start = end.minus(Months.months(MONTHS_TO_GO_BACK));
         List<Activity> activities = new ArrayList<Activity>();
-        MutableDateTime mdt = new MutableDateTime(start);
+        MutableDateTime mdt = new MutableDateTime(start, timeZone);
         while (mdt.isBefore(end))
         {
             mdt.hourOfDay().set(9);
@@ -45,9 +45,10 @@ class ActivitiesProducer
             int hours = 2 + random.nextInt(6) / activitiesCount;
             for (int j = 0; j < activitiesCount; j++)
             {
-                int hour = mdt.hourOfDay().get() + hours;
                 Activity activity = new Activity(loremIpsum.randomWords(2), loremIpsum.randomWords(4), timeZone);
-                activity.start().tick(new Time(mdt.copy().hourOfDay().set(hour).toDate(), timeZone)).stop();
+                activity.setStart(new Time(mdt));
+                int hour = mdt.hourOfDay().get() + hours;
+                activity.setEnd(new Time(mdt.copy().hourOfDay().set(hour)));
                 activity.setProject(projectKeys.get(random.nextInt(projectKeys.size())));
                 for (int i = 0; i < TAGS_PER_ACTIVITY; i++)
                 {

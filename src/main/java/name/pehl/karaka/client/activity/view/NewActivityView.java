@@ -1,18 +1,5 @@
 package name.pehl.karaka.client.activity.view;
 
-import java.util.Date;
-
-import name.pehl.karaka.client.activity.presenter.NewActivityPresenter;
-import name.pehl.karaka.client.activity.presenter.NewActivityUiHandlers;
-import name.pehl.karaka.client.model.NamedModelSuggestOracle;
-import name.pehl.karaka.client.model.NamedModelSuggestion;
-import name.pehl.karaka.client.project.ProjectsCache;
-import name.pehl.karaka.client.resources.Resources;
-import name.pehl.karaka.client.ui.Html5TextBox;
-import name.pehl.karaka.shared.model.Activity;
-import name.pehl.karaka.shared.model.Duration;
-import name.pehl.karaka.shared.model.Project;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -28,6 +15,18 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import name.pehl.karaka.client.activity.presenter.NewActivityPresenter;
+import name.pehl.karaka.client.activity.presenter.NewActivityUiHandlers;
+import name.pehl.karaka.client.model.NamedModelSuggestOracle;
+import name.pehl.karaka.client.model.NamedModelSuggestion;
+import name.pehl.karaka.client.project.ProjectsCache;
+import name.pehl.karaka.client.resources.Resources;
+import name.pehl.karaka.client.ui.Html5TextBox;
+import name.pehl.karaka.shared.model.Activity;
+import name.pehl.karaka.shared.model.Duration;
+import name.pehl.karaka.shared.model.Project;
+
+import java.util.Date;
 
 public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> implements NewActivityPresenter.MyView
 {
@@ -107,6 +106,13 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
         }
     }
 
+    @Override
+    public void clear()
+    {
+        activity.setText("");
+        project.setText("");
+        duration.clear();
+    }
 
     // ------------------------------------------------------------ ui handlers
 

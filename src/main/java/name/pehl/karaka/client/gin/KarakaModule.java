@@ -9,6 +9,7 @@ import name.pehl.karaka.client.KarakaPlaceManager;
 import name.pehl.karaka.client.NameTokens;
 import name.pehl.karaka.client.about.AboutPresenter;
 import name.pehl.karaka.client.about.AboutView;
+import name.pehl.karaka.client.activity.dispatch.CopyActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.DeleteActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.FindActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.GetActivitiesHandler;
@@ -16,6 +17,9 @@ import name.pehl.karaka.client.activity.dispatch.GetDurationsHandler;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.GetYearsHandler;
 import name.pehl.karaka.client.activity.dispatch.SaveActivityHandler;
+import name.pehl.karaka.client.activity.dispatch.StartActivityHandler;
+import name.pehl.karaka.client.activity.dispatch.StopActivityHandler;
+import name.pehl.karaka.client.activity.dispatch.TickActivityHandler;
 import name.pehl.karaka.client.activity.model.ActivitiesReader;
 import name.pehl.karaka.client.activity.model.ActivityReader;
 import name.pehl.karaka.client.activity.model.ActivityWriter;
@@ -110,6 +114,7 @@ public class KarakaModule extends AbstractPresenterModule
         bind(TableResources.class).in(Singleton.class);
 
         // Rest Action Handlers
+        bind(CopyActivityHandler.class);
         bind(DeleteActivityHandler.class);
         bind(FindActivityHandler.class);
         bind(GetActivitiesHandler.class);
@@ -121,6 +126,9 @@ public class KarakaModule extends AbstractPresenterModule
         bind(GetTagsHandler.class);
         bind(GetYearsHandler.class);
         bind(SaveActivityHandler.class);
+        bind(StartActivityHandler.class);
+        bind(StopActivityHandler.class);
+        bind(TickActivityHandler.class);
 
         // JsonReader / Writer
         // Bind them as eager singletons so that the JsonRegistry

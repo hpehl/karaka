@@ -22,43 +22,42 @@ import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
  * @author $Author:$
  * @version $Date:$ $Revision:$
  */
-public class SaveActivityHandler extends KarakaActionHandler<SaveActivityAction, SaveActivityResult>
+public class CopyActivityHandler extends KarakaActionHandler<CopyActivityAction, CopyActivityResult>
 {
     private final ActivityReader activityReader;
 
 
     @Inject
-    protected SaveActivityHandler(@SecurityCookie String securityCookieName,
+    protected CopyActivityHandler(@SecurityCookie String securityCookieName,
             SecurityCookieAccessor securityCookieAccessor, ActivityReader activityReader)
     {
-        super(SaveActivityAction.class, securityCookieName, securityCookieAccessor);
+        super(CopyActivityAction.class, securityCookieName, securityCookieAccessor);
         this.activityReader = activityReader;
     }
 
-
     @Override
-    protected Resource resourceFor(SaveActivityAction action)
+    protected Resource resourceFor(CopyActivityAction action)
     {
-        return new Resource(new UrlBuilder().module("rest").path("activities", action.getActivity().getId()).toUrl());
+        UrlBuilder urlBuilder = new UrlBuilder().module("rest")
+                .path("activities", "copy", action.getActivity().getId());
+        return new Resource(urlBuilder.toUrl());
     }
 
-
     @Override
-    protected Method methodFor(SaveActivityAction action, Resource resource)
+    protected Method methodFor(CopyActivityAction action, Resource resource)
     {
         return new Method(resource, PUT.name()).header(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON);
     }
 
-
     @Override
-    protected void executeMethod(final Method method, final AsyncCallback<SaveActivityResult> resultCallback)
+    protected void executeMethod(final Method method, final AsyncCallback<CopyActivityResult> resultCallback)
     {
-        method.send(new KarakaJsonCallback<Activity, SaveActivityResult>(activityReader, resultCallback)
+        method.send(new KarakaJsonCallback<Activity, CopyActivityResult>(activityReader, resultCallback)
         {
             @Override
-            protected SaveActivityResult extractResult(JsonReader<Activity> reader, JSONObject json)
+            protected CopyActivityResult extractResult(final JsonReader<Activity> reader, final JSONObject json)
             {
-                return new SaveActivityResult(reader.read(json));
+                return new CopyActivityResult(reader.read(json));
             }
         });
     }

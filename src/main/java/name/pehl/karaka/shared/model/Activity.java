@@ -66,11 +66,11 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     public Activity(String id, String name)
     {
         super(id, name);
+        this.start = new Time();
         this.pause = Duration.ZERO;
         this.duration = Duration.ZERO;
         this.status = STOPPED;
         this.tags = new ArrayList<Tag>();
-        ensureStart();
     }
 
 
@@ -100,103 +100,6 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
     }
 
 
-    /**
-     * Creates a copy of this activity and adds the specified amount of
-     * milliseconds to both start and end. No matter what the status of this
-     * activity is, the copied status will be {@link Status#STOPPED}.
-     * 
-     * @param millis
-     *            The amount of milliseconds to add to this start and end.
-     * @return
-     */
-    public Activity plus(long millis)
-    {
-        Time startCopy = new Time(new Date(this.start.getDate().getTime() + millis));
-        Time endCopy = new Time();
-        if (this.end != null)
-        {
-            endCopy.setDate(new Date(this.end.getDate().getTime() + millis));
-        }
-        else
-        {
-            endCopy.setDate(startCopy.getDate());
-        }
-        Activity copy = new Activity(this.name);
-        copy.setDescription(description);
-        copy.setStart(startCopy);
-        copy.setEnd(endCopy);
-        copy.setPause(this.pause);
-        copy.setBillable(this.billable);
-        copy.setStatus(STOPPED);
-        copy.setProject(this.project);
-        copy.getTags().addAll(this.tags);
-        return copy;
-    }
-
-
-    public void start()
-    {
-        ensureStart().setDate(new Date());
-        ensureEnd().setDate(new Date());
-        status = RUNNING;
-    }
-
-
-    public void resume()
-    {
-        ensureStart();
-        ensureEnd();
-        Date now = new Date();
-        if (start.after(now))
-        {
-            start = new Time();
-        }
-        if (end.after(now))
-        {
-            end = new Time();
-        }
-        pause = pause.plus(new Duration(end.getDate(), now));
-        end.setDate(now);
-        status = RUNNING;
-    }
-
-
-    public void stop()
-    {
-        ensureStart();
-        ensureEnd().setDate(new Date());
-        status = STOPPED;
-    }
-
-
-    public void tick()
-    {
-        if (status == RUNNING)
-        {
-            ensureStart();
-            ensureEnd().setDate(new Date());
-        }
-    }
-
-
-    /**
-     * @return <code>true</code> if the start date of this activity is today,
-     *         <code>false</code> otherwise.
-     */
-    @SuppressWarnings("deprecation")
-    public boolean isToday()
-    {
-        Date now = new Date();
-        Date startDate = start.getDate();
-        if (now.getYear() == startDate.getYear() && now.getMonth() == startDate.getMonth()
-                && now.getDate() == startDate.getDate())
-        {
-            return true;
-        }
-        return false;
-    }
-
-
     private void calculateDuration()
     {
         if (end != null)
@@ -209,25 +112,6 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
         }
     }
 
-
-    private Time ensureStart()
-    {
-        if (this.start == null)
-        {
-            this.start = new Time();
-        }
-        return this.start;
-    }
-
-
-    private Time ensureEnd()
-    {
-        if (this.end == null)
-        {
-            this.end = new Time();
-        }
-        return this.end;
-    }
 
 
     // --------------------------------------------------------- object methods
@@ -320,9 +204,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
 
     /**
      * Required for JSON (de)serialization - please don't call directly. The
-     * duration are calculated when calling {@link #setStart(Time)},
-     * {@link #setEnd(Time)}, {@link #start()}, {@link #stop()}, {@link #resume()}
-     * and {@link #tick()}.
+     * duration are calculated when calling {@link #setStart(Time)} and {@link #setEnd(Time)}.
      * 
      * @param duration
      */
