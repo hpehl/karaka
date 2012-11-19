@@ -1,7 +1,5 @@
 package name.pehl.karaka.client.activity.presenter;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Sets;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.event.shared.GwtEvent;
@@ -9,10 +7,18 @@ import com.google.gwt.event.shared.HasHandlers;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
+import name.pehl.karaka.client.activity.dispatch.CopyActivityAction;
+import name.pehl.karaka.client.activity.dispatch.CopyActivityResult;
 import name.pehl.karaka.client.activity.dispatch.DeleteActivityAction;
 import name.pehl.karaka.client.activity.dispatch.DeleteActivityResult;
 import name.pehl.karaka.client.activity.dispatch.SaveActivityAction;
 import name.pehl.karaka.client.activity.dispatch.SaveActivityResult;
+import name.pehl.karaka.client.activity.dispatch.StartActivityAction;
+import name.pehl.karaka.client.activity.dispatch.StartActivityResult;
+import name.pehl.karaka.client.activity.dispatch.StopActivityAction;
+import name.pehl.karaka.client.activity.dispatch.StopActivityResult;
+import name.pehl.karaka.client.activity.dispatch.TickActivityAction;
+import name.pehl.karaka.client.activity.dispatch.TickActivityResult;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.karaka.client.activity.event.ActivityAction.Action;
@@ -32,15 +38,13 @@ import name.pehl.karaka.shared.model.Activity;
 import name.pehl.karaka.shared.model.Project;
 import name.pehl.karaka.shared.model.Tag;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Set;
 
 import static java.util.logging.Level.INFO;
 import static name.pehl.karaka.client.activity.event.ActivityChanged.ChangeAction.*;
 import static name.pehl.karaka.client.logging.Logger.Category.activity;
 import static name.pehl.karaka.client.logging.Logger.info;
-import static name.pehl.karaka.client.logging.Logger.trace;
 
 /**
  * <p>
@@ -69,10 +73,10 @@ import static name.pehl.karaka.client.logging.Logger.trace;
  * </ol>
  * <h3>Dispatcher actions</h3>
  * <ul>
- * <li>{@linkplain SaveActivityAction}</li>
  * <li>{@linkplain DeleteActivityAction}</li>
+ * <li>{@linkplain SaveActivityAction}</li>
  * </ul>
- * 
+ *
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-23 13:52:44 +0100 (Do, 23. Dez 2010) $ $Revision: 192
  *          $
@@ -83,22 +87,18 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
     // ------------------------------------------------------- (static) members
 
     static final int TICK_INTERVAL = 60 * 1000;
-    static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
-
+    static final String ONE_DAY = "P1D";
     final EventBus eventBus;
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
-
     /**
      * Should I tick?
      */
     boolean ticking;
-
     /**
      * The currently running actvity. Null if no activity is running.
      */
     Activity runningActivity;
-
     /**
      * The currently displayed activities
      */
@@ -106,6 +106,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 
 
     // ------------------------------------------------------------------ setup
+
 
     @Inject
     public ActivityController(final EventBus eventBus, final Scheduler scheduler, final DispatchAsync dispatcher)
@@ -115,7 +116,6 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         this.scheduler = scheduler;
         this.dispatcher = dispatcher;
     }
-
 
     public void start()
     {
@@ -133,7 +133,6 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         eventBus.fireEventFromSource(event, this);
     }
 
-
     @Override
     public void onRunningActivityLoaded(RunningActivityLoadedEvent event)
     {
@@ -143,13 +142,11 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         tick();
     }
 
-
     @Override
     public void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
         activities = event.getActivities();
     }
-
 
     @Override
     public void onActivityAction(ActivityActionEvent event)
@@ -187,13 +184,14 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
 
     void save(final Activity activityToSave)
     {
-        trace(activity, "About to save " + activityToSave);
+        info(activity, "About to save " + activityToSave);
         dispatcher.execute(new SaveActivityAction(activityToSave), new KarakaCallback<SaveActivityResult>(eventBus)
         {
             @Override
             public void onSuccess(SaveActivityResult result)
             {
-                Activity savedActivity = result.getStoredActivity();
+                Activity savedActivity = result.getSaved();
+                info(activity, activityToSave + " successfully saved as " + savedActivity);
                 updateActivities(activityToSave, savedActivity);
                 ActivityChangedEvent.fire(ActivityController.this, CHANGED, savedActivity, activities);
                 ShowMessageEvent.fire(ActivityController.this,
@@ -203,124 +201,66 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         });
     }
 
-
-    void copy(Activity activityToCopy)
+    void copy(final Activity activityToCopy)
     {
-        trace(activity, "About to copy " + activityToCopy);
-        Activity plusOneDay = activityToCopy.plus(ONE_DAY_IN_MILLIS);
-        dispatcher.execute(new SaveActivityAction(plusOneDay), new KarakaCallback<SaveActivityResult>(eventBus)
-        {
-            @Override
-            public void onSuccess(SaveActivityResult result)
-            {
-                Activity copiedActivity = result.getStoredActivity();
-                updateActivities(null, copiedActivity);
-                ActivityChangedEvent.fire(ActivityController.this, NEW, copiedActivity, activities);
-                ShowMessageEvent.fire(ActivityController.this,
-                        new Message(INFO, "Activity \"" + copiedActivity.getName() + "\" added", true));
-            }
-        });
-    }
-
-
-    void start(final Activity activityToStart)
-    {
-        info(activity, "About to start " + activityToStart);
-        if (activityToStart.isStopped())
-        {
-            // if there's currently another activity running, stop it.
-            if (runningActivity != null && runningActivity.isRunning() && !runningActivity.equals(activityToStart))
-            {
-                info(activity, "Stopping currently running " + runningActivity);
-                Activity runningActivityBackup = runningActivity;
-                stopTicking();
-                dispatcher.execute(new SaveActivityAction(runningActivityBackup), new KarakaCallback<SaveActivityResult>(
-                        eventBus)
+        info(activity, "About to copy " + activityToCopy);
+        dispatcher.execute(new CopyActivityAction(activityToCopy, ONE_DAY),
+                new KarakaCallback<CopyActivityResult>(eventBus)
                 {
                     @Override
-                    public void onSuccess(SaveActivityResult result)
+                    public void onSuccess(CopyActivityResult result)
                     {
-                        Activity stoppedActivity = result.getStoredActivity();
-                        info(activity, "Successfully stopped " + stoppedActivity);
-                        start(activityToStart);
+                        Activity copiedActivity = result.getCopy();
+                        info(activity, activityToCopy + " successfully copied as " + copiedActivity);
+                        updateActivities(null, copiedActivity);
+                        ActivityChangedEvent.fire(ActivityController.this, NEW, copiedActivity, activities);
+                        ShowMessageEvent.fire(ActivityController.this,
+                                new Message(INFO, "Activity \"" + copiedActivity.getName() + "\" added", true));
                     }
                 });
-            }
-            else
-            {
-                // Is there an activity to resume?
-                boolean resume = false;
-                if (activityToStart.isToday())
-                {
-                    // Get the activities for today
-                    SortedSet<Activity> activitiesOfToday = Sets.filter(activities.activities(),
-                            new Predicate<Activity>()
-                            {
-                                @Override
-                                public boolean apply(@Nullable Activity input)
-                                {
-                                    return input != null && input.isToday();
-                                }
-                            });
-                    resume = activitiesOfToday.contains(activityToStart);
-                }
-                if (resume)
-                {
-                    info(activity, "Resuming " + activityToStart);
-                    activityToStart.resume();
-                    dispatcher.execute(new SaveActivityAction(activityToStart), new KarakaCallback<SaveActivityResult>(
-                            eventBus)
-                    {
-                        @Override
-                        public void onSuccess(SaveActivityResult result)
-                        {
-                            runningActivity = result.getStoredActivity();
-                            updateActivities(activityToStart, runningActivity);
-                            ActivityChangedEvent.fire(ActivityController.this, RESUMED, runningActivity, activities);
-                            ShowMessageEvent.fire(ActivityController.this, new Message(INFO, "Activity \""
-                                    + runningActivity.getName() + "\" resumed", true));
-                            checkAndrefreshProjectsAndTags(activityToStart);
-                            startTicking();
-                        }
-                    });
-                }
-                else
-                {
-                    // If the parameter is an existing activity. We have to copy
-                    // this activity.
-                    final Activity newActivity = activityToStart.isTransient() ? activityToStart : activityToStart
-                            .copy();
-                    newActivity.start();
-                    info(activity, "Starting " + newActivity);
-                    dispatcher.execute(new SaveActivityAction(newActivity), new KarakaCallback<SaveActivityResult>(
-                            eventBus)
-                    {
-                        @Override
-                        public void onSuccess(SaveActivityResult result)
-                        {
-                            runningActivity = result.getStoredActivity();
-                            updateActivities(newActivity, runningActivity);
-                            ActivityChangedEvent.fire(ActivityController.this, STARTED, runningActivity, activities);
-                            ShowMessageEvent.fire(ActivityController.this, new Message(INFO, "Activity \""
-                                    + runningActivity.getName() + "\" started", true));
-                            checkAndrefreshProjectsAndTags(activityToStart);
-                            startTicking();
-                        }
-                    });
-                }
-            }
+    }
+
+    void start(final Activity activityToResumeOrStart)
+    {
+        info(activity, "About to resume / start " + activityToResumeOrStart);
+        if (activityToResumeOrStart.isRunning())
+        {
+            info(activity, activityToResumeOrStart + " already running");
         }
         else
         {
-            info(activity, activityToStart + " already running");
+            dispatcher.execute(new StartActivityAction(activityToResumeOrStart),
+                    new KarakaCallback<StartActivityResult>(eventBus)
+                    {
+                        @Override
+                        public void onSuccess(final StartActivityResult result)
+                        {
+                            Set<Activity> modifiedActivities = result.getModified();
+                            runningActivity = extractRunningActivity(modifiedActivities);
+                            boolean resumed = modifiedActivities.contains(activityToResumeOrStart);
+                            info(activity,
+                                    activityToResumeOrStart + " successfully " + (resumed ? "resumed" : "started") + ". Modified activities: " + modifiedActivities);
+                            updateActivities(activityToResumeOrStart, modifiedActivities.toArray(new Activity[]{}));
+                            ActivityChangedEvent
+                                    .fire(ActivityController.this, resumed ? RESUMED : STARTED, runningActivity,
+                                            activities);
+                            ShowMessageEvent.fire(ActivityController.this, new Message(INFO, "Activity \""
+                                    + runningActivity.getName() + "\" " + (resumed ? "resumed" : "started"), true));
+                            checkAndrefreshProjectsAndTags(activityToResumeOrStart);
+                            startTicking();
+                        }
+                    });
         }
     }
-
 
     void stop(final Activity activityToStop)
     {
         info(activity, "About to stop " + activityToStop);
-        if (activityToStop.isRunning())
+        if (activityToStop.isStopped())
+        {
+            info(activity, activityToStop + " already stopped");
+        }
+        else
         {
             if (!activityToStop.equals(runningActivity))
             {
@@ -328,13 +268,14 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                         + " which is not the same as the internal running " + runningActivity + "!");
             }
             stopTicking();
-            activityToStop.stop();
-            dispatcher.execute(new SaveActivityAction(activityToStop), new KarakaCallback<SaveActivityResult>(eventBus)
+            dispatcher.execute(new StopActivityAction(activityToStop), new KarakaCallback<StopActivityResult>(eventBus)
             {
                 @Override
-                public void onSuccess(SaveActivityResult result)
+                public void onSuccess(StopActivityResult result)
                 {
-                    Activity stoppedActivity = result.getStoredActivity();
+                    Activity stoppedActivity = result.getStopped();
+                    info(activity,
+                            activityToStop + " successfully stopped as " + stoppedActivity);
                     updateActivities(activityToStop, stoppedActivity);
                     ActivityChangedEvent.fire(ActivityController.this, STOPPED, stoppedActivity, activities);
                     ShowMessageEvent.fire(ActivityController.this,
@@ -342,12 +283,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                 }
             });
         }
-        else
-        {
-            info(activity, activityToStop + " already stopped");
-        }
     }
-
 
     void delete(final Activity activityToDelete)
     {
@@ -361,39 +297,44 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
             }
             stopTicking();
         }
-        dispatcher.execute(new DeleteActivityAction(activityToDelete), new KarakaCallback<DeleteActivityResult>(eventBus)
-        {
-            @Override
-            public void onSuccess(DeleteActivityResult result)
-            {
-                updateActivities(activityToDelete, null);
-                ActivityChangedEvent.fire(ActivityController.this, DELETE, activityToDelete, activities);
-                ShowMessageEvent.fire(ActivityController.this,
-                        new Message(INFO, "Activity \"" + activityToDelete.getName() + "\" deleted", true));
-            }
-        });
+        dispatcher
+                .execute(new DeleteActivityAction(activityToDelete), new KarakaCallback<DeleteActivityResult>(eventBus)
+                {
+                    @Override
+                    public void onSuccess(DeleteActivityResult result)
+                    {
+                        info(activity, activityToDelete + " successfully deleted");
+                        updateActivities(activityToDelete);
+                        ActivityChangedEvent.fire(ActivityController.this, DELETE, activityToDelete, activities);
+                        ShowMessageEvent.fire(ActivityController.this,
+                                new Message(INFO, "Activity \"" + activityToDelete.getName() + "\" deleted", true));
+                    }
+                });
     }
 
-
-    private void updateActivities(Activity activityBefore, Activity activityAfter)
+    private void updateActivities(Activity activityBefore, Activity... activitiesAfter)
     {
         if (activities.contains(activityBefore))
         {
             activities.remove(activityBefore);
         }
-        if (activities.matchingRange(activityAfter))
+        if (activitiesAfter != null)
         {
-            activities.add(activityAfter);
+            for (Activity activityAfter : activitiesAfter)
+            {
+                if (activities.matchingRange(activityAfter))
+                {
+                    activities.add(activityAfter);
+                }
+            }
         }
     }
 
-
     /**
      * Called after an activity was saved successfully. If the unsaved activity
-     * contained transient project or tags, we have to refresh our local caches!
-     * 
-     * @param activity
-     *            The activity before it was saved
+     * contained a transient project or tags, we have to refresh our local caches!
+     *
+     * @param activity The activity before it was saved
      */
     private void checkAndrefreshProjectsAndTags(Activity activity)
     {
@@ -413,6 +354,18 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         }
     }
 
+    private Activity extractRunningActivity(final Set<Activity> modifiedActivities)
+    {
+        for (Activity modifiedActivity : modifiedActivities)
+        {
+            if (modifiedActivity.isRunning())
+            {
+                return runningActivity;
+            }
+        }
+        return null;
+    }
+
 
     // ------------------------------------------------------------------- tick
 
@@ -422,17 +375,14 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         scheduler.scheduleFixedPeriod(ActivityController.this, TICK_INTERVAL);
     }
 
-
     /**
      * Stops the {@code runningActivity} and sets it to <code>null</code>.
      */
     private void stopTicking()
     {
         ticking = false;
-        runningActivity.stop();
         runningActivity = null;
     }
-
 
     @Override
     public boolean execute()
@@ -444,14 +394,16 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
     {
         if (ticking)
         {
-            info(activity, "Tick for " + runningActivity);
-            runningActivity.tick();
-            dispatcher.execute(new SaveActivityAction(runningActivity), new KarakaCallback<SaveActivityResult>(eventBus)
+            info(activity, "About to tick " + runningActivity);
+            dispatcher.execute(new TickActivityAction(runningActivity), new KarakaCallback<TickActivityResult>(eventBus)
             {
                 @Override
-                public void onSuccess(SaveActivityResult result)
+                public void onSuccess(TickActivityResult result)
                 {
-                    runningActivity = result.getStoredActivity();
+                    Set<Activity> modifiedActivities = result.getModified();
+                    runningActivity = extractRunningActivity(modifiedActivities);
+                    info(activity,
+                            runningActivity + " successfully ticked. Modified activities: " + modifiedActivities);
                     updateActivities(runningActivity, runningActivity);
                     TickEvent.fire(ActivityController.this, runningActivity, activities);
                 }

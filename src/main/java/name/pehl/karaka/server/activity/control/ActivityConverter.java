@@ -11,11 +11,13 @@ import name.pehl.karaka.server.settings.entity.Settings;
 import name.pehl.karaka.server.tag.control.TagConverter;
 import name.pehl.karaka.server.tag.control.TagRepository;
 import name.pehl.karaka.shared.model.Duration;
+import org.joda.time.DateTime;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,7 +55,7 @@ public class ActivityConverter extends
         model.setEnd(new name.pehl.karaka.shared.model.Time(entity.getEnd().toDate(), entity.getEnd()
                 .getYear(), entity.getEnd().getMonth(), entity.getEnd().getWeek(), entity.getEnd().getDay()));
         model.setPause(new Duration(entity.getPause()));
-        model.setDuration(new Duration(entity.getMinutes()));
+        model.setDuration(new Duration(entity.getDuration()));
         model.setBillable(entity.isBillable());
         model.setStatus(entity.getStatus());
 
@@ -124,17 +126,17 @@ public class ActivityConverter extends
         entity.setDescription(model.getDescription());
         if (model.getStart() != null)
         {
-//            entity.setStart(new name.pehl.karaka.server.activity.entity.Time(model.getStart().getDate(), settings
-//                    .get().getTimeZone()));
+            entity.setStart(new name.pehl.karaka.server.activity.entity.Time(model.getStart().getDate(), settings
+                    .get().getTimeZone()));
         }
         else
         {
-//            entity.setStart(new name.pehl.karaka.server.activity.entity.Time(new Date(), settings.get().getTimeZone()));
+            entity.setStart(new name.pehl.karaka.server.activity.entity.Time(new Date(), settings.get().getTimeZone()));
         }
         if (model.getEnd() != null)
         {
-//            entity.setEnd(new name.pehl.karaka.server.activity.entity.Time(model.getEnd().getDate(), settings
-//                    .get().getTimeZone()));
+            entity.setEnd(new name.pehl.karaka.server.activity.entity.Time(model.getEnd().getDate(), settings
+                    .get().getTimeZone()));
         }
         else
         {
@@ -147,20 +149,20 @@ public class ActivityConverter extends
             // then the end time is calculated.
             if (model.isStopped() && model.getStart() != null && !model.getDuration().isZero())
             {
-//                DateTime start = entity.getStart().getDateTime();
-//                DateTime end = start.plusMinutes((int) model.getDuration().getTotalMinutes());
-//                entity.setEnd(
-//                        new name.pehl.karaka.server.activity.entity.Time(end.toDate(), settings.get().getTimeZone()));
+                DateTime end = entity.getStart().plusMinutes((int) model.getDuration().getTotalMinutes());
+                entity.setEnd(
+                        new name.pehl.karaka.server.activity.entity.Time(end.toDate(), settings.get().getTimeZone()));
             }
             else
             {
-//                entity.setEnd(
-//                        new name.pehl.karaka.server.activity.entity.Time(new Date(), settings.get().getTimeZone()));
+                // fall back to current time
+                entity.setEnd(
+                        new name.pehl.karaka.server.activity.entity.Time(new Date(), settings.get().getTimeZone()));
             }
         }
-//        entity.setPause(model.getPause().getTotalMinutes());
+        entity.setPause(model.getPause().getTotalMinutes());
         entity.setBillable(model.isBillable());
-        // entity.setStatus(model.getStatus()); Status can only be changed calling distinct services!
+        // entity.setStatus(model.getStatus()); Status can only be changed calling distinct service methods!
 
         // relations
         Key<name.pehl.karaka.server.project.entity.Project> projectKey = null;

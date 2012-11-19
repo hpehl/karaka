@@ -28,7 +28,6 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -40,13 +39,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.*;
 import static name.pehl.karaka.shared.model.HasLinks.SELF;
+import static name.pehl.karaka.shared.model.Status.STOPPED;
 import static name.pehl.karaka.shared.model.TimeUnit.*;
 import static org.joda.time.Months.months;
 import static org.joda.time.Weeks.weeks;
@@ -54,7 +55,7 @@ import static org.joda.time.Weeks.weeks;
 /**
  * Supported methods:
  * <p/>
- * <p>GET Methods:</p>
+ * <p>Read methods:</p>
  * <ul>
  * <li>GET /activities/{year}/{month}: Find activities by year and month</li>
  * <li>GET /activities/{year}/{month}/duration: Get the duration in minutes of the specified activities</li>
@@ -77,30 +78,44 @@ import static org.joda.time.Weeks.weeks;
  * <li>GET /activities/running: Find the running activity</li>
  * <li>GET /activities/years: Returns the years, months and weeks in which activities are stored</li>
  * </ul>
- * <p>Other methods:</p>
+ * <p>CUD methods:</p>
  * <ul>
- * <li>POST: Create a new activity. If the state of the new activity is
- * {@link name.pehl.karaka.shared.model.Status#RUNNING} and there's another running activity, the other activity is
- * stopped.</li>
- * <li>PUT /activities/{id}: Update an existing activity. Please note that changes to the status of an activity are
- * ignored by this method! The only way to change the state of an activity is to call the relvant method / url pair.
- * <li>PUT /activities/{id}/start: Start the specified activity. If the activity is already started nothing will
- * happen. If the activity is stopped a new activity will be started or the current activity will be resumed. If
- * there's another running activity this activity will be stoped first.</li>
- * <li>PUT /activities/{id}/stop: Stops the specified activity</li>
- * <li>DELETE /activities/{id}: Delete an existing activity</li>
- * </ul>
- * <p>
- * Normally for POST and PUT the end time is taken from the JSON input and the duration in minutes is calculated.
- * There's one exception to this rule: If
- * </p>
+ * <li>PUT /activities/{id}: Update an existing activity. The data for the activity must be provided in the request
+ * body. The end time of the activity is taken from the JSON input and the duration in minutes is calculated. There's
+ * one exception to this rule: If
  * <ul>
- * <li>the activity is stopped
- * <li>the start time is present
- * <li>the end time is not present and
- * <li>the duration in minutes is specified
+ * <li>the activity is stopped</li>
+ * <li>the start time is present</li>
+ * <li>the end time is not present and</li>
+ * <li>the duration in minutes is specified</li>
  * </ul>
- * then the end time is calculated.
+ * then the end time is calculated. Please note that changes to the status of an activity are ignored by this method!
+ * The only way to change the status of an activity is to call the relvant method / url pair.<br/>
+ * The method returns 200 together with the updated activity.</li>
+ * <li>PUT /activities/{id}/copy/{period}: Copy an existing activity as a new activity and adds the specified period.
+ * The period must follow the format described at <a href="http://en.wikipedia.org/wiki/ISO_8601#Durations">ISO8601</a>.
+ * The status of the original activity is not touched.<br/>
+ * The method returns 201 together with the copied activity.</li>
+ * <li>PUT /activities/start: Start a new activity. The data for the new activity must be provided in the request body.
+ * The new activity will be stored as the running activity. If there's another running activity that activity will be
+ * stopped first.<br/>
+ * The method returns 201 together with the created / modified activities in a collection (even if there was only one
+ * activity created).</li>
+ * <li>PUT /activities/{id}/start: Start an existing activity. Depending on the activities start date the activity is
+ * resumed (start date == today) or started as a new activity (start date != today). If there's another running
+ * activity that activity will be stopped first.<br/>
+ * The method returns 200 together with all modified activities in a collection (even if there was only one activity
+ * modified). If the activity was already started nothing will happen and 304 is returned.</li>
+ * <li>PUT /activities/{id}/tick: Tick an existing activity i.e. sets the end time to the current time and saves the
+ * activity. If the activity is not yet started, it will be started first. If there's another running activity that
+ * activity will be stopped first.<br/>
+ * The method returns 200 together with all modified activities in a collection (even if there was only one activity
+ * modified).</li>
+ * <li>PUT /activities/{id}/stop: Stop an existing activity.<br/>
+ * The method returns 200 together with the updated activity. If the activity is already stopped nothing will happen
+ * and 304 is returned.</li>
+ * <li>DELETE /activities/{id}: Delete an existing activity and return 204.</li>
+ * </ul>
  *
  * @author $Author: harald.pehl $
  * @version $Date: 2011-05-16 12:54:26 +0200 (Mo, 16. Mai 2011) $ $Revision: 110
@@ -496,27 +511,17 @@ public class ActivitiesResource
 
     // ------------------------------------------------------------ CUD methods
 
-    @POST
-    public Response saveNewActivity(name.pehl.karaka.shared.model.Activity newClientActivity)
-    {
-        Activity newServerActivity = activityConverter.fromModel(newClientActivity);
-        repository.put(newServerActivity);
-        name.pehl.karaka.shared.model.Activity createdClientActivity = activityConverter.toModel(newServerActivity);
-        return Response.status(CREATED).entity(createdClientActivity).build();
-    }
-
     @PUT
-    @Path("{id}")
-    public Response updateExistingActivity(@PathParam("id") String id,
-            name.pehl.karaka.shared.model.Activity modifiedClientActivity)
+    @Path("/{id}")
+    public Response updateActivity(@PathParam("id") String id,
+            name.pehl.karaka.shared.model.Activity clientActivity)
     {
         try
         {
-            Activity existingServerActivity = repository.get(Key.<Activity>create(id));
-            activityConverter.merge(modifiedClientActivity, existingServerActivity);
-            repository.put(existingServerActivity);
-            name.pehl.karaka.shared.model.Activity updatedClientActivity = activityConverter
-                    .toModel(existingServerActivity);
+            Activity serverActivity = repository.get(Key.<Activity>create(id));
+            activityConverter.merge(clientActivity, serverActivity);
+            repository.put(serverActivity);
+            name.pehl.karaka.shared.model.Activity updatedClientActivity = activityConverter.toModel(serverActivity);
             return Response.ok(updatedClientActivity).build();
         }
         catch (com.googlecode.objectify.NotFoundException e)
@@ -526,14 +531,75 @@ public class ActivitiesResource
     }
 
     @PUT
+    @Path("/{id}/copy/{period}")
+    public Response copyActivity(@PathParam("id") String id, @PathParam("period") String period)
+    {
+        try
+        {
+            Activity activity = repository.get(Key.<Activity>create(id));
+            Activity copy = activity.copy(period);
+            repository.put(copy);
+            name.pehl.karaka.shared.model.Activity clientCopy = activityConverter.toModel(copy);
+            return Response.status(CREATED).entity(clientCopy).build();
+        }
+        catch (com.googlecode.objectify.NotFoundException e)
+        {
+            return Response.status(NOT_FOUND).build();
+        }
+        catch (IllegalArgumentException e)
+        {
+            return Response.status(BAD_REQUEST).entity(
+                    "Illegal format for period \"" + period + "\". See http://en.wikipedia.org/wiki/ISO_8601#Durations for a valid format")
+                    .build();
+        }
+    }
+
+    @PUT
+    @Path("start")
+    public Response startNewActivity(name.pehl.karaka.shared.model.Activity clientActivity)
+    {
+        // TODO Is it an error if the client activity already exists on the server?
+        Activity newServerActivity = activityConverter.fromModel(clientActivity);
+        repository.put(newServerActivity);
+        name.pehl.karaka.shared.model.Activity createdClientActivity = activityConverter.toModel(newServerActivity);
+        return Response.status(CREATED).entity(createdClientActivity).build();
+    }
+
+    @PUT
     @Path("{id}/start")
     public Response startActivity(@PathParam("id") String id)
     {
         try
         {
             Activity activity = repository.get(Key.<Activity>create(id));
-            repository.start(activity);
-            return Response.ok().build();
+            Iterable<Activity> modifiedActivities = repository.start(activity);
+            Set<name.pehl.karaka.shared.model.Activity> clientActivities = new HashSet<name.pehl.karaka.shared.model.Activity>();
+            for (Activity modifiedActivity : modifiedActivities)
+            {
+                clientActivities.add(activityConverter.toModel(modifiedActivity));
+            }
+            return Response.ok(clientActivities).build();
+        }
+        catch (com.googlecode.objectify.NotFoundException e)
+        {
+            return Response.status(NOT_FOUND).build();
+        }
+    }
+
+    @PUT
+    @Path("{id}/tick")
+    public Response tickActivity(@PathParam("id") String id)
+    {
+        try
+        {
+            Activity activity = repository.get(Key.<Activity>create(id));
+            Iterable<Activity> modifiedActivities = repository.tick(activity);
+            Set<name.pehl.karaka.shared.model.Activity> clientActivities = new HashSet<name.pehl.karaka.shared.model.Activity>();
+            for (Activity modifiedActivity : modifiedActivities)
+            {
+                clientActivities.add(activityConverter.toModel(modifiedActivity));
+            }
+            return Response.ok(clientActivities).build();
         }
         catch (com.googlecode.objectify.NotFoundException e)
         {
@@ -548,8 +614,17 @@ public class ActivitiesResource
         try
         {
             Activity activity = repository.get(Key.<Activity>create(id));
-            repository.stop(activity);
-            return Response.ok().build();
+            if (activity.getStatus() == STOPPED)
+            {
+                return Response.status(NOT_MODIFIED).build();
+            }
+            else
+            {
+                activity.stop();
+                repository.put(activity);
+                name.pehl.karaka.shared.model.Activity clientActivity = activityConverter.toModel(activity);
+                return Response.ok(clientActivity).build();
+            }
         }
         catch (com.googlecode.objectify.NotFoundException e)
         {
@@ -559,7 +634,7 @@ public class ActivitiesResource
 
     @DELETE
     @Path("{id}")
-    public Response deleteExistingActivity(@PathParam("id") String id)
+    public Response deleteActivity(@PathParam("id") String id)
     {
         try
         {
@@ -586,7 +661,7 @@ public class ActivitiesResource
         long minutes = 0;
         for (Activity activity : activities)
         {
-            minutes += activity.getMinutes();
+            minutes += activity.getDuration();
         }
         return new Duration(minutes);
     }

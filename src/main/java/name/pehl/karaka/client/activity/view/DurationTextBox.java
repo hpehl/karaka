@@ -106,4 +106,9 @@ public class DurationTextBox extends Composite implements HasValue<Duration>, Is
             // TODO Error handling
         }
     }
+
+    public void clear()
+    {
+        textBox.setText("");
+    }
 }

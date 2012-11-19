@@ -1,10 +1,12 @@
 package name.pehl.karaka.server.activity.entity;
 
 import org.joda.time.Chronology;
+import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeFieldType;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Instant;
+import org.joda.time.ReadableDateTime;
 import org.joda.time.ReadableInstant;
 
 import javax.persistence.Transient;
@@ -43,32 +45,39 @@ public class Time implements ReadableInstant
     // ----------------------------------------------------------- constructors
 
 
-    Time()
+    public Time()
     {
-        this(new Date(), DateTimeZone.getDefault());
+        init(null);
     }
 
+    public Time(Time time)
+    {
+        init(time == null ? null : time.dateTime);
+    }
+
+    public Time(ReadableDateTime dateTime)
+    {
+        init(dateTime);
+    }
+
+    public Time(DateTime dateTime)
+    {
+        init(dateTime);
+    }
 
     public Time(Date date, DateTimeZone timeZone)
     {
-        init(date, timeZone);
+        init(new DateTime(date, timeZone));
     }
 
-    void init(Date date, DateTimeZone timeZone)
+    void init(ReadableDateTime dateTime)
     {
-        if (date == null)
-        {
-            this.dateTime = new DateTime(timeZone);
-        }
-        else
-        {
-            this.dateTime = new DateTime(date.getTime(), timeZone);
-        }
-        this.date = dateTime.toDate();
-        this.year = dateTime.year().get();
-        this.month = dateTime.monthOfYear().get();
-        this.week = dateTime.weekOfWeekyear().get();
-        this.day = dateTime.dayOfMonth().get();
+        this.dateTime = dateTime == null ? new DateTime(DateTimeZone.getDefault()) : new DateTime(dateTime);
+        this.date = this.dateTime.toDate();
+        this.year = this.dateTime.year().get();
+        this.month = this.dateTime.monthOfYear().get();
+        this.week = this.dateTime.weekOfWeekyear().get();
+        this.day = this.dateTime.dayOfMonth().get();
     }
 
 
@@ -182,4 +191,8 @@ public class Time implements ReadableInstant
 
     @Override
     public int compareTo(final ReadableInstant readableInstant) {return dateTime.compareTo(readableInstant);}
+
+    public DateMidnight toDateMidnight() {return dateTime.toDateMidnight();}
+
+    public DateTime plusMinutes(final int minutes) {return dateTime.plusMinutes(minutes);}
 }

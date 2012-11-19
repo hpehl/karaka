@@ -54,6 +54,8 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
     public interface MyView extends View, HasUiHandlers<NewActivityUiHandlers>
     {
         void setProject(Project project);
+
+        void clear();
     }
 
     final DispatchAsync dispatcher;
@@ -228,10 +230,12 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
         // 3. Duration
         if (enteredDuration == null || enteredDuration.isZero())
         {
+            // Start the new activity
             ActivityActionEvent.fire(this, START_STOP, activity);
         }
         else
         {
+            // Just store the new activity
             if (!activity.isTransient())
             {
                 activity = activity.copy();
@@ -260,5 +264,6 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
             activity.setDuration(enteredDuration);
             ActivityActionEvent.fire(this, SAVE, activity);
         }
+        getView().clear();
     }
 }

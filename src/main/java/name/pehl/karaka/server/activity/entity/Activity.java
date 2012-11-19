@@ -1,5 +1,6 @@
 package name.pehl.karaka.server.activity.entity;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ComparisonChain;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
@@ -9,9 +10,11 @@ import name.pehl.karaka.server.entity.DescriptiveEntity;
 import name.pehl.karaka.server.project.entity.Project;
 import name.pehl.karaka.server.tag.entity.Tag;
 import name.pehl.karaka.shared.model.Status;
+import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Minutes;
+import org.joda.time.Period;
 
 import javax.persistence.Embedded;
 import javax.persistence.PostLoad;
@@ -42,7 +45,6 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     // ------------------------------------------------------ members
 
     private static final long serialVersionUID = 3829933815690771262L;
-
     @Unindexed private final String timeZoneId;
     @Embedded private Time start;
     @Embedded @Unindexed private Time end;
@@ -55,6 +57,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
 
 
     // ------------------------------------------------------ constructors
+
 
     Activity()
     {
@@ -117,86 +120,99 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
         }
         if (start != null && start.date != null)
         {
-            start.init(start.date, timeZone);
+            start.init(new DateTime(start.date, timeZone));
         }
         if (end != null && end.date != null)
         {
-            end.init(end.date, timeZone);
+            end.init(new DateTime(end.date, timeZone));
         }
     }
 
 
     // --------------------------------------------------------- business methods
 
-    public Activity start()
+    /**
+     * Creates a new activity which is a copy of this activitiy with the
+     * following differences:
+     * <ul>
+     * <li>Id is <code>null</code> i.e. the copy is a transient activity
+     * <li>Start and end is the current time.
+     * <li>pause and duration are 0.
+     * <li>status is {@link Status#STOPPED}
+     * </ul>
+     *
+     * @return
+     */
+    public Activity copy()
     {
-        ensureStart();
-        ensureEnd();
-        status = RUNNING;
-        return this;
+        Activity copy = new Activity(getName(), getDescription(), timeZone);
+        copy.setProject(project);
+        copy.setTags(tags);
+        return copy;
     }
 
-    public Activity resume()
+    /**
+     * Copies the current activity and adds the specified period to the start and end date.
+     * The period must follow <a href="http://en.wikipedia.org/wiki/ISO_8601#Durations">ISO8601</a>.
+     *
+     * @param period
+     *
+     * @return
+     *
+     * @throws IllegalArgumentException if the duration is null, empty or
+     */
+    public Activity copy(final String period)
     {
-        ensureStart();
-        ensureEnd();
-        DateTime now = new DateTime(timeZone);
+        if (Strings.emptyToNull(period) == null)
+        {
+            throw new IllegalArgumentException("Period must not be null");
+        }
+        Period p = Period.parse(period);
+        Activity copy = copy();
+        copy.setEnd(new Time(end.dateTime.withPeriodAdded(p, 1)));
+        copy.setStart(new Time(start.dateTime.withPeriodAdded(p, 1)));
+        return copy;
+    }
+
+    public void start()
+    {
+        start = now();
+        end = now();
+        status = RUNNING;
+    }
+
+    public void resume()
+    {
         if (start.isAfterNow())
         {
-            start = new Time(null, timeZone);
+            start = now();
         }
         if (end.isAfterNow())
         {
-            end = new Time(null, timeZone);
+            end = now();
         }
-        pause += minutesBetween(end, now).getMinutes();
+        pause += minutesBetween(end, now()).getMinutes();
         end = now();
         status = RUNNING;
-        return this;
     }
 
-    public Activity tick()
-    {
-        return tick(now());
-    }
-
-    public Activity tick(Time to)
+    public void tick()
     {
         if (status == RUNNING)
         {
-            ensureStart();
-            end = to;
+            end = now();
         }
-        return this;
     }
 
-    public Activity stop()
+    public void stop()
     {
-        ensureStart();
         end = now();
         status = STOPPED;
-        return this;
-    }
-
-    private void ensureStart()
-    {
-        if (this.start == null)
-        {
-            this.start = now();
-        }
-    }
-
-    private void ensureEnd()
-    {
-        if (this.end == null)
-        {
-            this.end = now();
-        }
     }
 
     private Time now()
     {
-        return new Time(null, timeZone);
+        return new Time();
     }
 
 
@@ -227,7 +243,13 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
 
     // ------------------------------------------------------ properties
 
-    public long getMinutes()
+    public boolean isToday()
+    {
+        DateMidnight now = new DateMidnight(timeZone);
+        return now.equals(start.toDateMidnight());
+    }
+
+    public long getDuration()
     {
         Minutes m = minutesBetween(start, end);
         long minutes = m.getMinutes() - pause;
@@ -239,14 +261,58 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
         return start;
     }
 
+    public void setStart(final Time start)
+    {
+        if (start != null)
+        {
+            if (start.isAfter(end))
+            {
+                this.start = new Time(end);
+                this.pause = 0;
+            }
+            else
+            {
+                this.start = start;
+            }
+        }
+    }
+
     public Time getEnd()
     {
         return end;
     }
 
+    public void setEnd(final Time end)
+    {
+        if (end != null)
+        {
+            if (end.isBefore(start))
+            {
+                this.end = new Time(start);
+                this.pause = 0;
+            }
+            else
+            {
+                this.end = end;
+            }
+        }
+    }
+
     public long getPause()
     {
         return pause;
+    }
+
+    public void setPause(final long pause)
+    {
+        if (pause >= 0)
+        {
+            long duration = minutesBetween(start, end).getMinutes();
+            if (pause <= duration)
+            {
+                this.pause = pause;
+            }
+        }
     }
 
     public List<Key<Tag>> getTags()
