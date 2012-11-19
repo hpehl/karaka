@@ -12,7 +12,7 @@ Karaka ([Maori for "clock"](http://maoridictionary.co.nz/index.cfm?dictionaryKey
 * [Piriti](http://hpehl.github.com/piriti/)
 * [GWT Highcharts](http://www.moxiegroup.com/moxieapps/gwt-highcharts/)
 
-Work is still in progress. But you can take a first look at Karaka following the link below. #
+Work is still in progress. But you can take a first look at Karaka following the link below.
 One last note: Karaka uses some of the new HTML5 / CSS3 features and therefore requires a modern browser. 
 
 <a href="http://www.w3.org/html/logo/"><img src="http://www.w3.org/html/logo/badge/html5-badge-h-css3-graphics-semantics.png" width="197" height="64" title="HTML5 Powered with CSS3 / Styling, Graphics, 3D & Effects, and Semantics"/></a>
@@ -26,4 +26,4 @@ cd karaka
 git checkout develop
 mvn gae:unpack gae:run
 ```
-Open http://localhost:8080/. The local versions generates some sample time entries you can play with.
+Open http://localhost:8080/. The local version generates some sample time entries you can play with.
