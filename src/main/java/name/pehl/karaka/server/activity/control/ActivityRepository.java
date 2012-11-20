@@ -100,7 +100,7 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
     }
 
     /**
-     * Starts or resumes the specified activity. If the activities start day is today, the activity is resumed. If not
+     * Starts or resumes the specified activity. If the activities init day is today, the activity is resumed. If not
      * the activity is cloned and started as a new activity. If there's another activity running, this activity is
      * stopped first. The returned set contains all modified activities (two if there was another activity
      * running, one otherwise).
@@ -120,7 +120,7 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
                 runningActivity.stop();
                 saveMe.add(runningActivity);
             }
-            // same day --> resume, start otherwise
+            // same day --> resume, init otherwise
             if (activity.isToday())
             {
                 activity.resume();

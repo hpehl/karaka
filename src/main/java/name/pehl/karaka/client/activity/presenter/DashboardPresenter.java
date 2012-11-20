@@ -30,7 +30,7 @@ import static name.pehl.karaka.client.logging.Logger.warn;
 
 /**
  * <p>
- * The main presenter in Karaka. This presenter is responsible to start, resume
+ * The main presenter in Karaka. This presenter is responsible to init, resume
  * and stop activities. Other presenters are notified with appropriate events.
  * </p>
  * <h3>Events</h3>

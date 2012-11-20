@@ -108,9 +108,9 @@ public class ActivityConverter extends
     }
 
     /**
-     * Transforms the client side activity into a server side activity. Normally the start and end time is taken from
+     * Transforms the client side activity into a server side activity. Normally the init and end time is taken from
      * the client side activity and the minutes are calculated. There's one exception to this behaviour: If </p> <ul>
-     * <li>the activity is stopped <li>the start time is present <li>the end time is not present and <li>the minutes
+     * <li>the activity is stopped <li>the init time is present <li>the end time is not present and <li>the minutes
      * are
      * specified </ul>
      * <p/>
@@ -143,7 +143,7 @@ public class ActivityConverter extends
             // Normally the end time is taken from the model and the duration in minutes is calculated.
             // There's one exception to this rule: If
             //   - the activity is stopped
-            //   - the start time is present
+            //   - the init time is present
             //   - the end time is not present and
             //   - the duration in minutes is specified
             // then the end time is calculated.

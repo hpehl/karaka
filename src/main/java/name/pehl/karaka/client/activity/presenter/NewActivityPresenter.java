@@ -257,7 +257,7 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
             // This is the only valid use case to call
             // Activity.setMinutes(long) directly. On the server side it is
             // recognized that the activity is stopped and that there's a
-            // start time, a value for minutes but no end time. In this case
+            // init time, a value for minutes but no end time. In this case
             // the end time is calculated on the server
             activity.setStart(new Time(start));
             activity.setEnd(null);

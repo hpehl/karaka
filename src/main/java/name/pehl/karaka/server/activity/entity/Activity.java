@@ -152,7 +152,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
     /**
-     * Copies the current activity and adds the specified period to the start and end date.
+     * Copies the current activity and adds the specified period to the init and end date.
      * The period must follow <a href="http://en.wikipedia.org/wiki/ISO_8601#Durations">ISO8601</a>.
      *
      * @param period
@@ -225,7 +225,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     }
 
     /**
-     * Returns "Activity [&lt;id&gt;, &lt;name&gt;, &lt;start&gt;, &lt;end&gt;,
+     * Returns "Activity [&lt;id&gt;, &lt;name&gt;, &lt;init&gt;, &lt;end&gt;,
      * &lt;pause&gt;, &lt;status&gt;]"
      *
      * @return
