@@ -5,12 +5,24 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtplatform.dispatch.client.actionhandler.ClientActionHandler;
 import com.gwtplatform.dispatch.client.actionhandler.ExecuteCommand;
 import name.pehl.karaka.client.PresenterTest;
+import name.pehl.karaka.client.activity.dispatch.CopyActivityAction;
+import name.pehl.karaka.client.activity.dispatch.CopyActivityHandler;
+import name.pehl.karaka.client.activity.dispatch.CopyActivityResult;
 import name.pehl.karaka.client.activity.dispatch.DeleteActivityAction;
 import name.pehl.karaka.client.activity.dispatch.DeleteActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.DeleteActivityResult;
 import name.pehl.karaka.client.activity.dispatch.SaveActivityAction;
 import name.pehl.karaka.client.activity.dispatch.SaveActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.SaveActivityResult;
+import name.pehl.karaka.client.activity.dispatch.StartActivityAction;
+import name.pehl.karaka.client.activity.dispatch.StartActivityHandler;
+import name.pehl.karaka.client.activity.dispatch.StartActivityResult;
+import name.pehl.karaka.client.activity.dispatch.StopActivityAction;
+import name.pehl.karaka.client.activity.dispatch.StopActivityHandler;
+import name.pehl.karaka.client.activity.dispatch.StopActivityResult;
+import name.pehl.karaka.client.activity.dispatch.TickActivityAction;
+import name.pehl.karaka.client.activity.dispatch.TickActivityHandler;
+import name.pehl.karaka.client.activity.dispatch.TickActivityResult;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.karaka.client.activity.event.ActivityChanged;
 import name.pehl.karaka.client.activity.event.ActivityChangedEvent;
@@ -21,57 +33,70 @@ import name.pehl.karaka.client.activity.event.TickEvent.TickHandler;
 import name.pehl.karaka.client.application.Message;
 import name.pehl.karaka.client.application.ShowMessageEvent;
 import name.pehl.karaka.client.application.ShowMessageEvent.ShowMessageHandler;
+import name.pehl.karaka.client.project.RefreshProjectsEvent;
+import name.pehl.karaka.client.tag.RefreshTagsEvent;
 import name.pehl.karaka.shared.model.Activities;
 import name.pehl.karaka.shared.model.Activity;
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.util.TreeSet;
+import java.util.HashSet;
 
 import static java.util.Arrays.asList;
 import static java.util.logging.Level.INFO;
 import static name.pehl.karaka.client.activity.event.ActivityChanged.ChangeAction.*;
+import static name.pehl.karaka.client.project.RefreshProjectsEvent.RefreshProjectsHandler;
+import static name.pehl.karaka.client.tag.RefreshTagsEvent.RefreshTagsHandler;
 import static name.pehl.karaka.shared.model.Status.RUNNING;
-import static name.pehl.karaka.shared.model.Status.STOPPED;
 import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 
 @Ignore("Needs refactoring")
-public class ActivityControllerTest extends PresenterTest implements TickHandler, ActivityChangedHandler,
-        ShowMessageHandler
+public class ActivityControllerTest extends PresenterTest
+        implements ActivityChangedHandler, RefreshProjectsHandler, RefreshTagsHandler, ShowMessageHandler, TickHandler
 
 {
     // ------------------------------------------------------------------ setup
 
-    static final boolean[][] UPDATE_ACTIVITIES_COMBINATIONS = new boolean[][] { {false, false}, {false, true},
-            {true, false}, {true, true}};
-
-    SaveActivityHandler saveActivityHandler;
+    CopyActivityHandler copyActivityHandler;
     DeleteActivityHandler deleteActivityHandler;
+    SaveActivityHandler saveActivityHandler;
+    StartActivityHandler startActivityHandler;
+    StopActivityHandler stopActivityHandler;
+    TickActivityHandler tickActivityHandler;
     ActivityController cut;
-
 
     @Before
     public void setUp()
     {
         // client action handlers
-        saveActivityHandler = mock(SaveActivityHandler.class);
+        copyActivityHandler = mock(CopyActivityHandler.class);
         deleteActivityHandler = mock(DeleteActivityHandler.class);
+        saveActivityHandler = mock(SaveActivityHandler.class);
+        startActivityHandler = mock(StartActivityHandler.class);
+        stopActivityHandler = mock(StopActivityHandler.class);
+        tickActivityHandler = mock(TickActivityHandler.class);
         ImmutableMap<Class<?>, ClientActionHandler<?, ?>> actionHandlerMappings = new ImmutableMap.Builder<Class<?>, ClientActionHandler<?, ?>>()
+                .put(CopyActivityAction.class, copyActivityHandler)
+                .put(DeleteActivityAction.class, deleteActivityHandler)
                 .put(SaveActivityAction.class, saveActivityHandler)
-                .put(DeleteActivityAction.class, deleteActivityHandler).build();
+                .put(StartActivityAction.class, startActivityHandler)
+                .put(StopActivityAction.class, stopActivityHandler)
+                .put(TickActivityAction.class, tickActivityHandler)
+                .build();
 
-        // class under test
-        addEvents(this, TickEvent.getType(), ActivityChangedEvent.getType(), ShowMessageEvent.getType());
+        // fired events
+        addEvents(this, ActivityChangedEvent.getType(), RefreshProjectsEvent.getType(), RefreshTagsEvent.getType(),
+                ShowMessageEvent.getType(), TickEvent.getType());
         cut = new ActivityController(eventBus, scheduler, newDispatcher(actionHandlerMappings));
-        cut.start();
+        cut.activities = td.newActivities(WEEK);
+        cut.init();
     }
 
 
@@ -83,9 +108,11 @@ public class ActivityControllerTest extends PresenterTest implements TickHandler
         Activity activity = td.newActivity();
         activity.setStatus(RUNNING);
         cut.onRunningActivityLoaded(new RunningActivityLoadedEvent(activity));
-        assertSame(activity, cut.runningActivity);
-    }
 
+        assertTrue(cut.ticking);
+        assertEquals(1, scheduler.getRepeatingCommands().size());
+        assertTick(activity);
+    }
 
     @Test
     public void onActivitiesLoaded()
@@ -95,16 +122,14 @@ public class ActivityControllerTest extends PresenterTest implements TickHandler
         assertSame(activities, cut.activities);
     }
 
-
     @Test
     @SuppressWarnings("unchecked")
     public void save()
     {
-        Activity activityToSave = td.newActivity();
-        activityToSave.setName("Foo");
-        Activity savedActivity = activityToSave.copy();
+        Activity activity = td.newActivity();
+        activity.setName("Foo");
 
-        final SaveActivityResult saveActivityResult = new SaveActivityResult(savedActivity);
+        final SaveActivityResult saveActivityResult = new SaveActivityResult(activity);
         Answer<Object> saveActivityAnswer = new Answer<Object>()
         {
             @Override
@@ -119,230 +144,166 @@ public class ActivityControllerTest extends PresenterTest implements TickHandler
         doAnswer(saveActivityAnswer).when(saveActivityHandler).execute(any(SaveActivityAction.class),
                 any(AsyncCallback.class), any(ExecuteCommand.class));
 
-        for (boolean[] combination : UPDATE_ACTIVITIES_COMBINATIONS)
-        {
-            prepareUpdateActivities(activityToSave, savedActivity, combination[0], combination[1]);
-            cut.save(activityToSave);
-            verifyUpdateActivities(activityToSave, savedActivity, combination[0], combination[1]);
+        cut.save(activity);
 
-            ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
-            Message message = showMessageEvent.getMessage();
-            assertEquals(INFO, message.getLevel());
-            assertEquals("Activity \"Foo\" saved", message.getText());
-            assertTrue(message.isAutoHide());
+        ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
+        Message message = showMessageEvent.getMessage();
+        assertEquals(INFO, message.getLevel());
+        assertEquals("Activity \"Foo\" saved", message.getText());
+        assertTrue(message.isAutoHide());
 
-            ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
-            assertEquals(activityChangedEvent.getAction(), CHANGED);
-            assertSame(activityChangedEvent.getActivity(), savedActivity);
-        }
+        ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
+        assertEquals(activityChangedEvent.getAction(), CHANGED);
+        assertSame(activityChangedEvent.getActivity(), activity);
     }
-
 
     @Test
     @SuppressWarnings("unchecked")
     public void copy()
     {
-        Activity activityToCopy = td.newActivity();
-        activityToCopy.setName("Foo");
-        Activity copiedActivity = activityToCopy.copy();
+        Activity activity = td.newActivity();
+        activity.setName("Foo");
 
-        final SaveActivityResult saveActivityResult = new SaveActivityResult(copiedActivity);
-        Answer<Object> saveActivityAnswer = new Answer<Object>()
+        final CopyActivityResult copyActivityResult = new CopyActivityResult(activity);
+        Answer<Object> copyActivityAnswer = new Answer<Object>()
         {
             @Override
             public Object answer(InvocationOnMock invocation)
             {
-                AsyncCallback<SaveActivityResult> callback = (AsyncCallback<SaveActivityResult>) invocation
+                AsyncCallback<CopyActivityResult> callback = (AsyncCallback<CopyActivityResult>) invocation
                         .getArguments()[1];
-                callback.onSuccess(saveActivityResult);
+                callback.onSuccess(copyActivityResult);
                 return null;
             }
         };
-        doAnswer(saveActivityAnswer).when(saveActivityHandler).execute(any(SaveActivityAction.class),
+        doAnswer(copyActivityAnswer).when(copyActivityHandler).execute(any(CopyActivityAction.class),
                 any(AsyncCallback.class), any(ExecuteCommand.class));
 
-        for (boolean[] combination : UPDATE_ACTIVITIES_COMBINATIONS)
-        {
-            prepareUpdateActivities(null, copiedActivity, combination[0], combination[1]);
-            cut.copy(activityToCopy);
-            verifyUpdateActivities(null, copiedActivity, combination[0], combination[1]);
+        cut.copy(activity);
 
-            ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
-            Message message = showMessageEvent.getMessage();
-            assertEquals(INFO, message.getLevel());
-            assertEquals("Activity \"Foo\" added", message.getText());
-            assertTrue(message.isAutoHide());
+        ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
+        Message message = showMessageEvent.getMessage();
+        assertEquals(INFO, message.getLevel());
+        assertEquals("Activity \"Foo\" added", message.getText());
+        assertTrue(message.isAutoHide());
 
-            ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
-            assertEquals(activityChangedEvent.getAction(), NEW);
-            assertSame(activityChangedEvent.getActivity(), copiedActivity);
-        }
+        ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
+        assertEquals(activityChangedEvent.getAction(), NEW);
+        assertSame(activityChangedEvent.getActivity(), activity);
     }
 
+    @Test
+    public void startRunningActivity()
+    {
+        Activity activity = new Activity();
+        activity.setStatus(RUNNING);
+        cut.start(activity);
+        assertTrue(events.isEmpty());
+    }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void startActivityNoOtherActivityRunning()
+    public void startActivity()
     {
-        // create a *transient* activity!
-        Activity activityToStart = new Activity("Test activity");
-        activityToStart.setStart(td.newTime(DateTime.now().minusDays(1).minusHours(1)));
-        activityToStart.setEnd(td.newTime(DateTime.now()));
-        activityToStart.setName("Foo");
-        Activity startedActivity = activityToStart.copy();
-        startedActivity.setStatus(RUNNING);
+        Activity activity = new Activity();
+        activity.setName("Foo");
+        Activity copy = activity.copy();
+        copy.setStatus(RUNNING);
 
-        final SaveActivityResult saveActivityResult = new SaveActivityResult(startedActivity);
-        Answer<Object> saveActivityAnswer = new Answer<Object>()
+        final StartActivityResult startActivityResult = new StartActivityResult(new HashSet<Activity>(asList(copy)));
+        Answer<Object> startActivityAnswer = new Answer<Object>()
         {
             @Override
             public Object answer(InvocationOnMock invocation)
             {
-                AsyncCallback<SaveActivityResult> callback = (AsyncCallback<SaveActivityResult>) invocation
+                AsyncCallback<StartActivityResult> callback = (AsyncCallback<StartActivityResult>) invocation
                         .getArguments()[1];
-                callback.onSuccess(saveActivityResult);
+                callback.onSuccess(startActivityResult);
                 return null;
             }
         };
-        doAnswer(saveActivityAnswer).when(saveActivityHandler).execute(any(SaveActivityAction.class),
+        doAnswer(startActivityAnswer).when(startActivityHandler).execute(any(StartActivityAction.class),
                 any(AsyncCallback.class), any(ExecuteCommand.class));
 
-        for (boolean[] combination : UPDATE_ACTIVITIES_COMBINATIONS)
-        {
-            activityToStart.setStatus(STOPPED);
-            cut.ticking = false;
-            cut.runningActivity = null;
-            scheduler.getRepeatingCommands().clear();
+        cut.start(activity);
 
-            prepareUpdateActivities(activityToStart, startedActivity, combination[0], combination[1]);
-            cut.start(activityToStart);
-            assertSame(cut.runningActivity, startedActivity);
-            verifyUpdateActivities(activityToStart, startedActivity, combination[0], combination[1]);
+        assertTrue(cut.ticking);
+        assertSame(cut.runningActivity, copy);
+        assertEquals(1, scheduler.getRepeatingCommands().size());
 
-            ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
-            Message message = showMessageEvent.getMessage();
-            assertEquals(INFO, message.getLevel());
-            assertEquals("Activity \"Foo\" started", message.getText());
-            assertTrue(message.isAutoHide());
+        ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
+        Message message = showMessageEvent.getMessage();
+        assertEquals(INFO, message.getLevel());
+        assertEquals("Activity \"Foo\" started", message.getText());
+        assertTrue(message.isAutoHide());
 
-            ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
-            assertEquals(activityChangedEvent.getAction(), STARTED);
-            assertSame(activityChangedEvent.getActivity(), startedActivity);
-
-            assertTrue(cut.ticking);
-            assertEquals(1, scheduler.getRepeatingCommands().size());
-        }
+        ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
+        assertEquals(activityChangedEvent.getAction(), STARTED);
+        assertSame(activityChangedEvent.getActivity(), copy);
     }
-
 
     @Test
-    @SuppressWarnings("unchecked")
-    public void resumeActivityNoOtherActivityRunning()
+    public void stopStoppedActivity()
     {
-        // create a *transient* activity!
-        Activity activityToResume = new Activity("Test activity");
-        activityToResume.setName("Foo");
-        Activity resumedActivity = activityToResume.copy();
-        resumedActivity.setStatus(RUNNING);
-
-        final SaveActivityResult saveActivityResult = new SaveActivityResult(resumedActivity);
-        Answer<Object> saveActivityAnswer = new Answer<Object>()
-        {
-            @Override
-            public Object answer(InvocationOnMock invocation)
-            {
-                AsyncCallback<SaveActivityResult> callback = (AsyncCallback<SaveActivityResult>) invocation
-                        .getArguments()[1];
-                callback.onSuccess(saveActivityResult);
-                return null;
-            }
-        };
-        doAnswer(saveActivityAnswer).when(saveActivityHandler).execute(any(SaveActivityAction.class),
-                any(AsyncCallback.class), any(ExecuteCommand.class));
-
-        for (boolean[] combination : UPDATE_ACTIVITIES_COMBINATIONS)
-        {
-            activityToResume.setStatus(STOPPED);
-            cut.ticking = false;
-            cut.runningActivity = null;
-            scheduler.getRepeatingCommands().clear();
-
-            prepareUpdateActivities(activityToResume, resumedActivity, combination[0], combination[1]);
-            when(cut.activities.activities()).thenReturn(new TreeSet<Activity>(asList(activityToResume)));
-            cut.start(activityToResume);
-            assertSame(cut.runningActivity, resumedActivity);
-            verifyUpdateActivities(activityToResume, resumedActivity, combination[0], combination[1]);
-
-            ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
-            Message message = showMessageEvent.getMessage();
-            assertEquals(INFO, message.getLevel());
-            assertEquals("Activity \"Foo\" resumed", message.getText());
-            assertTrue(message.isAutoHide());
-
-            ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
-            assertEquals(activityChangedEvent.getAction(), RESUMED);
-            assertSame(activityChangedEvent.getActivity(), resumedActivity);
-
-            assertTrue(cut.ticking);
-            assertEquals(1, scheduler.getRepeatingCommands().size());
-        }
+        Activity activity = td.newActivity();
+        cut.stop(activity);
+        assertTrue(events.isEmpty());
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void stopActivityWhichIsNotTheRunningActivity()
+    {
+        Activity activity = td.newActivity();
+        activity.setStatus(RUNNING);
+        cut.stop(activity);
+    }
 
     @Test
     @SuppressWarnings("unchecked")
     public void stop()
     {
-        Activity activityToStop = td.newActivity();
-        activityToStop.setName("Foo");
-        Activity stoppedActivity = activityToStop.copy();
+        Activity activity = td.newActivity();
+        activity.setName("Foo");
+        activity.setStatus(RUNNING);
+        cut.runningActivity = activity;
 
-        final SaveActivityResult saveActivityResult = new SaveActivityResult(stoppedActivity);
-        Answer<Object> saveActivityAnswer = new Answer<Object>()
+        final StopActivityResult stopActivityResult = new StopActivityResult(activity);
+        Answer<Object> stopActivityAnswer = new Answer<Object>()
         {
             @Override
             public Object answer(InvocationOnMock invocation)
             {
-                AsyncCallback<SaveActivityResult> callback = (AsyncCallback<SaveActivityResult>) invocation
+                AsyncCallback<StopActivityResult> callback = (AsyncCallback<StopActivityResult>) invocation
                         .getArguments()[1];
-                callback.onSuccess(saveActivityResult);
+                callback.onSuccess(stopActivityResult);
                 return null;
             }
         };
-        doAnswer(saveActivityAnswer).when(saveActivityHandler).execute(any(SaveActivityAction.class),
+        doAnswer(stopActivityAnswer).when(stopActivityHandler).execute(any(StopActivityAction.class),
                 any(AsyncCallback.class), any(ExecuteCommand.class));
 
-        for (boolean[] combination : UPDATE_ACTIVITIES_COMBINATIONS)
-        {
-            activityToStop.setStatus(RUNNING);
-            cut.runningActivity = activityToStop;
+        cut.stop(activity);
 
-            prepareUpdateActivities(activityToStop, stoppedActivity, combination[0], combination[1]);
-            cut.stop(activityToStop);
-            assertFalse(cut.ticking);
-            assertTrue(activityToStop.isStopped());
-            assertNull(cut.runningActivity);
-            verifyUpdateActivities(activityToStop, stoppedActivity, combination[0], combination[1]);
+        assertFalse(cut.ticking);
+        assertNull(cut.runningActivity);
 
-            ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
-            Message message = showMessageEvent.getMessage();
-            assertEquals(INFO, message.getLevel());
-            assertEquals("Activity \"Foo\" stopped", message.getText());
-            assertTrue(message.isAutoHide());
+        ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
+        Message message = showMessageEvent.getMessage();
+        assertEquals(INFO, message.getLevel());
+        assertEquals("Activity \"Foo\" stopped", message.getText());
+        assertTrue(message.isAutoHide());
 
-            ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
-            assertEquals(activityChangedEvent.getAction(), ActivityChanged.ChangeAction.STOPPED);
-            assertSame(activityChangedEvent.getActivity(), stoppedActivity);
-        }
+        ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
+        assertEquals(activityChangedEvent.getAction(), ActivityChanged.ChangeAction.STOPPED);
+        assertSame(activityChangedEvent.getActivity(), activity);
     }
-
 
     @Test
     @SuppressWarnings("unchecked")
     public void delete()
     {
-        Activity activityToDelete = td.newActivity();
-        activityToDelete.setName("Foo");
+        Activity activity = td.newActivity();
+        activity.setName("Foo");
 
         final DeleteActivityResult deleteActivityResult = new DeleteActivityResult();
         Answer<Object> deleteActivityAnswer = new Answer<Object>()
@@ -359,54 +320,48 @@ public class ActivityControllerTest extends PresenterTest implements TickHandler
         doAnswer(deleteActivityAnswer).when(deleteActivityHandler).execute(any(DeleteActivityAction.class),
                 any(AsyncCallback.class), any(ExecuteCommand.class));
 
-        for (boolean[] combination : UPDATE_ACTIVITIES_COMBINATIONS)
-        {
-            prepareUpdateActivities(activityToDelete, null, combination[0], combination[1]);
-            cut.delete(activityToDelete);
-            verifyUpdateActivities(activityToDelete, null, combination[0], combination[1]);
+        cut.delete(activity);
 
-            ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
-            Message message = showMessageEvent.getMessage();
-            assertEquals(INFO, message.getLevel());
-            assertEquals("Activity \"Foo\" deleted", message.getText());
-            assertTrue(message.isAutoHide());
+        ShowMessageEvent showMessageEvent = (ShowMessageEvent) popEvent();
+        Message message = showMessageEvent.getMessage();
+        assertEquals(INFO, message.getLevel());
+        assertEquals("Activity \"Foo\" deleted", message.getText());
+        assertTrue(message.isAutoHide());
 
-            ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
-            assertEquals(activityChangedEvent.getAction(), DELETE);
-            assertSame(activityChangedEvent.getActivity(), activityToDelete);
-        }
+        ActivityChangedEvent activityChangedEvent = (ActivityChangedEvent) popEvent();
+        assertEquals(activityChangedEvent.getAction(), DELETE);
+        assertSame(activityChangedEvent.getActivity(), activity);
     }
-
 
     @Test
     @SuppressWarnings("unchecked")
     public void onExecuteTick()
     {
-        Activities activities = td.newActivities(WEEK);
+        cut.ticking = true;
         Activity activity = td.newActivity();
         activity.setStatus(RUNNING);
-        activities.add(activity);
-        cut.ticking = true;
-        cut.runningActivity = activity;
-        cut.activities = activities;
+        assertTick(activity);
+    }
 
-        SaveActivityAction saveActivityAction = new SaveActivityAction(activity);
-        final SaveActivityResult saveActivityResult = new SaveActivityResult(activity);
-        Answer<Object> saveActivityAnswer = new Answer<Object>()
+    private void assertTick(final Activity activity)
+    {
+        final TickActivityResult tickActivityResult = new TickActivityResult(new HashSet<Activity>(asList(activity)));
+        Answer<Object> tickActivityAnswer = new Answer<Object>()
         {
             @Override
             public Object answer(InvocationOnMock invocation)
             {
-                AsyncCallback<SaveActivityResult> callback = (AsyncCallback<SaveActivityResult>) invocation
+                AsyncCallback<TickActivityResult> callback = (AsyncCallback<TickActivityResult>) invocation
                         .getArguments()[1];
-                callback.onSuccess(saveActivityResult);
+                callback.onSuccess(tickActivityResult);
                 return null;
             }
         };
-        doAnswer(saveActivityAnswer).when(saveActivityHandler).execute(eq(saveActivityAction),
+        doAnswer(tickActivityAnswer).when(tickActivityHandler).execute(any(TickActivityAction.class),
                 any(AsyncCallback.class), any(ExecuteCommand.class));
 
         cut.execute();
+
         assertSame(activity, cut.runningActivity);
         TickEvent event = (TickEvent) popEvent();
         assertSame(activity, event.getActivity());
@@ -416,18 +371,22 @@ public class ActivityControllerTest extends PresenterTest implements TickHandler
     // ----------------------------------------------------------------- events
 
     @Override
-    public void onTick(TickEvent event)
-    {
-        pushEvent(event);
-    }
-
-
-    @Override
     public void onActivityChanged(ActivityChangedEvent event)
     {
         pushEvent(event);
     }
 
+    @Override
+    public void onRefreshProjects(final RefreshProjectsEvent event)
+    {
+        pushEvent(event);
+    }
+
+    @Override
+    public void onRefreshTags(final RefreshTagsEvent event)
+    {
+        pushEvent(event);
+    }
 
     @Override
     public void onShowMessage(ShowMessageEvent event)
@@ -435,41 +394,9 @@ public class ActivityControllerTest extends PresenterTest implements TickHandler
         pushEvent(event);
     }
 
-
-    // --------------------------------------------------------- helper methods
-
-    void prepareUpdateActivities(Activity activityBefore, Activity activityAfter, boolean contains,
-            boolean matchingRange)
+    @Override
+    public void onTick(TickEvent event)
     {
-        cut.activities = mock(Activities.class);
-        if (activityBefore != null)
-        {
-            when(cut.activities.contains(activityBefore)).thenReturn(contains);
-        }
-        if (activityAfter != null)
-        {
-            when(cut.activities.matchingRange(activityAfter)).thenReturn(matchingRange);
-        }
-    }
-
-
-    void verifyUpdateActivities(Activity activityBefore, Activity activityAfter, boolean contains, boolean matchingRange)
-    {
-        if (contains && activityBefore != null)
-        {
-            verify(cut.activities).remove(activityBefore);
-        }
-        else
-        {
-            verify(cut.activities, never()).remove(activityBefore);
-        }
-        if (matchingRange && activityAfter != null)
-        {
-            verify(cut.activities).add(activityAfter);
-        }
-        else
-        {
-            verify(cut.activities, never()).add(activityAfter);
-        }
+        pushEvent(event);
     }
 }

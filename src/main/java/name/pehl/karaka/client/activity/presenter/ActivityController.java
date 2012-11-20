@@ -58,23 +58,27 @@ import static name.pehl.karaka.client.logging.Logger.info;
  * <ol>
  * <li>IN</li>
  * <ul>
- * <li>{@linkplain RunningActivityLoadedEvent}</li>
- * <li>{@linkplain ActivitiesLoadedEvent}</li>
  * <li>{@linkplain ActivityActionEvent}</li>
+ * <li>{@linkplain ActivitiesLoadedEvent}</li>
+ * <li>{@linkplain RunningActivityLoadedEvent}</li>
  * </ul>
  * <li>OUT</li>
  * <ul>
- * <li>{@linkplain TickEvent}</li>
  * <li>{@linkplain ActivityChangedEvent}</li>
- * <li>{@linkplain ShowMessageEvent}</li>
  * <li>{@linkplain RefreshProjectsEvent}</li>
  * <li>{@linkplain RefreshTagsEvent}</li>
+ * <li>{@linkplain ShowMessageEvent}</li>
+ * <li>{@linkplain TickEvent}</li>
  * </ul>
  * </ol>
  * <h3>Dispatcher actions</h3>
  * <ul>
+ * <li>{@linkplain CopyActivityAction}</li>
  * <li>{@linkplain DeleteActivityAction}</li>
  * <li>{@linkplain SaveActivityAction}</li>
+ * <li>{@linkplain StartActivityAction}</li>
+ * <li>{@linkplain StopActivityAction}</li>
+ * <li>{@linkplain TickActivityAction}</li>
  * </ul>
  *
  * @author $Author: harald.pehl $
@@ -117,7 +121,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         this.dispatcher = dispatcher;
     }
 
-    public void start()
+    public void init()
     {
         eventBus.addHandler(RunningActivityLoadedEvent.getType(), this);
         eventBus.addHandler(ActivitiesLoadedEvent.getType(), this);
@@ -354,13 +358,13 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
         }
     }
 
-    private Activity extractRunningActivity(final Set<Activity> modifiedActivities)
+    private Activity extractRunningActivity(final Set<Activity> activities)
     {
-        for (Activity modifiedActivity : modifiedActivities)
+        for (Activity activity : activities)
         {
-            if (modifiedActivity.isRunning())
+            if (activity.isRunning())
             {
-                return runningActivity;
+                return activity;
             }
         }
         return null;

@@ -147,7 +147,7 @@ public class Activity extends DescriptiveModel implements Comparable<Activity>
      * @param start
      *            must not be null
      * @throws IllegalArgumentException
-     *             if start is <code>null</code>
+     *             if init is <code>null</code>
      */
     public void setStart(Time start)
     {

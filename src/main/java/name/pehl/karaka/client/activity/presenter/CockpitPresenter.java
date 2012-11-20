@@ -34,7 +34,7 @@ import static name.pehl.karaka.client.logging.Logger.warn;
 /**
  * <p>
  * Presenter which displays the most recent activity the duration for today, the
- * current week and month. The user can start / stop the activity. The activity
+ * current week and month. The user can init / stop the activity. The activity
  * does not depend on the activities displayed in the dashboard.
  * </p>
  * <h3>Events</h3>

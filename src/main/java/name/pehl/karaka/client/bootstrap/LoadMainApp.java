@@ -45,7 +45,7 @@ public class LoadMainApp implements BootstrapCommand
     public void execute(final AsyncCallback<Boolean> callback)
     {
         placeManager.revealDefaultPlace();
-        activityController.start();
+        activityController.init();
         callback.onSuccess(TRUE);
     }
 }

@@ -85,7 +85,7 @@ import static org.joda.time.Weeks.weeks;
  * one exception to this rule: If
  * <ul>
  * <li>the activity is stopped</li>
- * <li>the start time is present</li>
+ * <li>the init time is present</li>
  * <li>the end time is not present and</li>
  * <li>the duration in minutes is specified</li>
  * </ul>
@@ -96,13 +96,13 @@ import static org.joda.time.Weeks.weeks;
  * The period must follow the format described at <a href="http://en.wikipedia.org/wiki/ISO_8601#Durations">ISO8601</a>.
  * The status of the original activity is not touched.<br/>
  * The method returns 201 together with the copied activity.</li>
- * <li>PUT /activities/start: Start a new activity. The data for the new activity must be provided in the request body.
+ * <li>PUT /activities/init: Start a new activity. The data for the new activity must be provided in the request body.
  * The new activity will be stored as the running activity. If there's another running activity that activity will be
  * stopped first.<br/>
  * The method returns 201 together with the created / modified activities in a collection (even if there was only one
  * activity created).</li>
- * <li>PUT /activities/{id}/start: Start an existing activity. Depending on the activities start date the activity is
- * resumed (start date == today) or started as a new activity (start date != today). If there's another running
+ * <li>PUT /activities/{id}/init: Start an existing activity. Depending on the activities init date the activity is
+ * resumed (init date == today) or started as a new activity (init date != today). If there's another running
  * activity that activity will be stopped first.<br/>
  * The method returns 200 together with all modified activities in a collection (even if there was only one activity
  * modified). If the activity was already started nothing will happen and 304 is returned.</li>
