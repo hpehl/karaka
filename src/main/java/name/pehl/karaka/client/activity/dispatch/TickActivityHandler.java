@@ -40,7 +40,7 @@ public class TickActivityHandler extends KarakaActionHandler<TickActivityAction,
     @Override
     protected Resource resourceFor(TickActivityAction action)
     {
-        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities", "tick", action.getActivity().getId());
+        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities", action.getActivity().getId(), "tick");
         return new Resource(urlBuilder.toUrl());
     }
 

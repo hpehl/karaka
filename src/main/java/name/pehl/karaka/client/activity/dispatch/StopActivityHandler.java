@@ -1,9 +1,5 @@
 package name.pehl.karaka.client.activity.dispatch;
 
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
@@ -42,7 +38,7 @@ public class StopActivityHandler extends KarakaActionHandler<StopActivityAction,
     @Override
     protected Resource resourceFor(StopActivityAction action)
     {
-        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities", "stop", action.getActivity().getId());
+        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities", action.getActivity().getId(), "stop");
         return new Resource(urlBuilder.toUrl());
     }
 
@@ -65,29 +61,5 @@ public class StopActivityHandler extends KarakaActionHandler<StopActivityAction,
                 return new StopActivityResult(reader.read(json));
             }
         });
-
-
-        try
-        {
-            method.send(new RequestCallback()
-            {
-                @Override
-                public void onResponseReceived(Request request, Response response)
-                {
-                    resultCallback.onSuccess(new StopActivityResult());
-                }
-
-
-                @Override
-                public void onError(Request request, Throwable exception)
-                {
-                    resultCallback.onFailure(exception);
-                }
-            });
-        }
-        catch (RequestException e)
-        {
-            resultCallback.onFailure(e);
-        }
     }
 }

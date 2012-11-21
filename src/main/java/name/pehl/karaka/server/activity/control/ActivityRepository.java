@@ -4,8 +4,6 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import name.pehl.karaka.server.activity.entity.Activity;
 import name.pehl.karaka.server.repository.NamedEntityRepository;
-import name.pehl.karaka.server.settings.control.CurrentSettings;
-import name.pehl.karaka.server.settings.entity.Settings;
 import name.pehl.karaka.shared.model.Status;
 
 import javax.inject.Inject;
@@ -24,9 +22,6 @@ import static name.pehl.karaka.shared.model.Status.STOPPED;
  */
 public class ActivityRepository extends NamedEntityRepository<Activity>
 {
-    @Inject @CurrentSettings Settings settings;
-
-
     @Inject
     public ActivityRepository(ActivityIndexSearch indexSearch)
     {
