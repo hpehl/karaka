@@ -44,10 +44,14 @@ public class StartActivityHandler extends KarakaActionHandler<StartActivityActio
     protected Resource resourceFor(StartActivityAction action)
     {
         Activity activity = action.getActivity();
-        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities", "start");
-        if (!activity.isTransient())
+        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities");
+        if (activity.isTransient())
         {
-            urlBuilder = urlBuilder.path(activity.getId());
+            urlBuilder.path("start");
+        }
+        else
+        {
+            urlBuilder = urlBuilder.path(activity.getId(), "start");
         }
         return new Resource(urlBuilder.toUrl());
     }

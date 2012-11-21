@@ -244,7 +244,23 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                             boolean resumed = modifiedActivities.contains(activityToResumeOrStart);
                             info(activity,
                                     activityToResumeOrStart + " successfully " + (resumed ? "resumed" : "started") + ". Modified activities: " + modifiedActivities);
-                            updateActivities(activityToResumeOrStart, modifiedActivities.toArray(new Activity[]{}));
+
+                            // Remove the activity to start or resume *and* the modified activities first
+                            if (activities.contains(activityToResumeOrStart))
+                            {
+                                activities.remove(activityToResumeOrStart);
+                            }
+                            for (Activity modifiedActivity : modifiedActivities)
+                            {
+                                if (activities.contains(modifiedActivity))
+                                {
+                                    activities.remove(modifiedActivity);
+                                }
+                                if (activities.matchingRange(modifiedActivity))
+                                {
+                                    activities.add(modifiedActivity);
+                                }
+                            }
                             ActivityChangedEvent
                                     .fire(ActivityController.this, resumed ? RESUMED : STARTED, runningActivity,
                                             activities);
@@ -308,7 +324,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                     public void onSuccess(DeleteActivityResult result)
                     {
                         info(activity, activityToDelete + " successfully deleted");
-                        updateActivities(activityToDelete);
+                        updateActivities(activityToDelete, null);
                         ActivityChangedEvent.fire(ActivityController.this, DELETE, activityToDelete, activities);
                         ShowMessageEvent.fire(ActivityController.this,
                                 new Message(INFO, "Activity \"" + activityToDelete.getName() + "\" deleted", true));
@@ -316,21 +332,15 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                 });
     }
 
-    private void updateActivities(Activity activityBefore, Activity... activitiesAfter)
+    private void updateActivities(Activity activityBefore, Activity activityAfter)
     {
         if (activities.contains(activityBefore))
         {
             activities.remove(activityBefore);
         }
-        if (activitiesAfter != null)
+        if (activities.matchingRange(activityAfter))
         {
-            for (Activity activityAfter : activitiesAfter)
-            {
-                if (activities.matchingRange(activityAfter))
-                {
-                    activities.add(activityAfter);
-                }
-            }
+            activities.add(activityAfter);
         }
     }
 

@@ -39,7 +39,7 @@ public class CopyActivityHandler extends KarakaActionHandler<CopyActivityAction,
     protected Resource resourceFor(CopyActivityAction action)
     {
         UrlBuilder urlBuilder = new UrlBuilder().module("rest")
-                .path("activities", "copy", action.getActivity().getId());
+                .path("activities", action.getActivity().getId(), "copy", action.getPeriod());
         return new Resource(urlBuilder.toUrl());
     }
 

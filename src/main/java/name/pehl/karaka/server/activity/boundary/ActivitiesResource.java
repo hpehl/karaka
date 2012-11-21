@@ -34,7 +34,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
@@ -45,6 +44,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.Response.Status.*;
 import static name.pehl.karaka.shared.model.HasLinks.SELF;
 import static name.pehl.karaka.shared.model.Status.STOPPED;
@@ -126,7 +127,7 @@ import static org.joda.time.Weeks.weeks;
  */
 @Cache
 @Path("/activities")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(APPLICATION_JSON)
 public class ActivitiesResource
 {
     @Context UriInfo uriInfo;
@@ -182,7 +183,7 @@ public class ActivitiesResource
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(TEXT_PLAIN)
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/duration")
     public Duration minutesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
     {
@@ -200,7 +201,7 @@ public class ActivitiesResource
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(TEXT_PLAIN)
     @Path("/relative/{month:[+-]?\\d+}/duration")
     public Duration minutesForRelativeMonth(@PathParam("month") int month)
     {
@@ -218,7 +219,7 @@ public class ActivitiesResource
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(TEXT_PLAIN)
     @Path("/currentMonth/duration")
     public Duration minutesForCurrentMonth()
     {
@@ -282,7 +283,7 @@ public class ActivitiesResource
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(TEXT_PLAIN)
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}/duration")
     public Duration minutesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
     {
@@ -303,7 +304,7 @@ public class ActivitiesResource
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(TEXT_PLAIN)
     @Path("/relative/cw{week:[+-]?\\d+}/duration")
     public Duration minutesForRelativeWeek(@PathParam("week") int week)
     {
@@ -321,7 +322,7 @@ public class ActivitiesResource
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(TEXT_PLAIN)
     @Path("/currentWeek/duration")
     public Duration minutesForCurrentWeek()
     {
@@ -388,7 +389,7 @@ public class ActivitiesResource
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(TEXT_PLAIN)
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/{day:\\d{1,2}}/duration")
     public Duration minutesForYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
             @PathParam("day") int day)
@@ -407,7 +408,7 @@ public class ActivitiesResource
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(TEXT_PLAIN)
     @Path("/today/duration")
     public Duration minutesForToday()
     {
@@ -555,7 +556,7 @@ public class ActivitiesResource
     }
 
     @PUT
-    @Path("start")
+    @Path("/start")
     public Response startNewActivity(name.pehl.karaka.shared.model.Activity clientActivity)
     {
         // TODO Is it an error if the client activity already exists on the server?
@@ -566,7 +567,7 @@ public class ActivitiesResource
     }
 
     @PUT
-    @Path("{id}/start")
+    @Path("/{id}/start")
     public Response startActivity(@PathParam("id") String id)
     {
         try
@@ -587,7 +588,7 @@ public class ActivitiesResource
     }
 
     @PUT
-    @Path("{id}/tick")
+    @Path("/{id}/tick")
     public Response tickActivity(@PathParam("id") String id)
     {
         try
@@ -608,7 +609,7 @@ public class ActivitiesResource
     }
 
     @PUT
-    @Path("{id}/stop")
+    @Path("/{id}/stop")
     public Response stopActivity(@PathParam("id") String id)
     {
         try
@@ -633,7 +634,7 @@ public class ActivitiesResource
     }
 
     @DELETE
-    @Path("{id}")
+    @Path("/{id}")
     public Response deleteActivity(@PathParam("id") String id)
     {
         try
