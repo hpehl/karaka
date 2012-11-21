@@ -13,7 +13,11 @@ import org.moxieapps.gwt.highcharts.client.Point;
 import org.moxieapps.gwt.highcharts.client.events.PointClickEvent;
 import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions.Cursor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author $Author: harald.pehl $
@@ -33,7 +37,6 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
         this.weekToPoint = new HashMap<Week, Point>();
         this.pointToWeek = new HashMap<String, Week>();
     }
-
 
     @Override
     public void updateActivities(final Activities activities)
@@ -59,9 +62,9 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
             categories.add(category);
             updatePoint(point, hours, tooltip);
         }
+        // necessary to fix the alignment of the categories
         chart.getXAxis().setCategories(categories.toArray(new String[categories.size()]));
     }
-
 
     public void updateWeek(final Week week)
     {
@@ -72,19 +75,16 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
         }
     }
 
-
     double hours(final Week week)
     {
         return week.getMinutes().getTotalHours();
     }
-
 
     String tooltip(final Week week)
     {
         return "CW " + week.getWeek() + ": " + FormatUtils.duration(week.getMinutes()) + "<br/>"
                 + FormatUtils.dateDuration(week.getStart(), week.getEnd());
     }
-
 
     @Override
     public boolean onClick(final PointClickEvent pointClickEvent)
@@ -107,13 +107,11 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
         return false;
     }
 
-
     @Override
     public void fireEvent(final GwtEvent<?> event)
     {
         asWidget().fireEvent(event);
     }
-
 
     @Override
     public HandlerRegistration addWeekClickedHandler(final WeekClickedHandler handler)

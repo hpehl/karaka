@@ -3,6 +3,7 @@ package name.pehl.karaka.shared.model;
 import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -150,6 +151,24 @@ public class Activities extends HasLinks
 
     // ------------------------------------------------------- business methods
 
+    public void update(Activity... activities)
+    {
+        if (activities != null)
+        {
+            for (Activity activity : activities)
+            {
+                if (matchingRange(activity))
+                {
+                    if (contains(activity))
+                    {
+                        remove(activity);
+                    }
+                    add(activity);
+                }
+            }
+        }
+    }
+
     public boolean add(Activity activity)
     {
         boolean added = false;
@@ -199,10 +218,6 @@ public class Activities extends HasLinks
                     {
                         Week week = iter.next();
                         removed = week.remove(activity);
-                        if (week.isEmpty())
-                        {
-                            iter.remove();
-                        }
                     }
                     break;
                 case WEEK:
@@ -210,10 +225,6 @@ public class Activities extends HasLinks
                     {
                         Day day = iter.next();
                         removed = day.remove(activity);
-                        if (day.isEmpty())
-                        {
-                            iter.remove();
-                        }
                     }
                     break;
                 case DAY:

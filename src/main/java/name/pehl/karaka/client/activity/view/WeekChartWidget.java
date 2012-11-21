@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class WeekChartWidget extends QuickChartWidget
 {
-    final static String[] DAYS = new String[] {"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
+    final static String[] DAYS = new String[]{"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"};
     final Map<Day, Point> dayToPoint;
 
 
@@ -26,12 +26,10 @@ public class WeekChartWidget extends QuickChartWidget
         this.dayToPoint = new HashMap<Day, Point>();
     }
 
-
     @Override
     public void updateActivities(final Activities activities)
     {
-        // FIXME When there's a "hole" in the weeks the order of the points is
-        // not correct
+        // FIXME When there's a "hole" in the weeks the order of the points is not correct
         dayToPoint.clear();
         Iterator<Day> iter = activities.getDays().iterator();
         for (Point point : series.getPoints())
@@ -51,7 +49,6 @@ public class WeekChartWidget extends QuickChartWidget
         chart.getXAxis().setCategories(DAYS);
     }
 
-
     public void updateDay(final Day day)
     {
         Point point = dayToPoint.get(day);
@@ -61,16 +58,14 @@ public class WeekChartWidget extends QuickChartWidget
         }
     }
 
-
     double hours(final Day day)
     {
         return day.getDuration().getTotalHours();
     }
 
-
     String tooltip(final Day day)
     {
-        return FormatUtils.date(day.getActivities().first().getStart()) + ": "
-                + FormatUtils.duration(day.getDuration());
+        return FormatUtils.date(day.getActivities().first().getStart()) + ": " + FormatUtils
+                .duration(day.getDuration());
     }
 }

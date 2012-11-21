@@ -112,6 +112,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
         activity.setText("");
         project.setText("");
         duration.clear();
+        activity.setFocus(true);
     }
 
     // ------------------------------------------------------------ ui handlers

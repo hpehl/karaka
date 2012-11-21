@@ -8,6 +8,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.Instant;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.ReadableInstant;
+import org.joda.time.ReadablePeriod;
 
 import javax.persistence.Transient;
 import java.util.Date;
@@ -195,4 +196,6 @@ public class Time implements ReadableInstant
     public DateMidnight toDateMidnight() {return dateTime.toDateMidnight();}
 
     public DateTime plusMinutes(final int minutes) {return dateTime.plusMinutes(minutes);}
+
+    public DateTime plus(final ReadablePeriod period) {return dateTime.plus(period);}
 }
