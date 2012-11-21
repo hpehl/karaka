@@ -13,11 +13,9 @@ import org.moxieapps.gwt.highcharts.client.Point;
 import org.moxieapps.gwt.highcharts.client.events.PointClickEvent;
 import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions.Cursor;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 
 /**
  * @author $Author: harald.pehl $
@@ -26,7 +24,7 @@ import java.util.Map;
  */
 public class MonthChartWidget extends QuickChartWidget implements HasWeekClickedHandlers
 {
-    final static String[] WEEKS = new String[]{"n/a", "n/a", "n/a", "n/a"};
+    final static String[] WEEKS = new String[]{"n/a", "n/a", "n/a", "n/a", "n/a"};
     final Map<Week, Point> weekToPoint;
     final Map<String, Week> pointToWeek;
 
@@ -41,29 +39,29 @@ public class MonthChartWidget extends QuickChartWidget implements HasWeekClicked
     @Override
     public void updateActivities(final Activities activities)
     {
-        // FIXME When there's a "hole" in the weeks the order of the points is not correct
+        int index = 0;
         weekToPoint.clear();
-        List<String> categories = new ArrayList<String>();
-        Iterator<Week> iter = activities.getWeeks().iterator();
-        for (Point point : series.getPoints())
+        pointToWeek.clear();
+        String[] categories = new String[WEEKS.length];
+        SortedSet<Week> weeks = activities.getWeeks();
+        for (Week week : weeks)
         {
             double hours = 0;
             String tooltip = null;
-            String category = "n/a";
-            if (iter.hasNext())
+            Point point = series.getPoints()[index];
+            categories[index] = String.valueOf(week.getWeek());
+            weekToPoint.put(week, point);
+            if (!week.isEmpty())
             {
-                Week week = iter.next();
                 hours = hours(week);
                 tooltip = tooltip(week);
-                category = String.valueOf(week.getWeek());
-                weekToPoint.put(week, point);
                 pointToWeek.put(tooltip, week);
             }
-            categories.add(category);
             updatePoint(point, hours, tooltip);
+            index++;
         }
         // necessary to fix the alignment of the categories
-        chart.getXAxis().setCategories(categories.toArray(new String[categories.size()]));
+        chart.getXAxis().setCategories(categories);
     }
 
     public void updateWeek(final Week week)

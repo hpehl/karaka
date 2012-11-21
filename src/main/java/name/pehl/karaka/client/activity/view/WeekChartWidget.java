@@ -6,8 +6,8 @@ import name.pehl.karaka.shared.model.Day;
 import org.moxieapps.gwt.highcharts.client.Point;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.SortedSet;
 
 /**
  * @author $Author: harald.pehl $
@@ -29,21 +29,22 @@ public class WeekChartWidget extends QuickChartWidget
     @Override
     public void updateActivities(final Activities activities)
     {
-        // FIXME When there's a "hole" in the weeks the order of the points is not correct
+        int index = 0;
         dayToPoint.clear();
-        Iterator<Day> iter = activities.getDays().iterator();
-        for (Point point : series.getPoints())
+        SortedSet<Day> days = activities.getDays();
+        for (Day day : days)
         {
             double hours = 0;
             String tooltip = null;
-            if (iter.hasNext())
+            Point point = series.getPoints()[index];
+            dayToPoint.put(day, point);
+            if (!day.isEmpty())
             {
-                Day day = iter.next();
-                dayToPoint.put(day, point);
                 hours = hours(day);
                 tooltip = tooltip(day);
             }
             updatePoint(point, hours, tooltip);
+            index++;
         }
         // necessary to fix the alignment of the categories
         chart.getXAxis().setCategories(DAYS);
@@ -65,6 +66,10 @@ public class WeekChartWidget extends QuickChartWidget
 
     String tooltip(final Day day)
     {
+        if (day.getDuration().isZero())
+        {
+            return "";
+        }
         return FormatUtils.date(day.getActivities().first().getStart()) + ": " + FormatUtils
                 .duration(day.getDuration());
     }

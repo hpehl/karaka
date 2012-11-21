@@ -1,13 +1,12 @@
 package name.pehl.karaka.shared.model;
 
-import java.util.Iterator;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import com.google.common.collect.ComparisonChain;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-
-import com.google.common.collect.ComparisonChain;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * @author $LastChangedBy:$
@@ -24,6 +23,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
 
     // ------------------------------------------------------------ constructor
+
 
     /**
      * Required for JSON (de)serialization - please don't call directly.
@@ -46,7 +46,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
     /**
      * Based on {@link #weight()}
-     * 
+     *
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -58,10 +58,9 @@ public class Week implements Comparable<Week>, Iterable<Day>
         return result;
     }
 
-
     /**
      * Based on {@link #weight()}
-     * 
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -87,10 +86,9 @@ public class Week implements Comparable<Week>, Iterable<Day>
         return true;
     }
 
-
     /**
      * Based on {@link #weight()}
-     * 
+     *
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     @Override
@@ -98,7 +96,6 @@ public class Week implements Comparable<Week>, Iterable<Day>
     {
         return ComparisonChain.start().compare(this.weight(), that.weight()).result();
     }
-
 
     @Override
     public String toString()
@@ -128,13 +125,12 @@ public class Week implements Comparable<Week>, Iterable<Day>
         return added;
     }
 
-
     public boolean remove(Activity activity)
     {
         boolean removed = false;
         if (activity != null)
         {
-            for (Iterator<Day> iter = days.iterator(); iter.hasNext();)
+            for (Iterator<Day> iter = days.iterator(); iter.hasNext(); )
             {
                 Day day = iter.next();
                 removed = day.remove(activity);
@@ -142,7 +138,6 @@ public class Week implements Comparable<Week>, Iterable<Day>
         }
         return removed;
     }
-
 
     public boolean contains(Activity activity)
     {
@@ -161,19 +156,26 @@ public class Week implements Comparable<Week>, Iterable<Day>
         return result;
     }
 
-
     @Override
     public Iterator<Day> iterator()
     {
         return days.iterator();
     }
 
-
     public boolean isEmpty()
     {
-        return days.isEmpty();
+        if (!days.isEmpty())
+        {
+            for (Day day : days)
+            {
+                if (!day.isEmpty())
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
-
 
     /**
      * @return a sorted set (ascending) of all activities managed by this
@@ -189,28 +191,36 @@ public class Week implements Comparable<Week>, Iterable<Day>
         return ordered;
     }
 
-
     public Time getStart()
     {
-        Time start = null;
         if (!days.isEmpty())
         {
-            return days.first().getStart();
+            for (Day day : days)
+            {
+                if (!day.isEmpty())
+                {
+                    return day.getStart();
+                }
+            }
         }
-        return start;
+        return null;
     }
-
 
     public Time getEnd()
     {
-        Time end = null;
         if (!days.isEmpty())
         {
-            return days.last().getEnd();
+            Day[] daysArray = days.toArray(new Day[]{});
+            for (int i = daysArray.length - 1; i >= 0; i--)
+            {
+                if (!daysArray[i].isEmpty())
+                {
+                    return daysArray[i].getEnd();
+                }
+            }
         }
-        return end;
+        return null;
     }
-
 
     public Duration getMinutes()
     {
@@ -221,7 +231,6 @@ public class Week implements Comparable<Week>, Iterable<Day>
         }
         return new Duration(minutes);
     }
-
 
     public boolean add(Day day)
     {
@@ -236,11 +245,10 @@ public class Week implements Comparable<Week>, Iterable<Day>
         return days;
     }
 
-
     /**
      * Required for JSON (de)serialization - please don't call directly. Use
      * {@link #add(Day)} and/or {@link #add(Activity)} instead.
-     * 
+     *
      * @param days
      */
     public void setDays(SortedSet<Day> days)
@@ -248,24 +256,20 @@ public class Week implements Comparable<Week>, Iterable<Day>
         this.days = days;
     }
 
-
     public int getYear()
     {
         return year;
     }
-
 
     public void setYear(int year)
     {
         this.year = year;
     }
 
-
     public int getWeek()
     {
         return week;
     }
-
 
     public void setWeek(int week)
     {
@@ -287,7 +291,6 @@ public class Week implements Comparable<Week>, Iterable<Day>
         }
         return null;
     }
-
 
     int weight()
     {
