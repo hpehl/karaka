@@ -1,27 +1,22 @@
 package name.pehl.karaka.server.activity.control;
 
+import name.pehl.karaka.server.activity.entity.Activity;
+import name.pehl.karaka.server.activity.entity.Time;
+import name.pehl.karaka.shared.model.Activities;
+import name.pehl.karaka.shared.model.Day;
+import name.pehl.karaka.shared.model.TimeUnit;
+import name.pehl.karaka.shared.model.Week;
+import org.joda.time.DateMidnight;
+
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.inject.Inject;
-
-import name.pehl.karaka.server.activity.entity.Activity;
-import name.pehl.karaka.shared.model.Activities;
-import name.pehl.karaka.shared.model.Day;
-import name.pehl.karaka.shared.model.TimeUnit;
-import name.pehl.karaka.shared.model.Week;
-
-import org.joda.time.DateMidnight;
-
-import com.google.common.collect.SortedSetMultimap;
-import com.google.common.collect.TreeMultimap;
-
 public class ActivitiesConverter
 {
     @Inject ActivityConverter activityConverter;
-
 
     public Activities toModel(DateMidnight date, TimeUnit timeunit, List<Activity> activities)
     {
@@ -30,10 +25,10 @@ public class ActivitiesConverter
         switch (timeunit)
         {
             case MONTH:
-                result.getWeeks().addAll(groupByWeeks(activities));
+                result.getWeeks().addAll(groupByWeeks(date, activities));
                 break;
             case WEEK:
-                result.getDays().addAll(groupByDays(activities));
+                result.getDays().addAll(groupByDays(date, activities));
                 break;
             case DAY:
                 for (Activity activity : activities)
@@ -47,46 +42,57 @@ public class ActivitiesConverter
         return result;
     }
 
-
-    SortedSet<Week> groupByWeeks(Collection<Activity> activities)
+    SortedSet<Week> groupByWeeks(final DateMidnight date, Collection<Activity> activities)
     {
+        // generate *all* days for *all* weeks and fill in the activities
         SortedSet<Week> weeks = new TreeSet<Week>();
-        SortedSetMultimap<Week, Activity> activitiesPerWeek = TreeMultimap.create();
-        for (Activity activity : activities)
+        DateMidnight firstDayInMonth = date.monthOfYear().roundFloorCopy();
+        DateMidnight lastDayInMonth = firstDayInMonth.plusMonths(1);
+        for (DateMidnight currentWeek = firstDayInMonth; currentWeek.isBefore(lastDayInMonth);
+                currentWeek = currentWeek.plusWeeks(1))
         {
-            Week week = new Week(activity.getStart().getYear(), activity.getStart().getWeek());
-            activitiesPerWeek.put(week, activity);
-        }
-
-        for (Week week : activitiesPerWeek.keySet())
-        {
-            SortedSet<Activity> activitiesOfOneWeek = activitiesPerWeek.get(week);
-            SortedSet<Day> days = groupByDays(activitiesOfOneWeek);
-            week.setDays(days);
+            Week week = new Week(currentWeek.getYear(), currentWeek.getWeekOfWeekyear());
             weeks.add(week);
+            DateMidnight startOfWeek = currentWeek.weekOfWeekyear().roundFloorCopy();
+            DateMidnight endOfWeek = startOfWeek.plusWeeks(1);
+            for (DateMidnight currentDate = startOfWeek; currentDate.isBefore(endOfWeek);
+                    currentDate = currentDate.plusDays(1))
+            {
+                Day day = new Day(currentDate.getYear(), currentDate.getMonthOfYear(), currentDate.getDayOfMonth());
+                week.add(day);
+                for (Activity activity : activities)
+                {
+                    Time start = activity.getStart();
+                    if (currentDate.equals(start.toDateMidnight()) && date.getMonthOfYear() == start.getMonth())
+                    {
+                        day.add(activityConverter.toModel(activity));
+                    }
+                }
+            }
         }
         return weeks;
     }
 
-
-    SortedSet<Day> groupByDays(Collection<Activity> activities)
+    SortedSet<Day> groupByDays(final DateMidnight date, Collection<Activity> activities)
     {
+        // generate *all* days and fill in the activities
         SortedSet<Day> days = new TreeSet<Day>();
-        SortedSetMultimap<Day, Activity> activitiesPerDay = TreeMultimap.create();
-        for (Activity activity : activities)
+        DateMidnight.Property weekProp = date.weekOfWeekyear();
+        DateMidnight startOfWeek = date.weekOfWeekyear().roundFloorCopy();
+        DateMidnight endOfWeek = startOfWeek.plusWeeks(1);
+        for (DateMidnight currentDate = startOfWeek; currentDate.isBefore(endOfWeek);
+                currentDate = currentDate.plusDays(1))
         {
-            Day day = new Day(activity.getStart().getYear(), activity.getStart().getMonth(), activity.getStart()
-                    .getDay());
-            activitiesPerDay.put(day, activity);
-        }
-        for (Day day : activitiesPerDay.keySet())
-        {
-            SortedSet<Activity> activitiesOfOneDay = activitiesPerDay.get(day);
-            for (Activity activity : activitiesOfOneDay)
-            {
-                day.add(activityConverter.toModel(activity));
-            }
+            Day day = new Day(currentDate.getYear(), currentDate.getMonthOfYear(), currentDate.getDayOfMonth());
             days.add(day);
+            for (Activity activity : activities)
+            {
+                Time start = activity.getStart();
+                if (currentDate.equals(start.toDateMidnight()))
+                {
+                    day.add(activityConverter.toModel(activity));
+                }
+            }
         }
         return days;
     }

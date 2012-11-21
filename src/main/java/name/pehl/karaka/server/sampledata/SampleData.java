@@ -9,6 +9,7 @@ import name.pehl.karaka.server.paging.entity.PageResult;
 import name.pehl.karaka.server.project.control.ProjectRepository;
 import name.pehl.karaka.server.project.entity.Project;
 import name.pehl.karaka.server.settings.control.DefaultSettings;
+import name.pehl.karaka.server.settings.control.SettingsRepository;
 import name.pehl.karaka.server.settings.entity.Settings;
 import name.pehl.karaka.server.tag.control.TagRepository;
 import name.pehl.karaka.server.tag.entity.Tag;
@@ -23,7 +24,9 @@ class SampleData
 {
     @Inject Logger logger;
     @Inject Random random;
-    @Inject @DefaultSettings Settings currentSettings;
+
+    @Inject @DefaultSettings Settings defaultSettings;
+    @Inject SettingsRepository settingsRepository;
 
     @Inject List<Client> clients;
     @Inject ClientRepository clientRepository;
@@ -40,6 +43,10 @@ class SampleData
 
     void persit()
     {
+        // Settings
+        settingsRepository.put(defaultSettings);
+        logger.info("Persisted {}", defaultSettings);
+
         // Clients
         List<Key<Client>> clientKeys = new ArrayList<Key<Client>>();
         for (Client client : clients)
@@ -71,7 +78,7 @@ class SampleData
 
         // Activities
         List<Activity> activities = activitiesProducer.produceActivities(projectKeys, tagKeys,
-                currentSettings.getTimeZone());
+                defaultSettings.getTimeZone());
         for (Activity activity : activities)
         {
             activityRepository.put(activity);

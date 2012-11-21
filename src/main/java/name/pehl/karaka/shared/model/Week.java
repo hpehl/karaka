@@ -138,10 +138,6 @@ public class Week implements Comparable<Week>, Iterable<Day>
             {
                 Day day = iter.next();
                 removed = day.remove(activity);
-                if (day.isEmpty())
-                {
-                    iter.remove();
-                }
             }
         }
         return removed;

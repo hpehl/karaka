@@ -169,8 +169,9 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
         }
         Period p = Period.parse(period);
         Activity copy = copy();
-        copy.setEnd(new Time(end.dateTime.withPeriodAdded(p, 1)));
-        copy.setStart(new Time(start.dateTime.withPeriodAdded(p, 1)));
+        // Direct member access - no validation: we know what we're doing ;-)
+        copy.start = new Time(start.plus(p));
+        copy.end = new Time(end.plus(p));
         return copy;
     }
 
