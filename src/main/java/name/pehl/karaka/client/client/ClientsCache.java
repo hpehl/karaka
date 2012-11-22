@@ -18,35 +18,40 @@ import static name.pehl.karaka.client.logging.Logger.warn;
 public class ClientsCache extends AbstractModelCache<Client> implements ModelCache<Client>, RefreshClientsHandler
 {
     @Inject
-    public ClientsCache(final EventBus eventBus, final Scheduler scheduler, final DispatchAsync dispatcher)
+    public ClientsCache(final Scheduler scheduler, final EventBus eventBus, final DispatchAsync dispatcher)
     {
-        super(eventBus, dispatcher);
+        super(scheduler, eventBus, dispatcher);
         eventBus.addHandler(RefreshClientsEvent.getType(), this);
     }
-
 
     @Override
     public void refresh()
     {
         info(cache, "About to refresh clients...");
-        dispatcher.execute(new GetClientsAction(), new KarakaCallback<GetClientsResult>(eventBus)
+        scheduler.scheduleDeferred(new Scheduler.ScheduledCommand()
         {
             @Override
-            public void onSuccess(final GetClientsResult result)
+            public void execute()
             {
-                models.clear();
-                models.addAll(result.getClients());
-                info(cache, "Clients refreshed.");
-            }
+                dispatcher.execute(new GetClientsAction(), new KarakaCallback<GetClientsResult>(eventBus)
+                {
+                    @Override
+                    public void onSuccess(final GetClientsResult result)
+                    {
+                        models.clear();
+                        models.addAll(result.getClients());
+                        info(cache, "Clients refreshed.");
+                    }
 
-            @Override
-            public void onNotFound(final FailedStatusCodeException caught)
-            {
-                warn(cache, "No clients found.");
+                    @Override
+                    public void onNotFound(final FailedStatusCodeException caught)
+                    {
+                        warn(cache, "No clients found.");
+                    }
+                });
             }
         });
     }
-
 
     @Override
     public void onRefreshClients(final RefreshClientsEvent event)

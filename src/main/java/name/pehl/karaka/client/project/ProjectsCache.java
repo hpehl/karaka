@@ -18,36 +18,41 @@ import static name.pehl.karaka.client.logging.Logger.warn;
 public class ProjectsCache extends AbstractModelCache<Project> implements ModelCache<Project>, RefreshProjectsHandler
 {
     @Inject
-    public ProjectsCache(EventBus eventBus, Scheduler scheduler, DispatchAsync dispatcher)
+    public ProjectsCache(Scheduler scheduler, EventBus eventBus, DispatchAsync dispatcher)
     {
-        super(eventBus, dispatcher);
+        super(scheduler, eventBus, dispatcher);
         eventBus.addHandler(RefreshProjectsEvent.getType(), this);
     }
-
 
     @Override
     public void refresh()
     {
         info(cache, "About to refresh projects...");
-        dispatcher.execute(new GetProjectsAction(), new KarakaCallback<GetProjectsResult>(eventBus)
+        scheduler.scheduleDeferred(new Scheduler.ScheduledCommand()
         {
             @Override
-            public void onSuccess(GetProjectsResult result)
+            public void execute()
             {
-                models.clear();
-                models.addAll(result.getProjects());
-                info(cache, "Projects refreshed.");
-            }
+                dispatcher.execute(new GetProjectsAction(), new KarakaCallback<GetProjectsResult>(eventBus)
+                {
+                    @Override
+                    public void onSuccess(GetProjectsResult result)
+                    {
+                        models.clear();
+                        models.addAll(result.getProjects());
+                        info(cache, "Projects refreshed.");
+                    }
 
-            @Override
-            public void onNotFound(final FailedStatusCodeException caught)
-            {
-                warn(cache, "No projects found.");
-            }
+                    @Override
+                    public void onNotFound(final FailedStatusCodeException caught)
+                    {
+                        warn(cache, "No projects found.");
+                    }
 
+                });
+            }
         });
     }
-
 
     @Override
     public void onRefreshProjects(RefreshProjectsEvent event)

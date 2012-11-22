@@ -44,8 +44,11 @@ class SampleData
     void persit()
     {
         // Settings
-        settingsRepository.put(defaultSettings);
-        logger.info("Persisted {}", defaultSettings);
+        if (settingsRepository.list().isEmpty())
+        {
+            settingsRepository.put(defaultSettings);
+            logger.info("Persisted {}", defaultSettings);
+        }
 
         // Clients
         List<Key<Client>> clientKeys = new ArrayList<Key<Client>>();

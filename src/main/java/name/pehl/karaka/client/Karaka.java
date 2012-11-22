@@ -4,12 +4,12 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.Command;
 import com.gwtplatform.mvp.client.DelayedBindRegistry;
 import name.pehl.karaka.client.gin.KarakaGinjector;
 
 import static name.pehl.karaka.client.logging.Logger.Category.bootstrap;
-import static name.pehl.karaka.client.logging.Logger.fatal;
+import static name.pehl.karaka.client.logging.Logger.info;
 
 /**
  * @author $Author: harald.pehl $
@@ -22,7 +22,7 @@ public class Karaka implements EntryPoint
     @Override
     public void onModuleLoad()
     {
-        // Defer all application initialisation code to onModuleLoad2() so that the
+        // Defer all application initialisation code to so that the
         // UncaughtExceptionHandler can catch any unexpected exceptions.
         Log.setUncaughtExceptionHandler();
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand()
@@ -31,23 +31,12 @@ public class Karaka implements EntryPoint
             public void execute()
             {
                 DelayedBindRegistry.bind(ginjector);
-                ginjector.getPlaceManager().revealDefaultPlace();
-                ginjector.getActivityController().init();
-                ginjector.getBootstrapProcess().execute(new AsyncCallback<Boolean>()
+                ginjector.getBootstrapProcess().start(new Command()
                 {
                     @Override
-                    public void onFailure(Throwable caught)
+                    public void execute()
                     {
-                        fatal(bootstrap, "Error in bootstrap process", caught);
-                    }
-
-                    @Override
-                    public void onSuccess(Boolean wasSuccessfull)
-                    {
-                        if (!wasSuccessfull)
-                        {
-                            fatal(bootstrap, "Bootstrap process was not successfull");
-                        }
+                        info(bootstrap, "Bootstrap process finished");
                     }
                 });
             }

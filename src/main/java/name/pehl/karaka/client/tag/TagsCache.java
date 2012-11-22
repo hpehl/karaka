@@ -18,35 +18,40 @@ import static name.pehl.karaka.client.logging.Logger.warn;
 public class TagsCache extends AbstractModelCache<Tag> implements ModelCache<Tag>, RefreshTagsHandler
 {
     @Inject
-    public TagsCache(EventBus eventBus, Scheduler scheduler, DispatchAsync dispatcher)
+    public TagsCache(Scheduler scheduler, EventBus eventBus, DispatchAsync dispatcher)
     {
-        super(eventBus, dispatcher);
+        super(scheduler, eventBus, dispatcher);
         eventBus.addHandler(RefreshTagsEvent.getType(), this);
     }
-
 
     @Override
     public void refresh()
     {
         info(cache, "About to refresh tags...");
-        dispatcher.execute(new GetTagsAction(), new KarakaCallback<GetTagsResult>(eventBus)
+        scheduler.scheduleDeferred(new Scheduler.ScheduledCommand()
         {
             @Override
-            public void onSuccess(GetTagsResult result)
+            public void execute()
             {
-                models.clear();
-                models.addAll(result.getTags());
-                info(cache, "Tags refreshed.");
-            }
+                dispatcher.execute(new GetTagsAction(), new KarakaCallback<GetTagsResult>(eventBus)
+                {
+                    @Override
+                    public void onSuccess(GetTagsResult result)
+                    {
+                        models.clear();
+                        models.addAll(result.getTags());
+                        info(cache, "Tags refreshed.");
+                    }
 
-            @Override
-            public void onNotFound(final FailedStatusCodeException caught)
-            {
-                warn(cache, "No tags found.");
+                    @Override
+                    public void onNotFound(final FailedStatusCodeException caught)
+                    {
+                        warn(cache, "No tags found.");
+                    }
+                });
             }
         });
     }
-
 
     @Override
     public void onRefreshTags(RefreshTagsEvent event)

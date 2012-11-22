@@ -8,11 +8,11 @@ import name.pehl.karaka.server.settings.entity.Settings;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -27,13 +27,13 @@ public class SettingsResource
     @Inject SettingsConverter settingsConverter;
 
     @GET
-    public name.pehl.karaka.shared.model.Settings currentSettings(@Context UriInfo uriInfo)
+    public name.pehl.karaka.shared.model.Settings currentSettings(@Context ServletContext context)
     {
         name.pehl.karaka.shared.model.Settings result = settingsConverter.toModel(settings.get());
         UserService userService = UserServiceFactory.getUserService();
         if (userService != null && result.getUser() != null)
         {
-            String logoutUrl = uriInfo.getAbsolutePathBuilder().path("/login/openid.html").build().toASCIIString();
+            String logoutUrl = context.getContextPath() + "/login/bye.html";
             logoutUrl = userService.createLogoutURL(logoutUrl);
             result.getUser().setLogoutUrl(logoutUrl);
         }

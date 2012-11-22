@@ -23,42 +23,11 @@ public class SettingsCache extends AbstractModelCache<Settings> implements Model
 
 
     @Inject
-    public SettingsCache(final EventBus eventBus, final Scheduler scheduler, final DispatchAsync dispatcher)
+    public SettingsCache(final Scheduler scheduler, final EventBus eventBus, final DispatchAsync dispatcher)
     {
-        super(eventBus, dispatcher);
+        super(scheduler, eventBus, dispatcher);
         models.add(currentSettings);
     }
-
-
-    @Override
-    public void refresh()
-    {
-        info(cache, "About to refresh settings...");
-        dispatcher.execute(new GetSettingsAction(), new KarakaCallback<GetSettingsResult>(eventBus)
-        {
-            @Override
-            public void onSuccess(final GetSettingsResult result)
-            {
-                Settings settings = result.getSettings();
-                boolean changed = currentSettings.hasChanged(settings);
-                models.clear();
-                models.add(settings);
-                currentSettings = settings;
-                info(cache, "Settings refreshed.");
-                if (changed)
-                {
-                    SettingsChangedEvent.fire(SettingsCache.this, settings);
-                }
-            }
-
-            @Override
-            public void onNotFound(final FailedStatusCodeException caught)
-            {
-                warn(cache, "No settings found.");
-            }
-        });
-    }
-
 
     private static Settings defaultSettings()
     {
@@ -75,10 +44,9 @@ public class SettingsCache extends AbstractModelCache<Settings> implements Model
         return defaults;
     }
 
-
     /**
      * Static helper to access current settings from other static methods
-     * 
+     *
      * @return
      */
     public static Settings currentSettings()
@@ -86,6 +54,41 @@ public class SettingsCache extends AbstractModelCache<Settings> implements Model
         return currentSettings;
     }
 
+    @Override
+    public void refresh()
+    {
+        info(cache, "About to refresh settings...");
+        scheduler.scheduleDeferred(new Scheduler.ScheduledCommand()
+        {
+            @Override
+            public void execute()
+            {
+                dispatcher.execute(new GetSettingsAction(), new KarakaCallback<GetSettingsResult>(eventBus)
+                {
+                    @Override
+                    public void onSuccess(final GetSettingsResult result)
+                    {
+                        Settings settings = result.getSettings();
+                        boolean changed = currentSettings.hasChanged(settings);
+                        models.clear();
+                        models.add(settings);
+                        currentSettings = settings;
+                        info(cache, "Settings refreshed.");
+                        if (changed)
+                        {
+                            SettingsChangedEvent.fire(SettingsCache.this, settings);
+                        }
+                    }
+
+                    @Override
+                    public void onNotFound(final FailedStatusCodeException caught)
+                    {
+                        warn(cache, "No settings found.");
+                    }
+                });
+            }
+        });
+    }
 
     @Override
     public void fireEvent(final GwtEvent<?> event)

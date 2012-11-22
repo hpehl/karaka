@@ -1,12 +1,10 @@
 package name.pehl.karaka.client.bootstrap;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.Command;
 import com.google.inject.Inject;
 import name.pehl.karaka.client.project.ProjectsCache;
 
 import java.util.Iterator;
-
-import static java.lang.Boolean.TRUE;
 
 /**
  * @author Harald Pehl
@@ -23,11 +21,9 @@ public class LoadProjects extends BootstrapStep
     }
 
     @Override
-    public void execute(Iterator<BootstrapStep> iterator, final AsyncCallback<Boolean> callback)
+    public void execute(Iterator<BootstrapStep> iterator, final Command command)
     {
         projectsCache.refresh();
-        callback.onSuccess(TRUE);
-
-        next(iterator, callback);
+        next(iterator, command);
     }
 }

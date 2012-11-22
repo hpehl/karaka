@@ -1,5 +1,6 @@
 package name.pehl.karaka.client.model;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import name.pehl.karaka.shared.model.BaseModel;
@@ -10,14 +11,16 @@ import java.util.List;
 
 public abstract class AbstractModelCache<T extends BaseModel> implements ModelCache<T>
 {
+    protected final Scheduler scheduler;
     protected final EventBus eventBus;
     protected final DispatchAsync dispatcher;
     protected final List<T> models;
 
 
-    public AbstractModelCache(EventBus eventBus, DispatchAsync dispatcher)
+    public AbstractModelCache(Scheduler scheduler, EventBus eventBus, DispatchAsync dispatcher)
     {
         super();
+        this.scheduler = scheduler;
         this.eventBus = eventBus;
         this.dispatcher = dispatcher;
         this.models = new ArrayList<T>();

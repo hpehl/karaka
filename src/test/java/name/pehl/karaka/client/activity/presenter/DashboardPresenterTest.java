@@ -75,7 +75,7 @@ public class DashboardPresenterTest extends PresenterTest implements ShowMessage
     @Test
     public void prepareFromRequest()
     {
-        // execute place request
+        // start place request
         PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard).with("year", "2000").with("month", "1");
         cut.prepareFromRequest(placeRequest);
         ShowMessageEvent messageEvent = (ShowMessageEvent) popEvent();
