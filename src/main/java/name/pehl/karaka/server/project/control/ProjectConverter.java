@@ -26,14 +26,17 @@ public class ProjectConverter extends
         model.setDescription(entity.getDescription());
 
         // client relation
-        try
+        if (entity.getClient() != null)
         {
-            name.pehl.karaka.server.client.entity.Client client = clientRepository.get(entity.getClient());
-            model.setClient(clientConverter.toModel(client));
-        }
-        catch (NotFoundException e)
-        {
-            // not client - no conversion
+            try
+            {
+                name.pehl.karaka.server.client.entity.Client client = clientRepository.get(entity.getClient());
+                model.setClient(clientConverter.toModel(client));
+            }
+            catch (NotFoundException e)
+            {
+                // not client - no conversion
+            }
         }
         return model;
     }

@@ -60,30 +60,39 @@ public class ActivityConverter extends
         model.setStatus(entity.getStatus());
 
         // relations
-        try
+        if (entity.getProject() != null)
         {
-            name.pehl.karaka.server.project.entity.Project project = projectRepository.get(entity.getProject());
-            model.setProject(projectConverter.toModel(project));
-        }
-        catch (NotFoundException e)
-        {
-            // no project - no conversion
-        }
-        try
-        {
-            List<name.pehl.karaka.shared.model.Tag> modelTags = new ArrayList<name.pehl.karaka.shared.model.Tag>();
-            Collection<name.pehl.karaka.server.tag.entity.Tag> entityTags = tagRepository.ofy().get(entity.getTags())
-                    .values();
-            for (name.pehl.karaka.server.tag.entity.Tag entityTag : entityTags)
+            try
             {
-                name.pehl.karaka.shared.model.Tag modelTag = tagConverter.toModel(entityTag);
-                modelTags.add(modelTag);
+                name.pehl.karaka.server.project.entity.Project project = projectRepository.get(entity.getProject());
+                model.setProject(projectConverter.toModel(project));
             }
-            model.setTags(modelTags);
+            catch (NotFoundException e)
+            {
+                // no project - no conversion
+            }
         }
-        catch (NotFoundException e)
+        List<name.pehl.karaka.shared.model.Tag> modelTags = new ArrayList<name.pehl.karaka.shared.model.Tag>();
+        Collection<name.pehl.karaka.server.tag.entity.Tag> entityTags = tagRepository.ofy().get(entity.getTags())
+                .values();
+        if (entityTags != null && !entityTags.isEmpty())
         {
-            // no tags - no conversion
+            try
+            {
+                for (name.pehl.karaka.server.tag.entity.Tag entityTag : entityTags)
+                {
+                    name.pehl.karaka.shared.model.Tag modelTag = tagConverter.toModel(entityTag);
+                    modelTags.add(modelTag);
+                }
+            }
+            catch (NotFoundException e)
+            {
+                // no tags - no conversion
+            }
+            finally
+            {
+                model.setTags(modelTags);
+            }
         }
         return model;
     }
