@@ -51,8 +51,8 @@ public class AboutResource
             StringBuilder about = new StringBuilder();
             InputStream inputStream = context.getResourceAsStream("/META-INF/MANIFEST.MF");
             Manifest manifest = new Manifest(inputStream);
-            Map<String, Attributes> entries = manifest.getEntries();
-            for (Map.Entry<String, Attributes> entry : entries.entrySet())
+            Attributes attributes = manifest.getMainAttributes();
+            for (Map.Entry<Object, Object> entry : attributes.entrySet())
             {
                 about.append(entry.getKey()).append(": ").append(entry.getValue()).append('\n');
             }
