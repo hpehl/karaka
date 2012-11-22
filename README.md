@@ -1,4 +1,4 @@
-Karaka ([Maori for "clock"](http://maoridictionary.co.nz/index.cfm?dictionaryKeywords=clock)) is a personal time recording app deployed on Google AppEngine. Besides being useful I wanted to use the latest web techniques / frameworks in a real application. Karaka uses the following stack:
+Karaka ([Maori for "clock"](http://maoridictionary.co.nz/index.cfm?dictionaryKeywords=clock)) is a personal time recording app deployed on Google AppEngine. Besides being useful I wanted to use the latest frameworks in a real application. Karaka uses the following stack:
 * [Google App Engine](http://code.google.com/appengine/)
 * [CDI (Weld)](http://seamframework.org/Weld) / [GIN](http://code.google.com/p/google-gin/)
 * [Objectify](http://code.google.com/p/objectify-appengine/)
