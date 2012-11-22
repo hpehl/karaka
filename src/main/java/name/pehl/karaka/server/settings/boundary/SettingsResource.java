@@ -33,7 +33,7 @@ public class SettingsResource
         UserService userService = UserServiceFactory.getUserService();
         if (userService != null && result.getUser() != null)
         {
-            String logoutUrl = uriInfo.getBaseUriBuilder().path("/login/openid.html").build().toASCIIString();
+            String logoutUrl = uriInfo.getAbsolutePathBuilder().path("/login/openid.html").build().toASCIIString();
             logoutUrl = userService.createLogoutURL(logoutUrl);
             result.getUser().setLogoutUrl(logoutUrl);
         }

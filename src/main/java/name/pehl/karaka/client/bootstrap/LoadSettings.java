@@ -4,13 +4,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import name.pehl.karaka.client.settings.SettingsCache;
 
+import java.util.Iterator;
+
 import static java.lang.Boolean.TRUE;
 
 /**
  * @author Harald Pehl
  * @date 11/08/2012
  */
-public class LoadSettings implements BootstrapCommand
+public class LoadSettings extends BootstrapStep
 {
     private final SettingsCache settingsCache;
 
@@ -21,9 +23,11 @@ public class LoadSettings implements BootstrapCommand
     }
 
     @Override
-    public void execute(final AsyncCallback<Boolean> callback)
+    public void execute(Iterator<BootstrapStep> iterator, final AsyncCallback<Boolean> callback)
     {
         settingsCache.refresh();
         callback.onSuccess(TRUE);
+
+        execute(iterator, callback);
     }
 }

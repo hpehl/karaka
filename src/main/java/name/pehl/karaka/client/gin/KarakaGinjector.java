@@ -8,6 +8,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import name.pehl.karaka.client.about.AboutPresenter;
+import name.pehl.karaka.client.activity.presenter.ActivityController;
 import name.pehl.karaka.client.activity.presenter.DashboardPresenter;
 import name.pehl.karaka.client.application.ApplicationPresenter;
 import name.pehl.karaka.client.bootstrap.BootstrapProcess;
@@ -33,6 +34,8 @@ public interface KarakaGinjector extends Ginjector
     Logger getLogger();
     PlaceManager getPlaceManager();
     Resources getResources();
+    ActivityController getActivityController();
+
 
     // ------------------------------------------------------- presenters (a-z)
 

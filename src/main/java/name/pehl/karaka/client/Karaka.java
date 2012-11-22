@@ -3,12 +3,9 @@ package name.pehl.karaka.client;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtplatform.mvp.client.DelayedBindRegistry;
-import name.pehl.karaka.client.bootstrap.BootstrapProcess;
 import name.pehl.karaka.client.gin.KarakaGinjector;
 
 import static name.pehl.karaka.client.logging.Logger.Category.bootstrap;
@@ -33,28 +30,10 @@ public class Karaka implements EntryPoint
             @Override
             public void execute()
             {
-                onModuleLoad2();
-            }
-        });
-    }
-
-    private void onModuleLoad2()
-    {
-        GWT.runAsync(new RunAsyncCallback()
-        {
-            @Override
-            public void onFailure(final Throwable reason)
-            {
-                Window.alert("Failed to load Karaka");
-                fatal(bootstrap, "Failed to load Karaka", reason);
-            }
-
-            @Override
-            public void onSuccess()
-            {
                 DelayedBindRegistry.bind(ginjector);
-                BootstrapProcess bootstrapProcess = ginjector.getBootstrapProcess();
-                bootstrapProcess.execute(new AsyncCallback<Boolean>()
+                ginjector.getPlaceManager().revealDefaultPlace();
+                ginjector.getActivityController().init();
+                ginjector.getBootstrapProcess().execute(new AsyncCallback<Boolean>()
                 {
                     @Override
                     public void onFailure(Throwable caught)

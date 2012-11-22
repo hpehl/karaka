@@ -57,7 +57,6 @@ import name.pehl.karaka.client.application.NavigationPresenter;
 import name.pehl.karaka.client.application.NavigationView;
 import name.pehl.karaka.client.bootstrap.BootstrapProcess;
 import name.pehl.karaka.client.bootstrap.LoadClients;
-import name.pehl.karaka.client.bootstrap.LoadMainApp;
 import name.pehl.karaka.client.bootstrap.LoadProjects;
 import name.pehl.karaka.client.bootstrap.LoadSettings;
 import name.pehl.karaka.client.bootstrap.LoadTags;
@@ -199,7 +198,6 @@ public class KarakaModule extends AbstractPresenterModule
         // Bootstrap
         bind(BootstrapProcess.class);
         bind(LoadClients.class);
-        bind(LoadMainApp.class);
         bind(LoadProjects.class);
         bind(LoadSettings.class);
         bind(LoadTags.class);
