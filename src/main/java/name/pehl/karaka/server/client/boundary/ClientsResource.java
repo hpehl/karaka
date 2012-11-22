@@ -1,20 +1,19 @@
 package name.pehl.karaka.server.client.boundary;
 
-import java.util.ArrayList;
-import java.util.List;
+import name.pehl.karaka.server.client.control.ClientConverter;
+import name.pehl.karaka.server.client.control.ClientRepository;
+import name.pehl.karaka.server.client.entity.Client;
+import name.pehl.karaka.server.paging.entity.PageResult;
+import org.jboss.resteasy.spi.NotFoundException;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
 
-import name.pehl.karaka.server.client.control.ClientConverter;
-import name.pehl.karaka.server.client.control.ClientRepository;
-import name.pehl.karaka.server.client.entity.Client;
-import name.pehl.karaka.server.paging.entity.PageResult;
-
-import org.jboss.resteasy.spi.NotFoundException;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
  * Supported methods:
@@ -31,7 +30,7 @@ import org.jboss.resteasy.spi.NotFoundException;
  *          $
  */
 @Path("/clients")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(APPLICATION_JSON)
 public class ClientsResource
 {
     @Inject ClientRepository repository;

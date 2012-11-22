@@ -5,6 +5,7 @@ import name.pehl.karaka.server.client.boundary.ClientsResource;
 import name.pehl.karaka.server.project.boundary.ProjectsResource;
 import name.pehl.karaka.server.settings.boundary.SettingsResource;
 import name.pehl.karaka.server.tag.boundary.TagsResource;
+import name.pehl.karaka.server.version.AboutResource;
 
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ public class KarakaApplication extends Application
     public KarakaApplication()
     {
         this.classes = new HashSet<Class<?>>();
+        this.classes.add(AboutResource.class);
         this.classes.add(ActivitiesResource.class);
         this.classes.add(ClientsResource.class);
         this.classes.add(ProjectsResource.class);

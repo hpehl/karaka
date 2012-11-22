@@ -12,14 +12,15 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
  * Supported methods: <ul> <li>GET /settings: Get the current settings</li> </ul>
  */
 @Path("/settings")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(APPLICATION_JSON)
 public class SettingsResource
 {
     @Inject @CurrentSettings Instance<Settings> settings;

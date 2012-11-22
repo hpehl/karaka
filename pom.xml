@@ -378,9 +378,14 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <doCheck>true</doCheck>
-                    <doUpdate>true</doUpdate>
-                    <shortRevisionLength>10</shortRevisionLength>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <format>{0,number} at {1,date,yyyy-MM-dd HH:mm:ss}</format>
+                    <timestampFormat>yyyy-MM-dd HH:mm:ss</timestampFormat>
+                    <items>
+                        <item>buildNumber</item>
+                        <item>timestamp</item>
+                    </items>
                 </configuration>
             </plugin>
             <plugin>
@@ -467,8 +472,7 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
-                            <Application-Name></Application-Name>
-                            <Application-Build>${buildNumber}</Application-Build>
+                            <Build-Number>${buildNumber}</Build-Number>
                         </manifestEntries>
                     </archive>
                 </configuration>
