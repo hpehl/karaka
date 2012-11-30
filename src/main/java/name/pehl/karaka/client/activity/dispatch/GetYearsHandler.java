@@ -49,7 +49,9 @@ public class GetYearsHandler extends KarakaActionHandler<GetYearsAction, GetYear
             @Override
             protected GetYearsResult extractResult(final Method method, JsonReader<Years> reader, JSONObject json)
             {
-                return new GetYearsResult(reader.read(json));
+                Years years = reader.read(json);
+                years.setLinks(readLinks(method));
+                return new GetYearsResult(years);
             }
         });
     }

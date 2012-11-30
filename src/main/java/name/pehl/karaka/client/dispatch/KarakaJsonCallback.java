@@ -4,10 +4,14 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtplatform.dispatch.shared.Result;
+import name.pehl.karaka.shared.model.Link;
+import name.pehl.karaka.shared.model.LinksParser;
 import name.pehl.piriti.json.client.JsonReader;
 import org.fusesource.restygwt.client.FailedStatusCodeException;
 import org.fusesource.restygwt.client.JsonCallback;
 import org.fusesource.restygwt.client.Method;
+
+import java.util.List;
 
 public abstract class KarakaJsonCallback<T, R extends Result> implements JsonCallback
 {
@@ -55,6 +59,14 @@ public abstract class KarakaJsonCallback<T, R extends Result> implements JsonCal
             statusCode = ((FailedStatusCodeException)exception).getStatusCode();
         }
         resultCallback.onFailure(new RestException(method, exception.getMessage(), statusCode));
+    }
+
+
+    protected List<Link> readLinks(Method method)
+    {
+        String linkHeader = method.getResponse().getHeader("Link");
+        List<Link> links = LinksParser.valueOf(linkHeader);
+        return links:
     }
 
 
