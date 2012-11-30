@@ -74,7 +74,7 @@ public class StartActivityHandler extends KarakaActionHandler<StartActivityActio
         method.send(new KarakaJsonCallback<Activity, StartActivityResult>(activityReader, resultCallback)
         {
             @Override
-            protected StartActivityResult extractResult(final JsonReader<Activity> reader, final JSONObject json)
+            protected StartActivityResult extractResult(final Method method, final JsonReader<Activity> reader, final JSONObject json)
             {
                 return new StartActivityResult(new HashSet<Activity>(reader.readList(json)));
             }

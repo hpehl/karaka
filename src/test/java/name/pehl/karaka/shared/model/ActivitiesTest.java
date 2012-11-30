@@ -287,7 +287,6 @@ public class ActivitiesTest
     @Test
     public void getStartEnd()
     {
-
         // empty
         Activities cut = td.newActivities(WEEK);
         assertNull(cut.getStart());

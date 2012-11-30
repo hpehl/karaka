@@ -4,7 +4,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.EventBus;
 import name.pehl.karaka.client.application.Message;
 import name.pehl.karaka.client.application.ShowMessageEvent;
-import org.fusesource.restygwt.client.FailedStatusCodeException;
 
 import static java.util.logging.Level.SEVERE;
 import static name.pehl.karaka.client.logging.Logger.Category.dispatch;
@@ -25,8 +24,8 @@ public abstract class KarakaCallback<T> implements AsyncCallback<T>
     }
 
     /**
-     * Call {@link #onNotFound(FailedStatusCodeException)} in case of 404. In all other cases delegates to {@link
-     * #showError(Throwable)}.
+     * Call {@link #onNotFound(RestException)} in case of 404. In all other cases delegates to
+     * {@link #showError(Throwable)}.
      *
      * @param caught
      *
@@ -35,13 +34,17 @@ public abstract class KarakaCallback<T> implements AsyncCallback<T>
     @Override
     public void onFailure(final Throwable caught)
     {
-        if (caught instanceof FailedStatusCodeException && ((FailedStatusCodeException) caught).getStatusCode() == 404)
+        if (caught instanceof RestException)
         {
-            onNotFound((FailedStatusCodeException) caught);
-        }
-        else if (caught instanceof FailedStatusCodeException)
-        {
-            onFailedStatus((FailedStatusCodeException) caught);
+            RestException restException = (RestException) caught;
+            if (restException.getStatusCode() == 404)
+            {
+                onNotFound(restException);
+            }
+            else
+            {
+                onRestFailure(restException);
+            }
         }
         else
         {
@@ -54,7 +57,7 @@ public abstract class KarakaCallback<T> implements AsyncCallback<T>
      *
      * @param caught
      */
-    public void onFailedStatus(FailedStatusCodeException caught)
+    public void onRestFailure(final RestException caught)
     {
         showError(caught);
     }
@@ -64,7 +67,7 @@ public abstract class KarakaCallback<T> implements AsyncCallback<T>
      *
      * @param caught
      */
-    public void onNotFound(final FailedStatusCodeException caught)
+    public void onNotFound(final RestException caught)
     {
         showError(caught);
     }

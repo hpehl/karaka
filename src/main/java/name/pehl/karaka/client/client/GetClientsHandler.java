@@ -42,7 +42,7 @@ public class GetClientsHandler extends KarakaActionHandler<GetClientsAction, Get
         method.send(new KarakaJsonCallback<Client, GetClientsResult>(clientReader, resultCallback)
         {
             @Override
-            protected GetClientsResult extractResult(final JsonReader<Client> reader, final JSONObject json)
+            protected GetClientsResult extractResult(final Method method, final JsonReader<Client> reader, final JSONObject json)
             {
                 return new GetClientsResult(reader.readList(json));
             }

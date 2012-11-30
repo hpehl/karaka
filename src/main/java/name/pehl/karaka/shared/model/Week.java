@@ -1,7 +1,10 @@
 package name.pehl.karaka.shared.model;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Sets;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.Iterator;
@@ -162,6 +165,18 @@ public class Week implements Comparable<Week>, Iterable<Day>
         return days.iterator();
     }
 
+    public SortedSet<Day> noneEmptyDays()
+    {
+        return Sets.filter(days, new Predicate<Day>()
+        {
+            @Override
+            public boolean apply(@Nullable final Day input)
+            {
+                return input != null && !input.isEmpty();
+            }
+        });
+    }
+
     public boolean isEmpty()
     {
         if (!days.isEmpty())
@@ -193,33 +208,14 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
     public Time getStart()
     {
-        if (!days.isEmpty())
-        {
-            for (Day day : days)
-            {
-                if (!day.isEmpty())
-                {
-                    return day.getStart();
-                }
-            }
-        }
-        return null;
+        Day first = noneEmptyDays().first();
+        return first != null ? first.getStart() : null;
     }
 
     public Time getEnd()
     {
-        if (!days.isEmpty())
-        {
-            Day[] daysArray = days.toArray(new Day[]{});
-            for (int i = daysArray.length - 1; i >= 0; i--)
-            {
-                if (!daysArray[i].isEmpty())
-                {
-                    return daysArray[i].getEnd();
-                }
-            }
-        }
-        return null;
+        Day last = noneEmptyDays().last();
+        return last != null ? last.getEnd() : null;
     }
 
     public Duration getMinutes()

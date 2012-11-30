@@ -1,6 +1,8 @@
 package name.pehl.karaka.client.activity.dispatch;
 
 import name.pehl.karaka.client.dispatch.KarakaJsonCallback;
+import name.pehl.karaka.shared.model.Link;
+import name.pehl.karaka.shared.model.LinksParser;
 import name.pehl.piriti.json.client.JsonReader;
 import name.pehl.karaka.client.activity.model.ActivitiesReader;
 import name.pehl.karaka.client.dispatch.KarakaActionHandler;
@@ -14,6 +16,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
 import com.gwtplatform.dispatch.shared.SecurityCookieAccessor;
+
+import java.util.List;
 
 /**
  * @author $Author:$
@@ -46,9 +50,13 @@ public class GetActivitiesHandler extends KarakaActionHandler<GetActivitiesActio
         method.send(new KarakaJsonCallback<Activities, GetActivitiesResult>(activitiesReader, resultCallback)
         {
             @Override
-            protected GetActivitiesResult extractResult(JsonReader<Activities> reader, JSONObject json)
+            protected GetActivitiesResult extractResult(final Method method, JsonReader<Activities> reader, JSONObject json)
             {
-                return new GetActivitiesResult(activitiesReader.read(json));
+                String linkHeader = method.getResponse().getHeader("Link");
+                List<Link> links = LinksParser.valueOf(linkHeader);
+                Activities activities = activitiesReader.read(json);
+                activities.setLinks(links);
+                return new GetActivitiesResult(activities);
             }
         });
     }

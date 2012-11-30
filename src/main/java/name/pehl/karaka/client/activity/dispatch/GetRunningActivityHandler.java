@@ -43,7 +43,7 @@ public class GetRunningActivityHandler extends KarakaActionHandler<GetRunningAct
         method.send(new KarakaJsonCallback<Activity, GetRunningActivityResult>(activityReader, resultCallback)
         {
             @Override
-            protected GetRunningActivityResult extractResult(JsonReader<Activity> reader, JSONObject json)
+            protected GetRunningActivityResult extractResult(final Method method, JsonReader<Activity> reader, JSONObject json)
             {
                 return new GetRunningActivityResult(reader.read(json));
             }

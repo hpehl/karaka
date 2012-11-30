@@ -58,7 +58,7 @@ public class SaveActivityHandler extends KarakaActionHandler<SaveActivityAction,
         method.send(new KarakaJsonCallback<Activity, SaveActivityResult>(activityReader, resultCallback)
         {
             @Override
-            protected SaveActivityResult extractResult(JsonReader<Activity> reader, JSONObject json)
+            protected SaveActivityResult extractResult(final Method method, JsonReader<Activity> reader, JSONObject json)
             {
                 return new SaveActivityResult(reader.read(json));
             }

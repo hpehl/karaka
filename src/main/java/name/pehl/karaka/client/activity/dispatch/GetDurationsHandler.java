@@ -47,7 +47,7 @@ public class GetDurationsHandler extends KarakaActionHandler<GetDurationsAction,
         method.send(new KarakaJsonCallback<Durations, GetDurationsResult>(minutesReader, resultCallback)
         {
             @Override
-            protected GetDurationsResult extractResult(JsonReader<Durations> reader, JSONObject json)
+            protected GetDurationsResult extractResult(final Method method, JsonReader<Durations> reader, JSONObject json)
             {
                 return new GetDurationsResult(reader.read(json));
             }

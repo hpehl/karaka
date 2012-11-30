@@ -3,7 +3,7 @@ package name.pehl.karaka.client.dispatch;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.gwtplatform.dispatch.client.gin.DispatchAsyncModule;
 
-public class ClientDispatchModule extends AbstractGinModule
+public class DispatchModule extends AbstractGinModule
 {
     @Override
     protected void configure()

@@ -42,7 +42,7 @@ public class GetProjectsHandler extends KarakaActionHandler<GetProjectsAction, G
         method.send(new KarakaJsonCallback<Project, GetProjectsResult>(projectReader, resultCallback)
         {
             @Override
-            protected GetProjectsResult extractResult(JsonReader<Project> reader, JSONObject json)
+            protected GetProjectsResult extractResult(final Method method, JsonReader<Project> reader, JSONObject json)
             {
                 return new GetProjectsResult(reader.readList(json));
             }

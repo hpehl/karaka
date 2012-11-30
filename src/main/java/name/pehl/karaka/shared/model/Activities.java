@@ -1,20 +1,22 @@
 package name.pehl.karaka.shared.model;
 
-import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Sets;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
 
 /**
  * Main model class for managing activities. Weeks and days are sorted
  * ascending, activities are sorted descending.
- * 
+ *
  * @author $Author: harald.pehl $
  * @version $Date: 2011-08-31 22:05:44 +0200 (Mi, 31. Aug 2011) $ $Revision: 177
  *          $
@@ -36,6 +38,7 @@ public class Activities extends HasLinks
 
 
     // ------------------------------------------------------------ constructor
+
 
     /**
      * Required for JSON (de)serialization - please don't call directly.
@@ -64,7 +67,7 @@ public class Activities extends HasLinks
 
     /**
      * Based on year, month, week and day
-     * 
+     *
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -80,10 +83,9 @@ public class Activities extends HasLinks
         return result;
     }
 
-
     /**
      * Based on year, month, week and day
-     * 
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -124,7 +126,6 @@ public class Activities extends HasLinks
         }
         return true;
     }
-
 
     @Override
     public String toString()
@@ -205,7 +206,6 @@ public class Activities extends HasLinks
         return added;
     }
 
-
     public boolean remove(Activity activity)
     {
         boolean removed = false;
@@ -214,14 +214,14 @@ public class Activities extends HasLinks
             switch (unit)
             {
                 case MONTH:
-                    for (Iterator<Week> iter = weeks.iterator(); iter.hasNext();)
+                    for (Iterator<Week> iter = weeks.iterator(); iter.hasNext(); )
                     {
                         Week week = iter.next();
                         removed = week.remove(activity);
                     }
                     break;
                 case WEEK:
-                    for (Iterator<Day> iter = days.iterator(); iter.hasNext();)
+                    for (Iterator<Day> iter = days.iterator(); iter.hasNext(); )
                     {
                         Day day = iter.next();
                         removed = day.remove(activity);
@@ -236,7 +236,6 @@ public class Activities extends HasLinks
         }
         return removed;
     }
-
 
     public boolean contains(Activity activity)
     {
@@ -275,12 +274,12 @@ public class Activities extends HasLinks
         return result;
     }
 
-
     /**
      * Returns week the specified activity belongs to, <code>null</code>
      * otherwise.
-     * 
+     *
      * @param activity
+     *
      * @return
      */
     public Week weekOf(Activity activity)
@@ -289,7 +288,7 @@ public class Activities extends HasLinks
         if (activity != null)
         {
             // find the week this activity belongs to
-            for (Iterator<Week> iter = weeks.iterator(); iter.hasNext() && match == null;)
+            for (Iterator<Week> iter = weeks.iterator(); iter.hasNext() && match == null; )
             {
                 Week w = iter.next();
                 if (w.contains(activity))
@@ -301,12 +300,12 @@ public class Activities extends HasLinks
         return match;
     }
 
-
     /**
      * Returns the day the specified activity belongs to, <code>null</code>
      * otherwise.
-     * 
+     *
      * @param activity
+     *
      * @return
      */
     public Day dayOf(Activity activity)
@@ -315,7 +314,7 @@ public class Activities extends HasLinks
         if (activity != null)
         {
             // find the day this activity belongs to
-            for (Iterator<Day> iter = days.iterator(); iter.hasNext() && match == null;)
+            for (Iterator<Day> iter = days.iterator(); iter.hasNext() && match == null; )
             {
                 Day d = iter.next();
                 if (d.contains(activity))
@@ -326,7 +325,6 @@ public class Activities extends HasLinks
         }
         return match;
     }
-
 
     /**
      * @return a sorted set (ascending) of all activities managed by this
@@ -358,6 +356,10 @@ public class Activities extends HasLinks
         return ordered;
     }
 
+    public boolean isEmpty()
+    {
+        return activities().isEmpty();
+    }
 
     public boolean matchingRange(Activity activity)
     {
@@ -383,7 +385,6 @@ public class Activities extends HasLinks
         return match;
     }
 
-
     public Activity getRunningActivity()
     {
         for (Activity activity : activities())
@@ -396,6 +397,29 @@ public class Activities extends HasLinks
         return null;
     }
 
+    public SortedSet<Week> noneEmptyWeeks()
+    {
+        return Sets.filter(weeks, new Predicate<Week>()
+        {
+            @Override
+            public boolean apply(@Nullable final Week input)
+            {
+                return input != null && !input.isEmpty();
+            }
+        });
+    }
+
+    public SortedSet<Day> noneEmptyDays()
+    {
+        return Sets.filter(days, new Predicate<Day>()
+        {
+            @Override
+            public boolean apply(@Nullable final Day input)
+            {
+                return input != null && !input.isEmpty();
+            }
+        });
+    }
 
     public Time getStart()
     {
@@ -403,15 +427,17 @@ public class Activities extends HasLinks
         switch (unit)
         {
             case MONTH:
-                if (!weeks.isEmpty())
+                SortedSet<Week> noneEmptyWeeks = noneEmptyWeeks();
+                if (!noneEmptyWeeks.isEmpty())
                 {
-                    start = weeks.first().getStart();
+                    start = noneEmptyWeeks.first().getStart();
                 }
                 break;
             case WEEK:
-                if (!days.isEmpty())
+                SortedSet<Day> noneEmptyDays = noneEmptyDays();
+                if (!noneEmptyDays.isEmpty())
                 {
-                    start = days.first().getStart();
+                    start = noneEmptyDays.first().getStart();
                 }
                 break;
             case DAY:
@@ -428,22 +454,23 @@ public class Activities extends HasLinks
         return start;
     }
 
-
     public Time getEnd()
     {
         Time end = null;
         switch (unit)
         {
             case MONTH:
-                if (!weeks.isEmpty())
+                SortedSet<Week> noneEmptyWeeks = noneEmptyWeeks();
+                if (!noneEmptyWeeks.isEmpty())
                 {
-                    end = weeks.last().getEnd();
+                    end = noneEmptyWeeks.last().getEnd();
                 }
                 break;
             case WEEK:
-                if (!days.isEmpty())
+                SortedSet<Day> noneEmptyDays = noneEmptyDays();
+                if (!noneEmptyDays.isEmpty())
                 {
-                    end = days.last().getEnd();
+                    end = noneEmptyDays.last().getEnd();
                 }
                 break;
             case DAY:
@@ -459,7 +486,6 @@ public class Activities extends HasLinks
         }
         return end;
     }
-
 
     public Duration getDuration()
     {
@@ -490,20 +516,19 @@ public class Activities extends HasLinks
         return new Duration(minutes);
     }
 
-
     public int getNumberOfDays()
     {
         int result = 0;
         switch (unit)
         {
             case MONTH:
-                for (Week week : weeks)
+                for (Week week : noneEmptyWeeks())
                 {
-                    result += week.getDays().size();
+                    result += week.noneEmptyDays().size();
                 }
                 break;
             case WEEK:
-                result = days.size();
+                result = noneEmptyDays().size();
                 break;
             case DAY:
                 result = 1;
@@ -522,89 +547,75 @@ public class Activities extends HasLinks
         return year;
     }
 
-
     public void setYear(int year)
     {
         this.year = year;
     }
-
 
     public int getMonth()
     {
         return month;
     }
 
-
     public void setMonth(int month)
     {
         this.month = month;
     }
-
 
     public int getWeek()
     {
         return week;
     }
 
-
     public void setWeek(int week)
     {
         this.week = week;
     }
-
 
     public int getDay()
     {
         return day;
     }
 
-
     public void setDay(int day)
     {
         this.day = day;
     }
-
 
     public TimeUnit getUnit()
     {
         return unit;
     }
 
-
     public void setUnit(TimeUnit unit)
     {
         this.unit = unit;
     }
-
 
     public SortedSet<Week> getWeeks()
     {
         return weeks;
     }
 
-
     public void setWeeks(SortedSet<Week> weeks)
     {
         this.weeks = weeks;
     }
-
 
     public SortedSet<Day> getDays()
     {
         return days;
     }
 
-
     public void setDays(SortedSet<Day> days)
     {
         this.days = days;
     }
 
-
     /**
      * Required for JSON (de)serialization - please don't call directly. Use
      * {@link #activities()} instead.
-     * 
+     *
      * @return
      */
     public SortedSet<Activity> getActivities()
@@ -612,11 +623,10 @@ public class Activities extends HasLinks
         return activities;
     }
 
-
     /**
      * Required for JSON (de)serialization - please don't call directly. Use
      * {@link #add(Activity)} instead.
-     * 
+     *
      * @param activities
      */
     public void setActivities(SortedSet<Activity> activities)
@@ -639,7 +649,6 @@ public class Activities extends HasLinks
         }
         return null;
     }
-
 
     private Day findDay(Activity activity)
     {

@@ -14,11 +14,11 @@ import name.pehl.karaka.server.settings.entity.Settings;
 import name.pehl.karaka.shared.model.Activities;
 import name.pehl.karaka.shared.model.Duration;
 import name.pehl.karaka.shared.model.Durations;
-import name.pehl.karaka.shared.model.HasLinks;
 import name.pehl.karaka.shared.model.Year;
 import name.pehl.karaka.shared.model.Years;
 import org.jboss.resteasy.annotations.cache.Cache;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.spi.LinkHeader;
 import org.jboss.resteasy.spi.NotFoundException;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
@@ -47,7 +47,7 @@ import java.util.TreeSet;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.Response.Status.*;
-import static name.pehl.karaka.shared.model.HasLinks.SELF;
+import static name.pehl.karaka.shared.model.HasLinks.*;
 import static name.pehl.karaka.shared.model.Status.STOPPED;
 import static name.pehl.karaka.shared.model.TimeUnit.*;
 import static org.joda.time.Months.months;
@@ -142,7 +142,7 @@ public class ActivitiesResource
 
     @GET
     @Path("/years")
-    public Years years()
+    public Response years()
     {
         PageResult<Activity> activities = repository.list();
         if (activities.isEmpty())
@@ -165,8 +165,10 @@ public class ActivitiesResource
             year.addWeek(w);
         }
         Years years = new Years(new TreeSet<Year>(lookup.values()));
-        years.addLink(SELF, uriInfo.getAbsolutePath().toASCIIString());
-        return years;
+
+        String url = uriInfo.getAbsolutePath().toASCIIString();
+        LinkHeader linkHeader = new LinkHeader().addLink(null, SELF, url, null);
+        return Response.ok(years).header("Link", linkHeader.toString()).build();
     }
 
 
@@ -174,12 +176,12 @@ public class ActivitiesResource
 
     @GET
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}")
-    public Activities activitiesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
+    public Response activitiesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
     {
         DateMidnight yearMonth = new DateMidnight(year, month, 1, settings.get().getTimeZone());
-        Activities activities = activitiesConverter.toModel(yearMonth, MONTH, forYearMonth(yearMonth));
-        addLinksForYearMonth(activities, yearMonth);
-        return activities;
+        Activities activities = activitiesConverter.toModel(yearMonth, MONTH,
+                repository.findByYearMonth(yearMonth.year().get(), yearMonth.monthOfYear().get()));
+        return addLinksForYearMonth(activities, yearMonth);
     }
 
     @GET
@@ -187,17 +189,18 @@ public class ActivitiesResource
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/duration")
     public Duration minutesForYearMonth(@PathParam("year") int year, @PathParam("month") int month)
     {
-        return minutes(forYearMonth(new DateMidnight(year, month, 1, settings.get().getTimeZone())));
+        DateMidnight date = new DateMidnight(year, month, 1, settings.get().getTimeZone());
+        return minutes(repository.findByYearMonth(date.year().get(), date.monthOfYear().get()));
     }
 
     @GET
     @Path("/relative/{month:[+-]?\\d+}")
-    public Activities activitiesForRelativeMonth(@PathParam("month") int month)
+    public Response activitiesForRelativeMonth(@PathParam("month") int month)
     {
         DateMidnight absolute = absoluteMonth(month);
-        Activities activities = activitiesConverter.toModel(absolute, MONTH, forYearMonth(absolute));
-        addLinksForYearMonth(activities, absolute);
-        return activities;
+        Activities activities = activitiesConverter.toModel(absolute, MONTH,
+                repository.findByYearMonth(absolute.year().get(), absolute.monthOfYear().get()));
+        return addLinksForYearMonth(activities, absolute);
     }
 
     @GET
@@ -205,17 +208,18 @@ public class ActivitiesResource
     @Path("/relative/{month:[+-]?\\d+}/duration")
     public Duration minutesForRelativeMonth(@PathParam("month") int month)
     {
-        return minutes(forYearMonth(absoluteMonth(month)));
+        DateMidnight date = absoluteMonth(month);
+        return minutes(repository.findByYearMonth(date.year().get(), date.monthOfYear().get()));
     }
 
     @GET
     @Path("/currentMonth")
-    public Activities activitiesForCurrentMonth()
+    public Response activitiesForCurrentMonth()
     {
         DateMidnight now = now(settings.get().getTimeZone());
-        Activities activities = activitiesConverter.toModel(now, MONTH, forYearMonth(now));
-        addLinksForYearMonth(activities, now);
-        return activities;
+        Activities activities = activitiesConverter.toModel(now, MONTH,
+                repository.findByYearMonth(now.year().get(), now.monthOfYear().get()));
+        return addLinksForYearMonth(activities, now);
     }
 
     @GET
@@ -223,18 +227,8 @@ public class ActivitiesResource
     @Path("/currentMonth/duration")
     public Duration minutesForCurrentMonth()
     {
-        return minutes(forYearMonth(now(settings.get().getTimeZone())));
-    }
-
-    private List<Activity> forYearMonth(DateMidnight date)
-    {
-        List<Activity> activities = repository.findByYearMonth(date.year().get(), date.monthOfYear().get());
-        if (activities.isEmpty())
-        {
-            throw new NotFoundException(String.format("No activities found for %d/%d", date.monthOfYear().get(), date
-                    .year().get()));
-        }
-        return activities;
+        DateMidnight date = now(settings.get().getTimeZone());
+        return minutes(repository.findByYearMonth(date.year().get(), date.monthOfYear().get()));
     }
 
     private DateMidnight absoluteMonth(int month)
@@ -243,9 +237,11 @@ public class ActivitiesResource
         return now.plus(months(month));
     }
 
-    private void addLinksForYearMonth(Activities activities, DateMidnight yearMonth)
+    private Response addLinksForYearMonth(Activities activities, DateMidnight yearMonth)
     {
-        activities.addLink(SELF, uriInfo.getAbsolutePath().toASCIIString());
+        LinkHeader linkHeader = new LinkHeader();
+        String self = uriInfo.getAbsolutePath().toASCIIString();
+        linkHeader.addLink(null, SELF, self, null);
 
         DateMidnight prevMonth = yearMonth.minusMonths(1);
         DateMidnight nextMonth = yearMonth.plusMonths(1);
@@ -256,15 +252,29 @@ public class ActivitiesResource
             String prev = uriInfo.getBaseUriBuilder().path("activities")
                     .segment(String.valueOf(prevMonth.year().get()), String.valueOf(prevMonth.monthOfYear().get()))
                     .build().toASCIIString();
-            activities.addLink(HasLinks.PREV, prev);
+            linkHeader.addLink(null, PREV, prev, null);
         }
         if (hasNext)
         {
             String next = uriInfo.getBaseUriBuilder().path("activities")
                     .segment(String.valueOf(nextMonth.year().get()), String.valueOf(nextMonth.monthOfYear().get()))
                     .build().toASCIIString();
-            activities.addLink(HasLinks.NEXT, next);
+            linkHeader.addLink(null, NEXT, next, null);
         }
+
+        Response.ResponseBuilder response;
+        if (!activities.isEmpty())
+        {
+            response = Response.ok(activities);
+        }
+        else
+        {
+            response = Response.status(NOT_FOUND).entity(
+                    String.format("No activities found for %d/%d", yearMonth.monthOfYear().get(),
+                            yearMonth.year().get()));
+        }
+        response.header("Link", linkHeader.toString());
+        return response.build();
     }
 
 
@@ -272,14 +282,14 @@ public class ActivitiesResource
 
     @GET
     @Path("/{year:\\d{4}}/cw{week:\\d{1,2}}")
-    public Activities activitiesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
+    public Response activitiesForYearWeek(@PathParam("year") int year, @PathParam("week") int week)
     {
         DateMidnight yearWeek = new MutableDateTime(settings.get().getTimeZone()).year().set(year).weekOfWeekyear()
                 .set(week)
                 .toDateTime().toDateMidnight();
-        Activities activities = activitiesConverter.toModel(yearWeek, WEEK, forYearWeek(yearWeek));
-        addLinksForYearWeek(activities, yearWeek);
-        return activities;
+        Activities activities = activitiesConverter.toModel(yearWeek, WEEK,
+                repository.findByYearWeek(yearWeek.year().get(), yearWeek.weekOfWeekyear().get()));
+        return addLinksForYearWeek(activities, yearWeek);
     }
 
     @GET
@@ -290,17 +300,17 @@ public class ActivitiesResource
         DateMidnight yearWeek = new MutableDateTime(settings.get().getTimeZone()).year().set(year).weekOfWeekyear()
                 .set(week)
                 .toDateTime().toDateMidnight();
-        return minutes(forYearWeek(yearWeek));
+        return minutes(repository.findByYearWeek(yearWeek.year().get(), yearWeek.weekOfWeekyear().get()));
     }
 
     @GET
     @Path("/relative/cw{week:[+-]?\\d+}")
-    public Activities activitiesForRelativeWeek(@PathParam("week") int week)
+    public Response activitiesForRelativeWeek(@PathParam("week") int week)
     {
         DateMidnight absolute = absoluteWeek(week);
-        Activities activities = activitiesConverter.toModel(absolute, WEEK, forYearWeek(absolute));
-        addLinksForYearWeek(activities, absolute);
-        return activities;
+        Activities activities = activitiesConverter.toModel(absolute, WEEK,
+                repository.findByYearWeek(absolute.year().get(), absolute.weekOfWeekyear().get()));
+        return addLinksForYearWeek(activities, absolute);
     }
 
     @GET
@@ -308,17 +318,18 @@ public class ActivitiesResource
     @Path("/relative/cw{week:[+-]?\\d+}/duration")
     public Duration minutesForRelativeWeek(@PathParam("week") int week)
     {
-        return minutes(forYearWeek(absoluteWeek(week)));
+        DateMidnight date = absoluteWeek(week);
+        return minutes(repository.findByYearWeek(date.year().get(), date.weekOfWeekyear().get()));
     }
 
     @GET
     @Path("/currentWeek")
-    public Activities activitiesForCurrentWeek()
+    public Response activitiesForCurrentWeek()
     {
         DateMidnight now = now(settings.get().getTimeZone());
-        Activities activities = activitiesConverter.toModel(now, WEEK, forYearWeek(now));
-        addLinksForYearWeek(activities, now);
-        return activities;
+        Activities activities = activitiesConverter.toModel(now, WEEK,
+                repository.findByYearWeek(now.year().get(), now.weekOfWeekyear().get()));
+        return addLinksForYearWeek(activities, now);
     }
 
     @GET
@@ -326,18 +337,8 @@ public class ActivitiesResource
     @Path("/currentWeek/duration")
     public Duration minutesForCurrentWeek()
     {
-        return minutes(forYearWeek(now(settings.get().getTimeZone())));
-    }
-
-    private List<Activity> forYearWeek(DateMidnight date)
-    {
-        List<Activity> activities = repository.findByYearWeek(date.year().get(), date.weekOfWeekyear().get());
-        if (activities.isEmpty())
-        {
-            throw new NotFoundException(String.format("No activities found for CW %d/%d", date.weekOfWeekyear().get(),
-                    date.year().get()));
-        }
-        return activities;
+        DateMidnight date = now(settings.get().getTimeZone());
+        return minutes(repository.findByYearWeek(date.year().get(), date.weekOfWeekyear().get()));
     }
 
     private DateMidnight absoluteWeek(int week)
@@ -346,9 +347,11 @@ public class ActivitiesResource
         return now.plus(weeks(week));
     }
 
-    private void addLinksForYearWeek(Activities activities, DateMidnight yearWeek)
+    private Response addLinksForYearWeek(Activities activities, DateMidnight yearWeek)
     {
-        activities.addLink(SELF, uriInfo.getAbsolutePath().toASCIIString());
+        LinkHeader linkHeader = new LinkHeader();
+        String self = uriInfo.getAbsolutePath().toASCIIString();
+        linkHeader.addLink(null, SELF, self, null);
 
         DateMidnight prevWeek = yearWeek.minusWeeks(1);
         DateMidnight nextWeek = yearWeek.plusWeeks(1);
@@ -361,7 +364,7 @@ public class ActivitiesResource
                     .path("activities")
                     .segment(String.valueOf(prevWeek.year().get()),
                             "cw" + String.valueOf(prevWeek.weekOfWeekyear().get())).build().toASCIIString();
-            activities.addLink(HasLinks.PREV, prev);
+            linkHeader.addLink(null, PREV, prev, null);
         }
         if (hasNext)
         {
@@ -370,8 +373,22 @@ public class ActivitiesResource
                     .path("activities")
                     .segment(String.valueOf(nextWeek.year().get()),
                             "cw" + String.valueOf(nextWeek.weekOfWeekyear().get())).build().toASCIIString();
-            activities.addLink(HasLinks.NEXT, next);
+            linkHeader.addLink(null, NEXT, next, null);
         }
+
+        Response.ResponseBuilder response;
+        if (!activities.isEmpty())
+        {
+            response = Response.ok(activities);
+        }
+        else
+        {
+            response = Response.status(NOT_FOUND).entity(
+                    String.format("No activities found for CW %d/%d", yearWeek.weekOfWeekyear().get(),
+                            yearWeek.year().get()));
+        }
+        response.header("Link", linkHeader.toString());
+        return response.build();
     }
 
 
@@ -379,13 +396,14 @@ public class ActivitiesResource
 
     @GET
     @Path("/{year:\\d{4}}/{month:\\d{1,2}}/{day:\\d{1,2}}")
-    public Activities activitiesForYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
+    public Response activitiesForYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
             @PathParam("day") int day)
     {
         DateMidnight yearMonthDay = new DateMidnight(year, month, day, settings.get().getTimeZone());
-        Activities activities = activitiesConverter.toModel(yearMonthDay, DAY, forYearMonthDay(yearMonthDay));
-        addLinksForYearMonthDay(activities, yearMonthDay);
-        return activities;
+        Activities activities = activitiesConverter.toModel(yearMonthDay, DAY,
+                repository.findByYearMonthDay(yearMonthDay.year().get(), yearMonthDay.monthOfYear().get(), yearMonthDay
+                        .dayOfMonth().get()));
+        return addLinksForYearMonthDay(activities, yearMonthDay);
     }
 
     @GET
@@ -394,17 +412,20 @@ public class ActivitiesResource
     public Duration minutesForYearMonthDay(@PathParam("year") int year, @PathParam("month") int month,
             @PathParam("day") int day)
     {
-        return minutes(forYearMonthDay(new DateMidnight(year, month, day, settings.get().getTimeZone())));
+        DateMidnight date = new DateMidnight(year, month, day, settings.get().getTimeZone());
+        return minutes(repository.findByYearMonthDay(date.year().get(), date.monthOfYear().get(), date
+                .dayOfMonth().get()));
     }
 
     @GET
     @Path("/today")
-    public Activities activitiesForToday()
+    public Response activitiesForToday()
     {
         DateMidnight now = now(settings.get().getTimeZone());
-        Activities activities = activitiesConverter.toModel(now, DAY, forYearMonthDay(now));
-        addLinksForYearMonthDay(activities, now);
-        return activities;
+        Activities activities = activitiesConverter.toModel(now, DAY,
+                repository.findByYearMonthDay(now.year().get(), now.monthOfYear().get(), now
+                        .dayOfMonth().get()));
+        return addLinksForYearMonthDay(activities, now);
     }
 
     @GET
@@ -412,24 +433,16 @@ public class ActivitiesResource
     @Path("/today/duration")
     public Duration minutesForToday()
     {
-        return minutes(forYearMonthDay(now(settings.get().getTimeZone())));
+        DateMidnight date = now(settings.get().getTimeZone());
+        return minutes(repository.findByYearMonthDay(date.year().get(), date.monthOfYear().get(), date
+                .dayOfMonth().get()));
     }
 
-    private List<Activity> forYearMonthDay(DateMidnight date)
+    private Response addLinksForYearMonthDay(Activities activities, DateMidnight yearMonthDay)
     {
-        List<Activity> activities = repository.findByYearMonthDay(date.year().get(), date.monthOfYear().get(), date
-                .dayOfMonth().get());
-        if (activities.isEmpty())
-        {
-            throw new NotFoundException(String.format("No activities found for %d/%d/%d", date.dayOfMonth().get(), date
-                    .monthOfYear().get(), date.year().get()));
-        }
-        return activities;
-    }
-
-    private void addLinksForYearMonthDay(Activities activities, DateMidnight yearMonthDay)
-    {
-        activities.addLink(SELF, uriInfo.getAbsolutePath().toASCIIString());
+        LinkHeader linkHeader = new LinkHeader();
+        String self = uriInfo.getAbsolutePath().toASCIIString();
+        linkHeader.addLink(null, SELF, self, null);
 
         DateMidnight prevDay = yearMonthDay.minusDays(1);
         DateMidnight nextDay = yearMonthDay.plusDays(1);
@@ -444,7 +457,7 @@ public class ActivitiesResource
                     .path("activities")
                     .segment(String.valueOf(prevDay.year().get()), String.valueOf(prevDay.monthOfYear().get()),
                             String.valueOf(prevDay.dayOfMonth().get())).build().toASCIIString();
-            activities.addLink(HasLinks.PREV, prev);
+            linkHeader.addLink(null, PREV, prev, null);
         }
         if (hasNext)
         {
@@ -453,8 +466,22 @@ public class ActivitiesResource
                     .path("activities")
                     .segment(String.valueOf(nextDay.year().get()), String.valueOf(nextDay.monthOfYear().get()),
                             String.valueOf(nextDay.dayOfMonth().get())).build().toASCIIString();
-            activities.addLink(HasLinks.NEXT, next);
+            linkHeader.addLink(null, NEXT, next, null);
         }
+
+        Response.ResponseBuilder response;
+        if (!activities.isEmpty())
+        {
+            response = Response.ok(activities);
+        }
+        else
+        {
+            response = Response.status(NOT_FOUND).entity(String
+                    .format("No activities found for %d/%d/%d", yearMonthDay.dayOfMonth().get(),
+                            yearMonthDay.monthOfYear().get(), yearMonthDay.year().get()));
+        }
+        response.header("Link", linkHeader.toString());
+        return response.build();
     }
 
 
@@ -483,15 +510,18 @@ public class ActivitiesResource
 
     @GET
     @Path("/current/durations")
-    public Durations minutesForCurrentMonthWeekAndDay()
+    public Response minutesForCurrentMonthWeekAndDay()
     {
         DateMidnight now = now(settings.get().getTimeZone());
-        Duration currentMonth = minutes(forYearMonth(now));
-        Duration currentWeek = minutes(forYearWeek(now));
-        Duration today = minutes(forYearMonthDay(now));
+        Duration currentMonth = minutes(repository.findByYearMonth(now.year().get(), now.monthOfYear().get()));
+        Duration currentWeek = minutes(repository.findByYearWeek(now.year().get(), now.weekOfWeekyear().get()));
+        Duration today = minutes(repository.findByYearMonthDay(now.year().get(), now.monthOfYear().get(), now
+                .dayOfMonth().get()));
         Durations durations = new Durations(currentMonth, currentWeek, today);
-        durations.addLink(SELF, uriInfo.getAbsolutePath().toASCIIString());
-        return durations;
+
+        String url = uriInfo.getAbsolutePath().toASCIIString();
+        LinkHeader linkHeader = new LinkHeader().addLink(null, SELF, url, null);
+        return Response.ok(durations).header("Link", linkHeader.toString()).build();
     }
 
 

@@ -42,7 +42,7 @@ public class GetTagsHandler extends KarakaActionHandler<GetTagsAction, GetTagsRe
         method.send(new KarakaJsonCallback<Tag, GetTagsResult>(tagReader, resultCallback)
         {
             @Override
-            protected GetTagsResult extractResult(JsonReader<Tag> reader, JSONObject json)
+            protected GetTagsResult extractResult(final Method method, JsonReader<Tag> reader, JSONObject json)
             {
                 return new GetTagsResult(reader.readList(json));
             }

@@ -58,7 +58,7 @@ public class TickActivityHandler extends KarakaActionHandler<TickActivityAction,
         method.send(new KarakaJsonCallback<Activity, TickActivityResult>(activityReader, resultCallback)
         {
             @Override
-            protected TickActivityResult extractResult(final JsonReader<Activity> reader, final JSONObject json)
+            protected TickActivityResult extractResult(final Method method, final JsonReader<Activity> reader, final JSONObject json)
             {
                 return new TickActivityResult(new HashSet<Activity>(reader.readList(json)));
             }

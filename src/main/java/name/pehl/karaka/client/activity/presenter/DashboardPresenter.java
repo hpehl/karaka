@@ -20,7 +20,7 @@ import name.pehl.karaka.client.application.ApplicationPresenter;
 import name.pehl.karaka.client.application.Message;
 import name.pehl.karaka.client.application.ShowMessageEvent;
 import name.pehl.karaka.client.dispatch.KarakaCallback;
-import org.fusesource.restygwt.client.FailedStatusCodeException;
+import name.pehl.karaka.client.dispatch.RestException;
 
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
@@ -170,7 +170,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
 
                 @Override
-                public void onNotFound(final FailedStatusCodeException caught)
+                public void onNotFound(final RestException caught)
                 {
                     String errorMessage = "No activities found for " + activitiesRequest;
                     ShowMessageEvent.fire(DashboardPresenter.this, new Message(WARNING, errorMessage, true));

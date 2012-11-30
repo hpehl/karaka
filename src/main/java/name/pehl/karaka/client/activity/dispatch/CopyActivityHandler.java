@@ -55,7 +55,7 @@ public class CopyActivityHandler extends KarakaActionHandler<CopyActivityAction,
         method.send(new KarakaJsonCallback<Activity, CopyActivityResult>(activityReader, resultCallback)
         {
             @Override
-            protected CopyActivityResult extractResult(final JsonReader<Activity> reader, final JSONObject json)
+            protected CopyActivityResult extractResult(final Method method, final JsonReader<Activity> reader, final JSONObject json)
             {
                 return new CopyActivityResult(reader.read(json));
             }

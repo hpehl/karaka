@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui"
     xmlns:kui="urn:import:name.pehl.karaka.client.ui">
 
-    <ui:style>
+    <ui:style type="name.pehl.karaka.client.activity.view.ActivityNavigationView.Style">
         .header {
         	float: left;
         	font-size: 133%;
@@ -20,7 +20,16 @@
         
         .navigation span {
         	padding: 2px;
-        	cursor: pointer;
+        }
+
+        .enabled {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .disabled {
+            opacity: .25;
+            cursor: default;
         }
     </ui:style>
 
@@ -28,16 +37,16 @@
         <g:InlineLabel ui:field="header" addStyleNames="{style.header}">No
             Activities</g:InlineLabel>
         <span class="{style.navigation}">
-            <kui:InlineHTMLWithContextMenu ui:field="previous">
+            <g:InlineHTML ui:field="previous">
                 <svg width="32" height="32">
                     <path fill="#3d3d3d" stroke="none" d="M24.316,5.318L6.684,15.5l17.632,10.182V5.318L24.316,5.318z"></path>
                 </svg>
-            </kui:InlineHTMLWithContextMenu>
-            <kui:InlineHTMLWithContextMenu ui:field="next">
+            </g:InlineHTML>
+            <g:InlineHTML ui:field="next">
                 <svg width="32" height="32">
                     <path fill="#3d3d3d" stroke="none" d="M6.684,25.682L24.316,15.5L6.684,5.318V25.682z"></path>
                 </svg>
-            </kui:InlineHTMLWithContextMenu>
+            </g:InlineHTML>
             <kui:InlineHTMLWithContextMenu ui:field="month"
                 title="Click for current month, right click to choose month">
                 <svg width="27" height="32">

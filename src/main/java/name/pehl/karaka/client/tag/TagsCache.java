@@ -5,11 +5,11 @@ import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import name.pehl.karaka.client.dispatch.KarakaCallback;
+import name.pehl.karaka.client.dispatch.RestException;
 import name.pehl.karaka.client.model.AbstractModelCache;
 import name.pehl.karaka.client.model.ModelCache;
 import name.pehl.karaka.client.tag.RefreshTagsEvent.RefreshTagsHandler;
 import name.pehl.karaka.shared.model.Tag;
-import org.fusesource.restygwt.client.FailedStatusCodeException;
 
 import static name.pehl.karaka.client.logging.Logger.Category.cache;
 import static name.pehl.karaka.client.logging.Logger.info;
@@ -44,7 +44,7 @@ public class TagsCache extends AbstractModelCache<Tag> implements ModelCache<Tag
                     }
 
                     @Override
-                    public void onNotFound(final FailedStatusCodeException caught)
+                    public void onNotFound(final RestException caught)
                     {
                         warn(cache, "No tags found.");
                     }

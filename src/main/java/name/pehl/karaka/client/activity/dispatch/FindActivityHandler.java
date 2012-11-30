@@ -43,7 +43,7 @@ public class FindActivityHandler extends KarakaActionHandler<FindActivityAction,
         method.send(new KarakaJsonCallback<Activity, FindActivityResult>(activityReader, resultCallback)
         {
             @Override
-            protected FindActivityResult extractResult(JsonReader<Activity> reader, JSONObject json)
+            protected FindActivityResult extractResult(final Method method, JsonReader<Activity> reader, JSONObject json)
             {
                 return new FindActivityResult(reader.readList(json));
             }

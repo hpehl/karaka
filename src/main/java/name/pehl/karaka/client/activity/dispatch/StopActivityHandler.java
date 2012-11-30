@@ -56,7 +56,7 @@ public class StopActivityHandler extends KarakaActionHandler<StopActivityAction,
         method.send(new KarakaJsonCallback<Activity, StopActivityResult>(activityReader, resultCallback)
         {
             @Override
-            protected StopActivityResult extractResult(final JsonReader<Activity> reader, final JSONObject json)
+            protected StopActivityResult extractResult(final Method method, final JsonReader<Activity> reader, final JSONObject json)
             {
                 return new StopActivityResult(reader.read(json));
             }

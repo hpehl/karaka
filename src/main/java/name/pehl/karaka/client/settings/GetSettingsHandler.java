@@ -46,7 +46,7 @@ public class GetSettingsHandler extends KarakaActionHandler<GetSettingsAction, G
         method.send(new KarakaJsonCallback<Settings, GetSettingsResult>(settingsReader, resultCallback)
         {
             @Override
-            protected GetSettingsResult extractResult(JsonReader<Settings> reader, JSONObject json)
+            protected GetSettingsResult extractResult(final Method method, JsonReader<Settings> reader, JSONObject json)
             {
                 return new GetSettingsResult(settingsReader.read(json));
             }

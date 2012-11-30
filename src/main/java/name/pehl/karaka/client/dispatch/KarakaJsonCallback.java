@@ -1,15 +1,13 @@
 package name.pehl.karaka.client.dispatch;
 
-import name.pehl.piriti.json.client.JsonReader;
-
-import org.fusesource.restygwt.client.JsonCallback;
-import org.fusesource.restygwt.client.Method;
-import org.fusesource.restygwt.client.ResponseFormatException;
-
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtplatform.dispatch.shared.Result;
+import name.pehl.piriti.json.client.JsonReader;
+import org.fusesource.restygwt.client.FailedStatusCodeException;
+import org.fusesource.restygwt.client.JsonCallback;
+import org.fusesource.restygwt.client.Method;
 
 public abstract class KarakaJsonCallback<T, R extends Result> implements JsonCallback
 {
@@ -30,7 +28,7 @@ public abstract class KarakaJsonCallback<T, R extends Result> implements JsonCal
     {
         if (response.isObject() != null)
         {
-            resultCallback.onSuccess(extractResult(reader, response.isObject()));
+            resultCallback.onSuccess(extractResult(method, reader, response.isObject()));
         }
         else if (response.isArray() != null)
         {
@@ -39,11 +37,11 @@ public abstract class KarakaJsonCallback<T, R extends Result> implements JsonCal
             // contains the array.
             JSONObject root = new JSONObject();
             root.put("list", response.isArray());
-            resultCallback.onSuccess(extractResult(reader, root));
+            resultCallback.onSuccess(extractResult(method, reader, root));
         }
         else
         {
-            resultCallback.onFailure(new ResponseFormatException("Response was NOT a valid JSON object"));
+            resultCallback.onFailure(new RestException(method, "Response was NOT a valid JSON object"));
         }
     }
 
@@ -51,9 +49,14 @@ public abstract class KarakaJsonCallback<T, R extends Result> implements JsonCal
     @Override
     public void onFailure(Method method, Throwable exception)
     {
-        resultCallback.onFailure(exception);
+        int statusCode = -1;
+        if (exception instanceof FailedStatusCodeException)
+        {
+            statusCode = ((FailedStatusCodeException)exception).getStatusCode();
+        }
+        resultCallback.onFailure(new RestException(method, exception.getMessage(), statusCode));
     }
 
 
-    protected abstract R extractResult(JsonReader<T> reader, JSONObject json);
+    protected abstract R extractResult(Method method, JsonReader<T> reader, JSONObject json);
 }
