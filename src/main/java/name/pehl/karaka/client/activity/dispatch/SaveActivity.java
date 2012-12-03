@@ -7,7 +7,7 @@ import com.gwtplatform.dispatch.annotation.In;
 import com.gwtplatform.dispatch.annotation.Out;
 
 /**
- * Used to save new and update existing activities.
+ * Used to save new and update existing placeRequestFor.
  * 
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$

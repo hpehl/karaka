@@ -8,7 +8,7 @@ import name.pehl.karaka.shared.model.Activity;
 import java.util.Set;
 
 /**
- * Used to save new and update existing activities.
+ * Used to save new and update existing placeRequestFor.
  * 
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$

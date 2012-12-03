@@ -95,9 +95,9 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
     }
 
     /**
-     * Starts or resumes the specified activity. If the activities init day is today, the activity is resumed. If not
+     * Starts or resumes the specified activity. If the placeRequestFor init day is today, the activity is resumed. If not
      * the activity is cloned and started as a new activity. If there's another activity running, this activity is
-     * stopped first. The returned set contains all modified activities (two if there was another activity
+     * stopped first. The returned set contains all modified placeRequestFor (two if there was another activity
      * running, one otherwise).
      *
      * @param activity
@@ -135,7 +135,7 @@ public class ActivityRepository extends NamedEntityRepository<Activity>
 
     /**
      * Ticks the specified activity. If the activity is not running it is started. If there's another activity running,
-     * this activity is stopped first. The returned set contains all modified activities (two if there was another
+     * this activity is stopped first. The returned set contains all modified placeRequestFor (two if there was another
      * activity running, one otherwise).
      *
      * @param activity

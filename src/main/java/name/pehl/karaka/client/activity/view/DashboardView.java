@@ -14,7 +14,7 @@ import com.gwtplatform.mvp.client.ViewImpl;
  * Ideas:
  * <ul>
  * <li>Place buttons / clickable labels with the current tags next to the
- * header. Clicking the labels will filter the activities. See
+ * header. Clicking the labels will filter the placeRequestFor. See
  * http://meteor.com/examples/todos
  * </ul>
  */

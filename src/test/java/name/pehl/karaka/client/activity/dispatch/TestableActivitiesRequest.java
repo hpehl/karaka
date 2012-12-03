@@ -7,12 +7,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 
 public class TestableActivitiesRequest extends ActivitiesRequest
 {
-    public TestableActivitiesRequest(String url)
-    {
-        super(url);
-    }
-
-
     public TestableActivitiesRequest(PlaceRequest placeRequest)
     {
         this(placeRequest, new TestableUrlBuilder().module("rest").path("activities"));

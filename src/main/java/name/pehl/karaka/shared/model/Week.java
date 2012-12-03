@@ -193,7 +193,7 @@ public class Week implements Comparable<Week>, Iterable<Day>
     }
 
     /**
-     * @return a sorted set (ascending) of all activities managed by this
+     * @return a sorted set (ascending) of all placeRequestFor managed by this
      *         instance.
      */
     public SortedSet<Activity> getActivities()
@@ -208,14 +208,14 @@ public class Week implements Comparable<Week>, Iterable<Day>
 
     public Time getStart()
     {
-        Day first = noneEmptyDays().first();
-        return first != null ? first.getStart() : null;
+        SortedSet<Day> noneEmpyDays = noneEmptyDays();
+        return noneEmpyDays.isEmpty() ? null : noneEmpyDays.first().getStart();
     }
 
     public Time getEnd()
     {
-        Day last = noneEmptyDays().last();
-        return last != null ? last.getEnd() : null;
+        SortedSet<Day> noneEmptyDays = noneEmptyDays();
+        return noneEmptyDays.isEmpty() ? null : noneEmptyDays.last().getEnd();
     }
 
     public Duration getMinutes()

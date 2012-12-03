@@ -293,8 +293,8 @@ public class ActivitiesTest
         assertNull(cut.getEnd());
 
         // month
-        DateTime startDate = new DateTime().dayOfMonth().withMinimumValue();
-        DateTime endDate = new DateTime().dayOfMonth().withMaximumValue();
+        DateTime startDate = new DateTime().dayOfMonth().withMinimumValue().plusDays(5);
+        DateTime endDate = new DateTime().dayOfMonth().withMaximumValue().minusDays(5);
         Activity start = td.newActivity(startDate, startDate.plusHours(1));
         Activity end = td.newActivity(endDate, endDate.plusHours(1));
         internalGetStartEnd(td.month(), start, end);

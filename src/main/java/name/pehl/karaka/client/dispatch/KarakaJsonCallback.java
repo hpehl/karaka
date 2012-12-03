@@ -62,7 +62,7 @@ public abstract class KarakaJsonCallback<T, R extends Result> implements JsonCal
     }
 
 
-    protected List<Link> readLinks(Method method)
+    protected List<Link> readHeaderLinks(Method method)
     {
         String linkHeader = method.getResponse().getHeader("Link");
         List<Link> links = LinksParser.valueOf(linkHeader);

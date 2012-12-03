@@ -6,7 +6,7 @@ import com.gwtplatform.dispatch.annotation.Out;
 import name.pehl.karaka.shared.model.Activity;
 
 /**
- * Used to save new and update existing activities.
+ * Used to save new and update existing placeRequestFor.
  * 
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$

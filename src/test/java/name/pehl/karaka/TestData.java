@@ -20,7 +20,7 @@ import org.joda.time.MutableDateTime;
 
 public class TestData
 {
-    // ------------------------------------------------------------- activities
+    // ------------------------------------------------------------- placeRequestFor
 
     public Activities month()
     {

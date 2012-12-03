@@ -13,7 +13,10 @@ public abstract class HasLinks
     public static final String SELF = "self";
     public static final String PREV = "prev";
     public static final String NEXT = "next";
-
+    /**
+     * The links are uni-directional: On the server side the links are encodes into the response header.
+     * On the client side they are parsed and then assigned to this field.
+     */
     @Transient List<Link> links;
 
 
@@ -35,6 +38,12 @@ public abstract class HasLinks
     public boolean hasNext()
     {
         return findRel(NEXT) != null;
+    }
+
+    public String get(String rel)
+    {
+        Link link = findRel(rel);
+        return link != null ? link.getUrl() : null;
     }
 
     private Link findRel(String rel)

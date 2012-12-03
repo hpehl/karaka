@@ -50,7 +50,7 @@ public class GetDurationsHandler extends KarakaActionHandler<GetDurationsAction,
             protected GetDurationsResult extractResult(final Method method, JsonReader<Durations> reader, JSONObject json)
             {
                 Durations durations = reader.read(json);
-                durations.setLinks(readLinks(method));
+                durations.setLinks(readHeaderLinks(method));
                 return new GetDurationsResult(durations);
             }
         });

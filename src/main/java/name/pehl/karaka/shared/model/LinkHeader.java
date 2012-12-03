@@ -16,37 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-package name.pehl.karaka.client.bootstrap;
+package name.pehl.karaka.shared.model;
 
-import com.google.gwt.user.client.Command;
-import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import name.pehl.karaka.client.activity.presenter.ActivityController;
-
-import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Harald Pehl
- * @date 11/22/2012
+ * @date 11/30/2012
  */
-public class LoadMainApp extends BootstrapStep
+public class LinkHeader extends HasLinks
 {
-    private final PlaceManager placeManager;
-    private final ActivityController activityController;
-
-
-    @Inject
-    public LoadMainApp(final PlaceManager placeManager, final ActivityController activityController)
+    public LinkHeader(List<Link> links)
     {
-        this.placeManager = placeManager;
-        this.activityController = activityController;
-    }
-
-    @Override
-    public void execute(final Iterator<BootstrapStep> iterator, final Command command)
-    {
-        placeManager.revealCurrentPlace();
-        activityController.init();
-        next(iterator, command);
+        setLinks(links);
     }
 }

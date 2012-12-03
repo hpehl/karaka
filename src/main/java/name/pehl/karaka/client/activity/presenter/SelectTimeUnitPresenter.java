@@ -1,31 +1,21 @@
 package name.pehl.karaka.client.activity.presenter;
 
-import static name.pehl.karaka.client.NameTokens.dashboard;
-import name.pehl.karaka.client.activity.dispatch.GetYearsAction;
-import name.pehl.karaka.client.activity.dispatch.GetYearsResult;
-import name.pehl.karaka.client.dispatch.KarakaCallback;
-import name.pehl.karaka.shared.model.TimeUnit;
-import name.pehl.karaka.shared.model.Years;
-
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+import name.pehl.karaka.client.activity.dispatch.ActivitiesRequest;
+import name.pehl.karaka.client.activity.dispatch.GetYearsAction;
+import name.pehl.karaka.client.activity.dispatch.GetYearsResult;
+import name.pehl.karaka.client.dispatch.KarakaCallback;
+import name.pehl.karaka.shared.model.TimeUnit;
+import name.pehl.karaka.shared.model.Years;
 
 public abstract class SelectTimeUnitPresenter extends PresenterWidget<SelectTimeUnitPresenter.MyView> implements
         SelectTimeUnitUiHandlers
 {
-    public interface MyView extends PopupView, HasUiHandlers<SelectTimeUnitUiHandlers>
-    {
-        void updateYears(Years years);
-
-
-        void setUnit(TimeUnit unit);
-    }
-
     final DispatchAsync dispatcher;
     final PlaceManager placeManager;
     Years years;
@@ -41,7 +31,6 @@ public abstract class SelectTimeUnitPresenter extends PresenterWidget<SelectTime
         getView().setUiHandlers(this);
         getView().setUnit(unit);
     }
-
 
     @Override
     protected void onReveal()
@@ -59,21 +48,25 @@ public abstract class SelectTimeUnitPresenter extends PresenterWidget<SelectTime
         });
     }
 
-
     @Override
     public void onSelectYearAndMonth(int year, int month)
     {
-        PlaceRequest placeRequest = new PlaceRequest(dashboard).with("year", String.valueOf(year)).with("month",
-                String.valueOf(month));
-        placeManager.revealPlace(placeRequest);
+        placeManager.revealPlace(
+                ActivitiesRequest.placeRequestFor("" + year + ActivitiesRequest.PLACE_REQUEST_SEPERATOR + month));
     }
-
 
     @Override
     public void onSelectYearAndWeek(int year, int week)
     {
-        PlaceRequest placeRequest = new PlaceRequest(dashboard).with("year", String.valueOf(year)).with("week",
-                String.valueOf(week));
-        placeManager.revealPlace(placeRequest);
+        placeManager.revealPlace(
+                ActivitiesRequest.placeRequestFor(year + ActivitiesRequest.PLACE_REQUEST_SEPERATOR + "cw" + week));
+    }
+
+
+    public interface MyView extends PopupView, HasUiHandlers<SelectTimeUnitUiHandlers>
+    {
+        void updateYears(Years years);
+
+        void setUnit(TimeUnit unit);
     }
 }

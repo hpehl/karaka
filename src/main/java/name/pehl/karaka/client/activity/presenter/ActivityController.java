@@ -49,7 +49,7 @@ import static name.pehl.karaka.client.logging.Logger.info;
 /**
  * <p>
  * Singelton class which controls the current activity and the list of displayed
- * activities. This is the <strong>only</strong> place where the current
+ * placeRequestFor. This is the <strong>only</strong> place where the current
  * activity can be resumed, started, stopped, changed, deleted or copied. All
  * relevant presenters must notify this controller with appropriate events. In
  * return this controller responds with events to notify other presenters.
@@ -104,7 +104,7 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
      */
     Activity runningActivity;
     /**
-     * The currently displayed activities
+     * The currently displayed placeRequestFor
      */
     Activities activities;
 

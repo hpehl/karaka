@@ -55,7 +55,7 @@
         glassEnabled="true" addStyleNames="{style.popup}">
         <g:HTMLPanel>
             <div class="{style.spacebelow}">
-                <kui:Html5TextBox ui:field="name" placeholder="Name" title="Name" autofocus="autofocus" />
+                <g:SuggestBox ui:field="name" title="Name"/>
             </div>
             <div class="{style.spacebelow}">
                 <kui:Html5TextArea ui:field="description" placeholder="Description" title="Description"

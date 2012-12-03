@@ -17,6 +17,7 @@ import name.pehl.karaka.client.resources.I18n;
 import name.pehl.karaka.client.ui.FormatUtils;
 import name.pehl.karaka.client.ui.InlineHTMLWithContextMenu;
 import name.pehl.karaka.shared.model.Activities;
+import name.pehl.karaka.shared.model.HasLinks;
 
 import static name.pehl.karaka.shared.model.TimeUnit.MONTH;
 import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
@@ -25,31 +26,15 @@ import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
  * Ideas:
  * <ul>
  * <li>Place buttons / clickable labels with the current tags next to the
- * header. Clicking the labels will filter the activities. See
+ * header. Clicking the labels will filter the placeRequestFor. See
  * http://meteor.com/examples/todos
  * </ul>
  */
 public class ActivityNavigationView extends ViewWithUiHandlers<ActivityNavigationUiHandlers> implements
         ActivityNavigationPresenter.MyView
 {
-    // ---------------------------------------------------------- inner classes
-
-    interface Style extends CssResource
-    {
-        String enabled();
-        String disabled();
-    }
-
-    interface Binder extends UiBinder<Widget, ActivityNavigationView>
-    {
-    }
-
-    // ---------------------------------------------------------- private stuff
-
     final I18n i18n;
     final Widget widget;
-    Activities currentActivities;
-
     @UiField Style style;
     @UiField InlineLabel header;
     @UiField InlineHTML previous;
@@ -58,15 +43,12 @@ public class ActivityNavigationView extends ViewWithUiHandlers<ActivityNavigatio
     @UiField InlineHTMLWithContextMenu week;
 
 
-    // ------------------------------------------------------------------ setup
-
     @Inject
     public ActivityNavigationView(final Binder binder, final I18n i18n)
     {
         this.i18n = i18n;
         this.widget = binder.createAndBindUi(this);
     }
-
 
     @Override
     public Widget asWidget()
@@ -75,72 +57,70 @@ public class ActivityNavigationView extends ViewWithUiHandlers<ActivityNavigatio
     }
 
 
+    // ------------------------------------------------------------------ setup
+
     @Override
     public void setUiHandlers(ActivityNavigationUiHandlers uiHandlers)
     {
         super.setUiHandlers(uiHandlers);
     }
 
-
-    // ----------------------------------------------------------- view methods
-
     @Override
     public void updateHeader(Activities activities)
     {
-        // Update header
-        StringBuilder text = new StringBuilder();
-        StringBuilder title = new StringBuilder();
-        if (activities.getUnit() == WEEK)
+        if (!activities.isEmpty())
         {
-            String cw = "CW " + activities.getWeek() + " / " + activities.getYear();
-            text.append(cw);
-            title.append(cw);
+            // Update header
+            StringBuilder text = new StringBuilder();
+            StringBuilder title = new StringBuilder();
+            if (activities.getUnit() == WEEK)
+            {
+                String cw = "CW " + activities.getWeek() + " / " + activities.getYear();
+                text.append(cw);
+                title.append(cw);
+            }
+            else if (activities.getUnit() == MONTH)
+            {
+                String monthKey = "month_" + activities.getMonth();
+                String month = i18n.enums().getString(monthKey) + " " + activities.getYear();
+                text.append(month);
+                title.append(month);
+            }
+            title.append(" - ").append(FormatUtils.duration(activities.getDuration())).append(" - ")
+                    .append(FormatUtils.dateDuration(activities.getStart(), activities.getEnd()));
+            header.setText(text.toString());
+            header.setTitle(title.toString());
         }
-        else if (activities.getUnit() == MONTH)
-        {
-            String monthKey = "month_" + activities.getMonth();
-            String month = i18n.enums().getString(monthKey) + " " + activities.getYear();
-            text.append(month);
-            title.append(month);
-        }
-        title.append(" - ").append(FormatUtils.duration(activities.getDuration())).append(" - ")
-                .append(FormatUtils.dateDuration(activities.getStart(), activities.getEnd()));
-        header.setText(text.toString());
-        header.setTitle(title.toString());
+    }
 
-        // Update navigation
-        String unit = activities.getUnit().name().toLowerCase();
-        if (activities.hasPrev())
+    @Override
+    public void updateNavigation(final HasLinks links)
+    {
+        if (links.hasPrev())
         {
             previous.getElement().removeClassName(style.disabled());
             previous.getElement().addClassName(style.enabled());
-            previous.setTitle("Previous " + unit);
+            previous.setTitle("Previous activities");
         }
         else
         {
             previous.getElement().removeClassName(style.enabled());
             previous.getElement().addClassName(style.disabled());
-            previous.setTitle("No activities for previous " + unit);
+            previous.setTitle("No previous activities available");
         }
-        if (activities.hasNext())
+        if (links.hasNext())
         {
             next.getElement().removeClassName(style.disabled());
             next.getElement().addClassName(style.enabled());
-            next.setTitle("Next " + unit);
+            next.setTitle("Next activities");
         }
         else
         {
             next.getElement().removeClassName(style.enabled());
             next.getElement().addClassName(style.disabled());
-            next.setTitle("No activities for next " + unit);
+            next.setTitle("No following activities available");
         }
-
-        // For the event handlers
-        currentActivities = activities;
     }
-
-
-    // ------------------------------------------------------------ ui handlers
 
     @UiHandler("month")
     public void onMonthClicked(ClickEvent event)
@@ -150,7 +130,6 @@ public class ActivityNavigationView extends ViewWithUiHandlers<ActivityNavigatio
             getUiHandlers().onCurrentMonth();
         }
     }
-
 
     @UiHandler("month")
     public void onMonthContextMenu(ContextMenuEvent event)
@@ -162,6 +141,7 @@ public class ActivityNavigationView extends ViewWithUiHandlers<ActivityNavigatio
         }
     }
 
+    // ------------------------------------------------------------ ui handlers
 
     @UiHandler("week")
     public void onWeekClicked(ClickEvent event)
@@ -171,7 +151,6 @@ public class ActivityNavigationView extends ViewWithUiHandlers<ActivityNavigatio
             getUiHandlers().onCurrentWeek();
         }
     }
-
 
     @UiHandler("week")
     public void onWeekContextMenu(ContextMenuEvent event)
@@ -183,29 +162,35 @@ public class ActivityNavigationView extends ViewWithUiHandlers<ActivityNavigatio
         }
     }
 
-
     @UiHandler("previous")
     public void onPreviousClicked(ClickEvent event)
     {
-        if (currentActivities != null && currentActivities.hasPrev())
+        if (getUiHandlers() != null)
         {
-            if (getUiHandlers() != null)
-            {
-                getUiHandlers().onPrevious();
-            }
+            getUiHandlers().onPrevious();
         }
     }
-
 
     @UiHandler("next")
     public void onNextClicked(ClickEvent event)
     {
-        if (currentActivities != null && currentActivities.hasNext())
+        if (getUiHandlers() != null)
         {
-            if (getUiHandlers() != null)
-            {
-                getUiHandlers().onNext();
-            }
+            getUiHandlers().onNext();
         }
+    }
+
+
+    @SuppressWarnings("GwtCssResourceErrors")
+    interface Style extends CssResource
+    {
+        String enabled();
+
+        String disabled();
+    }
+
+
+    interface Binder extends UiBinder<Widget, ActivityNavigationView>
+    {
     }
 }

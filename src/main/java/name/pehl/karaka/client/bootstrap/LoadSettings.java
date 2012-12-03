@@ -24,6 +24,6 @@ public class LoadSettings extends BootstrapStep
     public void execute(Iterator<BootstrapStep> iterator, final Command command)
     {
         settingsCache.refresh();
-        execute(iterator, command);
+        next(iterator, command);
     }
 }

@@ -47,7 +47,7 @@ public class GetActivitiesHandler extends KarakaActionHandler<GetActivitiesActio
             protected GetActivitiesResult extractResult(final Method method, JsonReader<Activities> reader, JSONObject json)
             {
                 Activities activities = activitiesReader.read(json);
-                activities.setLinks(readLinks(method));
+                activities.setLinks(readHeaderLinks(method));
                 return new GetActivitiesResult(activities);
             }
         });

@@ -1,16 +1,12 @@
 package name.pehl.karaka.shared.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import com.google.common.testing.EqualsTester;
 import name.pehl.karaka.TestData;
-
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.testing.EqualsTester;
+import static org.junit.Assert.*;
 
 public class WeekTest
 {
@@ -111,8 +107,8 @@ public class WeekTest
     @Test
     public void time()
     {
-        DateTime startDate = new DateTime().dayOfMonth().withMinimumValue();
-        DateTime endDate = new DateTime().dayOfMonth().withMaximumValue();
+        DateTime startDate = new DateTime().dayOfMonth().withMinimumValue().plusDays(5);
+        DateTime endDate = new DateTime().dayOfMonth().withMaximumValue().minusDays(5);
         Activity start = td.newActivity(startDate, startDate.plusHours(1));
         Activity end = td.newActivity(endDate, endDate.plusHours(1));
 

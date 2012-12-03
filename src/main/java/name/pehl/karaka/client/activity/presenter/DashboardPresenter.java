@@ -16,11 +16,14 @@ import name.pehl.karaka.client.activity.dispatch.ActivitiesRequest;
 import name.pehl.karaka.client.activity.dispatch.GetActivitiesAction;
 import name.pehl.karaka.client.activity.dispatch.GetActivitiesResult;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
+import name.pehl.karaka.client.activity.event.ActivitiesNotFoundEvent;
 import name.pehl.karaka.client.application.ApplicationPresenter;
 import name.pehl.karaka.client.application.Message;
 import name.pehl.karaka.client.application.ShowMessageEvent;
 import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.client.dispatch.RestException;
+import name.pehl.karaka.shared.model.LinkHeader;
+import name.pehl.karaka.shared.model.LinksParser;
 
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
@@ -31,7 +34,7 @@ import static name.pehl.karaka.client.logging.Logger.warn;
 /**
  * <p>
  * The main presenter in Karaka. This presenter is responsible to init, resume
- * and stop activities. Other presenters are notified with appropriate events.
+ * and stop placeRequestFor. Other presenters are notified with appropriate events.
  * </p>
  * <h3>Events</h3>
  * <ol>
@@ -42,6 +45,7 @@ import static name.pehl.karaka.client.logging.Logger.warn;
  * <li>OUT</li>
  * <ul>
  * <li>{@linkplain ActivitiesLoadedEvent}</li>
+ * <li>{@linkplain ActivitiesNotFoundEvent}</li>
  * <li>{@linkplain ShowMessageEvent}</li>
  * </ul>
  * </ol>
@@ -112,7 +116,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
     {
         super.prepareFromRequest(placeRequest);
         final ActivitiesRequest activitiesRequest = new ActivitiesRequest(placeRequest);
-        ShowMessageEvent.fire(this, new Message(INFO, "Loading activities for " + activitiesRequest + "...", false));
+        ShowMessageEvent.fire(this, new Message(INFO, "Loading activities...", false));
         scheduler.scheduleDeferred(new GetActivitiesCommand(activitiesRequest));
     }
 
@@ -165,6 +169,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 @Override
                 public void onSuccess(final GetActivitiesResult result)
                 {
+                    ShowMessageEvent.fire(DashboardPresenter.this, new Message(INFO, "Activities successfully loaded.", true));
                     ActivitiesLoadedEvent.fire(DashboardPresenter.this, result.getActivities());
                 }
 
@@ -172,9 +177,13 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
                 @Override
                 public void onNotFound(final RestException caught)
                 {
-                    String errorMessage = "No activities found for " + activitiesRequest;
+                    String errorMessage = "No activities found";
                     ShowMessageEvent.fire(DashboardPresenter.this, new Message(WARNING, errorMessage, true));
                     warn(activity, errorMessage);
+
+                    String links = caught.getMethod().getResponse().getHeader("Link");
+                    LinkHeader linkHeader = new LinkHeader(LinksParser.valueOf(links));
+                    ActivitiesNotFoundEvent.fire(DashboardPresenter.this, linkHeader);
                 }
             });
         }

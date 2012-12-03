@@ -14,8 +14,8 @@ import java.util.TreeSet;
 import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
 
 /**
- * Main model class for managing activities. Weeks and days are sorted
- * ascending, activities are sorted descending.
+ * Main model class for managing placeRequestFor. Weeks and days are sorted
+ * ascending, placeRequestFor are sorted descending.
  *
  * @author $Author: harald.pehl $
  * @version $Date: 2011-08-31 22:05:44 +0200 (Mi, 31. Aug 2011) $ $Revision: 177
@@ -327,7 +327,7 @@ public class Activities extends HasLinks
     }
 
     /**
-     * @return a sorted set (ascending) of all activities managed by this
+     * @return a sorted set (ascending) of all placeRequestFor managed by this
      *         instance.
      */
     public SortedSet<Activity> activities()

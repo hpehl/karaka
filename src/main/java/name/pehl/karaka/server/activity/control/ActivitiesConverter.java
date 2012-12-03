@@ -44,7 +44,7 @@ public class ActivitiesConverter
 
     SortedSet<Week> groupByWeeks(final DateMidnight date, Collection<Activity> activities)
     {
-        // generate *all* days for *all* weeks and fill in the activities
+        // generate *all* days for *all* weeks and fill in the placeRequestFor
         SortedSet<Week> weeks = new TreeSet<Week>();
         DateMidnight firstDayInMonth = date.monthOfYear().roundFloorCopy();
         DateMidnight lastDayInMonth = firstDayInMonth.plusMonths(1);
@@ -75,7 +75,7 @@ public class ActivitiesConverter
 
     SortedSet<Day> groupByDays(final DateMidnight date, Collection<Activity> activities)
     {
-        // generate *all* days and fill in the activities
+        // generate *all* days and fill in the placeRequestFor
         SortedSet<Day> days = new TreeSet<Day>();
         DateMidnight.Property weekProp = date.weekOfWeekyear();
         DateMidnight startOfWeek = date.weekOfWeekyear().roundFloorCopy();

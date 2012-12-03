@@ -53,10 +53,11 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
 
     private final EscapablePopupPanel popupPanel;
     private final Driver driver;
+    private final ActivitySuggestOracle activityOracle;
     private Activity activityToEdit;
     private Project currentProject;
 
-    @UiField Html5TextBox name;
+    @UiField(provided = true) SuggestBox name;
     @UiField Html5TextArea description;
     @UiField TimeTextBox start;
     @UiField TimeTextBox end;
@@ -74,11 +75,17 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
     {
         super(eventBus);
 
+        this.activityOracle = new ActivitySuggestOracle();
+        Html5TextBox activityTextBox = new Html5TextBox();
+        activityTextBox.setPlaceholder("Name");
+        activityTextBox.setAutofocus("autofocus");
+        this.name = new SuggestBox(activityOracle, activityTextBox);
+
         NamedModelSuggestOracle<Project> projectOracle = new NamedModelSuggestOracle<Project>(projectsCache);
         Html5TextBox projectTextBox = new Html5TextBox();
         projectTextBox.setPlaceholder("Select or enter a new project");
-        this.project = new SuggestBox(projectOracle, projectTextBox);
 
+        this.project = new SuggestBox(projectOracle, projectTextBox);
         this.tags = new TagsEditorWidget(tagsCache);
 
         this.popupPanel = binder.createAndBindUi(this);

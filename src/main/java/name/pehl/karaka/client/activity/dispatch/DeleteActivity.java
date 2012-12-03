@@ -6,7 +6,7 @@ import com.gwtplatform.dispatch.annotation.GenDispatch;
 import com.gwtplatform.dispatch.annotation.In;
 
 /**
- * Used to save new and update existing activities.
+ * Used to save new and update existing placeRequestFor.
  * 
  * @author $LastChangedBy:$
  * @version $LastChangedRevision:$

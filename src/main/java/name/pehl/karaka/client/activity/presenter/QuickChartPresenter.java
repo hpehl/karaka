@@ -22,7 +22,7 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 /**
  * <p>
  * Presenter for the quick chart showing the activites by week / month. The
- * quickchart syncs with the activities displayed in the dashboard.
+ * quickchart syncs with the placeRequestFor displayed in the dashboard.
  * </p>
  * <h3>Ideas</h3>
  * <ul>
@@ -31,7 +31,7 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
  * <li>Provide links to the parent level
  * <li>Provide previous / next links to go to the previous / next day / week
  * <li>SVG drawn title popups
- * <li>Different shades of gray for the different activities of a day / week
+ * <li>Different shades of gray for the different placeRequestFor of a day / week
  * <li>Draw an X axis
  * </ul>
  * <h3>Events</h3>
