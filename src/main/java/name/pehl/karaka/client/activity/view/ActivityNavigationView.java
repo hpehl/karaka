@@ -185,7 +185,6 @@ public class ActivityNavigationView extends ViewWithUiHandlers<ActivityNavigatio
     interface Style extends CssResource
     {
         String enabled();
-
         String disabled();
     }
 

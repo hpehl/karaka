@@ -3,8 +3,17 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:act="urn:import:name.pehl.karaka.client.activity.view">
 
-    <ui:style>
-        div.newActivity {
+    <ui:style type="name.pehl.karaka.client.activity.view.NewActivityView.Style">
+        .selectedDate {
+            background-color: #68d6ea !important;
+        }
+
+        .selectedDate:hover {
+            color: #68d6ea !important;
+            background-color: white !important;
+        }
+
+        .newActivity {
         	font-size: 18px;
         	color: white;
         	padding-bottom: 20px;
@@ -17,11 +26,11 @@
         	border-top-right-radius: 5px;
         }
         
-        div.newActivity ul {
+        .newActivity ul {
         	padding: 20px 10px 0px 10px;
         }
         
-        div.newActivity ul li a {
+        .newActivity ul li a {
         	float: left;
         	cursor: pointer;
         	padding: 5px;
@@ -36,19 +45,19 @@
         	-moz-border-radius-topright: 5px;
         }
         
-        div.newActivity ul li a:hover {
+        .newActivity ul li a:hover {
         	color: #68d6ea;
         	background-color: white;
         }
         
-        div.input {
+        .input {
         	clear: left;
         	padding: 5px;
         	background-color: #68d6ea;
         	height: 40px;
         }
         
-        div.input span {
+        .input span {
         	display: inline;
         	padding: 5px;
         	margin: 0;
@@ -58,23 +67,23 @@
         	-moz-box-sizing: border-box;
         }
         
-        div.input input[type=text] {
+        .input input[type=text] {
         	width: 100%;
         	font-size: 16px;
         	line-height: 16px;
         }
         
-        div.input span.activityHolder {
+        .activityHolder {
         	float: left;
         	width: 60%;
         }
         
-        div.input span.projectHolder {
+        .projectHolder {
         	float: left;
         	width: 25%;
         }
         
-        div.input span.timeHolder {
+        .timeHolder {
         	float: left;
         	width: 15%;
         }

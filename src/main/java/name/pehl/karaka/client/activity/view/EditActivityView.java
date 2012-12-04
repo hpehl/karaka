@@ -77,15 +77,15 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
 
         this.activityOracle = new ActivitySuggestOracle();
         Html5TextBox activityTextBox = new Html5TextBox();
-        activityTextBox.setPlaceholder("Name");
+        activityTextBox.setPlaceholder("Select or enter a new activity");
         activityTextBox.setAutofocus("autofocus");
         this.name = new SuggestBox(activityOracle, activityTextBox);
 
         NamedModelSuggestOracle<Project> projectOracle = new NamedModelSuggestOracle<Project>(projectsCache);
         Html5TextBox projectTextBox = new Html5TextBox();
         projectTextBox.setPlaceholder("Select or enter a new project");
-
         this.project = new SuggestBox(projectOracle, projectTextBox);
+
         this.tags = new TagsEditorWidget(tagsCache);
 
         this.popupPanel = binder.createAndBindUi(this);

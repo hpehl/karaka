@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -30,13 +31,15 @@ import java.util.Date;
 
 public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> implements NewActivityPresenter.MyView
 {
-    // ---------------------------------------------------------- inner classes
+    @SuppressWarnings("GwtCssResourceErrors")
+    interface Style extends CssResource
+    {
+        String selectedDate();
+    }
 
     public interface Binder extends UiBinder<Widget, NewActivityView>
     {
     }
-
-    // ---------------------------------------------------------- private stuff
 
     private static final long ONE_DAY = 86400000l;
     private static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat("dd. MMM");
@@ -45,6 +48,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     final Resources resources;
     final ActivitySuggestOracle activityOracle;
 
+    @UiField Style style;
     @UiField Anchor theDayBeforeYesterday;
     @UiField Anchor yesterday;
     @UiField Anchor today;
@@ -73,7 +77,7 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
         this.project = new SuggestBox(projectOracle, projectTextBox);
 
         this.widget = binder.createAndBindUi(this);
-        this.today.addStyleName(resources.navigation().selectedDate());
+        this.today.addStyleName(style.selectedDate());
         this.yesterday.setText(DATE_FORMAT.format(new Date(System.currentTimeMillis() - ONE_DAY)));
         this.theDayBeforeYesterday.setText(DATE_FORMAT.format(new Date(System.currentTimeMillis() - 2 * ONE_DAY)));
     }
@@ -120,10 +124,10 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     @UiHandler("theDayBeforeYesterday")
     void onTheDayBeforeYesterdayClicked(final ClickEvent event)
     {
-        theDayBeforeYesterday.addStyleName(resources.navigation().selectedDate());
-        yesterday.removeStyleName(resources.navigation().selectedDate());
-        today.removeStyleName(resources.navigation().selectedDate());
-        calendar.removeStyleName(resources.navigation().selectedDate());
+        theDayBeforeYesterday.addStyleName(style.selectedDate());
+        yesterday.removeStyleName(style.selectedDate());
+        today.removeStyleName(style.selectedDate());
+        calendar.removeStyleName(style.selectedDate());
         calendar.reset();
         if (getUiHandlers() != null)
         {
@@ -136,10 +140,10 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     @UiHandler("yesterday")
     void onYesterdayClicked(final ClickEvent event)
     {
-        theDayBeforeYesterday.removeStyleName(resources.navigation().selectedDate());
-        yesterday.addStyleName(resources.navigation().selectedDate());
-        today.removeStyleName(resources.navigation().selectedDate());
-        calendar.removeStyleName(resources.navigation().selectedDate());
+        theDayBeforeYesterday.removeStyleName(style.selectedDate());
+        yesterday.addStyleName(style.selectedDate());
+        today.removeStyleName(style.selectedDate());
+        calendar.removeStyleName(style.selectedDate());
         calendar.reset();
         if (getUiHandlers() != null)
         {
@@ -152,10 +156,10 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     @UiHandler("today")
     void onTodayClicked(final ClickEvent event)
     {
-        theDayBeforeYesterday.removeStyleName(resources.navigation().selectedDate());
-        yesterday.removeStyleName(resources.navigation().selectedDate());
-        today.addStyleName(resources.navigation().selectedDate());
-        calendar.removeStyleName(resources.navigation().selectedDate());
+        theDayBeforeYesterday.removeStyleName(style.selectedDate());
+        yesterday.removeStyleName(style.selectedDate());
+        today.addStyleName(style.selectedDate());
+        calendar.removeStyleName(style.selectedDate());
         calendar.reset();
         if (getUiHandlers() != null)
         {
@@ -167,10 +171,10 @@ public class NewActivityView extends ViewWithUiHandlers<NewActivityUiHandlers> i
     @UiHandler("calendar")
     void onCalendarClicked(final ClickEvent event)
     {
-        theDayBeforeYesterday.removeStyleName(resources.navigation().selectedDate());
-        yesterday.removeStyleName(resources.navigation().selectedDate());
-        today.removeStyleName(resources.navigation().selectedDate());
-        calendar.addStyleName(resources.navigation().selectedDate());
+        theDayBeforeYesterday.removeStyleName(style.selectedDate());
+        yesterday.removeStyleName(style.selectedDate());
+        today.removeStyleName(style.selectedDate());
+        calendar.addStyleName(style.selectedDate());
     }
 
 

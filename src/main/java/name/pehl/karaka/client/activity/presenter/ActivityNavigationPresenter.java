@@ -56,12 +56,12 @@ public class ActivityNavigationPresenter extends PresenterWidget<ActivityNavigat
     final SelectMonthPresenter selectMonthPresenter;
     final SelectWeekPresenter selectWeekPresenter;
     /**
-     * The current links used for navigation. These are most likey the same as the current placeRequestFor.
-     * However in case of ActivitiesNotFoundEvent (404), the links are valid whereas the placeRequestFor are not.
+     * The current links used for navigation. These are most likey the same as the current activities.
+     * However in case of ActivitiesNotFoundEvent (404), the links are valid whereas the activities are not.
      */
     HasLinks links;
     /**
-     * The currently displayed placeRequestFor
+     * The currently displayed activities
      */
     Activities activities;
 
@@ -177,20 +177,20 @@ public class ActivityNavigationPresenter extends PresenterWidget<ActivityNavigat
         PlaceRequest placeRequest = new PlaceRequest(dashboard);
         if (Strings.emptyToNull(url) != null)
         {
-            String path = extractPath(url, ACTIVITIES);
-            path = CharMatcher.is('/').replaceFrom(path, SEPERATOR);
-            placeRequest = placeRequest.with(ACTIVITIES_PARAM, path);
+            String activities = extractActivities(url);
+            activities = CharMatcher.is('/').replaceFrom(activities, SEPERATOR);
+            placeRequest = placeRequest.with(ACTIVITIES_PARAM, activities);
         }
         return placeRequest;
     }
 
-    private String extractPath(String url, String after)
+    private String extractActivities(String url)
     {
         String path = url;
-        int start = url.indexOf(after);
+        int start = url.indexOf(ACTIVITIES);
         if (start != -1)
         {
-            path = url.substring(start + after.length());
+            path = url.substring(start + ACTIVITIES.length());
         }
         int end = path.indexOf("?");
         if (end != -1)

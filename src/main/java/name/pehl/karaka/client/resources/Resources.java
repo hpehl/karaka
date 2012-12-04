@@ -13,7 +13,6 @@ public interface Resources extends ClientBundle
 {
     // ----------------------------------------------------------------- images
 
-    // @formatter:off
     ImageResource copy();
     ImageResource delete();
     ImageResource recordOn();
@@ -23,7 +22,6 @@ public interface Resources extends ClientBundle
     ImageResource stopwatch32();
     ImageResource stopwatch64();
     ImageResource stopwatch128();
-    // @formatter:on
 
     // -------------------------------------------------------------------- CSS
 
@@ -44,33 +42,26 @@ public interface Resources extends ClientBundle
     @Source("widgets.css")
     CssResource widgets();
 
+
     public interface Message extends CssResource
     {
-        // @formatter:off
         String show();
         String hide();
-        // @formatter:on
     }
-
-
     @Source("message.css")
     Message message();
 
+
     public interface Navigation extends CssResource
     {
-        // @formatter:off
         String selectedNavigationEntry();
-        String selectedDate();
-        // @formatter:on
     }
-
-
     @Source("navigation.css")
     Navigation navigation();
 
+
     public interface ActivitiesTableStyle extends CssResource
     {
-        // @formatter:off
         String activeActivity();
         String startColumn();
         String durationInHoursColumn();
@@ -78,49 +69,37 @@ public interface Resources extends ClientBundle
         String nameColumn();
         String projectColumn();
         String actionsColumn();
-        // @formatter:on
     }
-
-
     @Source("activitiesTable.css")
     ActivitiesTableStyle activitiesTableStyle();
 
+
     public interface ClientsTableStyle extends CssResource
     {
-        // @formatter:off
         String nameColumn();
         String descriptionColumn();
         String actionsColumn();
-        // @formatter:on
     }
-
-
     @Source("clientsTable.css")
     ClientsTableStyle clientsTableStyle();
 
+
     public interface ProjectsTableStyle extends CssResource
     {
-        // @formatter:off
         String nameColumn();
         String descriptionColumn();
         String clientColumn();
         String actionsColumn();
-        // @formatter:on
     }
-
-
     @Source("projectsTable.css")
     ProjectsTableStyle projectsTableStyle();
 
+
     public interface TagsTableStyle extends CssResource
     {
-        // @formatter:off
         String nameColumn();
         String actionsColumn();
-        // @formatter:on
     }
-
-
     @Source("tagsTable.css")
     TagsTableStyle tagsTableStyle();
 }

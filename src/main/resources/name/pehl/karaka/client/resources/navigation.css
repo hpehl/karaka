@@ -8,16 +8,3 @@
     gwt-image: "selectedNavigation";
     background-position: center bottom;
 }
-
-/*
- * Classes to select the active date.
- * Used in NewActivityPresenter
- */
-a.selectedDate {
-    background-color: #68d6ea !important;
-}
-
-a.selectedDate:hover {
-    color: #68d6ea !important;
-    background-color: white !important;
-}
