@@ -16,6 +16,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static name.pehl.karaka.client.NameTokens.dashboard;
+import static name.pehl.karaka.client.activity.dispatch.ActivitiesRequest.ACTIVITIES_PARAM;
+import static name.pehl.karaka.client.activity.dispatch.ActivitiesRequest.SEPERATOR;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -28,7 +30,6 @@ public class SelectTimeUnitPresenterTest extends PresenterTest
     SelectTimeUnitPresenter.MyView view;
     SelectMonthPresenter cutMonth;
     SelectWeekPresenter cutWeek;
-
 
     @Before
     public void setUpTimeUnitPresenter()
@@ -72,7 +73,6 @@ public class SelectTimeUnitPresenterTest extends PresenterTest
         verify(view).updateYears(years);
     }
 
-
     @Test
     @SuppressWarnings("unchecked")
     public void onRevealWeek()
@@ -98,19 +98,18 @@ public class SelectTimeUnitPresenterTest extends PresenterTest
         verify(view).updateYears(years);
     }
 
-
     @Test
     public void onSelectMonth()
     {
         cutMonth.onSelectYearAndMonth(2000, 1);
-        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("path", "2000-1"));
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with(ACTIVITIES_PARAM, "2000" + SEPERATOR + "1"));
     }
-
 
     @Test
     public void onSelectWeek()
     {
         cutWeek.onSelectYearAndWeek(2000, 1);
-        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("path", "2000-cw1"));
+        verify(placeManager)
+                .revealPlace(new PlaceRequest(dashboard).with(ACTIVITIES_PARAM, "2000" + SEPERATOR + "cw1"));
     }
 }
