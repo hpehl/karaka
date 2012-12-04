@@ -12,6 +12,7 @@ import name.pehl.karaka.client.activity.dispatch.GetDurationsAction;
 import name.pehl.karaka.client.activity.dispatch.GetDurationsResult;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityAction;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityResult;
+import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.karaka.client.activity.event.ActivityActionEvent;
 import name.pehl.karaka.client.activity.event.ActivityChanged.ChangeAction;
 import name.pehl.karaka.client.activity.event.ActivityChangedEvent;
@@ -25,7 +26,10 @@ import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.shared.model.Activity;
 import name.pehl.karaka.shared.model.Durations;
 
+import java.util.SortedSet;
+
 import static java.util.logging.Level.WARNING;
+import static name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import static name.pehl.karaka.client.activity.event.ActivityAction.Action.START_STOP;
 import static name.pehl.karaka.client.logging.Logger.Category.activity;
 import static name.pehl.karaka.client.logging.Logger.info;
@@ -61,24 +65,17 @@ import static name.pehl.karaka.client.logging.Logger.warn;
  *          $
  */
 public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> implements CockpitUiHandlers,
-        ActivityChangedHandler, TickHandler
+        ActivityChangedHandler, TickHandler, ActivitiesLoadedHandler
 {
-    public interface MyView extends View, HasUiHandlers<CockpitUiHandlers>
-    {
-        void updateDurations(Durations minutes);
-
-
-        void updateStatus(Activity activity);
-    }
-
-    /**
-     * The currently managed actvity
-     */
-    Activity currentActivity;
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
     final GetDurationsCommand getDurationsCommand;
     final GetRunningActivityCommand getRunningActivityCommand;
+    /**
+     * The currently managed actvity
+     */
+    Activity currentActivity;
+    boolean noInitialRunningActivitiy;
 
 
     @Inject
@@ -94,8 +91,8 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         getView().setUiHandlers(this);
         getEventBus().addHandler(ActivityChangedEvent.getType(), this);
         getEventBus().addHandler(TickEvent.getType(), this);
+        getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
     }
-
 
     @Override
     protected void onReveal()
@@ -105,6 +102,18 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         scheduler.scheduleDeferred(getRunningActivityCommand);
     }
 
+    @Override
+    public void onActivitiesLoaded(final ActivitiesLoadedEvent event)
+    {
+        if (noInitialRunningActivitiy && currentActivity == null)
+        {
+            SortedSet<Activity> activities = event.getActivities().activities();
+            if (!activities.isEmpty())
+            {
+                currentActivity = activities.first();
+            }
+        }
+    }
 
     @Override
     public void onStartStop()
@@ -118,7 +127,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
             ActivityActionEvent.fire(this, START_STOP, currentActivity);
         }
     }
-
 
     @Override
     public void onActivityChanged(ActivityChangedEvent event)
@@ -147,12 +155,20 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         getDurationsCommand.execute();
     }
 
-
     @Override
     public void onTick(TickEvent event)
     {
         getDurationsCommand.execute();
     }
+
+
+    public interface MyView extends View, HasUiHandlers<CockpitUiHandlers>
+    {
+        void updateDurations(Durations minutes);
+
+        void updateStatus(Activity activity);
+    }
+
 
     class GetDurationsCommand implements ScheduledCommand
     {
@@ -167,16 +183,17 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                     getView().updateDurations(result.getMinutes());
                 }
 
-
                 @Override
                 public void onFailure(Throwable caught)
                 {
+                    noInitialRunningActivitiy = true;
                     warn(activity, "Cannot load minutes for current month, week and/or day");
                     getView().updateDurations(new Durations());
                 }
             });
         }
     }
+
 
     class GetRunningActivityCommand implements ScheduledCommand
     {
@@ -193,7 +210,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                             getView().updateStatus(currentActivity);
                             RunningActivityLoadedEvent.fire(CockpitPresenter.this, currentActivity);
                         }
-
 
                         @Override
                         public void onFailure(Throwable caught)

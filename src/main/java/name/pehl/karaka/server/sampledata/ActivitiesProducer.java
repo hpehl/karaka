@@ -1,6 +1,7 @@
 package name.pehl.karaka.server.sampledata;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import name.pehl.karaka.server.activity.entity.Activity;
 import name.pehl.karaka.server.activity.entity.Time;
 import name.pehl.karaka.server.project.entity.Project;
@@ -31,7 +32,7 @@ class ActivitiesProducer
     @Inject LoremIpsum loremIpsum;
 
 
-    public List<Activity> produceActivities(List<Key<Project>> projectKeys, List<Key<Tag>> tagKeys,
+    public List<Activity> produceActivities(List<Project> projects, List<Tag> tagKeys,
             DateTimeZone timeZone)
     {
         DateMidnight end = DateMidnight.now().plusDays(1);
@@ -49,10 +50,11 @@ class ActivitiesProducer
                 activity.setStart(new Time(mdt));
                 int hour = mdt.hourOfDay().get() + hours;
                 activity.setEnd(new Time(mdt.copy().hourOfDay().set(hour)));
-                activity.setProject(projectKeys.get(random.nextInt(projectKeys.size())));
+                activity.setProject(Ref.create(projects.get(random.nextInt(projects.size()))));
                 for (int i = 0; i < TAGS_PER_ACTIVITY; i++)
                 {
-                    activity.addTag(tagKeys.get(random.nextInt(tagKeys.size())));
+                    Tag tag = tagKeys.get(random.nextInt(tagKeys.size()));
+                    activity.addTag(Key.create(tag));
                 }
                 activities.add(activity);
                 mdt.hourOfDay().add(hours);

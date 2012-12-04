@@ -1,16 +1,12 @@
 package name.pehl.karaka.server.entity;
 
-import java.io.Serializable;
-
-import javax.persistence.Id;
+import com.googlecode.objectify.annotation.Id;
 
 /**
  * @author $LastChangedBy: harald.pehl $
  * @version $LastChangedRevision: 41 $
  */
-
-@SuppressWarnings("serial")
-public abstract class BaseEntity implements Serializable
+public abstract class BaseEntity
 {
     @Id private Long id;
 
@@ -19,17 +15,16 @@ public abstract class BaseEntity implements Serializable
     {
     }
 
-
     public boolean isTransient()
     {
         return id == null;
     }
 
-
     /**
      * Based on the id
-     * 
+     *
      * @return
+     *
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -41,12 +36,13 @@ public abstract class BaseEntity implements Serializable
         return result;
     }
 
-
     /**
      * Based on the id
-     * 
+     *
      * @param obj
+     *
      * @return
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -79,11 +75,11 @@ public abstract class BaseEntity implements Serializable
         return true;
     }
 
-
     /**
      * Returns {@link Class#getSimpleName()} [&lt;id&gt;]
-     * 
+     *
      * @return
+     *
      * @see java.lang.Object#toString()
      */
     @Override
@@ -91,7 +87,6 @@ public abstract class BaseEntity implements Serializable
     {
         return new StringBuilder(getClass().getSimpleName()).append(" [").append(id).append("]").toString();
     }
-
 
     public Long getId()
     {

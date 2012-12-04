@@ -1,6 +1,5 @@
 package name.pehl.karaka.server.project.boundary;
 
-import name.pehl.karaka.server.paging.entity.PageResult;
 import name.pehl.karaka.server.project.control.ProjectConverter;
 import name.pehl.karaka.server.project.control.ProjectRepository;
 import name.pehl.karaka.server.project.entity.Project;
@@ -40,7 +39,7 @@ public class ProjectsResource
     @GET
     public List<name.pehl.karaka.shared.model.Project> list()
     {
-        PageResult<Project> projects = repository.list();
+        List<Project> projects = repository.list();
         if (projects.isEmpty())
         {
             throw new NotFoundException("No projects found");

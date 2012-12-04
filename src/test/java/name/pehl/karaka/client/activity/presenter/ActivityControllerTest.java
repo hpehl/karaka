@@ -343,6 +343,7 @@ public class ActivityControllerTest extends PresenterTest
         assertTick(activity);
     }
 
+    @SuppressWarnings("unchecked")
     private void assertTick(final Activity activity)
     {
         final TickActivityResult tickActivityResult = new TickActivityResult(new HashSet<Activity>(asList(activity)));

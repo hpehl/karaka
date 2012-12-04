@@ -4,6 +4,7 @@ import name.pehl.piriti.commons.client.Transient;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +15,11 @@ public abstract class HasLinks
     public static final String PREV = "prev";
     public static final String NEXT = "next";
     /**
-     * The links are uni-directional: On the server side the links are encodes into the response header.
+     * Links are not part of the encoding / decoding
+     * On the server side the links are encodes into the response header.
      * On the client side they are parsed and then assigned to this field.
      */
-    @Transient List<Link> links;
+    @Transient @XmlTransient List<Link> links;
 
 
     public HasLinks()

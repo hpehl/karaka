@@ -1,11 +1,11 @@
 package name.pehl.karaka.server.sampledata;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import name.pehl.karaka.server.activity.control.ActivityRepository;
 import name.pehl.karaka.server.activity.entity.Activity;
 import name.pehl.karaka.server.client.control.ClientRepository;
 import name.pehl.karaka.server.client.entity.Client;
-import name.pehl.karaka.server.paging.entity.PageResult;
 import name.pehl.karaka.server.project.control.ProjectRepository;
 import name.pehl.karaka.server.project.entity.Project;
 import name.pehl.karaka.server.settings.control.DefaultSettings;
@@ -46,45 +46,45 @@ class SampleData
         // Settings
         if (settingsRepository.list().isEmpty())
         {
-            settingsRepository.put(defaultSettings);
+            settingsRepository.save(defaultSettings);
             logger.info("Persisted {}", defaultSettings);
         }
 
         // Clients
-        List<Key<Client>> clientKeys = new ArrayList<Key<Client>>();
+        List<Client> savedClients = new ArrayList<Client>();
         for (Client client : clients)
         {
-            Key<Client> key = clientRepository.put(client);
-            clientKeys.add(key);
+            Client savedClient = clientRepository.save(client);
+            savedClients.add(savedClient);
             logger.info("Persisted {}", client);
         }
 
         // Projects
-        List<Key<Project>> projectKeys = new ArrayList<Key<Project>>();
+        List<Project> savedProjects = new ArrayList<Project>();
         for (Project project : projects)
         {
-            Key<Client> client = clientKeys.get(random.nextInt(clients.size()));
-            project.setClient(client);
-            Key<Project> key = projectRepository.put(project);
-            projectKeys.add(key);
+            Client savedClient = savedClients.get(random.nextInt(clients.size()));
+            project.setClient(Ref.create(savedClient));
+            Project savedProject = projectRepository.save(project);
+            savedProjects.add(savedProject);
             logger.info("Persisted {}", project);
         }
 
         // Tags
-        List<Key<Tag>> tagKeys = new ArrayList<Key<Tag>>();
+        List<Tag> savedTags = new ArrayList<Tag>();
         for (Tag tag : tags)
         {
-            Key<Tag> key = tagRepository.put(tag);
-            tagKeys.add(key);
+            Tag savedTag = tagRepository.save(tag);
+            savedTags.add(savedTag);
             logger.info("Persisted {}", tag);
         }
 
         // Activities
-        List<Activity> activities = activitiesProducer.produceActivities(projectKeys, tagKeys,
+        List<Activity> activities = activitiesProducer.produceActivities(savedProjects, savedTags,
                 defaultSettings.getTimeZone());
         for (Activity activity : activities)
         {
-            activityRepository.put(activity);
+            activityRepository.save(activity);
             logger.info("Persisted {}", activity);
         }
     }
@@ -92,7 +92,7 @@ class SampleData
 
     void cleanup()
     {
-        PageResult<Activity> activities = activityRepository.list();
+        List<Activity> activities = activityRepository.list();
         if (!activities.isEmpty())
         {
             activityRepository.deleteAll(activities);
@@ -100,7 +100,7 @@ class SampleData
         }
 
         // Tags
-        PageResult<Tag> tags = tagRepository.list();
+        List<Tag> tags = tagRepository.list();
         if (!tags.isEmpty())
         {
             tagRepository.deleteAll(tags);
@@ -108,7 +108,7 @@ class SampleData
         }
 
         // Projects
-        PageResult<Project> projects = projectRepository.list();
+        List<Project> projects = projectRepository.list();
         if (!projects.isEmpty())
         {
             projectRepository.deleteAll(projects);
@@ -116,11 +116,19 @@ class SampleData
         }
 
         // Clients
-        PageResult<Client> clients = clientRepository.list();
+        List<Client> clients = clientRepository.list();
         if (!clients.isEmpty())
         {
             clientRepository.deleteAll(clients);
             logger.info("Removed {} clients", clients.size());
+        }
+
+        // Settings
+        List<Settings> settings = settingsRepository.list();
+        if (!settings.isEmpty())
+        {
+            settingsRepository.deleteAll(settings);
+            logger.info("Removed {} settings", settings.size());
         }
     }
 }

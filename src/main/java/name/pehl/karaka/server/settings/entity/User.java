@@ -1,8 +1,6 @@
 package name.pehl.karaka.server.settings.entity;
 
-import name.pehl.karaka.server.entity.BaseEntity;
-
-public class User extends BaseEntity
+public class User
 {
     private String userId;
     private String username;

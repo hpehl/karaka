@@ -1,24 +1,28 @@
 package name.pehl.karaka.server.activity.control;
 
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.NotFoundException;
+import com.googlecode.objectify.Ref;
 import name.pehl.karaka.server.converter.AbstractEntityConverter;
 import name.pehl.karaka.server.converter.EntityConverter;
 import name.pehl.karaka.server.project.control.ProjectConverter;
 import name.pehl.karaka.server.project.control.ProjectRepository;
+import name.pehl.karaka.server.project.entity.Project;
 import name.pehl.karaka.server.settings.control.CurrentSettings;
 import name.pehl.karaka.server.settings.entity.Settings;
 import name.pehl.karaka.server.tag.control.TagConverter;
 import name.pehl.karaka.server.tag.control.TagRepository;
+import name.pehl.karaka.server.tag.entity.Tag;
 import name.pehl.karaka.shared.model.Duration;
 import org.joda.time.DateTime;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
 /**
  * @author $LastChangedBy:$
@@ -29,8 +33,8 @@ public class ActivityConverter extends
         implements
         EntityConverter<name.pehl.karaka.server.activity.entity.Activity, name.pehl.karaka.shared.model.Activity>
 {
-    @Inject ProjectConverter projectConverter;
     @Inject ProjectRepository projectRepository;
+    @Inject ProjectConverter projectConverter;
     @Inject TagRepository tagRepository;
     @Inject TagConverter tagConverter;
     @Inject @CurrentSettings Instance<Settings> settings;
@@ -62,38 +66,19 @@ public class ActivityConverter extends
         // relations
         if (entity.getProject() != null)
         {
-            try
-            {
-                name.pehl.karaka.server.project.entity.Project project = projectRepository.get(entity.getProject());
-                model.setProject(projectConverter.toModel(project));
-            }
-            catch (NotFoundException e)
-            {
-                // no project - no conversion
-            }
+            model.setProject(projectConverter.toModel(entity.getProject().get()));
         }
         List<name.pehl.karaka.shared.model.Tag> modelTags = new ArrayList<name.pehl.karaka.shared.model.Tag>();
-        Collection<name.pehl.karaka.server.tag.entity.Tag> entityTags = tagRepository.ofy().get(entity.getTags())
-                .values();
-        if (entityTags != null && !entityTags.isEmpty())
+        Map<Key<Tag>,Tag> entityTags = ofy().load().keys(entity.getTags());
+        if (!entityTags.isEmpty())
         {
-            try
+            for (name.pehl.karaka.server.tag.entity.Tag entityTag : entityTags.values())
             {
-                for (name.pehl.karaka.server.tag.entity.Tag entityTag : entityTags)
-                {
-                    name.pehl.karaka.shared.model.Tag modelTag = tagConverter.toModel(entityTag);
-                    modelTags.add(modelTag);
-                }
-            }
-            catch (NotFoundException e)
-            {
-                // no tags - no conversion
-            }
-            finally
-            {
-                model.setTags(modelTags);
+                name.pehl.karaka.shared.model.Tag modelTag = tagConverter.toModel(entityTag);
+                modelTags.add(modelTag);
             }
         }
+        model.setTags(modelTags);
         return model;
     }
 
@@ -174,21 +159,25 @@ public class ActivityConverter extends
         // entity.setStatus(model.getStatus()); Status can only be changed calling distinct service methods!
 
         // relations
-        Key<name.pehl.karaka.server.project.entity.Project> projectKey = null;
         if (model.getProject() != null)
         {
             if (model.getProject().isTransient())
             {
                 name.pehl.karaka.server.project.entity.Project newProjectEntity = projectConverter.fromModel(model
                         .getProject());
-                projectKey = projectRepository.put(newProjectEntity);
+                Project savedProject = projectRepository.save(newProjectEntity);
+                entity.setProject(Ref.create(savedProject));
             }
             else
             {
-                projectKey = Key.<name.pehl.karaka.server.project.entity.Project>create(model.getProject().getId());
+                Key<name.pehl.karaka.server.project.entity.Project> projectKey = Key.create(model.getProject().getId());
+                entity.setProject(Ref.create(projectKey));
             }
         }
-        entity.setProject(projectKey);
+        else
+        {
+            entity.setProject(null);
+        }
         List<Key<name.pehl.karaka.server.tag.entity.Tag>> tags = new ArrayList<Key<name.pehl.karaka.server.tag.entity.Tag>>();
         if (model.getTags() != null && !model.getTags().isEmpty())
         {
@@ -197,7 +186,8 @@ public class ActivityConverter extends
                 if (tag.isTransient())
                 {
                     name.pehl.karaka.server.tag.entity.Tag newTagEntity = tagConverter.fromModel(tag);
-                    tags.add(tagRepository.put(newTagEntity));
+                    name.pehl.karaka.server.tag.entity.Tag savedTag = tagRepository.save(newTagEntity);
+                    tags.add(Key.create(savedTag));
                 }
                 else
                 {

@@ -37,7 +37,7 @@
         <gwt.version>2.5.0</gwt.version>
         <gwt.plugin.version>2.5.0</gwt.plugin.version>
         <gwtp.version>0.7</gwtp.version>
-        <objectify.version>3.1</objectify.version>
+        <objectify.version>4.0b1</objectify.version>
         <piriti.version>0.9-SNAPSHOT</piriti.version>
         <resteasy.version>2.3.5.Final</resteasy.version>
         <slf4j.version>1.7.2</slf4j.version>

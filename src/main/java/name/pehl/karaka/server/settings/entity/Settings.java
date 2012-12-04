@@ -1,21 +1,21 @@
 package name.pehl.karaka.server.settings.entity;
 
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Embed;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Ignore;
+import com.googlecode.objectify.annotation.OnLoad;
 import name.pehl.karaka.server.entity.BaseEntity;
 import org.joda.time.DateTimeZone;
 
-import javax.persistence.Embedded;
-import javax.persistence.PostLoad;
-import javax.persistence.Transient;
-
+@Cache
+@Entity
 public class Settings extends BaseEntity
 {
-    private static final long serialVersionUID = 5319841453603258758L;
-
     private boolean formatHoursAsFloatingPointNumber;
     private String timeZoneId;
-
-    @Transient private DateTimeZone timeZone;
-    @Embedded private User user;
+    @Ignore private DateTimeZone timeZone;
+    @Embed private User user;
 
 
     public Settings()
@@ -30,7 +30,7 @@ public class Settings extends BaseEntity
         this.timeZoneId = this.timeZone.getID();
     }
 
-    @PostLoad
+    @OnLoad
     void restoreTimeZone()
     {
         setTimeZoneId(timeZoneId);

@@ -9,7 +9,6 @@ import name.pehl.karaka.shared.model.Week;
 import org.joda.time.DateMidnight;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -42,7 +41,7 @@ public class ActivitiesConverter
         return result;
     }
 
-    SortedSet<Week> groupByWeeks(final DateMidnight date, Collection<Activity> activities)
+    SortedSet<Week> groupByWeeks(final DateMidnight date, List<Activity> activities)
     {
         // generate *all* days for *all* weeks and fill in the placeRequestFor
         SortedSet<Week> weeks = new TreeSet<Week>();
@@ -73,7 +72,7 @@ public class ActivitiesConverter
         return weeks;
     }
 
-    SortedSet<Day> groupByDays(final DateMidnight date, Collection<Activity> activities)
+    SortedSet<Day> groupByDays(final DateMidnight date, List<Activity> activities)
     {
         // generate *all* days and fill in the placeRequestFor
         SortedSet<Day> days = new TreeSet<Day>();

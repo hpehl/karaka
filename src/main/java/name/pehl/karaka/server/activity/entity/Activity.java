@@ -3,9 +3,14 @@ package name.pehl.karaka.server.activity.entity;
 import com.google.common.base.Strings;
 import com.google.common.collect.ComparisonChain;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Embed;
 import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Indexed;
-import com.googlecode.objectify.annotation.Unindexed;
+import com.googlecode.objectify.annotation.Ignore;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
+import com.googlecode.objectify.annotation.OnLoad;
 import name.pehl.karaka.server.entity.DescriptiveEntity;
 import name.pehl.karaka.server.project.entity.Project;
 import name.pehl.karaka.server.tag.entity.Tag;
@@ -16,9 +21,6 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.Minutes;
 import org.joda.time.Period;
 
-import javax.persistence.Embedded;
-import javax.persistence.PostLoad;
-import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,21 +41,21 @@ import static org.joda.time.Minutes.minutesBetween;
  * @author $Author: harald.pehl $
  * @version $Revision: 41 $
  */
+@Cache
 @Entity
 public class Activity extends DescriptiveEntity implements Comparable<Activity>
 {
     // ------------------------------------------------------ members
 
-    private static final long serialVersionUID = 3829933815690771262L;
-    @Unindexed private final String timeZoneId;
-    @Embedded private Time start;
-    @Embedded @Unindexed private Time end;
-    @Transient private DateTimeZone timeZone;
-    @Unindexed private long pause;
-    @Unindexed private boolean billable;
-    @Indexed(IfRunning.class) private Status status;
+    private String timeZoneId;
+    @Embed @Index private Time start;
+    @Embed private Time end;
+    @Ignore private DateTimeZone timeZone;
+    private long pause;
+    private boolean billable;
+    @Index(IfRunning.class) private Status status;
     private List<Key<Tag>> tags;
-    private Key<Project> project;
+    @Load private Ref<Project> project;
 
 
     // ------------------------------------------------------ constructors
@@ -107,7 +109,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
 
     // ------------------------------------------------------ lifecycle methods
 
-    @PostLoad
+    @OnLoad
     void restoreDateTimes()
     {
         if (timeZoneId == null)
@@ -147,7 +149,7 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     {
         Activity copy = new Activity(getName(), getDescription(), timeZone);
         copy.setProject(project);
-        copy.setTags(tags);
+        copy.setTags(new ArrayList<Key<Tag>>(tags));
         return copy;
     }
 
@@ -335,12 +337,12 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
         this.tags.add(key);
     }
 
-    public Key<Project> getProject()
+    public Ref<Project> getProject()
     {
         return project;
     }
 
-    public void setProject(Key<Project> project)
+    public void setProject(Ref<Project> project)
     {
         this.project = project;
     }

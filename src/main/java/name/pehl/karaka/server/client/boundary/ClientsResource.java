@@ -3,7 +3,6 @@ package name.pehl.karaka.server.client.boundary;
 import name.pehl.karaka.server.client.control.ClientConverter;
 import name.pehl.karaka.server.client.control.ClientRepository;
 import name.pehl.karaka.server.client.entity.Client;
-import name.pehl.karaka.server.paging.entity.PageResult;
 import org.jboss.resteasy.spi.NotFoundException;
 
 import javax.inject.Inject;
@@ -40,7 +39,7 @@ public class ClientsResource
     @GET
     public List<name.pehl.karaka.shared.model.Client> list()
     {
-        PageResult<Client> clients = repository.list();
+        List<Client> clients = repository.list();
         if (clients.isEmpty())
         {
             throw new NotFoundException("No clients found");

@@ -1,6 +1,5 @@
 package name.pehl.karaka.server.tag.boundary;
 
-import name.pehl.karaka.server.paging.entity.PageResult;
 import name.pehl.karaka.server.tag.control.TagConverter;
 import name.pehl.karaka.server.tag.control.TagRepository;
 import name.pehl.karaka.server.tag.entity.Tag;
@@ -40,7 +39,7 @@ public class TagsResource
     @GET
     public List<name.pehl.karaka.shared.model.Tag> list()
     {
-        PageResult<Tag> tags = repository.list();
+        List<Tag> tags = repository.list();
         if (tags.isEmpty())
         {
             throw new NotFoundException("No tags found");

@@ -1,9 +1,10 @@
 package name.pehl.karaka.server.project.control;
 
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.NotFoundException;
+import com.googlecode.objectify.Ref;
 import name.pehl.karaka.server.client.control.ClientConverter;
 import name.pehl.karaka.server.client.control.ClientRepository;
+import name.pehl.karaka.server.client.entity.Client;
 import name.pehl.karaka.server.converter.AbstractEntityConverter;
 import name.pehl.karaka.server.converter.EntityConverter;
 
@@ -28,15 +29,7 @@ public class ProjectConverter extends
         // client relation
         if (entity.getClient() != null)
         {
-            try
-            {
-                name.pehl.karaka.server.client.entity.Client client = clientRepository.get(entity.getClient());
-                model.setClient(clientConverter.toModel(client));
-            }
-            catch (NotFoundException e)
-            {
-                // not client - no conversion
-            }
+            model.setClient(clientConverter.toModel(entity.getClient().get()));
         }
         return model;
     }
@@ -74,13 +67,18 @@ public class ProjectConverter extends
             {
                 name.pehl.karaka.server.client.entity.Client newClientEntity = clientConverter.fromModel(model
                         .getClient());
-                clientKey = clientRepository.put(newClientEntity);
+                Client savedClient = clientRepository.save(newClientEntity);
+                entity.setClient(Ref.create(savedClient));
             }
             else
             {
-                clientKey = Key.<name.pehl.karaka.server.client.entity.Client> create(model.getClient().getId());
+                clientKey = Key.create(model.getClient().getId());
+                entity.setClient(Ref.create(clientKey));
             }
         }
-        entity.setClient(clientKey);
+        else
+        {
+            entity.setClient(null);
+        }
     }
 }

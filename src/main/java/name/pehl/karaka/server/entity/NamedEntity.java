@@ -1,15 +1,12 @@
 package name.pehl.karaka.server.entity;
 
-import com.googlecode.objectify.annotation.Unindexed;
-
 /**
  * @author $LastChangedBy: harald.pehl $
  * @version $LastChangedRevision: 41 $
  */
-@SuppressWarnings("serial")
 public abstract class NamedEntity extends BaseEntity
 {
-    @Unindexed private String name;
+    private String name;
 
 
     protected NamedEntity(String name)
@@ -18,11 +15,11 @@ public abstract class NamedEntity extends BaseEntity
         this.name = name;
     }
 
-
     /**
      * Returns {@link Class#getSimpleName()} [&lt;id&gt;, &lt;name&gt;]
-     * 
+     *
      * @return
+     *
      * @see java.lang.Object#toString()
      */
     @Override
@@ -32,12 +29,10 @@ public abstract class NamedEntity extends BaseEntity
                 .append("]").toString();
     }
 
-
     public String getName()
     {
         return name;
     }
-
 
     public void setName(String name)
     {

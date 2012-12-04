@@ -1,5 +1,6 @@
 package name.pehl.karaka.server.activity.entity;
 
+import com.googlecode.objectify.annotation.Ignore;
 import org.joda.time.Chronology;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
@@ -10,7 +11,6 @@ import org.joda.time.ReadableDateTime;
 import org.joda.time.ReadableInstant;
 import org.joda.time.ReadablePeriod;
 
-import javax.persistence.Transient;
 import java.util.Date;
 
 /**
@@ -36,7 +36,7 @@ public class Time implements ReadableInstant
     // -------------------------------------------------------- private members
 
     Date date;
-    @Transient DateTime dateTime;
+    @Ignore DateTime dateTime;
     int year;
     int month;
     int week;

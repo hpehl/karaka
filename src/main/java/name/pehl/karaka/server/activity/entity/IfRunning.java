@@ -22,10 +22,9 @@ public class IfRunning extends ValueIf<Status>
      * @param status
      * @return <code>true</code> if status == {@link Status#RUNNING},
      *         <code>false</code> otherwise.
-     * @see com.googlecode.objectify.condition.ValueIf#matches(java.lang.Object)
      */
     @Override
-    public boolean matches(Status status)
+    public boolean matchesValue(Status status)
     {
         return status == RUNNING;
     }
