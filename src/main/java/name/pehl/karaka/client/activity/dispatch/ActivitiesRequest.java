@@ -42,7 +42,7 @@ public class ActivitiesRequest
         }
         else
         {
-            warn(activity, "No valid path in " + placeRequest.getParameterNames() + ". Fall back to current week");
+            warn(activity, "No valid parameter in " + placeRequest.getParameterNames() + ". Fall back to current week");
             urlBuilder = urlBuilder.path("currentWeek");
         }
         this.url = urlBuilder.toUrl();
