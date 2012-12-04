@@ -1,27 +1,24 @@
 package name.pehl.karaka.client.activity.presenter;
 
-import static name.pehl.karaka.client.NameTokens.dashboard;
-import static org.junit.Assert.assertSame;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import name.pehl.karaka.client.PresenterTest;
-import name.pehl.karaka.client.activity.dispatch.GetYearsAction;
-import name.pehl.karaka.client.activity.dispatch.GetYearsHandler;
-import name.pehl.karaka.client.activity.dispatch.GetYearsResult;
-import name.pehl.karaka.shared.model.Years;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtplatform.dispatch.client.actionhandler.ClientActionHandler;
 import com.gwtplatform.dispatch.client.actionhandler.ExecuteCommand;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+import name.pehl.karaka.client.PresenterTest;
+import name.pehl.karaka.client.activity.dispatch.GetYearsAction;
+import name.pehl.karaka.client.activity.dispatch.GetYearsHandler;
+import name.pehl.karaka.client.activity.dispatch.GetYearsResult;
+import name.pehl.karaka.shared.model.Years;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import static name.pehl.karaka.client.NameTokens.dashboard;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 public class SelectTimeUnitPresenterTest extends PresenterTest
 {
@@ -106,7 +103,7 @@ public class SelectTimeUnitPresenterTest extends PresenterTest
     public void onSelectMonth()
     {
         cutMonth.onSelectYearAndMonth(2000, 1);
-        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("year", "2000").with("month", "1"));
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("path", "2000-1"));
     }
 
 
@@ -114,6 +111,6 @@ public class SelectTimeUnitPresenterTest extends PresenterTest
     public void onSelectWeek()
     {
         cutWeek.onSelectYearAndWeek(2000, 1);
-        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("year", "2000").with("week", "1"));
+        verify(placeManager).revealPlace(new PlaceRequest(dashboard).with("path", "2000-cw1"));
     }
 }

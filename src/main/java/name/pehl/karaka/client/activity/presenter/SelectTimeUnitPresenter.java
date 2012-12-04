@@ -6,12 +6,16 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import name.pehl.karaka.client.activity.dispatch.ActivitiesRequest;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import name.pehl.karaka.client.activity.dispatch.GetYearsAction;
 import name.pehl.karaka.client.activity.dispatch.GetYearsResult;
 import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.shared.model.TimeUnit;
 import name.pehl.karaka.shared.model.Years;
+
+import static name.pehl.karaka.client.NameTokens.dashboard;
+import static name.pehl.karaka.client.activity.dispatch.ActivitiesRequest.ACTIVITIES_PARAM;
+import static name.pehl.karaka.client.activity.dispatch.ActivitiesRequest.SEPERATOR;
 
 public abstract class SelectTimeUnitPresenter extends PresenterWidget<SelectTimeUnitPresenter.MyView> implements
         SelectTimeUnitUiHandlers
@@ -51,15 +55,15 @@ public abstract class SelectTimeUnitPresenter extends PresenterWidget<SelectTime
     @Override
     public void onSelectYearAndMonth(int year, int month)
     {
-        placeManager.revealPlace(
-                ActivitiesRequest.placeRequestFor("" + year + ActivitiesRequest.PLACE_REQUEST_SEPERATOR + month));
+        placeManager.revealPlace(new PlaceRequest(dashboard).with(ACTIVITIES_PARAM,
+                String.valueOf(year) + SEPERATOR + String.valueOf(month)));
     }
 
     @Override
     public void onSelectYearAndWeek(int year, int week)
     {
-        placeManager.revealPlace(
-                ActivitiesRequest.placeRequestFor(year + ActivitiesRequest.PLACE_REQUEST_SEPERATOR + "cw" + week));
+        placeManager.revealPlace(new PlaceRequest(dashboard).with(ACTIVITIES_PARAM,
+                String.valueOf(year) + SEPERATOR + "cw" + String.valueOf(week)));
     }
 
 

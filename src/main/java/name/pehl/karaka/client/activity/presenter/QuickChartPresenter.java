@@ -1,6 +1,12 @@
 package name.pehl.karaka.client.activity.presenter;
 
-import static name.pehl.karaka.client.NameTokens.dashboard;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.mvp.client.HasUiHandlers;
+import com.gwtplatform.mvp.client.PresenterWidget;
+import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.karaka.client.activity.event.ActivityChangedEvent;
@@ -11,13 +17,9 @@ import name.pehl.karaka.shared.model.Activities;
 import name.pehl.karaka.shared.model.Day;
 import name.pehl.karaka.shared.model.Week;
 
-import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.mvp.client.HasUiHandlers;
-import com.gwtplatform.mvp.client.PresenterWidget;
-import com.gwtplatform.mvp.client.View;
-import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+import static name.pehl.karaka.client.NameTokens.dashboard;
+import static name.pehl.karaka.client.activity.dispatch.ActivitiesRequest.ACTIVITIES_PARAM;
+import static name.pehl.karaka.client.activity.dispatch.ActivitiesRequest.SEPERATOR;
 
 /**
  * <p>
@@ -51,7 +53,7 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
  * <ul>
  * <li>none
  * </ul>
- * 
+ *
  * @author $Author: harald.pehl $
  * @version $Date: 2010-12-22 16:43:49 +0100 (Mi, 22. Dez 2010) $ $Revision: 102
  *          $
@@ -59,17 +61,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyView> implements QuickChartUiHandlers,
         ActivitiesLoadedHandler, ActivityChangedHandler, TickHandler
 {
-    public interface MyView extends View, HasUiHandlers<QuickChartUiHandlers>
-    {
-        void updateActivities(Activities activities);
-
-
-        void updateWeek(Week week);
-
-
-        void updateDay(Day day);
-    }
-
     final PlaceManager placeManager;
 
 
@@ -86,13 +77,11 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
         getEventBus().addHandler(TickEvent.getType(), this);
     }
 
-
     @Override
     public final void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
         getView().updateActivities(event.getActivities());
     }
-
 
     @Override
     public void onActivityChanged(ActivityChangedEvent event)
@@ -100,19 +89,26 @@ public class QuickChartPresenter extends PresenterWidget<QuickChartPresenter.MyV
         getView().updateActivities(event.getActivities());
     }
 
-
     @Override
     public void onTick(TickEvent event)
     {
         getView().updateActivities(event.getActivities());
     }
 
-
     @Override
     public void onCalendarWeekClicked(Week week)
     {
-        PlaceRequest placeRequest = new PlaceRequest(dashboard).with("year", String.valueOf(week.getYear())).with(
-                "week", String.valueOf(week.getWeek()));
-        placeManager.revealPlace(placeRequest);
+        placeManager.revealPlace(new PlaceRequest(dashboard).with(ACTIVITIES_PARAM,
+                String.valueOf(week.getYear()) + SEPERATOR + "cw" + String.valueOf(week.getWeek())));
+    }
+
+
+    public interface MyView extends View, HasUiHandlers<QuickChartUiHandlers>
+    {
+        void updateActivities(Activities activities);
+
+        void updateWeek(Week week);
+
+        void updateDay(Day day);
     }
 }

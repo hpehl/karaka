@@ -1,12 +1,9 @@
 package name.pehl.karaka.client.activity.dispatch;
 
-import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import name.pehl.karaka.client.rest.UrlBuilder;
 
-import static name.pehl.karaka.client.NameTokens.dashboard;
 import static name.pehl.karaka.client.logging.Logger.Category.activity;
 import static name.pehl.karaka.client.logging.Logger.warn;
 
@@ -16,10 +13,8 @@ import static name.pehl.karaka.client.logging.Logger.warn;
  */
 public class ActivitiesRequest
 {
-    public static final String PATH_PARAM = "path";
-    public static final String ACTIVITIES = "/activities/";
-    public static final char URL_SEPERATOR = '/';
-    public static final char PLACE_REQUEST_SEPERATOR = '-';
+    public static final String ACTIVITIES_PARAM = "activities";
+    public static final char SEPERATOR = '-';
     final String url;
 
 
@@ -37,10 +32,10 @@ public class ActivitiesRequest
      */
     protected ActivitiesRequest(PlaceRequest placeRequest, UrlBuilder urlBuilder)
     {
-        if (hasParameter(placeRequest, PATH_PARAM))
+        if (hasParameter(placeRequest, ACTIVITIES_PARAM))
         {
-            String path = placeRequest.getParameter(PATH_PARAM, null);
-            for (String p : Splitter.on(PLACE_REQUEST_SEPERATOR).omitEmptyStrings().trimResults().split(path))
+            String path = placeRequest.getParameter(ACTIVITIES_PARAM, null);
+            for (String p : Splitter.on(SEPERATOR).omitEmptyStrings().trimResults().split(path))
             {
                 urlBuilder.path(p);
             }
@@ -118,52 +113,5 @@ public class ActivitiesRequest
     public String toUrl()
     {
         return url;
-    }
-
-
-    // ------------------------------------------------------ static helper methods
-
-    /**
-     * Returns a place request for the dashboard recognicing the following service urls:
-     * <ul>
-     * <li>/placeRequestFor/currentWeek: Find placeRequestFor</li>
-     * <li>/placeRequestFor/currentMonth: Find placeRequestFor of the current month</li>
-     * <li>/placeRequestFor/{year}/cw{week}: Find placeRequestFor by year and week</li>
-     * <li>/placeRequestFor/relative/cw{week}: Find placeRequestFor by  week relative to the current week</li>
-     * <li>/placeRequestFor/{year}/{month}: Find placeRequestFor by year and month</li>
-     * <li>/placeRequestFor/relative/{month}: Find placeRequestFor by month relative to the current month</li>
-     * </ul>
-     *
-     * @param url
-     *
-     * @return
-     */
-    public static PlaceRequest placeRequestFor(String url)
-    {
-        PlaceRequest placeRequest = new PlaceRequest(dashboard);
-
-        if (Strings.emptyToNull(url) != null)
-        {
-            String path = extractPath(url, ACTIVITIES);
-            path = CharMatcher.is(URL_SEPERATOR).replaceFrom(path, PLACE_REQUEST_SEPERATOR);
-            placeRequest = placeRequest.with(PATH_PARAM, path);
-        }
-        return placeRequest;
-    }
-
-    private static String extractPath(String url, String after)
-    {
-        String path = url;
-        int start = url.indexOf(after);
-        if (start != -1)
-        {
-            path = url.substring(start + after.length());
-        }
-        int end = path.indexOf("?");
-        if (end != -1)
-        {
-            path = path.substring(0, end);
-        }
-        return path;
     }
 }

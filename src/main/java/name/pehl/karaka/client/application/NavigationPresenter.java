@@ -6,17 +6,12 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
-import name.pehl.karaka.client.NameTokens;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.karaka.client.settings.SettingsCache;
 import name.pehl.karaka.client.settings.SettingsChangedEvent;
 import name.pehl.karaka.client.settings.SettingsChangedEvent.SettingsChangedHandler;
-import name.pehl.karaka.shared.model.Activities;
 import name.pehl.karaka.shared.model.User;
-
-import static name.pehl.karaka.shared.model.TimeUnit.MONTH;
-import static name.pehl.karaka.shared.model.TimeUnit.WEEK;
 
 /**
  * <p>
@@ -118,20 +113,20 @@ public class NavigationPresenter extends PresenterWidget<NavigationPresenter.MyV
     @Override
     public void onActivitiesLoaded(ActivitiesLoadedEvent event)
     {
-        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard);
-        Activities activities = event.getActivities();
-        if (activities.getUnit() == MONTH)
-        {
-            placeRequest = placeRequest.with("year", String.valueOf(activities.getYear())).with("month",
-                    String.valueOf(activities.getMonth()));
-        }
-        else if (activities.getUnit() == WEEK)
-        {
-            placeRequest = placeRequest.with("year", String.valueOf(activities.getYear())).with("week",
-                    String.valueOf(activities.getWeek()));
-        }
-        String token = placeManager.buildHistoryToken(placeRequest);
-        getView().setDashboardToken(token);
+//        PlaceRequest placeRequest = new PlaceRequest(NameTokens.dashboard);
+//        Activities activities = event.getActivities();
+//        if (activities.getUnit() == MONTH)
+//        {
+//            placeRequest = placeRequest.with("year", String.valueOf(activities.getYear())).with("month",
+//                    String.valueOf(activities.getMonth()));
+//        }
+//        else if (activities.getUnit() == WEEK)
+//        {
+//            placeRequest = placeRequest.with("year", String.valueOf(activities.getYear())).with("week",
+//                    String.valueOf(activities.getWeek()));
+//        }
+//        String token = placeManager.buildHistoryToken(placeRequest);
+//        getView().setDashboardToken(token);
     }
 
 

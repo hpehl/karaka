@@ -1,12 +1,14 @@
 package name.pehl.karaka.client.activity.presenter;
 
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import name.pehl.karaka.client.activity.dispatch.ActivitiesRequest;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import name.pehl.karaka.client.activity.event.ActivitiesNotFoundEvent;
@@ -19,6 +21,9 @@ import name.pehl.karaka.shared.model.HasLinks;
 
 import java.security.acl.AclNotFoundException;
 
+import static name.pehl.karaka.client.NameTokens.dashboard;
+import static name.pehl.karaka.client.activity.dispatch.ActivitiesRequest.ACTIVITIES_PARAM;
+import static name.pehl.karaka.client.activity.dispatch.ActivitiesRequest.SEPERATOR;
 import static name.pehl.karaka.shared.model.HasLinks.NEXT;
 import static name.pehl.karaka.shared.model.HasLinks.PREV;
 
@@ -46,6 +51,7 @@ public class ActivityNavigationPresenter extends PresenterWidget<ActivityNavigat
         ActivityNavigationUiHandlers, ActivitiesLoadedHandler, ActivitiesNotFoundEvent.ActivitiesNotFoundHandler,
         ActivityChangedHandler, TickHandler
 {
+    static final String ACTIVITIES = "/activities/";
     final PlaceManager placeManager;
     final SelectMonthPresenter selectMonthPresenter;
     final SelectWeekPresenter selectWeekPresenter;
@@ -123,13 +129,13 @@ public class ActivityNavigationPresenter extends PresenterWidget<ActivityNavigat
     @Override
     public void onCurrentWeek()
     {
-        placeManager.revealPlace(ActivitiesRequest.placeRequestFor("currentWeek"));
+        placeManager.revealPlace(new PlaceRequest(dashboard).with(ACTIVITIES_PARAM, "currentWeek"));
     }
 
     @Override
     public void onCurrentMonth()
     {
-        placeManager.revealPlace(ActivitiesRequest.placeRequestFor("currentMonth"));
+        placeManager.revealPlace(new PlaceRequest(dashboard).with(ACTIVITIES_PARAM, "currentMonth"));
     }
 
     @Override
@@ -153,7 +159,7 @@ public class ActivityNavigationPresenter extends PresenterWidget<ActivityNavigat
     {
         if (links != null && links.hasPrev())
         {
-            placeManager.revealPlace(ActivitiesRequest.placeRequestFor(links.get(PREV)));
+            placeManager.revealPlace(placeRequestFor(links.get(PREV)));
         }
     }
 
@@ -162,8 +168,36 @@ public class ActivityNavigationPresenter extends PresenterWidget<ActivityNavigat
     {
         if (links != null && links.hasNext())
         {
-            placeManager.revealPlace(ActivitiesRequest.placeRequestFor(links.get(NEXT)));
+            placeManager.revealPlace(placeRequestFor(links.get(NEXT)));
         }
+    }
+
+    private PlaceRequest placeRequestFor(String url)
+    {
+        PlaceRequest placeRequest = new PlaceRequest(dashboard);
+        if (Strings.emptyToNull(url) != null)
+        {
+            String path = extractPath(url, ACTIVITIES);
+            path = CharMatcher.is('/').replaceFrom(path, SEPERATOR);
+            placeRequest = placeRequest.with(ACTIVITIES_PARAM, path);
+        }
+        return placeRequest;
+    }
+
+    private String extractPath(String url, String after)
+    {
+        String path = url;
+        int start = url.indexOf(after);
+        if (start != -1)
+        {
+            path = url.substring(start + after.length());
+        }
+        int end = path.indexOf("?");
+        if (end != -1)
+        {
+            path = path.substring(0, end);
+        }
+        return path;
     }
 
 
