@@ -173,5 +173,9 @@ public class EditActivityView extends PopupViewWithUiHandlers<EditAvtivityUiHand
         {
             currentProject = new Project(value);
         }
+        else
+        {
+            currentProject = null;
+        }
     }
 }

@@ -7,6 +7,7 @@ import name.pehl.karaka.client.activity.dispatch.DeleteActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.FindActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.karaka.client.activity.dispatch.GetDurationsHandler;
+import name.pehl.karaka.client.activity.dispatch.GetLatestActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.GetYearsHandler;
 import name.pehl.karaka.client.activity.dispatch.SaveActivityHandler;
@@ -22,13 +23,21 @@ public class KarakaActionHandlerRegistry extends DefaultClientActionHandlerRegis
 {
     @Inject
     public KarakaActionHandlerRegistry(final CopyActivityHandler copyActivityHandler,
-            final DeleteActivityHandler deleteActivityHandler, final FindActivityHandler findActivityHandler,
-            final GetActivitiesHandler getActivitiesHandler, final GetClientsHandler getClientsHandler,
-            final GetDurationsHandler getDurationsHandler, final GetProjectsHandler getProjectsHandler,
-            final GetRunningActivityHandler getRunningActivityHandler, final GetSettingsHandler getSettingsHandler,
-            final GetTagsHandler getTagsHandler, final GetYearsHandler getYearsHandler,
-            final SaveActivityHandler saveActivityHandler, final StartActivityHandler startActivityHandler,
-            final StopActivityHandler stopActivityHandler, final TickActivityHandler tickActivityHandler)
+            final DeleteActivityHandler deleteActivityHandler,
+            final FindActivityHandler findActivityHandler,
+            final GetActivitiesHandler getActivitiesHandler,
+            final GetClientsHandler getClientsHandler,
+            final GetDurationsHandler getDurationsHandler,
+            final GetLatestActivityHandler getLatestActivityHandler,
+            final GetProjectsHandler getProjectsHandler,
+            final GetRunningActivityHandler getRunningActivityHandler,
+            final GetSettingsHandler getSettingsHandler,
+            final GetTagsHandler getTagsHandler,
+            final GetYearsHandler getYearsHandler,
+            final SaveActivityHandler saveActivityHandler,
+            final StartActivityHandler startActivityHandler,
+            final StopActivityHandler stopActivityHandler,
+            final TickActivityHandler tickActivityHandler)
     {
         register(copyActivityHandler);
         register(deleteActivityHandler);
@@ -36,6 +45,7 @@ public class KarakaActionHandlerRegistry extends DefaultClientActionHandlerRegis
         register(getActivitiesHandler);
         register(getClientsHandler);
         register(getDurationsHandler);
+        register(getLatestActivityHandler);
         register(getProjectsHandler);
         register(getRunningActivityHandler);
         register(getSettingsHandler);

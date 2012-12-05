@@ -50,6 +50,11 @@ public abstract class Repository<T extends BaseEntity>
         this.indexSearch = indexSearch;
     }
 
+    public T get(String websafeKey)
+    {
+        return ofy().load().key(Key.<T>create(websafeKey)).safeGet();
+    }
+
     public T get(Key<T> key)
     {
         return ofy().load().key(key).safeGet();
@@ -71,7 +76,7 @@ public abstract class Repository<T extends BaseEntity>
     }
 
     @SuppressWarnings("unchecked")
-    public T save(T entity)
+    public T save(final T entity)
     {
         Key<T> key = ofy().save().entity(entity).now();
         T saved = get(key);
@@ -80,22 +85,22 @@ public abstract class Repository<T extends BaseEntity>
     }
 
     @SuppressWarnings("unchecked")
-    public Collection<T> saveAll(Iterable<T> entities)
+    public Collection<T> saveAll(final Iterable<T> entities)
     {
-        Map<Key<T>, T> keysAndEntities = ofy().save().<T>entities().now();
+        Map<Key<T>, T> keysAndEntities = ofy().save().<T>entities(entities).now();
         Collection<T> savedEntities = keysAndEntities.values();
         index(savedEntities);
         return savedEntities;
     }
 
     @SuppressWarnings("unchecked")
-    public void delete(T entity)
+    public void delete(final T entity)
     {
         ofy().delete().entity(entity);
         unIndex(entity);
     }
 
-    public void deleteAll(Iterable<T> entities)
+    public void deleteAll(final Iterable<T> entities)
     {
         ofy().delete().entities(entities);
         unIndex(entities);

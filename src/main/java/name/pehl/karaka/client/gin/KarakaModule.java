@@ -14,6 +14,7 @@ import name.pehl.karaka.client.activity.dispatch.DeleteActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.FindActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.GetActivitiesHandler;
 import name.pehl.karaka.client.activity.dispatch.GetDurationsHandler;
+import name.pehl.karaka.client.activity.dispatch.GetLatestActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityHandler;
 import name.pehl.karaka.client.activity.dispatch.GetYearsHandler;
 import name.pehl.karaka.client.activity.dispatch.SaveActivityHandler;
@@ -120,6 +121,7 @@ public class KarakaModule extends AbstractPresenterModule
         bind(GetActivitiesHandler.class);
         bind(GetClientsHandler.class);
         bind(GetDurationsHandler.class);
+        bind(GetLatestActivityHandler.class);
         bind(GetProjectsHandler.class);
         bind(GetRunningActivityHandler.class);
         bind(GetSettingsHandler.class);

@@ -10,9 +10,10 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import name.pehl.karaka.client.activity.dispatch.GetDurationsAction;
 import name.pehl.karaka.client.activity.dispatch.GetDurationsResult;
+import name.pehl.karaka.client.activity.dispatch.GetLatestActivityAction;
+import name.pehl.karaka.client.activity.dispatch.GetLatestActivityResult;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityAction;
 import name.pehl.karaka.client.activity.dispatch.GetRunningActivityResult;
-import name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent;
 import name.pehl.karaka.client.activity.event.ActivityActionEvent;
 import name.pehl.karaka.client.activity.event.ActivityChanged.ChangeAction;
 import name.pehl.karaka.client.activity.event.ActivityChangedEvent;
@@ -26,10 +27,7 @@ import name.pehl.karaka.client.dispatch.KarakaCallback;
 import name.pehl.karaka.shared.model.Activity;
 import name.pehl.karaka.shared.model.Durations;
 
-import java.util.SortedSet;
-
 import static java.util.logging.Level.WARNING;
-import static name.pehl.karaka.client.activity.event.ActivitiesLoadedEvent.ActivitiesLoadedHandler;
 import static name.pehl.karaka.client.activity.event.ActivityAction.Action.START_STOP;
 import static name.pehl.karaka.client.logging.Logger.Category.activity;
 import static name.pehl.karaka.client.logging.Logger.info;
@@ -65,17 +63,17 @@ import static name.pehl.karaka.client.logging.Logger.warn;
  *          $
  */
 public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> implements CockpitUiHandlers,
-        ActivityChangedHandler, TickHandler, ActivitiesLoadedHandler
+        ActivityChangedHandler, TickHandler
 {
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
     final GetDurationsCommand getDurationsCommand;
     final GetRunningActivityCommand getRunningActivityCommand;
+    final GetLatestActivityCommand getLatestActivityCommand;
     /**
      * The currently managed actvity
      */
     Activity currentActivity;
-    boolean noInitialRunningActivitiy;
 
 
     @Inject
@@ -87,11 +85,11 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         this.dispatcher = dispatcher;
         this.getDurationsCommand = new GetDurationsCommand();
         this.getRunningActivityCommand = new GetRunningActivityCommand();
+        this.getLatestActivityCommand = new GetLatestActivityCommand();
 
         getView().setUiHandlers(this);
         getEventBus().addHandler(ActivityChangedEvent.getType(), this);
         getEventBus().addHandler(TickEvent.getType(), this);
-        getEventBus().addHandler(ActivitiesLoadedEvent.getType(), this);
     }
 
     @Override
@@ -100,19 +98,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
         super.onReveal();
         scheduler.scheduleDeferred(getDurationsCommand);
         scheduler.scheduleDeferred(getRunningActivityCommand);
-    }
-
-    @Override
-    public void onActivitiesLoaded(final ActivitiesLoadedEvent event)
-    {
-        if (noInitialRunningActivitiy && currentActivity == null)
-        {
-            SortedSet<Activity> activities = event.getActivities().activities();
-            if (!activities.isEmpty())
-            {
-                currentActivity = activities.first();
-            }
-        }
     }
 
     @Override
@@ -186,7 +171,6 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                 @Override
                 public void onFailure(Throwable caught)
                 {
-                    noInitialRunningActivitiy = true;
                     warn(activity, "Cannot load minutes for current month, week and/or day");
                     getView().updateDurations(new Durations());
                 }
@@ -215,8 +199,33 @@ public class CockpitPresenter extends PresenterWidget<CockpitPresenter.MyView> i
                         public void onFailure(Throwable caught)
                         {
                             info(activity, "No running activity found.");
+                            scheduler.scheduleDeferred(getLatestActivityCommand);
                         }
                     });
+        }
+    }
+
+
+    class GetLatestActivityCommand implements ScheduledCommand
+    {
+        @Override
+        public void execute()
+        {
+            dispatcher.execute(new GetLatestActivityAction(), new KarakaCallback<GetLatestActivityResult>(getEventBus())
+            {
+                @Override
+                public void onSuccess(final GetLatestActivityResult result)
+                {
+                    currentActivity = result.getActivity();
+                    getView().updateStatus(currentActivity);
+                }
+
+                @Override
+                public void onFailure(final Throwable caught)
+                {
+                    warn(activity, "No latest activity found.");
+                }
+            });
         }
     }
 }

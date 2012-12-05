@@ -2,7 +2,6 @@ package name.pehl.karaka.server.activity.boundary;
 
 import com.google.appengine.api.search.Results;
 import com.google.appengine.api.search.ScoredDocument;
-import com.googlecode.objectify.Key;
 import name.pehl.karaka.server.activity.control.ActivitiesConverter;
 import name.pehl.karaka.server.activity.control.ActivityConverter;
 import name.pehl.karaka.server.activity.control.ActivityIndexSearch;
@@ -561,7 +560,7 @@ public class ActivitiesResource
     {
         try
         {
-            Activity serverActivity = repository.get(Key.<Activity>create(id));
+            Activity serverActivity = repository.get(id);
             activityConverter.merge(clientActivity, serverActivity);
             Activity savedActivity = repository.save(serverActivity);
             name.pehl.karaka.shared.model.Activity updatedClientActivity = activityConverter.toModel(savedActivity);
@@ -579,7 +578,7 @@ public class ActivitiesResource
     {
         try
         {
-            Activity activity = repository.get(Key.<Activity>create(id));
+            Activity activity = repository.get(id);
             Activity copy = activity.copy(period);
             Activity savedActivity = repository.save(copy);
             name.pehl.karaka.shared.model.Activity clientCopy = activityConverter.toModel(savedActivity);
@@ -614,7 +613,7 @@ public class ActivitiesResource
     {
         try
         {
-            Activity activity = repository.get(Key.<Activity>create(id));
+            Activity activity = repository.get(id);
             Iterable<Activity> modifiedActivities = repository.start(activity);
             Set<name.pehl.karaka.shared.model.Activity> clientActivities = new HashSet<name.pehl.karaka.shared.model.Activity>();
             for (Activity modifiedActivity : modifiedActivities)
@@ -635,7 +634,7 @@ public class ActivitiesResource
     {
         try
         {
-            Activity activity = repository.get(Key.<Activity>create(id));
+            Activity activity = repository.get(id);
             Iterable<Activity> modifiedActivities = repository.tick(activity);
             Set<name.pehl.karaka.shared.model.Activity> clientActivities = new HashSet<name.pehl.karaka.shared.model.Activity>();
             for (Activity modifiedActivity : modifiedActivities)
@@ -656,7 +655,7 @@ public class ActivitiesResource
     {
         try
         {
-            Activity activity = repository.get(Key.<Activity>create(id));
+            Activity activity = repository.get(id);
             if (activity.getStatus() == STOPPED)
             {
                 return Response.status(NOT_MODIFIED).build();
@@ -681,7 +680,7 @@ public class ActivitiesResource
     {
         try
         {
-            Activity activity = repository.get(Key.<Activity>create(id));
+            Activity activity = repository.get(id);
             repository.delete(activity);
             return Response.noContent().build();
         }

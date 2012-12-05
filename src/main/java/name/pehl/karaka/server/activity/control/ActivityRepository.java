@@ -84,7 +84,7 @@ public class ActivityRepository extends Repository<Activity>
 
     public Activity findLatestActivity()
     {
-        return query().order("start.date").first().get();
+        return query().order("-start.date").first().get();
     }
 
     /**
