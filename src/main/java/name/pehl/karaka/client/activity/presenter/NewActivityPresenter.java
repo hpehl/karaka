@@ -265,5 +265,15 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
             ActivityActionEvent.fire(this, SAVE, activity);
         }
         getView().clear();
+        reset();
+    }
+
+    private void reset()
+    {
+        selectedActivity = null;
+        enteredActivity =  null;
+        selectedProject = null;
+        enteredProject = null;
+        enteredDuration = null;
     }
 }

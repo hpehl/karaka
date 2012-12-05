@@ -15,6 +15,7 @@ import name.pehl.piriti.json.client.JsonReader;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.Resource;
 
+import static name.pehl.karaka.client.dispatch.KarakaActionHandler.HttpMethod.POST;
 import static name.pehl.karaka.client.dispatch.KarakaActionHandler.HttpMethod.PUT;
 import static org.fusesource.restygwt.client.Resource.CONTENT_TYPE_JSON;
 import static org.fusesource.restygwt.client.Resource.HEADER_CONTENT_TYPE;
@@ -42,14 +43,28 @@ public class SaveActivityHandler extends KarakaActionHandler<SaveActivityAction,
     @Override
     protected Resource resourceFor(SaveActivityAction action)
     {
-        return new Resource(new UrlBuilder().module("rest").path("activities", action.getActivity().getId()).toUrl());
+        UrlBuilder urlBuilder = new UrlBuilder().module("rest").path("activities");
+        if (!action.getActivity().isTransient())
+        {
+            urlBuilder = urlBuilder.path(action.getActivity().getId());
+        }
+        return new Resource(urlBuilder.toUrl());
     }
 
     @Override
     protected Method methodFor(SaveActivityAction action, Resource resource)
     {
-        return new Method(resource, PUT.name()).header(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON)
-                .text(activityWriter.toJson(action.getActivity()));
+        Method method;
+        if (action.getActivity().isTransient())
+        {
+            method = new Method(resource, POST.name());
+        }
+        else
+        {
+            method = new Method(resource, PUT.name());
+        }
+        method = method.header(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON).text(activityWriter.toJson(action.getActivity()));
+        return method;
     }
 
     @Override

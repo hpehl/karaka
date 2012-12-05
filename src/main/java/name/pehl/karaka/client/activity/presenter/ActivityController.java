@@ -197,7 +197,6 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                 Activity savedActivity = result.getSaved();
                 info(activity, activityToSave + " successfully saved as " + savedActivity);
                 activities.update(savedActivity);
-//                updateActivities(activityToSave, savedActivity);
                 ActivityChangedEvent.fire(ActivityController.this, CHANGED, savedActivity, activities);
                 ShowMessageEvent.fire(ActivityController.this,
                         new Message(INFO, "Activity \"" + savedActivity.getName() + "\" saved", true));
@@ -218,7 +217,6 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                         Activity copiedActivity = result.getCopy();
                         info(activity, activityToCopy + " successfully copied as " + copiedActivity);
                         activities.update(copiedActivity);
-//                        updateActivities(null, copiedActivity);
                         ActivityChangedEvent.fire(ActivityController.this, NEW, copiedActivity, activities);
                         ShowMessageEvent.fire(ActivityController.this,
                                 new Message(INFO, "Activity \"" + copiedActivity.getName() + "\" added", true));
@@ -283,7 +281,6 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                     info(activity,
                             activityToStop + " successfully stopped as " + stoppedActivity);
                     activities.update(stoppedActivity);
-//                    updateActivities(activityToStop, stoppedActivity);
                     ActivityChangedEvent.fire(ActivityController.this, STOPPED, stoppedActivity, activities);
                     ShowMessageEvent.fire(ActivityController.this,
                             new Message(INFO, "Activity \"" + stoppedActivity.getName() + "\" stopped", true));
@@ -312,24 +309,11 @@ public class ActivityController implements RepeatingCommand, HasHandlers, Runnin
                     {
                         info(activity, activityToDelete + " successfully deleted");
                         activities.remove(activityToDelete);
-//                        updateActivities(activityToDelete, null);
                         ActivityChangedEvent.fire(ActivityController.this, DELETE, activityToDelete, activities);
                         ShowMessageEvent.fire(ActivityController.this,
                                 new Message(INFO, "Activity \"" + activityToDelete.getName() + "\" deleted", true));
                     }
                 });
-    }
-
-    private void updateActivities(Activity activityBefore, Activity activityAfter)
-    {
-        if (activities.contains(activityBefore))
-        {
-            activities.remove(activityBefore);
-        }
-        if (activities.matchingRange(activityAfter))
-        {
-            activities.add(activityAfter);
-        }
     }
 
     /**

@@ -26,6 +26,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -553,6 +554,15 @@ public class ActivitiesResource
 
     // ------------------------------------------------------------ CUD methods
 
+    @POST
+    public Response createNewActivity(name.pehl.karaka.shared.model.Activity clientActivity)
+    {
+        Activity serverActivity = activityConverter.fromModel(clientActivity);
+        Activity savedActivity = repository.save(serverActivity);
+        name.pehl.karaka.shared.model.Activity newClientActivity = activityConverter.toModel(savedActivity);
+        return Response.status(CREATED).entity(newClientActivity).build();
+    }
+
     @PUT
     @Path("/{id}")
     public Response updateActivity(@PathParam("id") String id,
@@ -603,8 +613,13 @@ public class ActivitiesResource
         // TODO Is it an error if the client activity already exists on the server?
         Activity newServerActivity = activityConverter.fromModel(clientActivity);
         Activity savedActivity = repository.save(newServerActivity);
-        name.pehl.karaka.shared.model.Activity createdClientActivity = activityConverter.toModel(savedActivity);
-        return Response.status(CREATED).entity(createdClientActivity).build();
+        Iterable<Activity> modifiedActivities = repository.start(savedActivity);
+        Set<name.pehl.karaka.shared.model.Activity> clientActivities = new HashSet<name.pehl.karaka.shared.model.Activity>();
+        for (Activity modifiedActivity : modifiedActivities)
+        {
+            clientActivities.add(activityConverter.toModel(modifiedActivity));
+        }
+        return Response.status(CREATED).entity(clientActivities).build();
     }
 
     @PUT
