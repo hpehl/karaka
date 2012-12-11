@@ -6,6 +6,7 @@ import com.google.gwt.inject.client.Ginjector;
 import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
+import com.gwtplatform.mvp.client.googleanalytics.GoogleAnalytics;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import name.pehl.karaka.client.about.AboutPresenter;
 import name.pehl.karaka.client.activity.presenter.DashboardPresenter;
@@ -33,6 +34,7 @@ public interface KarakaGinjector extends Ginjector
     Logger getLogger();
     PlaceManager getPlaceManager();
     Resources getResources();
+    GoogleAnalytics getGoogleAnalytics();
 
 
     // ------------------------------------------------------- presenters (a-z)

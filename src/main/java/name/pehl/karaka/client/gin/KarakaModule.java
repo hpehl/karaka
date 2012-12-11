@@ -3,8 +3,10 @@ package name.pehl.karaka.client.gin;
 import com.google.gwt.core.client.Scheduler;
 import com.google.inject.Provides;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
+import com.gwtplatform.mvp.client.annotations.GaAccount;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
+import com.gwtplatform.mvp.client.googleanalytics.GoogleAnalyticsNavigationTracker;
 import name.pehl.karaka.client.KarakaPlaceManager;
 import name.pehl.karaka.client.NameTokens;
 import name.pehl.karaka.client.about.AboutPresenter;
@@ -190,6 +192,10 @@ public class KarakaModule extends AbstractPresenterModule
                 SettingsPresenter.MyProxy.class);
         bindPresenter(TagsPresenter.class, TagsPresenter.MyView.class, TagsView.class, TagsPresenter.MyProxy.class);
         bindPresenter(TermsPresenter.class, TermsPresenter.MyView.class, TermsView.class, TermsPresenter.MyProxy.class);
+
+        // Googler Analytics
+        bindConstant().annotatedWith(GaAccount.class).to("UA-36839059-1");
+        bind(GoogleAnalyticsNavigationTracker.class).asEagerSingleton();
 
         // Application specific
         bind(ActivityController.class).in(Singleton.class);

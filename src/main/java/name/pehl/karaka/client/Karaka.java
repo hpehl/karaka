@@ -1,6 +1,7 @@
 package name.pehl.karaka.client;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.common.base.Stopwatch;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -25,6 +26,7 @@ public class Karaka implements EntryPoint
         // Defer all application initialisation code to so that the
         // UncaughtExceptionHandler can catch any unexpected exceptions.
         Log.setUncaughtExceptionHandler();
+        final Stopwatch stopwatch = new Stopwatch().start();
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand()
         {
             @Override
@@ -36,7 +38,9 @@ public class Karaka implements EntryPoint
                     @Override
                     public void execute()
                     {
-                        info(bootstrap, "Bootstrap process finished");
+                        stopwatch.stop();
+                        info(bootstrap, "Bootstrap process finished in " + stopwatch);
+                        ginjector.getGoogleAnalytics().trackEvent(bootstrap.name(), stopwatch.toString());
                     }
                 });
             }
