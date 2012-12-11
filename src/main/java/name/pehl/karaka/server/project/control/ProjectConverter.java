@@ -27,7 +27,7 @@ public class ProjectConverter extends
         model.setDescription(entity.getDescription());
 
         // client relation
-        if (entity.getClient() != null)
+        if (entity.getClient() != null && entity.getClient().get() != null)
         {
             model.setClient(clientConverter.toModel(entity.getClient().get()));
         }

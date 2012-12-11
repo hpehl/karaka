@@ -64,7 +64,7 @@ public class ActivityConverter extends
         model.setStatus(entity.getStatus());
 
         // relations
-        if (entity.getProject() != null)
+        if (entity.getProject() != null && entity.getProject().get() != null)
         {
             model.setProject(projectConverter.toModel(entity.getProject().get()));
         }

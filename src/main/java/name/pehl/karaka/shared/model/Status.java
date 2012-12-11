@@ -6,6 +6,5 @@ package name.pehl.karaka.shared.model;
  */
 public enum Status
 {
-    STOPPED,
-    RUNNING;
+    STOPPED, RUNNING
 }
