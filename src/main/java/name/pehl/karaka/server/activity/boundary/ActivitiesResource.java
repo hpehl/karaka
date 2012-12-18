@@ -7,6 +7,7 @@ import name.pehl.karaka.server.activity.control.ActivityConverter;
 import name.pehl.karaka.server.activity.control.ActivityIndexSearch;
 import name.pehl.karaka.server.activity.control.ActivityRepository;
 import name.pehl.karaka.server.activity.entity.Activity;
+import name.pehl.karaka.server.activity.entity.SameActivity;
 import name.pehl.karaka.server.settings.control.CurrentSettings;
 import name.pehl.karaka.server.settings.entity.Settings;
 import name.pehl.karaka.shared.model.Activities;
@@ -491,7 +492,7 @@ public class ActivitiesResource
     @NoCache
     public List<name.pehl.karaka.shared.model.Activity> findByName(@QueryParam("q") String query)
     {
-        List<name.pehl.karaka.shared.model.Activity> result = new ArrayList<name.pehl.karaka.shared.model.Activity>();
+        Map<SameActivity, name.pehl.karaka.shared.model.Activity> activities = new HashMap<SameActivity, name.pehl.karaka.shared.model.Activity>();
         Results<ScoredDocument> results = indexSearch.search(query);
         for (ScoredDocument scoredDocument : results)
         {
@@ -499,10 +500,10 @@ public class ActivitiesResource
             Activity activity = repository.get(id);
             if (activity != null)
             {
-                result.add(activityConverter.toModel(activity));
+                activities.put(new SameActivity(activity), activityConverter.toModel(activity));
             }
         }
-        return result;
+        return new ArrayList<name.pehl.karaka.shared.model.Activity>(activities.values());
     }
 
 
@@ -513,10 +514,13 @@ public class ActivitiesResource
     public Response minutesForCurrentMonthWeekAndDay()
     {
         DateMidnight now = now(settings.get().getTimeZone());
-        Duration currentMonth = minutes(repository.findByYearMonth(now.year().get(), now.monthOfYear().get()));
-        Duration currentWeek = minutes(repository.findByYearWeek(now.year().get(), now.weekOfWeekyear().get()));
-        Duration today = minutes(repository.findByYearMonthDay(now.year().get(), now.monthOfYear().get(), now
-                .dayOfMonth().get()));
+        int year = now.year().get();
+        int month = now.monthOfYear().get();
+        int week = now.weekOfWeekyear().get();
+        int day = now.dayOfMonth().get();
+        Duration currentMonth = minutes(repository.findByYearMonth(year, month));
+        Duration currentWeek = minutes(repository.findByYearWeek(year, week));
+        Duration today = minutes(repository.findByYearMonthDay(year, month, day));
         Durations durations = new Durations(currentMonth, currentWeek, today);
 
         String url = uriInfo.getAbsolutePath().toASCIIString();

@@ -133,6 +133,10 @@ public class NewActivityPresenter extends PresenterWidget<NewActivityPresenter.M
                         {
                             displayString.append(": ").append(activity.getDescription());
                         }
+                        if (activity.getProject() != null)
+                        {
+                            displayString.append(", (Project: ").append(activity.getProject().getName()).append(")");
+                        }
                         NamedModelSuggestion<Activity> suggestion = new NamedModelSuggestion<Activity>(activity,
                                 activity.getName(), highlighter.highlight(displayString.toString()));
                         suggestions.add(suggestion);
