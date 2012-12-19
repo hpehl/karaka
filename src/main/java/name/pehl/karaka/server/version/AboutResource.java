@@ -26,9 +26,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Properties;
 
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -46,21 +46,32 @@ public class AboutResource
     @GET
     public Response about()
     {
+        InputStream inputStream = null;
         try
         {
-            StringBuilder about = new StringBuilder();
-            InputStream inputStream = context.getResourceAsStream("/META-INF/MANIFEST.MF");
-            Manifest manifest = new Manifest(inputStream);
-            Attributes attributes = manifest.getMainAttributes();
-            for (Map.Entry<Object, Object> entry : attributes.entrySet())
-            {
-                about.append(entry.getKey()).append(": ").append(entry.getValue()).append('\n');
-            }
-            return Response.ok(about).build();
+            StringWriter writer = new StringWriter();
+            inputStream = context.getResourceAsStream("/WEB-INF/about.properties");
+            Properties about = new Properties();
+            about.load(inputStream);
+            about.list(new PrintWriter(writer));
+            return Response.ok(writer).build();
         }
         catch (IOException e)
         {
             return Response.status(NOT_FOUND).build();
+        }
+        finally
+        {
+            if (inputStream != null)
+            {
+                try
+                {
+                    inputStream.close();
+                }
+                catch (IOException ignored)
+                {
+                }
+            }
         }
     }
 }

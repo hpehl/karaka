@@ -21,17 +21,10 @@
         <developerConnection>scm:git:git@github.com:hpehl/karaka.git</developerConnection>
         <url>git@github.com:hpehl/karaka.git</url>
     </scm>
-    <repositories>
-        <repository>
-            <id>objectify-appengine</id>
-            <url>http://objectify-appengine.googlecode.com/svn/maven</url>
-        </repository>
-    </repositories>
 
 
     <properties>
-        <gae.plugin.version>0.9.5</gae.plugin.version>
-        <gae.version>1.7.3</gae.version>
+        <gae.version>1.7.4</gae.version>
         <gin.version>2.0.0</gin.version>
         <guava.version>13.0.1</guava.version>
         <gwt.version>2.5.0</gwt.version>
@@ -68,36 +61,17 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Servlet -->
+        <!-- GAE -->
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-1.0-sdk</artifactId>
+            <version>${gae.version}</version>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- GAE -->
-        <dependency>
-            <groupId>net.kindleit</groupId>
-            <artifactId>gae-runtime</artifactId>
-            <version>${gae.version}</version>
-            <type>pom</type>
-            <exclusions>
-                <exclusion>
-                    <artifactId>appengine-tools-sdk</artifactId>
-                    <groupId>com.google.appengine</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-jsr107cache</artifactId>
-            <version>${gae.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.jsr107cache</groupId>
-            <artifactId>jsr107cache</artifactId>
-            <version>1.1</version>
         </dependency>
 
         <!-- GWT -->
@@ -316,7 +290,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
-                    <version>2.2</version>
+                    <version>2.3</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -324,9 +298,9 @@
                     <version>${gwt.plugin.version}</version>
                 </plugin>
                 <plugin>
-                    <groupId>net.kindleit</groupId>
-                    <artifactId>maven-gae-plugin</artifactId>
-                    <version>${gae.plugin.version}</version>
+                    <groupId>com.google.appengine</groupId>
+                    <artifactId>appengine-maven-plugin</artifactId>
+                    <version>${gae.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.bsc.maven</groupId>
@@ -336,7 +310,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>buildnumber-maven-plugin</artifactId>
-                    <version>1.1</version>
+                    <version>1.2</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -381,7 +355,6 @@
                     <doCheck>false</doCheck>
                     <doUpdate>false</doUpdate>
                     <format>{0,number} at {1,date,yyyy-MM-dd HH:mm:ss}</format>
-                    <timestampFormat>yyyy-MM-dd HH:mm:ss</timestampFormat>
                     <items>
                         <item>buildNumber</item>
                         <item>timestamp</item>
@@ -460,34 +433,19 @@
                 <configuration>
                     <webResources>
                         <resource>
-                            <directory>src/main/webapp</directory>
+                            <directory>src/main/webapp/WEB-INF</directory>
+                            <targetPath>WEB-INF</targetPath>
                             <filtering>true</filtering>
                             <includes>
-                                <include>**/appengine-web.xml</include>
+                                <include>about.properties</include>
                             </includes>
                         </resource>
                     </webResources>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Build-Number>${buildNumber}</Build-Number>
-                        </manifestEntries>
-                    </archive>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>net.kindleit</groupId>
-                <artifactId>maven-gae-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.kindleit</groupId>
-                        <artifactId>gae-runtime</artifactId>
-                        <version>${gae.version}</version>
-                        <type>pom</type>
-                    </dependency>
-                </dependencies>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-maven-plugin</artifactId>
             </plugin>
         </plugins>
 
