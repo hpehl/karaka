@@ -20,8 +20,10 @@ import org.jboss.resteasy.annotations.cache.NoCache;
 import org.jboss.resteasy.spi.LinkHeader;
 import org.jboss.resteasy.spi.NotFoundException;
 import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -74,6 +76,8 @@ import static org.joda.time.Weeks.weeks;
  * <li>GET /activities/{year}/{month}/{day}/duration: Get the duration in minutes of the specified activities</li>
  * <li>GET /activities/today: Find activities</li>
  * <li>GET /activities/today/duration: Get the duration in minutes of the specified activities</li>
+ * <li>GWT /activities/{yyyymmdd}/{yyyymmdd}: Get the activities in the specified range (from and to are inclusive)</li>
+ * <li>GWT /activities/{yyyymmdd}/yyyymmdd}/duration: Get the duration in minutes of the specified activities</li>
  * <li>GET /activities/running: Find the running activity</li>
  * <li>GET /activities/latest: Find the latest activity</li>
  * <li>GET /activities/?q=&lt;name&gt;: Fid the activities with the specified name</li>
@@ -483,6 +487,41 @@ public class ActivitiesResource
         }
         response.header("Link", linkHeader.toString());
         return response.build();
+    }
+
+
+    // ----------------------------------------------------------------- by range
+
+    @GET
+    @Path("/{from:\\d{8}}/{to:\\d{8}}")
+    public Response activitiesForYearMonthDay(@PathParam("from") String from, @PathParam("to") String to)
+    {
+        DateTime start = null;
+        try
+        {
+            start = ISODateTimeFormat.basicDate().parseDateTime(from);
+        }
+        catch (IllegalArgumentException e)
+        {
+            return Response.status(BAD_REQUEST).entity(String.format("Invalid start date: %s", start)).build();
+        }
+        DateTime end = null;
+        try
+        {
+            end = ISODateTimeFormat.basicDate().parseDateTime(to);
+        }
+        catch (IllegalArgumentException e)
+        {
+            return Response.status(BAD_REQUEST).entity(String.format("Invalid end date: %s", end)).build();
+        }
+        List<Activity> range = repository.findByRange(start, end);
+        if (!range.isEmpty())
+        {
+            // TODO Custom TimeUnit 'RANGE'?
+            Activities activities = activitiesConverter.toModel(start.toDateMidnight(), DAY, range);
+            return Response.ok(activities).build();
+        }
+        return Response.status(NOT_FOUND).entity(String.format("No activities found in range [%s,%s]", from, to)).build();
     }
 
 

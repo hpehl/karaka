@@ -4,6 +4,8 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import name.pehl.karaka.server.activity.entity.Activity;
 import name.pehl.karaka.server.repository.Repository;
 import name.pehl.karaka.shared.model.Status;
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -55,6 +57,18 @@ public class ActivityRepository extends Repository<Activity>
     {
         return query().filter("start.year =", year).filter("start.month =", month).filter("start.day =", day)
                 .count() > 0;
+    }
+
+    public List<Activity> findByRange(DateTime start, DateTime end)
+    {
+        if (start.isBefore(end))
+        {
+            DateTime startOfDay = start.withTimeAtStartOfDay();
+            DateMidnight endNextMidnight = end.plusDays(1).toDateMidnight();
+            return query().filter("start.date >", startOfDay.toDate())
+                    .filter("start.date <", endNextMidnight.toDate()).list();
+        }
+        return Collections.emptyList();
     }
 
     /**
