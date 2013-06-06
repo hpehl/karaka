@@ -1,10 +1,10 @@
+.DS_Store
 .idea
-target
 src/main/webapp/WEB-INF/deploy
 src/main/webapp/karaka
+target
 *.class
 *.iml
-.DS_Store
 *.jar
 *.war
 *.ear
