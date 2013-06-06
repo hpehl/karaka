@@ -48,8 +48,8 @@ public class Activity extends DescriptiveEntity implements Comparable<Activity>
     // ------------------------------------------------------ members
 
     private String timeZoneId;
-    @Embed @Index private Time start;
-    @Embed private Time end;
+    @Index private Time start;
+    private Time end;
     @Ignore private DateTimeZone timeZone;
     private long pause;
     private boolean billable;

@@ -11,7 +11,6 @@ import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
-import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import name.pehl.karaka.client.activity.dispatch.ActivitiesRequest;
 import name.pehl.karaka.client.activity.dispatch.GetActivitiesAction;
 import name.pehl.karaka.client.activity.dispatch.GetActivitiesResult;
@@ -34,7 +33,7 @@ import static name.pehl.karaka.client.logging.Logger.warn;
 /**
  * <p>
  * The main presenter in Karaka. This presenter is responsible to init, resume
- * and stop placeRequestFor. Other presenters are notified with appropriate events.
+ * and stop activities. Other presenters are notified with appropriate events.
  * </p>
  * <h3>Events</h3>
  * <ol>
@@ -74,9 +73,9 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
     // ------------------------------------------------------- (static) members
 
-    public static final Object SLOT_NewActivity = new Object();
-    public static final Object SLOT_ActivityNavigation = new Object();
-    public static final Object SLOT_ActivityList = new Object();
+    public static final Object TYPE_NewActivity = new Object();
+    public static final Object TYPE_ActivityNavigation = new Object();
+    public static final Object TYPE_ActivityList = new Object();
 
     final Scheduler scheduler;
     final DispatchAsync dispatcher;
@@ -93,7 +92,7 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
             final ActivityNavigationPresenter activityNavigationPresenter,
             final ActivityListPresenter activityListPresenter)
     {
-        super(eventBus, view, proxy);
+        super(eventBus, view, proxy, ApplicationPresenter.TYPE_MainContent);
         this.scheduler = scheduler;
         this.dispatcher = dispatcher;
         this.newActivityPresenter = newActivityPresenter;
@@ -103,6 +102,16 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
 
 
     // ---------------------------------------------------- presenter lifecycle
+
+
+    @Override
+    protected void onBind()
+    {
+        super.onBind();
+        setInSlot(TYPE_NewActivity, newActivityPresenter);
+        setInSlot(TYPE_ActivityNavigation, activityNavigationPresenter);
+        setInSlot(TYPE_ActivityList, activityListPresenter);
+    }
 
     /**
      * Turns the parameters in the place request into an
@@ -120,32 +129,6 @@ public class DashboardPresenter extends Presenter<DashboardPresenter.MyView, Das
         scheduler.scheduleDeferred(new GetActivitiesCommand(activitiesRequest));
     }
 
-
-    @Override
-    protected void revealInParent()
-    {
-        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
-    }
-
-
-    @Override
-    protected void onReveal()
-    {
-        super.onReveal();
-        setInSlot(SLOT_NewActivity, newActivityPresenter);
-        setInSlot(SLOT_ActivityNavigation, activityNavigationPresenter);
-        setInSlot(SLOT_ActivityList, activityListPresenter);
-    }
-
-
-    @Override
-    protected void onHide()
-    {
-        super.onHide();
-        removeFromSlot(SLOT_NewActivity, newActivityPresenter);
-        removeFromSlot(SLOT_ActivityNavigation, activityNavigationPresenter);
-        removeFromSlot(SLOT_ActivityList, activityListPresenter);
-    }
 
     // --------------------------------------------------- commands & callbacks
 

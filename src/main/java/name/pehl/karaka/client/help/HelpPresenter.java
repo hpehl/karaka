@@ -40,6 +40,6 @@ public class HelpPresenter extends Presenter<HelpPresenter.MyView, HelpPresenter
     @Override
     protected void revealInParent()
     {
-        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
+        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_MainContent, this);
     }
 }

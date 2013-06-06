@@ -3,6 +3,7 @@ package name.pehl.karaka.server.project.boundary;
 import name.pehl.karaka.server.project.control.ProjectConverter;
 import name.pehl.karaka.server.project.control.ProjectRepository;
 import name.pehl.karaka.server.project.entity.Project;
+import org.jboss.resteasy.annotations.cache.Cache;
 import org.jboss.resteasy.spi.NotFoundException;
 
 import javax.inject.Inject;
@@ -29,6 +30,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
  *          $
  */
 @Path("/projects")
+@Cache(maxAge = 36000)
 @Produces(APPLICATION_JSON)
 public class ProjectsResource
 {

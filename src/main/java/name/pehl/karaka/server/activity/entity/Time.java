@@ -1,5 +1,6 @@
 package name.pehl.karaka.server.activity.entity;
 
+import com.googlecode.objectify.annotation.Embed;
 import com.googlecode.objectify.annotation.Ignore;
 import org.joda.time.Chronology;
 import org.joda.time.DateMidnight;
@@ -31,6 +32,7 @@ import java.util.Date;
  * @version $Date: 2010-12-17 16:10:26 +0100 (Fr, 17. Dez 2010) $ $Revision: 136
  *          $
  */
+@Embed
 public class Time implements ReadableInstant
 {
     // -------------------------------------------------------- private members

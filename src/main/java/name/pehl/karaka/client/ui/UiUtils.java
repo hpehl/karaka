@@ -3,6 +3,7 @@ package name.pehl.karaka.client.ui;
 import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -24,20 +25,20 @@ public final class UiUtils
      * @param container
      * @param content
      */
-    public static void setContent(HasWidgets container, Widget content)
+    public static void setContent(HasWidgets container, IsWidget content)
     {
         if (container != null)
         {
             container.clear();
             if (content != null)
             {
-                container.add(content);
+                container.add(content.asWidget());
             }
         }
     }
 
 
-    public static void setContent(HasOneWidget container, Widget content)
+    public static void setContent(HasOneWidget container, IsWidget content)
     {
         if (container != null && content != null)
         {

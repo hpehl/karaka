@@ -82,7 +82,7 @@ public class ClientsPresenter extends Presenter<ClientsPresenter.MyView, Clients
     @Override
     protected void revealInParent()
     {
-        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
+        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_MainContent, this);
     }
 
 

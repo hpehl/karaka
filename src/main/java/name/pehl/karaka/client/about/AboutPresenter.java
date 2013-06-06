@@ -41,6 +41,6 @@ public class AboutPresenter extends Presenter<AboutPresenter.MyView, AboutPresen
     @Override
     protected void revealInParent()
     {
-        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
+        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_MainContent, this);
     }
 }

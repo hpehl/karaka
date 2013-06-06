@@ -40,6 +40,6 @@ public class ReportPresenter extends Presenter<ReportPresenter.MyView, ReportPre
     @Override
     protected void revealInParent()
     {
-        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
+        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_MainContent, this);
     }
 }

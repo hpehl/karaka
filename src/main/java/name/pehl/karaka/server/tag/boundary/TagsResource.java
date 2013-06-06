@@ -3,6 +3,7 @@ package name.pehl.karaka.server.tag.boundary;
 import name.pehl.karaka.server.tag.control.TagConverter;
 import name.pehl.karaka.server.tag.control.TagRepository;
 import name.pehl.karaka.server.tag.entity.Tag;
+import org.jboss.resteasy.annotations.cache.Cache;
 import org.jboss.resteasy.spi.NotFoundException;
 
 import javax.inject.Inject;
@@ -29,6 +30,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
  *          $
  */
 @Path("/tags")
+@Cache(maxAge = 36000)
 @Produces(APPLICATION_JSON)
 public class TagsResource
 {

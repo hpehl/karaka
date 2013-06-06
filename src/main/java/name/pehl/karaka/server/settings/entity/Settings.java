@@ -15,7 +15,7 @@ public class Settings extends BaseEntity
     private boolean formatHoursAsFloatingPointNumber;
     private String timeZoneId;
     @Ignore private DateTimeZone timeZone;
-    @Embed private User user;
+    private User user;
 
 
     public Settings()

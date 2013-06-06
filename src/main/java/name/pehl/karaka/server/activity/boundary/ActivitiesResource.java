@@ -86,6 +86,11 @@ import static org.joda.time.Weeks.weeks;
  * </ul>
  * <p>CUD methods:</p>
  * <ul>
+ * <li>POST /activities: Start a new activity. The data for the new activity must be provided in the request body.
+ * The new activity will be stored as the running activity. If there's another running activity that activity will be
+ * stopped first.<br/>
+ * The method returns 201 together with the created / modified activities in a collection (even if there was only one
+ * activity created).</li>
  * <li>PUT /activities/{id}: Update an existing activity. The data for the activity must be provided in the request
  * body. The end time of the activity is taken from the JSON input and the duration in minutes is calculated. There's
  * one exception to this rule: If
@@ -102,13 +107,8 @@ import static org.joda.time.Weeks.weeks;
  * The period must follow the format described at <a href="http://en.wikipedia.org/wiki/ISO_8601#Durations">ISO8601</a>.
  * The status of the original activity is not touched.<br/>
  * The method returns 201 together with the copied activity.</li>
- * <li>PUT /activities/init: Start a new activity. The data for the new activity must be provided in the request body.
- * The new activity will be stored as the running activity. If there's another running activity that activity will be
- * stopped first.<br/>
- * The method returns 201 together with the created / modified activities in a collection (even if there was only one
- * activity created).</li>
- * <li>PUT /activities/{id}/init: Start an existing activity. Depending on the activities init date the activity is
- * resumed (init date == today) or started as a new activity (init date != today). If there's another running
+ * <li>PUT /activities/{id}/start: Start an existing activity. Depending on the activities start date the activity is
+ * resumed (start date == today) or started as a new activity (start date != today). If there's another running
  * activity that activity will be stopped first.<br/>
  * The method returns 200 together with all modified activities in a collection (even if there was only one activity
  * modified). If the activity was already started nothing will happen and 304 is returned.</li>
@@ -126,12 +126,10 @@ import static org.joda.time.Weeks.weeks;
  * @author $Author: harald.pehl $
  * @version $Date: 2011-05-16 12:54:26 +0200 (Mo, 16. Mai 2011) $ $Revision: 110
  *          $
- * @todo Add hyperlinks to current, previous and next activities. If there are
- * no previous / next activities omit the links
  * @todo implement ETag
  */
-@Cache
 @Path("/activities")
+@Cache(maxAge = 36000)
 @Produces(APPLICATION_JSON)
 public class ActivitiesResource
 {
@@ -494,7 +492,7 @@ public class ActivitiesResource
 
     @GET
     @Path("/{from:\\d{8}}/{to:\\d{8}}")
-    public Response activitiesForYearMonthDay(@PathParam("from") String from, @PathParam("to") String to)
+    public Response activitiesInRange(@PathParam("from") String from, @PathParam("to") String to)
     {
         DateTime start = null;
         try

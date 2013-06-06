@@ -11,26 +11,6 @@
         <param-name>resteasy.injector.factory</param-name>
         <param-value>org.jboss.resteasy.cdi.CdiInjectorFactory</param-value>
     </context-param>
-    <context-param>
-        <param-name>resteasy.providers</param-name>
-        <param-value>name.pehl.karaka.server.JacksonConfigurator</param-value>
-    </context-param>
-    <context-param>
-        <param-name>resteasy.scan</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    <context-param>
-        <param-name>resteasy.servlet.mapping.prefix</param-name>
-        <param-value>/rest</param-value>
-    </context-param>
-    <context-param>
-        <param-name>karaka.server.cache.maxsize</param-name>
-        <param-value>1000</param-value>
-    </context-param>
-    <context-param>
-        <param-name>karaka.server.cache.expiration</param-name>
-        <param-value>36000</param-value> <!-- 10h -->
-    </context-param>
 
 
     <listener>
@@ -40,19 +20,16 @@
         <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
     </listener>
     <listener>
-        <listener-class>name.pehl.karaka.server.cache.ServletServerCache</listener-class>
-    </listener>
-    <listener>
         <listener-class>name.pehl.karaka.server.sampledata.SampleDataContextListener</listener-class>
     </listener>
 
 
     <filter>
-        <filter-name>securityToken</filter-name>
-        <filter-class>name.pehl.karaka.server.security.SecurityTokenCookieFilter</filter-class>
+        <filter-name>cookieFilter</filter-name>
+        <filter-class>name.pehl.karaka.server.security.CookieFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>securityToken</filter-name>
+        <filter-name>cookieFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     <filter>
@@ -94,6 +71,7 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+
 
     <security-constraint>
         <web-resource-collection>

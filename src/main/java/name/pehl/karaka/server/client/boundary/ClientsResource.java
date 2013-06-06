@@ -3,6 +3,7 @@ package name.pehl.karaka.server.client.boundary;
 import name.pehl.karaka.server.client.control.ClientConverter;
 import name.pehl.karaka.server.client.control.ClientRepository;
 import name.pehl.karaka.server.client.entity.Client;
+import org.jboss.resteasy.annotations.cache.Cache;
 import org.jboss.resteasy.spi.NotFoundException;
 
 import javax.inject.Inject;
@@ -29,6 +30,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
  *          $
  */
 @Path("/clients")
+@Cache(maxAge = 36000)
 @Produces(APPLICATION_JSON)
 public class ClientsResource
 {

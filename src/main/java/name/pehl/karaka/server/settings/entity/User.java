@@ -1,5 +1,8 @@
 package name.pehl.karaka.server.settings.entity;
 
+import com.googlecode.objectify.annotation.Embed;
+
+@Embed
 public class User
 {
     private String userId;

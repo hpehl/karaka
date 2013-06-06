@@ -1,5 +1,6 @@
 package name.pehl.karaka.client.activity.view;
 
+import com.google.gwt.user.client.ui.IsWidget;
 import name.pehl.karaka.client.activity.presenter.DashboardPresenter;
 import name.pehl.karaka.client.ui.UiUtils;
 
@@ -14,7 +15,7 @@ import com.gwtplatform.mvp.client.ViewImpl;
  * Ideas:
  * <ul>
  * <li>Place buttons / clickable labels with the current tags next to the
- * header. Clicking the labels will filter the placeRequestFor. See
+ * header. Clicking the labels will filter the activities. See
  * http://meteor.com/examples/todos
  * </ul>
  */
@@ -51,17 +52,17 @@ public class DashboardView extends ViewImpl implements DashboardPresenter.MyView
 
 
     @Override
-    public void setInSlot(Object slot, Widget content)
+    public void setInSlot(Object slot, IsWidget content)
     {
-        if (slot == DashboardPresenter.SLOT_NewActivity)
+        if (slot == DashboardPresenter.TYPE_NewActivity)
         {
             UiUtils.setContent(newActivityPanel, content);
         }
-        else if (slot == DashboardPresenter.SLOT_ActivityNavigation)
+        else if (slot == DashboardPresenter.TYPE_ActivityNavigation)
         {
             UiUtils.setContent(activityNavigationPanel, content);
         }
-        else if (slot == DashboardPresenter.SLOT_ActivityList)
+        else if (slot == DashboardPresenter.TYPE_ActivityList)
         {
             UiUtils.setContent(activityListPanel, content);
         }

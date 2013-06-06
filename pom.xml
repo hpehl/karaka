@@ -24,18 +24,18 @@
 
 
     <properties>
-        <gae.version>1.7.4</gae.version>
+        <gae.version>1.8.0</gae.version>
         <gin.version>2.0.0</gin.version>
-        <guava.version>13.0.1</guava.version>
-        <gwt.version>2.5.0</gwt.version>
-        <gwt.plugin.version>2.5.0</gwt.plugin.version>
-        <gwtp.version>0.7</gwtp.version>
-        <objectify.version>4.0b1</objectify.version>
-        <piriti.version>0.9-SNAPSHOT</piriti.version>
-        <resteasy.version>2.3.5.Final</resteasy.version>
-        <slf4j.version>1.7.2</slf4j.version>
-        <totoe.version>0.5-SNAPSHOT</totoe.version>
-        <weld.version>1.1.10.Final</weld.version>
+        <guava.version>14.0.1</guava.version>
+        <gwt.version>2.5.1</gwt.version>
+        <gwt.plugin.version>2.5.1</gwt.plugin.version>
+        <gwtp.version>1.0-RC-3.1</gwtp.version>
+        <objectify.version>4.0rc1</objectify.version>
+        <piriti.version>0.10</piriti.version>
+        <resteasy.version>3.0-beta-6</resteasy.version>
+        <slf4j.version>1.7.5</slf4j.version>
+        <totoe.version>0.6</totoe.version>
+        <weld.version>2.0.1.Final</weld.version>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
     </properties>
 
@@ -208,7 +208,7 @@
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson-provider</artifactId>
+            <artifactId>resteasy-jackson2-provider</artifactId>
             <version>${resteasy.version}</version>
         </dependency>
         <dependency>
@@ -221,7 +221,7 @@
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
-            <version>1.0</version>
+            <version>1.0.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -243,7 +243,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava-testlib</artifactId>
-            <version>12.0</version>
+            <version>${guava.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -254,7 +254,7 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>2.1</version>
+            <version>2.2</version>
         </dependency>
 
         <!-- Logging -->
@@ -266,7 +266,7 @@
         <dependency>
             <groupId>com.allen-sauer.gwt.log</groupId>
             <artifactId>gwt-log</artifactId>
-            <version>3.1.8</version>
+            <version>3.2.1</version>
         </dependency>
 
         <!-- Test -->
@@ -315,7 +315,7 @@
                 <plugin>
                     <groupId>org.bsc.maven</groupId>
                     <artifactId>maven-processor-plugin</artifactId>
-                    <version>2.0.5</version>
+                    <version>2.2.3</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>

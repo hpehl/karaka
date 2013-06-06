@@ -76,7 +76,7 @@ public class TagsPresenter extends Presenter<TagsPresenter.MyView, TagsPresenter
     @Override
     protected void revealInParent()
     {
-        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
+        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_MainContent, this);
     }
 
 

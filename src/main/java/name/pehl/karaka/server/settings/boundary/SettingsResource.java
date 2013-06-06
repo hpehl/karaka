@@ -5,6 +5,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import name.pehl.karaka.server.settings.control.CurrentSettings;
 import name.pehl.karaka.server.settings.control.SettingsConverter;
 import name.pehl.karaka.server.settings.entity.Settings;
+import org.jboss.resteasy.annotations.cache.Cache;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
  * Supported methods: <ul> <li>GET /settings: Get the current settings</li> </ul>
  */
 @Path("/settings")
+@Cache(maxAge = 36000)
 @Produces(APPLICATION_JSON)
 public class SettingsResource
 {

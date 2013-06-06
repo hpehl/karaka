@@ -8,6 +8,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.InlineHyperlink;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -64,7 +65,7 @@ public class NavigationView extends ViewImpl implements NavigationPresenter.MyVi
 
 
     @Override
-    public void setInSlot(Object slot, Widget content)
+    public void setInSlot(Object slot, IsWidget content)
     {
         if (slot == NavigationPresenter.SLOT_Message)
         {

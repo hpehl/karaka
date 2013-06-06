@@ -40,6 +40,6 @@ public class TermsPresenter extends Presenter<TermsPresenter.MyView, TermsPresen
     @Override
     protected void revealInParent()
     {
-        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_SetMainContent, this);
+        RevealContentEvent.fire(this, ApplicationPresenter.TYPE_MainContent, this);
     }
 }
