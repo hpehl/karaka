@@ -5,6 +5,4 @@ src/main/webapp/karaka
 target
 *.class
 *.iml
-*.jar
 *.war
-*.ear
